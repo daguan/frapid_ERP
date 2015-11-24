@@ -1,0 +1,26 @@
+﻿@model WebsiteBuilder.Models.Menu
+<div class="ui inverted  tophead vertical center aligned segment">
+    <div class="ui container">
+        <div class="ui large secondary inverted stackable menu">
+
+            @foreach (var item in Model.Get("Navigation"))
+            {
+                <a class="item" href="@item.Url">@item.MenuName</a>
+            }
+
+            <div class="right item">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a class="ui violet button" href="/dashboard">Return to Dashboard</a>
+                }
+                else
+                {
+                    foreach (var item in Model.Get("Anonymous"))
+                    {
+                        <a class="ui inverted button" href="@item.Url">@item.MenuName</a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

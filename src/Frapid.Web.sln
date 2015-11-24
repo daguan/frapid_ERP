@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.Web", "Frapid.Web\Frapid.Web.csproj", "{77C7D586-FEE9-40E2-A1C4-699EF4B0A1F3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{0DFA1BB9-74FE-4C63-B8AF-0B312ED992F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.ApplicationState", "Libraries\Frapid.ApplicationState\Frapid.ApplicationState.csproj", "{EF3D84F8-3D64-45D7-9050-3AE204F5AA72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.Configuration", "Libraries\Frapid.Configuration\Frapid.Configuration.csproj", "{CA3C3D39-6775-4234-B343-38F0724ADCF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.DataAccess", "Libraries\Frapid.DataAccess\Frapid.DataAccess.csproj", "{9BEA3809-B6D5-4025-AE7E-868E5E7E9C76}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.Framework", "Libraries\Frapid.Framework\Frapid.Framework.csproj", "{A4DEE358-3203-425C-80E9-8EBA0A01B73F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.i18n", "Libraries\Frapid.i18n\Frapid.i18n.csproj", "{88DFDF57-A52B-4D71-A0C4-BEF1A3839506}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77C7D586-FEE9-40E2-A1C4-699EF4B0A1F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C7D586-FEE9-40E2-A1C4-699EF4B0A1F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C7D586-FEE9-40E2-A1C4-699EF4B0A1F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C7D586-FEE9-40E2-A1C4-699EF4B0A1F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF3D84F8-3D64-45D7-9050-3AE204F5AA72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF3D84F8-3D64-45D7-9050-3AE204F5AA72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF3D84F8-3D64-45D7-9050-3AE204F5AA72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF3D84F8-3D64-45D7-9050-3AE204F5AA72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA3C3D39-6775-4234-B343-38F0724ADCF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA3C3D39-6775-4234-B343-38F0724ADCF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA3C3D39-6775-4234-B343-38F0724ADCF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA3C3D39-6775-4234-B343-38F0724ADCF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BEA3809-B6D5-4025-AE7E-868E5E7E9C76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BEA3809-B6D5-4025-AE7E-868E5E7E9C76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BEA3809-B6D5-4025-AE7E-868E5E7E9C76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BEA3809-B6D5-4025-AE7E-868E5E7E9C76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4DEE358-3203-425C-80E9-8EBA0A01B73F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4DEE358-3203-425C-80E9-8EBA0A01B73F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4DEE358-3203-425C-80E9-8EBA0A01B73F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4DEE358-3203-425C-80E9-8EBA0A01B73F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88DFDF57-A52B-4D71-A0C4-BEF1A3839506}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88DFDF57-A52B-4D71-A0C4-BEF1A3839506}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88DFDF57-A52B-4D71-A0C4-BEF1A3839506}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88DFDF57-A52B-4D71-A0C4-BEF1A3839506}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EF3D84F8-3D64-45D7-9050-3AE204F5AA72} = {0DFA1BB9-74FE-4C63-B8AF-0B312ED992F6}
+		{CA3C3D39-6775-4234-B343-38F0724ADCF8} = {0DFA1BB9-74FE-4C63-B8AF-0B312ED992F6}
+		{9BEA3809-B6D5-4025-AE7E-868E5E7E9C76} = {0DFA1BB9-74FE-4C63-B8AF-0B312ED992F6}
+		{A4DEE358-3203-425C-80E9-8EBA0A01B73F} = {0DFA1BB9-74FE-4C63-B8AF-0B312ED992F6}
+		{88DFDF57-A52B-4D71-A0C4-BEF1A3839506} = {0DFA1BB9-74FE-4C63-B8AF-0B312ED992F6}
+	EndGlobalSection
+EndGlobal

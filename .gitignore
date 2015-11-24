@@ -1,0 +1,7 @@
+.hg
+bin
+obj
+*.pdb
+*.exe
+*.suo
+*.user

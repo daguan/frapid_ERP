@@ -1,0 +1,11 @@
+﻿@using WebsiteBuilder.Models
+@model WebsiteBuilder.Models.Content
+
+@{
+    ViewBag.Keywords = Model.SeoKeywords;
+    ViewBag.Description = Model.SeoDescription;
+    ViewBag.Title = Model.Title;
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+@Html.Raw(Model.Contents)
