@@ -5,7 +5,7 @@ licensed under GNU/GPLv3 license. Please refer to the file contributing.md on th
 
 # Internationalization
 
-Internationalization is handled by the module `Salesific.i18n`. For more information, read the [internationalization guide](i18n.md).
+Internationalization is handled by the module `Frapid.i18n`. For more information, read the [internationalization guide](i18n.md).
 
 # Data Access & Restful APIs
 
