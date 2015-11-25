@@ -1,4 +1,5 @@
-﻿using Frapid.ApplicationState.Cache;
+﻿using System.Linq;
+using Frapid.ApplicationState.Cache;
 using Frapid.DataAccess;
 
 namespace WebsiteBuilder.DAL
@@ -13,13 +14,13 @@ namespace WebsiteBuilder.DAL
             }
 
             const string sql = "SELECT * FROM wb.contents WHERE alias=@0;";
-            return Factory.Single<Models.Content>(AppUsers.GetCatalog(), sql, alias);
+            return Factory.Get<Models.Content>(AppUsers.GetCatalog(), sql, alias).FirstOrDefault();
         }
 
         public static Models.Content GetDefault()
         {
             const string sql = "SELECT * FROM wb.contents WHERE is_default;";
-            return Factory.Single<Models.Content>(AppUsers.GetCatalog(), sql);
+            return Factory.Get<Models.Content>(AppUsers.GetCatalog(), sql).FirstOrDefault();
         }
     }
 }

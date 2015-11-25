@@ -5,7 +5,7 @@
     ViewBag.Keywords = Model.SeoKeywords;
     ViewBag.Description = Model.SeoDescription;
     ViewBag.Title = Model.Title;
-    Layout = "../Shared/_Layout.cshtml";
+    Layout = Model.LayoutPath + Model.Layout;
+    ViewBag.LayoutPath = Model.LayoutPath;
 }
-
 @Html.Raw(Model.Contents)

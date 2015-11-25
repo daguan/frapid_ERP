@@ -1,98 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Runtime.Caching;
-using System.Threading.Tasks;
-using System.Web;
-using Frapid.Framework;
-using Frapid.Framework.Extensions;
+﻿using System.Web;
+using Frapid.ApplicationState.Models;
 
 namespace Frapid.ApplicationState.Cache
 {
     public static class AppUsers
     {
-        [Obsolete]
-        public static async Task SetCurrentLoginAsync()
+        public static string GetDbNameByConvention()
         {
-            long globalLoginId = HttpContext.Current.User.Identity.Name.To<long>();
-            await SetCurrentLoginAsync(globalLoginId);
-        }
+            string url = HttpContext.Current.Request.Url.Authority;
 
-        [Obsolete]
-        public static async Task SetCurrentLoginAsync(long globalLoginId)
-        {
-            if (globalLoginId > 0)
+            if (url.StartsWith("www."))
             {
-                string key = globalLoginId.ToString(CultureInfo.InvariantCulture);
-
-                if (MemoryCache.Default[key] == null)
-                {
-                    MetaLogin metaLogin = await MetaLogin.GetAsync(globalLoginId);
-                    Dictionary<string, object> dictionary = GetDictionary(metaLogin);
-
-                    CacheFactory.AddToDefaultCache("Dictionary" + key, dictionary);
-                    CacheFactory.AddToDefaultCache(key, metaLogin);
-                }
-            }
-        }
-
-        [Obsolete]
-        public static MetaLogin GetCurrent()
-        {
-            long globalLoginId = 0;
-
-            if (HttpContext.Current.User != null)
-            {
-                long.TryParse(HttpContext.Current.User.Identity.Name, out globalLoginId);
+                url = url.Replace("www.", "");
             }
 
-            return GetCurrent(globalLoginId);
+            return url.Replace(".", "_");
         }
 
-        [Obsolete]
-        public static MetaLogin GetCurrent(long globalLoginId)
+        public static bool IsValidDomain()
         {
-            MetaLogin login = new MetaLogin();
-
-
-            if (globalLoginId != 0)
-            {
-                login =
-                    CacheFactory.GetFromDefaultCacheByKey(globalLoginId.ToString(CultureInfo.InvariantCulture)) as
-                        MetaLogin;
-            }
-
-            return login ?? (new MetaLogin());
-        }
-
-        [Obsolete]
-        private static Dictionary<string, object> GetDictionary(MetaLogin metaLogin)
-        {
-            Dictionary<string, object> dictionary = new Dictionary<string, object>();
-
-            if (metaLogin == null)
-            {
-                return dictionary;
-            }
-
-            dictionary.Add("Catalog", metaLogin.Catalog);
-            dictionary.Add("GlobalLoginId", metaLogin.GlobalLoginId);
-            dictionary.Add("LoginId", metaLogin.LoginId);
-
-            return dictionary;
-        }
-
-        [Obsolete]
-        public static string GetCurrentUserDb()
-        {
-            string catalog = GetCurrent().Catalog;
-            return catalog;
+            string url = GetDbNameByConvention();
+            return DomainSerializer.Get().Contains(url);
         }
 
         public static string GetCatalog()
         {
-            return "frapid";
-        }
+            string url = GetDbNameByConvention();
 
+            //By convention, the default database name is localhost
+            return IsValidDomain() ? url : "localhost";
+        }
     }
 }

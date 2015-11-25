@@ -13,5 +13,7 @@ namespace WebsiteBuilder.Models
         public bool Draft { get; set; }
         public string SeoKeywords { get; set; }
         public string SeoDescription { get; set; }
+        public string Layout { get; set; }
+        public string LayoutPath { get; set; }
     }
 }
