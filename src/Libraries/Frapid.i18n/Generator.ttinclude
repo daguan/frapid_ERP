@@ -6,8 +6,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using Frapid.i18n;
+using System.Threading.Tasks;
 
-namespace MixERP.Net.i18n.Resources
+namespace Frapid.i18n.Resources
 {
 <#
 	var groups = resources.GroupBy(g => g.ResourceClass);

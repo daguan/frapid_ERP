@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using Frapid.DataAccess;
 using Frapid.i18n.Models;
 
@@ -7,10 +6,10 @@ namespace Frapid.i18n.Database
 {
     public static class DbResources
     {
-        public static async Task<Dictionary<string, string>> GetLocalizedResourcesAsync()
+        public static Dictionary<string, string> GetLocalizedResources()
         {
-            const string sql = "SELECT * FROM localization.localized_resource_view;";
-            IEnumerable<dynamic> dbResources = await Factory.GetAsync<dynamic>(Factory.MetaDatabase, sql);
+            const string sql = "SELECT * FROM i18n.localized_resource_view;";
+            IEnumerable<dynamic> dbResources = Factory.Get<dynamic>(Factory.MetaDatabase, sql);
             Dictionary<string, string> resources = new Dictionary<string, string>();
 
 
@@ -25,11 +24,11 @@ namespace Frapid.i18n.Database
             return resources;
         }
 
-        public static async Task<IEnumerable<LocalizedResource>> GetLocalizationTableAsync(string language)
+        public static IEnumerable<LocalizedResource> GetLocalizationTable(string language)
         {
             const string sql =
-                "SELECT * FROM localization.get_localization_table(@Language) WHERE COALESCE(key, '') != '';";
-            return await Factory.GetAsync<LocalizedResource>(Factory.MetaDatabase, sql);
+                "SELECT * FROM i18n.get_localization_table(@0) WHERE COALESCE(key, '') != '';";
+            return Factory.Get<LocalizedResource>(Factory.MetaDatabase, sql, language);
         }
     }
 }

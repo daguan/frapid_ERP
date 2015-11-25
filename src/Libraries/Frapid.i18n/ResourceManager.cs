@@ -22,14 +22,14 @@ namespace Frapid.i18n
         /// If this optional parameter is left empty, the current culture will be used.</param>
         /// <returns></returns>
         /// <exception cref="MissingManifestResourceException">Thrown when the resource key is not found on the specified class.</exception>
-        public static async Task<string> GetStringAsync(string resourceClass, string resourceKey, string cultureCode = null)
+        public static string GetString(string resourceClass, string resourceKey, string cultureCode = null)
         {
             if (string.IsNullOrWhiteSpace(resourceClass))
             {
                 return resourceKey;
             }
 
-            string result = await TryGetResourceFromCacheAsync(resourceClass, resourceKey, cultureCode);
+            string result = TryGetResourceFromCache(resourceClass, resourceKey, cultureCode);
 
             if (result == null)
             {
@@ -53,7 +53,7 @@ namespace Frapid.i18n
         /// <param name="cultureCode">The culture of the resource. 
         /// If this optional parameter is left empty, the current culture will be used.</param>
         /// <returns></returns>
-        public static async Task<string> TryGetResourceFromCacheAsync(string resourceClass, string resourceKey, string cultureCode = null)
+        public static string TryGetResourceFromCache(string resourceClass, string resourceKey, string cultureCode = null)
         {
             CultureInfo culture = CultureManager.GetCurrent();
 
@@ -80,8 +80,8 @@ namespace Frapid.i18n
 
             if (cache == null || cache.Count.Equals(0))
             {
-                await InitializeResourcesAsync();
-                return await TryGetResourceFromCacheAsync(resourceClass, resourceKey, cultureCode);
+                InitializeResourcesAsync();
+                return TryGetResourceFromCache(resourceClass, resourceKey, cultureCode);
             }
 
             string cacheKey = resourceClass + "." + culture.Name + "." + resourceKey;
@@ -119,9 +119,9 @@ namespace Frapid.i18n
             return result;
         }
 
-        private static async Task InitializeResourcesAsync()
+        private static void InitializeResourcesAsync()
         {
-            IDictionary<string, string> resources = await DbResources.GetLocalizedResourcesAsync();
+            IDictionary<string, string> resources = DbResources.GetLocalizedResources();
             CacheFactory.AddToDefaultCache("Resources", resources);
         }
     }

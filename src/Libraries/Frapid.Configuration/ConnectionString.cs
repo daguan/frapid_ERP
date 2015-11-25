@@ -36,7 +36,7 @@ namespace Frapid.Configuration
         }
 
         private static string GetConnectionString(string host, string database, string username, string password, int port)
-        {
+        {            
             NpgsqlConnectionStringBuilder connectionStringBuilder = new NpgsqlConnectionStringBuilder
             {
                 Host = host,

@@ -1,0 +1,425 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NPoco</name>
+    </assembly>
+    <members>
+        <member name="T:NPoco.BitStream">
+            <summary>
+            Utility that read and write bits in byte array
+            </summary>
+        </member>
+        <member name="M:NPoco.BitStream.#ctor(System.Int32)">
+            <summary>
+            Initialize the stream with capacity
+            </summary>
+            <param name="capacity">Capacity of the stream</param>
+        </member>
+        <member name="M:NPoco.BitStream.#ctor(System.Byte[])">
+            <summary>
+            Initialize the stream with a source byte array
+            </summary>
+            <param name="source"></param>
+        </member>
+        <member name="P:NPoco.BitStream.Length">
+            <summary>
+            Bit length of the stream
+            </summary>
+        </member>
+        <member name="P:NPoco.BitStream.Position">
+            <summary>
+            Bit position of the stream
+            </summary>
+        </member>
+        <member name="M:NPoco.BitStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Read the stream to the buffer
+            </summary>
+            <param name="buffer">Buffer</param>
+            <param name="offset">Offset bit start position of the stream</param>
+            <param name="count">Number of bits to read</param>
+            <returns>Number of bits read</returns>
+        </member>
+        <member name="M:NPoco.BitStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Set up the stream position
+            </summary>
+            <param name="offset">Position</param>
+            <param name="origin">Position origin</param>
+            <returns>Position after setup</returns>
+        </member>
+        <member name="M:NPoco.BitStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Write from buffer to the stream
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset">Offset start bit position of buffer</param>
+            <param name="count">Number of bits</param>
+        </member>
+        <member name="M:NPoco.Base62.ToBase62(System.Byte[])">
+            <summary>
+            Convert a byte array
+            </summary>
+            <param name="original">Byte array</param>
+            <returns>Base62 string</returns>
+        </member>
+        <member name="M:NPoco.Base62.FromBase62(System.String)">
+            <summary>
+            Convert a Base62 string to byte array
+            </summary>
+            <param name="base62">Base62 string</param>
+            <returns>Byte array</returns>
+        </member>
+        <member name="T:NPoco.ManagedCache">
+            <summary>
+            Container for a Memory cache object
+            </summary>
+            <remarks>
+            Better to have one memory cache instance than many so it's memory management can be handled more effectively
+            http://stackoverflow.com/questions/8463962/using-multiple-instances-of-memorycache
+            </remarks>
+        </member>
+        <member name="M:NPoco.Cache`2.CreateStaticCache">
+            <summary>
+            Creates a cache that uses static storage
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NPoco.Database.IsNew``1(``0)">
+            <summary>Checks if a poco represents a new record.</summary>
+        </member>
+        <member name="T:NPoco.DatabaseType">
+            <summary>
+            Base class for DatabaseType handlers - provides default/common handling for different database engines
+            </summary>
+        </member>
+        <member name="M:NPoco.DatabaseType.AddTypeMap(System.Type,System.Data.DbType)">
+            <summary>
+            Configire the specified type to be mapped to a given db-type
+            </summary>
+        </member>
+        <member name="M:NPoco.DatabaseType.GetParameterPrefix(System.String)">
+            <summary>
+            Returns the prefix used to delimit parameters in SQL query strings.
+            </summary>
+            <param name="connectionString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NPoco.DatabaseType.MapParameterValue(System.Object)">
+            <summary>
+            Converts a supplied C# object value into a value suitable for passing to the database
+            </summary>
+            <param name="value">The value to convert</param>
+            <returns>The converted value</returns>
+        </member>
+        <member name="M:NPoco.DatabaseType.PreExecute(System.Data.Common.DbCommand)">
+            <summary>
+            Called immediately before a command is executed, allowing for modification of the DbCommand before it's passed to the database provider
+            </summary>
+            <param name="cmd"></param>
+        </member>
+        <member name="M:NPoco.DatabaseType.BuildPageQuery(System.Int64,System.Int64,NPoco.PagingHelper.SQLParts,System.Object[]@)">
+            <summary>
+            Builds an SQL query suitable for performing page based queries to the database
+            </summary>
+            <param name="skip">The number of rows that should be skipped by the query</param>
+            <param name="take">The number of rows that should be retruend by the query</param>
+            <param name="parts">The original SQL query after being parsed into it's component parts</param>
+            <param name="args">Arguments to any embedded parameters in the SQL query</param>
+            <returns>The final SQL query that should be executed.</returns>
+        </member>
+        <member name="M:NPoco.DatabaseType.GetExistsSql">
+            <summary>
+            Returns an SQL Statement that can check for the existance of a row in the database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NPoco.DatabaseType.EscapeTableName(System.String)">
+            <summary>
+            Escape a tablename into a suitable format for the associated database provider.
+            </summary>
+            <param name="tableName">The name of the table (as specified by the client program, or as attributes on the associated POCO class.</param>
+            <returns>The escaped table name</returns>
+        </member>
+        <member name="M:NPoco.DatabaseType.EscapeSqlIdentifier(System.String)">
+            <summary>
+            Escape and arbitary SQL identifier into a format suitable for the associated database provider
+            </summary>
+            <param name="str">The SQL identifier to be escaped</param>
+            <returns>The escaped identifier</returns>
+        </member>
+        <member name="M:NPoco.DatabaseType.GetAutoIncrementExpression(NPoco.TableInfo)">
+            <summary>
+            Return an SQL expression that can be used to populate the primary key column of an auto-increment column.
+            </summary>
+            <param name="ti">Table info describing the table</param>
+            <returns>An SQL expressions</returns>
+            <remarks>See the Oracle database type for an example of how this method is used.</remarks>
+        </member>
+        <member name="M:NPoco.DatabaseType.GetInsertOutputClause(System.String,System.Boolean)">
+            <summary>
+            Returns an SQL expression that can be used to specify the return value of auto incremented columns.
+            </summary>
+            <param name="primaryKeyName">The primary key of the row being inserted.</param>
+            <returns>An expression describing how to return the new primary key value</returns>
+            <remarks>See the SQLServer database provider for an example of how this method is used.</remarks>
+        </member>
+        <member name="M:NPoco.DatabaseType.ExecuteInsert``1(NPoco.Database,System.Data.Common.DbCommand,System.String,System.Boolean,``0,System.Object[])">
+            <summary>
+            Performs an Insert operation
+            </summary>
+            <param name="db">The calling Database object</param>
+            <param name="cmd">The insert command to be executed</param>
+            <param name="primaryKeyName">The primary key of the table being inserted into</param>
+            <param name="useOutputClause"></param>
+            <param name="poco"></param>
+            <param name="args"></param>
+            <returns>The ID of the newly inserted record</returns>
+        </member>
+        <member name="M:NPoco.DatabaseType.Resolve(System.String,System.String)">
+            <summary>
+            Look at the type and provider name being used and instantiate a suitable DatabaseType instance.
+            </summary>
+            <param name="typeName"></param>
+            <param name="providerName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NPoco.HashCodeCombiner">
+            <summary>
+            Used to create a hash code from multiple objects.
+            </summary>
+            <remarks>
+            .Net has a class the same as this: System.Web.Util.HashCodeCombiner and of course it works for all sorts of things
+            which we've not included here as we just need a quick easy class for this in order to create a unique
+            hash of directories/files to see if they have changed.
+            </remarks>
+        </member>
+        <member name="M:NPoco.HashCodeCombiner.GetCombinedHashCode">
+            <summary>
+            Returns the hex code of the combined hash code
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:NPoco.MemberAccessor">
+            <summary>
+            The PropertyAccessor class provides fast dynamic access
+            to a property of a specified target class.
+            </summary>
+        </member>
+        <member name="M:NPoco.MemberAccessor.#ctor(System.Type,System.String)">
+            <summary>
+            Creates a new property accessor.
+            </summary>
+            <param name="targetType">Target object type.</param>
+            <param name="memberName">Property name.</param>
+        </member>
+        <member name="M:NPoco.MemberAccessor.Set(System.Object,System.Object)">
+            <summary>
+            Sets the property for the specified target.
+            </summary>
+            <param name="target">Target object.</param>
+            <param name="value">Value to set.</param>
+        </member>
+        <member name="M:NPoco.MemberAccessor.InitTypes">
+            <summary>
+            Thanks to Ben Ratzlaff for this snippet of code
+            http://www.codeproject.com/cs/miscctrl/CustomPropGrid.asp
+            
+            "Initialize a private hashtable with type-opCode pairs 
+            so i dont have to write a long if/else statement when outputting msil"
+            </summary>
+        </member>
+        <member name="P:NPoco.ReferenceAttribute.ReferenceMemberName">
+            <summary>
+            The property name (case sensitive) that links the relationship.
+            </summary>
+        </member>
+        <member name="P:NPoco.ReferenceAttribute.ColumnName">
+            <summary>
+            The database column name that maps to the property.
+            </summary>
+        </member>
+        <member name="M:NPoco.SqlBuilder.#ctor">
+            <summary>
+            Initialises the SqlBuilder
+            </summary>
+        </member>
+        <member name="M:NPoco.SqlBuilder.#ctor(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Initialises the SqlBuilder with default replacement overrides
+            </summary>
+            <param name="defaultOverrides">A dictionary of token overrides. A value null means the token will not be replaced.</param>
+            <example>
+            { "where", "1=1" }
+            { "where(name)", "1!=1" }
+            </example>
+        </member>
+        <member name="M:NPoco.SqlBuilder.Select(System.String[])">
+            <summary>
+            Replaces the Select columns. Uses /**select**/
+            </summary>
+        </member>
+        <member name="M:NPoco.SqlBuilder.Join(System.String,System.Object[])">
+            <summary>
+            Adds an Inner Join. Uses /**join**/
+            </summary>
+        </member>
+        <member name="M:NPoco.SqlBuilder.LeftJoin(System.String,System.Object[])">
+            <summary>
+            Adds a Left Join. Uses /**leftjoin**/
+            </summary>
+        </member>
+        <member name="M:NPoco.SqlBuilder.Where(System.String,System.Object[])">
+            <summary>
+            Adds a filter. The Where keyword still needs to be specified. Uses /**where**/
+            </summary>
+        </member>
+        <member name="M:NPoco.SqlBuilder.WhereNamed(System.String,System.String,System.Object[])">
+            <summary>
+            Adds a named filter. The Where keyword still needs to be specified. Uses /**where(name)**/
+            </summary>
+        </member>
+        <member name="M:NPoco.SqlBuilder.OrderBy(System.String,System.Object[])">
+            <summary>
+            Adds an Order By clause. Uses /**orderby**/
+            </summary>
+        </member>
+        <member name="M:NPoco.SqlBuilder.OrderByCols(System.String[])">
+            <summary>
+            Adds columns in the Order By clause. Uses /**orderbycols**/
+            </summary>
+        </member>
+        <member name="M:NPoco.SqlBuilder.GroupBy(System.String,System.Object[])">
+            <summary>
+            Adds a Group By clause. Uses /**groupby**/
+            </summary>
+        </member>
+        <member name="M:NPoco.SqlBuilder.Having(System.String,System.Object[])">
+            <summary>
+            Adds a Having clause. Uses /**having**/
+            </summary>
+        </member>
+        <member name="M:NPoco.TypeHelpers.GetTheType``1(``0)">
+            <summary>
+            Gets an object's type even if it is null.
+            </summary>
+            <typeparam name="T">The type of the object.</typeparam>
+            <param name="that">The object being extended.</param>
+            <returns>The objects type.</returns>
+        </member>
+        <member name="M:NPoco.TypeHelpers.GetTheType(System.Object)">
+            <summary>
+            Gets an object's type even if it is null.
+            </summary>
+            <param name="that">The object being extended.</param>
+            <returns>The objects type.</returns>
+        </member>
+        <member name="T:NPoco.Expressions.PartialEvaluator">
+            <summary>
+            Rewrites an expression tree so that locally isolatable sub-expressions are evaluated and converted into ConstantExpression nodes.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:NPoco.Expressions.PartialEvaluator.Eval(System.Linq.Expressions.Expression,System.Func{System.Linq.Expressions.Expression,System.Boolean})" -->
+        <!-- Badly formed XML comment ignored for member "M:NPoco.Expressions.PartialEvaluator.Eval(System.Linq.Expressions.Expression)" -->
+        <!-- Badly formed XML comment ignored for member "T:NPoco.Expressions.PartialEvaluator.SubtreeEvaluator" -->
+        <member name="T:NPoco.Expressions.PartialEvaluator.Nominator">
+            <summary>
+            Performs bottom-up analysis to determine which nodes can possibly
+            be part of an evaluated sub-tree.
+            </summary>
+        </member>
+        <member name="T:NPoco.Expressions.PredicateBuilder">
+            <summary>
+            Enables the efficient, dynamic composition of query predicates.
+            </summary>
+        </member>
+        <member name="M:NPoco.Expressions.PredicateBuilder.True``1">
+            <summary>
+            Creates a predicate that evaluates to true.
+            </summary>
+        </member>
+        <member name="M:NPoco.Expressions.PredicateBuilder.False``1">
+            <summary>
+            Creates a predicate that evaluates to false.
+            </summary>
+        </member>
+        <member name="M:NPoco.Expressions.PredicateBuilder.Create``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            Creates a predicate expression from the specified lambda expression.
+            </summary>
+        </member>
+        <member name="M:NPoco.Expressions.PredicateBuilder.And``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            Combines the first predicate with the second using the logical "and".
+            </summary>
+        </member>
+        <member name="M:NPoco.Expressions.PredicateBuilder.Or``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            Combines the first predicate with the second using the logical "or".
+            </summary>
+        </member>
+        <member name="M:NPoco.Expressions.PredicateBuilder.Not``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            Negates the predicate.
+            </summary>
+        </member>
+        <member name="M:NPoco.Expressions.PredicateBuilder.Compose``1(System.Linq.Expressions.Expression{``0},System.Linq.Expressions.Expression{``0},System.Func{System.Linq.Expressions.Expression,System.Linq.Expressions.Expression,System.Linq.Expressions.Expression})">
+            <summary>
+            Combines the first expression with the second using the specified merge function.
+            </summary>
+        </member>
+        <member name="M:NPoco.Expressions.SqlExpression`1.Select``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Fields to be selected.
+            </summary>
+            <param name='fields'>
+            x=> x.SomeProperty1 or x=> new{ x.SomeProperty1, x.SomeProperty2}
+            </param>
+            <typeparam name='TKey'>
+            objectWithProperties
+            </typeparam>
+        </member>
+        <member name="M:NPoco.Expressions.SqlExpression`1.Limit(System.Int32,System.Int32)">
+            <summary>
+            Set the specified offset and rows for SQL Limit clause.
+            </summary>
+            <param name='skip'>
+            Offset of the first row to return. The offset of the initial row is 0
+            </param>
+            <param name='rows'>
+            Number of rows returned by a SELECT statement
+            </param>	
+        </member>
+        <member name="M:NPoco.Expressions.SqlExpression`1.Limit(System.Int32)">
+            <summary>
+            Set the specified rows for Sql Limit clause.
+            </summary>
+            <param name='rows'>
+            Number of rows returned by a SELECT statement
+            </param>
+        </member>
+        <member name="M:NPoco.Expressions.SqlExpression`1.Update``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Fields to be updated.
+            </summary>
+            <param name='fields'>
+            x=> x.SomeProperty1 or x=> new{ x.SomeProperty1, x.SomeProperty2}
+            </param>
+            <typeparam name='TKey'>
+            objectWithProperties
+            </typeparam>
+        </member>
+        <member name="M:NPoco.Expressions.SqlExpression`1.ToDeleteStatement">
+            <summary>
+            Clear InsertFields list ( all fields will be inserted)
+            </summary>
+        </member>
+        <member name="M:NPoco.Expressions.LinqExtensions.GetConstantValue``1(System.Linq.Expressions.Expression)">
+            <summary>
+            Gets the constant value.
+            </summary>
+            <param retval="exp">The exp.</param>
+            <returns>The get constant value.</returns>
+        </member>
+    </members>
+</doc>

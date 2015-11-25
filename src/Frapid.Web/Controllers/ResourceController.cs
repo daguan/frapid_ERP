@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 using Frapid.i18n;
 using Frapid.i18n.Database;
 using Frapid.i18n.Models;
@@ -13,21 +12,21 @@ namespace Frapid.Web.Controllers
 {
     public class ResourceController : Controller
     {
-        // GET: Resource
-        [Route("backend/resources.js")]
-        public async Task<ActionResult> IndexAsync()
+        [Route("i18n/resources.js")]
+        [OutputCache(Duration = 31536000, VaryByParam = "none", Location = OutputCacheLocation.Client, NoStore = true)]
+        public ActionResult Index()
         {
             string culture = CultureManager.GetCurrent().TwoLetterISOLanguageName;
-            string script = await  GetScriptAsync(culture);
+            string script = GetScript(culture);
             return Content(script, "text/javascript", Encoding.UTF8);
         }
 
-        private static async Task<string> GetScriptAsync(string culture)
+        private static string GetScript(string culture)
         {
             StringBuilder script = new StringBuilder();
             script.Append("var Resources = {");
 
-            IEnumerable<LocalizedResource> resources = await DbResources.GetLocalizationTableAsync(culture);
+            IEnumerable<LocalizedResource> resources = DbResources.GetLocalizationTable(culture);
 
             List<List<LocalizedResource>> resourceClassGroup = resources
                 .GroupBy(r => r.ResourceClass)
@@ -68,6 +67,5 @@ namespace Frapid.Web.Controllers
 
             return script.ToString();
         }
-
     }
 }

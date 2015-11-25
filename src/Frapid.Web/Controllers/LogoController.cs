@@ -10,7 +10,7 @@ namespace Frapid.Web.Controllers
         public FileResult Index()
         {
             string logo = HostingEnvironment.MapPath("~/Static/images/frapid-logo.png");
-            return new FileStreamResult(new FileStream(logo, FileMode.Open), "image/jpeg");
+            return new FileStreamResult(new FileStream(logo, FileMode.Open), "image/png");
         }
     }
 }
