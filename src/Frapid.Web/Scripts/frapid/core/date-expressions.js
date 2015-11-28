@@ -43,7 +43,7 @@ function getTime(dateTime) {
 };
 
 function dateAdd(dt, expression, number) {
-    var d = Date.parseExact(removeTimezone(dt), shortDateFormat);
+    var d = Date.parseExact(removeTimezone(dt), window.shortDateFormat);
     var ret = new Date();
 
     if (expression === "d") {
@@ -58,15 +58,19 @@ function dateAdd(dt, expression, number) {
         ret = new Date(d.getFullYear() + parseInt(number), d.getMonth(), d.getDate());
     };
 
-    return ret.toString(shortDateFormat);
+    return ret.toString(window.shortDateFormat);
 };
 
 function loadDatepicker() {
-    if (typeof (datepickerFormat) === "undefined") { datepickerFormat = ""; }
-    if (typeof (datepickerShowWeekNumber) === "undefined") { datepickerShowWeekNumber = false; }
-    if (typeof (datepickerWeekStartDay) === "undefined") { datepickerWeekStartDay = "1"; }
-    if (typeof (datepickerNumberOfMonths) === "undefined") { datepickerNumberOfMonths = ""; }
-    if (typeof (language) === "undefined") { language = ""; }
+    if (!$.isFunction($.fn.datepicker)) {
+        return;
+    };
+
+    if (typeof (window.datepickerFormat) === "undefined") { window.datepickerFormat = ""; }
+    if (typeof (window.datepickerShowWeekNumber) === "undefined") { window.datepickerShowWeekNumber = false; }
+    if (typeof (window.datepickerWeekStartDay) === "undefined") { window.datepickerWeekStartDay = "1"; }
+    if (typeof (window.datepickerNumberOfMonths) === "undefined") { window.datepickerNumberOfMonths = ""; }
+    if (typeof (window.language) === "undefined") { window.language = ""; }
 
     var candidates = $("input.date:not([readonly]), input[type=date]:not([readonly])");
 

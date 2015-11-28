@@ -1,6 +1,5 @@
 var makeDirty = function (obj) {
     obj.parent().addClass("error");
-    obj.focus();
 };
 
 var removeDirty = function (obj) {

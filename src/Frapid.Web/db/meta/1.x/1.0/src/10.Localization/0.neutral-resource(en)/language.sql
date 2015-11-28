@@ -3,3 +3,8 @@ SELECT i18n.add_localized_resource('Titles', '', 'Username', 'Username');
 SELECT i18n.add_localized_resource('Titles', '', 'Password', 'Password');
 SELECT i18n.add_localized_resource('Titles', '', 'ReturnToWebsite', 'Return to Website');
 SELECT i18n.add_localized_resource('Titles', '', 'Or', 'Or');
+SELECT i18n.add_localized_resource('Titles', '', 'Add', 'Add');
+SELECT i18n.add_localized_resource('Titles', '', 'Save', 'Save');
+SELECT i18n.add_localized_resource('Titles', '', 'Edit', 'Edit');
+SELECT i18n.add_localized_resource('Titles', '', 'Delete', 'Delete');
+SELECT i18n.add_localized_resource('Titles', '', 'Update', 'Update');

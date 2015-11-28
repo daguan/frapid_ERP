@@ -56,6 +56,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.DataAccess.dll</HintPath>
     </Reference>
+    <Reference Include="Frapid.i18n, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Frapid.i18n.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -176,8 +180,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Controllers\WebsiteBuilderController.cs" />
     <Compile Include="DAL\Content.cs" />
     <Compile Include="Models\Content.cs" />
+    <Compile Include="Models\RemoteUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebsiteBuilderAreaRegistration.cs" />
   </ItemGroup>

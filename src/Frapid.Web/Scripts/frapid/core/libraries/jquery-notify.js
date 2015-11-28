@@ -1,14 +1,20 @@
 function displayMessage(a, b) {
-    $.notify(a, b);
+    if ($.notify) {
+        $.notify(a, b);
+    };
 };
 
 function displaySucess() {
-    $.notify(Resources.Labels.TaskCompletedSuccessfully(), "success");
+    var taskCompletedSuccessfully = "Task completed successfully";
+    if ($.notify) {
+        $.notify(taskCompletedSuccessfully, "success");
+    };
 };
 
 var logError = function (a, b) {
-    //Todo
-    $.notify(a, b);
+    if ($.notify) {
+        $.notify(a, b);
+    };
 };
 
 function logAjaxErrorMessage(xhr) {

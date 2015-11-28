@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Frapid.Web;
 using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartup(typeof(Frapid.Web.Startup))]
+[assembly: OwinStartup(typeof (Startup))]
 
 namespace Frapid.Web
 {
-    public partial class Startup
+    public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
-            ConfigureAuth(app);
         }
     }
 }

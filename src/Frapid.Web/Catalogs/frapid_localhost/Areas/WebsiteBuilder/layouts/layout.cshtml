@@ -15,8 +15,8 @@
 <body>
     <div class="pusher">
         @{
-            string header = Model.LayoutPath + "header.cshtml";
-            string footer = Model.LayoutPath + "footer.cshtml";
+            string header = ViewBag.LayoutPath + "header.cshtml";
+            string footer = ViewBag.LayoutPath + "footer.cshtml";
         }
 
         @Html.Partial(header)

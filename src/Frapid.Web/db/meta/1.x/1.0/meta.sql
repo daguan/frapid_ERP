@@ -1,4 +1,7 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/00.db core/postgresql-roles.sql --<--<--
+﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/00.db core/extensions.sql --<--<--
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/00.db core/postgresql-roles.sql --<--<--
 DO
 $$
 BEGIN
@@ -287,6 +290,11 @@ SELECT i18n.add_localized_resource('Titles', '', 'Username', 'Username');
 SELECT i18n.add_localized_resource('Titles', '', 'Password', 'Password');
 SELECT i18n.add_localized_resource('Titles', '', 'ReturnToWebsite', 'Return to Website');
 SELECT i18n.add_localized_resource('Titles', '', 'Or', 'Or');
+SELECT i18n.add_localized_resource('Titles', '', 'Add', 'Add');
+SELECT i18n.add_localized_resource('Titles', '', 'Save', 'Save');
+SELECT i18n.add_localized_resource('Titles', '', 'Edit', 'Edit');
+SELECT i18n.add_localized_resource('Titles', '', 'Delete', 'Delete');
+SELECT i18n.add_localized_resource('Titles', '', 'Update', 'Update');
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/99.ownership.sql --<--<--

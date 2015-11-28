@@ -1,0 +1,15 @@
+@model WebsiteBuilder.Models.Content
+@{
+    ViewBag.Description = "Content not found";
+    ViewBag.Title = "404 Not Found";
+    Layout = ViewBag.LayoutPath + Model.Layout;
+}
+
+<div class="ui attached segment" style="padding:128px 0">
+    <div class="ui container">
+            <div class="ui huge header">404 Error</div>
+            <div class="ui divider"></div>
+            <p>The page, content, or resource is either missing or not available.</p>
+            <a href="/" class="btn btn-primary btn-xl page-scroll">Return Home</a>    
+    </div>
+</div>

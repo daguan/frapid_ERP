@@ -1,6 +1,8 @@
-﻿namespace Frapid.Authentication.Models
+﻿using Frapid.DataAccess;
+
+namespace Frapid.Authentication.DTO
 {
-    public class FacebookSignInResult
+    public class SignInResult : IPoco
     {
         public long SignInId { get; set; }
         public bool Status { get; set; }

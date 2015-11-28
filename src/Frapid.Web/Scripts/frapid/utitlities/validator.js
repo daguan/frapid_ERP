@@ -8,20 +8,12 @@
 
     var validateField = function (field) {
         var val = field.val();
-        var errorMessage = field.closest(".field").find(".error-message");
-        if (!errorMessage.length) {
-            errorMessage = $("<span class='error-message' />");
-            field.closest(".field").append(errorMessage);
-        };
 
         if (window.isNullOrWhiteSpace(val)) {
             this.isValid = false;
             window.makeDirty(field);
-
-            field.closest(".field").find(".error-message").html(window.Resources.Labels.ThisFieldIsRequired());
         } else {
             window.removeDirty(field);
-            field.closest(".field").find(".error-message").html("");
         };
     };
 
@@ -37,12 +29,26 @@
     };
 
     this.validate = function (el, oninvalid, log) {
-        var required = el.find(".image.form-field, [required]:not(:disabled):not([readonly]):not(.hidden.column)");
+        var required = el.find(".image.form-field, [required]:not(:disabled):not([readonly]):visible");
         required.trigger("blur");
 
         if (jQuery().timepicker) {
             $(".ui-timepicker-input").timepicker("hide");
         };
+
+        var emailFields = el.find('input[type=email]:visible');
+
+        $.each(emailFields, function () {
+            var el = $(this);
+            var val = el.val();
+
+            var exp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!exp.test(val)) {
+                window.makeDirty(el);
+                isValid = false;
+                return false;
+            };
+        });
 
         var errorFields = el.find(".error:not(.big.error)");
 
@@ -56,11 +62,53 @@
             if (log) {
                 console.log(message);
             };
+        });
 
+        var expressions = el.find("[data-validation-expression]:visible");
+
+        expressions.each(function () {
+            var el = $(this);
+            var val = el.val();
+            var expression = el.attr("data-validation-expression");
+            var message = el.attr("data-validation-message");
+            var target = $(el.attr("data-validation-target"));
+            target.html("");
+
+            if (!val.match(expression)) {
+                window.makeDirty(el);
+                isValid = false;
+                target.html(message);
+                return false;
+            };
+        });
+
+
+        var matchTargets = el.find("[data-match-target]");
+
+        matchTargets.each(function () {
+            var el = $(this);
+            var name = el.siblings("label").html();
+            var val = el.val();
+
+            var targetSelector = "#" + el.attr("data-match-target");
+            var target = $(targetSelector);
+            var targetVal = target.val();
+            var targetName = target.siblings("label").text();
+
+            if (val !== targetVal) {
+                window.makeDirty(el);
+                window.makeDirty(target);
+                alert("The " + name + " does not match with " + targetName + ".");
+                isValid = false;
+                return false;
+            };
+        });
+
+        if (!isValid) {
             if (typeof (oninvalid) === "function") {
                 oninvalid(field);
             };
-        });
+        };
 
         return isValid;
     };

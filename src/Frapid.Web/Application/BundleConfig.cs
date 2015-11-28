@@ -13,7 +13,7 @@ namespace Frapid.Web
 #else
             BundleTable.EnableOptimizations = true;
 #endif
-            bundles.Add(new ScriptBundle("~/bundles/frapid-core.js").Include(GetfrapidCoreScript()));
+            bundles.Add(new ScriptBundle("~/bundles/frapid-core.js").Include(GetFrapidCoreScript()));
             bundles.Add(new ScriptBundle("~/bundles/libraries.js").Include(GetLibrariesScript()));
             bundles.Add(new ScriptBundle("~/bundles/master-page.js").Include(GetMasterPageScript()));
             bundles.Add(new ScriptBundle("~/bundles/scrudfactory-view.js").Include(GetScrudFactoryView()));
@@ -113,7 +113,7 @@ namespace Frapid.Web
 
         #region Scripts
 
-        private static string[] GetfrapidCoreScript()
+        private static string[] GetFrapidCoreScript()
         {
             return new[]
             {
@@ -190,7 +190,7 @@ namespace Frapid.Web
                 "~/Scripts/linq.js/linq.js"
             };
 
-            libraries = libraries.Concat(GetfrapidCoreScript()).ToArray();
+            libraries = libraries.Concat(GetFrapidCoreScript()).ToArray();
 
             return libraries;
         }
@@ -221,7 +221,7 @@ namespace Frapid.Web
                 "~/Scripts/linq.js/linq.js"
             };
 
-            script.AddRange(GetfrapidCoreScript());
+            script.AddRange(GetFrapidCoreScript());
 
             script.AddRange(new[]
             {
@@ -236,7 +236,7 @@ namespace Frapid.Web
                 "~/Scripts/frapid/master-page/sortable.js",
                 "~/Scripts/frapid/master-page/semantic.js",
                 //"~/Scripts/frapid/master-page/menu.js",
-                "~/Scripts/frapid/master-page/notification.js"
+                //"~/Scripts/frapid/master-page/notification.js"
             });
 
             return script.ToArray();

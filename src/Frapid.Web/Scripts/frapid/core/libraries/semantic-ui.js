@@ -16,9 +16,14 @@ $(document).ready(function () {
         $(this).addClass("active");
     });
 
-    $('.activating.element').popup();
+    if ($.isFunction($.fn.popup)) {
+        $('.activating.element').popup();
+    };
 
-    $('.ui.checkbox').checkbox();
+    if ($.isFunction($.fn.checkbox)) {
+        $('.ui.checkbox').checkbox();
+    };
+
 
     initalizeDropdowns();
 });
