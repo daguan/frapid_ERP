@@ -51,27 +51,29 @@ CREATE TABLE auth.registrations
 (
     registration_id                         uuid PRIMARY KEY DEFAULT(gen_random_uuid()),
     name                                    national character varying(100),
-    email                                   national character varying(100) NOT NULL UNIQUE,
+    email                                   national character varying(100) NOT NULL,
     phone                                   national character varying(100),
     password                                text,
     browser                                 text,
-    ip_address                              national character varying(50) NOT NULL,
+    ip_address                              national character varying(50),
     registered_on                           TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
-    confirmed                               boolean NOT NULL,
+    confirmed                               boolean DEFAULT(false),
     confirmed_on                            TIMESTAMP WITH TIME ZONE
 );
 
+CREATE UNIQUE INDEX registrations_email_uix
+ON auth.registrations(LOWER(email));
 
 CREATE TABLE auth.users
 (
     user_id                                 SERIAL PRIMARY KEY,
-    email                                   national character varying(100) NOT NULL UNIQUE,
+    email                                   national character varying(100) NOT NULL,
     password                                text,
     office_id                               integer NOT NULL REFERENCES core.offices,
     role_id                                 integer NOT NULL REFERENCES auth.roles,
     name                                    national character varying(100),
     phone                                   national character varying(100),
-    api_key                                 text UNIQUE,
+    access_token                            text UNIQUE,
     status                                  boolean DEFAULT(true),    
     audit_user_id                           integer REFERENCES auth.users,
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
@@ -79,35 +81,94 @@ CREATE TABLE auth.users
 );
 
 
-CREATE FUNCTION auth.hash_password()
-RETURNS trigger
+CREATE UNIQUE INDEX users_email_uix
+ON auth.users(LOWER(email));
+
+CREATE TABLE auth.reset_requests
+(
+    request_id                              uuid PRIMARY KEY DEFAULT(gen_random_uuid()),
+    user_id                                 integer NOT NULL REFERENCES auth.users,
+    email                                   text,
+    name                                    text,
+    requested_on                            TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
+    expires_on                              TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW() + INTERVAL '24 hours'),
+    browser                                 text,
+    ip_address                              national character varying(50),
+    confirmed                               boolean DEFAULT(false),
+    confirmed_on                            TIMESTAMP WITH TIME ZONE
+);
+
+
+CREATE FUNCTION auth.has_active_reset_request(_email text)
+RETURNS boolean
 AS
 $$
-    DECLARE _email                  national character varying(100);
-    DECLARE _password               text;
+    DECLARE _expires_on                     TIMESTAMP WITH TIME ZONE = NOW() + INTERVAL '24 Hours';
 BEGIN
-    _email      := NEW.email;
-    _password   := NEW.password;
+    IF EXISTS
+    (
+        SELECT * FROM auth.reset_requests
+        WHERE LOWER(email) = LOWER(_email)
+        AND expires_on <= _expires_on
+    ) THEN        
+        RETURN true;
+    END IF;
 
-    _password   := encode(digest(_email || _password, 'sha512'), 'hex');
-    NEW.password = _password;
-
-
-    RETURN NEW;
+    RETURN false;
 END
 $$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER hash_password_on_insert
-BEFORE INSERT ON auth.registrations
-FOR EACH ROW
-EXECUTE PROCEDURE auth.hash_password();
+CREATE OR REPLACE FUNCTION auth.reset_account
+(
+    _email                                  text,
+    _browser                                text,
+    _ip_address                             text
+)
+RETURNS SETOF auth.reset_requests
+AS
+$$
+    DECLARE _request_id                     uuid;
+    DECLARE _user_id                        integer;
+    DECLARE _name                           text;
+    DECLARE _expires_on                     TIMESTAMP WITH TIME ZONE = NOW() + INTERVAL '24 Hours';
+BEGIN
+    IF(NOT auth.user_exists(_email) OR auth.is_restricted_user(_email)) THEN
+        RETURN;
+    END IF;
 
-CREATE TRIGGER hash_password_on_update
-BEFORE UPDATE ON auth.registrations
-FOR EACH ROW
-WHEN (OLD.password IS DISTINCT FROM NEW.password)
-EXECUTE PROCEDURE auth.hash_password();
+    SELECT
+        user_id,
+        name
+    INTO
+        _user_id,
+        _name
+    FROM auth.users
+    WHERE LOWER(email) = LOWER(_email);
+
+    IF auth.has_active_reset_request(_email) THEN
+        RETURN QUERY
+        SELECT * FROM auth.reset_requests
+        WHERE LOWER(email) = LOWER(_email)
+        AND expires_on <= _expires_on
+        LIMIT 1;
+        
+        RETURN;
+    END IF;
+
+    INSERT INTO auth.reset_requests(user_id, email, name, browser, ip_address, expires_on)
+    SELECT _user_id, _email, _name, _browser, _ip_address, _expires_on
+    RETURNING request_id INTO _request_id;
+
+    RETURN QUERY
+    SELECT *
+    FROM auth.reset_requests
+    WHERE request_id = _request_id;
+
+    RETURN;
+END
+$$
+LANGUAGE plpgsql;
 
 CREATE FUNCTION auth.email_exists(_email national character varying(100))
 RETURNS bool
@@ -125,8 +186,6 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
-
-
 
 
 ALTER TABLE core.currencies
@@ -152,16 +211,16 @@ REFERENCES auth.users;
 
 CREATE TABLE auth.fb_access_tokens
 (
-    user_id                         integer PRIMARY KEY REFERENCES auth.users,
-    fb_user_id                      text,
-    token                           text
+    user_id                                 integer PRIMARY KEY REFERENCES auth.users,
+    fb_user_id                              text,
+    token                                   text
 );
 
 
 CREATE TABLE auth.google_access_tokens
 (
-    user_id                         integer PRIMARY KEY REFERENCES auth.users,
-    token                           text
+    user_id                                 integer PRIMARY KEY REFERENCES auth.users,
+    token                                   text
 );
 
 CREATE TABLE auth.sign_ins
@@ -169,7 +228,7 @@ CREATE TABLE auth.sign_ins
     sign_in_id                              BIGSERIAL PRIMARY KEY,
     user_id                                 integer REFERENCES auth.users,
     browser                                 text,
-    ip_address                              national character varying(50) NOT NULL,
+    ip_address                              national character varying(50),
     login_timestamp                         TIMESTAMP WITH TIME ZONE NOT NULL 
                                             DEFAULT(NOW()),
     culture                                 national character varying(12) NOT NULL    
@@ -248,7 +307,7 @@ BEGIN
     (
         SELECT *
         FROM auth.users
-        WHERE auth.users.email = _email
+        WHERE LOWER(auth.users.email) = LOWER(_email)
         AND NOT auth.users.status
     ) THEN
         RETURN true;
@@ -268,7 +327,7 @@ BEGIN
     (
         SELECT *
         FROM auth.users
-        WHERE auth.users.email = _email
+        WHERE LOWER(auth.users.email) = LOWER(_email)
     ) THEN
         RETURN true;
     END IF;
@@ -323,7 +382,7 @@ $$
 BEGIN
     RETURN user_id
     FROM auth.users
-    WHERE auth.users.email = _email;
+    WHERE LOWER(auth.users.email) = LOWER(_email);
 END
 $$
 LANGUAGE plpgsql;
@@ -360,7 +419,7 @@ BEGIN
 
     SELECT user_id INTO _user_id
     FROM auth.users
-    WHERE auth.users.email = _email;
+    WHERE LOWER(auth.users.email) = LOWER(_email);
 
     IF NOT auth.user_exists(_email) AND auth.can_register_with_facebook() THEN
         INSERT INTO auth.users(role_id, office_id, email, name)
@@ -380,7 +439,7 @@ BEGIN
     IF(_user_id IS NULL) THEN
         SELECT user_id INTO _user_id
         FROM auth.users
-        WHERE auth.users.email = _email;
+        WHERE LOWER(auth.users.email) = LOWER(_email);
     END IF;
     
     INSERT INTO auth.sign_ins(user_id, browser, ip_address, login_timestamp, culture)
@@ -432,7 +491,7 @@ BEGIN
 
     SELECT user_id INTO _user_id
     FROM auth.users
-    WHERE auth.users.email = _email;
+    WHERE LOWER(auth.users.email) = LOWER(_email);
 
     IF NOT auth.google_user_exists(_user_id) THEN
         INSERT INTO auth.google_access_tokens(user_id, token)
@@ -525,6 +584,42 @@ $$
 BEGIN
     SELECT count(*) INTO _count FROM auth.users WHERE lower(email) = LOWER(_email);
     RETURN COALESCE(_count, 0) = 1;
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION auth.complete_reset
+(
+    _request_id                     uuid,
+    _password                       text
+)
+RETURNS void
+AS
+$$
+    DECLARE _user_id                integer;
+    DECLARE _email                  text;
+BEGIN
+    SELECT
+        auth.users.user_id,
+        auth.users.email
+    INTO
+        _user_id,
+        _email
+    FROM auth.reset_requests
+    INNER JOIN auth.users
+    ON auth.users.user_id = auth.reset_requests.user_id
+    WHERE auth.reset_requests.request_id = _request_id
+    AND expires_on >= NOW();
+
+    _password = encode(digest(_email || _password, 'sha512'), 'hex');
+    
+    UPDATE auth.users
+    SET
+        password = _password
+    WHERE user_id = _user_id;
+
+    UPDATE auth.reset_requests
+    SET confirmed = true, confirmed_on = NOW();
 END
 $$
 LANGUAGE plpgsql;

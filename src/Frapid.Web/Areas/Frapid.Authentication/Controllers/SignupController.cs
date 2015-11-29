@@ -5,7 +5,7 @@ using Frapid.Authentication.DAL;
 using Frapid.Authentication.DTO;
 using Frapid.Authentication.Exceptions;
 using Frapid.Authentication.Messaging;
-using WebsiteBuilder.Controllers;
+using Frapid.WebsiteBuilder.Controllers;
 using Registration = Frapid.Authentication.ViewModels.Registration;
 
 namespace Frapid.Authentication.Controllers
@@ -23,8 +23,7 @@ namespace Frapid.Authentication.Controllers
                 return Redirect("/dashboard");
             }
 
-            ViewBag.Layout = "layout.cshtml";
-            return View("~/Areas/Frapid.Authentication/Views/Account/SignUp.cshtml");
+            return View(GetRazorView<AreaRegistration>("Account/SignUp.cshtml"));
         }
 
         [Route("account/sign-up")]

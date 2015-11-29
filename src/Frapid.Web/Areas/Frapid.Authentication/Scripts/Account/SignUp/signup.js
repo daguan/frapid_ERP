@@ -4,6 +4,11 @@ $(document).ready(function () {
     window.validator.initialize($(".signup.segment"));
 });
 
+function getPassword(username, password) {
+    var hex = new window.jsSHA(username + password, 'TEXT').getHash('SHA-512', 'HEX');
+    return hex;
+};
+
 $("#EmailInputEmail").blur(function () {
     function request(email) {
         var url = "/account/sign-up/validate-email?email=" + email;
@@ -68,16 +73,17 @@ $("#SignUpButton").click(function () {
 
 
     var formEl = $(".signup.segment");
+    formEl.addClass("loading");
     var model = window.getForm(formEl);
+
+    model.Password = getPassword(model.Email, model.Password);
+    model.ConfirmPassword = getPassword(model.Email, model.ConfirmPassword);
+
 
     var ajax = request(model);
     ajax.success(function (response) {
         if (response) {
             window.location = "/account/sign-up/confirmation-email-sent";
         };
-    });
-
-    ajax.fail(function (xhr) {
-        alert(JSON.stringify(xhr));
     });
 });

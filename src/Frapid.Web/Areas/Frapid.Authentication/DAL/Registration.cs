@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Frapid.ApplicationState.Cache;
 using Frapid.DataAccess;
 
@@ -33,7 +34,7 @@ namespace Frapid.Authentication.DAL
         public static DTO.Registration Get(Guid token)
         {
             const string sql = "SELECT * FROM auth.registrations WHERE registration_id=@0;";
-            return Factory.Single<DTO.Registration>(AppUsers.GetCatalog(), sql, token);
+            return Factory.Get<DTO.Registration>(AppUsers.GetCatalog(), sql, token).FirstOrDefault();
         }
     }
 }

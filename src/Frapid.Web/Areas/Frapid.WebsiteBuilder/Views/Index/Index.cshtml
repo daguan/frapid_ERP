@@ -1,0 +1,10 @@
+﻿@model Frapid.WebsiteBuilder.Models.Content
+
+@{
+    ViewBag.Keywords = Model.SeoKeywords;
+    ViewBag.Description = Model.SeoDescription;
+    ViewBag.Title = Model.Title;
+    Layout = Model.LayoutPath + Model.Layout;
+    ViewBag.LayoutPath = Model.LayoutPath;
+}
+@Html.Raw(Model.Contents)

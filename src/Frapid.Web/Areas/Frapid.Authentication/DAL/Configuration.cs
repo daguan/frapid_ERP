@@ -1,4 +1,5 @@
-﻿using Frapid.ApplicationState.Cache;
+﻿using System.Linq;
+using Frapid.ApplicationState.Cache;
 using Frapid.Authentication.DTO;
 using Frapid.DataAccess;
 
@@ -9,7 +10,7 @@ namespace Frapid.Authentication.DAL
         public static ConfigurationProfile GetActiveProfile()
         {
             const string sql = "SELECT * FROM auth.configuration_profiles WHERE is_active;";
-            return Factory.Single<ConfigurationProfile>(AppUsers.GetCatalog(), sql);
+            return Factory.Get<ConfigurationProfile>(AppUsers.GetCatalog(), sql).FirstOrDefault();
         }
     }
 }

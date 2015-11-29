@@ -1,13 +1,12 @@
 ﻿using System.Globalization;
 using System.Web;
 using System.Web.Mvc;
+using Frapid.Areas;
 using Frapid.Authentication.DTO;
-using Frapid.i18n;
-using WebsiteBuilder.Models;
 
 namespace Frapid.Authentication.Controllers
 {
-    public class BaseAuthenticationController : Controller
+    public class BaseAuthenticationController : FrapidController
     {
         protected ActionResult OnAuthenticated(SignInResult result)
         {
@@ -17,16 +16,6 @@ namespace Frapid.Authentication.Controllers
             Response.Cookies.Add(cookie);
 
             return Json(result);
-        }
-
-        protected RemoteUser GetRemoteUser()
-        {
-            return new RemoteUser
-            {
-                Browser = Request.Browser.Browser,
-                IpAddress = Request.UserHostAddress,
-                Culture = CultureManager.GetCurrent().Name
-            };
         }
     }
 }

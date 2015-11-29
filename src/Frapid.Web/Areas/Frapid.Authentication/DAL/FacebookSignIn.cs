@@ -1,4 +1,5 @@
-﻿using Frapid.ApplicationState.Cache;
+﻿using System.Linq;
+using Frapid.ApplicationState.Cache;
 using Frapid.Authentication.DTO;
 using Frapid.DataAccess;
 
@@ -11,8 +12,8 @@ namespace Frapid.Authentication.DAL
         {
             const string sql =
                 "SELECT * FROM auth.fb_sign_in(@0::text, @1::text, @2::text, @3::text, @4::text, @5::text, @6::text);";
-            return Factory.Single<SignInResult>(AppUsers.GetCatalog(), sql, facebookUserId, email, name, token, browser,
-                ipAddress, culture);
+            return Factory.Get<SignInResult>(AppUsers.GetCatalog(), sql, facebookUserId, email, name, token, browser,
+                ipAddress, culture).FirstOrDefault();
         }
     }
 }

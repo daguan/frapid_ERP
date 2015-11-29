@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Facebook;
+using Frapid.Areas;
 using Frapid.Authentication.DAL;
 using Frapid.Authentication.DTO;
 using Frapid.Authentication.Messaging;
 using Frapid.Authentication.Models;
-using WebsiteBuilder.Models;
+using Registration = Frapid.Authentication.DAL.Registration;
 
 namespace Frapid.Authentication.RemoteAuthentication
 {
@@ -20,7 +21,7 @@ namespace Frapid.Authentication.RemoteAuthentication
         private FacebookUserInfo GetFacebookUserInfo(string token)
         {
             FacebookClient facebook = new FacebookClient(token);
-            dynamic me = facebook.Get("me", new { fields = new[] { "id", "email", "name" } });
+            dynamic me = facebook.Get("me", new {fields = new[] {"id", "email", "name"}});
 
             return new FacebookUserInfo
             {
@@ -45,15 +46,15 @@ namespace Frapid.Authentication.RemoteAuthentication
 
             string template = "~/Catalogs/{catalog}/Areas/Frapid.Authentication/EmailTemplates/welcome-3rd-party.html";
 
-            if (!DAL.Registration.HasAccount(email))
+            if (!Registration.HasAccount(email))
             {
                 WelcomeEmail welcomeEmail = new WelcomeEmail(facebookUser, template, ProviderName);
                 await welcomeEmail.SendAsync();
             }
 
-            SignInResult result = FacebookSignIn.SignIn(fbUserId, email, facebookUser.Name, token, user.Browser, user.IpAddress, user.Culture);
+            SignInResult result = FacebookSignIn.SignIn(fbUserId, email, facebookUser.Name, token, user.Browser,
+                user.IpAddress, user.Culture);
             return result;
         }
-
     }
 }

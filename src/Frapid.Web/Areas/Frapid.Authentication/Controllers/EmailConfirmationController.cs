@@ -2,9 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Frapid.Authentication.DAL;
 using Frapid.Authentication.Messaging;
 using Frapid.Framework.Extensions;
-using WebsiteBuilder.Controllers;
+using Frapid.WebsiteBuilder.Controllers;
 
 namespace Frapid.Authentication.Controllers
 {
@@ -13,8 +14,7 @@ namespace Frapid.Authentication.Controllers
         [Route("account/sign-up/confirmation-email-sent")]
         public ActionResult SignUpConfirmationEmailSent()
         {
-            ViewBag.Layout = "layout.cshtml";
-            return View("~/Areas/Frapid.Authentication/Views/Confirmation/EmailSent.cshtml");
+            return View(GetRazorView<AreaRegistration>("Confirmation/EmailSent.cshtml"));
         }
 
         [Route("account/sign-up/confirm")]
@@ -22,27 +22,24 @@ namespace Frapid.Authentication.Controllers
         {
             Guid id = token.To<Guid>();
 
-            if (DAL.Registration.ConfirmRegistration(id))
+            if (Registration.ConfirmRegistration(id))
             {
-                DTO.Registration registration = DAL.Registration.Get(id);
+                DTO.Registration registration = Registration.Get(id);
                 WelcomeEmail email = new WelcomeEmail(registration);
                 await email.SendAsync();
 
-                ViewBag.Layout = "layout.cshtml";
-                return View("~/Areas/Frapid.Authentication/Views/Confirmation/Welcome.cshtml");
+                return View(GetRazorView<AreaRegistration>("Confirmation/Welcome.cshtml"));
             }
 
-            ViewBag.Layout = "layout.cshtml";
-            return View("~/Areas/Frapid.Authentication/Views/Confirmation/InvalidToken.cshtml");
+            return View(GetRazorView<AreaRegistration>("Confirmation/InvalidToken.cshtml"));
         }
-
 
         [Route("account/sign-up/validate-email")]
         [HttpPost]
         public ActionResult ValidateEmail(string email)
         {
             Thread.Sleep(1000);
-            return string.IsNullOrWhiteSpace(email) ? Json(true) : Json(!DAL.Registration.EmailExists(email));
+            return string.IsNullOrWhiteSpace(email) ? Json(true) : Json(!Registration.EmailExists(email));
         }
     }
 }

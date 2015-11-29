@@ -2,13 +2,14 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Frapid.Areas;
 using Frapid.Authentication.DAL;
 using Frapid.Authentication.DTO;
 using Frapid.Authentication.Messaging;
 using Frapid.Authentication.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using WebsiteBuilder.Models;
+using Registration = Frapid.Authentication.DAL.Registration;
 
 namespace Frapid.Authentication.RemoteAuthentication
 {
@@ -23,7 +24,6 @@ namespace Frapid.Authentication.RemoteAuthentication
         }
 
         public string ClientId { get; set; }
-
         //https://developers.google.com/identity/sign-in/web/backend-auth
         private async Task<bool> ValidateAsync(string token)
         {
@@ -75,7 +75,7 @@ namespace Frapid.Authentication.RemoteAuthentication
 
             string template = "~/Catalogs/{catalog}/Areas/Frapid.Authentication/EmailTemplates/welcome-3rd-party.html";
 
-            if (!DAL.Registration.HasAccount(email))
+            if (!Registration.HasAccount(email))
             {
                 WelcomeEmail welcomeEmail = new WelcomeEmail(gUser, template, ProviderName);
                 await welcomeEmail.SendAsync();

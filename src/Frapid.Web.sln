@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.i18n", "Libraries\Fr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.Messaging", "Libraries\Frapid.Messaging\Frapid.Messaging.csproj", "{9408FEDE-8A04-460D-8FD9-1C710C1BAAEB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.Areas", "Libraries\Frapid.Areas\Frapid.Areas.csproj", "{0361910A-7773-4EE9-861B-FFC5636D82D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{9408FEDE-8A04-460D-8FD9-1C710C1BAAEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9408FEDE-8A04-460D-8FD9-1C710C1BAAEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9408FEDE-8A04-460D-8FD9-1C710C1BAAEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0361910A-7773-4EE9-861B-FFC5636D82D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0361910A-7773-4EE9-861B-FFC5636D82D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0361910A-7773-4EE9-861B-FFC5636D82D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0361910A-7773-4EE9-861B-FFC5636D82D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,5 +70,6 @@ Global
 		{A4DEE358-3203-425C-80E9-8EBA0A01B73F} = {0DFA1BB9-74FE-4C63-B8AF-0B312ED992F6}
 		{88DFDF57-A52B-4D71-A0C4-BEF1A3839506} = {0DFA1BB9-74FE-4C63-B8AF-0B312ED992F6}
 		{9408FEDE-8A04-460D-8FD9-1C710C1BAAEB} = {0DFA1BB9-74FE-4C63-B8AF-0B312ED992F6}
+		{0361910A-7773-4EE9-861B-FFC5636D82D1} = {0DFA1BB9-74FE-4C63-B8AF-0B312ED992F6}
 	EndGlobalSection
 EndGlobal

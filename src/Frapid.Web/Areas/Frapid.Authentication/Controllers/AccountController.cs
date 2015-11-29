@@ -30,7 +30,7 @@ namespace Frapid.Authentication.Controllers
             Mapper.CreateMap<ConfigurationProfile, SignIn>();
             SignIn model = Mapper.Map<SignIn>(profile);
 
-            return View("~/Areas/Frapid.Authentication/Views/Account/SignIn.cshtml", model);
+            return View(GetRazorView<AreaRegistration>("Account/SignIn.cshtml"), model);
         }
     }
 }
