@@ -3,7 +3,7 @@
         var url = "/api/core/filter-name-view/get-where/1";
         var where = [];
 
-        where.push(getAjaxColumnFilter("WHERE", "object_name", FilterConditions.IsEqualTo, scrudFactory.viewTableName));
+        where.push(getAjaxColumnFilter("WHERE", "object_name", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));
         var data = JSON.stringify(where);
 
         return getAjaxRequest(url, "POST", data, false);
@@ -88,7 +88,7 @@ function deleteSavedFilter() {
         var ajax = request(filterName);
         ajax.success(function () {
             loadFilterNames();
-            displayMessage(Resources.Labels.TaskCompletedSuccessfully(), "success");
+            displayMessage(window.Resources.Labels.TaskCompletedSuccessfully(), "success");
         });
     };
 };

@@ -34,7 +34,7 @@ $("#ApproveButton").click(function () {
 
     verifyAjax.success(function () {
         docready();
-        displayMessage(Resources.Labels.TaskCompletedSuccessfully(), "success");
+        displayMessage(window.Resources.Labels.TaskCompletedSuccessfully(), "success");
     });
 });
 
@@ -52,6 +52,6 @@ $("#RejectButton").click(function () {
 
     verifyAjax.success(function () {
         docready();
-        displayMessage(Resources.Labels.TaskCompletedSuccessfully(), "success");
+        displayMessage(window.Resources.Labels.TaskCompletedSuccessfully(), "success");
     });
 });

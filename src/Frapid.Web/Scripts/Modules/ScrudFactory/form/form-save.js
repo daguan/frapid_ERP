@@ -105,7 +105,7 @@
 
     ajax.success(function () {
         saveButton.removeClass("loading");
-        var confirmed = confirm(window.Resources.Labels.TaskCompletedSuccessfullyReturnToView());
+        var confirmed = confirm(window.Resources.Questions.TaskCompletedSuccessfullyReturnToView());
 
         resetForm();
 

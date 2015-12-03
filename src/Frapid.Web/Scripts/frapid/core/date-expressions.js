@@ -92,15 +92,6 @@ function loadDatepicker() {
         var result;
         var number;
 
-        if (value === "bom") { result = applicationDates.MonthStartDate.toFormattedDate(); };
-        if (value === "eom") { result = applicationDates.MonthEndDate.toFormattedDate(); };
-        if (value === "boq") { result = applicationDates.QuarterStartDate.toFormattedDate(); };
-        if (value === "eoq") { result = applicationDates.QuarterEndDate.toFormattedDate(); };
-        if (value === "boh") { result = applicationDates.FiscalHalfStartDate.toFormattedDate(); };
-        if (value === "eoh") { result = applicationDates.FiscalHalfEndDate.toFormattedDate(); };
-        if (value === "boy") { result = applicationDates.FiscalYearStartDate.toFormattedDate(); };
-        if (value === "eoy") { result = applicationDates.FiscalYearEndDate.toFormattedDate(); };
-
         if (value === "d") { result = dateAdd(today, "d", 0); }; //Today
         if (value === "w" || value === "+w") { result = dateAdd(today, "d", 7); }; //Next Week
         if (value === "m" || value === "+m") { result = dateAdd(today, "m", 1); }; //Next Month
@@ -121,8 +112,7 @@ function loadDatepicker() {
         };
 
         if (result) {
-            control.val(result).trigger('change');
-            validateByControlId(control.attr("id"));
+            control.val(result).trigger("change");
         };
     });
 

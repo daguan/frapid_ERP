@@ -34,8 +34,8 @@
       <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NPoco, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NPoco.3.1.0-alpha02\lib\net45\NPoco.dll</HintPath>
+    <Reference Include="NPoco, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NPoco.2.10.11\lib\net45\NPoco.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -76,10 +76,6 @@
     <ProjectReference Include="..\Frapid.Configuration\Frapid.Configuration.csproj">
       <Project>{CA3C3D39-6775-4234-B343-38F0724ADCF8}</Project>
       <Name>Frapid.Configuration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Frapid.DataAccess\Frapid.DataAccess.csproj">
-      <Project>{9BEA3809-B6D5-4025-AE7E-868E5E7E9C76}</Project>
-      <Name>Frapid.DataAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

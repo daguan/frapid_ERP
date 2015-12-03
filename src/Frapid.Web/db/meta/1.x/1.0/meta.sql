@@ -295,6 +295,8 @@ SELECT i18n.add_localized_resource('Titles', '', 'Save', 'Save');
 SELECT i18n.add_localized_resource('Titles', '', 'Edit', 'Edit');
 SELECT i18n.add_localized_resource('Titles', '', 'Delete', 'Delete');
 SELECT i18n.add_localized_resource('Titles', '', 'Update', 'Update');
+SELECT i18n.add_localized_resource('Titles', '', 'Select', 'Select');
+SELECT i18n.add_localized_resource('Titles', '', 'None', 'None');
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/99.ownership.sql --<--<--

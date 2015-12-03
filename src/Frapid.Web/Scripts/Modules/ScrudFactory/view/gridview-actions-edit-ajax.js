@@ -13,7 +13,7 @@
     };
 
     function request(primaryKeyValue) {
-        var url = scrudFactory.formAPI + "/" + primaryKeyValue;
+        var url = window.scrudFactory.formAPI + "/" + primaryKeyValue;
         return getAjaxRequest(url);
     };
 
@@ -25,8 +25,8 @@
 
     var primaryKeyValue = getPrimaryKeyValue($(el), isCard);
 
-    if (scrudFactory.editUrl) {
-        window.location = scrudFactory.editUrl + primaryKeyValue;
+    if (window.scrudFactory.editUrl) {
+        window.location = window.scrudFactory.editUrl + primaryKeyValue;
         return;
     };
 
@@ -35,7 +35,7 @@
         return;
     };
 
-    var tableName = scrudFactory.formTableName;
+    var tableName = window.scrudFactory.formTableName;
 
     if (checkIfProcedure()) {
         return;
@@ -43,8 +43,8 @@
 
     var ajax = request(primaryKeyValue);
 
-    if (scrudFactory.disabledOnEdit) {
-        $.each(scrudFactory.disabledOnEdit, function () {
+    if (window.scrudFactory.disabledOnEdit) {
+        $.each(window.scrudFactory.disabledOnEdit, function () {
             var t = $('[data-property="' + this + '"]');
             t.attr("disabled", "disabled");
         });

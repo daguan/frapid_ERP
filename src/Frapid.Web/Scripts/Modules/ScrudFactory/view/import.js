@@ -23,7 +23,7 @@
 
 $("#file").change(function () {
     function request(entities) {
-        var url = scrudFactory.formAPI + "/bulk-import";
+        var url = window.scrudFactory.formAPI + "/bulk-import";
         var data = JSON.stringify(entities);
         return getAjaxRequest(url, "POST", data);
     };

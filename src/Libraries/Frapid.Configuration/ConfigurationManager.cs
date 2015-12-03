@@ -11,7 +11,6 @@ namespace Frapid.Configuration
         /// <param name="configFileName">The name of the configuration file.</param>
         /// <param name="key">The configuration key to find.</param>
         /// <returns>Returns the configuration value of the requested key.</returns>
-        /// <exception cref="ConfigurationErrorsException">Thrown when the supplied configuration file is invalid or could not be loaded.</exception>
         public static string GetConfigurationValue(string configFileName, string key)
         {
             if (configFileName == null)
@@ -22,8 +21,12 @@ namespace Frapid.Configuration
             var fileName = System.Configuration.ConfigurationManager.AppSettings[configFileName];
 
             string path = HostingEnvironment.MapPath(fileName);
+            return ReadConfigurationValue(path, key);
+        }
 
-            ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap {ExeConfigFilename = path};
+        public static string ReadConfigurationValue(string path, string key)
+        {
+            ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap { ExeConfigFilename = path };
 
             System.Configuration.Configuration config =
                 System.Configuration.ConfigurationManager.OpenMappedExeConfiguration(configFileMap,
@@ -32,5 +35,6 @@ namespace Frapid.Configuration
 
             return section?.Settings[key] != null ? section.Settings[key].Value : string.Empty;
         }
+
     }
 }

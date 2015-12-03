@@ -209,3 +209,12 @@ END
 $$
 LANGUAGE plpgsql;
 
+SELECT * FROM core.create_app('Frapid.WebsiteBuilder', 'Website', '1.0', 'MixERP Inc.', 'December 1, 2015', 'world blue', '/dashboard/website/contents', null);
+
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Tasks', '', '', '');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Add New Content', '/dashboard/website/contents/new', '', 'Tasks');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'View Contents', '/dashboard/website/contents', '', 'Tasks');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Layout Manager', '', '', '');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Master Layout', '/dashboard/website/layouts/master', '', 'Layout Manager');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Header', '/dashboard/website/layouts/header', '', 'Layout Manager');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Footer', '/dashboard/website/layouts/footer', '', 'Layout Manager');

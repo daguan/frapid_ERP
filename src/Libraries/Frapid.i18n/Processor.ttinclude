@@ -20,7 +20,7 @@
 <#@ import namespace="System.Configuration" #>
 <#@ import namespace="System.Windows.Forms" #>
 <#+
-	private string _npgsqlConnectionString="Server=localhost;Port=5432;Database=localhost;User Id=postgres;Password=binod;";
+	private string _npgsqlConnectionString="Server=localhost;Port=5432;Database=postgres;User Id=postgres;Password=binod;";
 
 	public class DbResource
 	{

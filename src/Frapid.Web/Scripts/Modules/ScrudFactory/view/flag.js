@@ -77,7 +77,7 @@ function initializeFlag() {
 
         getFlagTypesAjax.success(function (msg) {
             bindSelect(flagSelect, msg, "Key", "Value");
-            var options = "<option value='0'>" + Resources.Titles.None() + "</option>";
+            var options = "<option value='0'>" + window.Resources.Titles.None() + "</option>";
             options += flagSelect.html();
             flagSelect.html(options);
             flagSelect.dropdown();

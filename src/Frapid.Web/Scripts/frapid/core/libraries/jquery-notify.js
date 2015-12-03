@@ -1,3 +1,5 @@
+var taskCompletedSuccessfully = window.Resources.Labels.TaskCompletedSuccessfully() || "Task completed successfully.";
+
 function displayMessage(a, b) {
     if ($.notify) {
         $.notify(a, b);
@@ -5,7 +7,6 @@ function displayMessage(a, b) {
 };
 
 function displaySucess() {
-    var taskCompletedSuccessfully = "Task completed successfully";
     if ($.notify) {
         $.notify(taskCompletedSuccessfully, "success");
     };

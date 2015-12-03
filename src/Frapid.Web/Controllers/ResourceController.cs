@@ -4,13 +4,14 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
+using Frapid.Areas;
 using Frapid.i18n;
 using Frapid.i18n.Database;
 using Frapid.i18n.Models;
 
 namespace Frapid.Web.Controllers
 {
-    public class ResourceController : Controller
+    public class ResourceController : FrapidController
     {
         [Route("i18n/resources.js")]
         [OutputCache(Duration = 31536000, VaryByParam = "none", Location = OutputCacheLocation.Client, NoStore = true)]

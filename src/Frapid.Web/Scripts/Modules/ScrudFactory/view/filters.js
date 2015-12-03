@@ -1,4 +1,4 @@
-﻿$("#FilterName").text(Resources.Titles.Untitled());
+﻿$("#FilterName").text(window.Resources.Titles.Untitled());
 
 function getFilterName() {
     if ($("#DefaultFilterSelect").val()) {
@@ -34,7 +34,7 @@ function loadColumns() {
 };
 
 $("#FilterNameInputText").keyup(function () {
-    $("#FilterName").html(Resources.Titles.Untitled());
+    $("#FilterName").html(window.Resources.Titles.Untitled());
     if ($(this).val()) {
         var filterName = stringFormat(window.Resources.Labels.NamedFilter(), $(this).val());
         $("#FilterName").html(filterName);
@@ -202,7 +202,7 @@ $("#SaveFilterButton").click(function () {
 
     ajax.success(function () {
         window.filterId = 0;
-        displayMessage(Resources.Titles.TaskCompletedSuccessfully(), "success");
+        displayMessage(window.Resources.Labels.TaskCompletedSuccessfully(), "success");
     });
 
     ajax.fail(function (xhr) {
@@ -250,7 +250,7 @@ function deleteFilter(el) {
 
 $("#MakeUserDefaultFilterButton").click(function () {
     function request(filterName) {
-        var url = "/api/core/filter/make-default/" + scrudFactory.viewTableName + "/" + filterName;
+        var url = "/api/core/filter/make-default/" + window.scrudFactory.viewTableName + "/" + filterName;
         return getAjaxRequest(url, "PUT");
     };
 
@@ -258,7 +258,7 @@ $("#MakeUserDefaultFilterButton").click(function () {
     var ajax = request(filterName);
 
     ajax.success(function () {
-        displayMessage(Resources.Labels.TaskCompletedSuccessfully(), "success");
+        displayMessage(window.Resources.Labels.TaskCompletedSuccessfully(), "success");
 
         $(".filter.modal").modal("close");
     });

@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/WebsiteBuilder/db/1.x/1.0/src/db.sql --<--<--
+﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/db.sql --<--<--
 DROP SCHEMA IF EXISTS wb CASCADE; --WEB BUILDER
 CREATE SCHEMA wb;
 
@@ -210,4 +210,13 @@ END
 $$
 LANGUAGE plpgsql;
 
+SELECT * FROM core.create_app('Frapid.WebsiteBuilder', 'Website', '1.0', 'MixERP Inc.', 'December 1, 2015', 'world blue', '/dashboard#/Frapid.WebsiteBuilder/contents', null);
+
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Tasks', '', '', '');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Add New Content', '/dashboard#/Frapid.WebsiteBuilder/contents/new', '', 'Tasks');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'View Contents', '/dashboard#/Frapid.WebsiteBuilder/contents', '', 'Tasks');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Layout Manager', '', '', '');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Master Layout', '/dashboard#/Frapid.WebsiteBuilder/layouts/master', '', 'Layout Manager');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Header', '/dashboard#/Frapid.WebsiteBuilder/layouts/header', '', 'Layout Manager');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Footer', '/dashboard#/Frapid.WebsiteBuilder/layouts/footer', '', 'Layout Manager');
 

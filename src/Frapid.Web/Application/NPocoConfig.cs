@@ -1,4 +1,5 @@
-﻿using Frapid.DataAccess;
+﻿using Frapid.Configuration;
+using Frapid.DataAccess;
 
 namespace Frapid.Web
 {
@@ -6,7 +7,7 @@ namespace Frapid.Web
     {
         public static void Register()
         {
-            Provider.Setup();
+            Provider.Setup(typeof(IPoco));
         }
     }
 }

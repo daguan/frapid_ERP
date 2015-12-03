@@ -28,7 +28,7 @@ function createKanbans(kanbans) {
 
     var kanban = new Object();
     kanban.KanbanId = "0";
-    kanban.KanbanName = Resources.Titles.Untitled();
+    kanban.KanbanName = window.Resources.Titles.Untitled();
     createKanbanSegment(kanban);
 
     $.each(kanbans, function (i, kanban) {

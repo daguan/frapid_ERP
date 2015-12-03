@@ -15,12 +15,12 @@
 
     var index = 0;
 
-    if (!scrudFactory.excludedColumns) {
-        scrudFactory.excludedColumns = [];
+    if (!window.scrudFactory.excludedColumns) {
+        window.scrudFactory.excludedColumns = [];
     };
 
     $.each(json[0], function (name) {
-        if (scrudFactory.excludedColumns.indexOf(name) === -1) {
+        if (window.scrudFactory.excludedColumns.indexOf(name) === -1) {
             header += "<th>" + name + "</th>";
         } else {
             excludedColumnIndices.push(index);
@@ -43,11 +43,11 @@
             if (excludedColumnIndices.indexOf(index) === -1) {
                 var title = "";
                 if (val === false) {
-                    val = Resources.Titles.No();
+                    val = window.Resources.Titles.No();
                 };
 
                 if (val === true) {
-                    val = Resources.Titles.Yes();
+                    val = window.Resources.Titles.Yes();
                 };
 
                 var column = Enumerable.From(metaDefinition.Columns)

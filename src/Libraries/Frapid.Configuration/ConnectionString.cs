@@ -5,10 +5,6 @@ namespace Frapid.Configuration
 {
     public static class ConnectionString
     {
-        /// <exception cref="System.Configuration.ConfigurationErrorsException">
-        ///     Thrown when the AppSetting key
-        ///     "DbServerConfigFileLocation" is not present in web.config.
-        /// </exception>
         public static string GetConnectionString(string database = "")
         {
             string host = ConfigurationManager.GetConfigurationValue("DbServerConfigFileLocation", "Server");
@@ -25,10 +21,6 @@ namespace Frapid.Configuration
             return GetConnectionString(host, database, userId, password, port);
         }
 
-        /// <exception cref="System.Configuration.ConfigurationErrorsException">
-        ///     Thrown when the AppSetting key
-        ///     "DbServerConfigFileLocation" is not present in web.config.
-        /// </exception>
         public static string GetMetaConnectionString()
         {
             string database = ConfigurationManager.GetConfigurationValue("DbServerConfigFileLocation", "MetaDatabase");

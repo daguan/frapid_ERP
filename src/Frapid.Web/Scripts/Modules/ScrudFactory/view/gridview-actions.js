@@ -40,11 +40,11 @@ function loadActions() {
     var editTemplate = "";
 
     if (scrudFactory.allowDelete) {
-        deleteTemplate = stringFormat("<a onclick='deleteRow(this);' title='{0}'><i class='delete icon'></i></a>", Resources.Titles.Delete());
+        deleteTemplate = stringFormat("<a onclick='deleteRow(this);' title='{0}'><i class='delete icon'></i></a>", window.Resources.Titles.Delete());
     };
 
     if (scrudFactory.allowEdit) {
-        editTemplate = stringFormat("<a onclick='editRow(this);' title='{0}'><i class='edit icon'></i></a>", Resources.Titles.Edit());
+        editTemplate = stringFormat("<a onclick='editRow(this);' title='{0}'><i class='edit icon'></i></a>", window.Resources.Titles.Edit());
     };
 
     var grid = $(".scrudview.table");
@@ -56,8 +56,8 @@ function loadActions() {
     };
 
 
-    var header = stringFormat("<th style='width:{0}px;'>{1}</th>", actionCount * 25, Resources.Titles.Actions());
-    header += "<th class='action' style='cursor:pointer;'>" + Resources.Titles.Select() + "</th>";
+    var header = stringFormat("<th style='width:{0}px;'>{1}</th>", actionCount * 25, window.Resources.Titles.Actions());
+    header += "<th class='action' style='cursor:pointer;'>" + window.Resources.Titles.Select() + "</th>";
     var selectTemplate = '<div class="ui toggle checkbox"> \
                                       <input type="checkbox">\
                                       <label></label>\

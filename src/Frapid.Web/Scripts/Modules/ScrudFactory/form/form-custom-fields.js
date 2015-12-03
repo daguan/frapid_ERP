@@ -42,7 +42,7 @@ function createCustomFields(customFields) {
     };
 
     if (customFields.length) {
-        var active = scrudFactory.tabs.length === 0;
+        var active = window.scrudFactory.tabs.length === 0;
         createTabEls("custom", window.Resources.Titles.CustomFields(), active);
     } else {
         if (!$("#scrud-tab-menus .item").length) {

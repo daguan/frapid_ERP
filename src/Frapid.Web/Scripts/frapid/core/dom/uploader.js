@@ -1,3 +1,4 @@
+var invalidFileExtensionLocalized = window.Resources.Warnings.InvalidFileExtension() || "Invalid file extension.";
 var uploaderInitialized = false;
 var allowedExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
 var uploaderTemplate = '<div class="ui uploader field">\
@@ -73,7 +74,7 @@ function isValidExtension(el) {
             };
 
             if (!valid) {
-                displayMessage(Resources.Warnings.InvalidFileExtension());
+                displayMessage(invalidFileExtensionLocalized);
                 el.value = "";
                 return false;
             };

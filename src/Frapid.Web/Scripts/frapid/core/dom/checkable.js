@@ -5,5 +5,5 @@ var toogleSelection = function (element) {
         element.prop("checked", false);
     } else {
         element.prop("checked", true);
-    }
+    };
 };

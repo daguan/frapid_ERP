@@ -10,12 +10,14 @@ namespace Frapid.Web
     {
         protected void Application_Start()
         {
+            LogManager.InternalizeLogger();
             AreaRegistration.RegisterAllAreas();
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             NPocoConfig.Register();
+            MetaConfig.Setup();
         }
     }
 }

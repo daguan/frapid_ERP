@@ -1,5 +1,7 @@
+var areYouSure = window.Resources.Questions.AreYouSure() || "Are you sure?";
+
 var confirmAction = function () {
-    return confirm(Resources.Questions.AreYouSure());
+    return confirm(areYouSure);
 };
 
 //Jason Bunting & Alex Nazarov

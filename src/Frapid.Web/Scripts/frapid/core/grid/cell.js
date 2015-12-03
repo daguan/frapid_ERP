@@ -1,8 +1,10 @@
+var areYouSure = window.Resources.Questions.AreYouSure() || "Are you sure?";
+
 var sumOfColumn = function (tableSelector, columnIndex) {
     var total = 0;
 
-    $(tableSelector).find('tr').each(function () {
-        var value = parseFloat2($('td', this).eq(columnIndex).text());
+    $(tableSelector).find("tr").each(function () {
+        var value = parseFloat2($("td", this).eq(columnIndex).text());
         total += value;
     });
 
@@ -33,7 +35,7 @@ var toggleSuccess = function (cell) {
 };
 
 var removeRow = function (cell) {
-    var result = confirm(Resources.Questions.AreYouSure());
+    var result = confirm(areYouSure);
 
     if (result) {
         cell.closest("tr").remove();

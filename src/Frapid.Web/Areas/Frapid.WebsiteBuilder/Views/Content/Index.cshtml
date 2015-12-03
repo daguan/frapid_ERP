@@ -1,0 +1,40 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Content List";
+    Layout = ViewBag.Layout;
+}
+
+<script>
+	var scrudFactory = new Object();
+
+    scrudFactory.title = "Contents";
+
+    scrudFactory.viewAPI = "/api/wb/content";
+    scrudFactory.viewTableName = "wb.contents";
+
+    scrudFactory.formAPI = "/api/wb/content";
+    scrudFactory.formTableName = "wb.contents";
+
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+
+    scrudFactory.live = "WorkCenterDepartmentName";
+
+	scrudFactory.keys = [
+	    {
+	        property: "ParentWorkCenterDepartmentId",
+	        url: '/api/production/work-center-department/display-fields',
+	        data: null,
+	        valueField: "Key",
+	        textField: "Value"
+	    }
+	];
+
+</script>
+
+
+<div data-ng-include="'/ScrudFactory/View.html'"></div>
+<div data-ng-include="'/ScrudFactory/Form.html'"></div>

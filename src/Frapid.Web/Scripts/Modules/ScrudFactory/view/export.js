@@ -5,23 +5,23 @@
         filterName += "-";
     };
 
-    return scrudFactory.title + "-" + filterName + stringFormat(Resources.Titles.PageN(), getPageNumber());
+    return window.scrudFactory.title + "-" + filterName + stringFormat(window.Resources.Titles.PageN(), getPageNumber());
 };
 
 function createPDF() {
-    printGridView(reportExportTemplatePath, reportHeaderPath, scrudFactory.title, "ScrudView", date, user, office, '', 2, 0, $("#MarkupHidden"), null, downloadPDF);
+    printGridView(window.reportExportTemplatePath, window.reportHeaderPath, window.scrudFactory.title, "ScrudView", date, window.user, window.office, '', 2, 0, $("#MarkupHidden"), null, downloadPDF);
 };
 
 function createXls() {
-    printGridView(reportExportTemplatePath, reportHeaderPath, scrudFactory.title, "ScrudView", date, user, office, '', 2, 0, $("#MarkupHidden"), null, downloadXls);
+    printGridView(window.reportExportTemplatePath, window.reportHeaderPath, window.scrudFactory.title, "ScrudView", date, window.user, window.office, '', 2, 0, $("#MarkupHidden"), null, downloadXls);
 };
 
 function createDoc() {
-    printGridView(reportExportTemplatePath, reportHeaderPath, scrudFactory.title, "ScrudView", date, user, office, '', 2, 0, $("#MarkupHidden"), null, downloadDoc);
+    printGridView(window.reportExportTemplatePath, window.reportHeaderPath, window.scrudFactory.title, "ScrudView", date, window.user, window.office, '', 2, 0, $("#MarkupHidden"), null, downloadDoc);
 };
 
 function print() {
-    printGridView(reportExportTemplatePath, reportHeaderPath, scrudFactory.title, "ScrudView", date, user, office, '', 2, 0);
+    printGridView(window.reportExportTemplatePath, window.reportHeaderPath, window.scrudFactory.title, "ScrudView", date, window.user, window.office, '', 2, 0);
 };
 
 function downloadXls() {

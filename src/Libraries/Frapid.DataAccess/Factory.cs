@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Frapid.Configuration;
+using Frapid.i18n;
+using Npgsql;
 using NPoco;
 
 namespace Frapid.DataAccess
@@ -178,5 +180,18 @@ namespace Frapid.DataAccess
                 await db.ExecuteAsync(sql, args);
             }
         }
+
+        public static string GetDbErrorResource(NpgsqlException ex)
+        {
+            string message = ResourceManager.TryGetResourceFromCache("DbErrors", ex.Code);
+
+            if (string.IsNullOrWhiteSpace(message) || message == ex.Code)
+            {
+                return ex.Message;
+            }
+
+            return message;
+        }
+
     }
 }

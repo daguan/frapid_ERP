@@ -1,0 +1,68 @@
+﻿@using Frapid.ApplicationState.Cache
+@model dynamic
+
+@{
+    ViewBag.Title = "Frapid Dashboard";
+    Layout = @ViewBag.Layout;
+}
+<div class="ui page grid">
+    <div class="sixteen wide column">
+        <div id="PhoneMenu" class="ui basic padded segment" style="background-color: #E6E6E6; border: 1px solid #DADADA">
+            <div class="ui grey center aligned header">Select an Application</div>
+            <div class="ui inverted divider"></div>
+            <div class="ui equal height grid">
+            </div>
+            <div class="ui basic segment">
+                <img class="ui centered image" height="30" src="/Static/images/logo.png" />                
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function loadIcons(apps) {
+        function addIcon(app, target) {
+            var div = $("<div/>");
+            var anchor = $("<a/>");
+            var icon = $("<i/>");
+            var span = $("<span/>");
+
+            div.attr("class", "two wide computer three wide tablet six wide mobile column");
+            anchor.attr("class", "ui link icons");
+            anchor.attr("data-app-name", app.AppName);
+            anchor.attr("href", app.LandingUrl || "javascript:void(0);");
+
+
+            icon.attr("class", "ui inverted circular large " + (app.Icon || "user") + " icon");
+            span.text(app.Name);
+
+            anchor.append(icon);
+            anchor.append(span);
+            div.append(anchor);
+
+            target.append(div);
+        };
+
+        var target = $("#PhoneMenu .ui.grid");
+
+        for (var i = 0; i < apps.length; i++) {
+            addIcon(apps[i], target);
+        };
+    };
+
+    function loadApps() {
+        function request() {
+            var url = "/dashboard/my/apps";
+            return window.getAjaxRequest(url);
+        };
+
+        var ajax = request();
+
+        ajax.success(function (response) {
+            loadIcons(response);
+        });
+    };
+
+    $(document).ready(function () {
+        loadApps();
+    });
+</script>

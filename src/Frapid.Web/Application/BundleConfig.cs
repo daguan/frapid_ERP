@@ -15,7 +15,7 @@ namespace Frapid.Web
 #endif
             bundles.Add(new ScriptBundle("~/bundles/frapid-core.js").Include(GetFrapidCoreScript()));
             bundles.Add(new ScriptBundle("~/bundles/libraries.js").Include(GetLibrariesScript()));
-            bundles.Add(new ScriptBundle("~/bundles/master-page.js").Include(GetMasterPageScript()));
+            bundles.Add(new ScriptBundle("~/bundles/backend.js").Include(GetDashboardScript()));
             bundles.Add(new ScriptBundle("~/bundles/scrudfactory-view.js").Include(GetScrudFactoryView()));
             bundles.Add(new ScriptBundle("~/bundles/scrudfactory-form.js").Include(GetScrudFactoryForm()));
 
@@ -45,7 +45,6 @@ namespace Frapid.Web
                 "~/Scripts/Modules/ScrudFactory/view/export.js",
                 "~/Scripts/Modules/ScrudFactory/view/filters-ajax.js",
                 "~/Scripts/Modules/ScrudFactory/view/filters.js",
-                "~/Scripts/Modules/ScrudFactory/view/flag.js",
                 "~/Scripts/Modules/ScrudFactory/view/gridview-actions-delete.js",
                 "~/Scripts/Modules/ScrudFactory/view/gridview-actions-edit-ajax.js",
                 "~/Scripts/Modules/ScrudFactory/view/gridview-actions-edit.js",
@@ -89,7 +88,6 @@ namespace Frapid.Web
                 "~/Scripts/Modules/ScrudFactory/shared/view.js",
                 "~/Scripts/Modules/ScrudFactory/form/title.js",
                 "~/Scripts/Modules/ScrudFactory/form/url.js",
-                "~/Scripts/Modules/ScrudFactory/form/visibility.js",
                 "~/Scripts/Modules/ScrudFactory/form/form-cancel.js",
                 "~/Scripts/Modules/ScrudFactory/form/form-custom-fields.js",
                 "~/Scripts/Modules/ScrudFactory/form/form-edit.js",
@@ -117,50 +115,38 @@ namespace Frapid.Web
         {
             return new[]
             {
-                "~/Scripts/frapid/core/dom/cascading-pair.js",
                 "~/Scripts/frapid/core/dom/checkable.js",
                 "~/Scripts/frapid/core/dom/document.js",
                 "~/Scripts/frapid/core/dom/frame.js",
                 "~/Scripts/frapid/core/dom/events.js",
-                "~/Scripts/frapid/core/dom/loader.js",
                 "~/Scripts/frapid/core/dom/uploader.js",
                 "~/Scripts/frapid/core/dom/popunder.js",
                 "~/Scripts/frapid/core/dom/select.js",
-                "~/Scripts/frapid/core/dom/visibility.js",
                 "~/Scripts/frapid/core/grid/cell.js",
-                "~/Scripts/frapid/core/grid/grid.js",
                 "~/Scripts/frapid/core/grid/print-grid.js",
                 "~/Scripts/frapid/core/libraries/chartjs.js",
-                "~/Scripts/frapid/core/libraries/colorbox.js",
                 "~/Scripts/frapid/core/libraries/jquery-notify.js",
                 "~/Scripts/frapid/core/libraries/semantic-ui.js",
                 "~/Scripts/frapid/core/prototype/string.js",
                 "~/Scripts/frapid/core/array.js",
-                "~/Scripts/frapid/core/aspnet-validation.js",
                 "~/Scripts/frapid/core/conversion.js",
                 "~/Scripts/frapid/core/date-expressions.js",
                 "~/Scripts/frapid/core/enums.js",
                 "~/Scripts/frapid/core/browser.js",
-                "~/Scripts/frapid/core/flag.js",
                 "~/Scripts/frapid/core/json.js",
                 "~/Scripts/frapid/core/localization.js",
                 "~/Scripts/frapid/core/location.js",
                 "~/Scripts/frapid/core/frapid-ajax.js",
-                "~/Scripts/frapid/core/transaction.js",
                 "~/Scripts/frapid/core/validation.js",
                 "~/Scripts/frapid/core/window.js",
-                "~/Scripts/frapid/core/dom/cascading-pair.js",
                 "~/Scripts/frapid/core/dom/checkable.js",
                 "~/Scripts/frapid/core/dom/document.js",
                 "~/Scripts/frapid/core/dom/events.js",
                 "~/Scripts/frapid/core/dom/popunder.js",
                 "~/Scripts/frapid/core/dom/select.js",
-                "~/Scripts/frapid/core/dom/visibility.js",
                 "~/Scripts/frapid/core/grid/cell.js",
-                "~/Scripts/frapid/core/grid/grid.js",
                 "~/Scripts/frapid/core/grid/print-grid.js",
                 "~/Scripts/frapid/core/libraries/chartjs.js",
-                "~/Scripts/frapid/core/libraries/colorbox.js",
                 "~/Scripts/frapid/core/libraries/jquery-notify.js",
                 "~/Scripts/frapid/core/libraries/semantic-ui.js",
                 "~/Scripts/frapid/core/prototype/string.js"
@@ -175,7 +161,6 @@ namespace Frapid.Web
                 "~/Scripts/jquery-ui.js",
                 "~/Scripts/jquery-timePicker/jquery.timepicker.js",
                 "~/Scripts/shortcut.js",
-                "~/Scripts/colorbox/jquery.colorbox.js",
                 "~/Scripts/jqueryNumber/jquery.number.js",
                 "~/Scripts/date.js",
                 "~/Scripts/chartjs/Chart.min.js",
@@ -195,7 +180,7 @@ namespace Frapid.Web
             return libraries;
         }
 
-        private static string[] GetMasterPageScript()
+        private static string[] GetDashboardScript()
         {
             List<string> script = new List<string>
             {
@@ -205,7 +190,6 @@ namespace Frapid.Web
                 "~/Scripts/jquery-ui.js",
                 "~/Scripts/jquery-timepicker/jquery.timepicker.js",
                 "~/Scripts/shortcut.js",
-                "~/Scripts/colorbox/jquery.colorbox.js",
                 "~/Scripts/papaparse/papaparse.min.js",
                 "~/Scripts/jqueryNumber/jquery.number.js",
                 "~/Scripts/date.js",
@@ -222,23 +206,6 @@ namespace Frapid.Web
             };
 
             script.AddRange(GetFrapidCoreScript());
-
-            script.AddRange(new[]
-            {
-                "~/Scripts/ajax-file-upload.js",
-                //Libraries End
-                "~/Scripts/frapid/master-page/declaration.js",
-                "~/Scripts/frapid/master-page/js-tree.js",
-                "~/Scripts/frapid/master-page/keyboard.js",
-                "~/Scripts/frapid/master-page/layout.js",
-                "~/Scripts/frapid/master-page/locale.js",
-                "~/Scripts/frapid/master-page/scrud.js",
-                "~/Scripts/frapid/master-page/sortable.js",
-                "~/Scripts/frapid/master-page/semantic.js",
-                //"~/Scripts/frapid/master-page/menu.js",
-                //"~/Scripts/frapid/master-page/notification.js"
-            });
-
             return script.ToArray();
         }
 

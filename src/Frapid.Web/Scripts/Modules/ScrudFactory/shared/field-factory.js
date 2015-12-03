@@ -44,9 +44,9 @@
                 option += " value=''>";
             };
 
-            option += Resources.Titles.Select() + "</option>";
-            option += "<option value='yes'>" + Resources.Titles.Yes() + "</option>";
-            option += "<option value='no'>" + Resources.Titles.No() + "</option>";
+            option += window.Resources.Titles.Select() + "</option>";
+            option += "<option value='yes'>" + window.Resources.Titles.Yes() + "</option>";
+            option += "<option value='no'>" + window.Resources.Titles.No() + "</option>";
 
             el.append(option);
 

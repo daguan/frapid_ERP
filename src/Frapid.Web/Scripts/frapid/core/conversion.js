@@ -5,8 +5,8 @@ var parseFloat2 = function (arg) {
 
     var input = arg;
 
-    if (currencySymbol) {
-        input = input.toString().replace(currencySymbol, "");
+    if (window.currencySymbol) {
+        input = input.toString().replace(window.currencySymbol, "");
     };
 
     var val = parseFloat(parseFormattedNumber(input.toString()) || 0);

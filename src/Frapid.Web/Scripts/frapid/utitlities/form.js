@@ -16,7 +16,7 @@
 function getForm(el) {
     function getControlNameById(id) {
         if (id) {
-            var conventions = ["InputTel", "InputColor", "InputDate", "InputDateTime", "InputDateTimeLocal", "Hidden", "InputNumber", "InputSearch", "InputTime", "InputUrl", "InputText", "InputPassword", "InputEmail", "Select", "Checkbox"];
+            var conventions = ["InputTel", "InputColor", "InputDate", "InputDateTime", "InputDateTimeLocal", "InputHidden", "InputNumber", "InputSearch", "InputTime", "InputUrl", "InputText", "InputPassword", "InputEmail", "Select", "Checkbox"];
             for (var i = 0; i < conventions.length; i++) {
                 var convention = conventions[i];
                 if (id.endsWith(convention)) {

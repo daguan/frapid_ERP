@@ -1,0 +1,63 @@
+﻿using System.Threading.Tasks;
+using Facebook;
+using Frapid.Areas;
+using Frapid.Account.DAL;
+using Frapid.Account.DTO;
+using Frapid.Account.InputModels;
+using Frapid.Account.Messaging;
+using Frapid.Account.Models;
+using Registration = Frapid.Account.DAL.Registration;
+
+namespace Frapid.Account.RemoteAuthentication
+{
+    public class FacebookAuthentication
+    {
+        public string ProviderName => "Facebook";
+
+        private bool Validate(FacebookUserInfo user, string id, string email)
+        {
+            return user.Id == id && user.Email == email;
+        }
+
+        private FacebookUserInfo GetFacebookUserInfo(string token)
+        {
+            FacebookClient facebook = new FacebookClient(token);
+            dynamic me = facebook.Get("me", new {fields = new[] {"id", "email", "name"}});
+
+            return new FacebookUserInfo
+            {
+                Id = me.id,
+                Name = me.name,
+                Email = me.email
+            };
+        }
+
+        public async Task<LoginResult> AuthenticateAsync(FacebookAccount account, RemoteUser user)
+        {
+            FacebookUserInfo facebookUser = GetFacebookUserInfo(account.Token);
+
+            if (!Validate(facebookUser, account.FacebookUserId, account.Email))
+            {
+                return new LoginResult
+                {
+                    Status = false,
+                    Message = "Access is denied"
+                };
+            }
+
+            LoginResult result = FacebookSignIn.SignIn(account.FacebookUserId, account.Email, account.OfficeId, facebookUser.Name, account.Token, user.Browser,
+                user.IpAddress, account.Culture);
+
+            if (result.Status)
+            {
+                if (!Registration.HasAccount(account.Email))
+                {
+                    string template = "~/Catalogs/{catalog}/Areas/Frapid.Account/EmailTemplates/welcome-3rd-party.html";
+                    WelcomeEmail welcomeEmail = new WelcomeEmail(facebookUser, template, ProviderName);
+                    await welcomeEmail.SendAsync();
+                }
+            }
+            return result;
+        }
+    }
+}

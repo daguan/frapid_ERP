@@ -1,31 +1,20 @@
 $(document).ready(function () {
     setCurrencyFormat();
     setNumberFormat();
-
-    if (typeof Sys !== "undefined") {
-        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(Page_EndRequest);
-    }
 });
-
-//Fired on ASP.net Ajax Postback
-function Page_EndRequest() {
-    setRegionalFormat();
-    if (typeof (AsyncListener) === "function") {
-        AsyncListener();
-    };
-};
 
 function setRegionalFormat()
 {
     setCurrencyFormat();
     setNumberFormat();
 };
+
 var setCurrencyFormat = function () {
     if (typeof currencyDecimalPlaces === "undefined" || typeof decimalSeparator === "undefined" || typeof thousandSeparator === "undefined") {
         return;
     };
 
-    $('input.currency').number(true, currencyDecimalPlaces, decimalSeparator, thousandSeparator);
+    $("input.currency").number(true, currencyDecimalPlaces, decimalSeparator, thousandSeparator);
 };
 
 var setNumberFormat = function () {
@@ -33,7 +22,7 @@ var setNumberFormat = function () {
         return;
     };
 
-    $('input.decimal').number(true, currencyDecimalPlaces, decimalSeparator, thousandSeparator);
+    $("input.decimal").number(true, currencyDecimalPlaces, decimalSeparator, thousandSeparator);
     $('input.decimal4').number(true, 4, decimalSeparator, thousandSeparator);
     $('input.integer').number(true, 0, decimalSeparator, thousandSeparator);
 };

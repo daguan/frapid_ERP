@@ -30,23 +30,23 @@ function getExtraContent(key) {
 
     var buttons = $('<div class="ui small basic buttons" />');
 
-    if (scrudFactory.viewUrl) {
-        var url = scrudFactory.viewUrl.replace("{Key}", key);
+    if (window.scrudFactory.viewUrl) {
+        var url = window.scrudFactory.viewUrl.replace("{Key}", key);
         var viewButton = $('<a class="ui basic button" />');
         viewButton.attr("href", url);
-        viewButton.text(Resources.Titles.View());
+        viewButton.text(window.Resources.Titles.View());
         buttons.append(viewButton);
     };
 
-    if (scrudFactory.allowEdit) {
+    if (window.scrudFactory.allowEdit) {
         var editButton = $('<a class="ui basic button" href="javascript:void(0);" onclick="editRow(this, true);" />');
-        editButton.text(Resources.Titles.Edit());
+        editButton.text(window.Resources.Titles.Edit());
         buttons.append(editButton);
     }
 
-    if (scrudFactory.allowDelete) {
+    if (window.scrudFactory.allowDelete) {
         var deleteButton = $('<a class="ui basic button" href="javascript:void(0);" onclick="deleteRow(this, true);" />');
-        deleteButton.text(Resources.Titles.Delete());
+        deleteButton.text(window.Resources.Titles.Delete());
         buttons.append(deleteButton);
     };
 
@@ -60,7 +60,7 @@ function getExtra(kanbanDetail) {
     var extra = $('<div class="extra" />');
 
     var text = $("<span />");
-    text.text(Resources.Titles.Rating());
+    text.text(window.Resources.Titles.Rating());
     extra.append(text);
 
     var dataRating = (kanbanDetail.Rating || 0);
