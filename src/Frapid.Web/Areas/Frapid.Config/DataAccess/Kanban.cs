@@ -8,20 +8,20 @@ using Frapid.DataAccess;
 using Frapid.DbPolicy;
 using Frapid.Framework.Extensions;
 using Npgsql;
-using NPoco;
+using Frapid.NPoco;
 using Serilog;
 
 namespace Frapid.Config.DataAccess
 {
     /// <summary>
-    /// Provides simplified data access features to perform SCRUD operation on the database table "core.kanbans".
+    /// Provides simplified data access features to perform SCRUD operation on the database table "config.kanbans".
     /// </summary>
     public class Kanban : DbAccess, IKanbanRepository
     {
         /// <summary>
-        /// The schema of this table. Returns literal "core".
+        /// The schema of this table. Returns literal "config".
         /// </summary>
-        public override string _ObjectNamespace => "core";
+        public override string _ObjectNamespace => "config";
 
         /// <summary>
         /// The schema unqualified name of this table. Returns literal "kanbans".
@@ -44,9 +44,9 @@ namespace Frapid.Config.DataAccess
         public string _Catalog { get; set; }
 
         /// <summary>
-        /// Performs SQL count on the table "core.kanbans".
+        /// Performs SQL count on the table "config.kanbans".
         /// </summary>
-        /// <returns>Returns the number of rows of the table "core.kanbans".</returns>
+        /// <returns>Returns the number of rows of the table "config.kanbans".</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public long Count()
         {
@@ -68,12 +68,12 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            const string sql = "SELECT COUNT(*) FROM core.kanbans;";
+            const string sql = "SELECT COUNT(*) FROM config.kanbans;";
             return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Executes a select query on the table "core.kanbans" to return all instances of the "Kanban" class. 
+        /// Executes a select query on the table "config.kanbans" to return all instances of the "Kanban" class. 
         /// </summary>
         /// <returns>Returns a non-live, non-mapped instances of "Kanban" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
@@ -97,12 +97,12 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            const string sql = "SELECT * FROM core.kanbans ORDER BY kanban_id;";
+            const string sql = "SELECT * FROM config.kanbans ORDER BY kanban_id;";
             return Factory.Get<Frapid.Config.Entities.Kanban>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Executes a select query on the table "core.kanbans" to return all instances of the "Kanban" class to export. 
+        /// Executes a select query on the table "config.kanbans" to return all instances of the "Kanban" class to export. 
         /// </summary>
         /// <returns>Returns a non-live, non-mapped instances of "Kanban" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
@@ -126,12 +126,12 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            const string sql = "SELECT * FROM core.kanbans ORDER BY kanban_id;";
+            const string sql = "SELECT * FROM config.kanbans ORDER BY kanban_id;";
             return Factory.Get<dynamic>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Executes a select query on the table "core.kanbans" with a where filter on the column "kanban_id" to return a single instance of the "Kanban" class. 
+        /// Executes a select query on the table "config.kanbans" with a where filter on the column "kanban_id" to return a single instance of the "Kanban" class. 
         /// </summary>
         /// <param name="kanbanId">The column "kanban_id" parameter used on where filter.</param>
         /// <returns>Returns a non-live, non-mapped instance of "Kanban" class mapped to the database row.</returns>
@@ -156,12 +156,12 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            const string sql = "SELECT * FROM core.kanbans WHERE kanban_id=@0;";
+            const string sql = "SELECT * FROM config.kanbans WHERE kanban_id=@0;";
             return Factory.Get<Frapid.Config.Entities.Kanban>(this._Catalog, sql, kanbanId).FirstOrDefault();
         }
 
         /// <summary>
-        /// Gets the first record of the table "core.kanbans". 
+        /// Gets the first record of the table "config.kanbans". 
         /// </summary>
         /// <returns>Returns a non-live, non-mapped instance of "Kanban" class mapped to the database row.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
@@ -185,12 +185,12 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            const string sql = "SELECT * FROM core.kanbans ORDER BY kanban_id LIMIT 1;";
+            const string sql = "SELECT * FROM config.kanbans ORDER BY kanban_id LIMIT 1;";
             return Factory.Get<Frapid.Config.Entities.Kanban>(this._Catalog, sql).FirstOrDefault();
         }
 
         /// <summary>
-        /// Gets the previous record of the table "core.kanbans" sorted by kanbanId.
+        /// Gets the previous record of the table "config.kanbans" sorted by kanbanId.
         /// </summary>
         /// <param name="kanbanId">The column "kanban_id" parameter used to find the next record.</param>
         /// <returns>Returns a non-live, non-mapped instance of "Kanban" class mapped to the database row.</returns>
@@ -215,12 +215,12 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            const string sql = "SELECT * FROM core.kanbans WHERE kanban_id < @0 ORDER BY kanban_id DESC LIMIT 1;";
+            const string sql = "SELECT * FROM config.kanbans WHERE kanban_id < @0 ORDER BY kanban_id DESC LIMIT 1;";
             return Factory.Get<Frapid.Config.Entities.Kanban>(this._Catalog, sql, kanbanId).FirstOrDefault();
         }
 
         /// <summary>
-        /// Gets the next record of the table "core.kanbans" sorted by kanbanId.
+        /// Gets the next record of the table "config.kanbans" sorted by kanbanId.
         /// </summary>
         /// <param name="kanbanId">The column "kanban_id" parameter used to find the next record.</param>
         /// <returns>Returns a non-live, non-mapped instance of "Kanban" class mapped to the database row.</returns>
@@ -245,13 +245,13 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            const string sql = "SELECT * FROM core.kanbans WHERE kanban_id > @0 ORDER BY kanban_id LIMIT 1;";
+            const string sql = "SELECT * FROM config.kanbans WHERE kanban_id > @0 ORDER BY kanban_id LIMIT 1;";
             return Factory.Get<Frapid.Config.Entities.Kanban>(this._Catalog, sql, kanbanId).FirstOrDefault();
         }
 
 
         /// <summary>
-        /// Gets the last record of the table "core.kanbans". 
+        /// Gets the last record of the table "config.kanbans". 
         /// </summary>
         /// <returns>Returns a non-live, non-mapped instance of "Kanban" class mapped to the database row.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
@@ -275,12 +275,12 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            const string sql = "SELECT * FROM core.kanbans ORDER BY kanban_id DESC LIMIT 1;";
+            const string sql = "SELECT * FROM config.kanbans ORDER BY kanban_id DESC LIMIT 1;";
             return Factory.Get<Frapid.Config.Entities.Kanban>(this._Catalog, sql).FirstOrDefault();
         }
 
         /// <summary>
-        /// Executes a select query on the table "core.kanbans" with a where filter on the column "kanban_id" to return a multiple instances of the "Kanban" class. 
+        /// Executes a select query on the table "config.kanbans" with a where filter on the column "kanban_id" to return a multiple instances of the "Kanban" class. 
         /// </summary>
         /// <param name="kanbanIds">Array of column "kanban_id" parameter used on where filter.</param>
         /// <returns>Returns a non-live, non-mapped collection of "Kanban" class mapped to the database row.</returns>
@@ -305,17 +305,17 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            const string sql = "SELECT * FROM core.kanbans WHERE kanban_id IN (@0);";
+            const string sql = "SELECT * FROM config.kanbans WHERE kanban_id IN (@0);";
 
             return Factory.Get<Frapid.Config.Entities.Kanban>(this._Catalog, sql, kanbanIds);
         }
 
         /// <summary>
-        /// Custom fields are user defined form elements for core.kanbans.
+        /// Custom fields are user defined form elements for config.kanbans.
         /// </summary>
-        /// <returns>Returns an enumerable custom field collection for the table core.kanbans</returns>
+        /// <returns>Returns an enumerable custom field collection for the table config.kanbans</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<CustomField> GetCustomFields(string resourceId)
+        public IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields(string resourceId)
         {
             if (string.IsNullOrWhiteSpace(this._Catalog))
             {
@@ -338,22 +338,22 @@ namespace Frapid.Config.DataAccess
             string sql;
             if (string.IsNullOrWhiteSpace(resourceId))
             {
-                sql = "SELECT * FROM core.custom_field_definition_view WHERE table_name='core.kanbans' ORDER BY field_order;";
-                return Factory.Get<CustomField>(this._Catalog, sql);
+                sql = "SELECT * FROM config.custom_field_definition_view WHERE table_name='config.kanbans' ORDER BY field_order;";
+                return Factory.Get<Frapid.DataAccess.CustomField>(this._Catalog, sql);
             }
 
-            sql = "SELECT * from core.get_custom_field_definition('core.kanbans'::text, @0::text) ORDER BY field_order;";
-            return Factory.Get<CustomField>(this._Catalog, sql, resourceId);
+            sql = "SELECT * from config.get_custom_field_definition('config.kanbans'::text, @0::text) ORDER BY field_order;";
+            return Factory.Get<Frapid.DataAccess.CustomField>(this._Catalog, sql, resourceId);
         }
 
         /// <summary>
-        /// Displayfields provide a minimal name/value context for data binding the row collection of core.kanbans.
+        /// Displayfields provide a minimal name/value context for data binding the row collection of config.kanbans.
         /// </summary>
-        /// <returns>Returns an enumerable name and value collection for the table core.kanbans</returns>
+        /// <returns>Returns an enumerable name and value collection for the table config.kanbans</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<DisplayField> GetDisplayFields()
+        public IEnumerable<Frapid.DataAccess.DisplayField> GetDisplayFields()
         {
-            List<DisplayField> displayFields = new List<DisplayField>();
+            List<Frapid.DataAccess.DisplayField> displayFields = new List<Frapid.DataAccess.DisplayField>();
 
             if (string.IsNullOrWhiteSpace(this._Catalog))
             {
@@ -373,7 +373,7 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            const string sql = "SELECT kanban_id AS key, kanban_name as value FROM core.kanbans;";
+            const string sql = "SELECT kanban_id AS key, kanban_name as value FROM config.kanbans;";
             using (NpgsqlCommand command = new NpgsqlCommand(sql))
             {
                 using (DataTable table = DbOperation.GetDataTable(this._Catalog, command))
@@ -403,12 +403,12 @@ namespace Frapid.Config.DataAccess
         }
 
         /// <summary>
-        /// Inserts or updates the instance of Kanban class on the database table "core.kanbans".
+        /// Inserts or updates the instance of Kanban class on the database table "config.kanbans".
         /// </summary>
         /// <param name="kanban">The instance of "Kanban" class to insert or update.</param>
         /// <param name="customFields">The custom field collection.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public object AddOrEdit(dynamic kanban, List<CustomField> customFields)
+        public object AddOrEdit(dynamic kanban, List<Frapid.DataAccess.CustomField> customFields)
         {
             if (string.IsNullOrWhiteSpace(this._Catalog))
             {
@@ -422,18 +422,17 @@ namespace Frapid.Config.DataAccess
 
             if (Cast.To<long>(primaryKeyValue) > 0)
             {
-                primaryKeyValue = kanban.kanban_id;
-                this.Update(kanban, long.Parse(kanban.kanban_id));
+                this.Update(kanban, Cast.To<long>(primaryKeyValue));
             }
             else
             {
                 primaryKeyValue = this.Add(kanban);
             }
 
-            string sql = "DELETE FROM core.custom_fields WHERE custom_field_setup_id IN(" +
+            string sql = "DELETE FROM config.custom_fields WHERE custom_field_setup_id IN(" +
                          "SELECT custom_field_setup_id " +
-                         "FROM core.custom_field_setup " +
-                         "WHERE form_name=core.get_custom_field_form_name('core.kanbans')" +
+                         "FROM config.custom_field_setup " +
+                         "WHERE form_name=config.get_custom_field_form_name('config.kanbans')" +
                          ");";
 
             Factory.NonQuery(this._Catalog, sql);
@@ -445,8 +444,8 @@ namespace Frapid.Config.DataAccess
 
             foreach (var field in customFields)
             {
-                sql = "INSERT INTO core.custom_fields(custom_field_setup_id, resource_id, value) " +
-                      "SELECT core.get_custom_field_setup_id_by_table_name('core.kanbans', @0::character varying(100)), " +
+                sql = "INSERT INTO config.custom_fields(custom_field_setup_id, resource_id, value) " +
+                      "SELECT config.get_custom_field_setup_id_by_table_name('config.kanbans', @0::character varying(100)), " +
                       "@1, @2;";
 
                 Factory.NonQuery(this._Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
@@ -456,7 +455,7 @@ namespace Frapid.Config.DataAccess
         }
 
         /// <summary>
-        /// Inserts the instance of Kanban class on the database table "core.kanbans".
+        /// Inserts the instance of Kanban class on the database table "config.kanbans".
         /// </summary>
         /// <param name="kanban">The instance of "Kanban" class to insert.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
@@ -480,11 +479,11 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            return Factory.Insert(this._Catalog, kanban, "core.kanbans", "kanban_id");
+            return Factory.Insert(this._Catalog, kanban, "config.kanbans", "kanban_id");
         }
 
         /// <summary>
-        /// Inserts or updates multiple instances of Kanban class on the database table "core.kanbans";
+        /// Inserts or updates multiple instances of Kanban class on the database table "config.kanbans";
         /// </summary>
         /// <param name="kanbans">List of "Kanban" class to import.</param>
         /// <returns></returns>
@@ -524,11 +523,11 @@ namespace Frapid.Config.DataAccess
                             if (Cast.To<long>(primaryKeyValue) > 0)
                             {
                                 result.Add(kanban.kanban_id);
-                                db.Update("core.kanbans", "kanban_id", kanban, kanban.kanban_id);
+                                db.Update("config.kanbans", "kanban_id", kanban, kanban.kanban_id);
                             }
                             else
                             {
-                                result.Add(db.Insert("core.kanbans", "kanban_id", kanban));
+                                result.Add(db.Insert("config.kanbans", "kanban_id", kanban));
                             }
                         }
 
@@ -560,7 +559,7 @@ namespace Frapid.Config.DataAccess
         }
 
         /// <summary>
-        /// Updates the row of the table "core.kanbans" with an instance of "Kanban" class against the primary key value.
+        /// Updates the row of the table "config.kanbans" with an instance of "Kanban" class against the primary key value.
         /// </summary>
         /// <param name="kanban">The instance of "Kanban" class to update.</param>
         /// <param name="kanbanId">The value of the column "kanban_id" which will be updated.</param>
@@ -585,11 +584,11 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            Factory.Update(this._Catalog, kanban, kanbanId, "core.kanbans", "kanban_id");
+            Factory.Update(this._Catalog, kanban, kanbanId, "config.kanbans", "kanban_id");
         }
 
         /// <summary>
-        /// Deletes the row of the table "core.kanbans" against the primary key value.
+        /// Deletes the row of the table "config.kanbans" against the primary key value.
         /// </summary>
         /// <param name="kanbanId">The value of the column "kanban_id" which will be deleted.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
@@ -613,12 +612,12 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            const string sql = "DELETE FROM core.kanbans WHERE kanban_id=@0;";
+            const string sql = "DELETE FROM config.kanbans WHERE kanban_id=@0;";
             Factory.NonQuery(this._Catalog, sql, kanbanId);
         }
 
         /// <summary>
-        /// Performs a select statement on table "core.kanbans" producing a paginated result of 10.
+        /// Performs a select statement on table "config.kanbans" producing a paginated result of 10.
         /// </summary>
         /// <returns>Returns the first page of collection of "Kanban" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
@@ -642,12 +641,12 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            const string sql = "SELECT * FROM core.kanbans ORDER BY kanban_id LIMIT 10 OFFSET 0;";
+            const string sql = "SELECT * FROM config.kanbans ORDER BY kanban_id LIMIT 10 OFFSET 0;";
             return Factory.Get<Frapid.Config.Entities.Kanban>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a select statement on table "core.kanbans" producing a paginated result of 10.
+        /// Performs a select statement on table "config.kanbans" producing a paginated result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result.</param>
         /// <returns>Returns collection of "Kanban" class.</returns>
@@ -673,19 +672,19 @@ namespace Frapid.Config.DataAccess
             }
 
             long offset = (pageNumber - 1) * 10;
-            const string sql = "SELECT * FROM core.kanbans ORDER BY kanban_id LIMIT 10 OFFSET @0;";
+            const string sql = "SELECT * FROM config.kanbans ORDER BY kanban_id LIMIT 10 OFFSET @0;";
 
             return Factory.Get<Frapid.Config.Entities.Kanban>(this._Catalog, sql, offset);
         }
 
         public List<Frapid.DataAccess.Filter> GetFilters(string catalog, string filterName)
         {
-            const string sql = "SELECT * FROM core.filters WHERE object_name='core.kanbans' AND lower(filter_name)=lower(@0);";
+            const string sql = "SELECT * FROM config.filters WHERE object_name='config.kanbans' AND lower(filter_name)=lower(@0);";
             return Factory.Get<Frapid.DataAccess.Filter>(catalog, sql, filterName).ToList();
         }
 
         /// <summary>
-        /// Performs a filtered count on table "core.kanbans".
+        /// Performs a filtered count on table "config.kanbans".
         /// </summary>
         /// <param name="filters">The list of filter conditions.</param>
         /// <returns>Returns number of rows of "Kanban" class using the filter.</returns>
@@ -710,14 +709,14 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM core.kanbans WHERE 1 = 1");
+            Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM config.kanbans WHERE 1 = 1");
             Frapid.DataAccess.FilterManager.AddFilters(ref sql, new Frapid.Config.Entities.Kanban(), filters);
 
             return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a filtered select statement on table "core.kanbans" producing a paginated result of 10.
+        /// Performs a filtered select statement on table "config.kanbans" producing a paginated result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -744,7 +743,7 @@ namespace Frapid.Config.DataAccess
             }
 
             long offset = (pageNumber - 1) * 10;
-            Sql sql = Sql.Builder.Append("SELECT * FROM core.kanbans WHERE 1 = 1");
+            Sql sql = Sql.Builder.Append("SELECT * FROM config.kanbans WHERE 1 = 1");
 
             Frapid.DataAccess.FilterManager.AddFilters(ref sql, new Frapid.Config.Entities.Kanban(), filters);
 
@@ -760,7 +759,7 @@ namespace Frapid.Config.DataAccess
         }
 
         /// <summary>
-        /// Performs a filtered count on table "core.kanbans".
+        /// Performs a filtered count on table "config.kanbans".
         /// </summary>
         /// <param name="filterName">The named filter.</param>
         /// <returns>Returns number of rows of "Kanban" class using the filter.</returns>
@@ -786,14 +785,14 @@ namespace Frapid.Config.DataAccess
             }
 
             List<Frapid.DataAccess.Filter> filters = this.GetFilters(this._Catalog, filterName);
-            Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM core.kanbans WHERE 1 = 1");
+            Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM config.kanbans WHERE 1 = 1");
             Frapid.DataAccess.FilterManager.AddFilters(ref sql, new Frapid.Config.Entities.Kanban(), filters);
 
             return Factory.Scalar<long>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a filtered select statement on table "core.kanbans" producing a paginated result of 10.
+        /// Performs a filtered select statement on table "config.kanbans" producing a paginated result of 10.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filterName">The named filter.</param>
@@ -822,7 +821,7 @@ namespace Frapid.Config.DataAccess
             List<Frapid.DataAccess.Filter> filters = this.GetFilters(this._Catalog, filterName);
 
             long offset = (pageNumber - 1) * 10;
-            Sql sql = Sql.Builder.Append("SELECT * FROM core.kanbans WHERE 1 = 1");
+            Sql sql = Sql.Builder.Append("SELECT * FROM config.kanbans WHERE 1 = 1");
 
             Frapid.DataAccess.FilterManager.AddFilters(ref sql, new Frapid.Config.Entities.Kanban(), filters);
 

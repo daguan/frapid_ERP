@@ -136,7 +136,7 @@ $("#ManageFiltersButton").click(function () {
 
 $("#SaveFilterButton").click(function () {
     function request(filterName, filters) {
-        var url = "/api/core/filter/recreate/" + scrudFactory.viewTableName + "/" + filterName;
+        var url = "/api/config/filter/recreate/" + window.scrudFactory.viewTableName + "/" + filterName;
         var data = JSON.stringify(filters);
 
         return getAjaxRequest(url, "PUT", data);
@@ -181,7 +181,7 @@ $("#SaveFilterButton").click(function () {
 
         filter.FilterId = window.filterId;
         filter.FilterStatement = "AND";
-        filter.ObjectName = scrudFactory.viewTableName;
+        filter.ObjectName = window.scrudFactory.viewTableName;
         filter.FilterName = filterNameInputText.val();
 
         filter.ColumnName = Enumerable.From(localizedHeaders)
@@ -250,7 +250,7 @@ function deleteFilter(el) {
 
 $("#MakeUserDefaultFilterButton").click(function () {
     function request(filterName) {
-        var url = "/api/core/filter/make-default/" + window.scrudFactory.viewTableName + "/" + filterName;
+        var url = "/api/config/filter/make-default/" + window.scrudFactory.viewTableName + "/" + filterName;
         return getAjaxRequest(url, "PUT");
     };
 

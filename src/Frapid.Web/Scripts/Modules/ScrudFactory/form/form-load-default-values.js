@@ -1,5 +1,5 @@
 ﻿function loadDefaultValues() {
-    if (defaultValuesLoaded) {
+    if (window.defaultValuesLoaded) {
         return;
     };
 
@@ -23,5 +23,5 @@
     });
 
     $("input.live").trigger("keyup");
-    defaultValuesLoaded = true;
+    window.defaultValuesLoaded = true;
 };

@@ -1,13 +1,13 @@
 ﻿function getField(propertyName, dataType, nullable) {
-    if (typeof (scrudFactory.keys) === "undefined") {
-        scrudFactory.keys = [];
+    if (typeof (window.scrudFactory.keys) === "undefined") {
+        window.scrudFactory.keys = [];
     };
 
     if (propertyName.toString().toLowerCase() === "password") {
         dataType = "password";
     };
 
-    var hasKey = Enumerable.From(scrudFactory.keys || [])
+    var hasKey = Enumerable.From(window.scrudFactory.keys || [])
         .Where(function (x) { return x.property === propertyName }).ToArray()[0];
 
     if (hasKey) {
@@ -32,6 +32,8 @@
             return $("<input type='text' class='currency' />");
         case "text":
             return $("<textarea />");
+        case "timestamp":
+        case "timestamptz":
         case "date":
             return $("<input type='text' class='date' />");
         case "bool":

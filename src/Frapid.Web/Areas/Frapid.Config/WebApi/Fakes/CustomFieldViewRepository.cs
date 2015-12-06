@@ -1,0 +1,62 @@
+// ReSharper disable All
+using System;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq;
+using Frapid.Config.DataAccess;
+using Frapid.DataAccess;
+using CustomField = Frapid.DataAccess.CustomField;
+
+namespace Frapid.Config.Api.Fakes
+{
+    public class CustomFieldViewRepository : ICustomFieldViewRepository
+    {
+        public long Count()
+        {
+            return 1;
+        }
+
+        public IEnumerable<Frapid.Config.Entities.CustomFieldView> Get()
+        {
+            return Enumerable.Repeat(new Frapid.Config.Entities.CustomFieldView(), 1);
+        }
+
+        public IEnumerable<Frapid.Config.Entities.CustomFieldView> GetPaginatedResult()
+        {
+            return Enumerable.Repeat(new Frapid.Config.Entities.CustomFieldView(), 1);
+        }
+
+        public IEnumerable<Frapid.Config.Entities.CustomFieldView> GetPaginatedResult(long pageNumber)
+        {
+            return Enumerable.Repeat(new Frapid.Config.Entities.CustomFieldView(), 1);
+        }
+
+
+
+        public long CountWhere(List<Frapid.DataAccess.Filter> filters)
+        {
+            return 1;
+        }
+
+        public IEnumerable<Frapid.Config.Entities.CustomFieldView> GetWhere(long pageNumber, List<Frapid.DataAccess.Filter> filters)
+        {
+            return Enumerable.Repeat(new Frapid.Config.Entities.CustomFieldView(), 1);
+        }
+
+        public List<Frapid.DataAccess.Filter> GetFilters(string catalog, string filterName)
+        {
+            return Enumerable.Repeat(new Frapid.DataAccess.Filter(), 1).ToList();
+        }
+
+        public long CountFiltered(string filterName)
+        {
+            return 1;
+        }
+
+        public IEnumerable<Frapid.Config.Entities.CustomFieldView> GetFiltered(long pageNumber, string filterName)
+        {
+            return Enumerable.Repeat(new Frapid.Config.Entities.CustomFieldView(), 1);
+        }
+
+    }
+}

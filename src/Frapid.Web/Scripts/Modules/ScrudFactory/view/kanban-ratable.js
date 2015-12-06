@@ -2,7 +2,7 @@
     $('.ui.rating').rating();
 
     function request(kanbanDetail) {
-        var url = "/api/core/kanban-detail/add-or-edit";
+        var url = "/api/config/kanban-detail/add-or-edit";
 
         var form = [];
         form.push(kanbanDetail);

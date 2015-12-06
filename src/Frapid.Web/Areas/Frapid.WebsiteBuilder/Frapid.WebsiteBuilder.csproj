@@ -48,6 +48,10 @@
       <HintPath>packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="AutoMapper, Version=4.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>packages\AutoMapper.4.1.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Frapid.ApplicationState, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.ApplicationState.dll</HintPath>
@@ -55,6 +59,10 @@
     <Reference Include="Frapid.Areas, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.Areas.dll</HintPath>
+    </Reference>
+    <Reference Include="Frapid.Configuration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Frapid.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Frapid.Dashboard, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -64,9 +72,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.DataAccess.dll</HintPath>
     </Reference>
+    <Reference Include="Frapid.DbPolicy, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Frapid.DbPolicy.dll</HintPath>
+    </Reference>
+    <Reference Include="Frapid.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Frapid.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="Frapid.i18n, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.i18n.dll</HintPath>
+    </Reference>
+    <Reference Include="Frapid.NPoco, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Frapid.NPoco.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -75,10 +95,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NPoco, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\NPoco.2.10.11\lib\net45\NPoco.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -191,9 +207,9 @@
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Controllers\WebsiteBuilderController.cs" />
     <Compile Include="DAL\Content.cs" />
-    <Compile Include="Models\Content.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AreaRegistration.cs" />
+    <Compile Include="Models\Content.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\site.css" />
@@ -230,6 +246,19 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="RestAPI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="DataAccess\Frapid.WebsiteBuilder.DataAccess.csproj">
+      <Project>{6d84caf6-e1fa-4a5c-8ccc-a36aea06aa0b}</Project>
+      <Name>Frapid.WebsiteBuilder.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="Entities\Frapid.WebsiteBuilder.Entities.csproj">
+      <Project>{F191307A-E582-48B2-81F9-78A1E2928D6D}</Project>
+      <Name>Frapid.WebsiteBuilder.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Views\Content\Manage.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Optimization;
 
 namespace Frapid.Web
@@ -8,23 +9,33 @@ namespace Frapid.Web
     {
         public static void RegisterBundles(BundleCollection bundles)
         {
-#if DEBUG
-            BundleTable.EnableOptimizations = false;
-#else
             BundleTable.EnableOptimizations = true;
-#endif
-            bundles.Add(new ScriptBundle("~/bundles/frapid-core.js").Include(GetFrapidCoreScript()));
-            bundles.Add(new ScriptBundle("~/bundles/libraries.js").Include(GetLibrariesScript()));
-            bundles.Add(new ScriptBundle("~/bundles/backend.js").Include(GetDashboardScript()));
-            bundles.Add(new ScriptBundle("~/bundles/scrudfactory-view.js").Include(GetScrudFactoryView()));
-            bundles.Add(new ScriptBundle("~/bundles/scrudfactory-form.js").Include(GetScrudFactoryForm()));
+
+            if (HttpContext.Current.IsDebuggingEnabled)
+            {
+                BundleTable.EnableOptimizations = false;
+                BundleTable.Bundles.ToList().ForEach(bundle => bundle.Transforms.Clear());
+            }
+
+            AddBundle(bundles, "~/bundles/frapid-core.js", GetFrapidCoreScript());
+            AddBundle(bundles, "~/bundles/libraries.js", GetLibrariesScript());
+            AddBundle(bundles, "~/bundles/backend.js", GetDashboardScript());
+            AddBundle(bundles, "~/bundles/scrudfactory-view.js", GetScrudFactoryView());
+            AddBundle(bundles, "~/bundles/scrudfactory-form.js", GetScrudFactoryForm());
 
             bundles.Add(new StyleBundle("~/bundles/master-page.css").Include(GetMasterPageStyle()));
             bundles.Add(new StyleBundle("~/bundles/master-page.rtl.css").Include(GetMasterPageRtlStyle()));
-
             bundles.Add(new StyleBundle("~/bundles/report.css").Include(GetReportStyle()));
             bundles.Add(new StyleBundle("~/bundles/report.rtl.css").Include(GetReportRtlStyle()));
         }
+
+        private static void AddBundle(BundleCollection bundles, string name, string[] files)
+        {
+            bundles.Add(HttpContext.Current.IsDebuggingEnabled
+                ? new Bundle(name).Include(files)
+                : new ScriptBundle(name).Include(files));
+        }
+
 
         private static string[] GetScrudFactoryView()
         {
@@ -54,6 +65,7 @@ namespace Frapid.Web
                 "~/Scripts/Modules/ScrudFactory/view/gridview.js",
                 "~/Scripts/Modules/ScrudFactory/view/import-export.js",
                 "~/Scripts/Modules/ScrudFactory/view/import.js",
+                "~/Scripts/Modules/ScrudFactory/view/flag.js",
                 "~/Scripts/Modules/ScrudFactory/view/kanban-cards-ajax.js",
                 "~/Scripts/Modules/ScrudFactory/view/kanban-cards.js",
                 "~/Scripts/Modules/ScrudFactory/view/kanban-ratable.js",
@@ -104,11 +116,12 @@ namespace Frapid.Web
                 "~/Scripts/Modules/ScrudFactory/form/ajax-request-initialize.js",
                 "~/Scripts/Modules/ScrudFactory/form/event-on-doc-keydown.js",
                 "~/Scripts/Modules/ScrudFactory/form/event-on-doc-ready.js",
+                "~/Scripts/Modules/ScrudFactory/form/visibility.js",
                 "~/Scripts/Modules/ScrudFactory/form/trigger-events.js",
                 "~/Scripts/Modules/ScrudFactory/form/event-on-ajax-stop.js"
             };
         }
-
+        
         #region Scripts
 
         private static string[] GetFrapidCoreScript()
@@ -156,7 +169,7 @@ namespace Frapid.Web
         private static string[] GetLibrariesScript()
         {
             string[] libraries = {
-                "~/Scripts/jquery-1.9.1.js",
+                "~/Scripts/jquery-2.1.4.js",
                 "~/Scripts/jquery.address.js",
                 "~/Scripts/jquery-ui.js",
                 "~/Scripts/jquery-timePicker/jquery.timepicker.js",

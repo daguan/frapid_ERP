@@ -8,5 +8,5 @@
     };
 
     var url = updateQueryString("View", target);
-    window.history.pushState({ path: url }, '', url);
+    window.history.replaceState({ path: url }, '', url);
 });

@@ -1,20 +1,20 @@
 ﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/db.sql --<--<--
-DROP SCHEMA IF EXISTS wb CASCADE; --WEB BUILDER
-CREATE SCHEMA wb;
+DROP SCHEMA IF EXISTS website CASCADE; --WEB BUILDER
+CREATE SCHEMA website;
 
-CREATE TABLE wb.contents
+CREATE TABLE website.contents
 (
     content_id                                  SERIAL NOT NULL PRIMARY KEY,
     title                                       national character varying(100) NOT NULL,
     alias                                       national character varying(50) NOT NULL UNIQUE,
-    author_id                                   integer REFERENCES auth.users,
-    published_on                                TIMESTAMP WITH TIME ZONE NOT NULL,
+    author_id                                   integer,
+    publish_on                                  TIMESTAMP WITH TIME ZONE NOT NULL,
     contents                                    text NOT NULL,
-    draft                                       boolean NOT NULL DEFAULT(true),
+    is_draft                                    boolean NOT NULL DEFAULT(true),
     seo_keywords                                national character varying(50) NOT NULL DEFAULT(''),
     seo_description                             national character varying(100) NOT NULL DEFAULT(''),
-    is_default                                  boolean NOT NULL DEFAULT(false),
-    audit_user_id                               integer REFERENCES auth.users,
+    is_homepage                                 boolean NOT NULL DEFAULT(false),
+    audit_user_id                               integer,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
                                                 DEFAULT(NOW())    
 );
@@ -210,21 +210,21 @@ END
 $$
 LANGUAGE plpgsql;
 
-SELECT * FROM core.create_app('Frapid.WebsiteBuilder', 'Website', '1.0', 'MixERP Inc.', 'December 1, 2015', 'world blue', '/dashboard#/Frapid.WebsiteBuilder/contents', null);
+SELECT * FROM config.create_app('Frapid.WebsiteBuilder', 'Website', '1.0', 'MixERP Inc.', 'December 1, 2015', 'world blue', '/dashboard/wb/contents', null);
 
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Tasks', '', '', '');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Add New Content', '/dashboard#/Frapid.WebsiteBuilder/contents/new', '', 'Tasks');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'View Contents', '/dashboard#/Frapid.WebsiteBuilder/contents', '', 'Tasks');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Layout Manager', '', '', '');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Master Layout', '/dashboard#/Frapid.WebsiteBuilder/layouts/master', '', 'Layout Manager');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Header', '/dashboard#/Frapid.WebsiteBuilder/layouts/header', '', 'Layout Manager');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Footer', '/dashboard#/Frapid.WebsiteBuilder/layouts/footer', '', 'Layout Manager');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Tasks', '', '', '');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Add New Content', '/dashboard/wb/contents/new', '', 'Tasks');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'View Contents', '/dashboard/wb/contents', '', 'Tasks');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Layout Manager', '', '', '');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Edit Master Layout', '/dashboard/wb/layouts/master', '', 'Layout Manager');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Edit Header', '/dashboard/wb/layouts/header', '', 'Layout Manager');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Edit Footer', '/dashboard/wb/layouts/footer', '', 'Layout Manager');
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/sample.sql.sample --<--<--
-DELETE FROM wb.contents;
+DELETE FROM website.contents;
 
-INSERT INTO wb.contents(title, alias, published_on, draft, seo_keywords, seo_description, is_default, contents)
+INSERT INTO website.contents(title, alias, publish_on, is_draft, seo_keywords, seo_description, is_homepage, contents)
 SELECT 'Welcome to Frapid', 'welcome-to-frapid', NOW(), false, 'frapid, cms, crm, erp, hrm', 'Homepage of Frapid Framework', true, '    <header>
         <div class="header-content">
             <div class="header-content-inner">

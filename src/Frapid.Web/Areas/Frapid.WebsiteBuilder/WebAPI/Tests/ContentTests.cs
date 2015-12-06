@@ -7,11 +7,11 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Frapid.ApplicationState.Models;
-using Frapid.DataAccess;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Frapid.WebsiteBuilder.Data;
+using Frapid.WebsiteBuilder.DataAccess;
 using Frapid.WebsiteBuilder.Api.Fakes;
+using Frapid.DataAccess;
 using Xunit;
 
 namespace Frapid.WebsiteBuilder.Api.Tests

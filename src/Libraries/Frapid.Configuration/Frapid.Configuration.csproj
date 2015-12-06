@@ -30,12 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Npgsql, Version=3.0.3.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Npgsql.3.0.3\lib\net45\Npgsql.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NPoco, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NPoco.2.10.11\lib\net45\NPoco.dll</HintPath>
+    <Reference Include="Npgsql, Version=3.0.3.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Npgsql.3.0.3\lib\net45\Npgsql.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -52,6 +52,8 @@
   <ItemGroup>
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="ConnectionString.cs" />
+    <Compile Include="DbConvention.cs" />
+    <Compile Include="DomainSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider.cs" />
   </ItemGroup>
@@ -60,6 +62,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Frapid.NPoco\Frapid.NPoco.csproj">
+      <Project>{58F77141-FFE7-45F6-B726-80100204E69D}</Project>
+      <Name>Frapid.NPoco</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Frapid.Framework\Frapid.Framework.csproj">
       <Project>{A4DEE358-3203-425C-80E9-8EBA0A01B73F}</Project>
       <Name>Frapid.Framework</Name>

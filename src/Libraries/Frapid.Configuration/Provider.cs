@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NPoco;
-using NPoco.FluentMappings;
+using Frapid.NPoco;
+using Frapid.NPoco.FluentMappings;
 
 namespace Frapid.Configuration
 {
@@ -26,7 +26,7 @@ namespace Frapid.Configuration
                     {
                         s.Assembly(item);
                         s.WithSmartConventions();
-                        s.TablesNamed(t => Inflector.AddUnderscores(Inflector.MakePlural(t.Name)).ToLower());
+                        s.TablesNamed(t => t.GetCustomAttributes(true).OfType<TableNameAttribute>().FirstOrDefault()?.Value??Inflector.AddUnderscores(Inflector.MakePlural(t.Name)).ToLower());
                         s.Columns.Named(m => Inflector.AddUnderscores(m.Name).ToLower());
                         s.PrimaryKeysNamed(t => Inflector.AddUnderscores(t.Name).ToLower() + "_id");
                         s.PrimaryKeysAutoIncremented(t => true);

@@ -1,0 +1,369 @@
+﻿@model Frapid.WebsiteBuilder.Entities.Content
+
+@{
+    var contentId = Model?.ContentId ?? null;
+    var title = Model?.Title ?? "";
+    var alias = Model?.Alias ?? "";
+    var content = Model?.Contents ?? "<p>Page Contents</p>";
+    var publishOn = Model?.PublishOn.ToShortDateString() ?? DateTime.Now.ToShortDateString();
+    var keywords = Model?.SeoKeywords ?? "";
+    var description = Model?.SeoDescription ?? "";
+    var draft = Model?.IsDraft ?? true;
+    var homePage = Model?.IsHomepage ?? false;
+
+    ViewBag.Title = title;
+    Layout = ViewBag.Layout;
+}
+<script src="https://raw.githubusercontent.com/adampietrasiak/jquery.initialize/master/jquery.initialize.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js"></script>
+<script src='http://lovasoa.github.io/tidy-html5/tidy.js'></script>
+<link rel="stylesheet" type="text/css" href="/Scripts/contenttools/content-tools.min.css">
+<style>
+    #editor {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+
+    [data-ng-view], [ng-view] {
+        height: 100%;
+    }
+
+    .vpad8 {
+        padding: 8px 0;
+    }
+
+    .error {
+        color: brown;
+    }
+</style>
+
+<div class="ui visible bottom sidebar">
+    <div class="ui attached segment">
+        <div class="ui container">
+            <div class="ui form">
+                <input type="hidden" data-entity="content_id" class="integer" value="@contentId" />
+                <div class="ui five fields">
+                    <div class="field">
+                        <label>Heading</label>
+                        <input type="text" data-entity="title" value="@title" required="" />
+                    </div>
+                    <div class="field">
+                        <label>Alias</label>
+                        <input type="text" data-entity="alias" value="@alias" required="" />
+                    </div>
+                    <div class="field">
+                        <label>Publish On</label>
+                        <input type="date" class="date" data-entity="publish_on" value="@publishOn" required="" />
+                    </div>
+                    <div class="field">
+                        <label>Seo Keyword</label>
+                        <input type="text" data-entity="seo_keywords" value="@keywords" required="" />
+                    </div>
+                    <div class="field">
+                        <label>Seo Description</label>
+                        <input type="text" data-entity="seo_description" value="@description" required="" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label>&nbsp;</label>
+                    <div class="ui toggle checkbox">
+                        <input id="ToggleHtmlCheckbox" type="checkbox" checked="checked">
+                        <label for="ToggleHtmlCheckbox">HTML Mode</label>
+                    </div>
+                    <div class="ui toggle checkbox">
+                        @Html.CheckBox("IsDraftInputCheckbox", draft, new { @id = "IsDraftInputCheckbox", @data_entity = "is_draft" })
+                        <label for="IsDraftInputCheckbox">Draft</label>
+                    </div>
+                    <div class="ui toggle checkbox">
+                        @Html.CheckBox("IsHomePageInputCheckbox", homePage, new { @id = "IsHomePageInputCheckbox", @data_entity = "is_homepage" })
+                        <label for="IsHomePageInputCheckbox">Home Page</label>
+                    </div>
+                    <button class="ui button" id="SaveButton">Save</button>
+                    <a class="ui button" ng-href="../contents">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ui attached segment" style="height: 100%;">
+    <div class="ui container">
+        <div class="error vpad8 initially hidden">
+            <div class="ui brown header">Error</div>
+            <div class="ui red bulleted list">
+            </div>
+            <div class="ui divider"></div>
+        </div>
+        <div id="content" class="initially hidden">
+            <div data-editable="" data-name="main-content" data-entity="contents" required="" data-raw="true">
+                @Html.Raw(content)
+            </div>
+        </div>
+        <div id="editor">
+        </div>
+    </div>
+</div>
+
+
+<script src="/Scripts/contenttools/content-tools.min.js"></script>
+<script>
+    if (!String.prototype.repeat) {
+        String.prototype.repeat = function (count) {
+            'use strict';
+            if (this == null) {
+                throw new TypeError('can\'t convert ' + this + ' to object');
+            }
+            var str = '' + this;
+            count = +count;
+            if (count != count) {
+                count = 0;
+            }
+            if (count < 0) {
+                throw new RangeError('repeat count must be non-negative');
+            }
+            if (count == Infinity) {
+                throw new RangeError('repeat count must be less than infinity');
+            }
+            count = Math.floor(count);
+            if (str.length == 0 || count == 0) {
+                return '';
+            }
+            // Ensuring count is a 31-bit integer allows us to heavily optimize the
+            // main part. But anyway, most current (August 2014) browsers can't handle
+            // strings 1 << 28 chars or longer, so:
+            if (str.length * count >= 1 << 28) {
+                throw new RangeError('repeat count must not overflow maximum string size');
+            }
+            var rpt = '';
+            for (; ;) {
+                if ((count & 1) == 1) {
+                    rpt += str;
+                }
+                count >>>= 1;
+                if (count == 0) {
+                    break;
+                }
+                str += str;
+            }
+            return rpt;
+        }
+    }
+</script>
+<script>
+    var toggleHtmlCheckbox = $("#ToggleHtmlCheckbox");
+    function initializeEditor() {
+        var editor = window.ContentTools.EditorApp.get();
+        editor.init('*[data-editable]', 'data-name');
+
+        $('.ct-ignition__button--edit').click(function () {
+            toggleHtmlCheckbox.attr("disabled", "disabled");
+        });
+        $('.ct-ignition__button--cancel,.ct-ignition__button--confirm').click(function () {
+            toggleHtmlCheckbox.removeAttr("disabled");
+        });
+    };
+
+    function initializeAceEditor() {
+        var html = $("#content").html();
+        html = window.tidy_html5(html, { "show-body-only": true, "indent": "auto", "indent-spaces": 2 });
+        html += "\r\n".repeat(10);
+
+        var editor = window.ace.edit("editor");
+        $("#editor").removeClass("initially, hidden");
+        editor.setTheme("ace/theme/ambience");
+        editor.getSession().setMode("ace/mode/html");
+        editor.setValue(html);
+
+        editor.on('input', function () {
+            html = editor.getSession().getValue();
+            $("#content").html(html);
+        });
+    };
+
+    $(document).ready(function () {
+        setTimeout(function () {
+            initializeAceEditor();
+        }, 100);
+    });
+
+
+    toggleHtmlCheckbox.change(function () {
+        var el = $(this);
+        var state = el.is(":checked");
+        var ctApp = $(".ct-app");
+        var html;
+
+        var editor = window.ace.edit("editor");
+
+        if (state) {
+            html = $("#content").html();
+            html = window.tidy_html5(html, { "show-body-only": true, "indent": "auto", "indent-spaces": 2 });
+            html += "\r\n".repeat(10);
+
+            ctApp.addClass("initially hidden");
+            $("#editor").removeClass("initially, hidden");
+            editor.setTheme("ace/theme/ambience");
+            editor.getSession().setMode("ace/mode/html");
+            editor.setValue(html);
+
+            editor.on('input', function () {
+                html = editor.getSession().getValue();
+                $("#content").html(html);
+            });
+            return;
+        };
+
+        html = editor.getSession().getValue();
+        $("#content").removeClass("initially, hidden").html(html);
+
+        ctApp.removeClass("initially, hidden");
+        $("#editor").addClass("initially hidden");
+        initializeEditor();
+    });
+</script>
+
+<script>
+    var entityParser = {
+        attribute: "data-entity",
+        validationSummary: ".error .bulleted.list",
+        getValue: function (el, raw) {
+            function parseValue(value, typeClass) {
+                if (!typeClass) {
+                    return value;
+                };
+
+                if (typeClass.indexOf("integer") !== -1) {
+                    return parseInt(value) || null;
+                };
+
+                if (typeClass.indexOf("float") !== -1) {
+                    return parseFloat(value) || null;
+                };
+
+                if (typeClass.indexOf("date") !== -1) {
+                    return window.parseLocalizedDate(value) || null;
+                };
+
+                return null;
+            };
+
+            var value = null;
+            var required = el.attr("required");
+            var tag = el.prop("tagName").toLowerCase();
+
+            switch (tag) {
+                case "h1":
+                case "h2":
+                case "h3":
+                case "h4":
+                case "h5":
+                case "span":
+                case "p":
+                case "div":
+                    if (raw) {
+                        value = el.html().trim();
+                    } else {
+                        value = el.text().trim();
+                    };
+
+                    break;
+                case "input":
+                    if (el.is(":checkbox")) {
+                        value = el.is(":checked");
+                    } else {
+                        value = parseValue(el.val(), el.attr("class"));
+                        el.closest(".field").removeClass("error");
+
+                        if (!value && required) {
+                            el.closest(".field").addClass("error");
+                        };
+                    };
+
+                    break;
+            };
+
+            return value;
+        },
+        getModel: function (attribute, validationEl, validationSummary) {
+            var dataEntities = $("[" + attribute + "]");
+
+            var model = {};
+            var valid = true;
+            var invalidItems = [];
+
+            dataEntities.each(function () {
+                var el = $(this);
+                var name = el.attr(attribute);
+                var raw = el.attr("data-raw");
+                var val = entityParser.getValue(el, raw);
+                var required = el.attr("required");
+
+                model[name] = val;
+
+                if (required && !val) {
+                    valid = false;
+                    invalidItems.push(name);
+                };
+            });
+
+            if (!valid) {
+                var list = $(validationSummary);
+                $(validationEl).removeClass("initially, hidden");
+                list.html("");
+
+                $.each(invalidItems, function () {
+                    var item = $("<div class='item' />");
+                    item.html(this + " is required");
+                    list.append(item);
+                });
+
+                return null;
+            };
+
+            return model;
+        }
+    };
+</script>
+<script>
+
+    $('[data-entity="title"]').keyup(function() {
+        function getAlias(title) {
+            return title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+        };
+
+        $('[data-entity="alias"]').val(getAlias($(this).val()));
+    });
+
+    $("#SaveButton").click(function () {
+        function request(model) {
+            var url = "/api/website/content/add-or-edit";
+            var form = [];
+            form.push(model);
+            form.push(null);
+
+            var data = JSON.stringify(form);
+
+            return window.getAjaxRequest(url, "POST", data);
+        };
+
+        var attribute = "data-entity";
+        var validationEl = ".error";
+        var validationSummary = ".error .bulleted.list";
+
+        var model = entityParser.getModel(attribute, validationEl, validationSummary);
+        if (!model) {
+            return;
+        };
+
+        var ajax = request(model);
+
+
+        ajax.success(function () {
+            location.href = "../contents";
+        });
+
+    });
+</script>

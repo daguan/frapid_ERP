@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Caching;
 using System.Web;
 using Frapid.ApplicationState.Models;
+using Frapid.Configuration;
 using Frapid.DataAccess;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
@@ -54,7 +55,8 @@ namespace Frapid.ApplicationState.Cache
 
             if (globalLoginId != 0)
             {
-                login = CacheFactory.GetFromDefaultCacheByKey(globalLoginId.ToString(CultureInfo.InvariantCulture)) as MetaLogin;
+                var cacheObject = CacheFactory.GetFromDefaultCacheByKey(globalLoginId.ToString(CultureInfo.InvariantCulture));
+                login = cacheObject as MetaLogin;
             }
 
             if (login == null)
@@ -121,30 +123,10 @@ namespace Frapid.ApplicationState.Cache
             return dictionary;
         }
 
-        public static string GetDbNameByConvention()
-        {
-            string url = HttpContext.Current.Request.Url.Authority;
-
-            if (url.StartsWith("www."))
-            {
-                url = url.Replace("www.", "");
-            }
-
-            return url.Replace(".", "_");
-        }
-
-        public static bool IsValidDomain()
-        {
-            string url = GetDbNameByConvention();
-            return DomainSerializer.Get().Contains(url);
-        }
-
         public static string GetCatalog()
         {
-            string url = GetDbNameByConvention();
-
-            //By convention, the default database name is localhost
-            return IsValidDomain() ? url : "localhost";
+            return DbConvention.GetCatalog();
         }
+
     }
 }

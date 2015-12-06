@@ -1,7 +1,7 @@
 ﻿function loadGrid() {
     function filteredRequest(pageNumber, queryStrings) {
-        var url = scrudFactory.viewAPI + "/get-where/" + pageNumber;
-        data = JSON.stringify(getAjaxFilters(queryStrings));
+        var url = window.scrudFactory.viewAPI + "/get-where/" + pageNumber;
+        var data = JSON.stringify(getAjaxFilters(queryStrings));
         return getAjaxRequest(url, "POST", data);
     };
 
@@ -11,10 +11,10 @@
             return filteredRequest(pageNumber, queryStrings, byOffice);
         };
 
-        var url = scrudFactory.viewAPI + "/page/" + pageNumber;
+        var url = window.scrudFactory.viewAPI + "/page/" + pageNumber;
 
         if (filterName) {
-            url = scrudFactory.viewAPI + "/get-filtered/" + pageNumber + "/" + filterName;
+            url = window.scrudFactory.viewAPI + "/get-filtered/" + pageNumber + "/" + filterName;
         };
 
         return getAjaxRequest(url);

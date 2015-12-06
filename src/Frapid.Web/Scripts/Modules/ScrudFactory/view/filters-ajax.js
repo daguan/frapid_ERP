@@ -1,6 +1,6 @@
 ﻿function loadFilterNames() {
     function request() {
-        var url = "/api/core/filter-name-view/get-where/1";
+        var url = "/api/config/filter-name-view/get-where/1";
         var where = [];
 
         where.push(getAjaxColumnFilter("WHERE", "object_name", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));
@@ -51,10 +51,10 @@
 
 function loadFilter() {
     function request(filterName) {
-        var url = "/api/core/filter/get-where/-1";
+        var url = "/api/config/filter/get-where/-1";
         var where = [];
 
-        where.push(getAjaxColumnFilter("WHERE", "object_name", FilterConditions.IsEqualTo, scrudFactory.viewTableName));
+        where.push(getAjaxColumnFilter("WHERE", "object_name", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));
         where.push(getAjaxColumnFilter("AND", "filter_name", FilterConditions.IsEqualTo, filterName));
 
         var data = JSON.stringify(where);
@@ -79,7 +79,7 @@ function loadFilter() {
 
 function deleteSavedFilter() {
     function request(filterName) {
-        var url = "/api/core/filter/delete/by-name/" + filterName;
+        var url = "/api/config/filter/delete/by-name/" + filterName;
         return getAjaxRequest(url, "DELETE");
     };
 

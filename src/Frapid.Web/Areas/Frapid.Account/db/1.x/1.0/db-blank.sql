@@ -12,6 +12,9 @@ CREATE TABLE account.roles
                                             DEFAULT(NOW())    
 );
 
+ALTER TABLE config.default_entity_access
+ADD FOREIGN KEY(role_id) REFERENCES account.roles;
+
 INSERT INTO account.roles
 SELECT     1,   'Guest',    false UNION ALL
 SELECT    10,   'Client',   false UNION ALL
@@ -25,7 +28,7 @@ CREATE TABLE account.configuration_profiles
     profile_name                            national character varying(100) NOT NULL UNIQUE,
     is_active                               boolean NOT NULL DEFAULT(true),    
     allow_registration                      boolean NOT NULL DEFAULT(true),
-    registration_office_id                  integer NOT NULL REFERENCES core.offices,
+    registration_office_id                  integer NOT NULL REFERENCES config.offices,
     registration_role_id                    integer NOT NULL REFERENCES account.roles,
     allow_facebook_registration             boolean NOT NULL DEFAULT(true),
     allow_google_registration               boolean NOT NULL DEFAULT(true),
@@ -69,7 +72,7 @@ CREATE TABLE account.users
     user_id                                 SERIAL PRIMARY KEY,
     email                                   national character varying(100) NOT NULL,
     password                                text,
-    office_id                               integer NOT NULL REFERENCES core.offices,
+    office_id                               integer NOT NULL REFERENCES config.offices,
     role_id                                 integer NOT NULL REFERENCES account.roles,
     name                                    national character varying(100),
     phone                                   national character varying(100),
@@ -83,6 +86,40 @@ CREATE TABLE account.users
 
 CREATE UNIQUE INDEX users_email_uix
 ON account.users(LOWER(email));
+
+ALTER TABLE config.entity_access
+ADD FOREIGN KEY(user_id) REFERENCES account.users;
+
+ALTER TABLE config.default_entity_access
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE config.entity_access
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE website.contents
+ADD FOREIGN KEY(author_id) REFERENCES account.users;
+
+ALTER TABLE website.contents
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE config.filters
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE config.kanbans
+ADD FOREIGN KEY(user_id) REFERENCES account.users;
+
+ALTER TABLE config.kanbans
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE config.kanban_details
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE config.flag_types
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE config.flags
+ADD FOREIGN KEY(user_id) REFERENCES account.users;
+
 
 CREATE TABLE account.reset_requests
 (
@@ -188,12 +225,12 @@ $$
 LANGUAGE plpgsql;
 
 
-ALTER TABLE core.currencies
+ALTER TABLE config.currencies
 ADD CONSTRAINT currencies_users_fk
 FOREIGN KEY(audit_user_id)
 REFERENCES account.users;
 
-ALTER TABLE core.offices
+ALTER TABLE config.offices
 ADD CONSTRAINT offices_users_fk
 FOREIGN KEY(audit_user_id)
 REFERENCES account.users;
@@ -223,10 +260,11 @@ CREATE TABLE account.google_access_tokens
     token                                   text
 );
 
-CREATE TABLE account.sign_ins
+CREATE TABLE account.logins
 (
-    sign_in_id                              BIGSERIAL PRIMARY KEY,
+    login_id                                BIGSERIAL PRIMARY KEY,
     user_id                                 integer REFERENCES account.users,
+    office_id                               integer REFERENCES config.offices,
     browser                                 text,
     ip_address                              national character varying(50),
     login_timestamp                         TIMESTAMP WITH TIME ZONE NOT NULL 
@@ -391,6 +429,7 @@ CREATE FUNCTION account.fb_sign_in
 (
     _fb_user_id                             text,
     _email                                  text,
+    _office_id                              integer,
     _name                                   text,
     _token                                  text,
     _browser                                text,
@@ -399,14 +438,14 @@ CREATE FUNCTION account.fb_sign_in
 )
 RETURNS TABLE
 (
-    sign_in_id                              bigint,
+    login_id                                bigint,
     status                                  boolean,
     message                                 text
 )
 AS
 $$
     DECLARE _user_id                        integer;
-    DECLARE _sign_in_id                     bigint;
+    DECLARE _login_id                       bigint;
     DECLARE _auto_register                  boolean = false;
 BEGIN
     IF account.is_restricted_user(_email) THEN
@@ -442,22 +481,42 @@ BEGIN
         WHERE LOWER(account.users.email) = LOWER(_email);
     END IF;
     
-    INSERT INTO account.sign_ins(user_id, browser, ip_address, login_timestamp, culture)
-    SELECT _user_id, _browser, _ip_address, NOW(), _culture
-    RETURNING account.sign_ins.sign_in_id INTO _sign_in_id;
+    INSERT INTO account.logins(user_id, office_id, browser, ip_address, login_timestamp, culture)
+    SELECT _user_id, _office_id, _browser, _ip_address, NOW(), _culture
+    RETURNING account.logins.login_id INTO _login_id;
 
     RETURN QUERY
-    SELECT _sign_in_id, true, 'Welcome'::text;
+    SELECT _login_id, true, 'Welcome'::text;
     RETURN;    
 END
 $$
 LANGUAGE plpgsql;
 
-
+CREATE FUNCTION account.sign_in
+(
+    _email                                  text,
+    _challenge                              text,
+    _password                               text
+)
+RETURNS TABLE
+(
+    login_id                                 bigint,
+    status                                  boolean,
+    message                                 text
+)
+AS
+$$
+    DECLARE 
+BEGIN
+    
+END
+$$
+LANGUAGE plpgsql;
 
 CREATE FUNCTION account.google_sign_in
 (
     _email                                  text,
+    _office_id                              integer,
     _name                                   text,
     _token                                  text,
     _browser                                text,
@@ -466,14 +525,14 @@ CREATE FUNCTION account.google_sign_in
 )
 RETURNS TABLE
 (
-    sign_in_id                              bigint,
+    login_id                                bigint,
     status                                  boolean,
     message                                 text
 )
 AS
 $$
     DECLARE _user_id                        integer;
-    DECLARE _sign_in_id                     bigint;
+    DECLARE _login_id                       bigint;
 BEGIN    
     IF account.is_restricted_user(_email) THEN
         --LOGIN IS RESTRICTED TO THIS USER
@@ -503,12 +562,12 @@ BEGIN
     END IF;
 
         
-    INSERT INTO account.sign_ins(user_id, browser, ip_address, login_timestamp, culture)
-    SELECT _user_id, _browser, _ip_address, NOW(), _culture
-    RETURNING account.sign_ins.sign_in_id INTO _sign_in_id;
+    INSERT INTO account.logins(user_id, office_id, browser, ip_address, login_timestamp, culture)
+    SELECT _user_id, _office_id, _browser, _ip_address, NOW(), _culture
+    RETURNING account.logins.login_id INTO _login_id;
 
     RETURN QUERY
-    SELECT _sign_in_id, true, 'Welcome'::text;
+    SELECT _login_id, true, 'Welcome'::text;
     RETURN;    
 END
 $$
@@ -624,12 +683,91 @@ END
 $$
 LANGUAGE plpgsql;
 
-SELECT * FROM core.create_app('Frapid.Account', 'Account', '1.0', 'MixERP Inc.', 'December 1, 2015', 'grey lock', '/dashboard#/Frapid.Authentication/roles', '{Frapid.WebsiteBuilder}'::text[]);
+CREATE FUNCTION account.sign_in
+(
+    _email                                  text,
+    _office_id                              integer,
+    _challenge                              text,
+    _password                               text,
+    _browser                                text,
+    _ip_address                             text,
+    _culture                                text
+)
+RETURNS TABLE
+(
+    login_id                                bigint,
+    status                                  boolean,
+    message                                 text
+)
+AS
+$$
+    DECLARE _login_id                       bigint;
+    DECLARE _user_id                        integer;
+BEGIN
+    IF account.is_restricted_user(_email) OR COALESCE(_challenge, '') = '' THEN
+        RETURN QUERY
+        SELECT NULL::bigint, false, 'Access is denied'::text;
 
-SELECT * FROM core.create_menu('Frapid.Account', 'Tasks', '', '', '');
-SELECT * FROM core.create_menu('Frapid.Account', 'Roles', '/dashboard#/Frapid.Authentication/roles', '', 'Tasks');
-SELECT * FROM core.create_menu('Frapid.Account', 'Configuration Profile', '/dashboard#/Frapid.Authentication/configuration-profile', '', 'Tasks');
-SELECT * FROM core.create_menu('Frapid.Account', 'User Management', '/dashboard#/Frapid.Authentication/user-management', '', 'Tasks');
+        RETURN;
+    END IF;
+
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM account.users
+        WHERE encode(digest(_challenge || password, 'sha512'), 'hex') = _password
+    ) THEN
+        RETURN QUERY
+        SELECT NULL::bigint, false, 'Access is denied'::text;
+
+        RETURN;
+    END IF;
+
+    SELECT user_id INTO _user_id
+    FROM account.users
+    WHERE email = _email;
+
+    INSERT INTO account.logins(user_id, office_id, browser, ip_address, login_timestamp, culture)
+    SELECT _user_id, _office_id, _browser, _ip_address, NOW(), _culture
+    RETURNING account.logins.login_id INTO _login_id;
+    
+    RETURN QUERY
+    SELECT _login_id, true, 'Welcome'::text;
+    RETURN;    
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE VIEW account.sign_in_view
+AS
+SELECT
+    account.logins.login_id,
+    account.users.email,
+    account.logins.user_id,
+    account.roles.role_id,
+    account.roles.role_name,
+    account.roles.is_administrator,
+    account.logins.browser,
+    account.logins.ip_address,
+    account.logins.login_timestamp,
+    account.logins.culture,
+    account.logins.office_id,
+    config.offices.office_name,
+    config.offices.office_code || ' (' || config.offices.office_name || ')' AS office
+FROM account.logins
+INNER JOIN account.users
+ON account.users.user_id = account.logins.user_id
+INNER JOIN account.roles
+ON account.roles.role_id = account.users.role_id
+INNER JOIN config.offices
+ON config.offices.office_id = account.logins.office_id;
+
+SELECT * FROM config.create_app('Frapid.Account', 'Account', '1.0', 'MixERP Inc.', 'December 1, 2015', 'grey lock', '/dashboard/account/configuration-profile', '{Frapid.WebsiteBuilder}'::text[]);
+
+SELECT * FROM config.create_menu('Frapid.Account', 'Tasks', '', '', '');
+SELECT * FROM config.create_menu('Frapid.Account', 'Roles', '/dashboard/account/roles', '', 'Tasks');
+SELECT * FROM config.create_menu('Frapid.Account', 'Configuration Profile', '/dashboard/account/configuration-profile', '', 'Tasks');
+SELECT * FROM config.create_menu('Frapid.Account', 'User Management', '/dashboard/account/user-management', '', 'Tasks');
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/99.ownership.sql --<--<--
 DO

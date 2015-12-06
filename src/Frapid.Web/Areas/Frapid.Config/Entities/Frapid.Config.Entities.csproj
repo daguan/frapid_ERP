@@ -7,8 +7,8 @@
     <ProjectGuid>{14978E9F-28A4-440F-9B85-21D8C18A84AF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Frapid.Core.Entities</RootNamespace>
-    <AssemblyName>Frapid.Core.Entities</AssemblyName>
+    <RootNamespace>Frapid.Config.Entities</RootNamespace>
+    <AssemblyName>Frapid.Config.Entities</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -33,6 +33,10 @@
     <Reference Include="Frapid.DataAccess">
       <HintPath>..\..\..\bin\Frapid.DataAccess.dll</HintPath>
     </Reference>
+    <Reference Include="Frapid.NPoco, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\Frapid.NPoco.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,10 +47,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccessType.cs" />
+    <Compile Include="App.cs" />
+    <Compile Include="AppDependency.cs" />
+    <Compile Include="Currency.cs" />
+    <Compile Include="CustomField.cs" />
+    <Compile Include="CustomFieldDataType.cs" />
+    <Compile Include="CustomFieldDefinitionView.cs" />
+    <Compile Include="CustomFieldForm.cs" />
+    <Compile Include="CustomFieldSetup.cs" />
+    <Compile Include="CustomFieldView.cs" />
+    <Compile Include="DbGetCustomFieldDefinitionResult.cs" />
+    <Compile Include="DefaultEntityAccess.cs" />
+    <Compile Include="EmailQueue.cs" />
+    <Compile Include="EntityAccess.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="FilterNameView.cs" />
+    <Compile Include="Flag.cs" />
+    <Compile Include="FlagType.cs" />
+    <Compile Include="FlagView.cs" />
     <Compile Include="Kanban.cs" />
+    <Compile Include="KanbanDetail.cs" />
+    <Compile Include="Menu.cs" />
+    <Compile Include="Office.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SmtpConfig.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

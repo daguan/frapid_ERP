@@ -8,7 +8,7 @@ namespace Frapid.Account.DAL
     {
         public static IEnumerable<DTO.Office> GetOffices()
         {
-            const string sql = "SELECT office_id, office_name FROM core.offices;";
+            const string sql = "SELECT office_id, office_name FROM config.offices;";
             return Factory.Get<DTO.Office>(AppUsers.GetCatalog(), sql);
         }
     }

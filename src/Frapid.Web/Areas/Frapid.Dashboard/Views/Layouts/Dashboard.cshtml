@@ -1,4 +1,7 @@
-﻿@using Newtonsoft.Json
+﻿@model dynamic
+@using Frapid.ApplicationState.Cache
+@using Frapid.i18n
+@using Newtonsoft.Json
 <!DOCTYPE html>
 <html data-ng-app="FrapidApp">
 <head>
@@ -10,6 +13,7 @@
     <link href="~/Scripts/semantic-ui/semantic.min.css" rel="stylesheet" />
     <script src="~/i18n/resources.js"></script>
     <script src="~/bundles/backend.js"></script>
+    <script src="~/Scripts/frapid/utitlities/validator.js"></script>
     <script src="/Scripts/angular-route.min.js"></script>
     <style>
         #PhoneMenu a {
@@ -53,10 +57,21 @@
             #Search input:focus {
                 min-width: 30vw;
             }
+
+            .hidden, .initially.hidden {
+                display: none;
+            }
+    html, body, div, p, table, td, th {
+        font-size: 12px;
+    }
+    
+    label, .ui.toggle.checkbox label {
+        cursor:pointer;
+    }
     </style>
 </head>
 <body>
-<div class="ui attached basic small menu" style="background-color: #C6C6C6">
+<div class="ui attached basic small inverted violet menu">
     <a class="item" data-ng-click="toogleDashboard();">
         <i class="mini pin icon"></i>
     </a>
@@ -72,64 +87,105 @@
         </a>
     </div>
 </div>
-    <div id="dashboard-container" class="ui basic attached segment" style="background-color: #E8E8E8; height: 100%;">
-        <script>
-            var viewPath = "@ViewBag.ViewPath";
-            var lastPage;
-            var frapidApp = angular.module('FrapidApp', ['ngRoute']);
+<div id="dashboard-container" class="ui basic attached segment" style="background-color: #E8E8E8; height: 100%;">
+    <script>
+        $.getJSON("/dashboard/meta", function (response) {
+            window.meta = response;
+            window.culture = meta.Culture;
+            window.language = meta.Language;
+            window.jqueryUIi18nPath = meta.JqueryUIi18NPath;
+            window.today = meta.Today;
+            window.now = meta.Now;
+            window.date = today;
+            window.userId = meta.UserId;
+            window.user = meta.User;
+            window.office = meta.Office;
+            window.metaView = meta.MetaView;
+            window.shortDateFormat = meta.ShortDateFormat;
+            window.longDateFormat = meta.LongDateFormat;
+            window.thousandSeparator = meta.ThousandSeparator;
+            window.decimalSeparator = meta.DecimalSeparator;
+            window.currencyDecimalPlaces = meta.CurrencyDecimalPlaces;
+            window.currencySymbol = meta.CurrencySymbol;
+            window.datepickerFormat = window.convertNetDateFormat(meta.DatepickerFormat);
+            window.datepickerShowWeekNumber = meta.DatepickerShowWeekNumber;
+            window.datepickerWeekStartDay = meta.DatepickerWeekStartDay;
+            window.datepickerNumberOfMonths = meta.DatepickerNumberOfMonths;
+        });
+
+    </script>
+    <script>
+        var viewPath = "@ViewBag.ViewPath";
+        var lastPage;
+        var frapidApp = angular.module('FrapidApp', ['ngRoute']);
 
 
-            frapidApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
-                $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
+        frapidApp.config(function($routeProvider, $locationProvider, $httpProvider) {
+            $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
 
-                $locationProvider.html5Mode({
-                    enabled: true,
-                    requireBase: false
-                });
-
-                $routeProvider.
-                    when('/dashboard', {
-                        templateUrl: "/dashboard/apps",
-                        title: "What!!??!!"
-                    }).
-                    when('/dashboard/:id*', {
-                        templateUrl: function (url) {
-                            return '/dashboard/' + url.id;
-                        },
-                        title: "What!!??!!"
-                    });
+            $locationProvider.html5Mode({
+                enabled: true,
+                requireBase: false
             });
 
-            frapidApp.run(function ($rootScope, $location) {
-                $rootScope.$on('$locationChangeStart', function (e, n, o) {
-                    if (!lastPage) {
-                        lastPage = "/dashboard";
-                        return;
+            $routeProvider.
+                when('/dashboard', {
+                    templateUrl: "/dashboard/apps"
+                }).
+                when('/dashboard/:url*', {
+                    templateUrl: function (url) {
+                        var path = '/dashboard/' + url.url;
+                        var qs = [];
+
+                        for (var q in url) {
+                            if (url.hasOwnProperty(q)) {
+                                if (q === "url") {
+                                    continue;;
+                                };
+
+                                if (url.hasOwnProperty(q)) {
+                                    qs.push(q + "=" + url[q]);
+                                };
+                            }
+                        };
+
+                        if (qs.length) {
+                            path = path + "?" + qs.join("&");
+                        };
+
+                        return path;
+                    }
+                });
+        });
+
+        frapidApp.run(function($rootScope, $location) {
+            $rootScope.$on('$locationChangeStart', function(e, n, o) {
+            });
+
+            $rootScope.$on('$routeChangeStart', function() {
+                $("#dashboard-container").addClass("loading");
+            });
+            $rootScope.$on('$routeChangeSuccess', function() {
+                $("#dashboard-container").removeClass("loading");
+            });
+
+            $rootScope.toogleDashboard = function() {
+                if (window.location.pathname !== "/dashboard") {
+                    lastPage = window.location.pathname;
+                    $location.path("/dashboard");
+                } else {
+                    if (lastPage) {
+                        $location.path(lastPage);
                     };
-
-                    lastPage = o.replace(window.location.origin, "");
-                });
-
-                $rootScope.$on('$routeChangeStart', function () {
-                    $("#dashboard-container").addClass("loading");
-                });
-                $rootScope.$on('$routeChangeSuccess', function () {
-                    $("#dashboard-container").removeClass("loading");
-                });
-
-                $rootScope.toogleDashboard = function () {
-                    $location.path(lastPage);
                 };
-            });
-        </script>
 
-        <div data-ng-view>
-            @RenderBody()
-        </div>
+            };
+        });
+    </script>
+
+    <div data-ng-view>
+        @RenderBody()
     </div>
+</div>
 </body>
-
-
-
-
 </html>

@@ -1,19 +1,19 @@
-DROP SCHEMA IF EXISTS wb CASCADE; --WEB BUILDER
-CREATE SCHEMA wb;
+DROP SCHEMA IF EXISTS website CASCADE; --WEB BUILDER
+CREATE SCHEMA website;
 
-CREATE TABLE wb.contents
+CREATE TABLE website.contents
 (
     content_id                                  SERIAL NOT NULL PRIMARY KEY,
     title                                       national character varying(100) NOT NULL,
     alias                                       national character varying(50) NOT NULL UNIQUE,
-    author_id                                   integer REFERENCES auth.users,
-    published_on                                TIMESTAMP WITH TIME ZONE NOT NULL,
+    author_id                                   integer,
+    publish_on                                  TIMESTAMP WITH TIME ZONE NOT NULL,
     contents                                    text NOT NULL,
-    draft                                       boolean NOT NULL DEFAULT(true),
+    is_draft                                    boolean NOT NULL DEFAULT(true),
     seo_keywords                                national character varying(50) NOT NULL DEFAULT(''),
     seo_description                             national character varying(100) NOT NULL DEFAULT(''),
-    is_default                                  boolean NOT NULL DEFAULT(false),
-    audit_user_id                               integer REFERENCES auth.users,
+    is_homepage                                 boolean NOT NULL DEFAULT(false),
+    audit_user_id                               integer,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
                                                 DEFAULT(NOW())    
 );
@@ -209,12 +209,12 @@ END
 $$
 LANGUAGE plpgsql;
 
-SELECT * FROM core.create_app('Frapid.WebsiteBuilder', 'Website', '1.0', 'MixERP Inc.', 'December 1, 2015', 'world blue', '/dashboard/website/contents', null);
+SELECT * FROM config.create_app('Frapid.WebsiteBuilder', 'Website', '1.0', 'MixERP Inc.', 'December 1, 2015', 'world blue', '/dashboard/wb/contents', null);
 
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Tasks', '', '', '');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Add New Content', '/dashboard/website/contents/new', '', 'Tasks');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'View Contents', '/dashboard/website/contents', '', 'Tasks');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Layout Manager', '', '', '');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Master Layout', '/dashboard/website/layouts/master', '', 'Layout Manager');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Header', '/dashboard/website/layouts/header', '', 'Layout Manager');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Footer', '/dashboard/website/layouts/footer', '', 'Layout Manager');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Tasks', '', '', '');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Add New Content', '/dashboard/wb/contents/new', '', 'Tasks');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'View Contents', '/dashboard/wb/contents', '', 'Tasks');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Layout Manager', '', '', '');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Edit Master Layout', '/dashboard/wb/layouts/master', '', 'Layout Manager');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Edit Header', '/dashboard/wb/layouts/header', '', 'Layout Manager');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Edit Footer', '/dashboard/wb/layouts/footer', '', 'Layout Manager');

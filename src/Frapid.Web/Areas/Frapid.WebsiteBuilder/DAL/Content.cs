@@ -1,33 +1,57 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Frapid.ApplicationState.Cache;
-using Frapid.DataAccess;
+using Frapid.Configuration;
+using Frapid.NPoco;
 
 namespace Frapid.WebsiteBuilder.DAL
 {
     public class Content
     {
-        public static IEnumerable<Models.Content> GetContents()
+        public static IEnumerable<Entities.Content> GetContents()
         {
-            const string sql = "SELECT * FROM wb.contents;";
-            return Factory.Get<Models.Content>(AppUsers.GetCatalog(), sql);
+            using (Database db = Provider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase()
+                )
+            {
+                return db.FetchBy<Entities.Content>(sql => sql.Where(c => c.IsHomepage));
+            }
         }
 
-        public static Models.Content Get(string alias)
+        public static Entities.Content Get(int contentId)
+        {
+            using (Database db = Provider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
+            {
+                return db.FetchBy<Entities.Content>(sql => sql
+                    .Where(c => c.ContentId == contentId))
+                    .FirstOrDefault();
+            }
+        }
+
+        public static Entities.Content GetPublished(string alias)
         {
             if (string.IsNullOrWhiteSpace(alias))
             {
                 return GetDefault();
             }
 
-            const string sql = "SELECT * FROM wb.contents WHERE alias=@0;";
-            return Factory.Get<Models.Content>(AppUsers.GetCatalog(), sql, alias).FirstOrDefault();
+            using (Database db = Provider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
+            {
+                return db.FetchBy<Entities.Content>(sql => sql
+                    .Where(c => c.Alias.ToLower().Equals(alias))
+                    .Where(c => c.PublishOn <= DateTime.Now)
+                    .Where(c => !c.IsDraft))
+                    .FirstOrDefault();
+            }
         }
 
-        public static Models.Content GetDefault()
+        public static Entities.Content GetDefault()
         {
-            const string sql = "SELECT * FROM wb.contents WHERE is_default;";
-            return Factory.Get<Models.Content>(AppUsers.GetCatalog(), sql).FirstOrDefault();
+            using (Database db = Provider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase()
+                )
+            {
+                return db.FetchBy<Entities.Content>(sql => sql.Where(c => c.IsHomepage)).FirstOrDefault();
+            }
         }
     }
 }

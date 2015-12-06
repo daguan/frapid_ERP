@@ -37,25 +37,25 @@
     element.attr("data-property", column.PropertyName);
     element.attr("data-type", column.DbDataType);
 
-    if (typeof (scrudFactory.live) !== "undefined") {
-        if (column.PropertyName === scrudFactory.live) {
+    if (typeof (window.scrudFactory.live) !== "undefined") {
+        if (column.PropertyName === window.scrudFactory.live) {
             element.addClass("live");
         };
     };
 
-    if (typeof (scrudFactory.readonlyColumns) === "undefined") {
-        scrudFactory.readonlyColumns = [];
+    if (typeof (window.scrudFactory.readonlyColumns) === "undefined") {
+        window.scrudFactory.readonlyColumns = [];
     };
 
-    if (typeof (scrudFactory.hiddenColumns) === "undefined") {
-        scrudFactory.hiddenColumns = [];
+    if (typeof (window.scrudFactory.hiddenColumns) === "undefined") {
+        window.scrudFactory.hiddenColumns = [];
     };
 
-    if (scrudFactory.readonlyColumns.indexOf(column.PropertyName) > -1) {
+    if (window.scrudFactory.readonlyColumns.indexOf(column.PropertyName) > -1) {
         element.attr("readonly", "");
     };
 
-    if (scrudFactory.hiddenColumns.indexOf(column.PropertyName) > -1) {
+    if (window.scrudFactory.hiddenColumns.indexOf(column.PropertyName) > -1) {
         field.addClass("hidden column");
     };
 
@@ -66,7 +66,7 @@
     if (column.IsPrimaryKey) {
         element.attr("data-primaryKey", "");
         element.removeClass();
-        if (scrudFactory.hidePrimaryKey) {
+        if (window.scrudFactory.hidePrimaryKey) {
             field.addClass("hidden column");
         };
     };
@@ -112,8 +112,8 @@
     };
 
     if (window.editData) {
-        if (scrudFactory.disabledOnEdit) {
-            if (scrudFactory.disabledOnEdit.indexOf(column.PropertyName) !== -1) {
+        if (window.scrudFactory.disabledOnEdit) {
+            if (window.scrudFactory.disabledOnEdit.indexOf(column.PropertyName) !== -1) {
                 element.attr("disabled", "disabled");
             };
         };

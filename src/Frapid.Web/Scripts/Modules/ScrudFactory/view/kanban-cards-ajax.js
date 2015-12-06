@@ -1,6 +1,6 @@
 ﻿function createCards() {
     function request(kanbanIds, resourceIds) {
-        var url = "/api/core/kanban-detail/get-by-resources/";
+        var url = "/api/config/kanban-detail/get-by-resources/";
         url += "?kanbanIds=";
         url += kanbanIds.join("&kanbanIds=");
 
@@ -18,7 +18,7 @@
         return;
     };
 
-    var keyField = (scrudFactory.card.keyField || getIdField());
+    var keyField = (window.scrudFactory.card.keyField || getIdField());
     var resourceIds = Enumerable.From(window.json).Select(function (x) { return x[keyField]; }).ToArray();
     var kanbanIds = Enumerable.From(window.kanbans).Select(function (x) { return x.KanbanId; }).ToArray();
 

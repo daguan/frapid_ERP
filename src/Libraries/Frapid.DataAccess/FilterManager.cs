@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Frapid.i18n;
-using NPoco;
+using Frapid.NPoco;
 
 namespace Frapid.DataAccess
 {
@@ -26,12 +26,6 @@ namespace Frapid.DataAccess
             return string.Empty;
         }
 
-        public static bool HasColumn<T>(T poco, string columnName)
-        {
-            var type = poco.GetType();
-            return type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(a => a.GetCustomAttributes(typeof (ColumnAttribute), false).Cast<ColumnAttribute>().Count(b => b.Name.ToUpperInvariant().Equals(columnName.ToUpperInvariant()))).Any(attributes => attributes > 0);
-        }
-
         public static void AddFilters<T>(ref Sql sql, T poco, List<Filter> filters)
         {
             if (filters == null || filters.Count().Equals(0))
@@ -51,7 +45,7 @@ namespace Frapid.DataAccess
 
                 string column = Sanitizer.SanitizeIdentifierName(filter.ColumnName);
 
-                if (string.IsNullOrWhiteSpace(column) || ! HasColumn(poco, filter.ColumnName))
+                if (string.IsNullOrWhiteSpace(column))
                 {
                     continue;
                 }
@@ -93,11 +87,11 @@ namespace Frapid.DataAccess
                         break;
                     case FilterCondition.IsLike:
                         sql.Append(statement + " lower(" + Sanitizer.SanitizeIdentifierName(column) + ") LIKE @0",
-                            "%" + filter.FilterValue.ToLower(CultureManager.GetCurrent()) + "%");
+                            "%" + filter.FilterValue.ToString().ToLower(CultureManager.GetCurrent()) + "%");
                         break;
                     case FilterCondition.IsNotLike:
                         sql.Append(statement + " lower(" + Sanitizer.SanitizeIdentifierName(column) + ") NOT LIKE @0",
-                            "%" + filter.FilterValue.ToLower(CultureManager.GetCurrent()) + "%");
+                            "%" + filter.FilterValue.ToString().ToLower(CultureManager.GetCurrent()) + "%");
                         break;
                 }
             }

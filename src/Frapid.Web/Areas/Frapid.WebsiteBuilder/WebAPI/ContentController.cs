@@ -6,21 +6,20 @@ using System.Net.Http;
 using System.Web.Http;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
-using Frapid.Areas;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Frapid.WebsiteBuilder.DataAccess;
 using Frapid.DataAccess;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Frapid.WebsiteBuilder.Data;
 
 namespace Frapid.WebsiteBuilder.Api
 {
     /// <summary>
     ///     Provides a direct HTTP access to perform various tasks such as adding, editing, and removing Contents.
     /// </summary>
-    [RoutePrefix("api/v1.5/wb/content")]
-    public class ContentController : WebApiController
+    [RoutePrefix("api/v1.0/website/content")]
+    public class ContentController : FrapidApiController
     {
         /// <summary>
         ///     The Content repository.
@@ -34,7 +33,7 @@ namespace Frapid.WebsiteBuilder.Api
             this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
             this._Catalog = AppUsers.GetCatalog();
 
-            this.ContentRepository = new Frapid.WebsiteBuilder.Data.Content
+            this.ContentRepository = new Frapid.WebsiteBuilder.DataAccess.Content
             {
                 _Catalog = this._Catalog,
                 _LoginId = this._LoginId,
@@ -63,7 +62,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns>Returns the "content" meta information to perform CRUD operation.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("meta")]
-        [Route("~/api/wb/content/meta")]
+        [Route("~/api/website/content/meta")]
+        [Authorize]
         public EntityView GetEntityView()
         {
             if (this._LoginId == 0)
@@ -80,12 +80,12 @@ namespace Frapid.WebsiteBuilder.Api
                                         new EntityColumn { ColumnName = "title",  PropertyName = "Title",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
                                         new EntityColumn { ColumnName = "alias",  PropertyName = "Alias",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 50 },
                                         new EntityColumn { ColumnName = "author_id",  PropertyName = "AuthorId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "published_on",  PropertyName = "PublishedOn",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "publish_on",  PropertyName = "PublishOn",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
                                         new EntityColumn { ColumnName = "contents",  PropertyName = "Contents",  DataType = "string",  DbDataType = "text",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "draft",  PropertyName = "Draft",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "is_draft",  PropertyName = "IsDraft",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
                                         new EntityColumn { ColumnName = "seo_keywords",  PropertyName = "SeoKeywords",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 50 },
                                         new EntityColumn { ColumnName = "seo_description",  PropertyName = "SeoDescription",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "is_default",  PropertyName = "IsDefault",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "is_homepage",  PropertyName = "IsHomepage",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
                                         new EntityColumn { ColumnName = "audit_user_id",  PropertyName = "AuditUserId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
                                         new EntityColumn { ColumnName = "audit_ts",  PropertyName = "AuditTs",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
                                 }
@@ -98,7 +98,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns>Returns the count of the contents.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
-        [Route("~/api/wb/content/count")]
+        [Route("~/api/website/content/count")]
+        [Authorize]
         public long Count()
         {
             try
@@ -117,10 +118,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -129,7 +132,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("all")]
-        [Route("~/api/wb/content/all")]
+        [Route("~/api/website/content/all")]
+        [Authorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Content> GetAll()
         {
             try
@@ -148,10 +152,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -160,7 +166,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("export")]
-        [Route("~/api/wb/content/export")]
+        [Route("~/api/website/content/export")]
+        [Authorize]
         public IEnumerable<dynamic> Export()
         {
             try
@@ -179,10 +186,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -192,7 +201,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("{contentId}")]
-        [Route("~/api/wb/content/{contentId}")]
+        [Route("~/api/website/content/{contentId}")]
+        [Authorize]
         public Frapid.WebsiteBuilder.Entities.Content Get(int contentId)
         {
             try
@@ -211,15 +221,18 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         [AcceptVerbs("GET", "HEAD")]
         [Route("get")]
-        [Route("~/api/wb/content/get")]
+        [Route("~/api/website/content/get")]
+        [Authorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Content> Get([FromUri] int[] contentIds)
         {
             try
@@ -238,10 +251,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -250,7 +265,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("first")]
-        [Route("~/api/wb/content/first")]
+        [Route("~/api/website/content/first")]
+        [Authorize]
         public Frapid.WebsiteBuilder.Entities.Content GetFirst()
         {
             try
@@ -269,10 +285,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -282,7 +300,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("previous/{contentId}")]
-        [Route("~/api/wb/content/previous/{contentId}")]
+        [Route("~/api/website/content/previous/{contentId}")]
+        [Authorize]
         public Frapid.WebsiteBuilder.Entities.Content GetPrevious(int contentId)
         {
             try
@@ -301,10 +320,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -314,7 +335,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("next/{contentId}")]
-        [Route("~/api/wb/content/next/{contentId}")]
+        [Route("~/api/website/content/next/{contentId}")]
+        [Authorize]
         public Frapid.WebsiteBuilder.Entities.Content GetNext(int contentId)
         {
             try
@@ -333,10 +355,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -345,7 +369,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns></returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("last")]
-        [Route("~/api/wb/content/last")]
+        [Route("~/api/website/content/last")]
+        [Authorize]
         public Frapid.WebsiteBuilder.Entities.Content GetLast()
         {
             try
@@ -364,10 +389,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -376,7 +403,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
-        [Route("~/api/wb/content")]
+        [Route("~/api/website/content")]
+        [Authorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Content> GetPaginatedResult()
         {
             try
@@ -395,10 +423,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -408,7 +438,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns>Returns the requested page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
-        [Route("~/api/wb/content/page/{pageNumber}")]
+        [Route("~/api/website/content/page/{pageNumber}")]
+        [Authorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Content> GetPaginatedResult(long pageNumber)
         {
             try
@@ -427,10 +458,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -440,7 +473,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns>Returns the count of filtered contents.</returns>
         [AcceptVerbs("POST")]
         [Route("count-where")]
-        [Route("~/api/wb/content/count-where")]
+        [Route("~/api/website/content/count-where")]
+        [Authorize]
         public long CountWhere([FromBody]JArray filters)
         {
             try
@@ -460,10 +494,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -474,7 +510,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
-        [Route("~/api/wb/content/get-where/{pageNumber}")]
+        [Route("~/api/website/content/get-where/{pageNumber}")]
+        [Authorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Content> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
@@ -494,10 +531,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -507,7 +546,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns>Returns the count of filtered contents.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("count-filtered/{filterName}")]
-        [Route("~/api/wb/content/count-filtered/{filterName}")]
+        [Route("~/api/website/content/count-filtered/{filterName}")]
+        [Authorize]
         public long CountFiltered(string filterName)
         {
             try
@@ -526,10 +566,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -540,7 +582,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns>Returns the requested page from the collection using the supplied filters.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("get-filtered/{pageNumber}/{filterName}")]
-        [Route("~/api/wb/content/get-filtered/{pageNumber}/{filterName}")]
+        [Route("~/api/website/content/get-filtered/{pageNumber}/{filterName}")]
+        [Authorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Content> GetFiltered(long pageNumber, string filterName)
         {
             try
@@ -559,10 +602,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -571,8 +616,9 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns>Returns an enumerable key/value collection of contents.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
-        [Route("~/api/wb/content/display-fields")]
-        public IEnumerable<DisplayField> GetDisplayFields()
+        [Route("~/api/website/content/display-fields")]
+        [Authorize]
+        public IEnumerable<Frapid.DataAccess.DisplayField> GetDisplayFields()
         {
             try
             {
@@ -590,10 +636,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -602,7 +650,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns>Returns an enumerable custom field collection of contents.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields")]
-        [Route("~/api/wb/content/custom-fields")]
+        [Route("~/api/website/content/custom-fields")]
+        [Authorize]
         public IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields()
         {
             try
@@ -621,10 +670,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -633,7 +684,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <returns>Returns an enumerable custom field collection of contents.</returns>
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields/{resourceId}")]
-        [Route("~/api/wb/content/custom-fields/{resourceId}")]
+        [Route("~/api/website/content/custom-fields/{resourceId}")]
+        [Authorize]
         public IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields(string resourceId)
         {
             try
@@ -652,10 +704,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -664,7 +718,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <param name="content">Your instance of contents class to add or edit.</param>
         [AcceptVerbs("POST")]
         [Route("add-or-edit")]
-        [Route("~/api/wb/content/add-or-edit")]
+        [Route("~/api/website/content/add-or-edit")]
+        [Authorize]
         public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             dynamic content = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
@@ -691,10 +746,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -703,7 +760,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <param name="content">Your instance of contents class to add.</param>
         [AcceptVerbs("POST")]
         [Route("add/{content}")]
-        [Route("~/api/wb/content/add/{content}")]
+        [Route("~/api/website/content/add/{content}")]
+        [Authorize]
         public void Add(Frapid.WebsiteBuilder.Entities.Content content)
         {
             if (content == null)
@@ -727,10 +785,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -740,7 +800,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <param name="contentId">Enter the value for ContentId in order to find and edit the existing record.</param>
         [AcceptVerbs("PUT")]
         [Route("edit/{contentId}")]
-        [Route("~/api/wb/content/edit/{contentId}")]
+        [Route("~/api/website/content/edit/{contentId}")]
+        [Authorize]
         public void Edit(int contentId, [FromBody] Frapid.WebsiteBuilder.Entities.Content content)
         {
             if (content == null)
@@ -764,10 +825,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         private List<ExpandoObject> ParseCollection(JArray collection)
@@ -783,7 +846,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <exception cref="DataAccessException">Thrown when your any Content class in the collection is invalid or malformed.</exception>
         [AcceptVerbs("POST")]
         [Route("bulk-import")]
-        [Route("~/api/wb/content/bulk-import")]
+        [Route("~/api/website/content/bulk-import")]
+        [Authorize]
         public List<object> BulkImport([FromBody]JArray collection)
         {
             List<ExpandoObject> contentCollection = this.ParseCollection(collection);
@@ -809,10 +873,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
         /// <summary>
@@ -821,7 +887,8 @@ namespace Frapid.WebsiteBuilder.Api
         /// <param name="contentId">Enter the value for ContentId in order to find and delete the existing record.</param>
         [AcceptVerbs("DELETE")]
         [Route("delete/{contentId}")]
-        [Route("~/api/wb/content/delete/{contentId}")]
+        [Route("~/api/website/content/delete/{contentId}")]
+        [Authorize]
         public void Delete(int contentId)
         {
             try
@@ -840,10 +907,12 @@ namespace Frapid.WebsiteBuilder.Api
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
+#if !DEBUG
             catch
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
             }
+#endif
         }
 
 

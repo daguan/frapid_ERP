@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using Frapid.DataAccess;
 
-namespace Frapid.WebsiteBuilder.Data
+namespace Frapid.WebsiteBuilder.DataAccess
 {
     public interface IContentRepository
     {
@@ -75,7 +75,7 @@ namespace Frapid.WebsiteBuilder.Data
         /// Displayfields provide a minimal name/value context for data binding Content.
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for Content.</returns>
-        IEnumerable<DisplayField> GetDisplayFields();
+        IEnumerable<Frapid.DataAccess.DisplayField> GetDisplayFields();
 
         /// <summary>
         /// Inserts the instance of Content class to IContentRepository.

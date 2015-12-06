@@ -115,7 +115,7 @@ function getIdField() {
 };
 
 function getCardKey(dynamic) {
-    var keyField = (scrudFactory.card.keyField || getIdField());
+    var keyField = (window.scrudFactory.card.keyField || getIdField());
     return dynamic[keyField];
 };
 
@@ -164,10 +164,10 @@ function createCard(dynamic, key, kanbanDetail) {
     var kanbanId = (kanbanDetail.KanbanId || 0);
 
     var text;
-    var imageField = (scrudFactory.card.image || getImageField(dynamic));
-    var headerField = (scrudFactory.card.header || getHeaderField(dynamic));
-    var metaField = (scrudFactory.card.meta || getMetaField(dynamic, headerField));
-    var descriptionField = (scrudFactory.card.description || getDescriptionField(dynamic));
+    var imageField = (window.scrudFactory.card.image || getImageField(dynamic));
+    var headerField = (window.scrudFactory.card.header || getHeaderField(dynamic));
+    var metaField = (window.scrudFactory.card.meta || getMetaField(dynamic, headerField));
+    var descriptionField = (window.scrudFactory.card.description || getDescriptionField(dynamic));
 
     var card = $('<div class="ui card" />');
     card.attr("data-kanban-detail-id", kanbanDetail.KanbanDetailId);
@@ -179,7 +179,7 @@ function createCard(dynamic, key, kanbanDetail) {
         if (src) {
             var image = $('<div class="image" />');
             var img = $("<img />");
-            img.attr("src", "/api/core/attachment/document/300/250/" + src);
+            img.attr("src", "/api/config/attachment/document/300/250/" + src);
 
             image.append(img);
             card.append(image);
@@ -220,7 +220,7 @@ function createCard(dynamic, key, kanbanDetail) {
         if (text) {
             var description = $('<div class="meta" />');
 
-            description.text(text);
+            description.html(text);
             content.append(description);
         };
     };

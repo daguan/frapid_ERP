@@ -1,13 +1,13 @@
 ﻿function makeSortable() {
     $(function () {
         function deleteRequest(kanbanDetailId) {
-            var url = "/api/core/kanban-detail/delete/" + kanbanDetailId;
+            var url = "/api/config/kanban-detail/delete/" + kanbanDetailId;
 
             return getAjaxRequest(url, "DELETE");
         };
 
         function request(kanbanDetail) {
-            var url = "/api/core/kanban-detail/add-or-edit";
+            var url = "/api/config/kanban-detail/add-or-edit";
 
             var form = [];
             form.push(kanbanDetail);

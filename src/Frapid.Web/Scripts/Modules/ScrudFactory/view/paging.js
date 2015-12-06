@@ -15,7 +15,7 @@
 
 function setPageNumber(pageNumber) {
     var url = updateQueryString("Page", pageNumber);
-    window.history.pushState({ path: url }, '', url);
+    window.history.replaceState({ path: url }, '', url);
 };
 
 function showNextPage() {

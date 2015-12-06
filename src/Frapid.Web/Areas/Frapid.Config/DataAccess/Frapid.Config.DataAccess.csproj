@@ -7,8 +7,8 @@
     <ProjectGuid>{6DE77AC1-1B75-4F9B-AB18-57B5B47ADA22}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Frapid.Core.DataAccess</RootNamespace>
-    <AssemblyName>Frapid.Core.DataAccess</AssemblyName>
+    <RootNamespace>Frapid.Config.DataAccess</RootNamespace>
+    <AssemblyName>Frapid.Config.DataAccess</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -45,16 +45,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\bin\Frapid.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="Frapid.NPoco, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\Frapid.NPoco.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Npgsql, Version=3.0.3.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>..\packages\Npgsql.3.0.3\lib\net45\Npgsql.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NPoco, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPoco.2.10.11\lib\net45\NPoco.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Serilog, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
@@ -88,13 +88,71 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccessType.cs" />
+    <Compile Include="App.cs" />
+    <Compile Include="AppDependency.cs" />
+    <Compile Include="CreateAppProcedure.cs" />
+    <Compile Include="CreateFlagProcedure.cs" />
+    <Compile Include="CreateMenuProcedure.cs" />
+    <Compile Include="Currency.cs" />
+    <Compile Include="CustomField.cs" />
+    <Compile Include="CustomFieldDataType.cs" />
+    <Compile Include="CustomFieldDefinitionView.cs" />
+    <Compile Include="CustomFieldForm.cs" />
+    <Compile Include="CustomFieldSetup.cs" />
+    <Compile Include="CustomFieldView.cs" />
+    <Compile Include="DefaultEntityAccess.cs" />
+    <Compile Include="EmailQueue.cs" />
+    <Compile Include="EntityAccess.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="FilterNameView.cs" />
+    <Compile Include="Flag.cs" />
+    <Compile Include="FlagType.cs" />
+    <Compile Include="FlagView.cs" />
+    <Compile Include="GetCustomFieldDefinitionProcedure.cs" />
+    <Compile Include="GetCustomFieldFormNameProcedure.cs" />
+    <Compile Include="GetCustomFieldSetupIdByTableNameProcedure.cs" />
+    <Compile Include="GetFlagTypeIdProcedure.cs" />
+    <Compile Include="GetUserIdByLoginIdProcedure.cs" />
+    <Compile Include="HasAccessProcedure.cs" />
+    <Compile Include="IAccessTypeRepository.cs" />
+    <Compile Include="IAppDependencyRepository.cs" />
+    <Compile Include="IAppRepository.cs" />
+    <Compile Include="ICreateAppRepository.cs" />
+    <Compile Include="ICreateFlagRepository.cs" />
+    <Compile Include="ICreateMenuRepository.cs" />
+    <Compile Include="ICurrencyRepository.cs" />
+    <Compile Include="ICustomFieldDataTypeRepository.cs" />
+    <Compile Include="ICustomFieldDefinitionViewRepository.cs" />
+    <Compile Include="ICustomFieldFormRepository.cs" />
+    <Compile Include="ICustomFieldRepository.cs" />
+    <Compile Include="ICustomFieldSetupRepository.cs" />
+    <Compile Include="ICustomFieldViewRepository.cs" />
+    <Compile Include="IDefaultEntityAccessRepository.cs" />
+    <Compile Include="IEmailQueueRepository.cs" />
+    <Compile Include="IEntityAccessRepository.cs" />
     <Compile Include="IFilterNameViewRepository.cs" />
     <Compile Include="IFilterRepository.cs" />
+    <Compile Include="IFlagRepository.cs" />
+    <Compile Include="IFlagTypeRepository.cs" />
+    <Compile Include="IFlagViewRepository.cs" />
+    <Compile Include="IGetCustomFieldDefinitionRepository.cs" />
+    <Compile Include="IGetCustomFieldFormNameRepository.cs" />
+    <Compile Include="IGetCustomFieldSetupIdByTableNameRepository.cs" />
+    <Compile Include="IGetFlagTypeIdRepository.cs" />
+    <Compile Include="IGetUserIdByLoginIdRepository.cs" />
+    <Compile Include="IHasAccessRepository.cs" />
+    <Compile Include="IKanbanDetailRepository.cs" />
     <Compile Include="IKanbanRepository.cs" />
+    <Compile Include="IMenuRepository.cs" />
+    <Compile Include="IOfficeRepository.cs" />
+    <Compile Include="ISmtpConfigRepository.cs" />
     <Compile Include="Kanban.cs" />
+    <Compile Include="KanbanDetail.cs" />
+    <Compile Include="Menu.cs" />
+    <Compile Include="Office.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SmtpConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Entities\Frapid.Config.Entities.csproj">

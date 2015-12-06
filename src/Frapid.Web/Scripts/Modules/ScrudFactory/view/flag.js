@@ -53,12 +53,12 @@ function displayFlaggedRows() {
 
 function initializeFlag() {
     function getFlagTypes() {
-        var url = "/api/core/flag-type/display-fields";
+        var url = "/api/config/flag-type/display-fields";
         return getAjaxRequest(url);
     };
 
     function addFlag(flag) {
-        var url = "/api/core/flag/add-or-edit";
+        var url = "/api/config/flag/add-or-edit";
         var form = [];
         form.push(flag);
         form.push(null);
@@ -68,7 +68,7 @@ function initializeFlag() {
     };
 
     function deleteFlag(flagId) {
-        var url = "/api/core/flag/delete/" + flagId;
+        var url = "/api/config/flag/delete/" + flagId;
         return getAjaxRequest(url, "DELETE");
     };
 
@@ -148,7 +148,7 @@ function initializeFlag() {
             flag.flag_id = v.flag_id;
             flag.resource_id = v.resource_id;
             flag.flag_type_id = parseInt(flagSelect.val());
-            flag.resource = scrudFactory.viewTableName;
+            flag.resource = window.scrudFactory.viewTableName;
             flag.resource_key = "";
 
             var flagAjax;
@@ -179,7 +179,7 @@ function initializeFlag() {
     });
 
     function getFlagView(resource, userId, flagIds) {
-        var url = "/api/core/flag-view/get/";
+        var url = "/api/config/flag-view/get/";
         url += resource + "/";
         url += userId;
         url += "?resourceIds=";
@@ -191,7 +191,7 @@ function initializeFlag() {
     function displayFlags() {
         var ids = getAllKeys();
 
-        var getFlagViewAjax = getFlagView(scrudFactory.viewTableName, userId, ids);
+        var getFlagViewAjax = getFlagView(window.scrudFactory.viewTableName, window.userId, ids);
 
         getFlagViewAjax.success(function (msg) {
             window.flagDefinition = msg;

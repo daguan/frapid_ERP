@@ -5,36 +5,59 @@
     Layout = ViewBag.Layout;
 }
 
+<script src="//cdn.quilljs.com/0.20.1/quill.js"></script>
+
 <script>
-	var scrudFactory = new Object();
+    var scrudFactory = new Object();
 
     scrudFactory.title = "Contents";
 
-    scrudFactory.viewAPI = "/api/wb/content";
-    scrudFactory.viewTableName = "wb.contents";
+    scrudFactory.viewAPI = "/api/website/content";
+    scrudFactory.viewTableName = "website.contents";
 
-    scrudFactory.formAPI = "/api/wb/content";
-    scrudFactory.formTableName = "wb.contents";
+    scrudFactory.formAPI = "/api/website/content";
+    scrudFactory.formTableName = "website.contents";
 
-    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+    scrudFactory.disabledOnEdit = ["AuthorId"];
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs", "Contents"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
+    scrudFactory.addNewUrl = "contents/manage";
+    scrudFactory.editUrl = "contents/manage?ContentId=";
 
     scrudFactory.live = "WorkCenterDepartmentName";
 
-	scrudFactory.keys = [
-	    {
-	        property: "ParentWorkCenterDepartmentId",
-	        url: '/api/production/work-center-department/display-fields',
-	        data: null,
-	        valueField: "Key",
-	        textField: "Value"
-	    }
-	];
+    scrudFactory.card = {
+        header: "Title",
+        meta: "Alias",
+        description: "Contents"
+    };
+    
+    scrudFactory.layout = [
+        {
+            tab: "",
+            fields: 
+            [
+                ["ContentId", ""],
+                ["Title", "Alias"],
+                ["Contents"],
+                ["", "", "", ""],
+                ["", "", "", ""],
+            ]
+        }
+    ];
+    scrudFactory.keys = [
+        {
+            property: "ParentWorkCenterDepartmentId",
+            url: '/api/production/work-center-department/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        }
+    ];
 
 </script>
 
 
 <div data-ng-include="'/ScrudFactory/View.html'"></div>
-<div data-ng-include="'/ScrudFactory/Form.html'"></div>

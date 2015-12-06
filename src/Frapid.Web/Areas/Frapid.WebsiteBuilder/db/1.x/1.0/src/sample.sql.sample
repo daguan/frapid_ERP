@@ -1,6 +1,6 @@
-DELETE FROM wb.contents;
+DELETE FROM website.contents;
 
-INSERT INTO wb.contents(title, alias, published_on, draft, seo_keywords, seo_description, is_default, contents)
+INSERT INTO website.contents(title, alias, publish_on, is_draft, seo_keywords, seo_description, is_homepage, contents)
 SELECT 'Welcome to Frapid', 'welcome-to-frapid', NOW(), false, 'frapid, cms, crm, erp, hrm', 'Homepage of Frapid Framework', true, '    <header>
         <div class="header-content">
             <div class="header-content-inner">

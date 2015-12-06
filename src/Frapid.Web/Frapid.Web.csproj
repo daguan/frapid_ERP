@@ -113,10 +113,6 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NPoco, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPoco.2.10.11\lib\net45\NPoco.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
@@ -207,6 +203,7 @@
     <Compile Include="Application\LogManager.cs" />
     <Compile Include="Application\NPocoConfig.cs" />
     <Compile Include="Application\RouteConfig.cs" />
+    <Compile Include="Application\StartupRegistration.cs" />
     <Compile Include="Application\WebApiConfig.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Global.asax.cs">
@@ -232,6 +229,9 @@
     <Content Include="Scripts\colorpicker\jqcolorpicker.jquery.json" />
     <Content Include="Scripts\colorpicker\README.md" />
     <Content Include="Scripts\colorpicker\TODO" />
+    <Content Include="Scripts\contenttools\content-tools.js" />
+    <Content Include="Scripts\contenttools\content-tools.min.css" />
+    <Content Include="Scripts\contenttools\content-tools.min.js" />
     <Content Include="Scripts\d3\LICENSE" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -241,6 +241,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Scripts\contenttools\icons.woff" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\ajax-file-upload.js" />
     <Content Include="Scripts\angular\angular.min.js" />
@@ -813,12 +814,13 @@
     <Content Include="Scripts\vakata-jstree\dist\themes\default\style.css" />
     <Content Include="Scripts\vakata-jstree\dist\themes\default\style.min.css" />
     <Content Include="Scripts\vakata-jstree\dist\themes\default\throbber.gif" />
-    <Content Include="Scripts\_references.js" />
     <Content Include="Scripts\app\_run.js" />
     <Content Include="Scripts\app\app.datamodel.js" />
     <Content Include="Scripts\app\app.viewmodel.js" />
     <Content Include="Scripts\app\common.js" />
     <Content Include="Scripts\app\home.viewmodel.js" />
+    <Content Include="ScrudFactory\Form.html" />
+    <Content Include="ScrudFactory\View.html" />
     <Content Include="Static\images\logo-inverted.png" />
     <Content Include="Static\images\logo.png" />
     <Content Include="Stylesheets\Backend\frapid.css" />
@@ -888,6 +890,7 @@
     <Folder Include="Areas\" />
     <Folder Include="Catalogs\" />
     <Folder Include="Resources\" />
+    <Folder Include="Scripts\contenttools\images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -896,7 +899,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\Frapid.Areas\Frapid.Areas.csproj">
-      <Project>{0361910a-7773-4ee9-861b-ffc5636d82d1}</Project>
+      <Project>{0361910A-7773-4EE9-861B-FFC5636D82D1}</Project>
       <Name>Frapid.Areas</Name>
     </ProjectReference>
     <ProjectReference Include="..\Libraries\Frapid.Configuration\Frapid.Configuration.csproj">

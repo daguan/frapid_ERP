@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -6,7 +6,7 @@ using System.Web.Http;
 
 namespace Frapid.Framework
 {
-    public class FrapidApiController: ApiController
+    public class FrapidApiController : ApiController
     {
         public static List<Assembly> GetMembers()
         {

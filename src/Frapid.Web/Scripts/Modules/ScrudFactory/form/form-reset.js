@@ -7,8 +7,8 @@
 
     $(".uploader.field .ui.image.preview").attr("src", "/Static/images/mixerp-logo-light.png");
 
-    if (scrudFactory.disabledOnEdit) {
-        $.each(scrudFactory.disabledOnEdit, function () {
+    if (window.scrudFactory.disabledOnEdit) {
+        $.each(window.scrudFactory.disabledOnEdit, function () {
             var el = $('[data-property="' + this + '"]');
             el.removeAttr("disabled");
         });

@@ -69,20 +69,20 @@ namespace Frapid.Config.DataAccess
         /// Custom fields are user defined form elements for IKanbanRepository.
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for Kanban.</returns>
-        IEnumerable<CustomField> GetCustomFields(string resourceId);
+        IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields(string resourceId);
 
         /// <summary>
         /// Displayfields provide a minimal name/value context for data binding Kanban.
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for Kanban.</returns>
-        IEnumerable<DisplayField> GetDisplayFields();
+        IEnumerable<Frapid.DataAccess.DisplayField> GetDisplayFields();
 
         /// <summary>
         /// Inserts the instance of Kanban class to IKanbanRepository.
         /// </summary>
         /// <param name="kanban">The instance of Kanban class to insert or update.</param>
         /// <param name="customFields">The custom field collection.</param>
-        object AddOrEdit(dynamic kanban, List<CustomField> customFields);
+        object AddOrEdit(dynamic kanban, List<Frapid.DataAccess.CustomField> customFields);
 
         /// <summary>
         /// Inserts the instance of Kanban class to IKanbanRepository.

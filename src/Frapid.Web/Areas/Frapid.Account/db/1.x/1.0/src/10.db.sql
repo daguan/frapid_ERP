@@ -11,6 +11,9 @@ CREATE TABLE account.roles
                                             DEFAULT(NOW())    
 );
 
+ALTER TABLE config.default_entity_access
+ADD FOREIGN KEY(role_id) REFERENCES account.roles;
+
 INSERT INTO account.roles
 SELECT     1,   'Guest',    false UNION ALL
 SELECT    10,   'Client',   false UNION ALL
@@ -24,7 +27,7 @@ CREATE TABLE account.configuration_profiles
     profile_name                            national character varying(100) NOT NULL UNIQUE,
     is_active                               boolean NOT NULL DEFAULT(true),    
     allow_registration                      boolean NOT NULL DEFAULT(true),
-    registration_office_id                  integer NOT NULL REFERENCES core.offices,
+    registration_office_id                  integer NOT NULL REFERENCES config.offices,
     registration_role_id                    integer NOT NULL REFERENCES account.roles,
     allow_facebook_registration             boolean NOT NULL DEFAULT(true),
     allow_google_registration               boolean NOT NULL DEFAULT(true),
@@ -68,7 +71,7 @@ CREATE TABLE account.users
     user_id                                 SERIAL PRIMARY KEY,
     email                                   national character varying(100) NOT NULL,
     password                                text,
-    office_id                               integer NOT NULL REFERENCES core.offices,
+    office_id                               integer NOT NULL REFERENCES config.offices,
     role_id                                 integer NOT NULL REFERENCES account.roles,
     name                                    national character varying(100),
     phone                                   national character varying(100),
@@ -82,6 +85,40 @@ CREATE TABLE account.users
 
 CREATE UNIQUE INDEX users_email_uix
 ON account.users(LOWER(email));
+
+ALTER TABLE config.entity_access
+ADD FOREIGN KEY(user_id) REFERENCES account.users;
+
+ALTER TABLE config.default_entity_access
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE config.entity_access
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE website.contents
+ADD FOREIGN KEY(author_id) REFERENCES account.users;
+
+ALTER TABLE website.contents
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE config.filters
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE config.kanbans
+ADD FOREIGN KEY(user_id) REFERENCES account.users;
+
+ALTER TABLE config.kanbans
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE config.kanban_details
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE config.flag_types
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE config.flags
+ADD FOREIGN KEY(user_id) REFERENCES account.users;
+
 
 CREATE TABLE account.reset_requests
 (
@@ -187,12 +224,12 @@ $$
 LANGUAGE plpgsql;
 
 
-ALTER TABLE core.currencies
+ALTER TABLE config.currencies
 ADD CONSTRAINT currencies_users_fk
 FOREIGN KEY(audit_user_id)
 REFERENCES account.users;
 
-ALTER TABLE core.offices
+ALTER TABLE config.offices
 ADD CONSTRAINT offices_users_fk
 FOREIGN KEY(audit_user_id)
 REFERENCES account.users;
@@ -226,7 +263,7 @@ CREATE TABLE account.logins
 (
     login_id                                BIGSERIAL PRIMARY KEY,
     user_id                                 integer REFERENCES account.users,
-    office_id                               integer REFERENCES core.offices,
+    office_id                               integer REFERENCES config.offices,
     browser                                 text,
     ip_address                              national character varying(50),
     login_timestamp                         TIMESTAMP WITH TIME ZONE NOT NULL 
@@ -714,19 +751,19 @@ SELECT
     account.logins.login_timestamp,
     account.logins.culture,
     account.logins.office_id,
-    core.offices.office_name,
-    core.offices.office_code || ' (' || core.offices.office_name || ')' AS office
+    config.offices.office_name,
+    config.offices.office_code || ' (' || config.offices.office_name || ')' AS office
 FROM account.logins
 INNER JOIN account.users
 ON account.users.user_id = account.logins.user_id
 INNER JOIN account.roles
 ON account.roles.role_id = account.users.role_id
-INNER JOIN core.offices
-ON core.offices.office_id = account.logins.office_id;
+INNER JOIN config.offices
+ON config.offices.office_id = account.logins.office_id;
 
-SELECT * FROM core.create_app('Frapid.Account', 'Account', '1.0', 'MixERP Inc.', 'December 1, 2015', 'grey lock', '/dashboard#/Frapid.Authentication/roles', '{Frapid.WebsiteBuilder}'::text[]);
+SELECT * FROM config.create_app('Frapid.Account', 'Account', '1.0', 'MixERP Inc.', 'December 1, 2015', 'grey lock', '/dashboard/account/configuration-profile', '{Frapid.WebsiteBuilder}'::text[]);
 
-SELECT * FROM core.create_menu('Frapid.Account', 'Tasks', '', '', '');
-SELECT * FROM core.create_menu('Frapid.Account', 'Roles', '/dashboard#/Frapid.Authentication/roles', '', 'Tasks');
-SELECT * FROM core.create_menu('Frapid.Account', 'Configuration Profile', '/dashboard#/Frapid.Authentication/configuration-profile', '', 'Tasks');
-SELECT * FROM core.create_menu('Frapid.Account', 'User Management', '/dashboard#/Frapid.Authentication/user-management', '', 'Tasks');
+SELECT * FROM config.create_menu('Frapid.Account', 'Tasks', '', '', '');
+SELECT * FROM config.create_menu('Frapid.Account', 'Roles', '/dashboard/account/roles', '', 'Tasks');
+SELECT * FROM config.create_menu('Frapid.Account', 'Configuration Profile', '/dashboard/account/configuration-profile', '', 'Tasks');
+SELECT * FROM config.create_menu('Frapid.Account', 'User Management', '/dashboard/account/user-management', '', 'Tasks');

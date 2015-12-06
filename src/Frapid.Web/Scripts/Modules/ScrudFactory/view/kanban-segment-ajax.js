@@ -4,7 +4,7 @@
 
 function deleteKanban(el) {
     function ajax(kanbanId) {
-        var url = "/api/core/kanban/delete/" + kanbanId;
+        var url = "/api/config/kanban/delete/" + kanbanId;
         return getAjaxRequest(url, "DELETE");
     };
 
@@ -47,7 +47,7 @@ function editKanban(el) {
 
 function saveOrUpdateKanban() {
     function request(k) {
-        var url = "/api/core/kanban/add-or-edit";
+        var url = "/api/config/kanban/add-or-edit";
 
         var form = [];
         form.push(k);
@@ -70,7 +70,7 @@ function saveOrUpdateKanban() {
 
     var kanban = new Object();
     kanban.kanban_id = (kanbanIdInputText.val() || null);
-    kanban.object_name = scrudFactory.viewTableName;
+    kanban.object_name = window.scrudFactory.viewTableName;
     kanban.user_id = window.userId;
     kanban.kanban_name = kanbanNameInputText.val();
     kanban.description = kanbanDescriptionTextArea.val();

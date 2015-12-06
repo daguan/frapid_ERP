@@ -55,6 +55,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\bin\Frapid.DataAccess.dll</HintPath>
     </Reference>
+    <Reference Include="Frapid.DbPolicy, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\Frapid.DbPolicy.dll</HintPath>
+    </Reference>
     <Reference Include="Frapid.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\bin\Frapid.Framework.dll</HintPath>
@@ -125,9 +129,9 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataAccess\Frapid.WebsiteBuilder.Data.csproj">
+    <ProjectReference Include="..\DataAccess\Frapid.WebsiteBuilder.DataAccess.csproj">
       <Project>{6d84caf6-e1fa-4a5c-8ccc-a36aea06aa0b}</Project>
-      <Name>Frapid.WebsiteBuilder.Data</Name>
+      <Name>Frapid.WebsiteBuilder.DataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\Entities\Frapid.WebsiteBuilder.Entities.csproj">
       <Project>{f191307a-e582-48b2-81f9-78a1e2928d6d}</Project>
@@ -156,15 +160,14 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55853</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:55853/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

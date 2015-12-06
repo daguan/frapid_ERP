@@ -1,6 +1,6 @@
 ﻿function editRow(el, isCard) {
     function customFieldRequest(tableName, primaryKeyValue) {
-        var url = "/api/core/custom-field-view/get-where/1";
+        var url = "/api/config/custom-field-view/get-where/1";
 
         var filters = [];
 

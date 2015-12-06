@@ -13,8 +13,8 @@ namespace Frapid.DataAccess
         public string ColumnName { get; set; }
         public string PropertyName { get; set; }
         public int FilterCondition { get; set; }
-        public string FilterValue { get; set; }
-        public string FilterAndValue { get; set; }
+        public object FilterValue { get; set; }
+        public object FilterAndValue { get; set; }
         public int? AuditUserId { get; set; }
         public DateTime? AuditTs { get; set; }
     }

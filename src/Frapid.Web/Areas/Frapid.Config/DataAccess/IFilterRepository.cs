@@ -69,20 +69,20 @@ namespace Frapid.Config.DataAccess
         /// Custom fields are user defined form elements for IFilterRepository.
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for Filter.</returns>
-        IEnumerable<CustomField> GetCustomFields(string resourceId);
+        IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields(string resourceId);
 
         /// <summary>
         /// Displayfields provide a minimal name/value context for data binding Filter.
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for Filter.</returns>
-        IEnumerable<DisplayField> GetDisplayFields();
+        IEnumerable<Frapid.DataAccess.DisplayField> GetDisplayFields();
 
         /// <summary>
         /// Inserts the instance of Filter class to IFilterRepository.
         /// </summary>
         /// <param name="filter">The instance of Filter class to insert or update.</param>
         /// <param name="customFields">The custom field collection.</param>
-        object AddOrEdit(dynamic filter, List<CustomField> customFields);
+        object AddOrEdit(dynamic filter, List<Frapid.DataAccess.CustomField> customFields);
 
         /// <summary>
         /// Inserts the instance of Filter class to IFilterRepository.

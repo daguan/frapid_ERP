@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
-using Frapid.WebsiteBuilder.Models;
+using AutoMapper;
+using Frapid.WebsiteBuilder.Entities;
 
 namespace Frapid.WebsiteBuilder.Controllers
 {
@@ -9,14 +10,17 @@ namespace Frapid.WebsiteBuilder.Controllers
         [Route("site/{*alias}")]
         public ActionResult Index(string alias = "")
         {
-            Content model = DAL.Content.Get(alias);
+            Content content = DAL.Content.GetPublished(alias);
+            Mapper.CreateMap<Content, Models.Content>();
+            Models.Content model = Mapper.Map<Models.Content>(content);
+
             string path = GetLayoutPath();
             string layout = "Layout.cshtml";
 
             if (model == null)
             {
                 return View(GetRazorView<AreaRegistration>("layouts/404.cshtml"),
-                    new Content {LayoutPath = path, Layout = layout});
+                    new Models.Content {LayoutPath = path, Layout = layout});
             }
 
             model.LayoutPath = path;

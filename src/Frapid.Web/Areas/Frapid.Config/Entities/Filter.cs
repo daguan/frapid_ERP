@@ -1,9 +1,12 @@
 // ReSharper disable All
 using System;
 using Frapid.DataAccess;
+using Frapid.NPoco;
 
 namespace Frapid.Config.Entities
 {
+    [TableName("config.filters")]
+    [PrimaryKey("filter_id", AutoIncrement = true)]
     public sealed class Filter : IPoco
     {
         public long FilterId { get; set; }

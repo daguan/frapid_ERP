@@ -14,8 +14,10 @@ function executeFunctionByName(functionName, context /*, args */) {
         context = context[namespaces[i]];
     };
 
-    if (typeof (context[func]) === "function") {
-        return context[func].apply(this, args);
+    if (context) {
+        if (typeof (context[func]) === "function") {
+            return context[func].apply(this, args);
+        };
     };
 
     return undefined;

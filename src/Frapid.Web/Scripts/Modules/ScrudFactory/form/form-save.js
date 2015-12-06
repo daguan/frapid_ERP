@@ -2,13 +2,14 @@
     triggerOnSavingEvent();
 
     function request(entity, customFields) {
-        var url = scrudFactory.formAPI + "/add-or-edit";
+        var url = window.scrudFactory.formAPI + "/add-or-edit";
         var form = [];
 
         form.push(entity);
         form.push(customFields);
 
         var data = JSON.stringify(form);
+        alert(data);
         return getAjaxRequest(url, "POST", data);
     };
 
@@ -49,7 +50,7 @@
                 case "float":
                 case "double":
                 case "decimal":
-                    val = val || null;
+                    val = parseFloat(val) || null;
                     break;
                 default:
                     val = val.toString().trim();
@@ -78,9 +79,9 @@
         var value = getFormValue(v.ColumnName, v.DataType, v.IsSerial, v.DbDataType);
 
         if (window.editData) {
-            if (scrudFactory.disabledOnEdit) {
-                if (scrudFactory.disabledOnEdit.indexOf(v.PropertyName) !== -1) {
-                    return false;
+            if (window.scrudFactory.disabledOnEdit && window.scrudFactory.disabledOnEdit.length) {
+                if (window.scrudFactory.disabledOnEdit.indexOf(v.PropertyName) !== -1) {
+                    return true;
                 };
             };
         };
@@ -100,6 +101,7 @@
             customFields.push(customField);
         });
     };
+
 
     var ajax = request(entity, customFields);
 

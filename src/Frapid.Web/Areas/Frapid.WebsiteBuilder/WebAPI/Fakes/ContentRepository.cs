@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using Frapid.WebsiteBuilder.Data;
+using Frapid.WebsiteBuilder.DataAccess;
+using Frapid.DataAccess;
+using CustomField = Frapid.DataAccess.CustomField;
 
 namespace Frapid.WebsiteBuilder.Api.Fakes
 {
@@ -91,17 +93,17 @@ namespace Frapid.WebsiteBuilder.Api.Fakes
 
         public IEnumerable<Frapid.DataAccess.DisplayField> GetDisplayFields()
         {
-            return Enumerable.Repeat(new Frapid.DataAccess.DisplayField(), 1);
+            return Enumerable.Repeat(new DisplayField(), 1);
         }
 
         public IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields()
         {
-            return Enumerable.Repeat(new Frapid.DataAccess.CustomField(), 1);
+            return Enumerable.Repeat(new CustomField(), 1);
         }
 
         public IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields(string resourceId)
         {
-            return Enumerable.Repeat(new Frapid.DataAccess.CustomField(), 1);
+            return Enumerable.Repeat(new CustomField(), 1);
         }
 
         public object AddOrEdit(dynamic content, List<Frapid.DataAccess.CustomField> customFields)

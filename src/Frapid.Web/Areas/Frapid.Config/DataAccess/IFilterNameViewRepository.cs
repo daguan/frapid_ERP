@@ -1,5 +1,8 @@
 // ReSharper disable All
 using System.Collections.Generic;
+using System.Dynamic;
+using Frapid.DataAccess;
+using Frapid.NPoco;
 
 namespace Frapid.Config.DataAccess
 {

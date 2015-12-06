@@ -39,11 +39,11 @@ function createKanbans(kanbans) {
 };
 
 function getKanbans() {
-    var url = "/api/core/kanban/get-where/1";
+    var url = "/api/config/kanban/get-where/1";
 
     var filters = [];
-    filters.push(getAjaxColumnFilter("WHERE", "object_name", FilterConditions.IsEqualTo, scrudFactory.viewTableName));
-    filters.push(getAjaxColumnFilter("WHERE", "user_id", FilterConditions.IsEqualTo, window.userId));
+    filters.push(getAjaxColumnFilter("WHERE", "object_name", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));
+    filters.push(getAjaxColumnFilter("WHERE", "user_id", FilterConditions.IsEqualTo, parseInt(window.userId)));
 
     var data = JSON.stringify(filters);
 

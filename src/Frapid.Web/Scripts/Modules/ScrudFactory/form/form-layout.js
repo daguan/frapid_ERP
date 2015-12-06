@@ -13,11 +13,11 @@
 function createLayout(collection, container) {
     var skip = [];
 
-    if (!scrudFactory.layout) {
-        scrudFactory.layout = [];
+    if (!window.scrudFactory.layout) {
+        window.scrudFactory.layout = [];
     };
 
-    $.each(scrudFactory.layout, function() {
+    $.each(window.scrudFactory.layout, function() {
         var layoutMember = this;
         var tab = layoutMember.tab;
         var fields = layoutMember.fields;
@@ -68,7 +68,7 @@ function createLayout(collection, container) {
     var range = _.range(collection.length);
     var missing = $(range).not(skip).get();
 
-    if (scrudFactory.hidePrimaryKey) {
+    if (window.scrudFactory.hidePrimaryKey) {
         var pki = getPrimaryKeyIndex(collection);
         missing = Enumerable.From(missing).Where(function (x) { return parseInt(x || 0) !== pki; }).ToArray();
         missing.push(pki);
@@ -79,11 +79,12 @@ function createLayout(collection, container) {
 
 
     $.each(missing, function () {
-        fields = $("<div class='fields' />");
-        createFieldGroup(fields, collection[this[0]], "four wide field");
+        //fields = $("<div class='fields' />");
+        var fields = $("<div class='fields' />");
+        createFieldGroup(fields, collection[this[0]], "eight wide field");
 
         if (this[1] !== undefined) {
-            createFieldGroup(fields, collection[this[1]], "four wide field");
+            createFieldGroup(fields, collection[this[1]], "eight wide field");
         };
 
         if (fields.children().length > 0) {

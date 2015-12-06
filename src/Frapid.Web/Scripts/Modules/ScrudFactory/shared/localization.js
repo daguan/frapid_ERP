@@ -10,7 +10,8 @@
         return localized;
     };
 
-    return text;
+
+    return text.split("_").join(" ").toPascalCase().split(" ").join("");
 };
 
 function localizeHeaders(el) {

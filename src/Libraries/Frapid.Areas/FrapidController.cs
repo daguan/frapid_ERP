@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Web.Hosting;
 using System.Web.Mvc;
-using Frapid.ApplicationState.Cache;
+using Frapid.Configuration;
 using Frapid.i18n;
 
 namespace Frapid.Areas
@@ -20,7 +20,7 @@ namespace Frapid.Areas
 
         protected string GetRazorView(string areaName, string path)
         {
-            string catalog = AppUsers.GetCatalog();
+            string catalog = DbConvention.GetCatalog();
 
             string overridePath = "~/Catalogs/{0}/Areas/{1}/Views/" + path;
             overridePath = string.Format(CultureInfo.InvariantCulture, overridePath, catalog, areaName);

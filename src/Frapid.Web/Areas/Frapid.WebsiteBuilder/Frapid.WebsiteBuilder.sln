@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.WebsiteBuilder", "Fr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.WebsiteBuilder.Api", "WebAPI\Frapid.WebsiteBuilder.Api.csproj", "{C29E751D-3F5C-4204-B27A-56338F273BEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.WebsiteBuilder.Data", "DataAccess\Frapid.WebsiteBuilder.Data.csproj", "{6D84CAF6-E1FA-4A5C-8CCC-A36AEA06AA0B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.WebsiteBuilder.DataAccess", "DataAccess\Frapid.WebsiteBuilder.DataAccess.csproj", "{6D84CAF6-E1FA-4A5C-8CCC-A36AEA06AA0B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.WebsiteBuilder.Entities", "Entities\Frapid.WebsiteBuilder.Entities.csproj", "{F191307A-E582-48B2-81F9-78A1E2928D6D}"
 EndProject
