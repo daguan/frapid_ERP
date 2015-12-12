@@ -6,6 +6,7 @@ using Frapid.NPoco;
 namespace Frapid.WebsiteBuilder.Entities
 {
     [TableName("website.contents")]
+    [PrimaryKey("content_id", AutoIncrement = true)]
     public sealed class Content : IPoco
     {
         public int ContentId { get; set; }

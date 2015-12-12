@@ -1,4 +1,5 @@
 ﻿using Frapid.DataAccess;
+using Frapid.DataAccess.Models;
 
 namespace Frapid.DbPolicy
 {
@@ -13,7 +14,7 @@ namespace Frapid.DbPolicy
 
         public void Validate()
         {
-            this.HasAccess = Validate(this);
+            HasAccess = Validate(this);
         }
 
         private static bool Validate(IPolicy policy)
@@ -25,7 +26,7 @@ namespace Frapid.DbPolicy
 
             const string sql = "SELECT * FROM config.has_access(config.get_user_id_by_login_id(@0), @1, @2);";
             string entity = policy.ObjectNamespace + "." + policy.ObjectName;
-            int type = (int)policy.AccessType;
+            int type = (int) policy.AccessType;
 
             bool result = Factory.Scalar<bool>(policy.Catalog, sql, policy.LoginId, entity, type);
             return result;

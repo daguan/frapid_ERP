@@ -2,7 +2,7 @@
 using Frapid.Configuration;
 using Frapid.i18n.Models;
 
-namespace Frapid.i18n.Database
+namespace Frapid.i18n.DAL
 {
     public static class DbResources
     {
@@ -12,7 +12,7 @@ namespace Frapid.i18n.Database
         {
             const string sql = "SELECT * FROM i18n.localized_resource_view;";
 
-            using (NPoco.Database db = Provider.Get(ConnectionString.GetConnectionString(MetaCatalog)).GetDatabase())
+            using (NPoco.Database db = DbProvider.Get(ConnectionString.GetConnectionString(MetaCatalog)).GetDatabase())
             {
                 IEnumerable<dynamic> dbResources = db.Query<dynamic>(sql);
 
@@ -35,7 +35,7 @@ namespace Frapid.i18n.Database
         {
             const string sql =
                 "SELECT * FROM i18n.get_localization_table(@0) WHERE COALESCE(key, '') != '';";
-            using (NPoco.Database db = Provider.Get(ConnectionString.GetConnectionString(MetaCatalog)).GetDatabase())
+            using (NPoco.Database db = DbProvider.Get(ConnectionString.GetConnectionString(MetaCatalog)).GetDatabase())
             {
                 return db.Query<LocalizedResource>(sql, language);
             }

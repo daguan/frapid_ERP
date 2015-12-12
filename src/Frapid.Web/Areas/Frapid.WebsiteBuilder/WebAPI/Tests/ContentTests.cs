@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 using Frapid.WebsiteBuilder.DataAccess;
 using Frapid.WebsiteBuilder.Api.Fakes;
 using Frapid.DataAccess;
+using Frapid.DataAccess.Models;
 using Xunit;
 
 namespace Frapid.WebsiteBuilder.Api.Tests

@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Frapid.Configuration;
 using Frapid.i18n;
-using Npgsql;
 using Frapid.NPoco;
+using Npgsql;
 
 namespace Frapid.DataAccess
 {
     public static class Factory
     {
         public const string ProviderName = "Npgsql";
-        public static readonly string MetaDatabase = ConfigurationManager.GetConfigurationValue("DbServerConfigFileLocation", "MetaDatabase");
+
+        public static readonly string MetaDatabase =
+            ConfigurationManager.GetConfigurationValue("DbServerConfigFileLocation", "MetaDatabase");
 
         public static T Single<T>(string catalog, string sql, params object[] args)
         {
-            using (Database db = Provider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
             {
                 return db.Single<T>(sql, args);
             }
@@ -23,7 +23,7 @@ namespace Frapid.DataAccess
 
         public static IEnumerable<T> Get<T>(string catalog, string sql, params object[] args)
         {
-            using (Database db = Provider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
             {
                 return db.Query<T>(sql, args);
             }
@@ -31,7 +31,7 @@ namespace Frapid.DataAccess
 
         public static IEnumerable<T> Get<T>(string catalog, string sql)
         {
-            using (Database db = Provider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
             {
                 return db.Query<T>(sql);
             }
@@ -39,7 +39,7 @@ namespace Frapid.DataAccess
 
         public static IEnumerable<T> Get<T>(string catalog, Sql sql)
         {
-            using (Database db = Provider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
             {
                 IEnumerable<T> retVal = db.Query<T>(sql);
                 return retVal;
@@ -48,7 +48,7 @@ namespace Frapid.DataAccess
 
         public static object Insert(string catalog, object poco, string tableName = "", string primaryKeyName = "")
         {
-            using (Database db = Provider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
             {
                 if (!string.IsNullOrWhiteSpace(tableName) && !string.IsNullOrWhiteSpace(primaryKeyName))
                 {
@@ -62,7 +62,7 @@ namespace Frapid.DataAccess
         public static object Update(string catalog, object poco, object primaryKeyValue, string tableName = "",
             string primaryKeyName = "")
         {
-            using (Database db = Provider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
             {
                 if (!string.IsNullOrWhiteSpace(tableName) && !string.IsNullOrWhiteSpace(primaryKeyName))
                 {
@@ -73,10 +73,9 @@ namespace Frapid.DataAccess
             }
         }
 
-
         public static T Scalar<T>(string catalog, string sql, params object[] args)
         {
-            using (Database db = Provider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
             {
                 return db.ExecuteScalar<T>(sql, args);
             }
@@ -84,7 +83,7 @@ namespace Frapid.DataAccess
 
         public static T Scalar<T>(string catalog, Sql sql)
         {
-            using (Database db = Provider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
             {
                 return db.ExecuteScalar<T>(sql);
             }
@@ -92,7 +91,7 @@ namespace Frapid.DataAccess
 
         public static void NonQuery(string catalog, string sql, params object[] args)
         {
-            using (Database db = Provider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
             {
                 db.Execute(sql, args);
             }
@@ -109,6 +108,5 @@ namespace Frapid.DataAccess
 
             return message;
         }
-
     }
 }

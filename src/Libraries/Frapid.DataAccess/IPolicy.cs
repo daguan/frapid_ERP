@@ -1,3 +1,5 @@
+using Frapid.DataAccess.Models;
+
 namespace Frapid.DataAccess
 {
     public interface IPolicy

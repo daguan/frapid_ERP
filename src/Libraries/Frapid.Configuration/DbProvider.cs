@@ -7,7 +7,7 @@ using Frapid.NPoco.FluentMappings;
 
 namespace Frapid.Configuration
 {
-    public static class Provider
+    public static class DbProvider
     {
         public static FluentConfig Config;
 

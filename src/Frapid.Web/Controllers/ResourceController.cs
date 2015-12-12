@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using System.Web.UI;
 using Frapid.Areas;
 using Frapid.i18n;
-using Frapid.i18n.Database;
+using Frapid.i18n.DAL;
 using Frapid.i18n.Models;
 
 namespace Frapid.Web.Controllers

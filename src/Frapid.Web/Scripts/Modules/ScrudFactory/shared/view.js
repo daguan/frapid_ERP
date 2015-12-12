@@ -7,8 +7,8 @@
         window.scrudView.hide();
         window.scrudForm.fadeIn(500);
     } else {
-        var url = updateQueryString("View", target);
-        window.history.replaceState({ path: url }, '', url);
+        //var url = updateQueryString("View", target);
+        //window.history.replaceState({ path: url }, '', url);
         window.scrudForm.hide();
         $("div[data-target]").hide();
         $("[data-target]").removeClass("active green");

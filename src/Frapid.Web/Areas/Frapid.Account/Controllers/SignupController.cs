@@ -77,8 +77,8 @@ namespace Frapid.Account.Controllers
                 throw new PasswordConfirmException("Passwords do not match.");
             }
 
-            model.Browser = GetRemoteUser().Browser;
-            model.IpAddress = GetRemoteUser().IpAddress;
+            model.Browser = this.RemoteUser.Browser;
+            model.IpAddress = this.RemoteUser.IpAddress;
 
             Mapper.CreateMap<Registration, DTO.Registration>();
             DTO.Registration registration = Mapper.Map<DTO.Registration>(model);

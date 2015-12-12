@@ -69,20 +69,20 @@ namespace Frapid.WebsiteBuilder.DataAccess
         /// Custom fields are user defined form elements for IContentRepository.
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for Content.</returns>
-        IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields(string resourceId);
+        IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId);
 
         /// <summary>
         /// Displayfields provide a minimal name/value context for data binding Content.
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for Content.</returns>
-        IEnumerable<Frapid.DataAccess.DisplayField> GetDisplayFields();
+        IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields();
 
         /// <summary>
         /// Inserts the instance of Content class to IContentRepository.
         /// </summary>
         /// <param name="content">The instance of Content class to insert or update.</param>
         /// <param name="customFields">The custom field collection.</param>
-        object AddOrEdit(dynamic content, List<Frapid.DataAccess.CustomField> customFields);
+        object AddOrEdit(dynamic content, List<Frapid.DataAccess.Models.CustomField> customFields);
 
         /// <summary>
         /// Inserts the instance of Content class to IContentRepository.
@@ -124,14 +124,14 @@ namespace Frapid.WebsiteBuilder.DataAccess
         /// <returns>Returns collection of Content class.</returns>
         IEnumerable<Frapid.WebsiteBuilder.Entities.Content> GetPaginatedResult(long pageNumber);
 
-        List<Frapid.DataAccess.Filter> GetFilters(string catalog, string filterName);
+        List<Frapid.DataAccess.Models.Filter> GetFilters(string catalog, string filterName);
 
         /// <summary>
         /// Performs a filtered count on IContentRepository.
         /// </summary>
         /// <param name="filters">The list of filter conditions.</param>
         /// <returns>Returns number of rows of Content class using the filter.</returns>
-        long CountWhere(List<Frapid.DataAccess.Filter> filters);
+        long CountWhere(List<Frapid.DataAccess.Models.Filter> filters);
 
         /// <summary>
         /// Performs a filtered pagination against IContentRepository producing result of 10 items.
@@ -139,7 +139,7 @@ namespace Frapid.WebsiteBuilder.DataAccess
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filters">The list of filter conditions.</param>
         /// <returns>Returns collection of Content class.</returns>
-        IEnumerable<Frapid.WebsiteBuilder.Entities.Content> GetWhere(long pageNumber, List<Frapid.DataAccess.Filter> filters);
+        IEnumerable<Frapid.WebsiteBuilder.Entities.Content> GetWhere(long pageNumber, List<Frapid.DataAccess.Models.Filter> filters);
 
         /// <summary>
         /// Performs a filtered count on IContentRepository.

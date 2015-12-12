@@ -24,6 +24,12 @@ namespace Frapid.Configuration
             return ReadConfigurationValue(path, key);
         }
 
+        /// <summary>
+        /// Opens a configuration files and gets the configuration value of the requested key.
+        /// </summary>
+        /// <param name="path">The physical path to the configuration file.</param>
+        /// <param name="key">The configuration key to find.</param>
+        /// <returns>Returns the configuration value of the requested key.</returns>
         public static string ReadConfigurationValue(string path, string key)
         {
             ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap { ExeConfigFilename = path };

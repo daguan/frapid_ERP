@@ -120,13 +120,17 @@
         var frapidApp = angular.module('FrapidApp', ['ngRoute']);
 
 
-        frapidApp.config(function($routeProvider, $locationProvider, $httpProvider) {
+
+
+
+        frapidApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
             $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
 
             $locationProvider.html5Mode({
                 enabled: true,
                 requireBase: false
             });
+
 
             $routeProvider.
                 when('/dashboard', {
@@ -135,6 +139,8 @@
                 when('/dashboard/:url*', {
                     templateUrl: function (url) {
                         var path = '/dashboard/' + url.url;
+
+
                         var qs = [];
 
                         for (var q in url) {
@@ -158,18 +164,19 @@
                 });
         });
 
-        frapidApp.run(function($rootScope, $location) {
-            $rootScope.$on('$locationChangeStart', function(e, n, o) {
+
+        frapidApp.run(function ($rootScope, $location) {
+            $rootScope.$on('$locationChangeStart', function (e, n, o) {
             });
 
-            $rootScope.$on('$routeChangeStart', function() {
+            $rootScope.$on('$routeChangeStart', function () {
                 $("#dashboard-container").addClass("loading");
             });
-            $rootScope.$on('$routeChangeSuccess', function() {
+            $rootScope.$on('$routeChangeSuccess', function () {
                 $("#dashboard-container").removeClass("loading");
             });
 
-            $rootScope.toogleDashboard = function() {
+            $rootScope.toogleDashboard = function () {
                 if (window.location.pathname !== "/dashboard") {
                     lastPage = window.location.pathname;
                     $location.path("/dashboard");

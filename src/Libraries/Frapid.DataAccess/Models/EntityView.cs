@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Frapid.DataAccess
+namespace Frapid.DataAccess.Models
 {
     public class EntityView
     {

@@ -34,8 +34,8 @@ namespace Frapid.Account.Controllers
                 return Redirect("/");
             }
 
-            model.Browser = GetRemoteUser().Browser;
-            model.IpAddress = GetRemoteUser().IpAddress;
+            model.Browser = this.RemoteUser.Browser;
+            model.IpAddress = this.RemoteUser.IpAddress;
 
             if (DAL.Reset.HasActiveResetRequest(model.Email))
             {

@@ -1,4 +1,4 @@
-﻿using Frapid.DataAccess;
+﻿using Frapid.DataAccess.Models;
 
 namespace Frapid.DbPolicy
 {

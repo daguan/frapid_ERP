@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Frapid.DataAccess.Models;
 using Frapid.i18n;
 using Frapid.NPoco;
 
@@ -96,6 +97,5 @@ namespace Frapid.DataAccess
                 }
             }
         }
-
     }
 }

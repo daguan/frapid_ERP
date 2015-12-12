@@ -9,31 +9,42 @@ namespace Frapid.Dashboard.Controllers
 {
     public class DashboardController : FrapidController
     {
+        private static readonly string BasePath = "~/Areas/Frapid.Dashboard/Views";
+        private static readonly string LandingPage = BasePath + "/Default/LandingPage.cshtml";
+        private static readonly string LayoutByConvention = "~/Catalogs/{0}/Areas/Frapid.Dashboard/Views/Layouts/";
+        private static readonly string FallbackLayout = "~/Areas/Frapid.Dashboard/Views/Layouts/";
+        private static readonly string LayoutFile = "Dashboard.cshtml";
+
         public DashboardController()
         {
             AppUsers.SetCurrentLogin();
 
             ViewBag.ViewPath = GetViewPath();
             ViewBag.LayoutPath = GetLayoutPath();
-            ViewBag.LayoutFile = "Dashboard.cshtml";
+            ViewBag.LayoutFile = LayoutFile;
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (!filterContext.HttpContext.Request.IsAjaxRequest())
             {
-                ViewBag.Layout = GetLayoutPath() + "Dashboard.cshtml";
+                ViewBag.Layout = GetLayoutPath() + LayoutFile;
             }
         }
 
-        protected string GetViewPath()
+        protected ViewResultBase FrapidView(string path, object model = null)
         {
-            return "/Areas/Frapid.Dashboard/Views";
+            return View(this.HttpContext.Request.IsAjaxRequest() ? path : LandingPage, model);
+        }
+
+        protected string GetViewPath(string view = "")
+        {
+            return BasePath + view;
         }
 
         protected string GetLayoutPath()
         {
-            string layout = "~/Catalogs/{0}/Areas/Frapid.Dashboard/Views/Layouts/";
+            string layout = LayoutByConvention;
             string catalog = AppUsers.GetCatalog();
             layout = string.Format(CultureInfo.InvariantCulture, layout, catalog);
 
@@ -44,7 +55,7 @@ namespace Frapid.Dashboard.Controllers
                 return layout;
             }
 
-            return "~/Areas/Frapid.Dashboard/Views/Layouts/";
+            return FallbackLayout;
         }
     }
 }

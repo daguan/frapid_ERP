@@ -41,7 +41,7 @@
 </style>
 
 <div class="ui visible bottom sidebar">
-    <div class="ui attached segment">
+    <div class="ui attached violet segment">
         <div class="ui container">
             <div class="ui form">
                 <input type="hidden" data-entity="content_id" class="integer" value="@contentId" />
@@ -59,7 +59,7 @@
                         <input type="date" class="date" data-entity="publish_on" value="@publishOn" required="" />
                     </div>
                     <div class="field">
-                        <label>Seo Keyword</label>
+                        <label>Seo Keywords</label>
                         <input type="text" data-entity="seo_keywords" value="@keywords" required="" />
                     </div>
                     <div class="field">
@@ -168,10 +168,15 @@
 
     function initializeAceEditor() {
         var html = $("#content").html();
-        html = window.tidy_html5(html, { "show-body-only": true, "indent": "auto", "indent-spaces": 2 });
+
+        if (window.tidy_html5) {
+            html = window.tidy_html5(html, { "show-body-only": true, "indent": "auto", "indent-spaces": 2, "show-info": false, "show-warnings": false, "show-errors": 0, "quiet": true });
+        };
+
         html += "\r\n".repeat(10);
 
         var editor = window.ace.edit("editor");
+        editor.$blockScrolling = Infinity;
         $("#editor").removeClass("initially, hidden");
         editor.setTheme("ace/theme/ambience");
         editor.getSession().setMode("ace/mode/html");
@@ -183,12 +188,6 @@
         });
     };
 
-    $(document).ready(function () {
-        setTimeout(function () {
-            initializeAceEditor();
-        }, 100);
-    });
-
 
     toggleHtmlCheckbox.change(function () {
         var el = $(this);
@@ -197,10 +196,14 @@
         var html;
 
         var editor = window.ace.edit("editor");
+        editor.$blockScrolling = Infinity;
 
         if (state) {
             html = $("#content").html();
-            html = window.tidy_html5(html, { "show-body-only": true, "indent": "auto", "indent-spaces": 2 });
+            if (window.tidy_html5) {
+                html = window.tidy_html5(html, { "show-body-only": true, "indent": "auto", "indent-spaces": 2, "show-info": false, "show-warnings": false, "show-errors": 0, "quiet": true });
+            };
+
             html += "\r\n".repeat(10);
 
             ctApp.addClass("initially hidden");
@@ -255,34 +258,34 @@
             var tag = el.prop("tagName").toLowerCase();
 
             switch (tag) {
-                case "h1":
-                case "h2":
-                case "h3":
-                case "h4":
-                case "h5":
-                case "span":
-                case "p":
-                case "div":
-                    if (raw) {
-                        value = el.html().trim();
-                    } else {
-                        value = el.text().trim();
+            case "h1":
+            case "h2":
+            case "h3":
+            case "h4":
+            case "h5":
+            case "span":
+            case "p":
+            case "div":
+                if (raw) {
+                    value = el.html().trim();
+                } else {
+                    value = el.text().trim();
+                };
+
+                break;
+            case "input":
+                if (el.is(":checkbox")) {
+                    value = el.is(":checked");
+                } else {
+                    value = parseValue(el.val(), el.attr("class"));
+                    el.closest(".field").removeClass("error");
+
+                    if (!value && required) {
+                        el.closest(".field").addClass("error");
                     };
+                };
 
-                    break;
-                case "input":
-                    if (el.is(":checkbox")) {
-                        value = el.is(":checked");
-                    } else {
-                        value = parseValue(el.val(), el.attr("class"));
-                        el.closest(".field").removeClass("error");
-
-                        if (!value && required) {
-                            el.closest(".field").addClass("error");
-                        };
-                    };
-
-                    break;
+                break;
             };
 
             return value;
@@ -337,7 +340,7 @@
         $('[data-entity="alias"]').val(getAlias($(this).val()));
     });
 
-    $("#SaveButton").click(function () {
+    $("#SaveButton").click(function() {
         function request(model) {
             var url = "/api/website/content/add-or-edit";
             var form = [];
@@ -361,9 +364,14 @@
         var ajax = request(model);
 
 
-        ajax.success(function () {
+        ajax.success(function() {
             location.href = "../contents";
         });
 
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        initializeAceEditor();
     });
 </script>

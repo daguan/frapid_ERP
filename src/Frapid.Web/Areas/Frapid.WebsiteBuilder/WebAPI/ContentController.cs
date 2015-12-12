@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Frapid.WebsiteBuilder.DataAccess;
 using Frapid.DataAccess;
+using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
 
@@ -479,7 +480,7 @@ namespace Frapid.WebsiteBuilder.Api
         {
             try
             {
-                List<Frapid.DataAccess.Filter> f = filters.ToObject<List<Frapid.DataAccess.Filter>>(JsonHelper.GetJsonSerializer());
+                List<Frapid.DataAccess.Models.Filter> f = filters.ToObject<List<Frapid.DataAccess.Models.Filter>>(JsonHelper.GetJsonSerializer());
                 return this.ContentRepository.CountWhere(f);
             }
             catch (UnauthorizedException)
@@ -516,7 +517,7 @@ namespace Frapid.WebsiteBuilder.Api
         {
             try
             {
-                List<Frapid.DataAccess.Filter> f = filters.ToObject<List<Frapid.DataAccess.Filter>>(JsonHelper.GetJsonSerializer());
+                List<Frapid.DataAccess.Models.Filter> f = filters.ToObject<List<Frapid.DataAccess.Models.Filter>>(JsonHelper.GetJsonSerializer());
                 return this.ContentRepository.GetWhere(pageNumber, f);
             }
             catch (UnauthorizedException)
@@ -618,7 +619,7 @@ namespace Frapid.WebsiteBuilder.Api
         [Route("display-fields")]
         [Route("~/api/website/content/display-fields")]
         [Authorize]
-        public IEnumerable<Frapid.DataAccess.DisplayField> GetDisplayFields()
+        public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
             try
             {
@@ -652,7 +653,7 @@ namespace Frapid.WebsiteBuilder.Api
         [Route("custom-fields")]
         [Route("~/api/website/content/custom-fields")]
         [Authorize]
-        public IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields()
+        public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields()
         {
             try
             {
@@ -686,7 +687,7 @@ namespace Frapid.WebsiteBuilder.Api
         [Route("custom-fields/{resourceId}")]
         [Route("~/api/website/content/custom-fields/{resourceId}")]
         [Authorize]
-        public IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields(string resourceId)
+        public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             try
             {
@@ -723,7 +724,7 @@ namespace Frapid.WebsiteBuilder.Api
         public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             dynamic content = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
-            List<Frapid.DataAccess.CustomField> customFields = form[1].ToObject<List<Frapid.DataAccess.CustomField>>(JsonHelper.GetJsonSerializer());
+            List<Frapid.DataAccess.Models.CustomField> customFields = form[1].ToObject<List<Frapid.DataAccess.Models.CustomField>>(JsonHelper.GetJsonSerializer());
 
             if (content == null)
             {

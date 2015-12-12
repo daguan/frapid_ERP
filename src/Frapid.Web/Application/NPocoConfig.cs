@@ -7,7 +7,7 @@ namespace Frapid.Web
     {
         public static void Register()
         {
-            Provider.Setup(typeof(IPoco));
+            DbProvider.Setup(typeof(IPoco));
         }
     }
 }

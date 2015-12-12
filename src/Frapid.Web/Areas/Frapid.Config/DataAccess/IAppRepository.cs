@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using Frapid.DataAccess;
+using Frapid.DataAccess.Models;
 
 namespace Frapid.Config.DataAccess
 {
@@ -69,20 +70,20 @@ namespace Frapid.Config.DataAccess
         /// Custom fields are user defined form elements for IAppRepository.
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for App.</returns>
-        IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields(string resourceId);
+        IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId);
 
         /// <summary>
         /// Displayfields provide a minimal name/value context for data binding App.
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for App.</returns>
-        IEnumerable<Frapid.DataAccess.DisplayField> GetDisplayFields();
+        IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields();
 
         /// <summary>
         /// Inserts the instance of App class to IAppRepository.
         /// </summary>
         /// <param name="app">The instance of App class to insert or update.</param>
         /// <param name="customFields">The custom field collection.</param>
-        object AddOrEdit(dynamic app, List<Frapid.DataAccess.CustomField> customFields);
+        object AddOrEdit(dynamic app, List<Frapid.DataAccess.Models.CustomField> customFields);
 
         /// <summary>
         /// Inserts the instance of App class to IAppRepository.
@@ -124,14 +125,14 @@ namespace Frapid.Config.DataAccess
         /// <returns>Returns collection of App class.</returns>
         IEnumerable<Frapid.Config.Entities.App> GetPaginatedResult(long pageNumber);
 
-        List<Frapid.DataAccess.Filter> GetFilters(string catalog, string filterName);
+        List<Frapid.DataAccess.Models.Filter> GetFilters(string catalog, string filterName);
 
         /// <summary>
         /// Performs a filtered count on IAppRepository.
         /// </summary>
         /// <param name="filters">The list of filter conditions.</param>
         /// <returns>Returns number of rows of App class using the filter.</returns>
-        long CountWhere(List<Frapid.DataAccess.Filter> filters);
+        long CountWhere(List<Frapid.DataAccess.Models.Filter> filters);
 
         /// <summary>
         /// Performs a filtered pagination against IAppRepository producing result of 10 items.
@@ -139,7 +140,7 @@ namespace Frapid.Config.DataAccess
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filters">The list of filter conditions.</param>
         /// <returns>Returns collection of App class.</returns>
-        IEnumerable<Frapid.Config.Entities.App> GetWhere(long pageNumber, List<Frapid.DataAccess.Filter> filters);
+        IEnumerable<Frapid.Config.Entities.App> GetWhere(long pageNumber, List<Frapid.DataAccess.Models.Filter> filters);
 
         /// <summary>
         /// Performs a filtered count on IAppRepository.

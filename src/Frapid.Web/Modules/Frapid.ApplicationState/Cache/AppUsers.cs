@@ -21,19 +21,23 @@ namespace Frapid.ApplicationState.Cache
 
         public static void SetCurrentLogin(long globalLoginId)
         {
-            if (globalLoginId > 0)
+            if (globalLoginId <= 0)
             {
-                string key = globalLoginId.ToString(CultureInfo.InvariantCulture);
-
-                if (MemoryCache.Default[key] == null)
-                {
-                    MetaLogin metaLogin = GetMetaLogin(globalLoginId);
-                    Dictionary<string, object> dictionary = GetDictionary(metaLogin);
-
-                    CacheFactory.AddToDefaultCache("Dictionary" + key, dictionary);
-                    CacheFactory.AddToDefaultCache(key, metaLogin);
-                }
+                return;
             }
+
+            string key = globalLoginId.ToString(CultureInfo.InvariantCulture);
+
+            if (MemoryCache.Default[key] != null)
+            {
+                return;
+            }
+
+            MetaLogin metaLogin = GetMetaLogin(globalLoginId);
+            Dictionary<string, object> dictionary = GetDictionary(metaLogin);
+
+            CacheFactory.AddToDefaultCache("Dictionary" + key, dictionary);
+            CacheFactory.AddToDefaultCache(key, metaLogin);
         }
 
         public static MetaLogin GetCurrent()
@@ -83,22 +87,24 @@ namespace Frapid.ApplicationState.Cache
             string sql = "SELECT * FROM public.frapid_logins WHERE global_login_id=@0;";
             MetaLogin login = Factory.Get<MetaLogin>(Factory.MetaDatabase, sql, globalLoginId).FirstOrDefault();
 
-            if (login != null)
+            if (login == null)
             {
-                string catalog = login.Catalog;
-
-                sql = "SELECT * FROM account.sign_in_view WHERE login_id=@0;";
-
-                var view = Factory.Get<LoginView>(catalog, sql, login.LoginId).FirstOrDefault();
-
-                if (view != null)
-                {
-                    login.View = view;
-                    return login;
-                }
+                return null;
             }
 
-            return null;
+            string catalog = login.Catalog;
+
+            sql = "SELECT * FROM account.sign_in_view WHERE login_id=@0;";
+
+            var view = Factory.Get<LoginView>(catalog, sql, login.LoginId).FirstOrDefault();
+
+            if (view == null)
+            {
+                return null;
+            }
+
+            login.View = view;
+            return login;
         }
 
         private static Dictionary<string, object> GetDictionary(MetaLogin metaLogin)
@@ -127,6 +133,5 @@ namespace Frapid.ApplicationState.Cache
         {
             return DbConvention.GetCatalog();
         }
-
     }
 }

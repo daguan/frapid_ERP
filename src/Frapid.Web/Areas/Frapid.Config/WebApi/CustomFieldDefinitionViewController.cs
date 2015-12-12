@@ -8,6 +8,7 @@ using Frapid.ApplicationState.Models;
 using Newtonsoft.Json.Linq;
 using Frapid.Config.DataAccess;
 using Frapid.DataAccess;
+using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
 
@@ -207,7 +208,7 @@ namespace Frapid.Config.Api
         {
             try
             {
-                List<Frapid.DataAccess.Filter> f = filters.ToObject<List<Frapid.DataAccess.Filter>>(JsonHelper.GetJsonSerializer());
+                List<Frapid.DataAccess.Models.Filter> f = filters.ToObject<List<Frapid.DataAccess.Models.Filter>>(JsonHelper.GetJsonSerializer());
                 return this.CustomFieldDefinitionViewRepository.CountWhere(f);
             }
             catch (UnauthorizedException)
@@ -244,7 +245,7 @@ namespace Frapid.Config.Api
         {
             try
             {
-                List<Frapid.DataAccess.Filter> f = filters.ToObject<List<Frapid.DataAccess.Filter>>(JsonHelper.GetJsonSerializer());
+                List<Frapid.DataAccess.Models.Filter> f = filters.ToObject<List<Frapid.DataAccess.Models.Filter>>(JsonHelper.GetJsonSerializer());
                 return this.CustomFieldDefinitionViewRepository.GetWhere(pageNumber, f);
             }
             catch (UnauthorizedException)

@@ -8,15 +8,18 @@ namespace Frapid.Areas
 {
     public abstract class FrapidController : Controller
     {
-        protected RemoteUser GetRemoteUser()
+        public RemoteUser RemoteUser { get; private set; }
+
+        protected FrapidController()
         {
-            return new RemoteUser
+            this.RemoteUser = new RemoteUser
             {
-                Browser = Request.Browser.Browser,
-                IpAddress = Request.UserHostAddress,
+                Browser = this.Request?.Browser.Browser,
+                IpAddress = this.Request?.UserHostAddress,
                 Culture = CultureManager.GetCurrent().Name
             };
         }
+
 
         protected string GetRazorView(string areaName, string path)
         {

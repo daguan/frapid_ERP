@@ -26,7 +26,7 @@ namespace Frapid.Configuration
         {
             string url = GetDbNameByConvention();
 
-            //By convention, the default database name is localhost
+            //The default database name is localhost
             return IsValidDomain() ? url : "localhost";
         }
     }

@@ -5,7 +5,8 @@ using System.Dynamic;
 using System.Linq;
 using Frapid.Config.DataAccess;
 using Frapid.DataAccess;
-using CustomField = Frapid.DataAccess.CustomField;
+using Frapid.DataAccess.Models;
+using CustomField = Frapid.DataAccess.Models.CustomField;
 
 namespace Frapid.Config.Api.Fakes
 {
@@ -66,12 +67,12 @@ namespace Frapid.Config.Api.Fakes
             return Enumerable.Repeat(new Frapid.Config.Entities.CustomFieldForm(), 1);
         }
 
-        public long CountWhere(List<Frapid.DataAccess.Filter> filters)
+        public long CountWhere(List<Frapid.DataAccess.Models.Filter> filters)
         {
             return 1;
         }
 
-        public IEnumerable<Frapid.Config.Entities.CustomFieldForm> GetWhere(long pageNumber, List<Frapid.DataAccess.Filter> filters)
+        public IEnumerable<Frapid.Config.Entities.CustomFieldForm> GetWhere(long pageNumber, List<Frapid.DataAccess.Models.Filter> filters)
         {
             return Enumerable.Repeat(new Frapid.Config.Entities.CustomFieldForm(), 1);
         }
@@ -81,9 +82,9 @@ namespace Frapid.Config.Api.Fakes
             return 1;
         }
 
-        public List<Frapid.DataAccess.Filter> GetFilters(string catalog, string filterName)
+        public List<Frapid.DataAccess.Models.Filter> GetFilters(string catalog, string filterName)
         {
-            return Enumerable.Repeat(new Frapid.DataAccess.Filter(), 1).ToList();
+            return Enumerable.Repeat(new Frapid.DataAccess.Models.Filter(), 1).ToList();
         }
 
         public IEnumerable<Frapid.Config.Entities.CustomFieldForm> GetFiltered(long pageNumber, string filterName)
@@ -91,22 +92,22 @@ namespace Frapid.Config.Api.Fakes
             return Enumerable.Repeat(new Frapid.Config.Entities.CustomFieldForm(), 1);
         }
 
-        public IEnumerable<Frapid.DataAccess.DisplayField> GetDisplayFields()
+        public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
             return Enumerable.Repeat(new DisplayField(), 1);
         }
 
-        public IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields()
+        public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields()
         {
             return Enumerable.Repeat(new CustomField(), 1);
         }
 
-        public IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields(string resourceId)
+        public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             return Enumerable.Repeat(new CustomField(), 1);
         }
 
-        public object AddOrEdit(dynamic customFieldForm, List<Frapid.DataAccess.CustomField> customFields)
+        public object AddOrEdit(dynamic customFieldForm, List<Frapid.DataAccess.Models.CustomField> customFields)
         {
             return true;
         }

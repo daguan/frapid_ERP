@@ -19,7 +19,7 @@ namespace Frapid.Account.Controllers
             try
             {
                 LoginResult result =
-                    await auth.AuthenticateAsync(account, GetRemoteUser());
+                    await auth.AuthenticateAsync(account, this.RemoteUser);
                 return OnAuthenticated(result);
             }
             catch (NpgsqlException)

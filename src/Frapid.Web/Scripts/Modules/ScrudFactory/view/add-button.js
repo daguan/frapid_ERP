@@ -5,8 +5,8 @@
         return true;
     };
 
-    if (scrudFactory.addNewUrl) {
-        addNewButton.attr("href", scrudFactory.addNewUrl);
+    if (window.scrudFactory.addNewUrl) {
+        addNewButton.attr("href", window.scrudFactory.addNewUrl);
         return true;
     };
 

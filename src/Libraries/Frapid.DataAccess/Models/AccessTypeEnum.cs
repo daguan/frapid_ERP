@@ -1,7 +1,7 @@
-namespace Frapid.DataAccess
+namespace Frapid.DataAccess.Models
 {
     /// <summary>
-    /// Access type signifies user interactions against a data.
+    /// Access type refers to user interactions against a data.
     /// </summary>
     public enum AccessTypeEnum
     {

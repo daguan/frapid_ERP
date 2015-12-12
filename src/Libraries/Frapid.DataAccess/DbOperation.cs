@@ -12,13 +12,6 @@ using Serilog;
 
 namespace Frapid.DataAccess
 {
-    public class DbNotificationArgs : EventArgs
-    {
-        public NpgsqlNotice Notice { get; set; }
-        public string Message { get; set; }
-        public string ColumnName { get; set; }
-    }
-
     public class DbOperation
     {
         public EventHandler<DbNotificationArgs> Listen;
@@ -50,7 +43,7 @@ namespace Frapid.DataAccess
             {
                 if (ex.Code.StartsWith("P"))
                 {
-                    string errorMessage = GetDBErrorResource(ex);
+                    string errorMessage = GetDbErrorResource(ex);
                     throw new DataAccessException(errorMessage, ex);
                 }
 
@@ -68,7 +61,7 @@ namespace Frapid.DataAccess
             return ExecuteNonQuery(catalog, new NpgsqlCommand(sql));
         }
 
-        private static string GetDBErrorResource(NpgsqlException ex)
+        private static string GetDbErrorResource(NpgsqlException ex)
         {
             string message = DbErrors.Get(ex.Code);
 
@@ -108,7 +101,7 @@ namespace Frapid.DataAccess
             {
                 if (ex.Code.StartsWith("P"))
                 {
-                    string errorMessage = GetDBErrorResource(ex);
+                    string errorMessage = GetDbErrorResource(ex);
                     throw new DataAccessException(errorMessage, ex);
                 }
 
@@ -141,7 +134,7 @@ namespace Frapid.DataAccess
             {
                 if (ex.Code.StartsWith("P"))
                 {
-                    string errorMessage = GetDBErrorResource(ex);
+                    string errorMessage = GetDbErrorResource(ex);
                     throw new DataAccessException(errorMessage, ex);
                 }
 
@@ -172,7 +165,7 @@ namespace Frapid.DataAccess
             {
                 if (ex.Code.StartsWith("P"))
                 {
-                    string errorMessage = GetDBErrorResource(ex);
+                    string errorMessage = GetDbErrorResource(ex);
                     throw new DataAccessException(errorMessage, ex);
                 }
 
@@ -211,7 +204,7 @@ namespace Frapid.DataAccess
             {
                 if (ex.Code.StartsWith("P"))
                 {
-                    string errorMessage = GetDBErrorResource(ex);
+                    string errorMessage = GetDbErrorResource(ex);
                     throw new DataAccessException(errorMessage, ex);
                 }
 
@@ -262,7 +255,7 @@ namespace Frapid.DataAccess
             {
                 if (ex.Code.StartsWith("P"))
                 {
-                    string errorMessage = GetDBErrorResource(ex);
+                    string errorMessage = GetDbErrorResource(ex);
                     throw new DataAccessException(errorMessage, ex);
                 }
 
@@ -290,7 +283,7 @@ namespace Frapid.DataAccess
             return false;
         }
 
-        public Task ListenNonQuery(string catalog, NpgsqlCommand command)
+        public Task ListenNonQueryAsync(string catalog, NpgsqlCommand command)
         {
             try
             {
@@ -318,7 +311,7 @@ namespace Frapid.DataAccess
 
                                 if (ex.Code.StartsWith("P"))
                                 {
-                                    errorMessage = GetDBErrorResource(ex);
+                                    errorMessage = GetDbErrorResource(ex);
                                 }
 
                                 EventHandler<DbNotificationArgs> listen = this.Listen;
@@ -343,7 +336,7 @@ namespace Frapid.DataAccess
             {
                 if (ex.Code.StartsWith("P"))
                 {
-                    string errorMessage = GetDBErrorResource(ex);
+                    string errorMessage = GetDbErrorResource(ex);
                     throw new DataAccessException(errorMessage, ex);
                 }
 

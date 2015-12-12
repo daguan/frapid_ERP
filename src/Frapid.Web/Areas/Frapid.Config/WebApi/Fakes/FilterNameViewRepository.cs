@@ -5,7 +5,8 @@ using System.Dynamic;
 using System.Linq;
 using Frapid.Config.DataAccess;
 using Frapid.DataAccess;
-using CustomField = Frapid.DataAccess.CustomField;
+using Frapid.DataAccess.Models;
+using CustomField = Frapid.DataAccess.Models.CustomField;
 
 namespace Frapid.Config.Api.Fakes
 {
@@ -33,19 +34,19 @@ namespace Frapid.Config.Api.Fakes
 
 
 
-        public long CountWhere(List<Frapid.DataAccess.Filter> filters)
+        public long CountWhere(List<Frapid.DataAccess.Models.Filter> filters)
         {
             return 1;
         }
 
-        public IEnumerable<Frapid.Config.Entities.FilterNameView> GetWhere(long pageNumber, List<Frapid.DataAccess.Filter> filters)
+        public IEnumerable<Frapid.Config.Entities.FilterNameView> GetWhere(long pageNumber, List<Frapid.DataAccess.Models.Filter> filters)
         {
             return Enumerable.Repeat(new Frapid.Config.Entities.FilterNameView(), 1);
         }
 
-        public List<Frapid.DataAccess.Filter> GetFilters(string catalog, string filterName)
+        public List<Frapid.DataAccess.Models.Filter> GetFilters(string catalog, string filterName)
         {
-            return Enumerable.Repeat(new Frapid.DataAccess.Filter(), 1).ToList();
+            return Enumerable.Repeat(new Frapid.DataAccess.Models.Filter(), 1).ToList();
         }
 
         public long CountFiltered(string filterName)

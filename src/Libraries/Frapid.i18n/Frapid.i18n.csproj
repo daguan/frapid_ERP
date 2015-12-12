@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CultureManager.cs" />
-    <Compile Include="Database\DbResources.cs" />
+    <Compile Include="DAL\DbResources.cs" />
     <Compile Include="Helpers\CacheFactory.cs" />
     <Compile Include="Models\LocalizedResource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

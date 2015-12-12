@@ -4,6 +4,7 @@ using System.Data;
 using System.Dynamic;
 using System.Linq;
 using Frapid.DataAccess;
+using Frapid.DataAccess.Models;
 using Frapid.DbPolicy;
 using Frapid.Framework.Extensions;
 using Npgsql;
@@ -163,10 +164,10 @@ namespace Frapid.Config.DataAccess
             return Factory.Get<Frapid.Config.Entities.FilterNameView>(this._Catalog, sql, offset);
         }
 
-        public List<Frapid.DataAccess.Filter> GetFilters(string catalog, string filterName)
+        public List<Frapid.DataAccess.Models.Filter> GetFilters(string catalog, string filterName)
         {
             const string sql = "SELECT * FROM config.filters WHERE object_name='config.filter_name_view' AND lower(filter_name)=lower(@0);";
-            return Factory.Get<Frapid.DataAccess.Filter>(catalog, sql, filterName).ToList();
+            return Factory.Get<Frapid.DataAccess.Models.Filter>(catalog, sql, filterName).ToList();
         }
 
         /// <summary>
@@ -175,7 +176,7 @@ namespace Frapid.Config.DataAccess
         /// <param name="filters">The list of filter conditions.</param>
         /// <returns>Returns number of rows of "FilterNameView" class using the filter.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public long CountWhere(List<Frapid.DataAccess.Filter> filters)
+        public long CountWhere(List<Frapid.DataAccess.Models.Filter> filters)
         {
             if (string.IsNullOrWhiteSpace(this._Catalog))
             {
@@ -208,7 +209,7 @@ namespace Frapid.Config.DataAccess
         /// <param name="filters">The list of filter conditions.</param>
         /// <returns>Returns collection of "FilterNameView" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<Frapid.Config.Entities.FilterNameView> GetWhere(long pageNumber, List<Frapid.DataAccess.Filter> filters)
+        public IEnumerable<Frapid.Config.Entities.FilterNameView> GetWhere(long pageNumber, List<Frapid.DataAccess.Models.Filter> filters)
         {
             if (string.IsNullOrWhiteSpace(this._Catalog))
             {
@@ -270,7 +271,7 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            List<Frapid.DataAccess.Filter> filters = this.GetFilters(this._Catalog, filterName);
+            List<Frapid.DataAccess.Models.Filter> filters = this.GetFilters(this._Catalog, filterName);
             Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM config.filter_name_view WHERE 1 = 1");
             Frapid.DataAccess.FilterManager.AddFilters(ref sql, new Frapid.Config.Entities.FilterNameView(), filters);
 
@@ -304,7 +305,7 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            List<Frapid.DataAccess.Filter> filters = this.GetFilters(this._Catalog, filterName);
+            List<Frapid.DataAccess.Models.Filter> filters = this.GetFilters(this._Catalog, filterName);
 
             long offset = (pageNumber - 1) * 10;
             Sql sql = Sql.Builder.Append("SELECT * FROM config.filter_name_view WHERE 1 = 1");

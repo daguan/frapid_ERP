@@ -24,13 +24,9 @@ namespace Frapid.DataAccess
             {
                 return string.Empty;
             }
-            if (identifier.Contains("/*"))
-            {
-                return string.Empty;
-            }
 
             //Only alphabets [a-zA-Z], numbers, underscore, and a period is allowed.
-            return Regex.Replace(identifier, @"[^a-zA-Z0-9_.]", "");
+            return identifier.Contains("/*") ? string.Empty : Regex.Replace(identifier, @"[^a-zA-Z0-9_.]", "");
         }
     }
 }

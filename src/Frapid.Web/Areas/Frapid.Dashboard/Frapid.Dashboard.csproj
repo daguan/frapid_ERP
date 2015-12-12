@@ -142,7 +142,7 @@
     <Content Include="Views\Default\Index.cshtml" />
     <Content Include="Views\Layouts\Dashboard.cshtml" />
     <Content Include="Views\Default\Apps.cshtml" />
-    <Content Include="Views\Default\Foobar.cshtml" />
+    <Content Include="Views\Default\LandingPage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

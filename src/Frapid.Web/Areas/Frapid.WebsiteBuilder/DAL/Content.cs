@@ -11,7 +11,7 @@ namespace Frapid.WebsiteBuilder.DAL
     {
         public static IEnumerable<Entities.Content> GetContents()
         {
-            using (Database db = Provider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase()
+            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase()
                 )
             {
                 return db.FetchBy<Entities.Content>(sql => sql.Where(c => c.IsHomepage));
@@ -20,7 +20,7 @@ namespace Frapid.WebsiteBuilder.DAL
 
         public static Entities.Content Get(int contentId)
         {
-            using (Database db = Provider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
+            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
             {
                 return db.FetchBy<Entities.Content>(sql => sql
                     .Where(c => c.ContentId == contentId))
@@ -35,7 +35,7 @@ namespace Frapid.WebsiteBuilder.DAL
                 return GetDefault();
             }
 
-            using (Database db = Provider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
+            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
             {
                 return db.FetchBy<Entities.Content>(sql => sql
                     .Where(c => c.Alias.ToLower().Equals(alias))
@@ -47,7 +47,7 @@ namespace Frapid.WebsiteBuilder.DAL
 
         public static Entities.Content GetDefault()
         {
-            using (Database db = Provider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase()
+            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase()
                 )
             {
                 return db.FetchBy<Entities.Content>(sql => sql.Where(c => c.IsHomepage)).FirstOrDefault();

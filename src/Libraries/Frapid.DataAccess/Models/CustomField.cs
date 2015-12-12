@@ -1,4 +1,4 @@
-namespace Frapid.DataAccess
+namespace Frapid.DataAccess.Models
 {
     public sealed class CustomField: IPoco
     {
@@ -17,6 +17,5 @@ namespace Frapid.DataAccess
         public bool? IsLongText { get; set; }
         public string ResourceId { get; set; }
         public string Value { get; set; }
-
     }
 }

@@ -5,6 +5,7 @@ using System.Dynamic;
 using System.Linq;
 using Frapid.Configuration;
 using Frapid.DataAccess;
+using Frapid.DataAccess.Models;
 using Frapid.DbPolicy;
 using Frapid.Framework.Extensions;
 using Npgsql;
@@ -315,7 +316,7 @@ namespace Frapid.Config.DataAccess
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for the table config.entity_access</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields(string resourceId)
+        public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             if (string.IsNullOrWhiteSpace(this._Catalog))
             {
@@ -339,11 +340,11 @@ namespace Frapid.Config.DataAccess
             if (string.IsNullOrWhiteSpace(resourceId))
             {
                 sql = "SELECT * FROM config.custom_field_definition_view WHERE table_name='config.entity_access' ORDER BY field_order;";
-                return Factory.Get<Frapid.DataAccess.CustomField>(this._Catalog, sql);
+                return Factory.Get<Frapid.DataAccess.Models.CustomField>(this._Catalog, sql);
             }
 
             sql = "SELECT * from config.get_custom_field_definition('config.entity_access'::text, @0::text) ORDER BY field_order;";
-            return Factory.Get<Frapid.DataAccess.CustomField>(this._Catalog, sql, resourceId);
+            return Factory.Get<Frapid.DataAccess.Models.CustomField>(this._Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -351,9 +352,9 @@ namespace Frapid.Config.DataAccess
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for the table config.entity_access</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<Frapid.DataAccess.DisplayField> GetDisplayFields()
+        public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
-            List<Frapid.DataAccess.DisplayField> displayFields = new List<Frapid.DataAccess.DisplayField>();
+            List<Frapid.DataAccess.Models.DisplayField> displayFields = new List<Frapid.DataAccess.Models.DisplayField>();
 
             if (string.IsNullOrWhiteSpace(this._Catalog))
             {
@@ -408,7 +409,7 @@ namespace Frapid.Config.DataAccess
         /// <param name="entityAccess">The instance of "EntityAccess" class to insert or update.</param>
         /// <param name="customFields">The custom field collection.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public object AddOrEdit(dynamic entityAccess, List<Frapid.DataAccess.CustomField> customFields)
+        public object AddOrEdit(dynamic entityAccess, List<Frapid.DataAccess.Models.CustomField> customFields)
         {
             if (string.IsNullOrWhiteSpace(this._Catalog))
             {
@@ -677,10 +678,10 @@ namespace Frapid.Config.DataAccess
             return Factory.Get<Frapid.Config.Entities.EntityAccess>(this._Catalog, sql, offset);
         }
 
-        public List<Frapid.DataAccess.Filter> GetFilters(string catalog, string filterName)
+        public List<Frapid.DataAccess.Models.Filter> GetFilters(string catalog, string filterName)
         {
             const string sql = "SELECT * FROM config.filters WHERE object_name='config.entity_access' AND lower(filter_name)=lower(@0);";
-            return Factory.Get<Frapid.DataAccess.Filter>(catalog, sql, filterName).ToList();
+            return Factory.Get<Frapid.DataAccess.Models.Filter>(catalog, sql, filterName).ToList();
         }
 
         /// <summary>
@@ -689,7 +690,7 @@ namespace Frapid.Config.DataAccess
         /// <param name="filters">The list of filter conditions.</param>
         /// <returns>Returns number of rows of "EntityAccess" class using the filter.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public long CountWhere(List<Frapid.DataAccess.Filter> filters)
+        public long CountWhere(List<Frapid.DataAccess.Models.Filter> filters)
         {
             if (string.IsNullOrWhiteSpace(this._Catalog))
             {
@@ -722,7 +723,7 @@ namespace Frapid.Config.DataAccess
         /// <param name="filters">The list of filter conditions.</param>
         /// <returns>Returns collection of "EntityAccess" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<Frapid.Config.Entities.EntityAccess> GetWhere(long pageNumber, List<Frapid.DataAccess.Filter> filters)
+        public IEnumerable<Frapid.Config.Entities.EntityAccess> GetWhere(long pageNumber, List<Frapid.DataAccess.Models.Filter> filters)
         {
             if (string.IsNullOrWhiteSpace(this._Catalog))
             {
@@ -784,7 +785,7 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            List<Frapid.DataAccess.Filter> filters = this.GetFilters(this._Catalog, filterName);
+            List<Frapid.DataAccess.Models.Filter> filters = this.GetFilters(this._Catalog, filterName);
             Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM config.entity_access WHERE 1 = 1");
             Frapid.DataAccess.FilterManager.AddFilters(ref sql, new Frapid.Config.Entities.EntityAccess(), filters);
 
@@ -818,7 +819,7 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            List<Frapid.DataAccess.Filter> filters = this.GetFilters(this._Catalog, filterName);
+            List<Frapid.DataAccess.Models.Filter> filters = this.GetFilters(this._Catalog, filterName);
 
             long offset = (pageNumber - 1) * 10;
             Sql sql = Sql.Builder.Append("SELECT * FROM config.entity_access WHERE 1 = 1");

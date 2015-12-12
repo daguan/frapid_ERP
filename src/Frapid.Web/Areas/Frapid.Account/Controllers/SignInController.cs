@@ -46,8 +46,8 @@ namespace Frapid.Account.Controllers
                 return Redirect("/");
             }
 
-            model.Browser = this.GetRemoteUser().Browser;
-            model.IpAddress = this.GetRemoteUser().IpAddress;
+            model.Browser = this.RemoteUser.Browser;
+            model.IpAddress = this.RemoteUser.IpAddress;
 
             try
             {

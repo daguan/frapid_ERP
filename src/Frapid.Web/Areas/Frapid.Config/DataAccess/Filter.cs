@@ -5,6 +5,7 @@ using System.Dynamic;
 using System.Linq;
 using Frapid.Configuration;
 using Frapid.DataAccess;
+using Frapid.DataAccess.Models;
 using Frapid.DbPolicy;
 using Frapid.Framework.Extensions;
 using Npgsql;
@@ -315,7 +316,7 @@ namespace Frapid.Config.DataAccess
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for the table config.filters</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields(string resourceId)
+        public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             if (string.IsNullOrWhiteSpace(this._Catalog))
             {
@@ -339,11 +340,11 @@ namespace Frapid.Config.DataAccess
             if (string.IsNullOrWhiteSpace(resourceId))
             {
                 sql = "SELECT * FROM config.custom_field_definition_view WHERE table_name='config.filters' ORDER BY field_order;";
-                return Factory.Get<Frapid.DataAccess.CustomField>(this._Catalog, sql);
+                return Factory.Get<Frapid.DataAccess.Models.CustomField>(this._Catalog, sql);
             }
 
             sql = "SELECT * from config.get_custom_field_definition('config.filters'::text, @0::text) ORDER BY field_order;";
-            return Factory.Get<Frapid.DataAccess.CustomField>(this._Catalog, sql, resourceId);
+            return Factory.Get<Frapid.DataAccess.Models.CustomField>(this._Catalog, sql, resourceId);
         }
 
         /// <summary>
@@ -351,9 +352,9 @@ namespace Frapid.Config.DataAccess
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for the table config.filters</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<Frapid.DataAccess.DisplayField> GetDisplayFields()
+        public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
-            List<Frapid.DataAccess.DisplayField> displayFields = new List<Frapid.DataAccess.DisplayField>();
+            List<Frapid.DataAccess.Models.DisplayField> displayFields = new List<Frapid.DataAccess.Models.DisplayField>();
 
             if (string.IsNullOrWhiteSpace(this._Catalog))
             {
@@ -408,7 +409,7 @@ namespace Frapid.Config.DataAccess
         /// <param name="filter">The instance of "Filter" class to insert or update.</param>
         /// <param name="customFields">The custom field collection.</param>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public object AddOrEdit(dynamic filter, List<Frapid.DataAccess.CustomField> customFields)
+        public object AddOrEdit(dynamic filter, List<Frapid.DataAccess.Models.CustomField> customFields)
         {
             if (string.IsNullOrWhiteSpace(this._Catalog))
             {
@@ -677,10 +678,10 @@ namespace Frapid.Config.DataAccess
             return Factory.Get<Frapid.Config.Entities.Filter>(this._Catalog, sql, offset);
         }
 
-        public List<Frapid.DataAccess.Filter> GetFilters(string catalog, string filterName)
+        public List<Frapid.DataAccess.Models.Filter> GetFilters(string catalog, string filterName)
         {
             const string sql = "SELECT * FROM config.filters WHERE object_name='config.filters' AND lower(filter_name)=lower(@0);";
-            return Factory.Get<Frapid.DataAccess.Filter>(catalog, sql, filterName).ToList();
+            return Factory.Get<Frapid.DataAccess.Models.Filter>(catalog, sql, filterName).ToList();
         }
 
         /// <summary>
@@ -689,7 +690,7 @@ namespace Frapid.Config.DataAccess
         /// <param name="filters">The list of filter conditions.</param>
         /// <returns>Returns number of rows of "Filter" class using the filter.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public long CountWhere(List<Frapid.DataAccess.Filter> filters)
+        public long CountWhere(List<Frapid.DataAccess.Models.Filter> filters)
         {
             if (string.IsNullOrWhiteSpace(this._Catalog))
             {
@@ -722,7 +723,7 @@ namespace Frapid.Config.DataAccess
         /// <param name="filters">The list of filter conditions.</param>
         /// <returns>Returns collection of "Filter" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
-        public IEnumerable<Frapid.Config.Entities.Filter> GetWhere(long pageNumber, List<Frapid.DataAccess.Filter> filters)
+        public IEnumerable<Frapid.Config.Entities.Filter> GetWhere(long pageNumber, List<Frapid.DataAccess.Models.Filter> filters)
         {
             if (string.IsNullOrWhiteSpace(this._Catalog))
             {
@@ -784,7 +785,7 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            List<Frapid.DataAccess.Filter> filters = this.GetFilters(this._Catalog, filterName);
+            List<Frapid.DataAccess.Models.Filter> filters = this.GetFilters(this._Catalog, filterName);
             Sql sql = Sql.Builder.Append("SELECT COUNT(*) FROM config.filters WHERE 1 = 1");
             Frapid.DataAccess.FilterManager.AddFilters(ref sql, new Frapid.Config.Entities.Filter(), filters);
 
@@ -818,7 +819,7 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            List<Frapid.DataAccess.Filter> filters = this.GetFilters(this._Catalog, filterName);
+            List<Frapid.DataAccess.Models.Filter> filters = this.GetFilters(this._Catalog, filterName);
 
             long offset = (pageNumber - 1) * 10;
             Sql sql = Sql.Builder.Append("SELECT * FROM config.filters WHERE 1 = 1");
@@ -888,10 +889,10 @@ namespace Frapid.Config.DataAccess
                 using (ITransaction transaction = db.GetTransaction())
                 {
 
-                    var toDelete = this.GetWhere(1, new List<Frapid.DataAccess.Filter>
+                    var toDelete = this.GetWhere(1, new List<Frapid.DataAccess.Models.Filter>
                         {
-                            new Frapid.DataAccess.Filter { ColumnName = "object_name", FilterCondition = (int) FilterCondition.IsEqualTo, FilterValue = objectName },
-                            new Frapid.DataAccess.Filter { ColumnName = "filter_name", FilterCondition = (int) FilterCondition.IsEqualTo, FilterValue = filterName }
+                            new Frapid.DataAccess.Models.Filter { ColumnName = "object_name", FilterCondition = (int) FilterCondition.IsEqualTo, FilterValue = objectName },
+                            new Frapid.DataAccess.Models.Filter { ColumnName = "filter_name", FilterCondition = (int) FilterCondition.IsEqualTo, FilterValue = filterName }
                         });
 
 

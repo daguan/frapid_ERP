@@ -1,4 +1,4 @@
-namespace Frapid.DataAccess
+namespace Frapid.DataAccess.Models
 {
     public class EntityColumn
     {

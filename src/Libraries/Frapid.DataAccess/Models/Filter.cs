@@ -1,6 +1,6 @@
 using System;
 
-namespace Frapid.DataAccess
+namespace Frapid.DataAccess.Models
 {
     public sealed class Filter:IPoco
     {

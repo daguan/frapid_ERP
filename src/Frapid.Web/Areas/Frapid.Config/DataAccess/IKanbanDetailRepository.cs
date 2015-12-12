@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using Frapid.DataAccess;
+using Frapid.DataAccess.Models;
 
 namespace Frapid.Config.DataAccess
 {
@@ -69,20 +70,20 @@ namespace Frapid.Config.DataAccess
         /// Custom fields are user defined form elements for IKanbanDetailRepository.
         /// </summary>
         /// <returns>Returns an enumerable custom field collection for KanbanDetail.</returns>
-        IEnumerable<Frapid.DataAccess.CustomField> GetCustomFields(string resourceId);
+        IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId);
 
         /// <summary>
         /// Displayfields provide a minimal name/value context for data binding KanbanDetail.
         /// </summary>
         /// <returns>Returns an enumerable name and value collection for KanbanDetail.</returns>
-        IEnumerable<Frapid.DataAccess.DisplayField> GetDisplayFields();
+        IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields();
 
         /// <summary>
         /// Inserts the instance of KanbanDetail class to IKanbanDetailRepository.
         /// </summary>
         /// <param name="kanbanDetail">The instance of KanbanDetail class to insert or update.</param>
         /// <param name="customFields">The custom field collection.</param>
-        object AddOrEdit(dynamic kanbanDetail, List<Frapid.DataAccess.CustomField> customFields);
+        object AddOrEdit(dynamic kanbanDetail, List<Frapid.DataAccess.Models.CustomField> customFields);
 
         /// <summary>
         /// Inserts the instance of KanbanDetail class to IKanbanDetailRepository.
@@ -124,14 +125,14 @@ namespace Frapid.Config.DataAccess
         /// <returns>Returns collection of KanbanDetail class.</returns>
         IEnumerable<Frapid.Config.Entities.KanbanDetail> GetPaginatedResult(long pageNumber);
 
-        List<Frapid.DataAccess.Filter> GetFilters(string catalog, string filterName);
+        List<Frapid.DataAccess.Models.Filter> GetFilters(string catalog, string filterName);
 
         /// <summary>
         /// Performs a filtered count on IKanbanDetailRepository.
         /// </summary>
         /// <param name="filters">The list of filter conditions.</param>
         /// <returns>Returns number of rows of KanbanDetail class using the filter.</returns>
-        long CountWhere(List<Frapid.DataAccess.Filter> filters);
+        long CountWhere(List<Frapid.DataAccess.Models.Filter> filters);
 
         /// <summary>
         /// Performs a filtered pagination against IKanbanDetailRepository producing result of 10 items.
@@ -139,7 +140,7 @@ namespace Frapid.Config.DataAccess
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filters">The list of filter conditions.</param>
         /// <returns>Returns collection of KanbanDetail class.</returns>
-        IEnumerable<Frapid.Config.Entities.KanbanDetail> GetWhere(long pageNumber, List<Frapid.DataAccess.Filter> filters);
+        IEnumerable<Frapid.Config.Entities.KanbanDetail> GetWhere(long pageNumber, List<Frapid.DataAccess.Models.Filter> filters);
 
         /// <summary>
         /// Performs a filtered count on IKanbanDetailRepository.

@@ -9,7 +9,7 @@ namespace Frapid.WebsiteBuilder.Controllers
         [Authorize]
         public ActionResult Index(string alias = "")
         {
-            return View(GetRazorView<AreaRegistration>("Content/Index.cshtml"));
+            return FrapidView(GetRazorView<AreaRegistration>("Content/Index.cshtml"));
         }
 
         [Route("dashboard/wb/contents/manage")]
@@ -17,7 +17,7 @@ namespace Frapid.WebsiteBuilder.Controllers
         public ActionResult Manage(int contentId = 0)
         {
             var model = DAL.Content.Get(contentId);
-            return View(GetRazorView<AreaRegistration>("Content/Manage.cshtml"), model);
+            return FrapidView(GetRazorView<AreaRegistration>("Content/Manage.cshtml"), model);
         }
     }
 }

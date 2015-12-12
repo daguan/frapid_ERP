@@ -19,7 +19,7 @@ namespace Frapid.Account.Controllers
             {
                 GoogleAuthentication oauth = new GoogleAuthentication();
                 LoginResult result =
-                    await oauth.AuthenticateAsync(account, GetRemoteUser());
+                    await oauth.AuthenticateAsync(account, this.RemoteUser);
                 return OnAuthenticated(result);
             }
             catch (NpgsqlException)

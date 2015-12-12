@@ -58,16 +58,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccessTypeEnum.cs" />
-    <Compile Include="CustomField.cs" />
+    <Compile Include="Models\AccessTypeEnum.cs" />
+    <Compile Include="Models\CustomField.cs" />
     <Compile Include="DataAccessException.cs" />
+    <Compile Include="DbNotificationArgs.cs" />
     <Compile Include="DbOperation.cs" />
-    <Compile Include="DisplayField.cs" />
-    <Compile Include="EntityColumn.cs" />
-    <Compile Include="EntityView.cs" />
+    <Compile Include="Models\DisplayField.cs" />
+    <Compile Include="Models\EntityColumn.cs" />
+    <Compile Include="Models\EntityView.cs" />
     <Compile Include="Factory.cs" />
-    <Compile Include="Filter.cs" />
-    <Compile Include="FilterCondition.cs" />
+    <Compile Include="Models\Filter.cs" />
+    <Compile Include="Models\FilterCondition.cs" />
     <Compile Include="FilterManager.cs" />
     <Compile Include="IDBAccess.cs" />
     <Compile Include="IPoco.cs" />

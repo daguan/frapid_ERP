@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Frapid.Config.Entities;
 using Frapid.DataAccess;
+using Frapid.DataAccess.Models;
 using Frapid.DbPolicy;
 using Frapid.Framework.Extensions;
 namespace Frapid.Config.DataAccess

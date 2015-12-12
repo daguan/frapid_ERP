@@ -8,6 +8,7 @@ using System.Web.Http;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Frapid.DataAccess;
+using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
 using Frapid.Config.Entities;
