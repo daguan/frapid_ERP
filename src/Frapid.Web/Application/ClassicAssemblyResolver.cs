@@ -9,11 +9,11 @@ namespace Frapid.Web
     {
         public override ICollection<Assembly> GetAssemblies()
         {
-            ICollection<Assembly> baseAssemblies = base.GetAssemblies();
-            List<Assembly> assemblies = new List<Assembly>(baseAssemblies);
-            List<Assembly> items = FrapidApiController.GetMembers();
+            var baseAssemblies = base.GetAssemblies();
+            var assemblies = new List<Assembly>(baseAssemblies);
+            var items = FrapidApiController.GetMembers();
 
-            foreach (Assembly item in items)
+            foreach (var item in items)
             {
                 baseAssemblies.Add(item);
             }

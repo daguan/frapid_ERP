@@ -41,7 +41,7 @@ namespace Frapid.Web
             string minimumLogLevel = ConfigurationManager.GetConfigurationValue("ParameterConfigFileLocation",
                 "MinimumLogLevel");
 
-            LoggingLevelSwitch levelSwitch = new LoggingLevelSwitch();
+            var levelSwitch = new LoggingLevelSwitch();
 
             LogEventLevel logLevel;
             Enum.TryParse(minimumLogLevel, out logLevel);

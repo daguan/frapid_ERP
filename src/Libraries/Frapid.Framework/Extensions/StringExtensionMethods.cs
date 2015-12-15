@@ -7,7 +7,7 @@ namespace Frapid.Framework.Extensions
         public static string ReplaceWholeWord(this string s, string word, string bywhat)
         {
             char firstLetter = word[0];
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             bool previousWasLetterOrDigit = false;
             int i = 0;
             while (i < s.Length - word.Length + 1)

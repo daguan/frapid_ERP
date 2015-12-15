@@ -16,7 +16,7 @@ namespace Frapid.WebsiteBuilder.Controllers
         [Authorize]
         public ActionResult Manage(int contentId = 0)
         {
-            var model = DAL.Content.Get(contentId);
+            var model = DAL.Contents.Get(contentId);
             return FrapidView(GetRazorView<AreaRegistration>("Content/Manage.cshtml"), model);
         }
     }

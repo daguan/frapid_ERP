@@ -12,5 +12,6 @@ namespace Frapid.Messaging.DTO
         public string FromEmail { get; set; }
         public string SentTo { get; set; }
         public string Message { get; set; }
+        public bool IsBodyHtml { get; set; } = true;
     }
 }

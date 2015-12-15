@@ -7,61 +7,12 @@ using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using Frapid.Messaging.DTO;
-using Frapid.Messaging.Helpers;
 using Serilog;
 
 namespace Frapid.Messaging
 {
-    public sealed class Processor
+    public sealed class Processor : IEmailProcessor
     {
-        public Processor(string catalog)
-        {
-            Catalog = catalog;
-        }
-
-        public string Catalog { get; set; }
-
-        public async Task<bool> SendAsync(string sendTo, string subject, string body, bool deleteAttachmentes,
-            params string[] attachments)
-        {
-            Config config = new Config(Catalog);
-
-            if (!config.Enabled)
-            {
-                return false;
-            }
-
-
-            EmailMessage email = new EmailMessage
-            {
-                FromName = config.FromName,
-                FromEmail = config.FromEmail,
-                Subject = subject,
-                SentTo = sendTo,
-                Message = body,
-                Type = Type.Outward,
-                EventDateUtc = DateTime.UtcNow,
-                Status = Status.Unknown
-            };
-
-            SmtpHost host = new SmtpHost
-            {
-                Address = config.SmtpHost,
-                Port = config.SmtpPort,
-                EnableSsl = config.EnableSsl,
-                DeliveryMethod = config.DeliveryMethod,
-                PickupDirectory = config.PickupDirectory
-            };
-
-            ICredentials credentials = new SmtpCredentials
-            {
-                Username = config.SmtpUsername,
-                Password = config.SmtpUserPassword
-            };
-
-            return await SendAsync(email, host, credentials, deleteAttachmentes, attachments);
-        }
-
         public async Task<bool> SendAsync(EmailMessage email, SmtpHost host, ICredentials credentials,
             bool deleteAttachmentes, params string[] attachments)
         {
@@ -91,7 +42,6 @@ namespace Frapid.Messaging
             email.SentTo = string.Join(",", addresses);
             email.Status = Status.Executing;
 
-            MailAddress sender = new MailAddress(email.FromEmail, email.FromName);
 
             using (MailMessage mail = new MailMessage(email.FromEmail, email.SentTo))
             {
@@ -121,7 +71,7 @@ namespace Frapid.Messaging
                 }
 
 
-                mail.From = sender;
+                MailAddress sender = new MailAddress(email.FromEmail, email.FromName);
                 using (SmtpClient smtp = new SmtpClient(host.Address, host.Port))
                 {
                     smtp.DeliveryMethod = host.DeliveryMethod;
@@ -134,9 +84,12 @@ namespace Frapid.Messaging
                     {
                         mail.Subject = email.Subject;
                         mail.Body = email.Message;
-                        mail.IsBodyHtml = true;
+                        mail.IsBodyHtml = email.IsBodyHtml;
+
                         mail.SubjectEncoding = Encoding.UTF8;
                         email.Status = Status.Completed;
+
+                        mail.ReplyToList.Add(sender);
 
                         await smtp.SendMailAsync(mail);
                         return true;

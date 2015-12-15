@@ -9,8 +9,8 @@ namespace Frapid.Web
     {
         public static void Register()
         {
-            Type iType = typeof (IStartupRegistration);
-            IEnumerable<object> members = AppDomain.CurrentDomain.GetAssemblies()
+            var iType = typeof (IStartupRegistration);
+            var members = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes())
                 .Where(x => iType.IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
                 .Select(Activator.CreateInstance);

@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.Areas", "Libraries\F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.NPoco", "Libraries\Frapid.NPoco\Frapid.NPoco.csproj", "{58F77141-FFE7-45F6-B726-80100204E69D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.Installer", "Libraries\Frapid.Installer\Frapid.Installer.csproj", "{BFFE76A6-7E9D-42FA-AB3A-108BD2125923}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{58F77141-FFE7-45F6-B726-80100204E69D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58F77141-FFE7-45F6-B726-80100204E69D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58F77141-FFE7-45F6-B726-80100204E69D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFFE76A6-7E9D-42FA-AB3A-108BD2125923}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFFE76A6-7E9D-42FA-AB3A-108BD2125923}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFFE76A6-7E9D-42FA-AB3A-108BD2125923}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFFE76A6-7E9D-42FA-AB3A-108BD2125923}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,5 +70,6 @@ Global
 		{88DFDF57-A52B-4D71-A0C4-BEF1A3839506} = {0DFA1BB9-74FE-4C63-B8AF-0B312ED992F6}
 		{0361910A-7773-4EE9-861B-FFC5636D82D1} = {0DFA1BB9-74FE-4C63-B8AF-0B312ED992F6}
 		{58F77141-FFE7-45F6-B726-80100204E69D} = {0DFA1BB9-74FE-4C63-B8AF-0B312ED992F6}
+		{BFFE76A6-7E9D-42FA-AB3A-108BD2125923} = {0DFA1BB9-74FE-4C63-B8AF-0B312ED992F6}
 	EndGlobalSection
 EndGlobal

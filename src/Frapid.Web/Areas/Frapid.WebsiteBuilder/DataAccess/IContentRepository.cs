@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using Frapid.DataAccess;
+using Frapid.DataAccess.Models;
 
 namespace Frapid.WebsiteBuilder.DataAccess
 {

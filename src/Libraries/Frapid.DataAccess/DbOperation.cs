@@ -16,17 +16,20 @@ namespace Frapid.DataAccess
     {
         public EventHandler<DbNotificationArgs> Listen;
 
-        public static bool ExecuteNonQuery(string catalog, NpgsqlCommand command)
+        public static bool ExecuteNonQuery(string catalog, NpgsqlCommand command, string connectionString = "")
         {
             try
             {
                 if (command != null)
                 {
+                    if (string.IsNullOrWhiteSpace(connectionString))
+                    {
+                        connectionString = ConnectionString.GetConnectionString(catalog);
+                    }
+
                     if (ValidateCommand(command))
                     {
-                        using (
-                            NpgsqlConnection connection =
-                                new NpgsqlConnection(ConnectionString.GetConnectionString(catalog)))
+                        using (var connection = new NpgsqlConnection(connectionString))
                         {
                             command.Connection = connection;
                             connection.Open();
@@ -81,13 +84,11 @@ namespace Frapid.DataAccess
                 {
                     if (ValidateCommand(command))
                     {
-                        using (
-                            NpgsqlConnection connection =
-                                new NpgsqlConnection(ConnectionString.GetConnectionString(catalog)))
+                        using (var connection = new NpgsqlConnection(ConnectionString.GetConnectionString(catalog)))
                         {
                             command.Connection = connection;
 
-                            using (NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(command))
+                            using (var adapter = new NpgsqlDataAdapter(command))
                             {
                                 return adapter;
                             }
@@ -117,9 +118,7 @@ namespace Frapid.DataAccess
                 {
                     if (ValidateCommand(command))
                     {
-                        using (
-                            NpgsqlConnection connection =
-                                new NpgsqlConnection(ConnectionString.GetConnectionString(catalog)))
+                        using (var connection = new NpgsqlConnection(ConnectionString.GetConnectionString(catalog)))
                         {
                             command.Connection = connection;
                             command.Connection.Open();
@@ -148,9 +147,9 @@ namespace Frapid.DataAccess
             {
                 if (ValidateCommand(command))
                 {
-                    using (NpgsqlDataAdapter adapter = GetDataAdapter(catalog, command))
+                    using (var adapter = GetDataAdapter(catalog, command))
                     {
-                        using (DataSet set = new DataSet())
+                        using (var set = new DataSet())
                         {
                             adapter.Fill(set);
                             set.Locale = CultureInfo.CurrentUICulture;
@@ -181,13 +180,13 @@ namespace Frapid.DataAccess
                 {
                     if (ValidateCommand(command))
                     {
-                        using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+                        using (var connection = new NpgsqlConnection(connectionString))
                         {
                             command.Connection = connection;
 
-                            using (NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(command))
+                            using (var adapter = new NpgsqlDataAdapter(command))
                             {
-                                using (DataTable dataTable = new DataTable())
+                                using (var dataTable = new DataTable())
                                 {
                                     dataTable.Locale = System.Threading.Thread.CurrentThread.CurrentCulture;
                                     adapter.Fill(dataTable);
@@ -221,7 +220,7 @@ namespace Frapid.DataAccess
         {
             if (ValidateCommand(command))
             {
-                using (DataView view = new DataView(GetDataTable(catalog, command)))
+                using (var view = new DataView(GetDataTable(catalog, command)))
                 {
                     return view;
                 }
@@ -238,9 +237,7 @@ namespace Frapid.DataAccess
                 {
                     if (ValidateCommand(command))
                     {
-                        using (
-                            NpgsqlConnection connection =
-                                new NpgsqlConnection(ConnectionString.GetConnectionString(catalog)))
+                        using (var connection = new NpgsqlConnection(ConnectionString.GetConnectionString(catalog)))
                         {
                             command.Connection = connection;
                             connection.Open();
@@ -267,8 +264,7 @@ namespace Frapid.DataAccess
         {
             try
             {
-                using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString.GetConnectionString(catalog))
-                    )
+                using (var connection = new NpgsqlConnection(ConnectionString.GetConnectionString(catalog)))
                 {
                     connection.Open();
                 }
@@ -291,13 +287,11 @@ namespace Frapid.DataAccess
                 {
                     if (ValidateCommand(command))
                     {
-                        Task task = new Task(delegate
+                        var task = new Task(delegate
                         {
                             try
                             {
-                                using (
-                                    NpgsqlConnection connection =
-                                        new NpgsqlConnection(ConnectionString.GetConnectionString(catalog)))
+                                using (var connection = new NpgsqlConnection(ConnectionString.GetConnectionString(catalog)))
                                 {
                                     command.Connection = connection;
                                     connection.Notice += Connection_Notice;
@@ -314,11 +308,11 @@ namespace Frapid.DataAccess
                                     errorMessage = GetDbErrorResource(ex);
                                 }
 
-                                EventHandler<DbNotificationArgs> listen = this.Listen;
+                                var listen = this.Listen;
 
                                 if (listen != null)
                                 {
-                                    DbNotificationArgs args = new DbNotificationArgs
+                                    var args = new DbNotificationArgs
                                     {
                                         Message = errorMessage
                                     };
@@ -348,7 +342,7 @@ namespace Frapid.DataAccess
 
         private static Collection<string> GetCommandTextParameterCollection(string commandText)
         {
-            Collection<string> parameters = new Collection<string>();
+            var parameters = new Collection<string>();
 
             foreach (Match match in Regex.Matches(commandText, @"@(\w+)"))
             {
@@ -365,7 +359,7 @@ namespace Frapid.DataAccess
 
         private static bool ValidateParameters(NpgsqlCommand command)
         {
-            Collection<string> commandTextParameters = GetCommandTextParameterCollection(command.CommandText);
+            var commandTextParameters = GetCommandTextParameterCollection(command.CommandText);
 
             foreach (NpgsqlParameter npgsqlParameter in command.Parameters)
             {
@@ -387,14 +381,13 @@ namespace Frapid.DataAccess
 
         private void Connection_Notice(object sender, NpgsqlNoticeEventArgs e)
         {
-            EventHandler<DbNotificationArgs> listen = Listen;
+            var listen = this.Listen;
 
             if (listen == null) return;
 
-            DbNotificationArgs args = new DbNotificationArgs
+            var args = new DbNotificationArgs
             {
                 Notice = e.Notice,
-                Message = e.Notice.MessageText,
                 ColumnName = e.Notice.ColumnName
             };
 

@@ -8,6 +8,8 @@ using Frapid.ApplicationState.Cache;
 using Frapid.Account.DTO;
 using Frapid.Account.Models;
 using Frapid.Messaging;
+using Frapid.Messaging.DTO;
+using Frapid.Messaging.Helpers;
 
 namespace Frapid.Account.Messaging
 {
@@ -50,15 +52,31 @@ namespace Frapid.Account.Messaging
             return parsed;
         }
 
+        private EmailQueue GetEmail(string catalog, IUserInfo model, string subject, string message)
+        {
+            Config config = new Config(catalog);
+
+            return new EmailQueue
+            {
+                AddedOn = DateTime.Now,
+                FromName = model.Name,
+                ReplyTo = model.Email,
+                Subject = subject,
+                Message = message,
+                SendTo = config.FromEmail
+            };
+        }
+
         public async Task SendAsync()
         {
             string template = GetTemplate();
             string parsed = ParseTemplate(template);
             string subject = "Welcome to " + HttpContext.Current.Request.Url.Authority;
-
-            MailQueueManager queue = new MailQueueManager(AppUsers.GetCatalog(), parsed, "", _user.Email, subject);
+            var catalog = AppUsers.GetCatalog();
+            var email = this.GetEmail(catalog, this._user, subject, parsed);
+            var queue = new MailQueueManager(catalog, email);
             queue.Add();
-            await queue.ProcessMailQueueAsync();
+            await queue.ProcessMailQueueAsync(EmailProcessor.GetDefault());
         }
     }
 }

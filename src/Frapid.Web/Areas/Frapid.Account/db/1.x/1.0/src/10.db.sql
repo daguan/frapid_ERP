@@ -98,7 +98,16 @@ ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
 ALTER TABLE website.contents
 ADD FOREIGN KEY(author_id) REFERENCES account.users;
 
-ALTER TABLE website.contents
+ALTER TABLE website.contacts
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE website.menus
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE website.menu_items
+ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+ALTER TABLE website.menu_items
 ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
 
 ALTER TABLE config.filters

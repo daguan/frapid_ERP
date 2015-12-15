@@ -16,7 +16,7 @@ namespace Frapid.i18n.Helpers
                 return;
             }
 
-            CacheItem cacheItem = new CacheItem(key, value);
+            var cacheItem = new CacheItem(key, value);
 
             if (MemoryCache.Default[key] == null)
             {

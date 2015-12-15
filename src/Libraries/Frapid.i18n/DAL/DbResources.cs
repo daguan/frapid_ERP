@@ -12,14 +12,13 @@ namespace Frapid.i18n.DAL
         {
             const string sql = "SELECT * FROM i18n.localized_resource_view;";
 
-            using (NPoco.Database db = DbProvider.Get(ConnectionString.GetConnectionString(MetaCatalog)).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(MetaCatalog)).GetDatabase())
             {
-                IEnumerable<dynamic> dbResources = db.Query<dynamic>(sql);
+                var dbResources = db.Query<dynamic>(sql);
 
-                Dictionary<string, string> resources = new Dictionary<string, string>();
+                var resources = new Dictionary<string, string>();
 
-
-                foreach (dynamic resource in dbResources)
+                foreach (var resource in dbResources)
                 {
                     string key = resource.Key;
                     string value = resource.Value;
@@ -35,7 +34,7 @@ namespace Frapid.i18n.DAL
         {
             const string sql =
                 "SELECT * FROM i18n.get_localization_table(@0) WHERE COALESCE(key, '') != '';";
-            using (NPoco.Database db = DbProvider.Get(ConnectionString.GetConnectionString(MetaCatalog)).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(MetaCatalog)).GetDatabase())
             {
                 return db.Query<LocalizedResource>(sql, language);
             }

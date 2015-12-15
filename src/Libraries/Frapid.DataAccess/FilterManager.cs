@@ -34,7 +34,7 @@ namespace Frapid.DataAccess
                 return;
             }
 
-            foreach (Filter filter in filters)
+            foreach (var filter in filters)
             {
                 if (string.IsNullOrWhiteSpace(filter.ColumnName))
                 {
@@ -51,7 +51,7 @@ namespace Frapid.DataAccess
                     continue;
                 }
 
-                var statement = filter.FilterStatement;
+                string statement = filter.FilterStatement;
 
                 if (statement == null || statement.ToUpperInvariant() != "OR")
                 {

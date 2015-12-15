@@ -1,0 +1,46 @@
+﻿<div class="ui contact form" style="display: none;">
+    <div class="big error"></div>
+    <div class="field">
+        <label>
+            Your Name
+        </label>
+        <input type="text" name="NameInputText" required="" />
+    </div>
+    <div class="field">
+        <label>
+            Email
+        </label>
+        <input type="email" name="EmailInputEmail" required="" />
+    </div>
+    <div class="field">
+        <label>
+            Subject
+        </label>
+        <input type="text" name="SubjectInputText" required="" />
+    </div>
+    <div class="phone number field">
+        <label>
+            Phone
+        </label>
+        <input type="tel" name="PhoneInputTel" required="" value=""/>
+    </div>
+    <div class="field">
+        <label>
+            Message
+        </label>
+        <textarea type="text" name="MessageTextArea" required="" maxlength="1000"></textarea>
+    </div>
+    <div class="hidden field">
+        <label>&nbsp;</label>
+        <input type="hidden" name="TokenInputHidden" required="" value="@ViewBag.Token" />
+    </div>
+    <button class="ui teal send email button" onclick="sendEmail(this)">Send Email</button>
+</div>
+
+
+<script src="/i18n/resources.js"></script>
+<script src="/bundles/backend.js"></script>
+<script src="/Scripts/jssha1.5/src/sha.js"></script>
+<script src="/Scripts/frapid/utitlities/form.js"></script>
+<script src="/Scripts/frapid/utitlities/validator.js"></script>
+<script src="~/Areas/Frapid.WebsiteBuilder/Scripts/contact-us.js"></script>

@@ -14,9 +14,9 @@
 
 
 function getForm(el) {
-    function getControlNameById(id) {
+    function getControlName(id) {
         if (id) {
-            var conventions = ["InputTel", "InputColor", "InputDate", "InputDateTime", "InputDateTimeLocal", "InputHidden", "InputNumber", "InputSearch", "InputTime", "InputUrl", "InputText", "InputPassword", "InputEmail", "Select", "Checkbox"];
+            var conventions = ["InputTel", "InputColor", "InputDate", "InputDateTime", "InputDateTimeLocal", "InputHidden", "InputNumber", "InputSearch", "InputTime", "InputUrl", "InputText", "InputPassword", "InputEmail", "Select", "Checkbox", "TextArea"];
             for (var i = 0; i < conventions.length; i++) {
                 var convention = conventions[i];
                 if (id.endsWith(convention)) {
@@ -28,19 +28,27 @@ function getForm(el) {
         return "";
     };
 
-    var members = el.find(".field input, .field select");
+    var members = el.find(".field input, .field select, .field textarea");
     var form = {};
 
     members.each(function () {
         var item = $(this);
         var id = item.attr("id");
+        var name = item.attr("name");
         if (id) {
             var val = item.val();
-            var member = getControlNameById(id);
+            var member = getControlName(id);
 
             if (member) {
                 form[member] = val;
             };
+        } else if(name){
+            var val = item.val();
+            var member = getControlName(name);
+
+            if (member) {
+                form[member] = val;
+            };            
         };
     });
 

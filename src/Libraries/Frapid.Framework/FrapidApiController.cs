@@ -10,10 +10,10 @@ namespace Frapid.Framework
     {
         public static List<Assembly> GetMembers()
         {
-            Type type = typeof(FrapidApiController);
+            var type = typeof(FrapidApiController);
             try
             {
-                List<Assembly> items = AppDomain.CurrentDomain.GetAssemblies()
+                var items = AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(s => s.GetTypes())
                     .Where(p => p.IsSubclassOf(type)).Select(t => t.Assembly).ToList();
                 return items;

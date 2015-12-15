@@ -8,13 +8,20 @@ namespace Frapid.Messaging.DAL
     {
         public static void AddToQueue(string catalog, EmailQueue queue)
         {
-            Factory.Insert(catalog, queue, "congif.email_queue", "queue_id");
+            Factory.Insert(catalog, queue, "config.email_queue", "queue_id");
         }
 
         public static IEnumerable<EmailQueue> GetMailInQueue(string catlog)
         {
-            const string sql = "SELECT * FROM congif.email_queue WHERE NOT delivered AND NOT canceled;";
+            const string sql = "SELECT * FROM config.email_queue WHERE NOT delivered AND NOT canceled;";
             return Factory.Get<EmailQueue>(catlog, sql);
+        }
+
+        public static void SetSuccess(string catalog, long queueId)
+        {
+            const string sql =
+                "UPDATE config.email_queue SET delivered = true, delivered_on = NOW() WHERE queue_id = @0;";
+            Factory.NonQuery(catalog, sql, queueId);
         }
     }
 }

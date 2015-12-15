@@ -1,0 +1,23 @@
+{
+	"ApplicationName": "Frapid.Account",
+	"AutoInstall": true,
+	"Thumbnail": null,
+	"Publisher": "MixERP Inc.",
+	"Url": "http://frapid.com",
+	"DocumentationUrl": "http://frapid.com",
+	"AssemblyName": "Frapid.Account",
+	"Version": "1.0",
+	"RealeasedOn": null,
+	"Description": "Frapid authentication module.",
+	"Category": "Core Modules",
+	"Bundle": "Frapid Framework",
+    "IsMeta": false,
+	"DbSchema": "account",
+	"BlankDbPath": "~/Areas/Frapid.Account/db/1.x/1.0/db-blank.sql",
+	"SampleDbPath": "~/Areas/Frapid.Account/db/1.x/1.0/db-sample.sql",
+	"InstallSample": true,
+	"My": "~/Areas/Frapid.Account/.my/db.sql",
+    "OverrideTemplatePath":"~/Areas/Frapid.Account/Override",
+    "OverrideDestination":"~/Catalogs/{0}/Areas",
+	"DependsOn": ["Frapid.Config", "Frapid.WebsiteBuilder"]
+}

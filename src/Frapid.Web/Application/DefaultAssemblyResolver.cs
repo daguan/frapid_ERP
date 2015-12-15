@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Http.Dispatcher;
 using Frapid.Framework;
@@ -11,21 +10,21 @@ namespace Frapid.Web
     {
         public override ICollection<Assembly> GetAssemblies()
         {
-            ICollection<Assembly> baseAssemblies = base.GetAssemblies();
-            List<Assembly> assemblies = new List<Assembly>(baseAssemblies);
+            var baseAssemblies = base.GetAssemblies();
+            var assemblies = new List<Assembly>(baseAssemblies);
 
             try
             {
-                List<Assembly> items = FrapidApiController.GetMembers();
+                var items = FrapidApiController.GetMembers();
 
-                foreach (Assembly item in items)
+                foreach (var item in items)
                 {
                     baseAssemblies.Add(item);
                 }
             }
             catch (ReflectionTypeLoadException ex)
             {
-                foreach (Exception exception in ex.LoaderExceptions)
+                foreach (var exception in ex.LoaderExceptions)
                 {
                     Log.Error("Could not load assemblies containing Frapid Web API. Exception: {Exception}", exception);
                 }

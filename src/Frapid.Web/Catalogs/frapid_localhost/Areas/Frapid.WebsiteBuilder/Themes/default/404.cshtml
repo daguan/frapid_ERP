@@ -1,0 +1,17 @@
+@model Frapid.WebsiteBuilder.Models.Content
+@{
+    ViewBag.Description = "Content not found";
+    ViewBag.Title = "404 Not Found";
+    Layout = ViewBag.LayoutPath + ViewBag.Layout;
+}
+
+<header>
+    <div class="header-content">
+        <div class="header-content-inner">
+            <h1>404 Error</h1>
+            <hr>
+            <p>The page, content, or resource is either missing or not available.</p>
+            <a href="/" class="btn btn-primary btn-xl page-scroll">Return Home</a>
+        </div>
+    </div>
+</header>

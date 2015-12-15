@@ -1,0 +1,23 @@
+{
+	"ApplicationName": "Frapid.Config",
+	"AutoInstall": true,
+	"Thumbnail": null,
+	"Publisher": "MixERP Inc.",
+	"Url": "http://frapid.com",
+	"DocumentationUrl": "http://frapid.com",
+	"AssemblyName": "Frapid.Config",
+	"Version": "1.0",
+	"RealeasedOn": null,
+	"Description": "Frapid configuration module.",
+	"Category": "Core Modules",
+	"Bundle": "Frapid Framework",
+    "IsMeta": false,
+	"DbSchema": "config",
+	"BlankDbPath": "~/Areas/Frapid.Config/db/config.sql",
+	"SampleDbPath": null,
+	"InstallSample": false,
+	"My": "~/Areas/Frapid.Config/.my/db.sql",
+	"OverrideTemplatePath": null,
+    "OverrideDestination":"~/Catalogs/{0}/Areas/Frapid.Config",
+	"DependsOn": []
+}

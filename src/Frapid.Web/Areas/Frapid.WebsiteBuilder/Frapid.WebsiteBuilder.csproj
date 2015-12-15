@@ -84,6 +84,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.i18n.dll</HintPath>
     </Reference>
+    <Reference Include="Frapid.Messaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Frapid.Messaging.dll</HintPath>
+    </Reference>
     <Reference Include="Frapid.NPoco, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.NPoco.dll</HintPath>
@@ -203,16 +207,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration.cs" />
+    <Compile Include="Controllers\ContactUsController.cs" />
     <Compile Include="Controllers\ContentController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Controllers\MyTemplateController.cs" />
     <Compile Include="Controllers\WebsiteBuilderController.cs" />
-    <Compile Include="DAL\Content.cs" />
+    <Compile Include="DAL\Contacts.cs" />
+    <Compile Include="DAL\Contents.cs" />
+    <Compile Include="DAL\Menus.cs" />
+    <Compile Include="Email.cs" />
+    <Compile Include="ViewModels\ContactForm.cs" />
+    <Compile Include="ViewModels\ContactUs.cs" />
+    <Compile Include="ViewModels\IWebsitePage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AreaRegistration.cs" />
-    <Compile Include="Models\Content.cs" />
+    <Compile Include="ViewModels\Content.cs" />
+    <Compile Include="ThemeConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\site.css" />
+    <Content Include="Scripts\contact-us.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -244,9 +259,7 @@
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RestAPI\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="DataAccess\Frapid.WebsiteBuilder.DataAccess.csproj">
       <Project>{6d84caf6-e1fa-4a5c-8ccc-a36aea06aa0b}</Project>
@@ -258,6 +271,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Views\ContactUs\Index.cshtml" />
+    <Content Include="Views\ContactUs\ContactForm.cshtml" />
     <None Include="Views\Content\Manage.cshtml" />
   </ItemGroup>
   <PropertyGroup>

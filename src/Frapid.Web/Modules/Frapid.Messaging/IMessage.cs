@@ -6,5 +6,6 @@
         string FromEmail { get; set; }
         string SentTo { get; set; }
         string Message { get; set; }
+        bool IsBodyHtml { get; set; }
     }
 }

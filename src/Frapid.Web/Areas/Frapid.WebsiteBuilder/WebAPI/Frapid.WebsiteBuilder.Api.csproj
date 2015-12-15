@@ -119,11 +119,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContactController.cs" />
     <Compile Include="ContentController.cs" />
+    <Compile Include="Fakes\ContactRepository.cs" />
     <Compile Include="Fakes\ContentRepository.cs" />
+    <Compile Include="Fakes\MenuItemRepository.cs" />
+    <Compile Include="Fakes\MenuItemViewRepository.cs" />
+    <Compile Include="Fakes\MenuRepository.cs" />
+    <Compile Include="MenuItemController.cs" />
+    <Compile Include="MenuItemViewController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\ContactRouteTests.cs" />
+    <Compile Include="Tests\ContactTests.cs" />
     <Compile Include="Tests\ContentRouteTests.cs" />
     <Compile Include="Tests\ContentTests.cs" />
+    <Compile Include="Tests\MenuItemRouteTests.cs" />
+    <Compile Include="Tests\MenuItemTests.cs" />
+    <Compile Include="Tests\MenuItemViewRouteTests.cs" />
+    <Compile Include="Tests\MenuItemViewTests.cs" />
+    <Compile Include="Tests\MenuRouteTests.cs" />
+    <Compile Include="Tests\MenuTests.cs" />
+    <Compile Include="WebsiteMenuController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

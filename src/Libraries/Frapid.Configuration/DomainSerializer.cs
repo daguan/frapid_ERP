@@ -6,13 +6,21 @@ using Newtonsoft.Json;
 
 namespace Frapid.Configuration
 {
-    public static class DomainSerializer
+    public class DomainSerializer
     {
-        public static List<string> Get()
+        public string FileName { get; set; }
+        private const string Path = "~/Resources/Configs/";
+
+        public DomainSerializer(string fileName)
+        {
+            this.FileName = fileName;
+        }
+
+        public List<string> Get()
         {
             List<string> urls = new List<string>();
 
-            string path = HostingEnvironment.MapPath("~/Resources/Configs/domains.json");
+            string path = HostingEnvironment.MapPath(Path + this.FileName);
 
             if (path == null)
             {
@@ -22,13 +30,21 @@ namespace Frapid.Configuration
             string contents = File.ReadAllText(path, Encoding.UTF8);
             urls = JsonConvert.DeserializeObject<List<string>>(contents);
 
-            return urls;
+            return urls ?? new List<string>();
         }
 
-        public static void Save(List<string> urls)
+        public void Add(string url)
+        {
+            var urls = this.Get();
+            urls.Add(url);
+
+            this.Save(urls);
+        }
+
+        public void Save(List<string> urls)
         {
             string contents = JsonConvert.SerializeObject(urls);
-            string path = HostingEnvironment.MapPath("~/Resources/Configs/domains.json");
+            string path = HostingEnvironment.MapPath(Path + this.FileName);
 
             if (path == null)
             {

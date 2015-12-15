@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -7,7 +6,6 @@ using System.Web.UI;
 using Frapid.Areas;
 using Frapid.i18n;
 using Frapid.i18n.DAL;
-using Frapid.i18n.Models;
 
 namespace Frapid.Web.Controllers
 {
@@ -19,26 +17,26 @@ namespace Frapid.Web.Controllers
         {
             string culture = CultureManager.GetCurrent().TwoLetterISOLanguageName;
             string script = GetScript(culture);
-            return Content(script, "text/javascript", Encoding.UTF8);
+            return this.Content(script, "text/javascript", Encoding.UTF8);
         }
 
         private static string GetScript(string culture)
         {
-            StringBuilder script = new StringBuilder();
+            var script = new StringBuilder();
             script.Append("var Resources = {");
 
-            IEnumerable<LocalizedResource> resources = DbResources.GetLocalizationTable(culture);
+            var resources = DbResources.GetLocalizationTable(culture);
 
-            List<List<LocalizedResource>> resourceClassGroup = resources
+            var resourceClassGroup = resources
                 .GroupBy(r => r.ResourceClass)
                 .Select(group => group.ToList())
                 .ToList();
 
-            foreach (List<LocalizedResource> resourceClass in resourceClassGroup)
+            foreach (var resourceClass in resourceClassGroup)
             {
                 int i = 0;
 
-                foreach (LocalizedResource resource in resourceClass)
+                foreach (var resource in resourceClass)
                 {
                     if (i == 0)
                     {

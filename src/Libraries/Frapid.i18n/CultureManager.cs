@@ -6,19 +6,19 @@ namespace Frapid.i18n
     {
         public static int GetCurrencyDecimalPlaces()
         {
-            CultureInfo culture = GetCurrentUiCulture();
+            var culture = GetCurrentUiCulture();
             return culture.NumberFormat.CurrencyDecimalDigits;
         }
 
         public static string GetCurrencySymbol()
         {
-            CultureInfo culture = GetCurrentUiCulture();
+            var culture = GetCurrentUiCulture();
             return culture.NumberFormat.CurrencySymbol;
         }
 
         public static bool IsRtl()
         {
-            CultureInfo culture = GetCurrent();
+            var culture = GetCurrent();
 
             if (culture == null)
             {
@@ -30,8 +30,9 @@ namespace Frapid.i18n
 
         public static CultureInfo GetCurrentUiCulture()
         {
-            CultureInfo culture = CultureInfo.DefaultThreadCurrentUICulture ?? CultureInfo.CurrentUICulture;
-            var cultureString = culture.ToString();
+            var culture = CultureInfo.DefaultThreadCurrentUICulture ?? CultureInfo.CurrentUICulture;
+            string cultureString = culture.ToString();
+
             if (cultureString.Equals("fr") || cultureString.Equals("ru") || cultureString.Equals("fr-FR"))
             {
                 culture.NumberFormat.CurrencyGroupSeparator = "\x0020";
@@ -47,31 +48,31 @@ namespace Frapid.i18n
 
         public static string GetDecimalSeparator()
         {
-            CultureInfo culture = GetCurrentUiCulture();
+            var culture = GetCurrentUiCulture();
             return culture.NumberFormat.CurrencyDecimalSeparator;
         }
 
         public static int GetNumberDecimalPlaces()
         {
-            CultureInfo culture = GetCurrentUiCulture();
+            var culture = GetCurrentUiCulture();
             return culture.NumberFormat.NumberDecimalDigits;
         }
 
         public static string GetShortDateFormat()
         {
-            CultureInfo culture = GetCurrentUiCulture();
+            var culture = GetCurrentUiCulture();
             return culture.DateTimeFormat.ShortDatePattern;
         }
 
         public static string GetLongDateFormat()
         {
-            CultureInfo culture = GetCurrentUiCulture();
+            var culture = GetCurrentUiCulture();
             return culture.DateTimeFormat.LongDatePattern;
         }
 
         public static string GetThousandSeparator()
         {
-            CultureInfo culture = GetCurrentUiCulture();
+            var culture = GetCurrentUiCulture();
             return culture.NumberFormat.CurrencyGroupSeparator;
         }
     }

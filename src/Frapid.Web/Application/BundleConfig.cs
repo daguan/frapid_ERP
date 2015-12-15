@@ -195,7 +195,7 @@ namespace Frapid.Web
 
         private static string[] GetDashboardScript()
         {
-            List<string> script = new List<string>
+            var script = new List<string>
             {
                 "~/Scripts/jquery-1.9.1.js",
                 "~/Scripts/angular/angular.min.js",

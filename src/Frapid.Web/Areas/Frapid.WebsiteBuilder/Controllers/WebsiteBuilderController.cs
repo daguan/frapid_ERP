@@ -1,7 +1,5 @@
-﻿using System.Globalization;
-using System.IO;
+﻿using System.IO;
 using System.Web.Hosting;
-using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
 
 namespace Frapid.WebsiteBuilder.Controllers
@@ -10,15 +8,15 @@ namespace Frapid.WebsiteBuilder.Controllers
     {
         public WebsiteBuilderController()
         {
-            ViewBag.LayoutPath = GetLayoutPath();
-            ViewBag.Layout = "Layout.cshtml";
+            string theme = GetTheme();
+
+            ViewBag.LayoutPath = GetLayoutPath(theme);
+            ViewBag.Layout = GetDefaultDocument(theme);
         }
 
-        protected string GetLayoutPath()
+        protected string GetLayoutPath(string theme = "")
         {
-            string layout = "~/Catalogs/{0}/Areas/Frapid.WebsiteBuilder/Views/Layouts/";
-            string catalog = AppUsers.GetCatalog();
-            layout = string.Format(CultureInfo.InvariantCulture, layout, catalog);
+            string layout = Configuration.GetCurrentThemePath();
 
             string layoutDirectory = HostingEnvironment.MapPath(layout);
 
@@ -27,7 +25,22 @@ namespace Frapid.WebsiteBuilder.Controllers
                 return layout;
             }
 
-            return "~/Views/Site/Layouts/";
+            return null;
+        }
+
+        protected string GetTheme()
+        {
+            return Configuration.GetDefaultTheme();
+        }
+
+        protected string GetDefaultDocument(string theme = "")
+        {
+            if (string.IsNullOrWhiteSpace(theme))
+            {
+                theme = GetTheme();
+            }
+
+            return ThemeConfiguration.GetDefaultDocument(theme);
         }
     }
 }

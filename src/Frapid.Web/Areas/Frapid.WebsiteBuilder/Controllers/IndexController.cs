@@ -10,17 +10,17 @@ namespace Frapid.WebsiteBuilder.Controllers
         [Route("site/{*alias}")]
         public ActionResult Index(string alias = "")
         {
-            Content content = DAL.Content.GetPublished(alias);
-            Mapper.CreateMap<Content, Models.Content>();
-            Models.Content model = Mapper.Map<Models.Content>(content);
+            Content content = DAL.Contents.GetPublished(alias);
+            Mapper.CreateMap<Content, ViewModels.Content>();
+            ViewModels.Content model = Mapper.Map<ViewModels.Content>(content);
 
             string path = GetLayoutPath();
-            string layout = "Layout.cshtml";
+            string layout = this.GetDefaultDocument();
 
             if (model == null)
             {
                 return View(GetRazorView<AreaRegistration>("layouts/404.cshtml"),
-                    new Models.Content {LayoutPath = path, Layout = layout});
+                    new ViewModels.Content {LayoutPath = path, Layout = layout});
             }
 
             model.LayoutPath = path;

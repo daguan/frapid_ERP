@@ -1,0 +1,23 @@
+{
+	"ApplicationName": "Frapid",
+	"AutoInstall": true,
+	"Thumbnail": null,
+	"Publisher": "MixERP Inc.",
+	"Url": "http://frapid.com",
+	"DocumentationUrl": "http://frapid.com",
+	"AssemblyName": null,
+	"Version": "1.0",
+	"RealeasedOn": null,
+	"Description": "Frapid",
+	"Category": "N/A",
+	"Bundle": "Frapid Framework",
+    "IsMeta": true,
+	"DbSchema": "i18n",
+	"BlankDbPath": "~/db/meta.sql",
+	"SampleDbPath": null,
+	"InstallSample": false,
+	"My": null,
+    "OverrideTemplatePath":"~/Override",
+    "OverrideDestination":"~/Catalogs/{0}",
+	"DependsOn": []
+}

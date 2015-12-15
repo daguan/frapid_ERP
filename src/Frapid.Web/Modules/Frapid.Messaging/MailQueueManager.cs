@@ -15,19 +15,13 @@ namespace Frapid.Messaging
         {
         }
 
-        public MailQueueManager(string catalog, string message, string attachments, string sendTo, string subject)
+        public MailQueueManager(string catalog, EmailQueue mail)
         {
             Catalog = catalog;
-            Message = message;
-            Attachments = attachments;
-            SendTo = sendTo;
-            Subject = subject;
+            Email = mail;
         }
 
-        public string Message { get; }
-        public string Attachments { get; }
-        public string SendTo { get; }
-        public string Subject { get; }
+        public EmailQueue Email { get; set; }
         public string Catalog { get; set; }
 
         public void Add()
@@ -37,16 +31,7 @@ namespace Frapid.Messaging
                 return;
             }
 
-            EmailQueue queue = new EmailQueue
-            {
-                Subject = Subject,
-                SendTo = SendTo,
-                Attachments = Attachments,
-                Message = Message,
-                AddedOn = DateTime.UtcNow
-            };
-
-            MailQueue.AddToQueue(Catalog, queue);
+            MailQueue.AddToQueue(Catalog, Email);
         }
 
         private bool IsEnabled()
@@ -55,19 +40,21 @@ namespace Frapid.Messaging
             return config.Enabled;
         }
 
-        public async Task ProcessMailQueueAsync()
+        public async Task ProcessMailQueueAsync(IEmailProcessor processor)
         {
-            IEnumerable<EmailQueue> queue = MailQueue.GetMailInQueue(Catalog);
+            IEnumerable<EmailQueue> queue = MailQueue.GetMailInQueue(Catalog).ToList();
+            Config config = new Config(Catalog);
 
             if (IsEnabled())
             {
                 foreach (EmailQueue mail in queue)
                 {
-                    Processor processor = new Processor(Catalog);
-                    bool success =
-                        await
-                            processor.SendAsync(mail.SendTo, mail.Subject, mail.Message, false,
-                                mail.Attachments.Split(',').ToArray());
+                    EmailMessage message = EmailHelper.GetMessage(mail);
+                    SmtpHost host = EmailHelper.GetSmtpHost(config);
+                    ICredentials credentials = EmailHelper.GetCredentials(config);
+                    string[] attachments = mail.Attachments?.Split(',').ToArray();
+
+                    bool success = await processor.SendAsync(message, host, credentials, false, attachments);
 
                     if (!success)
                     {
@@ -76,7 +63,9 @@ namespace Frapid.Messaging
 
                     mail.Delivered = true;
                     mail.DeliveredOn = DateTime.UtcNow;
-                    Factory.Update(Catalog, mail, mail.QueueId, "congif.email_queue", "queue_id");
+
+
+                    MailQueue.SetSuccess(this.Catalog, mail.QueueId);
                 }
             }
         }

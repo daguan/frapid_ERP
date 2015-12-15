@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Frapid.NPoco;
@@ -15,18 +14,21 @@ namespace Frapid.Configuration
         {
             try
             {
-                IEnumerable<Assembly> items = AppDomain.CurrentDomain.GetAssemblies()
+                var items = AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(s => s.GetTypes())
                     .Where(type.IsAssignableFrom).Select(t => t.Assembly);
 
 
-                FluentConfig fluentConfig = FluentMappingConfiguration.Scan(s =>
+                var fluentConfig = FluentMappingConfiguration.Scan(s =>
                 {
-                    foreach (Assembly item in items)
+                    foreach (var item in items)
                     {
                         s.Assembly(item);
                         s.WithSmartConventions();
-                        s.TablesNamed(t => t.GetCustomAttributes(true).OfType<TableNameAttribute>().FirstOrDefault()?.Value??Inflector.AddUnderscores(Inflector.MakePlural(t.Name)).ToLower());
+                        s.TablesNamed(
+                            t =>
+                                t.GetCustomAttributes(true).OfType<TableNameAttribute>().FirstOrDefault()?.Value ??
+                                Inflector.AddUnderscores(Inflector.MakePlural(t.Name)).ToLower());
                         s.Columns.Named(m => Inflector.AddUnderscores(m.Name).ToLower());
                         s.PrimaryKeysNamed(t => Inflector.AddUnderscores(t.Name).ToLower() + "_id");
                         s.PrimaryKeysAutoIncremented(t => true);

@@ -42,13 +42,13 @@ namespace Frapid.Areas
         protected string GetRazorView(string areaName, string controllerName, string actionName)
         {
             string path = controllerName.ToLower() + "/" + actionName.ToLower() + ".cshtml";
-            return GetRazorView(areaName, path);
+            return this.GetRazorView(areaName, path);
         }
 
         protected string GetRazorView<T>(string path) where T : FrapidAreaRegistration, new()
         {
             FrapidAreaRegistration registration = new T();
-            return GetRazorView(registration.AreaName, path);
+            return this.GetRazorView(registration.AreaName, path);
         }
 
         protected string GetRazorView<T>(string controllerName, string actionName)
@@ -56,7 +56,7 @@ namespace Frapid.Areas
         {
             FrapidAreaRegistration registration = new T();
             string path = controllerName.ToLower() + "/" + actionName.ToLower() + ".cshtml";
-            return GetRazorView(registration.AreaName, path);
+            return this.GetRazorView(registration.AreaName, path);
         }
     }
 }

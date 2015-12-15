@@ -62,12 +62,12 @@ namespace Frapid.i18n
         private static IDictionary<string, string> GetCache()
         {
             IDictionary<string, string> cache;
-            object cacheItem = MemoryCache.Default.Get("Resources");
+            var cacheItem = MemoryCache.Default.Get("Resources");
 
             // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
             if (cacheItem is CacheItem)
             {
-                CacheItem item = (CacheItem)cacheItem;
+                var item = (CacheItem)cacheItem;
                 cache = (IDictionary<string, string>)item.Value;
             }
             else

@@ -1,10 +1,13 @@
-﻿using System.Web;
+﻿using System;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Web;
 
 namespace Frapid.Configuration
 {
     public class DbConvention
     {
-        public static string GetDbNameByConvention()
+        public static string GetDomain()
         {
             string url = HttpContext.Current.Request.Url.Authority;
 
@@ -13,21 +16,36 @@ namespace Frapid.Configuration
                 url = url.Replace("www.", "");
             }
 
-            return url.Replace(".", "_");
+            return url;
         }
 
-        public static bool IsValidDomain()
+        public static string GetDbNameByConvention(string domain = "")
         {
-            string url = GetDbNameByConvention();
-            return DomainSerializer.Get().Contains(url);
+            if (string.IsNullOrWhiteSpace(domain))
+            {
+                domain = GetDomain();
+            }
+
+            return domain.Replace(".", "_");
         }
 
-        public static string GetCatalog()
+        public static bool IsValidCatalog(string catalog = "")
         {
-            string url = GetDbNameByConvention();
+            if (string.IsNullOrWhiteSpace(catalog))
+            {
+                catalog = GetDbNameByConvention(catalog);
+            }
 
+            var serializer = new DomainSerializer("domains-approved.json");
+
+            return serializer.Get().Select(GetDbNameByConvention).Any(c => catalog.Equals(c));
+        }
+
+        public static string GetCatalog(string url = "")
+        {
+            string catalog = GetDbNameByConvention(url);
             //The default database name is localhost
-            return IsValidDomain() ? url : "localhost";
+            return IsValidCatalog(catalog) ? catalog : "localhost";
         }
     }
 }
