@@ -8,7 +8,7 @@ You and “The Author” (MixERP Inc. Pvt. Ltd.) agree:
 
 You grant to “The Author” (MixERP Inc. Pvt. Ltd.) a non-exclusive, irrevocable, worldwide, royalty-free, sublicenseable, relicenseable, transferable license under all of Your relevant intellectual property rights, to use, copy, prepare derivative works of, distribute and publicly perform and display “The Contributions” on any licensing terms, including without limitation:
 
-(a) open source licenses like the GNU General Public (v3.0) license; and
+(a) open source licenses like the MIT license; and
 
 (b) binary, proprietary, or commercial licenses.
 
