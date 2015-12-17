@@ -1,5 +1,3 @@
-using System;
-
 namespace Frapid.WebsiteBuilder.ViewModels
 {
     public class ContactForm

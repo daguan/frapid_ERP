@@ -1,4 +1,5 @@
 ﻿function addKanban() {
+    $("#KanbanIdInputText").val("");
     $("#KanbanForm").modal("show");
 };
 
@@ -69,7 +70,7 @@ function saveOrUpdateKanban() {
     removeDirty(kanbanNameInputText);
 
     var kanban = new Object();
-    kanban.kanban_id = (kanbanIdInputText.val() || null);
+    kanban.kanban_id = parseInt(kanbanIdInputText.val() || null);
     kanban.object_name = window.scrudFactory.viewTableName;
     kanban.user_id = window.userId;
     kanban.kanban_name = kanbanNameInputText.val();

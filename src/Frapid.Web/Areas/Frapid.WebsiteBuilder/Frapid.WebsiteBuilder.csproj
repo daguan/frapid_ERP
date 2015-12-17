@@ -208,9 +208,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\ContactUsController.cs" />
     <Compile Include="Controllers\ContentController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\MenuItemController.cs" />
     <Compile Include="Controllers\MyTemplateController.cs" />
     <Compile Include="Controllers\WebsiteBuilderController.cs" />
     <Compile Include="DAL\Contacts.cs" />
@@ -273,7 +277,11 @@
   <ItemGroup>
     <Content Include="Views\ContactUs\Index.cshtml" />
     <Content Include="Views\ContactUs\ContactForm.cshtml" />
+    <Content Include="Views\Menu\Index.cshtml" />
+    <None Include="Views\Category\Index.cshtml" />
     <None Include="Views\Content\Manage.cshtml" />
+    <Content Include="Views\Contact\Index.cshtml" />
+    <Content Include="Views\MenuItem\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

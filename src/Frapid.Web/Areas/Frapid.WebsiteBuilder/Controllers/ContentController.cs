@@ -3,16 +3,17 @@ using Frapid.Dashboard.Controllers;
 
 namespace Frapid.WebsiteBuilder.Controllers
 {
-    public class ContentController:DashboardController
+    public class ContentController : DashboardController
     {
-        [Route("dashboard/wb/contents")]
+        [Route("dashboard/website/contents")]
         [Authorize]
         public ActionResult Index(string alias = "")
         {
             return FrapidView(GetRazorView<AreaRegistration>("Content/Index.cshtml"));
         }
 
-        [Route("dashboard/wb/contents/manage")]
+        [Route("dashboard/website/contents/manage")]
+        [Route("dashboard/website/contents/new")]
         [Authorize]
         public ActionResult Manage(int contentId = 0)
         {

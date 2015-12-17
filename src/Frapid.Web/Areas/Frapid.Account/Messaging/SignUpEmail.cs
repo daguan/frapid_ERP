@@ -25,7 +25,7 @@ namespace Frapid.Account.Messaging
 
         private string GetTemplate()
         {
-            var path = "~/Catalogs/{catalog}/Areas/Frapid.Account/EmailTemplates/account-verification.html";
+            string path = "~/Catalogs/{catalog}/Areas/Frapid.Account/EmailTemplates/account-verification.html";
             path = path.Replace("{catalog}", AppUsers.GetCatalog());
             path = HostingEnvironment.MapPath(path);
 
@@ -39,10 +39,10 @@ namespace Frapid.Account.Messaging
 
         private string ParseTemplate(string template)
         {
-            var siteUrl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
-            var link = siteUrl + "/account/sign-up/confirm?token=" + this._registrationId;
+            string siteUrl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+            string link = siteUrl + "/account/sign-up/confirm?token=" + this._registrationId;
 
-            var parsed = template.Replace("{{Name}}", this._registration.Name);
+            string parsed = template.Replace("{{Name}}", this._registration.Name);
             parsed = parsed.Replace("{{EmailAddress}}", this._registration.Email);
             parsed = parsed.Replace("{{VerificationLink}}", link);
             parsed = parsed.Replace("{{SiteUrl}}", siteUrl);
@@ -50,29 +50,26 @@ namespace Frapid.Account.Messaging
             return parsed;
         }
 
-        private EmailQueue GetEmail(string catalog, Registration model, string subject, string message)
+        private EmailQueue GetEmail(Registration model, string subject, string message)
         {
-            Config config = new Config(catalog);
-
             return new EmailQueue
             {
                 AddedOn = DateTime.Now,
                 FromName = model.Name,
-                ReplyTo = model.Email,
                 Subject = subject,
                 Message = message,
-                SendTo = config.FromEmail
+                SendTo = model.Email
             };
         }
 
         public async Task SendAsync()
         {
-            var template = this.GetTemplate();
-            var parsed = this.ParseTemplate(template);
-            var subject = "Confirm Your Registration at " + HttpContext.Current.Request.Url.Authority;
+            string template = this.GetTemplate();
+            string parsed = this.ParseTemplate(template);
+            string subject = "Confirm Your Registration at " + HttpContext.Current.Request.Url.Authority;
 
-            var catalog = AppUsers.GetCatalog();
-            var email = this.GetEmail(catalog, this._registration, subject, parsed);
+            string catalog = AppUsers.GetCatalog();
+            var email = this.GetEmail(this._registration, subject, parsed);
             var queue = new MailQueueManager(catalog, email);
             queue.Add();
             await queue.ProcessMailQueueAsync(EmailProcessor.GetDefault());

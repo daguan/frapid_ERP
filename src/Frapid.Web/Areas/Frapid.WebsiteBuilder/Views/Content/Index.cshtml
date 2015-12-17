@@ -5,8 +5,6 @@
     Layout = ViewBag.Layout;
 }
 
-<script src="//cdn.quilljs.com/0.20.1/quill.js"></script>
-
 <script>
     var scrudFactory = new Object();
 
@@ -19,43 +17,18 @@
     scrudFactory.formTableName = "website.contents";
 
     scrudFactory.disabledOnEdit = ["AuthorId"];
-    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs", "Contents"];
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs", "Contents", "Markdown"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
     scrudFactory.addNewUrl = "contents/manage";
     scrudFactory.editUrl = "contents/manage?ContentId=";
 
-    scrudFactory.live = "WorkCenterDepartmentName";
-
     scrudFactory.card = {
         header: "Title",
         meta: "Alias",
-        description: "Contents"
-    };
-    
-    scrudFactory.layout = [
-        {
-            tab: "",
-            fields: 
-            [
-                ["ContentId", ""],
-                ["Title", "Alias"],
-                ["Contents"],
-                ["", "", "", ""],
-                ["", "", "", ""],
-            ]
-        }
-    ];
-    scrudFactory.keys = [
-        {
-            property: "ParentWorkCenterDepartmentId",
-            url: '/api/production/work-center-department/display-fields',
-            data: null,
-            valueField: "Key",
-            textField: "Value"
-        }
-    ];
+        description: "SeoDescription"
+    };    
 </script>
 
 

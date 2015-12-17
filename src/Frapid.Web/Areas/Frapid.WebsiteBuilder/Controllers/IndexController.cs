@@ -7,20 +7,21 @@ namespace Frapid.WebsiteBuilder.Controllers
     public class IndexController : WebsiteBuilderController
     {
         [Route("")]
-        [Route("site/{*alias}")]
-        public ActionResult Index(string alias = "")
+        [Route("site/{categoryAlias}/{alias}")]
+        public ActionResult Index(string categoryAlias = "", string alias = "")
         {
-            Content content = DAL.Contents.GetPublished(alias);
-            Mapper.CreateMap<Content, ViewModels.Content>();
-            ViewModels.Content model = Mapper.Map<ViewModels.Content>(content);
+            var content = DAL.Contents.GetPublished(categoryAlias, alias);
+            Mapper.CreateMap<PublishedContentView, ViewModels.Content>();
+            var model = Mapper.Map<ViewModels.Content>(content);
+
+            bool isHomepage = string.IsNullOrWhiteSpace(categoryAlias) && string.IsNullOrWhiteSpace(alias);
 
             string path = GetLayoutPath();
-            string layout = this.GetDefaultDocument();
+            string layout = isHomepage ? this.GetHomepageLayout() : this.GetLayout();
 
             if (model == null)
             {
-                return View(GetRazorView<AreaRegistration>("layouts/404.cshtml"),
-                    new ViewModels.Content {LayoutPath = path, Layout = layout});
+                return View(this.GetLayoutPath() + "404.cshtml");
             }
 
             model.LayoutPath = path;

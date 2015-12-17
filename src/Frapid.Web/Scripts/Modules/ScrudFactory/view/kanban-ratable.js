@@ -16,12 +16,12 @@
     $('.ui.rating i').dblclick(function () {
         var el = $(this);
         var card = el.parent().parent().parent();
-        var kanbanDetailId = card.attr("data-kanban-detail-id");
+        var kanbanDetailId = parseInt(card.attr("data-kanban-detail-id") || null);
 
         if (kanbanDetailId) {
             var kanbanDetail = new Object();
             kanbanDetail.kanban_detail_id = kanbanDetailId;
-            kanbanDetail.kanban_id = card.closest(".segment").attr("id").replace("kanban", "");
+            kanbanDetail.kanban_id = parseInt(card.closest(".segment").attr("id").replace("kanban", "") || null);
             kanbanDetail.resource_id = card.attr("data-key");
             kanbanDetail.rating = el.parent().find("i.active").length;
 

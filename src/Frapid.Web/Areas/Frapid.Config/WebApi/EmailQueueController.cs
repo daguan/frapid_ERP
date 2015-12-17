@@ -78,6 +78,8 @@ namespace Frapid.Config.Api
                 Columns = new List<EntityColumn>()
                                 {
                                         new EntityColumn { ColumnName = "queue_id",  PropertyName = "QueueId",  DataType = "long",  DbDataType = "int8",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = true,  Value = "",  MaxLength = 0 },
+                                        new EntityColumn { ColumnName = "from_name",  PropertyName = "FromName",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 256 },
+                                        new EntityColumn { ColumnName = "reply_to",  PropertyName = "ReplyTo",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 256 },
                                         new EntityColumn { ColumnName = "subject",  PropertyName = "Subject",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 256 },
                                         new EntityColumn { ColumnName = "send_to",  PropertyName = "SendTo",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 256 },
                                         new EntityColumn { ColumnName = "attachments",  PropertyName = "Attachments",  DataType = "string",  DbDataType = "text",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },

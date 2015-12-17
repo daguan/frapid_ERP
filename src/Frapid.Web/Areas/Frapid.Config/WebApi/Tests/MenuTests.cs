@@ -19,9 +19,9 @@ namespace Frapid.Config.Api.Tests
 {
     public class MenuTests
     {
-        public static MenuController Fixture()
+        public static ConfigMenuController Fixture()
         {
-            MenuController controller = new MenuController(new MenuRepository(), "", new LoginView());
+            ConfigMenuController controller = new ConfigMenuController(new MenuRepository(), "", new LoginView());
             return controller;
         }
 

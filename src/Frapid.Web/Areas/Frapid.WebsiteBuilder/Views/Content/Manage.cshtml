@@ -1,23 +1,26 @@
 ﻿@model Frapid.WebsiteBuilder.Entities.Content
 
 @{
-    var contentId = Model?.ContentId ?? null;
-    var title = Model?.Title ?? "";
-    var alias = Model?.Alias ?? "";
-    var content = Model?.Contents ?? "<p>Page Contents</p>";
-    var publishOn = Model?.PublishOn.ToShortDateString() ?? DateTime.Now.ToShortDateString();
-    var keywords = Model?.SeoKeywords ?? "";
-    var description = Model?.SeoDescription ?? "";
-    var draft = Model?.IsDraft ?? true;
-    var homePage = Model?.IsHomepage ?? false;
+    var contentId = Model?.ContentId;
+    string title = Model?.Title ?? "";
+    string alias = Model?.Alias ?? "";
+    string markdown = Model?.Markdown ?? "";
+    bool isMarkDown = !string.IsNullOrWhiteSpace(Model?.Markdown);
+    string content = Model?.Contents ?? "";
+    string categoryId = Model?.CategoryId.ToString() ?? "";
+    string tags = Model?.Tags ?? "";
+    string publishOn = Model?.PublishOn.ToShortDateString() ?? DateTime.Now.ToShortDateString();
+    string keywords = Model?.SeoKeywords ?? "";
+    string description = Model?.SeoDescription ?? "";
+    bool draft = Model?.IsDraft ?? true;
+    bool homePage = Model?.IsHomepage ?? false;
 
     ViewBag.Title = title;
     Layout = ViewBag.Layout;
 }
-<script src="https://raw.githubusercontent.com/adampietrasiak/jquery.initialize/master/jquery.initialize.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js"></script>
-<script src='http://lovasoa.github.io/tidy-html5/tidy.js'></script>
-<link rel="stylesheet" type="text/css" href="/Scripts/contenttools/content-tools.min.css">
+<link href="/my/template/css/site.css" rel="stylesheet">
+<script src="/Scripts/ace-1.2.2/src-min-noconflict/ace.js"></script>
+<script src="/Scripts/marked-0.3.5/lib/marked.js"></script>
 <style>
     #editor {
         position: absolute;
@@ -26,6 +29,7 @@
         bottom: 0;
         left: 0;
     }
+
 
     [data-ng-view], [ng-view] {
         height: 100%;
@@ -40,19 +44,55 @@
     }
 </style>
 
-<div class="ui visible bottom sidebar">
-    <div class="ui attached violet segment">
-        <div class="ui container">
+<div class="ui attached segment" style="height: 100%;">
+    <div class="ui stackable divided doubling grid" style="height: 100%;">
+        <div class="three wide column">
+            <div class="ui one column grid">
+                <div class="right aligned column">
+                    <button class="ui icon basic violet circular button" onclick="maximize('editor', 'seven wide');">
+                        <i class="code icon"></i>
+                    </button>
+                    <button class="ui icon violet circular button" onclick="maximize('preview', 'six wide');">
+                        <i class="expand icon"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui violet header">Save This Page</div>
+            </div>
+            <div class="ui divider"></div>
             <div class="ui form">
                 <input type="hidden" data-entity="content_id" class="integer" value="@contentId" />
-                <div class="ui five fields">
+                <input type="hidden" data-entity="markdown" value="@markdown" />
+                <div class="">
                     <div class="field">
-                        <label>Heading</label>
+                        <label>Title</label>
                         <input type="text" data-entity="title" value="@title" required="" />
                     </div>
                     <div class="field">
                         <label>Alias</label>
                         <input type="text" data-entity="alias" value="@alias" required="" />
+                    </div>
+                    <div class="field">
+                        <label>Category</label>
+                        <select id="CategorySelect" class="ui search integer dropdown"
+                                data-entity="category_id"
+                                required=""
+                                data-placeholder="true"
+                                data-api="/api/website/category/display-fields"
+                                data-api-value-field="Value"
+                                data-api-key-field="Key"
+                                data-api-selected-value="@categoryId"></select>
+                    </div>
+                    <div class="field">
+                        <label>Tags</label>
+                        <select id="TagsSelect" class="ui fluid multiple search selection tag dropdown"
+                                data-entity="tags"
+                                data-api="/api/website/tag-view/all"
+                                data-api-value-field="Tag"
+                                data-api-key-field="Tag"
+                                data-api-selected-values="@tags"
+                                multiple=""></select>
                     </div>
                     <div class="field">
                         <label>Publish On</label>
@@ -69,166 +109,155 @@
                 </div>
                 <div class="field">
                     <label>&nbsp;</label>
-                    <div class="ui toggle checkbox">
-                        <input id="ToggleHtmlCheckbox" type="checkbox" checked="checked">
-                        <label for="ToggleHtmlCheckbox">HTML Mode</label>
-                    </div>
-                    <div class="ui toggle checkbox">
-                        @Html.CheckBox("IsDraftInputCheckbox", draft, new { @id = "IsDraftInputCheckbox", @data_entity = "is_draft" })
+                    <div class="ui checkbox">
+                        @Html.CheckBox("IsDraftInputCheckbox", draft, new {@id = "IsDraftInputCheckbox", @data_entity = "is_draft"})
                         <label for="IsDraftInputCheckbox">Draft</label>
                     </div>
-                    <div class="ui toggle checkbox">
-                        @Html.CheckBox("IsHomePageInputCheckbox", homePage, new { @id = "IsHomePageInputCheckbox", @data_entity = "is_homepage" })
+                    <div class="ui checkbox">
+                        @Html.CheckBox("IsHomePageInputCheckbox", homePage, new {@id = "IsHomePageInputCheckbox", @data_entity = "is_homepage"})
                         <label for="IsHomePageInputCheckbox">Home Page</label>
                     </div>
-                    <button class="ui button" id="SaveButton">Save</button>
-                    <a class="ui button" ng-href="../contents">Back</a>
+                    <div class="ui checkbox">
+                        @Html.CheckBox("IsMarkdownInputCheckbox", isMarkDown, new { @id = "IsMarkdownInputCheckbox" })
+                        <label for="IsMarkdownInputCheckbox">Is Markdown</label>
+                    </div>
+                </div>
+                <div class="ui basic buttons">
+                    <button class="ui basic button">Preview</button>
+                    <button class="ui basic button" id="SaveButton">Save</button>
+                    <a class="ui basic button" ng-href="../contents">Cancel</a>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
-<div class="ui attached segment" style="height: 100%;">
-    <div class="ui container">
-        <div class="error vpad8 initially hidden">
-            <div class="ui brown header">Error</div>
-            <div class="ui red bulleted list">
+            <div class="ui container">
+                <div class="error vpad8 initially hidden">
+                    <div class="ui brown header">Error</div>
+                    <div class="ui red bulleted list">
+                    </div>
+                    <div class="ui divider"></div>
+                </div>
             </div>
-            <div class="ui divider"></div>
+
         </div>
-        <div id="content" class="initially hidden">
-            <div data-editable="" data-name="main-content" data-entity="contents" required="" data-raw="true">
+        <div class="seven wide column" data-target="editor">
+            <div id="editor">
+            </div>
+        </div>
+        <div class="six wide column" style="height: 100%; overflow: auto;" data-target="preview">
+            <div id="content" class="body" data-entity="contents" data-raw="true">
                 @Html.Raw(content)
             </div>
         </div>
-        <div id="editor">
-        </div>
     </div>
 </div>
 
-
-<script src="/Scripts/contenttools/content-tools.min.js"></script>
 <script>
-    if (!String.prototype.repeat) {
-        String.prototype.repeat = function (count) {
-            'use strict';
-            if (this == null) {
-                throw new TypeError('can\'t convert ' + this + ' to object');
-            }
-            var str = '' + this;
-            count = +count;
-            if (count != count) {
-                count = 0;
-            }
-            if (count < 0) {
-                throw new RangeError('repeat count must be non-negative');
-            }
-            if (count == Infinity) {
-                throw new RangeError('repeat count must be less than infinity');
-            }
-            count = Math.floor(count);
-            if (str.length == 0 || count == 0) {
-                return '';
-            }
-            // Ensuring count is a 31-bit integer allows us to heavily optimize the
-            // main part. But anyway, most current (August 2014) browsers can't handle
-            // strings 1 << 28 chars or longer, so:
-            if (str.length * count >= 1 << 28) {
-                throw new RangeError('repeat count must not overflow maximum string size');
-            }
-            var rpt = '';
-            for (; ;) {
-                if ((count & 1) == 1) {
-                    rpt += str;
-                }
-                count >>>= 1;
-                if (count == 0) {
-                    break;
-                }
-                str += str;
-            }
-            return rpt;
-        }
-    }
-</script>
-<script>
-    var toggleHtmlCheckbox = $("#ToggleHtmlCheckbox");
-    function initializeEditor() {
-        var editor = window.ContentTools.EditorApp.get();
-        editor.init('*[data-editable]', 'data-name');
-
-        $('.ct-ignition__button--edit').click(function () {
-            toggleHtmlCheckbox.attr("disabled", "disabled");
-        });
-        $('.ct-ignition__button--cancel,.ct-ignition__button--confirm').click(function () {
-            toggleHtmlCheckbox.removeAttr("disabled");
-        });
-    };
-
+    window.overridePath = "/dashboard/website/contents";
+    $(".dropdown").dropdown();
     function initializeAceEditor() {
-        var html = $("#content").html();
-
-        if (window.tidy_html5) {
-            html = window.tidy_html5(html, { "show-body-only": true, "indent": "auto", "indent-spaces": 2, "show-info": false, "show-warnings": false, "show-errors": 0, "quiet": true });
+        if (!window.ace) {
+            return;
         };
 
-        html += "\r\n".repeat(10);
+        var html = $("#content").html();
+        var content = $("input[data-entity='markdown']").val();
+
+        if (!content) {
+            content = html;
+        };
 
         var editor = window.ace.edit("editor");
         editor.$blockScrolling = Infinity;
         $("#editor").removeClass("initially, hidden");
         editor.setTheme("ace/theme/ambience");
-        editor.getSession().setMode("ace/mode/html");
-        editor.setValue(html);
+        editor.getSession().setMode("ace/mode/xml");
+        editor.setValue(content);
 
         editor.on('input', function () {
-            html = editor.getSession().getValue();
-            $("#content").html(html);
+            displayContent();
         });
     };
 
-
-    toggleHtmlCheckbox.change(function () {
-        var el = $(this);
-        var state = el.is(":checked");
-        var ctApp = $(".ct-app");
-        var html;
-
-        var editor = window.ace.edit("editor");
-        editor.$blockScrolling = Infinity;
-
-        if (state) {
-            html = $("#content").html();
-            if (window.tidy_html5) {
-                html = window.tidy_html5(html, { "show-body-only": true, "indent": "auto", "indent-spaces": 2, "show-info": false, "show-warnings": false, "show-errors": 0, "quiet": true });
-            };
-
-            html += "\r\n".repeat(10);
-
-            ctApp.addClass("initially hidden");
-            $("#editor").removeClass("initially, hidden");
-            editor.setTheme("ace/theme/ambience");
-            editor.getSession().setMode("ace/mode/html");
-            editor.setValue(html);
-
-            editor.on('input', function () {
-                html = editor.getSession().getValue();
-                $("#content").html(html);
-            });
+    function appendTag(select, text, value, selected) {
+        if (select.find("option[value='" + value + "']").length) {
             return;
         };
 
-        html = editor.getSession().getValue();
-        $("#content").removeClass("initially, hidden").html(html);
+        var option = $("<option />");
+        if (selected) {
+            option.attr("selected", "selected");
+        };
 
-        ctApp.removeClass("initially, hidden");
-        $("#editor").addClass("initially hidden");
-        initializeEditor();
+        option.attr("value", value);
+
+
+        option.html(text);
+        select.append(option);
+    };
+
+    $(".tag.dropdown input.search").keyup(function (e) {
+        if (e.keyCode === 188) {
+            var val = $(this).val();
+
+            appendTag($("#TagsSelect"), val, val, true);
+        };
     });
+
+
+    function displayContent() {
+        var editor = window.ace.edit("editor");
+        var isMarkdown = $("#IsMarkdownInputCheckbox").is(":checked");
+        var contents = editor.getSession().getValue();
+
+        if (isMarkdown) {
+            $("input[data-entity='markdown']").val(contents);
+        };
+
+        var html;
+
+        if (isMarkdown) {
+            html = window.marked(contents);
+            $("#content").html(html);
+            return;
+        };
+
+        html = contents;
+        $("#content").html(html);
+    };
 </script>
 
 <script>
+    function initalizeSelectApis() {
+        var candidates = $("select[data-api]");
+
+        candidates.each(function () {
+            var el = $(this);
+            var apiUrl = el.attr("data-api");
+            var valueField = el.attr("data-api-value-field");
+            var keyField = el.attr("data-api-key-field");
+
+            window.ajaxDataBind(apiUrl, el, null, null, null, function () {
+                var selectedValue = el.attr("data-api-selected-value");
+                var selectedValues = el.attr("data-api-selected-values");
+
+                if (selectedValue) {
+                    setTimeout(function () {
+                        el.dropdown("set selected", selectedValue.toString());
+                    }, 100);
+                };
+
+                if (selectedValues) {
+                    setTimeout(function () {
+                        var values = selectedValues.split(",");
+                        el.dropdown("set selected", values);
+                    }, 100);
+                };
+
+
+            }, keyField, valueField);
+        });
+    };
+
     var entityParser = {
         attribute: "data-entity",
         validationSummary: ".error .bulleted.list",
@@ -286,6 +315,15 @@
                 };
 
                 break;
+            case "select":
+                if (el.attr("multiple")) {
+                    value = el.val().join(",");
+                } else {
+                    value = el.val();
+                    value = parseValue(value, el.parent().attr("class"));
+                };
+
+                break;
             };
 
             return value;
@@ -299,6 +337,12 @@
 
             dataEntities.each(function () {
                 var el = $(this);
+                var label = el.siblings("label").text();
+
+                if (el.is("select")) {
+                    label = el.parent().parent().find("label").text();
+                };
+
                 var name = el.attr(attribute);
                 var raw = el.attr("data-raw");
                 var val = entityParser.getValue(el, raw);
@@ -308,7 +352,7 @@
 
                 if (required && !val) {
                     valid = false;
-                    invalidItems.push(name);
+                    invalidItems.push(label);
                 };
             });
 
@@ -330,17 +374,19 @@
         }
     };
 </script>
+
+
 <script>
 
-    $('[data-entity="title"]').keyup(function() {
+    $('[data-entity="title"]').keyup(function () {
         function getAlias(title) {
-            return title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+            return title.toLowerCase().replace(/ +(?= )/g, '').replace(/ /g, '-').replace(/[^\w-]+/g, '');
         };
 
         $('[data-entity="alias"]').val(getAlias($(this).val()));
     });
 
-    $("#SaveButton").click(function() {
+    $("#SaveButton").click(function () {
         function request(model) {
             var url = "/api/website/content/add-or-edit";
             var form = [];
@@ -348,7 +394,6 @@
             form.push(null);
 
             var data = JSON.stringify(form);
-
             return window.getAjaxRequest(url, "POST", data);
         };
 
@@ -364,7 +409,7 @@
         var ajax = request(model);
 
 
-        ajax.success(function() {
+        ajax.success(function () {
             location.href = "../contents";
         });
 
@@ -372,6 +417,22 @@
 </script>
 <script>
     $(document).ready(function () {
+        initalizeSelectApis();
         initializeAceEditor();
     });
+
+    function maximize(target, width) {
+        var items = $("[data-target]");
+        var el = $("[data-target=" + target + "]");
+        items.hide();
+
+        if (!el.hasClass('thirteen wide')) {
+            el.removeClass(width).addClass('thirteen wide');
+            el.fadeIn();
+            return;
+        };
+
+        el.removeClass('thirteen wide').addClass(width);
+        items.fadeIn();
+    };
 </script>

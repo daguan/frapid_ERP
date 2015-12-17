@@ -50,7 +50,7 @@
                 case "float":
                 case "double":
                 case "decimal":
-                    val = parseFloat(val) || null;
+                    val = parseFloat(val || null);
                     break;
                 default:
                     val = val.toString().trim();

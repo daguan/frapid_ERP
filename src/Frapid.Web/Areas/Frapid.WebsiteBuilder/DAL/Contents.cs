@@ -3,53 +3,52 @@ using System.Collections.Generic;
 using System.Linq;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
-using Frapid.NPoco;
+using Frapid.Framework.Extensions;
+using Frapid.WebsiteBuilder.Entities;
 
 namespace Frapid.WebsiteBuilder.DAL
 {
     public class Contents
     {
-        public static IEnumerable<Entities.Content> GetContents()
+        public static IEnumerable<Content> GetContents()
         {
-            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
             {
-                return db.FetchBy<Entities.Content>(sql => sql.Where(c => c.IsHomepage));
+                return db.FetchBy<Content>(sql => sql.Where(c => c.IsHomepage));
             }
         }
 
-        public static Entities.Content Get(int contentId)
+        public static Content Get(int contentId)
         {
-            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
             {
-                return db.FetchBy<Entities.Content>(sql => sql
+                return db.FetchBy<Content>(sql => sql
                     .Where(c => c.ContentId == contentId))
                     .FirstOrDefault();
             }
         }
 
-        public static Entities.Content GetPublished(string alias)
+        public static PublishedContentView GetPublished(string categoryAlias, string alias)
         {
             if (string.IsNullOrWhiteSpace(alias))
             {
                 return GetDefault();
             }
 
-            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
             {
-                return db.FetchBy<Entities.Content>(sql => sql
-                    .Where(c => c.Alias.ToLower().Equals(alias))
-                    .Where(c => c.PublishOn <= DateTime.Now)
-                    .Where(c => !c.IsDraft))
+                return db.FetchBy<PublishedContentView>(sql => sql
+                    .Where(c => c.Alias.ToLower().Equals(alias.ToLower()))
+                    .Where(c => c.CategoryAlias.ToLower().Equals(categoryAlias.ToLower())))
                     .FirstOrDefault();
             }
         }
 
-        public static Entities.Content GetDefault()
+        public static PublishedContentView GetDefault()
         {
-            using (Database db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase()
-                )
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
             {
-                return db.FetchBy<Entities.Content>(sql => sql.Where(c => c.IsHomepage)).FirstOrDefault();
+                return db.FetchBy<PublishedContentView>(sql => sql.Where(c => c.IsHomepage == true).Limit(1)).FirstOrDefault();
             }
         }
     }

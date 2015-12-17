@@ -36,7 +36,7 @@ namespace Frapid.WebsiteBuilder
 
         public static string Get(string key)
         {
-            var path = GetWebsiteBuilderPath() + "/" + ConfigFile;
+            string path = GetWebsiteBuilderPath() + "/" + ConfigFile;
             return ConfigurationManager.ReadConfigurationValue(path, key);
         }
     }

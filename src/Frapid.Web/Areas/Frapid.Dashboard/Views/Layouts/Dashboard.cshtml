@@ -15,7 +15,7 @@
     <script src="~/bundles/backend.js"></script>
     <script src="~/Scripts/frapid/utitlities/validator.js"></script>
     <script src="/Scripts/angular-route.min.js"></script>
-    <style>
+    <style>        
         #PhoneMenu a {
             display: block !important;
             text-align: center !important;
@@ -58,37 +58,51 @@
                 min-width: 30vw;
             }
 
-            .hidden, .initially.hidden {
-                display: none;
-            }
-    html, body, div, p, table, td, th {
-        font-size: 12px;
-    }
-    
-    label, .ui.toggle.checkbox label {
-        cursor:pointer;
-    }
+        .hidden, .initially.hidden {
+            display: none;
+        }
+
+        html, body, div, p, table, td, th {
+            font-size: 12px;
+        }
+
+        label, .ui.toggle.checkbox label {
+            cursor: pointer;
+        }
+        
+        .dashboard.menu {
+            height:32px;
+        }
+        
+        input[readonly], input[disabled], textarea[readonly], textarea[disabled], select[readonly], select[disabled] {
+            background-color: #f0f0f0 !important;
+            cursor: not-allowed;
+        }
+        
+        
     </style>
 </head>
 <body>
-<div class="ui attached basic small inverted violet menu">
-    <a class="item" data-ng-click="toogleDashboard();">
-        <i class="mini pin icon"></i>
-    </a>
-    <div class="right stackable menu">
-        <a class="item" href="/" target="_blank" title="Go to Website">
-            <i class="mini world icon"></i>
+    <div class="ui attached basic small inverted violet stackable dashboard menu">
+        <a class="item" data-ng-click="toogleDashboard();">
+            <i class="mini pin icon"></i>
         </a>
-        <a class="item">
-            <i class="mini mail icon"></i>
-        </a>
-        <a class="item" href="/account/sign-out" target="_self">
-            <i class="mini log out icon"></i>
-        </a>
+        <div class="ui container" data-target="app-menus">
+        </div>
+        <div class="right stackable menu">
+            <a class="item" href="/" target="_blank" title="Go to Website">
+                <i class="mini world icon"></i>
+            </a>
+            <a class="item">
+                <i class="mini mail icon"></i>
+            </a>
+            <a class="item" href="/account/sign-out" target="_self">
+                <i class="mini log out icon"></i>
+            </a>
+        </div>
     </div>
-</div>
-<div id="dashboard-container" class="ui basic attached segment" style="background-color: #E8E8E8; height: 100%;">
-    <script>
+    <div id="dashboard-container" class="ui basic attached segment" style="background-color: #E8E8E8; height: 100%;">
+        <script>        
         $.getJSON("/dashboard/meta", function (response) {
             window.meta = response;
             window.culture = meta.Culture;
@@ -113,86 +127,174 @@
             window.datepickerNumberOfMonths = meta.DatepickerNumberOfMonths;
         });
 
-    </script>
-    <script>
-        var viewPath = "@ViewBag.ViewPath";
-        var lastPage;
-        var frapidApp = angular.module('FrapidApp', ['ngRoute']);
+        </script>
+        <script>
+            var viewPath = "@ViewBag.ViewPath";
+            var lastPage;
+            var frapidApp = angular.module('FrapidApp', ['ngRoute']);
 
 
 
+            frapidApp.config(function ($routeProvider, $locationProvider, $httpProvider) {            
+                $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
 
-
-        frapidApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
-            $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
-
-            $locationProvider.html5Mode({
-                enabled: true,
-                requireBase: false
-            });
-
-
-            $routeProvider.
-                when('/dashboard', {
-                    templateUrl: "/dashboard/apps"
-                }).
-                when('/dashboard/:url*', {
-                    templateUrl: function (url) {
-                        var path = '/dashboard/' + url.url;
-
-
-                        var qs = [];
-
-                        for (var q in url) {
-                            if (url.hasOwnProperty(q)) {
-                                if (q === "url") {
-                                    continue;;
-                                };
-
-                                if (url.hasOwnProperty(q)) {
-                                    qs.push(q + "=" + url[q]);
-                                };
-                            }
-                        };
-
-                        if (qs.length) {
-                            path = path + "?" + qs.join("&");
-                        };
-
-                        return path;
-                    }
+                $locationProvider.html5Mode({
+                    enabled: true,
+                    requireBase: false
                 });
-        });
 
 
-        frapidApp.run(function ($rootScope, $location) {
-            $rootScope.$on('$locationChangeStart', function (e, n, o) {
+                $routeProvider.
+                    when('/dashboard', {
+                        templateUrl: "/dashboard/apps"
+                    }).
+                    when('/dashboard/:url*', {
+                        templateUrl: function (url) {
+                            var path = '/dashboard/' + url.url;
+
+
+                            var qs = [];
+
+                            for (var q in url) {
+                                if (url.hasOwnProperty(q)) {
+                                    if (q === "url") {
+                                        continue;;
+                                    };
+
+                                    if (url.hasOwnProperty(q)) {
+                                        qs.push(q + "=" + url[q]);
+                                    };
+                                }
+                            };
+
+                            if (qs.length) {
+                                path = path + "?" + qs.join("&");
+                            };
+
+                            return path;
+                        }
+                    });
             });
+            
+            frapidApp.run(function ($rootScope, $location) {
+                $rootScope.$on('$locationChangeStart', function (e, n, o) {
+                    window.overridePath = null;
+                });
 
-            $rootScope.$on('$routeChangeStart', function () {
-                $("#dashboard-container").addClass("loading");
-            });
-            $rootScope.$on('$routeChangeSuccess', function () {
-                $("#dashboard-container").removeClass("loading");
-            });
+                $rootScope.$on('$routeChangeStart', function () {
+                    $("#dashboard-container").addClass("loading");
+                });
+                $rootScope.$on('$routeChangeSuccess', function () {
+                    $("#dashboard-container").removeClass("loading");
+                    buildMenus();
+                });
 
-            $rootScope.toogleDashboard = function () {
-                if (window.location.pathname !== "/dashboard") {
-                    lastPage = window.location.pathname;
-                    $location.path("/dashboard");
-                } else {
-                    if (lastPage) {
-                        $location.path(lastPage);
+                $rootScope.toogleDashboard = function () {
+                    if (window.location.pathname !== "/dashboard") {
+                        lastPage = window.location.pathname;
+                        $location.path("/dashboard");
+                    } else {
+                        if (lastPage) {
+                            $location.path(lastPage);
+                        };
+                    };
+
+                };
+            });
+        </script>
+        <script>
+        var menuBuilder = {
+            build: function (app, container, menuId) {
+                var myMenus = window.Enumerable.From(window.appMenus)
+                    .Where(function (x) { return x.AppName === app; })
+                    .Where(function (x) { return x.ParentMenuId === menuId; })
+                    .OrderBy(function (x) { return x.Sort; })
+                    .ToArray();
+
+                var isSubMenu = menuId != null && myMenus.length > 0;
+
+                if (isSubMenu) {
+                    if (container.hasClass("item")) {
+                        container.addClass("ui dropdown");
+                        container.append('<i class="dropdown icon"></i>');
+                        container.append("<div class='sub menu' />");
                     };
                 };
 
-            };
-        });
-    </script>
+                $.each(myMenus, function () {
+                    var anchor = $("<a />");
+                    var span = $("<span/>");
+                    anchor.addClass("item");
+                    anchor.attr("data-menu-id", this.MenuId);
+                    anchor.attr("data-app-name", this.AppName);
+                    anchor.attr("data-parent-menu-id", this.ParentMenuId);
+                    anchor.attr("href", this.Url || "javascript:void(0);");
 
-    <div data-ng-view>
-        @RenderBody()
+                    span.html(this.MenuName);
+
+                    if (this.Icon) {
+                        var i = $("<i/>");
+                        i.addClass(this.Icon);
+                        i.addClass("icon");
+
+                        anchor.append(i);
+                    };
+
+                    anchor.append(span);
+
+                    if (isSubMenu) {
+                        container.find(".sub.menu").append(anchor);
+                    } else {
+                        container.append(anchor);
+                    };
+
+
+                    window.menuBuilder.build(app, anchor, this.MenuId);
+                });
+            }
+        };
+        </script>
+        <script>
+            function buildMenus(){
+                setTimeout(function(){
+                    var target = $('[data-target="app-menus"]').html("");
+                    var path = window.overridePath || window.location.pathname;
+                    if (window.menuBuilder) {
+                        var application = window.Enumerable.From(window.appMenus)
+                            .Where(function(x) { return x.Url === path; })
+                            .FirstOrDefault();
+
+                        if (application) {
+                            window.menuBuilder.build(application.AppName, target, null);
+                            $(".dropdown").dropdown();
+                        };
+                    };
+                    
+                    target.fadeIn(200);
+                }, 500);
+            };
+            
+            (function () {                
+                function loadMenus() {
+                    function request() {
+                        var url = "/api/config/menu/all";
+                        return window.getAjaxRequest(url);
+                    };
+
+                    var ajax = request();
+
+                    ajax.success(function (response) {
+                        window.appMenus = response;
+                        buildMenus();
+                    });
+                };
+
+                loadMenus();
+            })();
+        </script>
+        <div data-ng-view>
+            @RenderBody()
+        </div>
     </div>
-</div>
 </body>
 </html>

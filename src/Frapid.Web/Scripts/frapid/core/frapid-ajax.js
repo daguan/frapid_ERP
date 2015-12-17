@@ -21,16 +21,6 @@ var getData = function (data) {
 };
 
 
-var appendItem = function (dropDownList, value, text, selected) {
-    var option = $("<option></option>");
-    option.val(value).html(text).trigger('change');
-
-    if (selected) {
-        option.attr("selected", true);
-    };
-
-    dropDownList.append(option);
-};
 
 var getAjax = function (url, data) {
     var ajax;
@@ -101,8 +91,8 @@ var ajaxUpdateVal = function (url, data, targetControls) {
             $(this).val(msg.d).trigger('change');
         });
 
-        if (typeof ajaxUpdateValCallback == "function") {
-            ajaxUpdateValCallback(targetControls);
+        if (typeof window.ajaxUpdateValCallback == "function") {
+            window.ajaxUpdateValCallback(targetControls);
         };
     });
 
@@ -111,8 +101,19 @@ var ajaxUpdateVal = function (url, data, targetControls) {
     });
 };
 
-jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, dataValueField, dataTextField, isArray) {
+jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, keyField, valueField, isArray) {
     "use strict";
+    function appendItem(dropDownList, value, text, selected) {
+        var option = $("<option></option>");
+        option.val(value).html(text).trigger('change');
+
+        if (selected) {
+            option.attr("selected", true);
+        };
+
+        dropDownList.append(option);
+    };
+
     var selected;
 
     var targetControl = $(this);
@@ -126,18 +127,18 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, dataValu
 
     if (!skipSelect) {
         appendItem(targetControl, "", window.Resources.Titles.Select());
-    }
-
-    if (!dataValueField) {
-        dataValueField = "Value";
     };
 
-    if (!dataTextField) {
-        dataTextField = "Text";
+    if (!keyField) {
+        keyField = "Value";
     };
 
-    var valueIsExpression = dataValueField.substring(2, 0) === "{{" && dataValueField.slice(-2) === "}}";
-    var textIsExpression = dataTextField.substring(2, 0) === "{{" && dataTextField.slice(-2) === "}}";
+    if (!valueField) {
+        valueField = "Text";
+    };
+
+    var valueIsExpression = keyField.substring(2, 0) === "{{" && keyField.slice(-2) === "}}";
+    var textIsExpression = valueField.substring(2, 0) === "{{" && valueField.slice(-2) === "}}";
 
     $.each(ajaxData, function () {
         var text;
@@ -157,17 +158,17 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, dataValu
             var expression;
 
             if (textIsExpression) {
-                expression = dataTextField.replace("{{", "").replace("}}", "");
+                expression = valueField.replace("{{", "").replace("}}", "");
                 text = eval(expression);
             } else {
-                text = this[dataTextField].toString();
+                text = this[valueField].toString();
             };
 
             if (valueIsExpression) {
-                expression = dataValueField.replace("{{", "").replace("}}", "");
+                expression = keyField.replace("{{", "").replace("}}", "");
                 value = eval(expression);
             } else {
-                value = this[dataValueField].toString();
+                value = this[keyField].toString();
             };
         };
 
@@ -181,7 +182,18 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, dataValu
     });
 };
 
-var ajaxDataBind = function (url, targetControl, data, selectedValue, associatedControl, callback, dataValueField, dataTextField, isArray) {
+var ajaxDataBind = function (url, targetControl, data, selectedValue, associatedControl, callback, keyField, valueField, isArray) {
+    function appendItem(dropDownList, value, text, selected) {
+        var option = $("<option></option>");
+        option.val(value).html(text).trigger('change');
+
+        if (selected) {
+            option.attr("selected", true);
+        };
+
+        dropDownList.append(option);
+    };
+
     var isWebApiRequest = url.substring(5, 0) === "/api/";
     var isProcedure = url.slice(-7) === "execute";
 
@@ -219,12 +231,12 @@ var ajaxDataBind = function (url, targetControl, data, selectedValue, associated
         };
 
         if (targetControl.length === 1) {
-            targetControl.bindAjaxData(result, false, selectedValue, dataValueField, dataTextField, isArray);
+            targetControl.bindAjaxData(result, false, selectedValue, keyField, valueField, isArray);
         };
 
         if (targetControl.length > 1) {
             targetControl.each(function () {
-                $(this).bindAjaxData(result, false, selectedValue, dataValueField, dataTextField, isArray);
+                $(this).bindAjaxData(result, false, selectedValue, keyField, valueField, isArray);
             });
         };
 
@@ -232,8 +244,8 @@ var ajaxDataBind = function (url, targetControl, data, selectedValue, associated
             associatedControl.val(selectedValue).trigger('change');
         };
 
-        if (typeof ajaxDataBindCallBack === "function") {
-            ajaxDataBindCallBack(targetControl);
+        if (typeof window.ajaxDataBindCallBack === "function") {
+            window.ajaxDataBindCallBack(targetControl);
         };
 
         if (typeof callback === "function") {

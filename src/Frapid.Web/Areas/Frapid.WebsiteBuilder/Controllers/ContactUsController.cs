@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
 using Frapid.WebsiteBuilder.DAL;
-using Frapid.WebsiteBuilder.Entities;
 using Frapid.WebsiteBuilder.ViewModels;
 
 namespace Frapid.WebsiteBuilder.Controllers
@@ -17,8 +15,8 @@ namespace Frapid.WebsiteBuilder.Controllers
         [AllowAnonymous]
         public ActionResult Index(string alias = "")
         {
-            ContactUs model = new ContactUs();
-            IEnumerable<Contact> contacts = Contacts.GetContacts();
+            var model = new ContactUs();
+            var contacts = Contacts.GetContacts();
             model.Contacts = contacts;
 
             Session[TokenKey] = model.Token;

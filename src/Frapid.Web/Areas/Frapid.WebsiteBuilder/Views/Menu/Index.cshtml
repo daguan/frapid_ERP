@@ -1,0 +1,72 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Menus";
+    Layout = ViewBag.Layout;
+}
+
+<script>
+    var scrudFactory = new Object();
+
+    scrudFactory.title = "Menus";
+
+    scrudFactory.viewAPI = "/api/website/menu";
+    scrudFactory.viewTableName = "website.menus";
+
+    scrudFactory.formAPI = "/api/website/menu";
+    scrudFactory.formTableName = "website.menus";
+
+    scrudFactory.disabledOnEdit = ["AuthorId"];
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+
+    scrudFactory.live = "MenuName";
+
+    scrudFactory.layout = [
+        {
+            tab: "",
+            fields: [
+                ["MenuId", ""],
+                ["MenuName", ""],
+                ["Description", ""]
+            ]
+        }
+    ];
+
+    scrudFactory.card = {
+        header: "MenuName",
+        description: "Description"
+    };
+
+    scrudFactory.customActions = [
+        {
+
+            title: "Menu Items",
+            href: "/dashboard/website/menus/items?MenuId={id}&TitleSuffix={col:4}",
+            icon: "list icon",
+            position: "before"
+        }
+    ];
+</script>
+
+
+<div data-ng-include="'/ScrudFactory/View.html'"></div>
+<div data-ng-include="'/ScrudFactory/Form.html'"></div>
+
+<script>
+    $(document).on("formready", function() {
+        $("#category_name").keyup(function() {
+            function getAlias(title) {
+                return title.toLowerCase().replace(/ +(?= )/g, '').replace(/ /g, '-').replace(/[^\w-]+/g, '');
+            };
+
+            var category = $(this).val();
+            var alias = getAlias(category);
+
+            $("#alias").val(alias);
+
+        });
+    });
+</script>

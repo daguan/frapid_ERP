@@ -15,7 +15,5 @@ namespace Frapid.DataAccess.Models
         public int FilterCondition { get; set; }
         public object FilterValue { get; set; }
         public object FilterAndValue { get; set; }
-        public int? AuditUserId { get; set; }
-        public DateTime? AuditTs { get; set; }
     }
 }

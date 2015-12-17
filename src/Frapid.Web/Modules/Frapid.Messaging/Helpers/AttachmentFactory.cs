@@ -9,7 +9,7 @@ namespace Frapid.Messaging.Helpers
     {
         public static List<Attachment> GetAttachments(params string[] files)
         {
-            List<Attachment> attachments = new List<Attachment>();
+            var attachments = new List<Attachment>();
 
             if (files != null)
             {
@@ -17,9 +17,9 @@ namespace Frapid.Messaging.Helpers
                 {
                     if (!string.IsNullOrWhiteSpace(file))
                     {
-                        using (Attachment attachment = new Attachment(file, MediaTypeNames.Application.Octet))
+                        using (var attachment = new Attachment(file, MediaTypeNames.Application.Octet))
                         {
-                            ContentDisposition disposition = attachment.ContentDisposition;
+                            var disposition = attachment.ContentDisposition;
                             disposition.CreationDate = File.GetCreationTime(file);
                             disposition.ModificationDate = File.GetLastWriteTime(file);
                             disposition.ReadDate = File.GetLastAccessTime(file);

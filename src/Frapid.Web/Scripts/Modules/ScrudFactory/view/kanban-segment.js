@@ -1,5 +1,5 @@
 ﻿var kanbanTemplate = '<div id="kanban{KanbanId}" class="ui segment">\
-                    <span class="ui teal left large label" data-kanban-id="{KanbanId}" title="{Description}">{KanbanName}</span>\
+                    <span class="ui violet left large label" data-kanban-id="{KanbanId}" title="{Description}">{KanbanName}</span>\
                     <div class="ui right floated tiny basic icon buttons">\
                         <a title="{AddNewCheckListLocalized}" class="ui basic button" href="javascript:void(0);" onclick="addKanban();"><i class="add icon"></i></a>\
                         <a title="{EditThisCheckListLocalized}" class="ui basic button" href="javascript:void(0);" onclick="editKanban(this);"><i class="edit icon"></i></a>\

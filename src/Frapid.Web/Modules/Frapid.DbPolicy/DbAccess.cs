@@ -25,7 +25,7 @@ namespace Frapid.DbPolicy
         /// </param>
         public void Validate(AccessTypeEnum type, long loginId, string catalog, bool noException)
         {
-            PolicyValidator policy = new PolicyValidator
+            var policy = new PolicyValidator
             {
                 ObjectNamespace = _ObjectNamespace,
                 ObjectName = _ObjectName,

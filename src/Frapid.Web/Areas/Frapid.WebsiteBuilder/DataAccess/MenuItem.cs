@@ -374,7 +374,7 @@ namespace Frapid.WebsiteBuilder.DataAccess
                 }
             }
 
-            const string sql = "SELECT menu_item_id AS key, menu_item_id as value FROM website.menu_items;";
+            const string sql = "SELECT menu_item_id AS key, title as value FROM website.menu_items;";
             using (NpgsqlCommand command = new NpgsqlCommand(sql))
             {
                 using (DataTable table = DbOperation.GetDataTable(this._Catalog, command))

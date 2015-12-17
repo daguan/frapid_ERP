@@ -374,7 +374,7 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            const string sql = "SELECT queue_id AS key, queue_id as value FROM config.email_queue;";
+            const string sql = "SELECT queue_id AS key, from_name as value FROM config.email_queue;";
             using (NpgsqlCommand command = new NpgsqlCommand(sql))
             {
                 using (DataTable table = DbOperation.GetDataTable(this._Catalog, command))

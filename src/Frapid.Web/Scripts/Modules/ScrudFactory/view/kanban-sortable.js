@@ -25,7 +25,7 @@
                 var card = $(ui.item[0]);
 
                 var kanbanDetail = new Object();
-                kanbanDetail.kanban_detail_id = (card.attr("data-kanban-detail-id") || 0);
+                kanbanDetail.kanban_detail_id = parseInt(card.attr("data-kanban-detail-id") || 0);
                 kanbanDetail.kanban_id = parseInt(card.parent().parent().attr("id").replace("kanban", "") || 0);
                 kanbanDetail.rating = card.find(".rating .active.icon").length;
                 kanbanDetail.resource_id = card.attr("data-key");

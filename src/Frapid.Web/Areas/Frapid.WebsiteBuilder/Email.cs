@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
-using System.Web.Mvc;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;
 using Frapid.Messaging.Helpers;
@@ -25,16 +24,16 @@ namespace Frapid.WebsiteBuilder
 
         private string GetMessage(string catalog, ContactForm model)
         {
-            var fallback = model.Email + " wrote : <br/><br/>" + this.ConvertLines(model.Message);
+            string fallback = model.Email + " wrote : <br/><br/>" + this.ConvertLines(model.Message);
 
-            var file = HostingEnvironment.MapPath(string.Format(CultureInfo.InvariantCulture, TemplatePath, catalog));
+            string file = HostingEnvironment.MapPath(string.Format(CultureInfo.InvariantCulture, TemplatePath, catalog));
 
             if (file == null || !File.Exists(file))
             {
                 return fallback;
             }
 
-            var message = File.ReadAllText(file, Encoding.UTF8);
+            string message = File.ReadAllText(file, Encoding.UTF8);
 
             if (string.IsNullOrWhiteSpace(message))
             {
@@ -50,7 +49,7 @@ namespace Frapid.WebsiteBuilder
 
         private EmailQueue GetEmail(string catalog, ContactForm model)
         {
-            Config config = new Config(catalog);
+            var config = new Config(catalog);
 
             return new EmailQueue
             {
@@ -68,7 +67,7 @@ namespace Frapid.WebsiteBuilder
             try
             {
                 var email = this.GetEmail(catalog, model);
-                MailQueueManager manager = new MailQueueManager(catalog, email);
+                var manager = new MailQueueManager(catalog, email);
                 manager.Add();
 
                 await manager.ProcessMailQueueAsync(EmailProcessor.GetDefault());

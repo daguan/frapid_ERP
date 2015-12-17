@@ -1,0 +1,64 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Content Categories";
+    Layout = ViewBag.Layout;
+}
+
+<script>
+    var scrudFactory = new Object();
+
+    scrudFactory.title = "Content Categories";
+
+    scrudFactory.viewAPI = "/api/website/category";
+    scrudFactory.viewTableName = "website.categories";
+
+    scrudFactory.formAPI = "/api/website/category";
+    scrudFactory.formTableName = "website.categories";
+
+    scrudFactory.disabledOnEdit = ["AuthorId"];
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+
+    scrudFactory.live = "CategoryName";
+
+    scrudFactory.layout = [
+        {
+            tab: "",
+            fields: [
+                ["CategoryId", ""],
+                ["CategoryName", "Alias"],
+                ["SeoKeywords", "SeoDescription"]
+            ]
+        }
+    ];
+
+    scrudFactory.card = {
+        header: "CategoryName",
+        meta: "Alias",
+        description: "SeoDescription"
+    };
+
+</script>
+
+
+<div data-ng-include="'/ScrudFactory/View.html'"></div>
+<div data-ng-include="'/ScrudFactory/Form.html'"></div>
+
+<script>
+    $(document).on("formready", function() {
+        $("#category_name").keyup(function() {
+            function getAlias(title) {
+                return title.toLowerCase().replace(/ +(?= )/g, '').replace(/ /g, '-').replace(/[^\w-]+/g, '');
+            };
+
+            var category = $(this).val();
+            var alias = getAlias(category);
+
+            $("#alias").val(alias);
+
+        });
+    });
+</script>

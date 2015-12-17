@@ -33,8 +33,8 @@ namespace Frapid.ApplicationState.Cache
                 return;
             }
 
-            MetaLogin metaLogin = GetMetaLogin(globalLoginId);
-            Dictionary<string, object> dictionary = GetDictionary(metaLogin);
+            var metaLogin = GetMetaLogin(globalLoginId);
+            var dictionary = GetDictionary(metaLogin);
 
             CacheFactory.AddToDefaultCache("Dictionary" + key, dictionary);
             CacheFactory.AddToDefaultCache(key, metaLogin);
@@ -54,7 +54,7 @@ namespace Frapid.ApplicationState.Cache
 
         public static MetaLogin GetCurrent(long globalLoginId)
         {
-            MetaLogin login = new MetaLogin();
+            var login = new MetaLogin();
 
 
             if (globalLoginId != 0)
@@ -85,7 +85,7 @@ namespace Frapid.ApplicationState.Cache
         public static MetaLogin GetMetaLogin(long globalLoginId)
         {
             string sql = "SELECT * FROM public.frapid_logins WHERE global_login_id=@0;";
-            MetaLogin login = Factory.Get<MetaLogin>(Factory.MetaDatabase, sql, globalLoginId).FirstOrDefault();
+            var login = Factory.Get<MetaLogin>(Factory.MetaDatabase, sql, globalLoginId).FirstOrDefault();
 
             if (login == null)
             {
@@ -109,7 +109,7 @@ namespace Frapid.ApplicationState.Cache
 
         private static Dictionary<string, object> GetDictionary(MetaLogin metaLogin)
         {
-            Dictionary<string, object> dictionary = new Dictionary<string, object>();
+            var dictionary = new Dictionary<string, object>();
 
             if (metaLogin == null)
             {

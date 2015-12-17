@@ -6,11 +6,17 @@ namespace Frapid.WebsiteBuilder
 {
     public class ThemeConfiguration
     {
-        private const string DefaultDocumentKey = "DefaultDocument";
+        private const string DefaultLayout = "DefaultLayout";
+        private const string HomepageLayout = "HomepageLayout";
 
-        public static string GetDefaultDocument(string theme)
+        public static string GetLayout(string theme)
         {
-            return Get(theme, DefaultDocumentKey);
+            return Get(theme, DefaultLayout);
+        }
+
+        public static string GetHomepageLayout(string theme)
+        {
+            return Get(theme, HomepageLayout);
         }
 
         public static string Get(string theme, string key)

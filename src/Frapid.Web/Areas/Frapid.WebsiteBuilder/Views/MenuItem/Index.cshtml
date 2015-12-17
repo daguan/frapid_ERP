@@ -1,0 +1,86 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Menu Items";
+    Layout = ViewBag.Layout;
+}
+
+<script>
+    var scrudFactory = new Object();
+
+    scrudFactory.title = "Menu Items";
+
+    scrudFactory.viewAPI = "/api/website/menu-item";
+    scrudFactory.viewTableName = "website.menu_items";
+
+    scrudFactory.formAPI = "/api/website/menu-item";
+    scrudFactory.formTableName = "website.menu_items";
+
+    scrudFactory.disabledOnEdit = ["AuthorId"];
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+
+    scrudFactory.live = "Title";
+
+    scrudFactory.layout = [
+        {
+            tab: "",
+            fields: [
+                ["MenuItemId", ""],
+                ["MenuId", "Title"],
+                ["ContentId", ""],
+                ["Url", "Sort"]
+            ]
+        }
+    ];
+
+    scrudFactory.card = {
+        header: "Title",
+        description: "Url"
+    };
+
+    scrudFactory.back = {
+        Title: "Back to Menus",
+        Url: "/dashboard/website/menus"
+    };
+
+    scrudFactory.keys = [
+        {
+            property: "MenuId",
+            url: '/api/website/menu/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "ContentId",
+            url: '/api/website/content/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        }
+    ];
+
+</script>
+
+
+<div data-ng-include="'/ScrudFactory/View.html'"></div>
+<div data-ng-include="'/ScrudFactory/Form.html'"></div>
+
+<script>
+    $(document).on("formready", function () {
+        $("#category_name").keyup(function () {
+            function getAlias(title) {
+                return title.toLowerCase().replace(/ +(?= )/g, '').replace(/ /g, '-').replace(/[^\w-]+/g, '');
+            };
+
+            var category = $(this).val();
+            var alias = getAlias(category);
+
+            $("#alias").val(alias);
+
+        });
+    });
+</script>

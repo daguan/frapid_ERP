@@ -8,7 +8,7 @@ namespace Frapid.Messaging.Helpers
     {
         public Config(string catalog)
         {
-            Smtp smtp = GetSmtpConfig(catalog);
+            var smtp = GetSmtpConfig(catalog);
 
             if (smtp == null)
             {
@@ -40,7 +40,7 @@ namespace Frapid.Messaging.Helpers
 
         public static bool IsEnabled(string catalog)
         {
-            Smtp smtp = GetSmtpConfig(catalog);
+            var smtp = GetSmtpConfig(catalog);
 
             if (smtp == null)
             {
@@ -57,7 +57,7 @@ namespace Frapid.Messaging.Helpers
 
         private SecureString GetSmtpUserPassword(string password)
         {
-            SecureString secureString = new SecureString();
+            var secureString = new SecureString();
             foreach (char c in password)
             {
                 secureString.AppendChar(c);

@@ -6,9 +6,9 @@ namespace Frapid.Messaging
 {
     public static class EmailHelper
     {
-        public static EmailMessage GetMessage(EmailQueue mail)
+        public static EmailMessage GetMessage(Config config, EmailQueue mail)
         {
-            return new EmailMessage
+            var message = new EmailMessage
             {
                 FromName = mail.FromName,
                 FromEmail = mail.ReplyTo,
@@ -19,6 +19,15 @@ namespace Frapid.Messaging
                 EventDateUtc = DateTime.UtcNow,
                 Status = Status.Unknown
             };
+
+
+            if (string.IsNullOrWhiteSpace(message.FromEmail))
+            {
+                message.FromName = config.FromName;
+                message.FromEmail = config.FromEmail;
+            }
+
+            return message;
         }
 
         public static SmtpHost GetSmtpHost(Config config)

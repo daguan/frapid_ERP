@@ -38,6 +38,5 @@ namespace Frapid.WebsiteBuilder.Controllers
         {
             return MimeMapping.GetMimeMapping(fileName);
         }
-
     }
 }

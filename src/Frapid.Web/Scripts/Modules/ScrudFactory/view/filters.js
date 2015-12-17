@@ -1,4 +1,6 @@
-﻿$("#FilterName").text(window.Resources.Titles.Untitled());
+﻿var ignoredQueryStrings = ["TitleSuffix", "View"];
+
+$("#FilterName").text(window.Resources.Titles.Untitled());
 
 function getFilterName() {
     if ($("#DefaultFilterSelect").val()) {
@@ -10,10 +12,43 @@ function getFilterName() {
 };
 
 function getAjaxFilters(queryStrings) {
+    function getType(propertyName) {
+        var type = window.Enumerable.From(metaDefinition.Columns)
+            .Where(function (x) { return x.PropertyName === propertyName }).FirstOrDefault();
+
+        if (type) {
+            return type.DataType;
+        };
+
+        return "";
+    };
+
+    function parseValue(propertyName, value) {
+        var type = getType(propertyName);
+
+        if (type) {
+            switch (type) {
+                case "int":
+                case "short":
+                case "long":
+                    value = parseInt(value || null);
+                case "double":
+                case "decimal":
+                case "float":
+                    value = parseFloat(value || null);
+            };
+        };
+
+        return value;
+    };
+
     var filters = [];
 
-    $.each(queryStrings, function (index, value) {
-        filters.push(getAjaxColumnFilter("WHERE", toUnderscoreCase(value.key), 0, value.value));
+    $.each(queryStrings, function (index, item) {
+        if (ignoredQueryStrings.indexOf(item.key) === -1) {
+            var value = parseValue(item.key, item.value);
+            filters.push(getAjaxColumnFilter("WHERE", toUnderscoreCase(item.key), 0, value));
+        };
     });
 
     return filters;
@@ -21,13 +56,13 @@ function getAjaxFilters(queryStrings) {
 
 
 function loadFilterConditions() {
-    var el = $("#FilterConditionSelect");
+    var el = $('[data-scope="filter-condition"]');
     bindSelect(el, filterConditions, "value", "text");
     el.dropdown();
 };
 
 function loadColumns() {
-    var el = $("#ColumnSelect");
+    var el = $('[data-scope="column"]');
     el.html("");
     bindSelect(el, localizedHeaders, "columnName", "localized");
     el.dropdown();

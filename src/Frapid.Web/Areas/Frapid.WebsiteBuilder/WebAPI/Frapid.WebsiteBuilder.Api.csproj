@@ -119,26 +119,46 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CategoryController.cs" />
     <Compile Include="ContactController.cs" />
     <Compile Include="ContentController.cs" />
+    <Compile Include="Fakes\CategoryRepository.cs" />
     <Compile Include="Fakes\ContactRepository.cs" />
     <Compile Include="Fakes\ContentRepository.cs" />
+    <Compile Include="Fakes\GetCategoryIdByCategoryAliasRepository.cs" />
+    <Compile Include="Fakes\GetCategoryIdByCategoryNameRepository.cs" />
     <Compile Include="Fakes\MenuItemRepository.cs" />
     <Compile Include="Fakes\MenuItemViewRepository.cs" />
     <Compile Include="Fakes\MenuRepository.cs" />
+    <Compile Include="Fakes\PublishedContentViewRepository.cs" />
+    <Compile Include="Fakes\TagViewRepository.cs" />
+    <Compile Include="GetCategoryIdByCategoryAliasController.cs" />
+    <Compile Include="GetCategoryIdByCategoryNameController.cs" />
     <Compile Include="MenuItemController.cs" />
     <Compile Include="MenuItemViewController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublishedContentViewController.cs" />
+    <Compile Include="TagViewController.cs" />
+    <Compile Include="Tests\CategoryRouteTests.cs" />
+    <Compile Include="Tests\CategoryTests.cs" />
     <Compile Include="Tests\ContactRouteTests.cs" />
     <Compile Include="Tests\ContactTests.cs" />
     <Compile Include="Tests\ContentRouteTests.cs" />
     <Compile Include="Tests\ContentTests.cs" />
+    <Compile Include="Tests\GetCategoryIdByCategoryAliasRouteTests.cs" />
+    <Compile Include="Tests\GetCategoryIdByCategoryAliasTests.cs" />
+    <Compile Include="Tests\GetCategoryIdByCategoryNameRouteTests.cs" />
+    <Compile Include="Tests\GetCategoryIdByCategoryNameTests.cs" />
     <Compile Include="Tests\MenuItemRouteTests.cs" />
     <Compile Include="Tests\MenuItemTests.cs" />
     <Compile Include="Tests\MenuItemViewRouteTests.cs" />
     <Compile Include="Tests\MenuItemViewTests.cs" />
     <Compile Include="Tests\MenuRouteTests.cs" />
     <Compile Include="Tests\MenuTests.cs" />
+    <Compile Include="Tests\PublishedContentViewRouteTests.cs" />
+    <Compile Include="Tests\PublishedContentViewTests.cs" />
+    <Compile Include="Tests\TagViewRouteTests.cs" />
+    <Compile Include="Tests\TagViewTests.cs" />
     <Compile Include="WebsiteMenuController.cs" />
   </ItemGroup>
   <ItemGroup>

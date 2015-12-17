@@ -1,0 +1,134 @@
+.body, .body p, .body div, .story, footer, .body .button, .body .field, .body .field label, .body .field input, header .item {
+    font-family: "Pontano Sans", "Segoe UI", "Open Sans", "Myriad Set Pro","Lucida Grande","Helvetica Neue","Helvetica","Arial","Verdana","sans-serif"!important;
+    color:#808080;
+}
+
+.body h1, .body h2, .body h3, .body h4, .body h5, .body div.header, .body .header span {
+    font-family:"Josefin Sans", "Segoe UI", "Helvetica Neue","Helvetica","Arial","Verdana","sans-serif"!important;
+}
+
+
+header
+{
+    height:48px;
+}
+
+.logo
+{
+    padding-top:12px;
+}
+
+
+
+.fixed.menu .item{
+    font-size:12px;
+}
+
+.vertically.padded.segment{
+    padding-top:100px;
+    padding-bottom:100px;
+}
+
+.fixed.menu .item:hover
+{
+    background-color:#339900!important;
+    color:#FFFFFF!important;
+}
+
+
+section.body
+{
+    min-height:100%;
+    padding:20px 0 0 0;
+}
+
+section.body .segment .container
+{
+    padding:40px 12px;
+}
+
+#banner{
+    background: #0E1619 url("../images/banners/banner1.jpg") no-repeat scroll 50% 25% / cover;
+}
+
+#contact{
+    background: #FFFFFF url("../images/banners/banner2.jpg") no-repeat scroll 10% 25% / cover;
+    padding-top:200px;
+    min-height:800px;
+}
+
+.caption.container
+{
+    padding:256px 0!important;
+}
+
+
+.caption.container .header
+{
+    font-size:56px;
+}
+
+.caption.container *
+{
+    line-height:1.7em;
+}
+
+.story.container
+{
+    text-align:center;
+}
+
+.story.container .header
+{
+    font-size:36px;
+}
+
+.story.container .header span
+{
+    color:#339900;
+}
+
+.story.container .divider
+{
+    margin:0 auto;
+    width:200px;
+    padding:8px;
+}
+
+
+a:hover{
+    color:#339941;
+}
+
+.ad.icon
+{
+    width:25%;
+    float:left;
+}
+
+.ad.details
+{
+    width:75%;
+    float:right;
+}
+
+.ad.icon i
+{
+    font-size:26px;
+}
+
+footer
+{
+    background-color:#1B1C1D;
+}
+
+.footer{
+    color:#ECF1ED!important;
+}
+footer a {
+    color:#FFFFFF;
+}
+
+footer a:active, footer a:hover {
+    color:#FAD101;
+}

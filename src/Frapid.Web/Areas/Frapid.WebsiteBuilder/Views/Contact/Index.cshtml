@@ -1,0 +1,69 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Contacts";
+    Layout = ViewBag.Layout;
+}
+
+<script>
+    var scrudFactory = new Object();
+
+    scrudFactory.title = "Contacts";
+
+    scrudFactory.viewAPI = "/api/website/contact";
+    scrudFactory.viewTableName = "website.contacts";
+
+    scrudFactory.formAPI = "/api/website/contact";
+    scrudFactory.formTableName = "website.contacts";
+
+    scrudFactory.disabledOnEdit = ["AuthorId"];
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+
+    scrudFactory.live = "Title";
+
+    scrudFactory.layout = [
+        {
+            tab: "",
+            fields: [
+                ["ContactId", ""],
+                ["Title", "Name"],
+                ["Position", "Email"],
+                ["Address"],
+                ["City", "State"],
+                ["Country", "PostalCode"],
+                ["Telephone", ""],
+                ["Details"],
+            ]
+        }
+    ];
+
+    scrudFactory.card = {
+        header: "Title",
+        meta: "Name",
+        description: "Description"
+    };
+
+</script>
+
+
+<div data-ng-include="'/ScrudFactory/View.html'"></div>
+<div data-ng-include="'/ScrudFactory/Form.html'"></div>
+
+<script>
+    $(document).on("formready", function() {
+        $("#category_name").keyup(function() {
+            function getAlias(title) {
+                return title.toLowerCase().replace(/ +(?= )/g, '').replace(/ /g, '-').replace(/[^\w-]+/g, '');
+            };
+
+            var category = $(this).val();
+            var alias = getAlias(category);
+
+            $("#alias").val(alias);
+
+        });
+    });
+</script>

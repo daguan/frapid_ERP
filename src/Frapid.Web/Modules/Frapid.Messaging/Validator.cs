@@ -37,7 +37,7 @@ namespace Frapid.Messaging
         private string DomainMapper(Match match)
         {
             // IdnMapping class with default property values.
-            IdnMapping idn = new IdnMapping();
+            var idn = new IdnMapping();
 
             string domainName = match.Groups[2].Value;
             try

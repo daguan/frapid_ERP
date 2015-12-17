@@ -1,0 +1,15 @@
+@using Frapid.WebsiteBuilder.DAL
+
+<header class="ui fixed stackable basic menu">
+    <div class="ui container">
+        <a class="logo" href="/">
+            <img src="/my/template/images/frapid-logo.png" style="height:24px;" />
+        </a>
+        <div class="right menu">
+            @foreach (var item in Menus.GetMenuItems("Default"))
+            {
+                <a class="item" href="@item.Url">@item.Title</a>
+            }
+        </div>
+    </div>
+</header>

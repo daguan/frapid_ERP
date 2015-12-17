@@ -106,7 +106,7 @@
 
         if (!isValid) {
             if (typeof (oninvalid) === "function") {
-                oninvalid(field);
+                oninvalid(errorFields);
             };
         };
 

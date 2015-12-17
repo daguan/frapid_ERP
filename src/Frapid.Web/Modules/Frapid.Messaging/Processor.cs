@@ -26,9 +26,9 @@ namespace Frapid.Messaging
                 throw new ArgumentNullException(email.Message);
             }
 
-            string[] addresses = email.SentTo.Split(',');
+            var addresses = email.SentTo.Split(',');
 
-            foreach (Validator validator in addresses.Select(address => new Validator(address)))
+            foreach (var validator in addresses.Select(address => new Validator(address)))
             {
                 validator.Validate();
 
@@ -43,7 +43,7 @@ namespace Frapid.Messaging
             email.Status = Status.Executing;
 
 
-            using (MailMessage mail = new MailMessage(email.FromEmail, email.SentTo))
+            using (var mail = new MailMessage(email.FromEmail, email.SentTo))
             {
                 if (attachments != null)
                 {
@@ -53,9 +53,9 @@ namespace Frapid.Messaging
                         {
                             if (File.Exists(file))
                             {
-                                Attachment attachment = new Attachment(file, MediaTypeNames.Application.Octet);
+                                var attachment = new Attachment(file, MediaTypeNames.Application.Octet);
 
-                                ContentDisposition disposition = attachment.ContentDisposition;
+                                var disposition = attachment.ContentDisposition;
                                 disposition.CreationDate = File.GetCreationTime(file);
                                 disposition.ModificationDate = File.GetLastWriteTime(file);
                                 disposition.ReadDate = File.GetLastAccessTime(file);
@@ -71,8 +71,8 @@ namespace Frapid.Messaging
                 }
 
 
-                MailAddress sender = new MailAddress(email.FromEmail, email.FromName);
-                using (SmtpClient smtp = new SmtpClient(host.Address, host.Port))
+                var sender = new MailAddress(email.FromEmail, email.FromName);
+                using (var smtp = new SmtpClient(host.Address, host.Port))
                 {
                     smtp.DeliveryMethod = host.DeliveryMethod;
                     smtp.PickupDirectoryLocation = host.PickupDirectory;

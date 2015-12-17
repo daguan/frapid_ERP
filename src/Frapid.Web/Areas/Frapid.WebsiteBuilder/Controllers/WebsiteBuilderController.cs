@@ -11,7 +11,7 @@ namespace Frapid.WebsiteBuilder.Controllers
             string theme = GetTheme();
 
             ViewBag.LayoutPath = GetLayoutPath(theme);
-            ViewBag.Layout = GetDefaultDocument(theme);
+            ViewBag.Layout = this.GetLayout(theme);
         }
 
         protected string GetLayoutPath(string theme = "")
@@ -33,14 +33,24 @@ namespace Frapid.WebsiteBuilder.Controllers
             return Configuration.GetDefaultTheme();
         }
 
-        protected string GetDefaultDocument(string theme = "")
+        protected string GetLayout(string theme = "")
         {
             if (string.IsNullOrWhiteSpace(theme))
             {
                 theme = GetTheme();
             }
 
-            return ThemeConfiguration.GetDefaultDocument(theme);
+            return ThemeConfiguration.GetLayout(theme);
+        }
+
+        protected string GetHomepageLayout(string theme = "")
+        {
+            if (string.IsNullOrWhiteSpace(theme))
+            {
+                theme = GetTheme();
+            }
+
+            return ThemeConfiguration.GetHomepageLayout(theme);
         }
     }
 }
