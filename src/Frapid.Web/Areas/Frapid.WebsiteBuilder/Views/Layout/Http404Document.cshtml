@@ -1,0 +1,11 @@
+﻿@model Frapid.WebsiteBuilder.ViewModels.Layout
+
+@{
+    ViewBag.Title = "Edit Master Layout";
+    Layout = ViewBag.Layout;
+}
+
+<link href="/my/template/css/site.css" rel="stylesheet">
+<script src="/Scripts/ace-1.2.2/src-min-noconflict/ace.js"></script>
+
+@Html.Partial("~/Areas/Frapid.WebsiteBuilder/Views/Layout/Shared/Editor.cshtml")

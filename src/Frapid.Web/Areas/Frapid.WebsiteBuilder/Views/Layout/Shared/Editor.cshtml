@@ -1,0 +1,25 @@
+﻿@using Frapid.Framework.Extensions;
+@model Frapid.WebsiteBuilder.ViewModels.Layout
+
+<div class="ui stackable divided grid" style="height: 100%;">
+    <div class="ui three wide column segment">
+        <div class="ui header">
+            Editing @Model.Name
+        </div>
+        <div class="ui basic buttons">
+            <div class="ui basic button" id="SaveButton">Save</div>
+            <a class="ui basic button" href="javascript:history.go(-1)">Back</a>
+        </div>
+    </div>
+
+    <div class="thirteen wide column" data-target="editor" style="height: 100%;">
+        <div id="editor">
+        </div>
+    </div>
+</div>
+
+<script>
+    var type = @Model.Type;
+    var html = "@Html.Encode(HttpUtility.JavaScriptStringEncode(Model.Contents))";
+</script>
+<script src="~/Areas/Frapid.WebsiteBuilder/Scripts/Layout/Shared/Editor.js"></script>

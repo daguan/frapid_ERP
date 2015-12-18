@@ -7,7 +7,7 @@ namespace Frapid.WebsiteBuilder.Controllers
     {
         [Route("dashboard/website/categories")]
         [Authorize]
-        public ActionResult Index(string alias = "")
+        public ActionResult Index()
         {
             return this.FrapidView(this.GetRazorView<AreaRegistration>("Category/Index.cshtml"));
         }

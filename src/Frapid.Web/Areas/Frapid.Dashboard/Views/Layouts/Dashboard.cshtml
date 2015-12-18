@@ -79,7 +79,26 @@
             cursor: not-allowed;
         }
         
-        
+    #editor {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+
+
+    [data-ng-view], [ng-view] {
+        height: 100%;
+    }
+
+    .vpad8 {
+        padding: 8px 0;
+    }
+
+    .error {
+        color: brown;
+    }        
     </style>
 </head>
 <body>
@@ -87,7 +106,7 @@
         <a class="item" data-ng-click="toogleDashboard();">
             <i class="mini pin icon"></i>
         </a>
-        <div class="ui container" data-target="app-menus">
+        <div class="ui container" data-scope="app-menus">
         </div>
         <div class="right stackable menu">
             <a class="item" href="/" target="_blank" title="Go to Website">
@@ -184,6 +203,7 @@
                 $rootScope.$on('$routeChangeStart', function () {
                     $("#dashboard-container").addClass("loading");
                 });
+                
                 $rootScope.$on('$routeChangeSuccess', function () {
                     $("#dashboard-container").removeClass("loading");
                     buildMenus();
@@ -257,7 +277,7 @@
         <script>
             function buildMenus(){
                 setTimeout(function(){
-                    var target = $('[data-target="app-menus"]').html("");
+                    var target = $('[data-scope="app-menus"]').html("");
                     var path = window.overridePath || window.location.pathname;
                     if (window.menuBuilder) {
                         var application = window.Enumerable.From(window.appMenus)
@@ -291,6 +311,38 @@
 
                 loadMenus();
             })();
+            
+            
+            function initalizeSelectApis() {
+                var candidates = $("select[data-api]");
+
+                candidates.each(function () {
+                    var el = $(this);
+                    var apiUrl = el.attr("data-api");
+                    var valueField = el.attr("data-api-value-field");
+                    var keyField = el.attr("data-api-key-field");
+
+                    window.ajaxDataBind(apiUrl, el, null, null, null, function () {
+                        var selectedValue = el.attr("data-api-selected-value");
+                        var selectedValues = el.attr("data-api-selected-values");
+
+                        if (selectedValue) {
+                            setTimeout(function () {
+                                el.dropdown("set selected", selectedValue.toString());
+                            }, 100);
+                        };
+
+                        if (selectedValues) {
+                            setTimeout(function () {
+                                var values = selectedValues.split(",");
+                                el.dropdown("set selected", values);
+                            }, 100);
+                        };
+
+
+                    }, keyField, valueField);
+                });
+            };           
         </script>
         <div data-ng-view>
             @RenderBody()

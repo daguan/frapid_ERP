@@ -213,6 +213,7 @@
     <Compile Include="Controllers\ContactUsController.cs" />
     <Compile Include="Controllers\ContentController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Controllers\LayoutController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\MenuItemController.cs" />
     <Compile Include="Controllers\MyTemplateController.cs" />
@@ -228,10 +229,15 @@
     <Compile Include="AreaRegistration.cs" />
     <Compile Include="ViewModels\Content.cs" />
     <Compile Include="ThemeConfiguration.cs" />
+    <Compile Include="ViewModels\Layout.cs" />
+    <Compile Include="ViewModels\LayoutType.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\site.css" />
-    <Content Include="Scripts\contact-us.js" />
+    <Content Include="Scripts\Contents\EntityParser.js" />
+    <Content Include="Scripts\Contents\Manage.js" />
+    <Content Include="Scripts\ContactUs\ContactForm.js" />
+    <Content Include="Scripts\Layout\Shared\Editor.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -240,7 +246,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Shared\_Navigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -250,15 +255,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Content\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\_ViewStart.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\_Layout.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\_Template.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -282,6 +278,12 @@
     <None Include="Views\Content\Manage.cshtml" />
     <Content Include="Views\Contact\Index.cshtml" />
     <Content Include="Views\MenuItem\Index.cshtml" />
+    <Content Include="Views\Layout\Shared\Editor.cshtml" />
+    <Content Include="Views\Layout\Master.cshtml" />
+    <Content Include="Views\Layout\Header.cshtml" />
+    <Content Include="Views\Layout\Footer.cshtml" />
+    <Content Include="Views\Layout\Homepage.cshtml" />
+    <Content Include="Views\Layout\Http404Document.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

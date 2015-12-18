@@ -1,58 +1,23 @@
 ﻿@model Frapid.WebsiteBuilder.Entities.Content
 
 @{
-    var contentId = Model?.ContentId;
-    string title = Model?.Title ?? "";
-    string alias = Model?.Alias ?? "";
-    string markdown = Model?.Markdown ?? "";
-    bool isMarkDown = !string.IsNullOrWhiteSpace(Model?.Markdown);
-    string content = Model?.Contents ?? "";
-    string categoryId = Model?.CategoryId.ToString() ?? "";
-    string tags = Model?.Tags ?? "";
-    string publishOn = Model?.PublishOn.ToShortDateString() ?? DateTime.Now.ToShortDateString();
-    string keywords = Model?.SeoKeywords ?? "";
-    string description = Model?.SeoDescription ?? "";
-    bool draft = Model?.IsDraft ?? true;
-    bool homePage = Model?.IsHomepage ?? false;
-
-    ViewBag.Title = title;
+    bool isMarkDown = !string.IsNullOrWhiteSpace(Model.Markdown);
+    ViewBag.Title = Model.Title;
     Layout = ViewBag.Layout;
 }
 <link href="/my/template/css/site.css" rel="stylesheet">
 <script src="/Scripts/ace-1.2.2/src-min-noconflict/ace.js"></script>
 <script src="/Scripts/marked-0.3.5/lib/marked.js"></script>
-<style>
-    #editor {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-    }
-
-
-    [data-ng-view], [ng-view] {
-        height: 100%;
-    }
-
-    .vpad8 {
-        padding: 8px 0;
-    }
-
-    .error {
-        color: brown;
-    }
-</style>
 
 <div class="ui attached segment" style="height: 100%;">
     <div class="ui stackable divided doubling grid" style="height: 100%;">
         <div class="three wide column">
             <div class="ui one column grid">
                 <div class="right aligned column">
-                    <button class="ui icon basic violet circular button" onclick="maximize('editor', 'seven wide');">
+                    <button class="ui icon basic violet circular button" onclick="maximize('editor', '');">
                         <i class="code icon"></i>
                     </button>
-                    <button class="ui icon violet circular button" onclick="maximize('preview', 'six wide');">
+                    <button class="ui icon violet circular button" onclick="maximize('preview', '');">
                         <i class="expand icon"></i>
                     </button>
                 </div>
@@ -61,17 +26,17 @@
                 <div class="ui violet header">Save This Page</div>
             </div>
             <div class="ui divider"></div>
-            <div class="ui form">
-                <input type="hidden" data-entity="content_id" class="integer" value="@contentId" />
-                <input type="hidden" data-entity="markdown" value="@markdown" />
+            <div wi class="ui form">
+                <input type="hidden" data-entity="content_id" class="integer" value="@Model.ContentId" />
+                <input type="hidden" data-entity="markdown" value="@Model.Markdown" />
                 <div class="">
                     <div class="field">
                         <label>Title</label>
-                        <input type="text" data-entity="title" value="@title" required="" />
+                        <input type="text" data-entity="title" value="@Model.Title" required="" />
                     </div>
                     <div class="field">
                         <label>Alias</label>
-                        <input type="text" data-entity="alias" value="@alias" required="" />
+                        <input type="text" data-entity="alias" value="@Model.Alias" required="" />
                     </div>
                     <div class="field">
                         <label>Category</label>
@@ -82,7 +47,7 @@
                                 data-api="/api/website/category/display-fields"
                                 data-api-value-field="Value"
                                 data-api-key-field="Key"
-                                data-api-selected-value="@categoryId"></select>
+                                data-api-selected-value="@Model.CategoryId"></select>
                     </div>
                     <div class="field">
                         <label>Tags</label>
@@ -91,30 +56,30 @@
                                 data-api="/api/website/tag-view/all"
                                 data-api-value-field="Tag"
                                 data-api-key-field="Tag"
-                                data-api-selected-values="@tags"
+                                data-api-selected-values="@Model.Tags"
                                 multiple=""></select>
                     </div>
                     <div class="field">
                         <label>Publish On</label>
-                        <input type="date" class="date" data-entity="publish_on" value="@publishOn" required="" />
+                        <input type="date" class="date" data-entity="publish_on" value="@Model.PublishOn.ToShortDateString()" required="" />
                     </div>
                     <div class="field">
                         <label>Seo Keywords</label>
-                        <input type="text" data-entity="seo_keywords" value="@keywords" required="" />
+                        <input type="text" data-entity="seo_keywords" value="@Model.SeoKeywords" required="" />
                     </div>
                     <div class="field">
                         <label>Seo Description</label>
-                        <input type="text" data-entity="seo_description" value="@description" required="" />
+                        <input type="text" data-entity="seo_description" value="@Model.SeoDescription" required="" />
                     </div>
                 </div>
                 <div class="field">
                     <label>&nbsp;</label>
                     <div class="ui checkbox">
-                        @Html.CheckBox("IsDraftInputCheckbox", draft, new {@id = "IsDraftInputCheckbox", @data_entity = "is_draft"})
+                        @Html.CheckBox("IsDraftInputCheckbox", Model.IsDraft, new { @id = "IsDraftInputCheckbox", @data_entity = "is_draft" })
                         <label for="IsDraftInputCheckbox">Draft</label>
                     </div>
                     <div class="ui checkbox">
-                        @Html.CheckBox("IsHomePageInputCheckbox", homePage, new {@id = "IsHomePageInputCheckbox", @data_entity = "is_homepage"})
+                        @Html.CheckBox("IsHomePageInputCheckbox", Model.IsHomepage, new { @id = "IsHomePageInputCheckbox", @data_entity = "is_homepage" })
                         <label for="IsHomePageInputCheckbox">Home Page</label>
                     </div>
                     <div class="ui checkbox">
@@ -123,7 +88,6 @@
                     </div>
                 </div>
                 <div class="ui basic buttons">
-                    <button class="ui basic button">Preview</button>
                     <button class="ui basic button" id="SaveButton">Save</button>
                     <a class="ui basic button" ng-href="../contents">Cancel</a>
                 </div>
@@ -139,300 +103,28 @@
             </div>
 
         </div>
-        <div class="seven wide column" data-target="editor">
-            <div id="editor">
+        <div class="thirteen wide column" style="height: 100%;">
+            <div class="ui stackable two column divided grid" style="height: 100%;">
+                <div class="column" data-target="editor" style="height: 100%;">
+                    <div id="editor">
+                    </div>
+                </div>
+                <div class="column" style="height: 100%; overflow: auto;" data-target="preview">
+                    <div id="content" class="body" data-entity="contents" data-raw="true">
+                        @Html.Raw(Model.Contents)
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="six wide column" style="height: 100%; overflow: auto;" data-target="preview">
-            <div id="content" class="body" data-entity="contents" data-raw="true">
-                @Html.Raw(content)
-            </div>
+
         </div>
     </div>
 </div>
 
-<script>
-    window.overridePath = "/dashboard/website/contents";
-    $(".dropdown").dropdown();
-    function initializeAceEditor() {
-        if (!window.ace) {
-            return;
-        };
-
-        var html = $("#content").html();
-        var content = $("input[data-entity='markdown']").val();
-
-        if (!content) {
-            content = html;
-        };
-
-        var editor = window.ace.edit("editor");
-        editor.$blockScrolling = Infinity;
-        $("#editor").removeClass("initially, hidden");
-        editor.setTheme("ace/theme/ambience");
-        editor.getSession().setMode("ace/mode/xml");
-        editor.setValue(content);
-
-        editor.on('input', function () {
-            displayContent();
-        });
-    };
-
-    function appendTag(select, text, value, selected) {
-        if (select.find("option[value='" + value + "']").length) {
-            return;
-        };
-
-        var option = $("<option />");
-        if (selected) {
-            option.attr("selected", "selected");
-        };
-
-        option.attr("value", value);
-
-
-        option.html(text);
-        select.append(option);
-    };
-
-    $(".tag.dropdown input.search").keyup(function (e) {
-        if (e.keyCode === 188) {
-            var val = $(this).val();
-
-            appendTag($("#TagsSelect"), val, val, true);
-        };
-    });
-
-
-    function displayContent() {
-        var editor = window.ace.edit("editor");
-        var isMarkdown = $("#IsMarkdownInputCheckbox").is(":checked");
-        var contents = editor.getSession().getValue();
-
-        if (isMarkdown) {
-            $("input[data-entity='markdown']").val(contents);
-        };
-
-        var html;
-
-        if (isMarkdown) {
-            html = window.marked(contents);
-            $("#content").html(html);
-            return;
-        };
-
-        html = contents;
-        $("#content").html(html);
-    };
-</script>
 
 <script>
-    function initalizeSelectApis() {
-        var candidates = $("select[data-api]");
-
-        candidates.each(function () {
-            var el = $(this);
-            var apiUrl = el.attr("data-api");
-            var valueField = el.attr("data-api-value-field");
-            var keyField = el.attr("data-api-key-field");
-
-            window.ajaxDataBind(apiUrl, el, null, null, null, function () {
-                var selectedValue = el.attr("data-api-selected-value");
-                var selectedValues = el.attr("data-api-selected-values");
-
-                if (selectedValue) {
-                    setTimeout(function () {
-                        el.dropdown("set selected", selectedValue.toString());
-                    }, 100);
-                };
-
-                if (selectedValues) {
-                    setTimeout(function () {
-                        var values = selectedValues.split(",");
-                        el.dropdown("set selected", values);
-                    }, 100);
-                };
-
-
-            }, keyField, valueField);
-        });
-    };
-
-    var entityParser = {
-        attribute: "data-entity",
-        validationSummary: ".error .bulleted.list",
-        getValue: function (el, raw) {
-            function parseValue(value, typeClass) {
-                if (!typeClass) {
-                    return value;
-                };
-
-                if (typeClass.indexOf("integer") !== -1) {
-                    return parseInt(value) || null;
-                };
-
-                if (typeClass.indexOf("float") !== -1) {
-                    return parseFloat(value) || null;
-                };
-
-                if (typeClass.indexOf("date") !== -1) {
-                    return window.parseLocalizedDate(value) || null;
-                };
-
-                return null;
-            };
-
-            var value = null;
-            var required = el.attr("required");
-            var tag = el.prop("tagName").toLowerCase();
-
-            switch (tag) {
-            case "h1":
-            case "h2":
-            case "h3":
-            case "h4":
-            case "h5":
-            case "span":
-            case "p":
-            case "div":
-                if (raw) {
-                    value = el.html().trim();
-                } else {
-                    value = el.text().trim();
-                };
-
-                break;
-            case "input":
-                if (el.is(":checkbox")) {
-                    value = el.is(":checked");
-                } else {
-                    value = parseValue(el.val(), el.attr("class"));
-                    el.closest(".field").removeClass("error");
-
-                    if (!value && required) {
-                        el.closest(".field").addClass("error");
-                    };
-                };
-
-                break;
-            case "select":
-                if (el.attr("multiple")) {
-                    value = el.val().join(",");
-                } else {
-                    value = el.val();
-                    value = parseValue(value, el.parent().attr("class"));
-                };
-
-                break;
-            };
-
-            return value;
-        },
-        getModel: function (attribute, validationEl, validationSummary) {
-            var dataEntities = $("[" + attribute + "]");
-
-            var model = {};
-            var valid = true;
-            var invalidItems = [];
-
-            dataEntities.each(function () {
-                var el = $(this);
-                var label = el.siblings("label").text();
-
-                if (el.is("select")) {
-                    label = el.parent().parent().find("label").text();
-                };
-
-                var name = el.attr(attribute);
-                var raw = el.attr("data-raw");
-                var val = entityParser.getValue(el, raw);
-                var required = el.attr("required");
-
-                model[name] = val;
-
-                if (required && !val) {
-                    valid = false;
-                    invalidItems.push(label);
-                };
-            });
-
-            if (!valid) {
-                var list = $(validationSummary);
-                $(validationEl).removeClass("initially, hidden");
-                list.html("");
-
-                $.each(invalidItems, function () {
-                    var item = $("<div class='item' />");
-                    item.html(this + " is required");
-                    list.append(item);
-                });
-
-                return null;
-            };
-
-            return model;
-        }
-    };
+    var html = "@Html.Encode(HttpUtility.JavaScriptStringEncode(Model.Contents))";
 </script>
 
 
-<script>
-
-    $('[data-entity="title"]').keyup(function () {
-        function getAlias(title) {
-            return title.toLowerCase().replace(/ +(?= )/g, '').replace(/ /g, '-').replace(/[^\w-]+/g, '');
-        };
-
-        $('[data-entity="alias"]').val(getAlias($(this).val()));
-    });
-
-    $("#SaveButton").click(function () {
-        function request(model) {
-            var url = "/api/website/content/add-or-edit";
-            var form = [];
-            form.push(model);
-            form.push(null);
-
-            var data = JSON.stringify(form);
-            return window.getAjaxRequest(url, "POST", data);
-        };
-
-        var attribute = "data-entity";
-        var validationEl = ".error";
-        var validationSummary = ".error .bulleted.list";
-
-        var model = entityParser.getModel(attribute, validationEl, validationSummary);
-        if (!model) {
-            return;
-        };
-
-        var ajax = request(model);
-
-
-        ajax.success(function () {
-            location.href = "../contents";
-        });
-
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        initalizeSelectApis();
-        initializeAceEditor();
-    });
-
-    function maximize(target, width) {
-        var items = $("[data-target]");
-        var el = $("[data-target=" + target + "]");
-        items.hide();
-
-        if (!el.hasClass('thirteen wide')) {
-            el.removeClass(width).addClass('thirteen wide');
-            el.fadeIn();
-            return;
-        };
-
-        el.removeClass('thirteen wide').addClass(width);
-        items.fadeIn();
-    };
-</script>
+<script src="~/Areas/Frapid.WebsiteBuilder/Scripts/Contents/EntityParser.js"></script>
+<script src="~/Areas/Frapid.WebsiteBuilder/Scripts/Contents/Manage.js"></script>

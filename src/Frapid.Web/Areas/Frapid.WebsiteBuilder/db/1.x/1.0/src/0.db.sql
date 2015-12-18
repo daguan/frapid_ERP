@@ -295,16 +295,18 @@ LANGUAGE plpgsql;
 
 SELECT * FROM config.create_app('Frapid.WebsiteBuilder', 'Website', '1.0', 'MixERP Inc.', 'December 1, 2015', 'world blue', '/dashboard/website/contents', null);
 
-SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Tasks', '', '', '');
-SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Manage Categories', '/dashboard/website/categories', '', 'Tasks');
-SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Add New Content', '/dashboard/website/contents/new', '', 'Tasks');
-SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'View Contents', '/dashboard/website/contents', '', 'Tasks');
-SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Menus', '/dashboard/website/menus', '', 'Tasks');
-SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Contacts', '/dashboard/website/contacts', '', 'Tasks');
-SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Layout Manager', '', '', '');
-SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Edit Master Layout', '/dashboard/website/layouts/master', '', 'Layout Manager');
-SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Edit Header', '/dashboard/website/layouts/header', '', 'Layout Manager');
-SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Edit Footer', '/dashboard/website/layouts/footer', '', 'Layout Manager');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Tasks', '', 'tasks icon', '');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Manage Categories', '/dashboard/website/categories', 'sitemap icon', 'Tasks');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Add New Content', '/dashboard/website/contents/new', 'file', 'Tasks');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'View Contents', '/dashboard/website/contents', 'desktop', 'Tasks');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Menus', '/dashboard/website/menus', 'star', 'Tasks');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Contacts', '/dashboard/website/contacts', 'phone', 'Tasks');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Layout Manager', '', 'grid layout', '');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Edit Master Layout (Homepage)', '/dashboard/website/layouts/master/home', 'block layout', 'Layout Manager');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Edit Master Layout', '/dashboard/website/layouts/master', 'block layout', 'Layout Manager');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Edit Header', '/dashboard/website/layouts/header', 'arrow circle outline up', 'Layout Manager');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', 'Edit Footer', '/dashboard/website/layouts/footer', 'arrow circle outline down', 'Layout Manager');
+SELECT * FROM config.create_menu('Frapid.WebsiteBuilder', '404 Not Found Document', '/dashboard/website/layouts/404-not-found-document', 'warning circle', 'Layout Manager');
 
 CREATE VIEW website.tag_view
 AS

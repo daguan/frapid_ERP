@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
-using Frapid.Framework.Extensions;
 using Frapid.WebsiteBuilder.Entities;
 
 namespace Frapid.WebsiteBuilder.DAL
@@ -48,7 +46,9 @@ namespace Frapid.WebsiteBuilder.DAL
         {
             using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
             {
-                return db.FetchBy<PublishedContentView>(sql => sql.Where(c => c.IsHomepage == true).Limit(1)).FirstOrDefault();
+                return
+                    db.FetchBy<PublishedContentView>(sql => sql.Where(c => c.IsHomepage == true).Limit(1))
+                        .FirstOrDefault();
             }
         }
     }

@@ -7,7 +7,7 @@ namespace Frapid.WebsiteBuilder.Controllers
     {
         [Route("dashboard/website/menus/items")]
         [Authorize]
-        public ActionResult Index(string alias = "")
+        public ActionResult Index()
         {
             return this.FrapidView(this.GetRazorView<AreaRegistration>("MenuItem/Index.cshtml"));
         }

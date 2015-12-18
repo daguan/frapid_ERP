@@ -13,7 +13,7 @@ namespace Frapid.WebsiteBuilder.Controllers
 
         [Route("contact-us")]
         [AllowAnonymous]
-        public ActionResult Index(string alias = "")
+        public ActionResult Index()
         {
             var model = new ContactUs();
             var contacts = Contacts.GetContacts();
