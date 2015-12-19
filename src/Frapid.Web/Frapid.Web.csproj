@@ -234,15 +234,13 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\angular-route.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\colorpicker\bower.json" />
     <Content Include="Scripts\colorpicker\jqcolorpicker.jquery.json" />
     <Content Include="Scripts\colorpicker\README.md" />
     <Content Include="Scripts\colorpicker\TODO" />
-    <Content Include="Scripts\contenttools\content-tools.js" />
-    <Content Include="Scripts\contenttools\content-tools.min.css" />
-    <Content Include="Scripts\contenttools\content-tools.min.js" />
     <Content Include="Scripts\d3\LICENSE" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -252,7 +250,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Scripts\contenttools\icons.woff" />
+    <None Include="Properties\PublishProfiles\frapid-publish-profile.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\ajax-file-upload.js" />
     <Content Include="Scripts\angular\angular.min.js" />
@@ -832,7 +830,6 @@
     <Content Include="Scripts\app\home.viewmodel.js" />
     <Content Include="ScrudFactory\Form.html" />
     <Content Include="ScrudFactory\View.html" />
-    <Content Include="Static\images\logo-inverted.png" />
     <Content Include="Static\images\logo.png" />
     <Content Include="Stylesheets\Backend\frapid.css" />
     <Content Include="Web.config">
@@ -901,7 +898,6 @@
     <Folder Include="Areas\" />
     <Folder Include="Catalogs\" />
     <Folder Include="Resources\" />
-    <Folder Include="Scripts\contenttools\images\" />
     <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>

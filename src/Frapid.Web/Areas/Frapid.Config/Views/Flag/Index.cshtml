@@ -1,0 +1,38 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Flag Types";
+    Layout = ViewBag.Layout;
+}
+
+<script>
+    var scrudFactory = new Object();
+
+    scrudFactory.title = "Flag Types";
+
+    scrudFactory.viewAPI = "/api/config/flag-type";
+    scrudFactory.viewTableName = "config.flag_types";
+
+    scrudFactory.formAPI = "/api/config/flag-type";
+    scrudFactory.formTableName = "config.flag_types";
+
+    scrudFactory.disabledOnEdit = ["AuthorId"];
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+
+    scrudFactory.live = "FlagTypeName";
+
+    scrudFactory.layout = [
+        {
+            tab: "",
+            fields: [
+            ]
+        }
+    ];
+</script>
+
+
+<div data-ng-include="'/ScrudFactory/View.html'"></div>
+<div data-ng-include="'/ScrudFactory/Form.html'"></div>

@@ -21,6 +21,7 @@ namespace Frapid.WebsiteBuilder.Entities
         public string Telephone { get; set; }
         public string Details { get; set; }
         public string Email { get; set; }
+        public string Recipients { get; set; }
         public bool DisplayEmail { get; set; }
         public bool DisplayContactForm { get; set; }
         public int Sort { get; set; }

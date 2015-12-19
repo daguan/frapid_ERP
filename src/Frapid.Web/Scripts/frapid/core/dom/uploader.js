@@ -3,12 +3,11 @@ var uploaderInitialized = false;
 var allowedExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
 var uploaderTemplate = '<div class="ui uploader field">\
                             <div class="">\
-                                <img src="{0}" class="ui bordered rounded image preview">\
+                                <img src="{0}" class="ui rounded small vpad8 image preview">\
                             </div>\
                             </div>\
                             <div class="uploader">\
-                            <label for="file{1}" class="ui pink icon button">\
-                                <i class="file icon"></i>\
+                            <label for="file{1}" class="ui basic icon button">\
                                 Upload</label>\
                                 <input id="file{1}" class="file" data-target="{1}" style="display: none" type="file">\
                             </div>';
@@ -20,11 +19,11 @@ function initializeUploader() {
         el.parent().find(".uploader").remove();
         var val = el.val();
         var id = el.attr("id");
-        var imagePath = "/Static/images/mixerp-logo-light.png";
+        var imagePath = "/Static/images/logo.png";
 
         if (val) {
             imagePath = "/Resource/Static/Attachments/" + val;
-        }
+        };
 
         el.attr("style", "display:none;");
         el.parent().append(stringFormat(uploaderTemplate, imagePath, id));

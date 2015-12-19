@@ -1,0 +1,50 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Configuration Profile";
+    Layout = ViewBag.Layout;
+}
+<script>
+    var scrudFactory = new Object();
+
+    scrudFactory.title = "Configuration Profile";
+
+    scrudFactory.viewAPI = "/api/account/configuration-profile";
+    scrudFactory.viewTableName = "account.configuration_profiles";
+
+    scrudFactory.formAPI = "/api/account/configuration-profile";
+    scrudFactory.formTableName = "account.configuration_profiles";
+
+    scrudFactory.disabledOnEdit = ["AuthorId"];
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+
+    scrudFactory.live = "ProfileName";
+
+    scrudFactory.card = {
+        header: "ProfileName"
+    };
+
+    scrudFactory.keys = [
+        {
+            property: "RegistrationOfficeId",
+            url: '/api/config/office/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "RegistrationRoleId",
+            url: '/api/account/role/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        }
+    ];
+</script>
+
+
+<div data-ng-include="'/ScrudFactory/View.html'"></div>
+<div data-ng-include="'/ScrudFactory/Form.html'"></div>

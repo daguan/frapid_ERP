@@ -1,0 +1,62 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "User Management";
+    Layout = ViewBag.Layout;
+}
+<script>
+    var scrudFactory = new Object();
+
+    scrudFactory.title = "User Management";
+
+    scrudFactory.viewAPI = "/api/account/user";
+    scrudFactory.viewTableName = "account.users";
+
+    scrudFactory.formAPI = "/api/account/user";
+    scrudFactory.formTableName = "account.users";
+
+    scrudFactory.disabledOnEdit = ["AuthorId"];
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs", "Password"];
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+
+    scrudFactory.live = "Email";
+
+    scrudFactory.layout = [
+        {
+            tab: "",
+            fields: [
+                ["UserId", ""],
+                ["Email", "Name"],
+                ["OfficeId", "RoleId"],
+                ["Phone", "Status"]
+            ]
+        }
+    ];
+
+    scrudFactory.card = {
+        header: "Name"
+    };
+
+    scrudFactory.keys = [
+        {
+            property: "OfficeId",
+            url: '/api/config/office/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        },
+        {
+            property: "RoleId",
+            url: '/api/account/role/display-fields',
+            data: null,
+            valueField: "Key",
+            textField: "Value"
+        }
+    ];
+</script>
+
+
+<div data-ng-include="'/ScrudFactory/View.html'"></div>
+<div data-ng-include="'/ScrudFactory/Form.html'"></div>

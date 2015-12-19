@@ -110,6 +110,7 @@
     <Compile Include="AccessTypeController.cs" />
     <Compile Include="AppController.cs" />
     <Compile Include="AppDependencyController.cs" />
+    <Compile Include="ConfigMenuController.cs" />
     <Compile Include="CreateAppController.cs" />
     <Compile Include="CreateFlagController.cs" />
     <Compile Include="CreateMenuController.cs" />
@@ -168,7 +169,6 @@
     <Compile Include="HasAccessController.cs" />
     <Compile Include="KanbanController.cs" />
     <Compile Include="KanbanDetailController.cs" />
-    <Compile Include="MenuController.cs" />
     <Compile Include="OfficeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmtpConfigController.cs" />

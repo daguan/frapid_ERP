@@ -27,9 +27,7 @@ namespace Frapid.Config.Entities
         public string Fax { get; set; }
         public string Email { get; set; }
         public string Url { get; set; }
-        public string RegistrationNumber { get; set; }
-        public string PanNumber { get; set; }
-        public bool AllowTransactionPosting { get; set; }
+        public string Logo { get; set; }
         public int? ParentOfficeId { get; set; }
         public int? AuditUserId { get; set; }
         public DateTime? AuditTs { get; set; }

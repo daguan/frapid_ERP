@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.1.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.1.1\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{39C347F9-992F-46A2-A768-1049C87B4EF3}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Frapid.Account.Api</RootNamespace>
+    <AssemblyName>Frapid.Account.Api</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Frapid.ApplicationState">
+      <HintPath>..\..\..\bin\Frapid.ApplicationState.dll</HintPath>
+    </Reference>
+    <Reference Include="Frapid.DataAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\Frapid.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="Frapid.DbPolicy, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\Frapid.DbPolicy.dll</HintPath>
+    </Reference>
+    <Reference Include="Frapid.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\Frapid.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="xunit.assert, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.assert.2.1.0\lib\dotnet\xunit.assert.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="xunit.core, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.core.2.1.0\lib\dotnet\xunit.core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="xunit.execution.desktop, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.execution.2.1.0\lib\net45\xunit.execution.desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CanConfirmRegistrationController.cs" />
+    <Compile Include="CanRegisterWithFacebookController.cs" />
+    <Compile Include="CanRegisterWithGoogleController.cs" />
+    <Compile Include="CompleteResetController.cs" />
+    <Compile Include="ConfigurationProfileController.cs" />
+    <Compile Include="ConfirmRegistrationController.cs" />
+    <Compile Include="EmailExistsController.cs" />
+    <Compile Include="Fakes\CanConfirmRegistrationRepository.cs" />
+    <Compile Include="Fakes\CanRegisterWithFacebookRepository.cs" />
+    <Compile Include="Fakes\CanRegisterWithGoogleRepository.cs" />
+    <Compile Include="Fakes\CompleteResetRepository.cs" />
+    <Compile Include="Fakes\ConfigurationProfileRepository.cs" />
+    <Compile Include="Fakes\ConfirmRegistrationRepository.cs" />
+    <Compile Include="Fakes\EmailExistsRepository.cs" />
+    <Compile Include="Fakes\FbAccessTokenRepository.cs" />
+    <Compile Include="Fakes\FbSignInRepository.cs" />
+    <Compile Include="Fakes\FbUserExistsRepository.cs" />
+    <Compile Include="Fakes\GetRegistrationOfficeIdRepository.cs" />
+    <Compile Include="Fakes\GetRegistrationRoleIdRepository.cs" />
+    <Compile Include="Fakes\GetUserIdByEmailRepository.cs" />
+    <Compile Include="Fakes\GoogleAccessTokenRepository.cs" />
+    <Compile Include="Fakes\GoogleSignInRepository.cs" />
+    <Compile Include="Fakes\GoogleUserExistsRepository.cs" />
+    <Compile Include="Fakes\HasAccountRepository.cs" />
+    <Compile Include="Fakes\HasActiveResetRequestRepository.cs" />
+    <Compile Include="Fakes\IsRestrictedUserRepository.cs" />
+    <Compile Include="Fakes\LoginRepository.cs" />
+    <Compile Include="Fakes\RegistrationRepository.cs" />
+    <Compile Include="Fakes\ResetAccountRepository.cs" />
+    <Compile Include="Fakes\ResetRequestRepository.cs" />
+    <Compile Include="Fakes\RoleRepository.cs" />
+    <Compile Include="Fakes\SignInRepository.cs" />
+    <Compile Include="Fakes\SignInViewRepository.cs" />
+    <Compile Include="Fakes\UserExistsRepository.cs" />
+    <Compile Include="Fakes\UserRepository.cs" />
+    <Compile Include="FbAccessTokenController.cs" />
+    <Compile Include="FbSignInController.cs" />
+    <Compile Include="FbUserExistsController.cs" />
+    <Compile Include="GetRegistrationOfficeIdController.cs" />
+    <Compile Include="GetRegistrationRoleIdController.cs" />
+    <Compile Include="GetUserIdByEmailController.cs" />
+    <Compile Include="GoogleAccessTokenController.cs" />
+    <Compile Include="GoogleSignInController.cs" />
+    <Compile Include="GoogleUserExistsController.cs" />
+    <Compile Include="HasAccountController.cs" />
+    <Compile Include="HasActiveResetRequestController.cs" />
+    <Compile Include="IsRestrictedUserController.cs" />
+    <Compile Include="LoginController.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegistrationController.cs" />
+    <Compile Include="ResetAccountController.cs" />
+    <Compile Include="ResetRequestController.cs" />
+    <Compile Include="RoleController.cs" />
+    <Compile Include="SignInController.cs" />
+    <Compile Include="SignInViewController.cs" />
+    <Compile Include="Tests\CanConfirmRegistrationRouteTests.cs" />
+    <Compile Include="Tests\CanConfirmRegistrationTests.cs" />
+    <Compile Include="Tests\CanRegisterWithFacebookRouteTests.cs" />
+    <Compile Include="Tests\CanRegisterWithFacebookTests.cs" />
+    <Compile Include="Tests\CanRegisterWithGoogleRouteTests.cs" />
+    <Compile Include="Tests\CanRegisterWithGoogleTests.cs" />
+    <Compile Include="Tests\CompleteResetRouteTests.cs" />
+    <Compile Include="Tests\CompleteResetTests.cs" />
+    <Compile Include="Tests\ConfigurationProfileRouteTests.cs" />
+    <Compile Include="Tests\ConfigurationProfileTests.cs" />
+    <Compile Include="Tests\ConfirmRegistrationRouteTests.cs" />
+    <Compile Include="Tests\ConfirmRegistrationTests.cs" />
+    <Compile Include="Tests\EmailExistsRouteTests.cs" />
+    <Compile Include="Tests\EmailExistsTests.cs" />
+    <Compile Include="Tests\FbAccessTokenRouteTests.cs" />
+    <Compile Include="Tests\FbAccessTokenTests.cs" />
+    <Compile Include="Tests\FbSignInRouteTests.cs" />
+    <Compile Include="Tests\FbSignInTests.cs" />
+    <Compile Include="Tests\FbUserExistsRouteTests.cs" />
+    <Compile Include="Tests\FbUserExistsTests.cs" />
+    <Compile Include="Tests\GetRegistrationOfficeIdRouteTests.cs" />
+    <Compile Include="Tests\GetRegistrationOfficeIdTests.cs" />
+    <Compile Include="Tests\GetRegistrationRoleIdRouteTests.cs" />
+    <Compile Include="Tests\GetRegistrationRoleIdTests.cs" />
+    <Compile Include="Tests\GetUserIdByEmailRouteTests.cs" />
+    <Compile Include="Tests\GetUserIdByEmailTests.cs" />
+    <Compile Include="Tests\GoogleAccessTokenRouteTests.cs" />
+    <Compile Include="Tests\GoogleAccessTokenTests.cs" />
+    <Compile Include="Tests\GoogleSignInRouteTests.cs" />
+    <Compile Include="Tests\GoogleSignInTests.cs" />
+    <Compile Include="Tests\GoogleUserExistsRouteTests.cs" />
+    <Compile Include="Tests\GoogleUserExistsTests.cs" />
+    <Compile Include="Tests\HasAccountRouteTests.cs" />
+    <Compile Include="Tests\HasAccountTests.cs" />
+    <Compile Include="Tests\HasActiveResetRequestRouteTests.cs" />
+    <Compile Include="Tests\HasActiveResetRequestTests.cs" />
+    <Compile Include="Tests\IsRestrictedUserRouteTests.cs" />
+    <Compile Include="Tests\IsRestrictedUserTests.cs" />
+    <Compile Include="Tests\LoginRouteTests.cs" />
+    <Compile Include="Tests\LoginTests.cs" />
+    <Compile Include="Tests\RegistrationRouteTests.cs" />
+    <Compile Include="Tests\RegistrationTests.cs" />
+    <Compile Include="Tests\ResetAccountRouteTests.cs" />
+    <Compile Include="Tests\ResetAccountTests.cs" />
+    <Compile Include="Tests\ResetRequestRouteTests.cs" />
+    <Compile Include="Tests\ResetRequestTests.cs" />
+    <Compile Include="Tests\RoleRouteTests.cs" />
+    <Compile Include="Tests\RoleTests.cs" />
+    <Compile Include="Tests\SignInRouteTests.cs" />
+    <Compile Include="Tests\SignInTests.cs" />
+    <Compile Include="Tests\SignInViewRouteTests.cs" />
+    <Compile Include="Tests\SignInViewTests.cs" />
+    <Compile Include="Tests\UserExistsRouteTests.cs" />
+    <Compile Include="Tests\UserExistsTests.cs" />
+    <Compile Include="Tests\UserRouteTests.cs" />
+    <Compile Include="Tests\UserTests.cs" />
+    <Compile Include="UserController.cs" />
+    <Compile Include="UserExistsController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataAccess\Frapid.Account.DataAccess.csproj">
+      <Project>{92f69053-8676-4628-af71-0e9e27795c90}</Project>
+      <Name>Frapid.Account.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Entities\Frapid.Account.Entities.csproj">
+      <Project>{682c3328-ddc3-458c-bb5f-9ab97ea42a0e}</Project>
+      <Name>Frapid.Account.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>52937</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:52937/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.1.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.1.1\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

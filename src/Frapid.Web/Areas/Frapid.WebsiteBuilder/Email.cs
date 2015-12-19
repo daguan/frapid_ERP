@@ -47,10 +47,22 @@ namespace Frapid.WebsiteBuilder
             return message;
         }
 
-        private EmailQueue GetEmail(string catalog, ContactForm model)
+        private string GetEmails(string catalog, int contactId)
         {
             var config = new Config(catalog);
 
+            var contact = DAL.Contacts.GetContact(contactId);
+
+            if (contact == null)
+            {
+                return config.FromEmail;
+            }
+
+            return !string.IsNullOrWhiteSpace(contact.Recipients) ? contact.Recipients : contact.Email;
+        }
+
+        private EmailQueue GetEmail(string catalog, ContactForm model)
+        {
             return new EmailQueue
             {
                 AddedOn = DateTime.Now,
@@ -58,7 +70,7 @@ namespace Frapid.WebsiteBuilder
                 ReplyTo = model.Email,
                 Subject = model.Subject,
                 Message = this.GetMessage(catalog, model),
-                SendTo = config.FromEmail
+                SendTo = this.GetEmails(catalog, model.ContactId)
             };
         }
 

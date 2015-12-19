@@ -138,9 +138,7 @@ CREATE TABLE config.offices
     fax                                     national character varying(24),
     email                                   national character varying(128),
     url                                     national character varying(50),
-    registration_number                     national character varying(24),
-    pan_number                              national character varying(24),
-    allow_transaction_posting               boolean not null DEFAULT(true),
+    logo                                    public.image,
     parent_office_id                        integer NULL REFERENCES config.offices,
     audit_user_id                           integer NULL,
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 

@@ -17,5 +17,13 @@ namespace Frapid.WebsiteBuilder.DAL
                     .ThenBy(c => c.ContactId);
             }
         }
+
+        public static Contact GetContact(int contactId)
+        {
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
+            {
+                return db.FetchBy<Contact>(sql => sql.Where(c => c.ContactId.Equals(contactId))).FirstOrDefault();
+            }
+        }
     }
 }

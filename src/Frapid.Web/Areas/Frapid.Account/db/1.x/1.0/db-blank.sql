@@ -76,7 +76,6 @@ CREATE TABLE account.users
     role_id                                 integer NOT NULL REFERENCES account.roles,
     name                                    national character varying(100),
     phone                                   national character varying(100),
-    access_token                            text UNIQUE,
     status                                  boolean DEFAULT(true),    
     audit_user_id                           integer REFERENCES account.users,
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
@@ -773,10 +772,10 @@ ON config.offices.office_id = account.logins.office_id;
 
 SELECT * FROM config.create_app('Frapid.Account', 'Account', '1.0', 'MixERP Inc.', 'December 1, 2015', 'grey lock', '/dashboard/account/configuration-profile', '{Frapid.WebsiteBuilder}'::text[]);
 
-SELECT * FROM config.create_menu('Frapid.Account', 'Tasks', '', '', '');
-SELECT * FROM config.create_menu('Frapid.Account', 'Roles', '/dashboard/account/roles', '', 'Tasks');
-SELECT * FROM config.create_menu('Frapid.Account', 'Configuration Profile', '/dashboard/account/configuration-profile', '', 'Tasks');
-SELECT * FROM config.create_menu('Frapid.Account', 'User Management', '/dashboard/account/user-management', '', 'Tasks');
+SELECT * FROM config.create_menu('Frapid.Account', 'Roles', '/dashboard/account/roles', 'users', '');
+SELECT * FROM config.create_menu('Frapid.Account', 'User Management', '/dashboard/account/user-management', 'user', '');
+SELECT * FROM config.create_menu('Frapid.Account', 'Configuration Profile', '/dashboard/account/configuration-profile', 'configure', '');
+
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/99.ownership.sql --<--<--
 DO

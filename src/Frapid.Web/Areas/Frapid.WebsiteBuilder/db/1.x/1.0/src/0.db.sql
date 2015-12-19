@@ -74,6 +74,7 @@ CREATE TABLE website.contacts
     telephone                                   national character varying(500),
     details                                     text,
     email                                       national character varying(500),
+    recipients                                  national character varying(1000),
     display_email                               boolean NOT NULL DEFAULT(false),
     display_contact_form                        boolean NOT NULL DEFAULT(true),
     sort                                        integer NOT NULL DEFAULT(0),

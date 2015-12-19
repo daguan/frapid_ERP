@@ -1,0 +1,38 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Currencies";
+    Layout = ViewBag.Layout;
+}
+
+<script>
+    var scrudFactory = new Object();
+
+    scrudFactory.title = "Currencies";
+
+    scrudFactory.viewAPI = "/api/config/currency";
+    scrudFactory.viewTableName = "config.currencies";
+
+    scrudFactory.formAPI = "/api/config/currency";
+    scrudFactory.formTableName = "config.currencies";
+
+    scrudFactory.disabledOnEdit = ["AuthorId"];
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+
+    scrudFactory.live = "CurrencyName";
+
+    scrudFactory.layout = [
+        {
+            tab: "",
+            fields: [
+            ]
+        }
+    ];
+</script>
+
+
+<div data-ng-include="'/ScrudFactory/View.html'"></div>
+<div data-ng-include="'/ScrudFactory/Form.html'"></div>

@@ -34,13 +34,13 @@
                         }
                         @if (!string.IsNullOrWhiteSpace(item.Address))
                         {
-                            <br/>
+                            <br />
                             @item.Address
                         }
 
                         @if (!string.IsNullOrWhiteSpace(item.City))
                         {
-                            <br/>
+                            <br />
                             @item.City
                         }
                         @if (!string.IsNullOrWhiteSpace(item.State))
@@ -53,11 +53,11 @@
                         }
                         @if (!string.IsNullOrWhiteSpace(item.PostalCode))
                         {
-                            <br/><em>Postal Code:</em>
+                            <br /><em>Postal Code:</em>
                             @item.PostalCode
                         }
-                        <br/>
-                        <br/>
+                        <br />
+                        <br />
 
                         @if (!string.IsNullOrWhiteSpace(item.Telephone))
                         {
@@ -66,12 +66,12 @@
                         }
                         @if (!string.IsNullOrWhiteSpace(item.PostalCode))
                         {
-                            <br/><strong>Postal Code:</strong>
+                            <br /><strong>Postal Code:</strong>
                             @item.PostalCode
                         }
                         @if (!string.IsNullOrWhiteSpace(item.Email) && item.DisplayEmail)
                         {
-                            <br/><strong>Email:</strong>
+                            <br /><strong>Email:</strong>
                             <a href="mailto:@item.Email">@item.Email</a>
                         }
                         @if (!string.IsNullOrWhiteSpace(item.Details))
@@ -82,9 +82,9 @@
 
                     @if (item.DisplayContactForm && !string.IsNullOrWhiteSpace(item.Email))
                     {
-                        <br/>
+                        <br />
                         <button class="ui teal button" onclick="showContactForm(this)">Send Email</button>
-                        @Html.Partial("~/Areas/Frapid.WebsiteBuilder/Views/ContactUs/ContactForm.cshtml", new ContactForm())
+                        @Html.Partial("~/Areas/Frapid.WebsiteBuilder/Views/ContactUs/ContactForm.cshtml", new ContactForm { ContactId = item.ContactId })
                     }
 
                 </div>

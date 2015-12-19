@@ -1,4 +1,4 @@
-﻿var ignoredQueryStrings = ["TitleSuffix", "View"];
+﻿var ignoredQueryStrings = ["TitleSuffix", "View", "Page"];
 
 $("#FilterName").text(window.Resources.Titles.Untitled());
 

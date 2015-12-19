@@ -171,9 +171,7 @@ CREATE TABLE config.offices
     fax                                     national character varying(24),
     email                                   national character varying(128),
     url                                     national character varying(50),
-    registration_number                     national character varying(24),
-    pan_number                              national character varying(24),
-    allow_transaction_posting               boolean not null DEFAULT(true),
+    logo                                    public.image,
     parent_office_id                        integer NULL REFERENCES config.offices,
     audit_user_id                           integer NULL,
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
@@ -998,6 +996,17 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/98.menu.sql --<--<--
+SELECT * FROM config.create_app('Frapid.Config', 'Config', '1.0', 'MixERP Inc.', 'December 1, 2015', 'orange configure', '/dashboard/config/offices', null);
+
+SELECT * FROM config.create_menu('Frapid.Config', 'Office', '/dashboard/config/offices', 'building outline', '');
+SELECT * FROM config.create_menu('Frapid.Config', 'Currency', '/dashboard/config/currencies', 'money', '');
+SELECT * FROM config.create_menu('Frapid.Config', 'Flags', '/dashboard/config/flags', 'flag', '');
+SELECT * FROM config.create_menu('Frapid.Config', 'SMTP', '/dashboard/config/smtp', 'at', '');
+SELECT * FROM config.create_menu('Frapid.Config', 'Menu Access', '/dashboard/config/menu-access', 'lock', '');
+SELECT * FROM config.create_menu('Frapid.Config', 'API Access', '/dashboard/config/api-access', 'key', '');
+
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/99.ownership.sql --<--<--
 DO

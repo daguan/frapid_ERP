@@ -74,7 +74,7 @@
             height:32px;
         }
         
-        input[readonly], input[disabled], textarea[readonly], textarea[disabled], select[readonly], select[disabled] {
+        input[readonly], input[disabled], textarea[readonly], textarea[disabled], select[readonly], select[disabled], .dropdown.disabled {
             background-color: #f0f0f0 !important;
             cursor: not-allowed;
         }
@@ -106,21 +106,20 @@
         <a class="item" data-ng-click="toogleDashboard();">
             <i class="mini pin icon"></i>
         </a>
-        <div class="ui container" data-scope="app-menus">
+        <div class="menu" data-scope="app-menus">
+            
         </div>
-        <div class="right stackable menu">
+
+        <div class="right menu">
             <a class="item" href="/" target="_blank" title="Go to Website">
-                <i class="mini world icon"></i>
-            </a>
-            <a class="item">
-                <i class="mini mail icon"></i>
+                <i class="mini external icon"></i>
             </a>
             <a class="item" href="/account/sign-out" target="_self">
                 <i class="mini log out icon"></i>
             </a>
         </div>
     </div>
-    <div id="dashboard-container" class="ui basic attached segment" style="background-color: #E8E8E8; height: 100%;">
+    <div id="dashboard-container" class="ui basic attached segment" style="background-color: #D5D5D5; height: 100%;">
         <script>        
         $.getJSON("/dashboard/meta", function (response) {
             window.meta = response;
