@@ -22,7 +22,7 @@ namespace Frapid.Account.Messaging
             _user = user;
             this._provider = provider;
             this._template = string.IsNullOrWhiteSpace(template)
-                ? "~/Catalogs/{catalog}/Areas/Frapid.Account/EmailTemplates/welcome.html"
+                ? "~/Catalogs/{catalog}/Areas/Frapid.Account/EmailTemplates/welcome-email.html"
                 : template;
         }
 

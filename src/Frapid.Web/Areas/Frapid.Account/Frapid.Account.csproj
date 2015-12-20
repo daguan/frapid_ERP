@@ -160,19 +160,21 @@
     <Content Include="Scripts\Account\SignUp\signup.js" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration.cs" />
+    <Compile Include="Controllers\Backend\EmailTemplateController.cs" />
     <Compile Include="Controllers\SignInController.cs" />
     <Compile Include="AuthenticationManager.cs" />
     <Compile Include="Controllers\BaseAuthenticationController.cs" />
-    <Compile Include="Controllers\FacebookSignInController.cs" />
+    <Compile Include="Controllers\FacebookController.cs" />
     <Compile Include="Controllers\GoogleSignInController.cs" />
-    <Compile Include="Controllers\ResetController.cs" />
+    <Compile Include="Controllers\Frontend\ResetController.cs" />
     <Compile Include="Controllers\SignOutController.cs" />
     <Compile Include="DAL\Office.cs" />
     <Compile Include="DAL\Reset.cs" />
     <Compile Include="DAL\SignIn.cs" />
-    <Compile Include="DashboardControllers\ConfigurationProfileController.cs" />
-    <Compile Include="DashboardControllers\RoleController.cs" />
-    <Compile Include="DashboardControllers\UserController.cs" />
+    <Compile Include="Controllers\Backend\ConfigurationProfileController.cs" />
+    <Compile Include="Controllers\Backend\RoleController.cs" />
+    <Compile Include="Controllers\Backend\UserController.cs" />
     <Compile Include="DTO\Office.cs" />
     <Compile Include="Exceptions\EmailConfirmException.cs" />
     <Compile Include="Messaging\ResetEmail.cs" />
@@ -180,7 +182,7 @@
     <Compile Include="Messaging\WelcomeEmail.cs" />
     <Compile Include="Messaging\SignUpEmail.cs" />
     <Compile Include="Exceptions\PasswordConfirmException.cs" />
-    <Compile Include="Controllers\SignupController.cs" />
+    <Compile Include="Controllers\Frontend\SignupController.cs" />
     <Compile Include="DAL\Configuration.cs" />
     <Compile Include="DAL\GoogleSignIn.cs" />
     <Compile Include="DAL\FacebookSignIn.cs" />
@@ -203,8 +205,10 @@
     <Compile Include="ViewModels\SignIn.cs" />
     <Compile Include="AreaRegistration.cs" />
     <Compile Include="InputModels\SignInInfo.cs" />
+    <Compile Include="ViewModels\Template.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\EmailTemplate\Editor.js" />
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
     <Content Include="Views\SignIn\Index.cshtml" />
@@ -216,6 +220,8 @@
     <Content Include="Views\ConfigurationProfile\Index.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Role\Index.cshtml" />
+    <None Include="Views\EmailTemplate\Index.cshtml" />
+    <Content Include="Views\EmailTemplate\Shared\Editor.cshtml" />
     <None Include="Views\Reset\Do.cshtml" />
     <None Include="Views\Reset\Index.cshtml" />
     <Content Include="web.config" />

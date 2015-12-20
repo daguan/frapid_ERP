@@ -1,4 +1,14 @@
 ﻿var validator = new function () {
+    function makeDirty(el){
+        var field = el.closest(".field");
+        field.addClass("error");
+    };
+
+    function removeDirty(el){
+        var field = el.closest(".field");
+        field.removeClass("error");
+    };
+    
     var isValid = true;
     var requiredFieldMessage = window.requiredFieldMessage || "This field is required.";//Fallback to english language.
 
@@ -11,9 +21,9 @@
 
         if (window.isNullOrWhiteSpace(val)) {
             this.isValid = false;
-            window.makeDirty(field);
+            makeDirty(field);
         } else {
-            window.removeDirty(field);
+            removeDirty(field);
         };
     };
 
@@ -44,7 +54,7 @@
 
             var exp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!exp.test(val)) {
-                window.makeDirty(el);
+                makeDirty(el);
                 isValid = false;
                 return false;
             };
@@ -57,7 +67,7 @@
         $.each(errorFields, function (i, v) {
             var field = $(v);
             var label = field.closest(".field").find("label");
-            var message = label.html() + " : " + requiredFieldMessage;
+            var message = (label.html() || field.find("[id]").attr("id")) + " : " + requiredFieldMessage;
 
             if (log) {
                 console.log(message);
@@ -75,7 +85,7 @@
             target.html("");
 
             if (!val.match(expression)) {
-                window.makeDirty(el);
+                makeDirty(el);
                 isValid = false;
                 target.html(message);
                 return false;
@@ -96,8 +106,8 @@
             var targetName = target.siblings("label").text();
 
             if (val !== targetVal) {
-                window.makeDirty(el);
-                window.makeDirty(target);
+                makeDirty(el);
+                makeDirty(target);
                 alert("The " + name + " does not match with " + targetName + ".");
                 isValid = false;
                 return false;

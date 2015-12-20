@@ -152,20 +152,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
-    <Compile Include="Controllers\CategoryController.cs" />
-    <Compile Include="Controllers\ContactController.cs" />
-    <Compile Include="Controllers\ContactUsController.cs" />
-    <Compile Include="Controllers\ContentController.cs" />
-    <Compile Include="Controllers\IndexController.cs" />
-    <Compile Include="Controllers\LayoutController.cs" />
-    <Compile Include="Controllers\MenuController.cs" />
-    <Compile Include="Controllers\MenuItemController.cs" />
+    <Compile Include="Controllers\Backend\CategoryController.cs" />
+    <Compile Include="Controllers\Backend\ContactController.cs" />
+    <Compile Include="Controllers\Backend\DashboardSubscriptionController.cs" />
+    <Compile Include="Controllers\FrontEnd\ContactUsController.cs" />
+    <Compile Include="Controllers\Backend\ContentController.cs" />
+    <Compile Include="Controllers\FrontEnd\IndexController.cs" />
+    <Compile Include="Controllers\Backend\SubscriptionEmailTemplateController.cs" />
+    <Compile Include="Controllers\Backend\LayoutController.cs" />
+    <Compile Include="Controllers\Backend\MenuController.cs" />
+    <Compile Include="Controllers\Backend\MenuItemController.cs" />
     <Compile Include="Controllers\MyTemplateController.cs" />
+    <Compile Include="Controllers\FrontEnd\SubscriptionController.cs" />
     <Compile Include="Controllers\WebsiteBuilderController.cs" />
     <Compile Include="DAL\Contacts.cs" />
     <Compile Include="DAL\Contents.cs" />
+    <Compile Include="DAL\EmailSubscriptions.cs" />
     <Compile Include="DAL\Menus.cs" />
-    <Compile Include="Email.cs" />
+    <Compile Include="Emails\SubscriptionRemovedEmail.cs" />
+    <Compile Include="Emails\SubscriptionWelcomeEmail.cs" />
+    <Compile Include="Emails\ContactUsEmail.cs" />
     <Compile Include="ViewModels\ContactForm.cs" />
     <Compile Include="ViewModels\ContactUs.cs" />
     <Compile Include="ViewModels\IWebsitePage.cs" />
@@ -175,12 +181,16 @@
     <Compile Include="ThemeConfiguration.cs" />
     <Compile Include="ViewModels\Layout.cs" />
     <Compile Include="ViewModels\LayoutType.cs" />
+    <Compile Include="ViewModels\Subscribe.cs" />
+    <Compile Include="ViewModels\Template.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\site.css" />
+    <Content Include="Scripts\Subscription\Remove.js" />
     <Content Include="Scripts\Contents\EntityParser.js" />
     <Content Include="Scripts\Contents\Manage.js" />
     <Content Include="Scripts\ContactUs\ContactForm.js" />
+    <Content Include="Scripts\SubscriptionEmailTemplate\Shared\Editor.js" />
     <Content Include="Scripts\Layout\Shared\Editor.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Web.config" />
@@ -205,6 +215,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="DataAccess\Frapid.WebsiteBuilder.DataAccess.csproj">
+      <Project>{6d84caf6-e1fa-4a5c-8ccc-a36aea06aa0b}</Project>
+      <Name>Frapid.WebsiteBuilder.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="Entities\Frapid.WebsiteBuilder.Entities.csproj">
       <Project>{F191307A-E582-48B2-81F9-78A1E2928D6D}</Project>
       <Name>Frapid.WebsiteBuilder.Entities</Name>
@@ -214,6 +228,7 @@
     <Content Include="Views\ContactUs\Index.cshtml" />
     <Content Include="Views\ContactUs\ContactForm.cshtml" />
     <Content Include="Views\Menu\Index.cshtml" />
+    <Content Include="AppInfo.json" />
     <None Include="Views\Category\Index.cshtml" />
     <None Include="Views\Content\Manage.cshtml" />
     <Content Include="Views\Contact\Index.cshtml" />
@@ -224,6 +239,11 @@
     <Content Include="Views\Layout\Footer.cshtml" />
     <Content Include="Views\Layout\Homepage.cshtml" />
     <Content Include="Views\Layout\Http404Document.cshtml" />
+    <Content Include="Views\Subscription\Remove.cshtml" />
+    <Content Include="Views\SubscriptionEmailTemplate\SubscriptionRemoved.cshtml" />
+    <Content Include="Views\SubscriptionEmailTemplate\Shared\Editor.cshtml" />
+    <None Include="Views\DashboardSubscription\Index.cshtml" />
+    <None Include="Views\SubscriptionEmailTemplate\Welcome.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -12,9 +12,10 @@ namespace Frapid.WebsiteBuilder.Controllers
 
             ViewBag.LayoutPath = GetLayoutPath(theme);
             ViewBag.Layout = this.GetLayout(theme);
+            ViewBag.HomepageLayout = this.GetHomepageLayout(theme);
         }
 
-        protected string GetLayoutPath(string theme = "")
+        public static string GetLayoutPath(string theme = "")
         {
             string layout = Configuration.GetCurrentThemePath();
 

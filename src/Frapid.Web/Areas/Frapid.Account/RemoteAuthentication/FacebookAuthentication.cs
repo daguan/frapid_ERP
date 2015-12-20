@@ -21,7 +21,7 @@ namespace Frapid.Account.RemoteAuthentication
 
         private FacebookUserInfo GetFacebookUserInfo(string token)
         {
-            FacebookClient facebook = new FacebookClient(token);
+            var facebook = new FacebookClient(token);
             dynamic me = facebook.Get("me", new {fields = new[] {"id", "email", "name"}});
 
             return new FacebookUserInfo
@@ -34,7 +34,7 @@ namespace Frapid.Account.RemoteAuthentication
 
         public async Task<LoginResult> AuthenticateAsync(FacebookAccount account, RemoteUser user)
         {
-            FacebookUserInfo facebookUser = GetFacebookUserInfo(account.Token);
+            var facebookUser = GetFacebookUserInfo(account.Token);
 
             if (!Validate(facebookUser, account.FacebookUserId, account.Email))
             {
@@ -45,15 +45,15 @@ namespace Frapid.Account.RemoteAuthentication
                 };
             }
 
-            LoginResult result = FacebookSignIn.SignIn(account.FacebookUserId, account.Email, account.OfficeId, facebookUser.Name, account.Token, user.Browser,
+            var result = FacebookSignIn.SignIn(account.FacebookUserId, account.Email, account.OfficeId, facebookUser.Name, account.Token, user.Browser,
                 user.IpAddress, account.Culture);
 
             if (result.Status)
             {
                 if (!Registration.HasAccount(account.Email))
                 {
-                    string template = "~/Catalogs/{catalog}/Areas/Frapid.Account/EmailTemplates/welcome-3rd-party.html";
-                    WelcomeEmail welcomeEmail = new WelcomeEmail(facebookUser, template, ProviderName);
+                    string template = "~/Catalogs/{catalog}/Areas/Frapid.Account/EmailTemplates/welcome-email-other.html";
+                    var welcomeEmail = new WelcomeEmail(facebookUser, template, ProviderName);
                     await welcomeEmail.SendAsync();
                 }
             }

@@ -7,6 +7,24 @@
     font-family:"Josefin Sans", "Segoe UI", "Helvetica Neue","Helvetica","Arial","Verdana","sans-serif"!important;
 }
 
+.subscription .inverted.segment p
+{
+    color:white;
+}   
+
+.subscription .ui.form{
+    width:400px;
+    margin:0 auto;
+}
+
+.subscription .ui.form input {
+    text-align:center;
+}
+
+.confirm.email {
+    position:absolute;
+    left: -2000px;
+}
 
 header
 {

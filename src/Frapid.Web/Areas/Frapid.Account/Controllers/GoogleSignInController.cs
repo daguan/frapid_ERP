@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
-using Frapid.Account.DTO;
 using Frapid.Account.InputModels;
 using Frapid.Account.RemoteAuthentication;
 using Npgsql;
@@ -17,8 +15,8 @@ namespace Frapid.Account.Controllers
         {
             try
             {
-                GoogleAuthentication oauth = new GoogleAuthentication();
-                LoginResult result =
+                var oauth = new GoogleAuthentication();
+                var result =
                     await oauth.AuthenticateAsync(account, this.RemoteUser);
                 return OnAuthenticated(result);
             }

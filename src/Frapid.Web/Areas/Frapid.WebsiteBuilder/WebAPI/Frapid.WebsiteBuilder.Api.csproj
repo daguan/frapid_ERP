@@ -119,18 +119,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddEmailSubscriptionController.cs" />
     <Compile Include="CategoryController.cs" />
     <Compile Include="ContactController.cs" />
     <Compile Include="ContentController.cs" />
+    <Compile Include="EmailSubscriptionController.cs" />
+    <Compile Include="Fakes\AddEmailSubscriptionRepository.cs" />
     <Compile Include="Fakes\CategoryRepository.cs" />
     <Compile Include="Fakes\ContactRepository.cs" />
     <Compile Include="Fakes\ContentRepository.cs" />
+    <Compile Include="Fakes\EmailSubscriptionRepository.cs" />
     <Compile Include="Fakes\GetCategoryIdByCategoryAliasRepository.cs" />
     <Compile Include="Fakes\GetCategoryIdByCategoryNameRepository.cs" />
     <Compile Include="Fakes\MenuItemRepository.cs" />
     <Compile Include="Fakes\MenuItemViewRepository.cs" />
     <Compile Include="Fakes\MenuRepository.cs" />
     <Compile Include="Fakes\PublishedContentViewRepository.cs" />
+    <Compile Include="Fakes\RemoveEmailSubscriptionRepository.cs" />
     <Compile Include="Fakes\TagViewRepository.cs" />
     <Compile Include="GetCategoryIdByCategoryAliasController.cs" />
     <Compile Include="GetCategoryIdByCategoryNameController.cs" />
@@ -138,13 +143,18 @@
     <Compile Include="MenuItemViewController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublishedContentViewController.cs" />
+    <Compile Include="RemoveEmailSubscriptionController.cs" />
     <Compile Include="TagViewController.cs" />
+    <Compile Include="Tests\AddEmailSubscriptionRouteTests.cs" />
+    <Compile Include="Tests\AddEmailSubscriptionTests.cs" />
     <Compile Include="Tests\CategoryRouteTests.cs" />
     <Compile Include="Tests\CategoryTests.cs" />
     <Compile Include="Tests\ContactRouteTests.cs" />
     <Compile Include="Tests\ContactTests.cs" />
     <Compile Include="Tests\ContentRouteTests.cs" />
     <Compile Include="Tests\ContentTests.cs" />
+    <Compile Include="Tests\EmailSubscriptionRouteTests.cs" />
+    <Compile Include="Tests\EmailSubscriptionTests.cs" />
     <Compile Include="Tests\GetCategoryIdByCategoryAliasRouteTests.cs" />
     <Compile Include="Tests\GetCategoryIdByCategoryAliasTests.cs" />
     <Compile Include="Tests\GetCategoryIdByCategoryNameRouteTests.cs" />
@@ -157,6 +167,8 @@
     <Compile Include="Tests\MenuTests.cs" />
     <Compile Include="Tests\PublishedContentViewRouteTests.cs" />
     <Compile Include="Tests\PublishedContentViewTests.cs" />
+    <Compile Include="Tests\RemoveEmailSubscriptionRouteTests.cs" />
+    <Compile Include="Tests\RemoveEmailSubscriptionTests.cs" />
     <Compile Include="Tests\TagViewRouteTests.cs" />
     <Compile Include="Tests\TagViewTests.cs" />
     <Compile Include="WebsiteMenuController.cs" />

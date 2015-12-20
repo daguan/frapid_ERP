@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Web.Mvc;
 using AutoMapper;
 using Frapid.Account.DTO;
 using Frapid.Account.InputModels;
 using Frapid.Account.ViewModels;
 using Frapid.Configuration;
-using Office = Frapid.Account.DAL.Office;
 using Npgsql;
+using Office = Frapid.Account.DAL.Office;
 
 namespace Frapid.Account.Controllers
 {
@@ -25,9 +24,9 @@ namespace Frapid.Account.Controllers
                 return Redirect("/dashboard");
             }
 
-            ConfigurationProfile profile = DAL.Configuration.GetActiveProfile();
+            var profile = DAL.Configuration.GetActiveProfile();
             Mapper.CreateMap<ConfigurationProfile, SignIn>();
-            SignIn model = Mapper.Map<SignIn>(profile);
+            var model = Mapper.Map<SignIn>(profile);
 
             return View(GetRazorView<AreaRegistration>("SignIn/Index.cshtml"), model);
         }
@@ -38,7 +37,7 @@ namespace Frapid.Account.Controllers
         [AllowAnonymous]
         public ActionResult Do(SignInInfo model)
         {
-            System.Threading.Thread.Sleep(1000);
+            Thread.Sleep(1000);
 
             string challenge = Session["Challenge"].ToString();
             if (model.Challenge != challenge)
@@ -51,13 +50,13 @@ namespace Frapid.Account.Controllers
 
             try
             {
-                LoginResult result = DAL.SignIn.Do(model.Email, model.OfficeId, model.Challenge, model.Password,
+                var result = DAL.SignIn.Do(model.Email, model.OfficeId, model.Challenge, model.Password,
                     model.Browser, model.IpAddress, model.Culture);
                 return this.OnAuthenticated(result);
             }
             catch (NpgsqlException)
             {
-                return Json("Access is denied.");                
+                return Json("Access is denied.");
             }
         }
 
@@ -74,9 +73,9 @@ namespace Frapid.Account.Controllers
         [AllowAnonymous]
         public ActionResult GetLanguages()
         {
-            string[] cultures =
+            var cultures =
                 ConfigurationManager.GetConfigurationValue("ParameterConfigFileLocation", "Cultures").Split(',');
-            List<Language> languages = (from culture in cultures
+            var languages = (from culture in cultures
                 select culture.Trim()
                 into cultureName
                 from info in

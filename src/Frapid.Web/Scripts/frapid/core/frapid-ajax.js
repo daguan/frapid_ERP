@@ -71,7 +71,9 @@ var getAjaxRequest = function (url, type, data, bodyPost) {
 
 
     ajax.fail(function (xhr) {
-        displayMessage(getAjaxErrorMessage(xhr));
+        if(window.displayMessage){
+            displayMessage(getAjaxErrorMessage(xhr));            
+        };
     });
 
     return ajax;

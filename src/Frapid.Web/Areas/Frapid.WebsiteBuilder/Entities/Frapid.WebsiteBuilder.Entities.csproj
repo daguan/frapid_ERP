@@ -54,6 +54,7 @@
     <Compile Include="Category.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="Content.cs" />
+    <Compile Include="EmailSubscription.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="MenuItem.cs" />
     <Compile Include="MenuItemView.cs" />

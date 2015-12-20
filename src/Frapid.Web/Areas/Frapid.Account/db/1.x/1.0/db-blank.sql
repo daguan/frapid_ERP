@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/10.db.sql --<--<--
+﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 DROP SCHEMA IF EXISTS account CASCADE;
 CREATE SCHEMA account;
 
@@ -14,13 +14,6 @@ CREATE TABLE account.roles
 
 ALTER TABLE config.default_entity_access
 ADD FOREIGN KEY(role_id) REFERENCES account.roles;
-
-INSERT INTO account.roles
-SELECT     1,   'Guest',    false UNION ALL
-SELECT    10,   'Client',   false UNION ALL
-SELECT   100,   'Partner',  false UNION ALL
-SELECT  1000,   'User',     false UNION ALL
-SELECT 10000,   'Admin',    true;
 
 CREATE TABLE account.configuration_profiles
 (
@@ -45,10 +38,6 @@ CREATE TABLE account.configuration_profiles
 CREATE UNIQUE INDEX configuration_profile_uix
 ON account.configuration_profiles(is_active)
 WHERE is_active;
-
-INSERT INTO account.configuration_profiles(profile_name, is_active, allow_registration, registration_role_id, registration_office_id)
-SELECT 'Default', true, true, 1, 1;
-
 
 CREATE TABLE account.registrations
 (
@@ -143,96 +132,6 @@ CREATE TABLE account.reset_requests
     confirmed_on                            TIMESTAMP WITH TIME ZONE
 );
 
-
-CREATE FUNCTION account.has_active_reset_request(_email text)
-RETURNS boolean
-AS
-$$
-    DECLARE _expires_on                     TIMESTAMP WITH TIME ZONE = NOW() + INTERVAL '24 Hours';
-BEGIN
-    IF EXISTS
-    (
-        SELECT * FROM account.reset_requests
-        WHERE LOWER(email) = LOWER(_email)
-        AND expires_on <= _expires_on
-    ) THEN        
-        RETURN true;
-    END IF;
-
-    RETURN false;
-END
-$$
-LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION account.reset_account
-(
-    _email                                  text,
-    _browser                                text,
-    _ip_address                             text
-)
-RETURNS SETOF account.reset_requests
-AS
-$$
-    DECLARE _request_id                     uuid;
-    DECLARE _user_id                        integer;
-    DECLARE _name                           text;
-    DECLARE _expires_on                     TIMESTAMP WITH TIME ZONE = NOW() + INTERVAL '24 Hours';
-BEGIN
-    IF(NOT account.user_exists(_email) OR account.is_restricted_user(_email)) THEN
-        RETURN;
-    END IF;
-
-    SELECT
-        user_id,
-        name
-    INTO
-        _user_id,
-        _name
-    FROM account.users
-    WHERE LOWER(email) = LOWER(_email);
-
-    IF account.has_active_reset_request(_email) THEN
-        RETURN QUERY
-        SELECT * FROM account.reset_requests
-        WHERE LOWER(email) = LOWER(_email)
-        AND expires_on <= _expires_on
-        LIMIT 1;
-        
-        RETURN;
-    END IF;
-
-    INSERT INTO account.reset_requests(user_id, email, name, browser, ip_address, expires_on)
-    SELECT _user_id, _email, _name, _browser, _ip_address, _expires_on
-    RETURNING request_id INTO _request_id;
-
-    RETURN QUERY
-    SELECT *
-    FROM account.reset_requests
-    WHERE request_id = _request_id;
-
-    RETURN;
-END
-$$
-LANGUAGE plpgsql;
-
-CREATE FUNCTION account.email_exists(_email national character varying(100))
-RETURNS bool
-AS
-$$
-    DECLARE _count                          integer;
-BEGIN
-    SELECT count(*) INTO _count FROM account.users WHERE lower(email) = LOWER(_email);
-
-    IF(COALESCE(_count, 0) =0) THEN
-        SELECT count(*) INTO _count FROM account.registrations WHERE lower(email) = LOWER(_email);
-    END IF;
-    
-    RETURN COALESCE(_count, 0) > 0;
-END
-$$
-LANGUAGE plpgsql;
-
-
 ALTER TABLE config.currencies
 ADD CONSTRAINT currencies_users_fk
 FOREIGN KEY(audit_user_id)
@@ -280,29 +179,33 @@ CREATE TABLE account.logins
     culture                                 national character varying(12) NOT NULL    
 );
 
-CREATE FUNCTION account.get_registration_role_id()
-RETURNS integer
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.can_confirm_registration.sql --<--<--
+DROP FUNCTION IF EXISTS account.can_confirm_registration(_token uuid);
+
+CREATE FUNCTION account.can_confirm_registration(_token uuid)
+RETURNS boolean
+STABLE
 AS
 $$
 BEGIN
-    RETURN registration_role_id
-    FROM account.configuration_profiles
-    WHERE is_active;
+    IF EXISTS
+    (
+        SELECT *
+        FROM account.registrations
+        WHERE registration_id = _token
+        AND NOT confirmed
+    ) THEN
+        RETURN true;
+    END IF;
+
+    RETURN false;
 END
 $$
 LANGUAGE plpgsql;
 
-CREATE FUNCTION account.get_registration_office_id()
-RETURNS integer
-AS
-$$
-BEGIN
-    RETURN registration_office_id
-    FROM account.configuration_profiles
-    WHERE is_active;
-END
-$$
-LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.can_register_with_facebook.sql --<--<--
+DROP FUNCTION IF EXISTS account.can_register_with_facebook();
 
 CREATE FUNCTION account.can_register_with_facebook()
 RETURNS boolean
@@ -324,6 +227,10 @@ END
 $$
 LANGUAGE plpgsql;
 
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.can_register_with_google.sql --<--<--
+DROP FUNCTION IF EXISTS account.can_register_with_google();
+
 CREATE FUNCTION account.can_register_with_google()
 RETURNS boolean
 AS
@@ -344,94 +251,128 @@ END
 $$
 LANGUAGE plpgsql;
 
-CREATE FUNCTION account.is_restricted_user(_email national character varying(100))
-RETURNS boolean
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.complete_reset.sql --<--<--
+DROP FUNCTION IF EXISTS account.complete_reset
+(
+    _request_id                     uuid,
+    _password                       text
+);
+
+CREATE FUNCTION account.complete_reset
+(
+    _request_id                     uuid,
+    _password                       text
+)
+RETURNS void
 AS
 $$
+    DECLARE _user_id                integer;
+    DECLARE _email                  text;
 BEGIN
-    IF EXISTS
-    (
-        SELECT *
-        FROM account.users
-        WHERE LOWER(account.users.email) = LOWER(_email)
-        AND NOT account.users.status
-    ) THEN
-        RETURN true;
-    END IF;
+    SELECT
+        account.users.user_id,
+        account.users.email
+    INTO
+        _user_id,
+        _email
+    FROM account.reset_requests
+    INNER JOIN account.users
+    ON account.users.user_id = account.reset_requests.user_id
+    WHERE account.reset_requests.request_id = _request_id
+    AND expires_on >= NOW();
+
+    _password = encode(digest(_email || _password, 'sha512'), 'hex');
     
-    RETURN false;
+    UPDATE account.users
+    SET
+        password = _password
+    WHERE user_id = _user_id;
+
+    UPDATE account.reset_requests
+    SET confirmed = true, confirmed_on = NOW();
 END
 $$
 LANGUAGE plpgsql;
 
-CREATE FUNCTION account.user_exists(_email national character varying(100))
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.confirm_registration.sql --<--<--
+DROP FUNCTION IF EXISTS account.confirm_registration(_token uuid);
+
+CREATE FUNCTION account.confirm_registration(_token uuid)
 RETURNS boolean
 AS
 $$
+    DECLARE _can_confirm        boolean;
+    DECLARE _office_id          integer;
+    DECLARE _role_id            integer;
 BEGIN
-    IF EXISTS
-    (
-        SELECT *
-        FROM account.users
-        WHERE LOWER(account.users.email) = LOWER(_email)
-    ) THEN
-        RETURN true;
+    _can_confirm := account.can_confirm_registration(_token);
+
+    IF(NOT _can_confirm) THEN
+        RETURN false;
     END IF;
+
+    SELECT
+        registration_office_id,
+        registration_role_id
+    INTO
+        _office_id,
+        _role_id
+    FROM account.configuration_profiles
+    WHERE is_active
+    LIMIT 1;
+
+    INSERT INTO account.users(email, password, office_id, role_id, name, phone)
+    SELECT email, password, _office_id, _role_id, name, phone
+    FROM account.registrations
+    WHERE registration_id = _token;
+
+    UPDATE account.registrations
+    SET 
+        confirmed = true, 
+        confirmed_on = NOW()
+    WHERE registration_id = _token;
     
-    RETURN false;
+    RETURN true;
 END
 $$
 LANGUAGE plpgsql;
 
-CREATE FUNCTION account.fb_user_exists(_user_id integer)
-RETURNS boolean
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.email_exists.sql --<--<--
+DROP FUNCTION IF EXISTS account.email_exists(_email national character varying(100));
+
+CREATE FUNCTION account.email_exists(_email national character varying(100))
+RETURNS bool
 AS
 $$
+    DECLARE _count                          integer;
 BEGIN
-    IF EXISTS
-    (
-        SELECT *
-        FROM account.fb_access_tokens
-        WHERE account.fb_access_tokens.user_id = _user_id
-    ) THEN
-        RETURN true;
+    SELECT count(*) INTO _count FROM account.users WHERE lower(email) = LOWER(_email);
+
+    IF(COALESCE(_count, 0) =0) THEN
+        SELECT count(*) INTO _count FROM account.registrations WHERE lower(email) = LOWER(_email);
     END IF;
     
-    RETURN false;
+    RETURN COALESCE(_count, 0) > 0;
 END
 $$
 LANGUAGE plpgsql;
 
-CREATE FUNCTION account.google_user_exists(_user_id integer)
-RETURNS boolean
-AS
-$$
-BEGIN
-    IF EXISTS
-    (
-        SELECT *
-        FROM account.google_access_tokens
-        WHERE account.google_access_tokens.user_id = _user_id
-    ) THEN
-        RETURN true;
-    END IF;
-    
-    RETURN false;
-END
-$$
-LANGUAGE plpgsql;
 
-CREATE FUNCTION account.get_user_id_by_email(_email national character varying(100))
-RETURNS integer
-AS
-$$
-BEGIN
-    RETURN user_id
-    FROM account.users
-    WHERE LOWER(account.users.email) = LOWER(_email);
-END
-$$
-LANGUAGE plpgsql;
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.fb_sign_in.sql --<--<--
+DROP FUNCTION IF EXISTS account.fb_sign_in
+(
+    _fb_user_id                             text,
+    _email                                  text,
+    _office_id                              integer,
+    _name                                   text,
+    _token                                  text,
+    _browser                                text,
+    _ip_address                             text,
+    _culture                                text
+);
 
 CREATE FUNCTION account.fb_sign_in
 (
@@ -500,26 +441,88 @@ END
 $$
 LANGUAGE plpgsql;
 
-CREATE FUNCTION account.sign_in
-(
-    _email                                  text,
-    _challenge                              text,
-    _password                               text
-)
-RETURNS TABLE
-(
-    login_id                                 bigint,
-    status                                  boolean,
-    message                                 text
-)
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.fb_user_exists.sql --<--<--
+DROP FUNCTION IF EXISTS account.fb_user_exists(_user_id integer);
+
+CREATE FUNCTION account.fb_user_exists(_user_id integer)
+RETURNS boolean
 AS
 $$
-    DECLARE 
 BEGIN
+    IF EXISTS
+    (
+        SELECT *
+        FROM account.fb_access_tokens
+        WHERE account.fb_access_tokens.user_id = _user_id
+    ) THEN
+        RETURN true;
+    END IF;
     
+    RETURN false;
 END
 $$
 LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.get_registration_office_id.sql --<--<--
+DROP FUNCTION IF EXISTS account.get_registration_office_id();
+
+CREATE FUNCTION account.get_registration_office_id()
+RETURNS integer
+AS
+$$
+BEGIN
+    RETURN registration_office_id
+    FROM account.configuration_profiles
+    WHERE is_active;
+END
+$$
+LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.get_registration_role_id.sql --<--<--
+DROP FUNCTION IF EXISTS account.get_registration_role_id();
+
+CREATE FUNCTION account.get_registration_role_id()
+RETURNS integer
+AS
+$$
+BEGIN
+    RETURN registration_role_id
+    FROM account.configuration_profiles
+    WHERE is_active;
+END
+$$
+LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.get_user_id_by_email.sql --<--<--
+DROP FUNCTION IF EXISTS account.get_user_id_by_email(_email national character varying(100));
+
+CREATE FUNCTION account.get_user_id_by_email(_email national character varying(100))
+RETURNS integer
+AS
+$$
+BEGIN
+    RETURN user_id
+    FROM account.users
+    WHERE LOWER(account.users.email) = LOWER(_email);
+END
+$$
+LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.google_sign_in.sql --<--<--
+DROP FUNCTION IF EXISTS account.google_sign_in
+(
+    _email                                  text,
+    _office_id                              integer,
+    _name                                   text,
+    _token                                  text,
+    _browser                                text,
+    _ip_address                             text,
+    _culture                                text
+);
 
 CREATE FUNCTION account.google_sign_in
 (
@@ -582,66 +585,31 @@ $$
 LANGUAGE plpgsql;
 
 
-CREATE FUNCTION account.can_confirm_registration(_token uuid)
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.google_user_exists.sql --<--<--
+DROP FUNCTION IF EXISTS account.google_user_exists(_user_id integer);
+
+CREATE FUNCTION account.google_user_exists(_user_id integer)
 RETURNS boolean
-STABLE
 AS
 $$
 BEGIN
     IF EXISTS
     (
         SELECT *
-        FROM account.registrations
-        WHERE registration_id = _token
-        AND NOT confirmed
+        FROM account.google_access_tokens
+        WHERE account.google_access_tokens.user_id = _user_id
     ) THEN
         RETURN true;
     END IF;
-
+    
     RETURN false;
 END
 $$
 LANGUAGE plpgsql;
 
-CREATE FUNCTION account.confirm_registration(_token uuid)
-RETURNS boolean
-AS
-$$
-    DECLARE _can_confirm        boolean;
-    DECLARE _office_id          integer;
-    DECLARE _role_id            integer;
-BEGIN
-    _can_confirm := account.can_confirm_registration(_token);
 
-    IF(NOT _can_confirm) THEN
-        RETURN false;
-    END IF;
-
-    SELECT
-        registration_office_id,
-        registration_role_id
-    INTO
-        _office_id,
-        _role_id
-    FROM account.configuration_profiles
-    WHERE is_active
-    LIMIT 1;
-
-    INSERT INTO account.users(email, password, office_id, role_id, name, phone)
-    SELECT email, password, _office_id, _role_id, name, phone
-    FROM account.registrations
-    WHERE registration_id = _token;
-
-    UPDATE account.registrations
-    SET 
-        confirmed = true, 
-        confirmed_on = NOW()
-    WHERE registration_id = _token;
-    
-    RETURN true;
-END
-$$
-LANGUAGE plpgsql;
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.has_account.sql --<--<--
+DROP FUNCTION IF EXISTS account.has_account(_email national character varying(100));
 
 CREATE FUNCTION account.has_account(_email national character varying(100))
 RETURNS bool
@@ -655,41 +623,125 @@ END
 $$
 LANGUAGE plpgsql;
 
-CREATE FUNCTION account.complete_reset
-(
-    _request_id                     uuid,
-    _password                       text
-)
-RETURNS void
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.has_active_reset_request.sql --<--<--
+DROP FUNCTION IF EXISTS account.has_active_reset_request(_email text);
+
+CREATE FUNCTION account.has_active_reset_request(_email text)
+RETURNS boolean
 AS
 $$
-    DECLARE _user_id                integer;
-    DECLARE _email                  text;
+    DECLARE _expires_on                     TIMESTAMP WITH TIME ZONE = NOW() + INTERVAL '24 Hours';
 BEGIN
-    SELECT
-        account.users.user_id,
-        account.users.email
-    INTO
-        _user_id,
-        _email
-    FROM account.reset_requests
-    INNER JOIN account.users
-    ON account.users.user_id = account.reset_requests.user_id
-    WHERE account.reset_requests.request_id = _request_id
-    AND expires_on >= NOW();
+    IF EXISTS
+    (
+        SELECT * FROM account.reset_requests
+        WHERE LOWER(email) = LOWER(_email)
+        AND expires_on <= _expires_on
+    ) THEN        
+        RETURN true;
+    END IF;
 
-    _password = encode(digest(_email || _password, 'sha512'), 'hex');
-    
-    UPDATE account.users
-    SET
-        password = _password
-    WHERE user_id = _user_id;
-
-    UPDATE account.reset_requests
-    SET confirmed = true, confirmed_on = NOW();
+    RETURN false;
 END
 $$
 LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.is_restricted_user.sql --<--<--
+DROP FUNCTION IF EXISTS account.is_restricted_user(_email national character varying(100));
+
+CREATE FUNCTION account.is_restricted_user(_email national character varying(100))
+RETURNS boolean
+AS
+$$
+BEGIN
+    IF EXISTS
+    (
+        SELECT *
+        FROM account.users
+        WHERE LOWER(account.users.email) = LOWER(_email)
+        AND NOT account.users.status
+    ) THEN
+        RETURN true;
+    END IF;
+    
+    RETURN false;
+END
+$$
+LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.reset_account.sql --<--<--
+DROP FUNCTION IF EXISTS account.reset_account
+(
+    _email                                  text,
+    _browser                                text,
+    _ip_address                             text
+);
+
+CREATE FUNCTION account.reset_account
+(
+    _email                                  text,
+    _browser                                text,
+    _ip_address                             text
+)
+RETURNS SETOF account.reset_requests
+AS
+$$
+    DECLARE _request_id                     uuid;
+    DECLARE _user_id                        integer;
+    DECLARE _name                           text;
+    DECLARE _expires_on                     TIMESTAMP WITH TIME ZONE = NOW() + INTERVAL '24 Hours';
+BEGIN
+    IF(NOT account.user_exists(_email) OR account.is_restricted_user(_email)) THEN
+        RETURN;
+    END IF;
+
+    SELECT
+        user_id,
+        name
+    INTO
+        _user_id,
+        _name
+    FROM account.users
+    WHERE LOWER(email) = LOWER(_email);
+
+    IF account.has_active_reset_request(_email) THEN
+        RETURN QUERY
+        SELECT * FROM account.reset_requests
+        WHERE LOWER(email) = LOWER(_email)
+        AND expires_on <= _expires_on
+        LIMIT 1;
+        
+        RETURN;
+    END IF;
+
+    INSERT INTO account.reset_requests(user_id, email, name, browser, ip_address, expires_on)
+    SELECT _user_id, _email, _name, _browser, _ip_address, _expires_on
+    RETURNING request_id INTO _request_id;
+
+    RETURN QUERY
+    SELECT *
+    FROM account.reset_requests
+    WHERE request_id = _request_id;
+
+    RETURN;
+END
+$$
+LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.sign_in.sql --<--<--
+DROP FUNCTION IF EXISTS account.sign_in
+(
+    _email                                  text,
+    _office_id                              integer,
+    _challenge                              text,
+    _password                               text,
+    _browser                                text,
+    _ip_address                             text,
+    _culture                                text
+);
 
 CREATE FUNCTION account.sign_in
 (
@@ -746,6 +798,59 @@ END
 $$
 LANGUAGE plpgsql;
 
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.user_exists.sql --<--<--
+DROP FUNCTION IF EXISTS account.user_exists(_email national character varying(100));
+
+CREATE FUNCTION account.user_exists(_email national character varying(100))
+RETURNS boolean
+AS
+$$
+BEGIN
+    IF EXISTS
+    (
+        SELECT *
+        FROM account.users
+        WHERE LOWER(account.users.email) = LOWER(_email)
+    ) THEN
+        RETURN true;
+    END IF;
+    
+    RETURN false;
+END
+$$
+LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/03.menus/menus.sql --<--<--
+SELECT * FROM config.create_app('Frapid.Account', 'Account', '1.0', 'MixERP Inc.', 'December 1, 2015', 'grey lock', '/dashboard/account/configuration-profile', '{Frapid.WebsiteBuilder}'::text[]);
+
+SELECT * FROM config.create_menu('Frapid.Account', 'Roles', '/dashboard/account/roles', 'users', '');
+SELECT * FROM config.create_menu('Frapid.Account', 'User Management', '/dashboard/account/user-management', 'user', '');
+SELECT * FROM config.create_menu('Frapid.Account', 'Configuration Profile', '/dashboard/account/configuration-profile', 'configure', '');
+SELECT * FROM config.create_menu('Frapid.Account', 'Email Templates', '', 'mail', '');
+SELECT * FROM config.create_menu('Frapid.Account', 'Account Verification', '/dashboard/account/email-templates/account-verification', 'checkmark box', 'Email Templates');
+SELECT * FROM config.create_menu('Frapid.Account', 'Password Reset', '/dashboard/account/email-templates/password-reset', 'key', 'Email Templates');
+SELECT * FROM config.create_menu('Frapid.Account', 'Welcome Email', '/dashboard/account/email-templates/welcome-email', 'star', 'Email Templates');
+SELECT * FROM config.create_menu('Frapid.Account', 'Welcome Email (3rd Party)', '/dashboard/account/email-templates/welcome-email-other', 'star outline', 'Email Templates');
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
+INSERT INTO account.roles
+SELECT     1,   'Guest',    false UNION ALL
+SELECT    10,   'Client',   false UNION ALL
+SELECT   100,   'Partner',  false UNION ALL
+SELECT  1000,   'User',     false UNION ALL
+SELECT 10000,   'Admin',    true;
+
+
+INSERT INTO account.configuration_profiles(profile_name, is_active, allow_registration, registration_role_id, registration_office_id)
+SELECT 'Default', true, true, 1, 1;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/05.views/account.sign_in_view.sql --<--<--
+DROP VIEW IF EXISTS account.sign_in_view;
+
 CREATE VIEW account.sign_in_view
 AS
 SELECT
@@ -769,12 +874,6 @@ INNER JOIN account.roles
 ON account.roles.role_id = account.users.role_id
 INNER JOIN config.offices
 ON config.offices.office_id = account.logins.office_id;
-
-SELECT * FROM config.create_app('Frapid.Account', 'Account', '1.0', 'MixERP Inc.', 'December 1, 2015', 'grey lock', '/dashboard/account/configuration-profile', '{Frapid.WebsiteBuilder}'::text[]);
-
-SELECT * FROM config.create_menu('Frapid.Account', 'Roles', '/dashboard/account/roles', 'users', '');
-SELECT * FROM config.create_menu('Frapid.Account', 'User Management', '/dashboard/account/user-management', 'user', '');
-SELECT * FROM config.create_menu('Frapid.Account', 'Configuration Profile', '/dashboard/account/configuration-profile', 'configure', '');
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/99.ownership.sql --<--<--

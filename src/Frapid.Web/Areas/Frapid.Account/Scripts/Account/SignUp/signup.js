@@ -1,4 +1,5 @@
-﻿$(".email.address.field").hide();
+﻿var bigError = $(".big.error");
+$(".email.address.field").hide();
 
 $(document).ready(function () {
     window.validator.initialize($(".signup.segment"));
@@ -9,7 +10,7 @@ function getPassword(username, password) {
     return hex;
 };
 
-$("#EmailInputEmail").blur(function () {
+$("#EmailInputEmail").change(function () {
     function request(email) {
         var url = "/account/sign-up/validate-email?email=" + email;
         return window.getAjaxRequest(url, "POST");
@@ -27,11 +28,11 @@ $("#EmailInputEmail").blur(function () {
 
     ajax.success(function (response) {
         if (response) {
-            $(".big.error").html("");
+            bigError.html("");
             window.removeDirty(el);
             $("#SignUpButton").removeClass("disabled");
         } else {
-            $(".big.error").html("This email address is already in use.");
+            bigError.html("This email address is already in use.");
             window.makeDirty(el);
         };
     });
@@ -45,11 +46,11 @@ $("#SignUpButton").click(function () {
     };
 
     function validate() {
-        $(".big.error").html("");
+        bigError.html("");
         var formEl = $(".signup.segment");
 
         if (!$("#AgreementCheckbox").is(":checked")) {
-            $(".big.error").html("Please agree to terms and conditions to create an account.");
+            bigError.html("Please agree to terms and conditions to create an account.");
             return false;
         };
 
@@ -64,7 +65,7 @@ $("#SignUpButton").click(function () {
         return isValid;
     };
 
-    $(".big.error").html("");
+    bigError.html("");
 
     var isValid = validate();
     if (!isValid) {

@@ -28,9 +28,7 @@ END
 $$
 LANGUAGE plpgsql;
 
-
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/01.types-domains-tables-and-constraints/domains.sql --<--<--
 DROP SCHEMA IF EXISTS config CASCADE;
 CREATE SCHEMA config;
 
@@ -112,9 +110,7 @@ DROP DOMAIN IF EXISTS public.html CASCADE;
 CREATE DOMAIN public.html
 AS text;
 
-
-
-
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 CREATE TABLE config.kanbans
 (
     kanban_id                               BIGSERIAL NOT NULL PRIMARY KEY,
@@ -177,9 +173,6 @@ CREATE TABLE config.offices
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())
 );
-
-INSERT INTO config.offices(office_code, office_name)
-SELECT 'DEF', 'Default';
 
 CREATE TABLE config.smtp_configs
 (
@@ -283,128 +276,6 @@ CREATE TABLE config.entity_access
                                     DEFAULT(NOW())
 );
 
-DROP FUNCTION IF EXISTS config.has_access(_user_id integer, _entity text, _access_type_id integer);
-
-CREATE FUNCTION config.has_access(_user_id integer, _entity text, _access_type_id integer)
-RETURNS boolean
-AS
-$$
-    DECLARE _role_id                    integer;
-    DECLARE _group_config               boolean = NULL;
-    DECLARE _user_config                boolean = NULL;
-    DECLARE _config                     boolean = true;
-BEGIN
-    SELECT role_id INTO _role_id FROM account.users WHERE user_id = _user_id;
-
-    --GROUP config BASED ON ALL ENTITIES AND ALL ACCESS TYPES
-    IF EXISTS
-    (
-        SELECT * FROM config.default_entity_access
-        WHERE role_id = _role_id
-        AND NOT allow_access
-        AND access_type_id IS NULL
-        AND COALESCE(entity_name, '') = ''
-    ) THEN
-        _group_config = false;
-    END IF;
-
-    --GROUP config BASED ON ALL ENTITIES AND SPECIFIED ACCESS TYPE
-    IF EXISTS
-    (
-        SELECT * FROM config.default_entity_access
-        WHERE role_id = _role_id
-        AND NOT allow_access
-        AND access_type_id = _access_type_id
-        AND COALESCE(entity_name, '') = ''
-    ) THEN
-        _group_config = false;
-    END IF;
- 
-
-    --GROUP config BASED ON SPECIFIED ENTITY AND ALL ACCESS TYPES
-    IF EXISTS
-    (
-        SELECT * FROM config.default_entity_access
-        WHERE role_id = _role_id
-        AND NOT allow_access
-        AND access_type_id IS NULL
-        AND entity_name = _entity
-    ) THEN
-        _group_config = false;
-    END IF;
-
-    --GROUP config BASED ON SPECIFIED ENTITY AND SPECIFIED ACCESS TYPE
-    IF EXISTS
-    (
-        SELECT * FROM config.default_entity_access
-        WHERE role_id = _role_id
-        AND NOT allow_access
-        AND access_type_id = _access_type_id
-        AND entity_name = _entity
-    ) THEN
-        _group_config = false;
-    END IF;
-
-
-    --USER config BASED ON ALL ENTITIES AND ALL ACCESS TYPES
-    SELECT allow_access INTO _user_config FROM config.entity_access
-    WHERE user_id = _user_id
-    AND access_type_id IS NULL
-    AND COALESCE(entity_name, '') = '';
-
-    --USER config BASED ON SPECIFIED ENTITY AND ALL ACCESS TYPES
-    IF(_user_config IS NULL) THEN
-        SELECT allow_access INTO _user_config 
-        FROM config.entity_access
-        WHERE user_id = _user_id
-        AND access_type_id IS NULL
-        AND entity_name = _entity;
-    END IF;
- 
-    --USER config BASED ON ALL ENTITIES AND SPECIFIED ACCESS TYPE
-    IF(_user_config IS NULL) THEN
-        SELECT allow_access INTO _user_config FROM config.entity_access
-        WHERE user_id = _user_id
-        AND access_type_id = _access_type_id
-        AND COALESCE(entity_name, '') = '';
-    END IF;
- 
-
-    --USER config BASED ON SPECIFIED ENTITY AND SPECIFIED ACCESS TYPE
-    IF(_user_config IS NULL) THEN
-        SELECT allow_access INTO _user_config FROM config.entity_access
-        WHERE user_id = _user_id
-        AND access_type_id = _access_type_id
-        AND entity_name = _entity;
-    END IF;
-
-    IF(_group_config IS NOT NULL) THEN
-        _config := _group_config;
-    END IF;
-
-    IF(_user_config IS NOT NULL) THEN
-        _config := _user_config;
-    END IF;
-
-    RETURN _config;
-END
-$$
-LANGUAGE plpgsql;
-
-
-CREATE FUNCTION config.get_user_id_by_login_id(_login_id bigint)
-RETURNS integer
-AS
-$$
-BEGIN
-    RETURN 
-    user_id
-    FROM account.logins
-    WHERE login_id = _login_id;
-END
-$$
-LANGUAGE plpgsql;
-
 CREATE TABLE config.filters
 (
     filter_id                       BIGSERIAL NOT NULL PRIMARY KEY,
@@ -424,8 +295,6 @@ CREATE TABLE config.filters
 
 CREATE INDEX filters_object_name_inx
 ON config.filters(object_name);
-
-
 
 CREATE TABLE config.custom_field_data_types
 (
@@ -495,280 +364,9 @@ CREATE TABLE config.flags
 CREATE UNIQUE INDEX flags_user_id_resource_resource_id_uix
 ON config.flags(user_id, UPPER(resource), UPPER(resource_key), UPPER(resource_id));
 
-
-
-
-
-DROP VIEW IF EXISTS config.custom_field_view;
-
-CREATE VIEW config.custom_field_view
-AS
-SELECT
-    config.custom_field_forms.table_name,
-    config.custom_field_forms.key_name,
-    config.custom_field_setup.custom_field_setup_id,
-    config.custom_field_setup.form_name,
-    config.custom_field_setup.field_order,
-    config.custom_field_setup.field_name,
-    config.custom_field_setup.field_label,
-    config.custom_field_setup.description,
-    config.custom_field_data_types.data_type,
-    config.custom_field_data_types.is_number,
-    config.custom_field_data_types.is_date,
-    config.custom_field_data_types.is_boolean,
-    config.custom_field_data_types.is_long_text,
-    config.custom_fields.resource_id,
-    config.custom_fields.value
-FROM config.custom_field_setup
-INNER JOIN config.custom_field_data_types
-ON config.custom_field_data_types.data_type = config.custom_field_setup.data_type
-INNER JOIN config.custom_field_forms
-ON config.custom_field_forms.form_name = config.custom_field_setup.form_name
-INNER JOIN config.custom_fields
-ON config.custom_fields.custom_field_setup_id = config.custom_field_setup.custom_field_setup_id
-ORDER BY field_order;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-CREATE FUNCTION config.get_flag_type_id
-(
-    user_id_        integer,
-    resource_       text,
-    resource_key_   text,
-    resource_id_    text
-)
-RETURNS integer
-STABLE
-AS
-$$
-BEGIN
-    RETURN flag_type_id
-    FROM config.flags
-    WHERE user_id=$1
-    AND resource=$2
-    AND resource_key=$3
-    AND resource_id=$4;
-END
-$$
-LANGUAGE plpgsql;
-
-
-
-
-
-
-
-
-
-
-CREATE FUNCTION config.create_flag
-(
-    user_id_            integer,
-    flag_type_id_       integer,
-    resource_           text,
-    resource_key_       text,
-    resource_id_        text
-)
-RETURNS void
-VOLATILE
-AS
-$$
-BEGIN
-    IF NOT EXISTS(SELECT * FROM config.flags WHERE user_id=user_id_ AND resource=resource_ AND resource_key=resource_key_ AND resource_id=resource_id_) THEN
-        INSERT INTO config.flags(user_id, flag_type_id, resource, resource_key, resource_id)
-        SELECT user_id_, flag_type_id_, resource_, resource_key_, resource_id_;
-    ELSE
-        UPDATE config.flags
-        SET
-            flag_type_id=flag_type_id_
-        WHERE 
-            user_id=user_id_ 
-        AND 
-            resource=resource_ 
-        AND 
-            resource_key=resource_key_ 
-        AND 
-            resource_id=resource_id_;
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-
-DROP VIEW IF EXISTS config.flag_view;
-
-CREATE VIEW config.flag_view
-AS
-SELECT
-    config.flags.flag_id,
-    config.flags.user_id,
-    config.flags.flag_type_id,
-    config.flags.resource_id,
-    config.flags.resource,
-    config.flags.resource_key,
-    config.flags.flagged_on,
-    config.flag_types.flag_type_name,
-    config.flag_types.background_color,
-    config.flag_types.foreground_color
-FROM config.flags
-INNER JOIN config.flag_types
-ON config.flags.flag_type_id = config.flag_types.flag_type_id;
-
-
-DROP VIEW IF EXISTS config.filter_name_view;
-
-CREATE VIEW config.filter_name_view
-AS
-SELECT
-    DISTINCT
-    object_name,
-    filter_name,
-    is_default
-FROM config.filters;
-
-CREATE VIEW config.custom_field_definition_view
-AS
-SELECT
-    config.custom_field_forms.table_name,
-    config.custom_field_forms.key_name,
-    config.custom_field_setup.custom_field_setup_id,
-    config.custom_field_setup.form_name,
-    config.custom_field_setup.field_order,
-    config.custom_field_setup.field_name,
-    config.custom_field_setup.field_label,
-    config.custom_field_setup.description,
-    config.custom_field_data_types.data_type,
-    config.custom_field_data_types.is_number,
-    config.custom_field_data_types.is_date,
-    config.custom_field_data_types.is_boolean,
-    config.custom_field_data_types.is_long_text,
-    ''::text AS resource_id,
-    ''::text AS value
-FROM config.custom_field_setup
-INNER JOIN config.custom_field_data_types
-ON config.custom_field_data_types.data_type = config.custom_field_setup.data_type
-INNER JOIN config.custom_field_forms
-ON config.custom_field_forms.form_name = config.custom_field_setup.form_name
-ORDER BY field_order;
-
-
-
-DROP FUNCTION IF EXISTS config.get_custom_field_setup_id_by_table_name
-(
-    _schema_name national character varying(100), 
-    _table_name national character varying(100),
-    _field_name national character varying(100)
-);
-
-CREATE FUNCTION config.get_custom_field_setup_id_by_table_name
-(
-    _schema_name national character varying(100), 
-    _table_name national character varying(100),
-    _field_name national character varying(100)
-)
-RETURNS integer
-AS
-$$
-BEGIN
-    RETURN custom_field_setup_id
-    FROM config.custom_field_setup
-    WHERE form_name = config.get_custom_field_form_name(_schema_name, _table_name)
-    AND field_name = _field_name;
-END
-$$
-LANGUAGE plpgsql;
-
-
-
-DROP FUNCTION IF EXISTS config.get_custom_field_definition
-(
-    _table_name             text,
-    _resource_id            text
-);
-
-CREATE FUNCTION config.get_custom_field_definition
-(
-    _table_name             text,
-    _resource_id            text
-)
-RETURNS TABLE
-(
-    table_name              national character varying(100),
-    key_name                national character varying(100),
-    custom_field_setup_id   integer,
-    form_name               national character varying(100),
-    field_order             integer,
-    field_name              national character varying(100),
-    field_label             national character varying(100),
-    description             text,
-    data_type               national character varying(50),
-    is_number               boolean,
-    is_date                 boolean,
-    is_boolean              boolean,
-    is_long_text            boolean,
-    resource_id             text,
-    value                   text
-)
-AS
-$$
-BEGIN
-    DROP TABLE IF EXISTS definition_temp;
-    CREATE TEMPORARY TABLE definition_temp
-    (
-        table_name              national character varying(100),
-        key_name                national character varying(100),
-        custom_field_setup_id   integer,
-        form_name               national character varying(100),
-        field_order             integer,
-        field_name              national character varying(100),
-        field_label             national character varying(100),
-        description             text,
-        data_type               national character varying(50),
-        is_number               boolean,
-        is_date                 boolean,
-        is_boolean              boolean,
-        is_long_text            boolean,
-        resource_id             text,
-        value                   text
-    ) ON COMMIT DROP;
-    
-    INSERT INTO definition_temp
-    SELECT * FROM config.custom_field_definition_view
-    WHERE config.custom_field_definition_view.table_name = _table_name
-    ORDER BY field_order;
-
-    UPDATE definition_temp
-    SET resource_id = _resource_id;
-
-    UPDATE definition_temp
-    SET value = config.custom_fields.value
-    FROM config.custom_fields
-    WHERE definition_temp.custom_field_setup_id = config.custom_fields.custom_field_setup_id
-    AND config.custom_fields.resource_id = _resource_id;
-    
-    RETURN QUERY
-    SELECT * FROM definition_temp;
-END
-$$
-LANGUAGE plpgsql;
-
-
-
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
+INSERT INTO config.offices(office_code, office_name)
+SELECT 'DEF', 'Default';
 
 DO
 $$
@@ -801,27 +399,96 @@ END
 $$
 LANGUAGE plpgsql;
 
-DROP FUNCTION IF EXISTS config.get_custom_field_form_name
-(
-    _table_name character varying
-);
 
-CREATE FUNCTION config.get_custom_field_form_name
-(
-    _table_name character varying
-)
-RETURNS character varying
-STABLE
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/05.views/config.custom_field_definition_view.sql --<--<--
+DROP VIEW IF EXISTS config.custom_field_definition_view;
+
+CREATE VIEW config.custom_field_definition_view
 AS
-$$
-BEGIN
-    RETURN form_name 
-    FROM config.custom_field_forms
-    WHERE table_name = _table_name;
-END
-$$
-LANGUAGE plpgsql;
+SELECT
+    config.custom_field_forms.table_name,
+    config.custom_field_forms.key_name,
+    config.custom_field_setup.custom_field_setup_id,
+    config.custom_field_setup.form_name,
+    config.custom_field_setup.field_order,
+    config.custom_field_setup.field_name,
+    config.custom_field_setup.field_label,
+    config.custom_field_setup.description,
+    config.custom_field_data_types.data_type,
+    config.custom_field_data_types.is_number,
+    config.custom_field_data_types.is_date,
+    config.custom_field_data_types.is_boolean,
+    config.custom_field_data_types.is_long_text,
+    ''::text AS resource_id,
+    ''::text AS value
+FROM config.custom_field_setup
+INNER JOIN config.custom_field_data_types
+ON config.custom_field_data_types.data_type = config.custom_field_setup.data_type
+INNER JOIN config.custom_field_forms
+ON config.custom_field_forms.form_name = config.custom_field_setup.form_name
+ORDER BY field_order;
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/05.views/config.custom_field_view.sql --<--<--
+DROP VIEW IF EXISTS config.custom_field_view;
+
+CREATE VIEW config.custom_field_view
+AS
+SELECT
+    config.custom_field_forms.table_name,
+    config.custom_field_forms.key_name,
+    config.custom_field_setup.custom_field_setup_id,
+    config.custom_field_setup.form_name,
+    config.custom_field_setup.field_order,
+    config.custom_field_setup.field_name,
+    config.custom_field_setup.field_label,
+    config.custom_field_setup.description,
+    config.custom_field_data_types.data_type,
+    config.custom_field_data_types.is_number,
+    config.custom_field_data_types.is_date,
+    config.custom_field_data_types.is_boolean,
+    config.custom_field_data_types.is_long_text,
+    config.custom_fields.resource_id,
+    config.custom_fields.value
+FROM config.custom_field_setup
+INNER JOIN config.custom_field_data_types
+ON config.custom_field_data_types.data_type = config.custom_field_setup.data_type
+INNER JOIN config.custom_field_forms
+ON config.custom_field_forms.form_name = config.custom_field_setup.form_name
+INNER JOIN config.custom_fields
+ON config.custom_fields.custom_field_setup_id = config.custom_field_setup.custom_field_setup_id
+ORDER BY field_order;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/05.views/config.filter_name_view.sql --<--<--
+DROP VIEW IF EXISTS config.filter_name_view;
+
+CREATE VIEW config.filter_name_view
+AS
+SELECT
+    DISTINCT
+    object_name,
+    filter_name,
+    is_default
+FROM config.filters;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/05.views/config.flag_view.sql --<--<--
+DROP VIEW IF EXISTS config.flag_view;
+
+CREATE VIEW config.flag_view
+AS
+SELECT
+    config.flags.flag_id,
+    config.flags.user_id,
+    config.flags.flag_type_id,
+    config.flags.resource_id,
+    config.flags.resource,
+    config.flags.resource_key,
+    config.flags.flagged_on,
+    config.flag_types.flag_type_name,
+    config.flag_types.background_color,
+    config.flag_types.foreground_color
+FROM config.flags
+INNER JOIN config.flag_types
+ON config.flags.flag_type_id = config.flag_types.flag_type_id;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.create_app.sql --<--<--
 DROP FUNCTION IF EXISTS config.create_app
@@ -880,6 +547,51 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.create_flag.sql --<--<--
+DROP FUNCTION IF EXISTS config.create_flag
+(
+    user_id_            integer,
+    flag_type_id_       integer,
+    resource_           text,
+    resource_key_       text,
+    resource_id_        text
+);
+
+CREATE FUNCTION config.create_flag
+(
+    user_id_            integer,
+    flag_type_id_       integer,
+    resource_           text,
+    resource_key_       text,
+    resource_id_        text
+)
+RETURNS void
+VOLATILE
+AS
+$$
+BEGIN
+    IF NOT EXISTS(SELECT * FROM config.flags WHERE user_id=user_id_ AND resource=resource_ AND resource_key=resource_key_ AND resource_id=resource_id_) THEN
+        INSERT INTO config.flags(user_id, flag_type_id, resource, resource_key, resource_id)
+        SELECT user_id_, flag_type_id_, resource_, resource_key_, resource_id_;
+    ELSE
+        UPDATE config.flags
+        SET
+            flag_type_id=flag_type_id_
+        WHERE 
+            user_id=user_id_ 
+        AND 
+            resource=resource_ 
+        AND 
+            resource_key=resource_key_ 
+        AND 
+            resource_id=resource_id_;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.create_menu.sql --<--<--
@@ -993,6 +705,286 @@ AS
 $$
 BEGIN
     RETURN config.create_menu(0, _app_name, _menu_name, _url, _icon, _parent_menu_name);
+END
+$$
+LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_definition.sql --<--<--
+DROP FUNCTION IF EXISTS config.get_custom_field_definition
+(
+    _table_name             text,
+    _resource_id            text
+);
+
+CREATE FUNCTION config.get_custom_field_definition
+(
+    _table_name             text,
+    _resource_id            text
+)
+RETURNS TABLE
+(
+    table_name              national character varying(100),
+    key_name                national character varying(100),
+    custom_field_setup_id   integer,
+    form_name               national character varying(100),
+    field_order             integer,
+    field_name              national character varying(100),
+    field_label             national character varying(100),
+    description             text,
+    data_type               national character varying(50),
+    is_number               boolean,
+    is_date                 boolean,
+    is_boolean              boolean,
+    is_long_text            boolean,
+    resource_id             text,
+    value                   text
+)
+AS
+$$
+BEGIN
+    DROP TABLE IF EXISTS definition_temp;
+    CREATE TEMPORARY TABLE definition_temp
+    (
+        table_name              national character varying(100),
+        key_name                national character varying(100),
+        custom_field_setup_id   integer,
+        form_name               national character varying(100),
+        field_order             integer,
+        field_name              national character varying(100),
+        field_label             national character varying(100),
+        description             text,
+        data_type               national character varying(50),
+        is_number               boolean,
+        is_date                 boolean,
+        is_boolean              boolean,
+        is_long_text            boolean,
+        resource_id             text,
+        value                   text
+    ) ON COMMIT DROP;
+    
+    INSERT INTO definition_temp
+    SELECT * FROM config.custom_field_definition_view
+    WHERE config.custom_field_definition_view.table_name = _table_name
+    ORDER BY field_order;
+
+    UPDATE definition_temp
+    SET resource_id = _resource_id;
+
+    UPDATE definition_temp
+    SET value = config.custom_fields.value
+    FROM config.custom_fields
+    WHERE definition_temp.custom_field_setup_id = config.custom_fields.custom_field_setup_id
+    AND config.custom_fields.resource_id = _resource_id;
+    
+    RETURN QUERY
+    SELECT * FROM definition_temp;
+END
+$$
+LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_form_name.sql --<--<--
+DROP FUNCTION IF EXISTS config.get_custom_field_form_name
+(
+    _table_name character varying
+);
+
+CREATE FUNCTION config.get_custom_field_form_name
+(
+    _table_name character varying
+)
+RETURNS character varying
+STABLE
+AS
+$$
+BEGIN
+    RETURN form_name 
+    FROM config.custom_field_forms
+    WHERE table_name = _table_name;
+END
+$$
+LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_setup_id_by_table_name.sql --<--<--
+DROP FUNCTION IF EXISTS config.get_custom_field_setup_id_by_table_name
+(
+    _schema_name national character varying(100), 
+    _table_name national character varying(100),
+    _field_name national character varying(100)
+);
+
+CREATE FUNCTION config.get_custom_field_setup_id_by_table_name
+(
+    _schema_name national character varying(100), 
+    _table_name national character varying(100),
+    _field_name national character varying(100)
+)
+RETURNS integer
+AS
+$$
+BEGIN
+    RETURN custom_field_setup_id
+    FROM config.custom_field_setup
+    WHERE form_name = config.get_custom_field_form_name(_schema_name, _table_name)
+    AND field_name = _field_name;
+END
+$$
+LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.get_flag_type_id.sql --<--<--
+DROP FUNCTION IF EXISTS config.get_flag_type_id
+(
+    user_id_        integer,
+    resource_       text,
+    resource_key_   text,
+    resource_id_    text
+);
+
+CREATE FUNCTION config.get_flag_type_id
+(
+    user_id_        integer,
+    resource_       text,
+    resource_key_   text,
+    resource_id_    text
+)
+RETURNS integer
+STABLE
+AS
+$$
+BEGIN
+    RETURN flag_type_id
+    FROM config.flags
+    WHERE user_id=$1
+    AND resource=$2
+    AND resource_key=$3
+    AND resource_id=$4;
+END
+$$
+LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.get_user_id_by_login_id.sql --<--<--
+DROP FUNCTION IF EXISTS config.get_user_id_by_login_id(_login_id bigint);
+
+CREATE FUNCTION config.get_user_id_by_login_id(_login_id bigint)
+RETURNS integer
+AS
+$$
+BEGIN
+    RETURN 
+    user_id
+    FROM account.logins
+    WHERE login_id = _login_id;
+END
+$$
+LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.has_access.sql --<--<--
+DROP FUNCTION IF EXISTS config.has_access(_user_id integer, _entity text, _access_type_id integer);
+
+CREATE FUNCTION config.has_access(_user_id integer, _entity text, _access_type_id integer)
+RETURNS boolean
+AS
+$$
+    DECLARE _role_id                    integer;
+    DECLARE _group_config               boolean = NULL;
+    DECLARE _user_config                boolean = NULL;
+    DECLARE _config                     boolean = true;
+BEGIN
+    SELECT role_id INTO _role_id FROM account.users WHERE user_id = _user_id;
+
+    --GROUP config BASED ON ALL ENTITIES AND ALL ACCESS TYPES
+    IF EXISTS
+    (
+        SELECT * FROM config.default_entity_access
+        WHERE role_id = _role_id
+        AND NOT allow_access
+        AND access_type_id IS NULL
+        AND COALESCE(entity_name, '') = ''
+    ) THEN
+        _group_config = false;
+    END IF;
+
+    --GROUP config BASED ON ALL ENTITIES AND SPECIFIED ACCESS TYPE
+    IF EXISTS
+    (
+        SELECT * FROM config.default_entity_access
+        WHERE role_id = _role_id
+        AND NOT allow_access
+        AND access_type_id = _access_type_id
+        AND COALESCE(entity_name, '') = ''
+    ) THEN
+        _group_config = false;
+    END IF;
+ 
+
+    --GROUP config BASED ON SPECIFIED ENTITY AND ALL ACCESS TYPES
+    IF EXISTS
+    (
+        SELECT * FROM config.default_entity_access
+        WHERE role_id = _role_id
+        AND NOT allow_access
+        AND access_type_id IS NULL
+        AND entity_name = _entity
+    ) THEN
+        _group_config = false;
+    END IF;
+
+    --GROUP config BASED ON SPECIFIED ENTITY AND SPECIFIED ACCESS TYPE
+    IF EXISTS
+    (
+        SELECT * FROM config.default_entity_access
+        WHERE role_id = _role_id
+        AND NOT allow_access
+        AND access_type_id = _access_type_id
+        AND entity_name = _entity
+    ) THEN
+        _group_config = false;
+    END IF;
+
+
+    --USER config BASED ON ALL ENTITIES AND ALL ACCESS TYPES
+    SELECT allow_access INTO _user_config FROM config.entity_access
+    WHERE user_id = _user_id
+    AND access_type_id IS NULL
+    AND COALESCE(entity_name, '') = '';
+
+    --USER config BASED ON SPECIFIED ENTITY AND ALL ACCESS TYPES
+    IF(_user_config IS NULL) THEN
+        SELECT allow_access INTO _user_config 
+        FROM config.entity_access
+        WHERE user_id = _user_id
+        AND access_type_id IS NULL
+        AND entity_name = _entity;
+    END IF;
+ 
+    --USER config BASED ON ALL ENTITIES AND SPECIFIED ACCESS TYPE
+    IF(_user_config IS NULL) THEN
+        SELECT allow_access INTO _user_config FROM config.entity_access
+        WHERE user_id = _user_id
+        AND access_type_id = _access_type_id
+        AND COALESCE(entity_name, '') = '';
+    END IF;
+ 
+
+    --USER config BASED ON SPECIFIED ENTITY AND SPECIFIED ACCESS TYPE
+    IF(_user_config IS NULL) THEN
+        SELECT allow_access INTO _user_config FROM config.entity_access
+        WHERE user_id = _user_id
+        AND access_type_id = _access_type_id
+        AND entity_name = _entity;
+    END IF;
+
+    IF(_group_config IS NOT NULL) THEN
+        _config := _group_config;
+    END IF;
+
+    IF(_user_config IS NOT NULL) THEN
+        _config := _user_config;
+    END IF;
+
+    RETURN _config;
 END
 $$
 LANGUAGE plpgsql;
