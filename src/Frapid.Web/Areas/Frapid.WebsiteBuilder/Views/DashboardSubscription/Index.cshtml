@@ -1,0 +1,31 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "View Subscriptions";
+    Layout = ViewBag.Layout;
+}
+
+<script>
+    var scrudFactory = new Object();
+
+    scrudFactory.title = "View Subscriptions";
+
+    scrudFactory.viewAPI = "/api/website/email-subscription";
+    scrudFactory.viewTableName = "website.email_subscriptions";
+
+    scrudFactory.formAPI = "/api/website/email-subscription";
+    scrudFactory.formTableName = "website.email_subscriptions";
+
+    scrudFactory.disabledOnEdit = ["AuthorId"];
+    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+
+    scrudFactory.allowDelete = true;
+
+    scrudFactory.card = {
+        meta: "SubscribedOn"
+    };
+
+</script>
+
+
+<div data-ng-include="'/ScrudFactory/View.html'"></div>
