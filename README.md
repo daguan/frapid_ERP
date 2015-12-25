@@ -28,7 +28,7 @@ running as a single IIS Website.
 
 ** See Also **
 
-[Database Naming Convention](concepts/database-naming-convention.md)
+[Database Naming Convention](docs/concepts/database-naming-convention.md)
 
 # Who Is Using Frapid?
 
