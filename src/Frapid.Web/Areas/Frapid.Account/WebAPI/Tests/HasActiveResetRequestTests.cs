@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static HasActiveResetRequestController Fixture()
         {
-            HasActiveResetRequestController controller = new HasActiveResetRequestController(new HasActiveResetRequestRepository(), "", new LoginView());
+            HasActiveResetRequestController controller = new HasActiveResetRequestController(new HasActiveResetRequestRepository());
             return controller;
         }
 

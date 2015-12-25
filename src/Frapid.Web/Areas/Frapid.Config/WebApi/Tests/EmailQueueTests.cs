@@ -21,7 +21,7 @@ namespace Frapid.Config.Api.Tests
     {
         public static EmailQueueController Fixture()
         {
-            EmailQueueController controller = new EmailQueueController(new EmailQueueRepository(), "", new LoginView());
+            EmailQueueController controller = new EmailQueueController(new EmailQueueRepository());
             return controller;
         }
 

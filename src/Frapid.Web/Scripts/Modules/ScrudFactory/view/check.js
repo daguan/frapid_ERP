@@ -1,17 +1,17 @@
 ﻿function checkIfProcedure() {
-    if ((typeof (scrudFactory.isProcedure) === "undefined")) {
-        return scrudFactory.viewAPI.indexOf("/procedures") !== -1;
+    if ((typeof (window.scrudFactory.isProcedure) === "undefined")) {
+        return window.scrudFactory.viewAPI.indexOf("/procedures") !== -1;
     };
 
-    return scrudFactory.isProcedure;
+    return window.scrudFactory.isProcedure;
 };
 
 function hasVerfication() {
-    if (!scrudFactory.hasVerfication) {
+    if (!window.scrudFactory.hasVerfication) {
         return false;
     };
 
-    if (!scrudFactory.formAPI) {
+    if (!window.scrudFactory.formAPI) {
         return false;
     };
 

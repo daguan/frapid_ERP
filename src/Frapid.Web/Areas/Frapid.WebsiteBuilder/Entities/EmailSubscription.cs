@@ -11,6 +11,8 @@ namespace Frapid.WebsiteBuilder.Entities
     {
         public System.Guid EmailSubscriptionId { get; set; }
         public string Email { get; set; }
+        public string Browser { get; set; }
+        public string IpAddress { get; set; }
         public bool? Unsubscribed { get; set; }
         public DateTime? SubscribedOn { get; set; }
         public DateTime? UnsubscribedOn { get; set; }

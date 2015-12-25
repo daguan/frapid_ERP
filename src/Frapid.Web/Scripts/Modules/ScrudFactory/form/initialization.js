@@ -53,7 +53,7 @@ function createTabEls(tabId, name, active) {
 };
 
 function createTabs() {
-    var sorted = Enumerable.From(scrudFactory.tabs).OrderBy(function (x) { return x.sort; }).ToArray();
+    var sorted = window.Enumerable.From(window.scrudFactory.tabs).OrderBy(function (x) { return x.sort; }).ToArray();
 
     $.each(sorted, function () {
         createTabEls(this.id, this.name, this.active);

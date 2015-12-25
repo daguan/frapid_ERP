@@ -21,7 +21,7 @@ namespace Frapid.WebsiteBuilder.Api.Tests
     {
         public static EmailSubscriptionController Fixture()
         {
-            EmailSubscriptionController controller = new EmailSubscriptionController(new EmailSubscriptionRepository(), "", new LoginView());
+            EmailSubscriptionController controller = new EmailSubscriptionController(new EmailSubscriptionRepository());
             return controller;
         }
 

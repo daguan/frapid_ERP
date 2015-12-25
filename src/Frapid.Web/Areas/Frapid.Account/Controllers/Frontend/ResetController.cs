@@ -1,14 +1,16 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Frapid.Account.DAL;
 using Frapid.Account.InputModels;
 using Frapid.Account.Messaging;
-using Frapid.Account.ViewModels;
+using Frapid.Areas;
 using Frapid.WebsiteBuilder.Controllers;
-using Registration = Frapid.Account.DAL.Registration;
+using Reset = Frapid.Account.ViewModels.Reset;
 
 namespace Frapid.Account.Controllers.Frontend
 {
+    [AntiForgery]
     public class ResetController : WebsiteBuilderController
     {
         [Route("account/reset")]
@@ -37,12 +39,12 @@ namespace Frapid.Account.Controllers.Frontend
             model.Browser = this.RemoteUser.Browser;
             model.IpAddress = this.RemoteUser.IpAddress;
 
-            if (DAL.Reset.HasActiveResetRequest(model.Email))
+            if (DAL.ResetRequests.HasActiveResetRequest(model.Email))
             {
                 return this.Json(true);
             }
 
-            var result = DAL.Reset.Request(model);
+            var result = DAL.ResetRequests.Request(model);
 
             if (result.UserId <= 0)
             {
@@ -57,11 +59,11 @@ namespace Frapid.Account.Controllers.Frontend
 
         [Route("account/reset/validate-email")]
         [HttpPost]
-        [AllowAnonymous]
+        [AllowAnonymous]       
         public ActionResult ValidateEmail(string email)
         {
             Thread.Sleep(1000);
-            return string.IsNullOrWhiteSpace(email) ? this.Json(true) : this.Json(!Registration.HasAccount(email));
+            return string.IsNullOrWhiteSpace(email) ? this.Json(true) : this.Json(!Registrations.HasAccount(email));
         }
 
         [Route("account/reset/email-sent")]
@@ -80,7 +82,7 @@ namespace Frapid.Account.Controllers.Frontend
                 return this.Redirect("/site/404");
             }
 
-            var reset = DAL.Reset.GetIfActive(token);
+            var reset = DAL.ResetRequests.GetIfActive(token);
 
             if (reset == null)
             {
@@ -92,7 +94,7 @@ namespace Frapid.Account.Controllers.Frontend
 
         [Route("account/reset/confirm")]
         [HttpPost]
-        [AllowAnonymous]
+        [AllowAnonymous]        
         public ActionResult Do()
         {
             string token = this.Request.QueryString["token"];
@@ -103,10 +105,10 @@ namespace Frapid.Account.Controllers.Frontend
                 return this.Json(false);
             }
 
-            var reset = DAL.Reset.GetIfActive(token);
+            var reset = DAL.ResetRequests.GetIfActive(token);
             if (reset != null)
             {
-                DAL.Reset.CompleteReset(token, password);
+                DAL.ResetRequests.CompleteReset(token, password);
                 return this.Json(true);
             }
 

@@ -1,21 +1,22 @@
-﻿using System;
-using System.Web;
-using System.Web.Security;
+﻿using System.Web;
+using Frapid.Configuration;
+using Frapid.TokenManager;
 
 namespace Frapid.Account
 {
     public class AuthenticationManager
-    {        
-        public static HttpCookie GetCookie(string loginId)
+    {
+        public static HttpCookie GetCookie(Token token, string catalog, string loginId)
         {
-            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, loginId, DateTime.Now, DateTime.Now.AddMinutes(30), true, string.Empty, FormsAuthentication.FormsCookiePath);
-            string encrypted = FormsAuthentication.Encrypt(ticket);
-
-            HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted)
+            var cookie = new HttpCookie("MyCookieName")
             {
-                Domain = FormsAuthentication.CookieDomain,
-                Path = ticket.CookiePath
+                Domain = DbConvention.GetDomain(),
+                Name = "access_token",
+                Value = token.ClientToken,
+                HttpOnly = true,
+                Secure = true
             };
+
             return cookie;
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using System.Web.Security;
+using Frapid.Areas;
 
 namespace Frapid.Account.Controllers
 {
@@ -7,9 +8,14 @@ namespace Frapid.Account.Controllers
     {
         [Route("account/sign-out")]
         [Route("account/log-out")]
-        [Authorize]
+        [RestrictAnonymous]
         public ActionResult SignOut()
         {
+            if (this.MetaUser != null)
+            {
+                DAL.AccessTokens.Revoke(this.MetaUser.ClientToken);
+            }
+
             FormsAuthentication.SignOut();
             return Redirect("/account/sign-in");
         }

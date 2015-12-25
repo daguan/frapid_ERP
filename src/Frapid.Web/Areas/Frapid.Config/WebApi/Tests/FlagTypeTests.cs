@@ -21,7 +21,7 @@ namespace Frapid.Config.Api.Tests
     {
         public static FlagTypeController Fixture()
         {
-            FlagTypeController controller = new FlagTypeController(new FlagTypeRepository(), "", new LoginView());
+            FlagTypeController controller = new FlagTypeController(new FlagTypeRepository());
             return controller;
         }
 

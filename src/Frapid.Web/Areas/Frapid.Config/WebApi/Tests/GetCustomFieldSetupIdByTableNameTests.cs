@@ -12,7 +12,7 @@ namespace Frapid.Config.Api.Tests
     {
         public static GetCustomFieldSetupIdByTableNameController Fixture()
         {
-            GetCustomFieldSetupIdByTableNameController controller = new GetCustomFieldSetupIdByTableNameController(new GetCustomFieldSetupIdByTableNameRepository(), "", new LoginView());
+            GetCustomFieldSetupIdByTableNameController controller = new GetCustomFieldSetupIdByTableNameController(new GetCustomFieldSetupIdByTableNameRepository());
             return controller;
         }
 

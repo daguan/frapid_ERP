@@ -12,7 +12,7 @@ namespace Frapid.WebsiteBuilder.Api.Tests
     {
         public static GetCategoryIdByCategoryNameController Fixture()
         {
-            GetCategoryIdByCategoryNameController controller = new GetCategoryIdByCategoryNameController(new GetCategoryIdByCategoryNameRepository(), "", new LoginView());
+            GetCategoryIdByCategoryNameController controller = new GetCategoryIdByCategoryNameController(new GetCategoryIdByCategoryNameRepository());
             return controller;
         }
 

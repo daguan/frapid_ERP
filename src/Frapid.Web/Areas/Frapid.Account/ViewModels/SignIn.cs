@@ -1,6 +1,4 @@
-﻿using System;
-using System.Web;
-using Frapid.i18n;
+﻿using Frapid.i18n;
 
 namespace Frapid.Account.ViewModels
 {
@@ -8,13 +6,11 @@ namespace Frapid.Account.ViewModels
     {
         public SignIn()
         {
-            Challenge = Guid.NewGuid().ToString();
             Culture = CultureManager.GetCurrent().Name;
-            HttpContext.Current.Session["Challenge"] = Challenge;
         }
 
         public string Email { get; set; }
-        public string Challenge { get; }
+        public string Challenge { get; set; }
         public string Password { get; set; }
         public bool RememberMe { get; set; }
         public string Culture { get; set; }

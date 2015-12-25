@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
+using Frapid.WebApi;
 
 namespace Frapid.Account.Api
 {
@@ -25,37 +27,31 @@ namespace Frapid.Account.Api
         /// <summary>
         ///     The ConfigurationProfile repository.
         /// </summary>
-        private readonly IConfigurationProfileRepository ConfigurationProfileRepository;
+        private IConfigurationProfileRepository ConfigurationProfileRepository;
 
         public ConfigurationProfileController()
         {
-            this._LoginId = AppUsers.GetCurrent().View.LoginId.To<long>();
-            this._UserId = AppUsers.GetCurrent().View.UserId.To<int>();
-            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
-            this._Catalog = AppUsers.GetCatalog();
-
-            this.ConfigurationProfileRepository = new Frapid.Account.DataAccess.ConfigurationProfile
-            {
-                _Catalog = this._Catalog,
-                _LoginId = this._LoginId,
-                _UserId = this._UserId
-            };
         }
 
-        public ConfigurationProfileController(IConfigurationProfileRepository repository, string catalog, LoginView view)
+        public ConfigurationProfileController(IConfigurationProfileRepository repository)
         {
-            this._LoginId = view.LoginId.To<long>();
-            this._UserId = view.UserId.To<int>();
-            this._OfficeId = view.OfficeId.To<int>();
-            this._Catalog = catalog;
-
             this.ConfigurationProfileRepository = repository;
         }
 
-        public long _LoginId { get; }
-        public int _UserId { get; private set; }
-        public int _OfficeId { get; private set; }
-        public string _Catalog { get; }
+        protected override void Initialize(HttpControllerContext context)
+        {
+            base.Initialize(context);
+
+            if (this.ConfigurationProfileRepository == null)
+            {
+                this.ConfigurationProfileRepository = new Frapid.Account.DataAccess.ConfigurationProfile
+                {
+                    _Catalog = this.MetaUser.Catalog,
+                    _LoginId = this.MetaUser.LoginId,
+                    _UserId = this.MetaUser.UserId
+                };
+            }
+        }
 
         /// <summary>
         ///     Creates meta information of "configuration profile" entity.
@@ -64,34 +60,183 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("meta")]
         [Route("~/api/account/configuration-profile/meta")]
-        [Authorize]
+        [RestAuthorize]
         public EntityView GetEntityView()
         {
-            if (this._LoginId == 0)
-            {
-                return new EntityView();
-            }
-
             return new EntityView
             {
                 PrimaryKey = "profile_id",
                 Columns = new List<EntityColumn>()
-                                {
-                                        new EntityColumn { ColumnName = "profile_id",  PropertyName = "ProfileId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = true,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "profile_name",  PropertyName = "ProfileName",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "is_active",  PropertyName = "IsActive",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "allow_registration",  PropertyName = "AllowRegistration",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "registration_office_id",  PropertyName = "RegistrationOfficeId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "registration_role_id",  PropertyName = "RegistrationRoleId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "allow_facebook_registration",  PropertyName = "AllowFacebookRegistration",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "allow_google_registration",  PropertyName = "AllowGoogleRegistration",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "google_signin_client_id",  PropertyName = "GoogleSigninClientId",  DataType = "string",  DbDataType = "text",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "google_signin_scope",  PropertyName = "GoogleSigninScope",  DataType = "string",  DbDataType = "text",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "facebook_app_id",  PropertyName = "FacebookAppId",  DataType = "string",  DbDataType = "text",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "facebook_scope",  PropertyName = "FacebookScope",  DataType = "string",  DbDataType = "text",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "audit_user_id",  PropertyName = "AuditUserId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "audit_ts",  PropertyName = "AuditTs",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
-                                }
+                {
+                        new EntityColumn
+                        {
+                                ColumnName = "profile_id",
+                                PropertyName = "ProfileId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = false,
+                                IsPrimaryKey = true,
+                                IsSerial = true,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "profile_name",
+                                PropertyName = "ProfileName",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "is_active",
+                                PropertyName = "IsActive",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "allow_registration",
+                                PropertyName = "AllowRegistration",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "registration_office_id",
+                                PropertyName = "RegistrationOfficeId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "registration_role_id",
+                                PropertyName = "RegistrationRoleId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "allow_facebook_registration",
+                                PropertyName = "AllowFacebookRegistration",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "allow_google_registration",
+                                PropertyName = "AllowGoogleRegistration",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "google_signin_client_id",
+                                PropertyName = "GoogleSigninClientId",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "google_signin_scope",
+                                PropertyName = "GoogleSigninScope",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "facebook_app_id",
+                                PropertyName = "FacebookAppId",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "facebook_scope",
+                                PropertyName = "FacebookScope",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_user_id",
+                                PropertyName = "AuditUserId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_ts",
+                                PropertyName = "AuditTs",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        }
+                }
             };
         }
 
@@ -102,7 +247,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
         [Route("~/api/account/configuration-profile/count")]
-        [Authorize]
+        [RestAuthorize]
         public long Count()
         {
             try
@@ -136,7 +281,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("all")]
         [Route("~/api/account/configuration-profile/all")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.ConfigurationProfile> GetAll()
         {
             try
@@ -170,7 +315,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("export")]
         [Route("~/api/account/configuration-profile/export")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<dynamic> Export()
         {
             try
@@ -205,7 +350,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("{profileId}")]
         [Route("~/api/account/configuration-profile/{profileId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Account.Entities.ConfigurationProfile Get(int profileId)
         {
             try
@@ -235,7 +380,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get")]
         [Route("~/api/account/configuration-profile/get")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.ConfigurationProfile> Get([FromUri] int[] profileIds)
         {
             try
@@ -269,7 +414,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("first")]
         [Route("~/api/account/configuration-profile/first")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Account.Entities.ConfigurationProfile GetFirst()
         {
             try
@@ -304,7 +449,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("previous/{profileId}")]
         [Route("~/api/account/configuration-profile/previous/{profileId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Account.Entities.ConfigurationProfile GetPrevious(int profileId)
         {
             try
@@ -339,7 +484,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("next/{profileId}")]
         [Route("~/api/account/configuration-profile/next/{profileId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Account.Entities.ConfigurationProfile GetNext(int profileId)
         {
             try
@@ -373,7 +518,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("last")]
         [Route("~/api/account/configuration-profile/last")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Account.Entities.ConfigurationProfile GetLast()
         {
             try
@@ -407,7 +552,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
         [Route("~/api/account/configuration-profile")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.ConfigurationProfile> GetPaginatedResult()
         {
             try
@@ -442,7 +587,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
         [Route("~/api/account/configuration-profile/page/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.ConfigurationProfile> GetPaginatedResult(long pageNumber)
         {
             try
@@ -477,7 +622,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/account/configuration-profile/count-where")]
-        [Authorize]
+        [RestAuthorize]
         public long CountWhere([FromBody]JArray filters)
         {
             try
@@ -514,7 +659,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/account/configuration-profile/get-where/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.ConfigurationProfile> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
@@ -550,7 +695,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count-filtered/{filterName}")]
         [Route("~/api/account/configuration-profile/count-filtered/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public long CountFiltered(string filterName)
         {
             try
@@ -586,7 +731,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get-filtered/{pageNumber}/{filterName}")]
         [Route("~/api/account/configuration-profile/get-filtered/{pageNumber}/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.ConfigurationProfile> GetFiltered(long pageNumber, string filterName)
         {
             try
@@ -620,7 +765,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
         [Route("~/api/account/configuration-profile/display-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
             try
@@ -654,7 +799,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields")]
         [Route("~/api/account/configuration-profile/custom-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields()
         {
             try
@@ -688,7 +833,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields/{resourceId}")]
         [Route("~/api/account/configuration-profile/custom-fields/{resourceId}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             try
@@ -722,7 +867,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("POST")]
         [Route("add-or-edit")]
         [Route("~/api/account/configuration-profile/add-or-edit")]
-        [Authorize]
+        [RestAuthorize]
         public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             dynamic configurationProfile = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
@@ -764,7 +909,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("POST")]
         [Route("add/{configurationProfile}")]
         [Route("~/api/account/configuration-profile/add/{configurationProfile}")]
-        [Authorize]
+        [RestAuthorize]
         public void Add(Frapid.Account.Entities.ConfigurationProfile configurationProfile)
         {
             if (configurationProfile == null)
@@ -804,7 +949,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("PUT")]
         [Route("edit/{profileId}")]
         [Route("~/api/account/configuration-profile/edit/{profileId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Edit(int profileId, [FromBody] Frapid.Account.Entities.ConfigurationProfile configurationProfile)
         {
             if (configurationProfile == null)
@@ -850,7 +995,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("POST")]
         [Route("bulk-import")]
         [Route("~/api/account/configuration-profile/bulk-import")]
-        [Authorize]
+        [RestAuthorize]
         public List<object> BulkImport([FromBody]JArray collection)
         {
             List<ExpandoObject> configurationProfileCollection = this.ParseCollection(collection);
@@ -891,7 +1036,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("DELETE")]
         [Route("delete/{profileId}")]
         [Route("~/api/account/configuration-profile/delete/{profileId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Delete(int profileId)
         {
             try

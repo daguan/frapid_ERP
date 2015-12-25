@@ -261,7 +261,7 @@ function createFilters(filters) {
             .Where(function (x) { return x.value === filterCondition.toString() })
             .Select(function (x) { return x.text }).ToArray()[0];
 
-        column = Enumerable.From(localizedHeaders)
+        var column = Enumerable.From(localizedHeaders)
             .Where(function (x) { return x.columnName === selectedColumn }).ToArray()[0];
 
         if (column) {

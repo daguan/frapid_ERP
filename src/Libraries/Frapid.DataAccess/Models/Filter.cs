@@ -1,8 +1,6 @@
-using System;
-
 namespace Frapid.DataAccess.Models
 {
-    public sealed class Filter:IPoco
+    public sealed class Filter : IPoco
     {
         public long FilterId { get; set; }
         public string ObjectName { get; set; }

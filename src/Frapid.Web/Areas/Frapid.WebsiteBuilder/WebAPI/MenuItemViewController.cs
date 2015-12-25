@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Newtonsoft.Json.Linq;
@@ -11,6 +12,7 @@ using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
+using Frapid.WebApi;
 
 namespace Frapid.WebsiteBuilder.Api
 {
@@ -23,37 +25,31 @@ namespace Frapid.WebsiteBuilder.Api
         /// <summary>
         ///     The MenuItemView repository.
         /// </summary>
-        private readonly IMenuItemViewRepository MenuItemViewRepository;
+        private IMenuItemViewRepository MenuItemViewRepository;
 
         public MenuItemViewController()
         {
-            this._LoginId = AppUsers.GetCurrent().View.LoginId.To<long>();
-            this._UserId = AppUsers.GetCurrent().View.UserId.To<int>();
-            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
-            this._Catalog = AppUsers.GetCatalog();
-
-            this.MenuItemViewRepository = new Frapid.WebsiteBuilder.DataAccess.MenuItemView
-            {
-                _Catalog = this._Catalog,
-                _LoginId = this._LoginId,
-                _UserId = this._UserId
-            };
         }
 
-        public MenuItemViewController(IMenuItemViewRepository repository, string catalog, LoginView view)
+        public MenuItemViewController(IMenuItemViewRepository repository)
         {
-            this._LoginId = view.LoginId.To<long>();
-            this._UserId = view.UserId.To<int>();
-            this._OfficeId = view.OfficeId.To<int>();
-            this._Catalog = catalog;
-
             this.MenuItemViewRepository = repository;
         }
 
-        public long _LoginId { get; }
-        public int _UserId { get; private set; }
-        public int _OfficeId { get; private set; }
-        public string _Catalog { get; }
+        protected override void Initialize(HttpControllerContext context)
+        {
+            base.Initialize(context);
+
+            if (this.MenuItemViewRepository == null)
+            {
+                this.MenuItemViewRepository = new Frapid.WebsiteBuilder.DataAccess.MenuItemView
+                {
+                    _Catalog = this.MetaUser.Catalog,
+                    _LoginId = this.MetaUser.LoginId,
+                    _UserId = this.MetaUser.UserId
+                };
+            }
+        }
 
         /// <summary>
         ///     Counts the number of menu item views.
@@ -62,7 +58,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
         [Route("~/api/website/menu-item-view/count")]
-        [Authorize]
+        [RestAuthorize]
         public long Count()
         {
             try
@@ -98,7 +94,7 @@ namespace Frapid.WebsiteBuilder.Api
         [Route("all")]
         [Route("~/api/website/menu-item-view/export")]
         [Route("~/api/website/menu-item-view/all")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.MenuItemView> Get()
         {
             try
@@ -132,7 +128,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
         [Route("~/api/website/menu-item-view")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.MenuItemView> GetPaginatedResult()
         {
             try
@@ -167,7 +163,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
         [Route("~/api/website/menu-item-view/page/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.MenuItemView> GetPaginatedResult(long pageNumber)
         {
             try
@@ -201,7 +197,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
         [Route("~/api/website/menu-item-view/display-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<DisplayField> GetDisplayFields()
         {
             try
@@ -236,7 +232,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/website/menu-item-view/count-where")]
-        [Authorize]
+        [RestAuthorize]
         public long CountWhere([FromBody]JArray filters)
         {
             try
@@ -273,7 +269,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/website/menu-item-view/get-where/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.MenuItemView> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
@@ -309,7 +305,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count-filtered/{filterName}")]
         [Route("~/api/website/menu-item-view/count-filtered/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public long CountFiltered(string filterName)
         {
             try
@@ -346,7 +342,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get-filtered/{pageNumber}/{filterName}")]
         [Route("~/api/website/menu-item-view/get-filtered/{pageNumber}/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.MenuItemView> GetFiltered(long pageNumber, string filterName)
         {
             try

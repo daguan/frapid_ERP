@@ -21,7 +21,7 @@ namespace Frapid.Config.Api.Tests
     {
         public static FilterController Fixture()
         {
-            FilterController controller = new FilterController(new FilterRepository(), "", new LoginView());
+            FilterController controller = new FilterController(new FilterRepository());
             return controller;
         }
 

@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
+using Frapid.WebApi;
 
 namespace Frapid.WebsiteBuilder.Api
 {
@@ -25,37 +27,31 @@ namespace Frapid.WebsiteBuilder.Api
         /// <summary>
         ///     The Category repository.
         /// </summary>
-        private readonly ICategoryRepository CategoryRepository;
+        private ICategoryRepository CategoryRepository;
 
         public CategoryController()
         {
-            this._LoginId = AppUsers.GetCurrent().View.LoginId.To<long>();
-            this._UserId = AppUsers.GetCurrent().View.UserId.To<int>();
-            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
-            this._Catalog = AppUsers.GetCatalog();
-
-            this.CategoryRepository = new Frapid.WebsiteBuilder.DataAccess.Category
-            {
-                _Catalog = this._Catalog,
-                _LoginId = this._LoginId,
-                _UserId = this._UserId
-            };
         }
 
-        public CategoryController(ICategoryRepository repository, string catalog, LoginView view)
+        public CategoryController(ICategoryRepository repository)
         {
-            this._LoginId = view.LoginId.To<long>();
-            this._UserId = view.UserId.To<int>();
-            this._OfficeId = view.OfficeId.To<int>();
-            this._Catalog = catalog;
-
             this.CategoryRepository = repository;
         }
 
-        public long _LoginId { get; }
-        public int _UserId { get; private set; }
-        public int _OfficeId { get; private set; }
-        public string _Catalog { get; }
+        protected override void Initialize(HttpControllerContext context)
+        {
+            base.Initialize(context);
+
+            if (this.CategoryRepository == null)
+            {
+                this.CategoryRepository = new Frapid.WebsiteBuilder.DataAccess.Category
+                {
+                    _Catalog = this.MetaUser.Catalog,
+                    _LoginId = this.MetaUser.LoginId,
+                    _UserId = this.MetaUser.UserId
+                };
+            }
+        }
 
         /// <summary>
         ///     Creates meta information of "category" entity.
@@ -64,27 +60,99 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("meta")]
         [Route("~/api/website/category/meta")]
-        [Authorize]
+        [RestAuthorize]
         public EntityView GetEntityView()
         {
-            if (this._LoginId == 0)
-            {
-                return new EntityView();
-            }
-
             return new EntityView
             {
                 PrimaryKey = "category_id",
                 Columns = new List<EntityColumn>()
-                                {
-                                        new EntityColumn { ColumnName = "category_id",  PropertyName = "CategoryId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = true,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "category_name",  PropertyName = "CategoryName",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "alias",  PropertyName = "Alias",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 50 },
-                                        new EntityColumn { ColumnName = "seo_keywords",  PropertyName = "SeoKeywords",  DataType = "string",  DbDataType = "varchar",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 50 },
-                                        new EntityColumn { ColumnName = "seo_description",  PropertyName = "SeoDescription",  DataType = "string",  DbDataType = "varchar",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "audit_user_id",  PropertyName = "AuditUserId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "audit_ts",  PropertyName = "AuditTs",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
-                                }
+                {
+                        new EntityColumn
+                        {
+                                ColumnName = "category_id",
+                                PropertyName = "CategoryId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = false,
+                                IsPrimaryKey = true,
+                                IsSerial = true,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "category_name",
+                                PropertyName = "CategoryName",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "alias",
+                                PropertyName = "Alias",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 50
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "seo_keywords",
+                                PropertyName = "SeoKeywords",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 50
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "seo_description",
+                                PropertyName = "SeoDescription",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_user_id",
+                                PropertyName = "AuditUserId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_ts",
+                                PropertyName = "AuditTs",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        }
+                }
             };
         }
 
@@ -95,7 +163,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
         [Route("~/api/website/category/count")]
-        [Authorize]
+        [RestAuthorize]
         public long Count()
         {
             try
@@ -129,7 +197,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("all")]
         [Route("~/api/website/category/all")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Category> GetAll()
         {
             try
@@ -163,7 +231,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("export")]
         [Route("~/api/website/category/export")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<dynamic> Export()
         {
             try
@@ -198,7 +266,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("{categoryId}")]
         [Route("~/api/website/category/{categoryId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.Category Get(int categoryId)
         {
             try
@@ -228,7 +296,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get")]
         [Route("~/api/website/category/get")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Category> Get([FromUri] int[] categoryIds)
         {
             try
@@ -262,7 +330,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("first")]
         [Route("~/api/website/category/first")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.Category GetFirst()
         {
             try
@@ -297,7 +365,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("previous/{categoryId}")]
         [Route("~/api/website/category/previous/{categoryId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.Category GetPrevious(int categoryId)
         {
             try
@@ -332,7 +400,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("next/{categoryId}")]
         [Route("~/api/website/category/next/{categoryId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.Category GetNext(int categoryId)
         {
             try
@@ -366,7 +434,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("last")]
         [Route("~/api/website/category/last")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.Category GetLast()
         {
             try
@@ -400,7 +468,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
         [Route("~/api/website/category")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Category> GetPaginatedResult()
         {
             try
@@ -435,7 +503,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
         [Route("~/api/website/category/page/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Category> GetPaginatedResult(long pageNumber)
         {
             try
@@ -470,7 +538,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/website/category/count-where")]
-        [Authorize]
+        [RestAuthorize]
         public long CountWhere([FromBody]JArray filters)
         {
             try
@@ -507,7 +575,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/website/category/get-where/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Category> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
@@ -543,7 +611,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count-filtered/{filterName}")]
         [Route("~/api/website/category/count-filtered/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public long CountFiltered(string filterName)
         {
             try
@@ -579,7 +647,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get-filtered/{pageNumber}/{filterName}")]
         [Route("~/api/website/category/get-filtered/{pageNumber}/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Category> GetFiltered(long pageNumber, string filterName)
         {
             try
@@ -613,7 +681,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
         [Route("~/api/website/category/display-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
             try
@@ -647,7 +715,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields")]
         [Route("~/api/website/category/custom-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields()
         {
             try
@@ -681,7 +749,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields/{resourceId}")]
         [Route("~/api/website/category/custom-fields/{resourceId}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             try
@@ -715,7 +783,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("add-or-edit")]
         [Route("~/api/website/category/add-or-edit")]
-        [Authorize]
+        [RestAuthorize]
         public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             dynamic category = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
@@ -757,7 +825,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("add/{category}")]
         [Route("~/api/website/category/add/{category}")]
-        [Authorize]
+        [RestAuthorize]
         public void Add(Frapid.WebsiteBuilder.Entities.Category category)
         {
             if (category == null)
@@ -797,7 +865,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("PUT")]
         [Route("edit/{categoryId}")]
         [Route("~/api/website/category/edit/{categoryId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Edit(int categoryId, [FromBody] Frapid.WebsiteBuilder.Entities.Category category)
         {
             if (category == null)
@@ -843,7 +911,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("bulk-import")]
         [Route("~/api/website/category/bulk-import")]
-        [Authorize]
+        [RestAuthorize]
         public List<object> BulkImport([FromBody]JArray collection)
         {
             List<ExpandoObject> categoryCollection = this.ParseCollection(collection);
@@ -884,7 +952,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("DELETE")]
         [Route("delete/{categoryId}")]
         [Route("~/api/website/category/delete/{categoryId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Delete(int categoryId)
         {
             try

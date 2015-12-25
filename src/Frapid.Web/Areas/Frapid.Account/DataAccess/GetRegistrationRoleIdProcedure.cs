@@ -12,7 +12,7 @@ using Frapid.Framework.Extensions;
 namespace Frapid.Account.DataAccess
 {
     /// <summary>
-    /// Prepares, validates, and executes the function "account.get_registration_role_id()" on the database.
+    /// Prepares, validates, and executes the function "account.get_registration_role_id(_email text)" on the database.
     /// </summary>
     public class GetRegistrationRoleIdProcedure : DbAccess, IGetRegistrationRoleIdRepository
     {
@@ -37,12 +37,25 @@ namespace Frapid.Account.DataAccess
         /// </summary>
         public string _Catalog { get; set; }
 
+        /// <summary>
+        /// Maps to "_email" argument of the function "account.get_registration_role_id".
+        /// </summary>
+        public string Email { get; set; }
 
         /// <summary>
-        /// Prepares, validates, and executes the function "account.get_registration_role_id()" on the database.
+        /// Prepares, validates, and executes the function "account.get_registration_role_id(_email text)" on the database.
         /// </summary>
         public GetRegistrationRoleIdProcedure()
         {
+        }
+
+        /// <summary>
+        /// Prepares, validates, and executes the function "account.get_registration_role_id(_email text)" on the database.
+        /// </summary>
+        /// <param name="email">Enter argument value for "_email" parameter of the function "account.get_registration_role_id".</param>
+        public GetRegistrationRoleIdProcedure(string email)
+        {
+            this.Email = email;
         }
         /// <summary>
         /// Prepares and executes the function "account.get_registration_role_id".
@@ -62,12 +75,13 @@ namespace Frapid.Account.DataAccess
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-            string query = "SELECT * FROM account.get_registration_role_id();";
+            string query = "SELECT * FROM account.get_registration_role_id(@Email);";
 
-
+            query = query.ReplaceWholeWord("@Email", "@0::text");
 
 
             List<object> parameters = new List<object>();
+            parameters.Add(this.Email);
 
             return Factory.Scalar<int>(this._Catalog, query, parameters.ToArray());
         }

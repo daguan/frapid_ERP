@@ -14,7 +14,7 @@ namespace Frapid.DbPolicy
 
         public void Validate()
         {
-            HasAccess = Validate(this);
+            this.HasAccess = Validate(this);
         }
 
         private static bool Validate(IPolicy policy)
@@ -24,7 +24,7 @@ namespace Frapid.DbPolicy
                 return false;
             }
 
-            const string sql = "SELECT * FROM config.has_access(config.get_user_id_by_login_id(@0), @1, @2);";
+            const string sql = "SELECT * FROM auth.has_access(config.get_user_id_by_login_id(@0), @1, @2);";
             string entity = policy.ObjectNamespace + "." + policy.ObjectName;
             int type = (int) policy.AccessType;
 

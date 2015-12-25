@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
+using Frapid.Areas;
 using Frapid.i18n;
 
 namespace Frapid.Dashboard.Controllers
@@ -8,14 +9,14 @@ namespace Frapid.Dashboard.Controllers
     public class DefaultController : DashboardController
     {
         [Route("dashboard")]
-        [Authorize]
+        [RestrictAnonymous]
         public ActionResult Index()
         {
             return View(GetRazorView<AreaRegistration>("Default/Index.cshtml"));
         }
 
         [Route("dashboard/meta")]
-        [Authorize]
+        [RestrictAnonymous]
         public ActionResult GetMeta()
         {
             return Json(new ViewModels.Dashboard
@@ -43,7 +44,7 @@ namespace Frapid.Dashboard.Controllers
         }
 
         [Route("dashboard/apps")]
-        [Authorize]
+        [RestrictAnonymous]
         public ActionResult GetApps()
         {
             return View(GetRazorView<AreaRegistration>("Default/Apps.cshtml"));

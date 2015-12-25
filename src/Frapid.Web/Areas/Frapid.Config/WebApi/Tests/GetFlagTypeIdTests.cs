@@ -12,7 +12,7 @@ namespace Frapid.Config.Api.Tests
     {
         public static GetFlagTypeIdController Fixture()
         {
-            GetFlagTypeIdController controller = new GetFlagTypeIdController(new GetFlagTypeIdRepository(), "", new LoginView());
+            GetFlagTypeIdController controller = new GetFlagTypeIdController(new GetFlagTypeIdRepository());
             return controller;
         }
 

@@ -12,7 +12,7 @@ namespace Frapid.Config.Api.Tests
     {
         public static GetCustomFieldFormNameController Fixture()
         {
-            GetCustomFieldFormNameController controller = new GetCustomFieldFormNameController(new GetCustomFieldFormNameRepository(), "", new LoginView());
+            GetCustomFieldFormNameController controller = new GetCustomFieldFormNameController(new GetCustomFieldFormNameRepository());
             return controller;
         }
 

@@ -15,17 +15,15 @@ BEGIN
     END IF;
 
     SELECT
-        registration_office_id,
-        registration_role_id
+        registration_office_id
     INTO
-        _office_id,
-        _role_id
+        _office_id
     FROM account.configuration_profiles
     WHERE is_active
     LIMIT 1;
 
     INSERT INTO account.users(email, password, office_id, role_id, name, phone)
-    SELECT email, password, _office_id, _role_id, name, phone
+    SELECT email, password, _office_id, account.get_registration_role_id(email), name, phone
     FROM account.registrations
     WHERE registration_id = _token;
 

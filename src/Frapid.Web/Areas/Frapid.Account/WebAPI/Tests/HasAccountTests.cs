@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static HasAccountController Fixture()
         {
-            HasAccountController controller = new HasAccountController(new HasAccountRepository(), "", new LoginView());
+            HasAccountController controller = new HasAccountController(new HasAccountRepository());
             return controller;
         }
 

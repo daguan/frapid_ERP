@@ -71,6 +71,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccessToken.cs" />
+    <Compile Include="AddInstalledDomainProcedure.cs" />
+    <Compile Include="Application.cs" />
     <Compile Include="CanConfirmRegistrationProcedure.cs" />
     <Compile Include="CanRegisterWithFacebookProcedure.cs" />
     <Compile Include="CanRegisterWithGoogleProcedure.cs" />
@@ -89,6 +92,9 @@
     <Compile Include="GoogleUserExistsProcedure.cs" />
     <Compile Include="HasAccountProcedure.cs" />
     <Compile Include="HasActiveResetRequestProcedure.cs" />
+    <Compile Include="IAccessTokenRepository.cs" />
+    <Compile Include="IAddInstalledDomainRepository.cs" />
+    <Compile Include="IApplicationRepository.cs" />
     <Compile Include="ICanConfirmRegistrationRepository.cs" />
     <Compile Include="ICanRegisterWithFacebookRepository.cs" />
     <Compile Include="ICanRegisterWithGoogleRepository.cs" />
@@ -107,8 +113,11 @@
     <Compile Include="IGoogleUserExistsRepository.cs" />
     <Compile Include="IHasAccountRepository.cs" />
     <Compile Include="IHasActiveResetRequestRepository.cs" />
+    <Compile Include="IInstalledDomainRepository.cs" />
     <Compile Include="IIsRestrictedUserRepository.cs" />
     <Compile Include="ILoginRepository.cs" />
+    <Compile Include="InstalledDomain.cs" />
+    <Compile Include="IRefreshTokenRepository.cs" />
     <Compile Include="IRegistrationRepository.cs" />
     <Compile Include="IResetAccountRepository.cs" />
     <Compile Include="IResetRequestRepository.cs" />
@@ -120,6 +129,7 @@
     <Compile Include="IUserRepository.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RefreshToken.cs" />
     <Compile Include="Registration.cs" />
     <Compile Include="ResetAccountProcedure.cs" />
     <Compile Include="ResetRequest.cs" />

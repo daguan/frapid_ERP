@@ -1,5 +1,5 @@
 ﻿function verify(primaryKey, verificationStatusId, reason) {
-    var url = scrudFactory.formAPI;
+    var url = window.scrudFactory.formAPI;
     url += "/verify/";
     url += primaryKey + "/";
     url += verificationStatusId + "/";

@@ -9,6 +9,8 @@ namespace Frapid.Account.DataAccess
     public interface IGetRegistrationRoleIdRepository
     {
 
+        string Email { get; set; }
+
         /// <summary>
         /// Prepares and executes IGetRegistrationRoleIdRepository.
         /// </summary>

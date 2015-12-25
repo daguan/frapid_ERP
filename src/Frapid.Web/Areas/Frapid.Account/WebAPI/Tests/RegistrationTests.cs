@@ -21,7 +21,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static RegistrationController Fixture()
         {
-            RegistrationController controller = new RegistrationController(new RegistrationRepository(), "", new LoginView());
+            RegistrationController controller = new RegistrationController(new RegistrationRepository());
             return controller;
         }
 

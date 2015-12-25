@@ -23,7 +23,7 @@
 
 $("#FirstButton").click(function () {
     function request() {
-        var url = scrudFactory.formAPI + "/first";
+        var url = window.scrudFactory.formAPI + "/first";
         return getAjaxRequest(url);
     };
 
@@ -36,7 +36,7 @@ $("#FirstButton").click(function () {
 
 $("#PreviousButton").click(function () {
     function request(id) {
-        var url = scrudFactory.formAPI + "/previous/" + id;
+        var url = window.scrudFactory.formAPI + "/previous/" + id;
         return getAjaxRequest(url);
     };
 
@@ -54,7 +54,7 @@ $("#PreviousButton").click(function () {
 
 $("#NextButton").click(function () {
     function request(id) {
-        var url = scrudFactory.formAPI + "/next/" + id;
+        var url = window.scrudFactory.formAPI + "/next/" + id;
         return getAjaxRequest(url);
     };
 
@@ -74,7 +74,7 @@ $("#NextButton").click(function () {
 
 $("#LastButton").click(function () {
     function request() {
-        var url = scrudFactory.formAPI + "/last";
+        var url = window.scrudFactory.formAPI + "/last";
         return getAjaxRequest(url);
     };
 

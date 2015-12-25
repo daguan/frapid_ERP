@@ -2,6 +2,7 @@
 using System.Text;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using Frapid.Areas;
 using Frapid.Dashboard.Controllers;
 using Frapid.WebsiteBuilder.ViewModels;
 
@@ -10,14 +11,14 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     public class LayoutController : DashboardController
     {
         [Route("dashboard/website/layouts/master")]
-        [Authorize]
+        [RestrictAnonymous]
         public ActionResult Master()
         {
             var model = this.GetModel(LayoutType.DefaultLayout);
             return this.FrapidView(this.GetRazorView<AreaRegistration>("Layout/Master.cshtml"), model);
         }
         [Route("dashboard/website/layouts/master/home")]
-        [Authorize]
+        [RestrictAnonymous]
         public ActionResult Homepage()
         {
             var model = this.GetModel(LayoutType.HomepageLayout);
@@ -25,7 +26,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         }
 
         [Route("dashboard/website/layouts/header")]
-        [Authorize]
+        [RestrictAnonymous]
         public ActionResult Header()
         {
             var model = this.GetModel(LayoutType.Header);
@@ -33,7 +34,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         }
 
         [Route("dashboard/website/layouts/footer")]
-        [Authorize]
+        [RestrictAnonymous]
         public ActionResult Footer()
         {
             var model = this.GetModel(LayoutType.Footer);
@@ -42,7 +43,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
 
 
         [Route("dashboard/website/layouts/404-not-found-document")]
-        [Authorize]
+        [RestrictAnonymous]
         public ActionResult Http404Document()
         {
             var model = this.GetModel(LayoutType.Http404Document);
@@ -51,7 +52,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
 
         [Route("dashboard/website/layouts/save")]
         [HttpPost]
-        [Authorize]
+        [RestrictAnonymous]
         public ActionResult SaveLayoutFile(Layout layout)
         {
             string path = HostingEnvironment.MapPath(Configuration.GetCurrentThemePath());

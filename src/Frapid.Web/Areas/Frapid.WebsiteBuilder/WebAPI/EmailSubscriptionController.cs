@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
+using Frapid.WebApi;
 
 namespace Frapid.WebsiteBuilder.Api
 {
@@ -25,37 +27,31 @@ namespace Frapid.WebsiteBuilder.Api
         /// <summary>
         ///     The EmailSubscription repository.
         /// </summary>
-        private readonly IEmailSubscriptionRepository EmailSubscriptionRepository;
+        private IEmailSubscriptionRepository EmailSubscriptionRepository;
 
         public EmailSubscriptionController()
         {
-            this._LoginId = AppUsers.GetCurrent().View.LoginId.To<long>();
-            this._UserId = AppUsers.GetCurrent().View.UserId.To<int>();
-            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
-            this._Catalog = AppUsers.GetCatalog();
-
-            this.EmailSubscriptionRepository = new Frapid.WebsiteBuilder.DataAccess.EmailSubscription
-            {
-                _Catalog = this._Catalog,
-                _LoginId = this._LoginId,
-                _UserId = this._UserId
-            };
         }
 
-        public EmailSubscriptionController(IEmailSubscriptionRepository repository, string catalog, LoginView view)
+        public EmailSubscriptionController(IEmailSubscriptionRepository repository)
         {
-            this._LoginId = view.LoginId.To<long>();
-            this._UserId = view.UserId.To<int>();
-            this._OfficeId = view.OfficeId.To<int>();
-            this._Catalog = catalog;
-
             this.EmailSubscriptionRepository = repository;
         }
 
-        public long _LoginId { get; }
-        public int _UserId { get; private set; }
-        public int _OfficeId { get; private set; }
-        public string _Catalog { get; }
+        protected override void Initialize(HttpControllerContext context)
+        {
+            base.Initialize(context);
+
+            if (this.EmailSubscriptionRepository == null)
+            {
+                this.EmailSubscriptionRepository = new Frapid.WebsiteBuilder.DataAccess.EmailSubscription
+                {
+                    _Catalog = this.MetaUser.Catalog,
+                    _LoginId = this.MetaUser.LoginId,
+                    _UserId = this.MetaUser.UserId
+                };
+            }
+        }
 
         /// <summary>
         ///     Creates meta information of "email subscription" entity.
@@ -64,25 +60,99 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("meta")]
         [Route("~/api/website/email-subscription/meta")]
-        [Authorize]
+        [RestAuthorize]
         public EntityView GetEntityView()
         {
-            if (this._LoginId == 0)
-            {
-                return new EntityView();
-            }
-
             return new EntityView
             {
                 PrimaryKey = "email_subscription_id",
                 Columns = new List<EntityColumn>()
-                                {
-                                        new EntityColumn { ColumnName = "email_subscription_id",  PropertyName = "EmailSubscriptionId",  DataType = "System.Guid",  DbDataType = "uuid",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "email",  PropertyName = "Email",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "unsubscribed",  PropertyName = "Unsubscribed",  DataType = "bool",  DbDataType = "bool",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "subscribed_on",  PropertyName = "SubscribedOn",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "unsubscribed_on",  PropertyName = "UnsubscribedOn",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
-                                }
+                {
+                        new EntityColumn
+                        {
+                                ColumnName = "email_subscription_id",
+                                PropertyName = "EmailSubscriptionId",
+                                DataType = "System.Guid",
+                                DbDataType = "uuid",
+                                IsNullable = false,
+                                IsPrimaryKey = true,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "email",
+                                PropertyName = "Email",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "browser",
+                                PropertyName = "Browser",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "ip_address",
+                                PropertyName = "IpAddress",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 50
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "unsubscribed",
+                                PropertyName = "Unsubscribed",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "subscribed_on",
+                                PropertyName = "SubscribedOn",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "unsubscribed_on",
+                                PropertyName = "UnsubscribedOn",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        }
+                }
             };
         }
 
@@ -93,7 +163,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
         [Route("~/api/website/email-subscription/count")]
-        [Authorize]
+        [RestAuthorize]
         public long Count()
         {
             try
@@ -127,7 +197,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("all")]
         [Route("~/api/website/email-subscription/all")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.EmailSubscription> GetAll()
         {
             try
@@ -161,7 +231,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("export")]
         [Route("~/api/website/email-subscription/export")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<dynamic> Export()
         {
             try
@@ -196,7 +266,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("{emailSubscriptionId}")]
         [Route("~/api/website/email-subscription/{emailSubscriptionId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.EmailSubscription Get(System.Guid emailSubscriptionId)
         {
             try
@@ -226,7 +296,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get")]
         [Route("~/api/website/email-subscription/get")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.EmailSubscription> Get([FromUri] System.Guid[] emailSubscriptionIds)
         {
             try
@@ -260,7 +330,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("first")]
         [Route("~/api/website/email-subscription/first")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.EmailSubscription GetFirst()
         {
             try
@@ -295,7 +365,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("previous/{emailSubscriptionId}")]
         [Route("~/api/website/email-subscription/previous/{emailSubscriptionId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.EmailSubscription GetPrevious(System.Guid emailSubscriptionId)
         {
             try
@@ -330,7 +400,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("next/{emailSubscriptionId}")]
         [Route("~/api/website/email-subscription/next/{emailSubscriptionId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.EmailSubscription GetNext(System.Guid emailSubscriptionId)
         {
             try
@@ -364,7 +434,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("last")]
         [Route("~/api/website/email-subscription/last")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.EmailSubscription GetLast()
         {
             try
@@ -398,7 +468,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
         [Route("~/api/website/email-subscription")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.EmailSubscription> GetPaginatedResult()
         {
             try
@@ -433,7 +503,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
         [Route("~/api/website/email-subscription/page/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.EmailSubscription> GetPaginatedResult(long pageNumber)
         {
             try
@@ -468,7 +538,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/website/email-subscription/count-where")]
-        [Authorize]
+        [RestAuthorize]
         public long CountWhere([FromBody]JArray filters)
         {
             try
@@ -505,7 +575,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/website/email-subscription/get-where/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.EmailSubscription> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
@@ -541,7 +611,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count-filtered/{filterName}")]
         [Route("~/api/website/email-subscription/count-filtered/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public long CountFiltered(string filterName)
         {
             try
@@ -577,7 +647,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get-filtered/{pageNumber}/{filterName}")]
         [Route("~/api/website/email-subscription/get-filtered/{pageNumber}/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.EmailSubscription> GetFiltered(long pageNumber, string filterName)
         {
             try
@@ -611,7 +681,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
         [Route("~/api/website/email-subscription/display-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
             try
@@ -645,7 +715,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields")]
         [Route("~/api/website/email-subscription/custom-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields()
         {
             try
@@ -679,7 +749,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields/{resourceId}")]
         [Route("~/api/website/email-subscription/custom-fields/{resourceId}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             try
@@ -713,7 +783,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("add-or-edit")]
         [Route("~/api/website/email-subscription/add-or-edit")]
-        [Authorize]
+        [RestAuthorize]
         public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             dynamic emailSubscription = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
@@ -755,7 +825,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("add/{emailSubscription}")]
         [Route("~/api/website/email-subscription/add/{emailSubscription}")]
-        [Authorize]
+        [RestAuthorize]
         public void Add(Frapid.WebsiteBuilder.Entities.EmailSubscription emailSubscription)
         {
             if (emailSubscription == null)
@@ -795,7 +865,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("PUT")]
         [Route("edit/{emailSubscriptionId}")]
         [Route("~/api/website/email-subscription/edit/{emailSubscriptionId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Edit(System.Guid emailSubscriptionId, [FromBody] Frapid.WebsiteBuilder.Entities.EmailSubscription emailSubscription)
         {
             if (emailSubscription == null)
@@ -841,7 +911,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("bulk-import")]
         [Route("~/api/website/email-subscription/bulk-import")]
-        [Authorize]
+        [RestAuthorize]
         public List<object> BulkImport([FromBody]JArray collection)
         {
             List<ExpandoObject> emailSubscriptionCollection = this.ParseCollection(collection);
@@ -882,7 +952,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("DELETE")]
         [Route("delete/{emailSubscriptionId}")]
         [Route("~/api/website/email-subscription/delete/{emailSubscriptionId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Delete(System.Guid emailSubscriptionId)
         {
             try

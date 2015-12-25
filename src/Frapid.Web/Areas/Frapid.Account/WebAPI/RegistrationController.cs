@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
+using Frapid.WebApi;
 
 namespace Frapid.Account.Api
 {
@@ -25,37 +27,31 @@ namespace Frapid.Account.Api
         /// <summary>
         ///     The Registration repository.
         /// </summary>
-        private readonly IRegistrationRepository RegistrationRepository;
+        private IRegistrationRepository RegistrationRepository;
 
         public RegistrationController()
         {
-            this._LoginId = AppUsers.GetCurrent().View.LoginId.To<long>();
-            this._UserId = AppUsers.GetCurrent().View.UserId.To<int>();
-            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
-            this._Catalog = AppUsers.GetCatalog();
-
-            this.RegistrationRepository = new Frapid.Account.DataAccess.Registration
-            {
-                _Catalog = this._Catalog,
-                _LoginId = this._LoginId,
-                _UserId = this._UserId
-            };
         }
 
-        public RegistrationController(IRegistrationRepository repository, string catalog, LoginView view)
+        public RegistrationController(IRegistrationRepository repository)
         {
-            this._LoginId = view.LoginId.To<long>();
-            this._UserId = view.UserId.To<int>();
-            this._OfficeId = view.OfficeId.To<int>();
-            this._Catalog = catalog;
-
             this.RegistrationRepository = repository;
         }
 
-        public long _LoginId { get; }
-        public int _UserId { get; private set; }
-        public int _OfficeId { get; private set; }
-        public string _Catalog { get; }
+        protected override void Initialize(HttpControllerContext context)
+        {
+            base.Initialize(context);
+
+            if (this.RegistrationRepository == null)
+            {
+                this.RegistrationRepository = new Frapid.Account.DataAccess.Registration
+                {
+                    _Catalog = this.MetaUser.Catalog,
+                    _LoginId = this.MetaUser.LoginId,
+                    _UserId = this.MetaUser.UserId
+                };
+            }
+        }
 
         /// <summary>
         ///     Creates meta information of "registration" entity.
@@ -64,30 +60,135 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("meta")]
         [Route("~/api/account/registration/meta")]
-        [Authorize]
+        [RestAuthorize]
         public EntityView GetEntityView()
         {
-            if (this._LoginId == 0)
-            {
-                return new EntityView();
-            }
-
             return new EntityView
             {
                 PrimaryKey = "registration_id",
                 Columns = new List<EntityColumn>()
-                                {
-                                        new EntityColumn { ColumnName = "registration_id",  PropertyName = "RegistrationId",  DataType = "System.Guid",  DbDataType = "uuid",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "name",  PropertyName = "Name",  DataType = "string",  DbDataType = "varchar",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "email",  PropertyName = "Email",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "phone",  PropertyName = "Phone",  DataType = "string",  DbDataType = "varchar",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "password",  PropertyName = "Password",  DataType = "string",  DbDataType = "text",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "browser",  PropertyName = "Browser",  DataType = "string",  DbDataType = "text",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "ip_address",  PropertyName = "IpAddress",  DataType = "string",  DbDataType = "varchar",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 50 },
-                                        new EntityColumn { ColumnName = "registered_on",  PropertyName = "RegisteredOn",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "confirmed",  PropertyName = "Confirmed",  DataType = "bool",  DbDataType = "bool",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "confirmed_on",  PropertyName = "ConfirmedOn",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
-                                }
+                {
+                        new EntityColumn
+                        {
+                                ColumnName = "registration_id",
+                                PropertyName = "RegistrationId",
+                                DataType = "System.Guid",
+                                DbDataType = "uuid",
+                                IsNullable = false,
+                                IsPrimaryKey = true,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "name",
+                                PropertyName = "Name",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "email",
+                                PropertyName = "Email",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "phone",
+                                PropertyName = "Phone",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "password",
+                                PropertyName = "Password",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "browser",
+                                PropertyName = "Browser",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "ip_address",
+                                PropertyName = "IpAddress",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 50
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "registered_on",
+                                PropertyName = "RegisteredOn",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "confirmed",
+                                PropertyName = "Confirmed",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "confirmed_on",
+                                PropertyName = "ConfirmedOn",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        }
+                }
             };
         }
 
@@ -98,7 +199,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
         [Route("~/api/account/registration/count")]
-        [Authorize]
+        [RestAuthorize]
         public long Count()
         {
             try
@@ -132,7 +233,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("all")]
         [Route("~/api/account/registration/all")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.Registration> GetAll()
         {
             try
@@ -166,7 +267,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("export")]
         [Route("~/api/account/registration/export")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<dynamic> Export()
         {
             try
@@ -201,7 +302,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("{registrationId}")]
         [Route("~/api/account/registration/{registrationId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Account.Entities.Registration Get(System.Guid registrationId)
         {
             try
@@ -231,7 +332,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get")]
         [Route("~/api/account/registration/get")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.Registration> Get([FromUri] System.Guid[] registrationIds)
         {
             try
@@ -265,7 +366,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("first")]
         [Route("~/api/account/registration/first")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Account.Entities.Registration GetFirst()
         {
             try
@@ -300,7 +401,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("previous/{registrationId}")]
         [Route("~/api/account/registration/previous/{registrationId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Account.Entities.Registration GetPrevious(System.Guid registrationId)
         {
             try
@@ -335,7 +436,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("next/{registrationId}")]
         [Route("~/api/account/registration/next/{registrationId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Account.Entities.Registration GetNext(System.Guid registrationId)
         {
             try
@@ -369,7 +470,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("last")]
         [Route("~/api/account/registration/last")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Account.Entities.Registration GetLast()
         {
             try
@@ -403,7 +504,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
         [Route("~/api/account/registration")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.Registration> GetPaginatedResult()
         {
             try
@@ -438,7 +539,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
         [Route("~/api/account/registration/page/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.Registration> GetPaginatedResult(long pageNumber)
         {
             try
@@ -473,7 +574,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/account/registration/count-where")]
-        [Authorize]
+        [RestAuthorize]
         public long CountWhere([FromBody]JArray filters)
         {
             try
@@ -510,7 +611,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/account/registration/get-where/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.Registration> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
@@ -546,7 +647,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count-filtered/{filterName}")]
         [Route("~/api/account/registration/count-filtered/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public long CountFiltered(string filterName)
         {
             try
@@ -582,7 +683,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get-filtered/{pageNumber}/{filterName}")]
         [Route("~/api/account/registration/get-filtered/{pageNumber}/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.Registration> GetFiltered(long pageNumber, string filterName)
         {
             try
@@ -616,7 +717,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
         [Route("~/api/account/registration/display-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
             try
@@ -650,7 +751,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields")]
         [Route("~/api/account/registration/custom-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields()
         {
             try
@@ -684,7 +785,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields/{resourceId}")]
         [Route("~/api/account/registration/custom-fields/{resourceId}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             try
@@ -718,7 +819,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("POST")]
         [Route("add-or-edit")]
         [Route("~/api/account/registration/add-or-edit")]
-        [Authorize]
+        [RestAuthorize]
         public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             dynamic registration = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
@@ -760,7 +861,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("POST")]
         [Route("add/{registration}")]
         [Route("~/api/account/registration/add/{registration}")]
-        [Authorize]
+        [RestAuthorize]
         public void Add(Frapid.Account.Entities.Registration registration)
         {
             if (registration == null)
@@ -800,7 +901,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("PUT")]
         [Route("edit/{registrationId}")]
         [Route("~/api/account/registration/edit/{registrationId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Edit(System.Guid registrationId, [FromBody] Frapid.Account.Entities.Registration registration)
         {
             if (registration == null)
@@ -846,7 +947,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("POST")]
         [Route("bulk-import")]
         [Route("~/api/account/registration/bulk-import")]
-        [Authorize]
+        [RestAuthorize]
         public List<object> BulkImport([FromBody]JArray collection)
         {
             List<ExpandoObject> registrationCollection = this.ParseCollection(collection);
@@ -887,7 +988,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("DELETE")]
         [Route("delete/{registrationId}")]
         [Route("~/api/account/registration/delete/{registrationId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Delete(System.Guid registrationId)
         {
             try

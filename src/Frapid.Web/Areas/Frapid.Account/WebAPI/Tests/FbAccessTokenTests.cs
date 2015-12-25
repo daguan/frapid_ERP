@@ -21,7 +21,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static FbAccessTokenController Fixture()
         {
-            FbAccessTokenController controller = new FbAccessTokenController(new FbAccessTokenRepository(), "", new LoginView());
+            FbAccessTokenController controller = new FbAccessTokenController(new FbAccessTokenRepository());
             return controller;
         }
 

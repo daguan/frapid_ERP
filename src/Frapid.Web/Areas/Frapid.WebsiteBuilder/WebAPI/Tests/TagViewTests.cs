@@ -19,7 +19,7 @@ namespace Frapid.WebsiteBuilder.Api.Tests
     {
         public static TagViewController Fixture()
         {
-            TagViewController controller = new TagViewController(new TagViewRepository(), "", new LoginView());
+            TagViewController controller = new TagViewController(new TagViewRepository());
             return controller;
         }
 

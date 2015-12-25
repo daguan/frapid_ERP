@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static ResetAccountController Fixture()
         {
-            ResetAccountController controller = new ResetAccountController(new ResetAccountRepository(), "", new LoginView());
+            ResetAccountController controller = new ResetAccountController(new ResetAccountRepository());
             return controller;
         }
 

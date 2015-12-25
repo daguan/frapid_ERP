@@ -17,8 +17,6 @@ namespace Frapid.Dashboard.Controllers
 
         public DashboardController()
         {
-            AppUsers.SetCurrentLogin();
-
             ViewBag.ViewPath = GetViewPath();
             ViewBag.LayoutPath = GetLayoutPath();
             ViewBag.LayoutFile = LayoutFile;

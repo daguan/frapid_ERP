@@ -1,9 +1,9 @@
 ﻿function initializeCustomButtons() {
-    if (!scrudFactory.customButtons) {
+    if (!window.scrudFactory.customButtons) {
         return;
     };
 
-    var buttons = scrudFactory.customButtons;
+    var buttons = window.scrudFactory.customButtons;
 
     $.each(buttons, function (i, v) {
         var anchor = $("<a class='ui basic button' />");

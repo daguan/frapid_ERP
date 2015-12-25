@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
+using Frapid.WebApi;
 
 namespace Frapid.WebsiteBuilder.Api
 {
@@ -25,37 +27,31 @@ namespace Frapid.WebsiteBuilder.Api
         /// <summary>
         ///     The Content repository.
         /// </summary>
-        private readonly IContentRepository ContentRepository;
+        private IContentRepository ContentRepository;
 
         public ContentController()
         {
-            this._LoginId = AppUsers.GetCurrent().View.LoginId.To<long>();
-            this._UserId = AppUsers.GetCurrent().View.UserId.To<int>();
-            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
-            this._Catalog = AppUsers.GetCatalog();
-
-            this.ContentRepository = new Frapid.WebsiteBuilder.DataAccess.Content
-            {
-                _Catalog = this._Catalog,
-                _LoginId = this._LoginId,
-                _UserId = this._UserId
-            };
         }
 
-        public ContentController(IContentRepository repository, string catalog, LoginView view)
+        public ContentController(IContentRepository repository)
         {
-            this._LoginId = view.LoginId.To<long>();
-            this._UserId = view.UserId.To<int>();
-            this._OfficeId = view.OfficeId.To<int>();
-            this._Catalog = catalog;
-
             this.ContentRepository = repository;
         }
 
-        public long _LoginId { get; }
-        public int _UserId { get; private set; }
-        public int _OfficeId { get; private set; }
-        public string _Catalog { get; }
+        protected override void Initialize(HttpControllerContext context)
+        {
+            base.Initialize(context);
+
+            if (this.ContentRepository == null)
+            {
+                this.ContentRepository = new Frapid.WebsiteBuilder.DataAccess.Content
+                {
+                    _Catalog = this.MetaUser.Catalog,
+                    _LoginId = this.MetaUser.LoginId,
+                    _UserId = this.MetaUser.UserId
+                };
+            }
+        }
 
         /// <summary>
         ///     Creates meta information of "content" entity.
@@ -64,35 +60,195 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("meta")]
         [Route("~/api/website/content/meta")]
-        [Authorize]
+        [RestAuthorize]
         public EntityView GetEntityView()
         {
-            if (this._LoginId == 0)
-            {
-                return new EntityView();
-            }
-
             return new EntityView
             {
                 PrimaryKey = "content_id",
                 Columns = new List<EntityColumn>()
-                                {
-                                        new EntityColumn { ColumnName = "content_id",  PropertyName = "ContentId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = true,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "category_id",  PropertyName = "CategoryId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "title",  PropertyName = "Title",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "alias",  PropertyName = "Alias",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 50 },
-                                        new EntityColumn { ColumnName = "author_id",  PropertyName = "AuthorId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "publish_on",  PropertyName = "PublishOn",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "markdown",  PropertyName = "Markdown",  DataType = "string",  DbDataType = "text",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "contents",  PropertyName = "Contents",  DataType = "string",  DbDataType = "text",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "tags",  PropertyName = "Tags",  DataType = "string",  DbDataType = "text",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "is_draft",  PropertyName = "IsDraft",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "seo_keywords",  PropertyName = "SeoKeywords",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 50 },
-                                        new EntityColumn { ColumnName = "seo_description",  PropertyName = "SeoDescription",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "is_homepage",  PropertyName = "IsHomepage",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "audit_user_id",  PropertyName = "AuditUserId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "audit_ts",  PropertyName = "AuditTs",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
-                                }
+                {
+                        new EntityColumn
+                        {
+                                ColumnName = "content_id",
+                                PropertyName = "ContentId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = false,
+                                IsPrimaryKey = true,
+                                IsSerial = true,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "category_id",
+                                PropertyName = "CategoryId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "title",
+                                PropertyName = "Title",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "alias",
+                                PropertyName = "Alias",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 50
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "author_id",
+                                PropertyName = "AuthorId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "publish_on",
+                                PropertyName = "PublishOn",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "markdown",
+                                PropertyName = "Markdown",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "contents",
+                                PropertyName = "Contents",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "tags",
+                                PropertyName = "Tags",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "is_draft",
+                                PropertyName = "IsDraft",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "seo_keywords",
+                                PropertyName = "SeoKeywords",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 50
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "seo_description",
+                                PropertyName = "SeoDescription",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "is_homepage",
+                                PropertyName = "IsHomepage",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_user_id",
+                                PropertyName = "AuditUserId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_ts",
+                                PropertyName = "AuditTs",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        }
+                }
             };
         }
 
@@ -103,7 +259,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
         [Route("~/api/website/content/count")]
-        [Authorize]
+        [RestAuthorize]
         public long Count()
         {
             try
@@ -137,7 +293,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("all")]
         [Route("~/api/website/content/all")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Content> GetAll()
         {
             try
@@ -171,7 +327,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("export")]
         [Route("~/api/website/content/export")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<dynamic> Export()
         {
             try
@@ -206,7 +362,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("{contentId}")]
         [Route("~/api/website/content/{contentId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.Content Get(int contentId)
         {
             try
@@ -236,7 +392,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get")]
         [Route("~/api/website/content/get")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Content> Get([FromUri] int[] contentIds)
         {
             try
@@ -270,7 +426,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("first")]
         [Route("~/api/website/content/first")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.Content GetFirst()
         {
             try
@@ -305,7 +461,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("previous/{contentId}")]
         [Route("~/api/website/content/previous/{contentId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.Content GetPrevious(int contentId)
         {
             try
@@ -340,7 +496,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("next/{contentId}")]
         [Route("~/api/website/content/next/{contentId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.Content GetNext(int contentId)
         {
             try
@@ -374,7 +530,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("last")]
         [Route("~/api/website/content/last")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.Content GetLast()
         {
             try
@@ -408,7 +564,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
         [Route("~/api/website/content")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Content> GetPaginatedResult()
         {
             try
@@ -443,7 +599,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
         [Route("~/api/website/content/page/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Content> GetPaginatedResult(long pageNumber)
         {
             try
@@ -478,7 +634,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/website/content/count-where")]
-        [Authorize]
+        [RestAuthorize]
         public long CountWhere([FromBody]JArray filters)
         {
             try
@@ -515,7 +671,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/website/content/get-where/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Content> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
@@ -551,7 +707,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count-filtered/{filterName}")]
         [Route("~/api/website/content/count-filtered/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public long CountFiltered(string filterName)
         {
             try
@@ -587,7 +743,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get-filtered/{pageNumber}/{filterName}")]
         [Route("~/api/website/content/get-filtered/{pageNumber}/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.Content> GetFiltered(long pageNumber, string filterName)
         {
             try
@@ -621,7 +777,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
         [Route("~/api/website/content/display-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
             try
@@ -655,7 +811,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields")]
         [Route("~/api/website/content/custom-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields()
         {
             try
@@ -689,7 +845,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields/{resourceId}")]
         [Route("~/api/website/content/custom-fields/{resourceId}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             try
@@ -723,7 +879,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("add-or-edit")]
         [Route("~/api/website/content/add-or-edit")]
-        [Authorize]
+        [RestAuthorize]
         public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             dynamic content = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
@@ -765,7 +921,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("add/{content}")]
         [Route("~/api/website/content/add/{content}")]
-        [Authorize]
+        [RestAuthorize]
         public void Add(Frapid.WebsiteBuilder.Entities.Content content)
         {
             if (content == null)
@@ -805,7 +961,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("PUT")]
         [Route("edit/{contentId}")]
         [Route("~/api/website/content/edit/{contentId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Edit(int contentId, [FromBody] Frapid.WebsiteBuilder.Entities.Content content)
         {
             if (content == null)
@@ -851,7 +1007,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("bulk-import")]
         [Route("~/api/website/content/bulk-import")]
-        [Authorize]
+        [RestAuthorize]
         public List<object> BulkImport([FromBody]JArray collection)
         {
             List<ExpandoObject> contentCollection = this.ParseCollection(collection);
@@ -892,7 +1048,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("DELETE")]
         [Route("delete/{contentId}")]
         [Route("~/api/website/content/delete/{contentId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Delete(int contentId)
         {
             try

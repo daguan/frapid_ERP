@@ -8,8 +8,8 @@ namespace Frapid.Messaging
     {
         public EmailTemplateProcessor(string template, List<object> dictionary)
         {
-            Template = template;
-            Dictionary = dictionary;
+            this.Template = template;
+            this.Dictionary = dictionary;
         }
 
         public string Template { get; }
@@ -17,10 +17,10 @@ namespace Frapid.Messaging
 
         public string Process()
         {
-            var parameters = GetParameters(Template);
-            string template = Template;
+            var parameters = this.GetParameters(this.Template);
+            string template = this.Template;
 
-            foreach (var item in Dictionary)
+            foreach (var item in this.Dictionary)
             {
                 foreach (string parameter in parameters)
                 {
@@ -34,7 +34,7 @@ namespace Frapid.Messaging
             }
 
             //Remove null parameters
-            parameters = GetParameters(Template);
+            parameters = this.GetParameters(this.Template);
 
             return parameters.Aggregate(template,
                 (current, parameter) => current.Replace("{" + parameter + "}", string.Empty));

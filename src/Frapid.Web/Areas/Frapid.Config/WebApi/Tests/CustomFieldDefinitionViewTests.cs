@@ -19,7 +19,7 @@ namespace Frapid.Config.Api.Tests
     {
         public static CustomFieldDefinitionViewController Fixture()
         {
-            CustomFieldDefinitionViewController controller = new CustomFieldDefinitionViewController(new CustomFieldDefinitionViewRepository(), "", new LoginView());
+            CustomFieldDefinitionViewController controller = new CustomFieldDefinitionViewController(new CustomFieldDefinitionViewRepository());
             return controller;
         }
 

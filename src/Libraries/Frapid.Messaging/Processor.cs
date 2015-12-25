@@ -108,7 +108,7 @@ namespace Frapid.Messaging
 
                         if (deleteAttachmentes)
                         {
-                            DeleteFiles(attachments);
+                            this.DeleteFiles(attachments);
                         }
                     }
                 }

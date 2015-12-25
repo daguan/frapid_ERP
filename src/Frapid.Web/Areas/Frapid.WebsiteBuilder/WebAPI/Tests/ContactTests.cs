@@ -21,7 +21,7 @@ namespace Frapid.WebsiteBuilder.Api.Tests
     {
         public static ContactController Fixture()
         {
-            ContactController controller = new ContactController(new ContactRepository(), "", new LoginView());
+            ContactController controller = new ContactController(new ContactRepository());
             return controller;
         }
 

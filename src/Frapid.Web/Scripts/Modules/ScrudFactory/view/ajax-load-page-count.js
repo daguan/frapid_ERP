@@ -2,7 +2,7 @@
     function filteredRequest(queryStrings) {
         var filters = getAjaxFilters(queryStrings);
 
-        var url = scrudFactory.viewAPI + "/count-where";
+        var url = window.scrudFactory.viewAPI + "/count-where";
         var data = JSON.stringify(filters);
 
         return getAjaxRequest(url, "POST", data);
@@ -14,10 +14,10 @@
             return filteredRequest(qs);
         };
 
-        var url = scrudFactory.viewAPI + "/count";
+        var url = window.scrudFactory.viewAPI + "/count";
 
         if (filterName) {
-            url = scrudFactory.viewAPI + "/count-filtered/" + filterName;
+            url = window.scrudFactory.viewAPI + "/count-filtered/" + filterName;
         };
 
         return getAjaxRequest(url);

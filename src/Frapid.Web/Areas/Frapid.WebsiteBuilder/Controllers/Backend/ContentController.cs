@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Frapid.Areas;
 using Frapid.Dashboard.Controllers;
 using Frapid.WebsiteBuilder.Entities;
 
@@ -7,7 +8,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     public class ContentController : DashboardController
     {
         [Route("dashboard/website/contents")]
-        [Authorize]
+        [RestrictAnonymous]
         public ActionResult Index()
         {
             return this.FrapidView(this.GetRazorView<AreaRegistration>("Content/Index.cshtml"));
@@ -15,7 +16,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
 
         [Route("dashboard/website/contents/manage")]
         [Route("dashboard/website/contents/new")]
-        [Authorize]
+        [RestrictAnonymous]
         public ActionResult Manage(int contentId = 0)
         {
             var model = DAL.Contents.Get(contentId) ?? new Content();

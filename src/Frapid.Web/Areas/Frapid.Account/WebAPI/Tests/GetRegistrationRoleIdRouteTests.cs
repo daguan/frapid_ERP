@@ -16,6 +16,10 @@ namespace Frapid.Account.Api.Tests
     public class GetRegistrationRoleIdRouteTests
     {
         [Theory]
+        [InlineData("/api/{apiVersionNumber}/account/procedures/get-registration-role-id/annotation", "GET", typeof(GetRegistrationRoleIdController), "GetAnnotation")]
+        [InlineData("/api/account/procedures/get-registration-role-id/annotation", "GET", typeof(GetRegistrationRoleIdController), "GetAnnotation")]
+        [InlineData("/api/{apiVersionNumber}/account/procedures/get-registration-role-id/annotation", "HEAD", typeof(GetRegistrationRoleIdController), "GetAnnotation")]
+        [InlineData("/api/account/procedures/get-registration-role-id/annotation", "HEAD", typeof(GetRegistrationRoleIdController), "GetAnnotation")]
         [InlineData("/api/{apiVersionNumber}/account/procedures/get-registration-role-id/execute", "POST", typeof(GetRegistrationRoleIdController), "Execute")]
         [InlineData("/api/account/procedures/get-registration-role-id/execute", "POST", typeof(GetRegistrationRoleIdController), "Execute")]
         [Conditional("Debug")]

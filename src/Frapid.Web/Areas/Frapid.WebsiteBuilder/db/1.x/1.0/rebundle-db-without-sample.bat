@@ -1,5 +1,6 @@
 @echo off
 bundler\MixERP.Net.Utility.SqlBundler.exe ..\..\..\ "db/1.x/1.0" false false
-copy db.sql db-blank.sql
-del db.sql
+copy website.sql website-blank.sql
+del website.sql
+copy website-blank.sql ..\..\website-blank.sql
 pause

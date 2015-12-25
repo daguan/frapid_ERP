@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
+using Frapid.WebApi;
 
 namespace Frapid.WebsiteBuilder.Api
 {
@@ -25,37 +27,31 @@ namespace Frapid.WebsiteBuilder.Api
         /// <summary>
         ///     The MenuItem repository.
         /// </summary>
-        private readonly IMenuItemRepository MenuItemRepository;
+        private IMenuItemRepository MenuItemRepository;
 
         public MenuItemController()
         {
-            this._LoginId = AppUsers.GetCurrent().View.LoginId.To<long>();
-            this._UserId = AppUsers.GetCurrent().View.UserId.To<int>();
-            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
-            this._Catalog = AppUsers.GetCatalog();
-
-            this.MenuItemRepository = new Frapid.WebsiteBuilder.DataAccess.MenuItem
-            {
-                _Catalog = this._Catalog,
-                _LoginId = this._LoginId,
-                _UserId = this._UserId
-            };
         }
 
-        public MenuItemController(IMenuItemRepository repository, string catalog, LoginView view)
+        public MenuItemController(IMenuItemRepository repository)
         {
-            this._LoginId = view.LoginId.To<long>();
-            this._UserId = view.UserId.To<int>();
-            this._OfficeId = view.OfficeId.To<int>();
-            this._Catalog = catalog;
-
             this.MenuItemRepository = repository;
         }
 
-        public long _LoginId { get; }
-        public int _UserId { get; private set; }
-        public int _OfficeId { get; private set; }
-        public string _Catalog { get; }
+        protected override void Initialize(HttpControllerContext context)
+        {
+            base.Initialize(context);
+
+            if (this.MenuItemRepository == null)
+            {
+                this.MenuItemRepository = new Frapid.WebsiteBuilder.DataAccess.MenuItem
+                {
+                    _Catalog = this.MetaUser.Catalog,
+                    _LoginId = this.MetaUser.LoginId,
+                    _UserId = this.MetaUser.UserId
+                };
+            }
+        }
 
         /// <summary>
         ///     Creates meta information of "menu item" entity.
@@ -64,28 +60,111 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("meta")]
         [Route("~/api/website/menu-item/meta")]
-        [Authorize]
+        [RestAuthorize]
         public EntityView GetEntityView()
         {
-            if (this._LoginId == 0)
-            {
-                return new EntityView();
-            }
-
             return new EntityView
             {
                 PrimaryKey = "menu_item_id",
                 Columns = new List<EntityColumn>()
-                                {
-                                        new EntityColumn { ColumnName = "menu_item_id",  PropertyName = "MenuItemId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = true,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "menu_id",  PropertyName = "MenuId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "sort",  PropertyName = "Sort",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "title",  PropertyName = "Title",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "url",  PropertyName = "Url",  DataType = "string",  DbDataType = "varchar",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 500 },
-                                        new EntityColumn { ColumnName = "content_id",  PropertyName = "ContentId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "audit_user_id",  PropertyName = "AuditUserId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "audit_ts",  PropertyName = "AuditTs",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
-                                }
+                {
+                        new EntityColumn
+                        {
+                                ColumnName = "menu_item_id",
+                                PropertyName = "MenuItemId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = false,
+                                IsPrimaryKey = true,
+                                IsSerial = true,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "menu_id",
+                                PropertyName = "MenuId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "sort",
+                                PropertyName = "Sort",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "title",
+                                PropertyName = "Title",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "url",
+                                PropertyName = "Url",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 500
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "content_id",
+                                PropertyName = "ContentId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_user_id",
+                                PropertyName = "AuditUserId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_ts",
+                                PropertyName = "AuditTs",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        }
+                }
             };
         }
 
@@ -96,7 +175,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
         [Route("~/api/website/menu-item/count")]
-        [Authorize]
+        [RestAuthorize]
         public long Count()
         {
             try
@@ -130,7 +209,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("all")]
         [Route("~/api/website/menu-item/all")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.MenuItem> GetAll()
         {
             try
@@ -164,7 +243,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("export")]
         [Route("~/api/website/menu-item/export")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<dynamic> Export()
         {
             try
@@ -199,7 +278,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("{menuItemId}")]
         [Route("~/api/website/menu-item/{menuItemId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.MenuItem Get(int menuItemId)
         {
             try
@@ -229,7 +308,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get")]
         [Route("~/api/website/menu-item/get")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.MenuItem> Get([FromUri] int[] menuItemIds)
         {
             try
@@ -263,7 +342,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("first")]
         [Route("~/api/website/menu-item/first")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.MenuItem GetFirst()
         {
             try
@@ -298,7 +377,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("previous/{menuItemId}")]
         [Route("~/api/website/menu-item/previous/{menuItemId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.MenuItem GetPrevious(int menuItemId)
         {
             try
@@ -333,7 +412,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("next/{menuItemId}")]
         [Route("~/api/website/menu-item/next/{menuItemId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.MenuItem GetNext(int menuItemId)
         {
             try
@@ -367,7 +446,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("last")]
         [Route("~/api/website/menu-item/last")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.WebsiteBuilder.Entities.MenuItem GetLast()
         {
             try
@@ -401,7 +480,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
         [Route("~/api/website/menu-item")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.MenuItem> GetPaginatedResult()
         {
             try
@@ -436,7 +515,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
         [Route("~/api/website/menu-item/page/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.MenuItem> GetPaginatedResult(long pageNumber)
         {
             try
@@ -471,7 +550,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/website/menu-item/count-where")]
-        [Authorize]
+        [RestAuthorize]
         public long CountWhere([FromBody]JArray filters)
         {
             try
@@ -508,7 +587,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/website/menu-item/get-where/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.MenuItem> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
@@ -544,7 +623,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count-filtered/{filterName}")]
         [Route("~/api/website/menu-item/count-filtered/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public long CountFiltered(string filterName)
         {
             try
@@ -580,7 +659,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get-filtered/{pageNumber}/{filterName}")]
         [Route("~/api/website/menu-item/get-filtered/{pageNumber}/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.WebsiteBuilder.Entities.MenuItem> GetFiltered(long pageNumber, string filterName)
         {
             try
@@ -614,7 +693,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
         [Route("~/api/website/menu-item/display-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
             try
@@ -648,7 +727,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields")]
         [Route("~/api/website/menu-item/custom-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields()
         {
             try
@@ -682,7 +761,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields/{resourceId}")]
         [Route("~/api/website/menu-item/custom-fields/{resourceId}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             try
@@ -716,7 +795,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("add-or-edit")]
         [Route("~/api/website/menu-item/add-or-edit")]
-        [Authorize]
+        [RestAuthorize]
         public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             dynamic menuItem = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
@@ -758,7 +837,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("add/{menuItem}")]
         [Route("~/api/website/menu-item/add/{menuItem}")]
-        [Authorize]
+        [RestAuthorize]
         public void Add(Frapid.WebsiteBuilder.Entities.MenuItem menuItem)
         {
             if (menuItem == null)
@@ -798,7 +877,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("PUT")]
         [Route("edit/{menuItemId}")]
         [Route("~/api/website/menu-item/edit/{menuItemId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Edit(int menuItemId, [FromBody] Frapid.WebsiteBuilder.Entities.MenuItem menuItem)
         {
             if (menuItem == null)
@@ -844,7 +923,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("POST")]
         [Route("bulk-import")]
         [Route("~/api/website/menu-item/bulk-import")]
-        [Authorize]
+        [RestAuthorize]
         public List<object> BulkImport([FromBody]JArray collection)
         {
             List<ExpandoObject> menuItemCollection = this.ParseCollection(collection);
@@ -885,7 +964,7 @@ namespace Frapid.WebsiteBuilder.Api
         [AcceptVerbs("DELETE")]
         [Route("delete/{menuItemId}")]
         [Route("~/api/website/menu-item/delete/{menuItemId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Delete(int menuItemId)
         {
             try

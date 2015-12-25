@@ -21,7 +21,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static ResetRequestController Fixture()
         {
-            ResetRequestController controller = new ResetRequestController(new ResetRequestRepository(), "", new LoginView());
+            ResetRequestController controller = new ResetRequestController(new ResetRequestRepository());
             return controller;
         }
 

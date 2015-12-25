@@ -12,7 +12,7 @@ namespace Frapid.WebsiteBuilder.Api.Tests
     {
         public static RemoveEmailSubscriptionController Fixture()
         {
-            RemoveEmailSubscriptionController controller = new RemoveEmailSubscriptionController(new RemoveEmailSubscriptionRepository(), "", new LoginView());
+            RemoveEmailSubscriptionController controller = new RemoveEmailSubscriptionController(new RemoveEmailSubscriptionRepository());
             return controller;
         }
 

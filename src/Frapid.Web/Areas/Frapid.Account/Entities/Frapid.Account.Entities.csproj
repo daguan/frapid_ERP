@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccessToken.cs" />
+    <Compile Include="Application.cs" />
     <Compile Include="ConfigurationProfile.cs" />
     <Compile Include="DbFbSignInResult.cs" />
     <Compile Include="DbGoogleSignInResult.cs" />
@@ -53,8 +55,10 @@
     <Compile Include="DbSignInResult.cs" />
     <Compile Include="FbAccessToken.cs" />
     <Compile Include="GoogleAccessToken.cs" />
+    <Compile Include="InstalledDomain.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RefreshToken.cs" />
     <Compile Include="Registration.cs" />
     <Compile Include="ResetRequest.cs" />
     <Compile Include="Role.cs" />

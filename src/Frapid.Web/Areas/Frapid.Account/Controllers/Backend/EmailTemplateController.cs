@@ -2,14 +2,16 @@ using System.IO;
 using System.Text;
 using System.Web.Mvc;
 using Frapid.Account.ViewModels;
+using Frapid.Areas;
 using Frapid.Dashboard.Controllers;
 
 namespace Frapid.Account.Controllers.Backend
 {
+    [AntiForgery]
     public class EmailTemplateController : DashboardController
     {
         [Route("dashboard/account/email-templates/{file}")]
-        [Authorize]
+        [RestrictAnonymous]
         public ActionResult Index(string file)
         {
             string contents = this.GetContents(file);
@@ -24,7 +26,7 @@ namespace Frapid.Account.Controllers.Backend
         }
 
         [Route("dashboard/account/email-templates")]
-        [Authorize]
+        [RestrictAnonymous]
         [HttpPost]
         public ActionResult Save(Template model)
         {

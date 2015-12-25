@@ -3,7 +3,7 @@
     item.html(message);
     console.log(message);
     
-    if(scrudFactory.tabs.length > 1){
+    if(window.scrudFactory.tabs.length > 1){
         $("#ScrudFormErrorModal .error-list").append(item);
     };
 };
@@ -22,7 +22,7 @@ function validate() {
     }, true);
 
     if (!result) {
-        if (scrudFactory.tabs.length > 1) {
+        if (window.scrudFactory.tabs.length > 1) {
             $("#ScrudFormErrorModal").modal({ blurring: true }).modal("show");
         };
 

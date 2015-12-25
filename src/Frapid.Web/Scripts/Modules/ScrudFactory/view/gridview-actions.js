@@ -39,11 +39,11 @@ function loadActions() {
     var deleteTemplate = "";
     var editTemplate = "";
 
-    if (scrudFactory.allowDelete) {
+    if (window.scrudFactory.allowDelete) {
         deleteTemplate = stringFormat("<a onclick='deleteRow(this);' title='{0}'><i class='delete icon'></i></a>", window.Resources.Titles.Delete());
     };
 
-    if (scrudFactory.allowEdit) {
+    if (window.scrudFactory.allowEdit) {
         editTemplate = stringFormat("<a onclick='editRow(this);' title='{0}'><i class='edit icon'></i></a>", window.Resources.Titles.Edit());
     };
 
@@ -51,8 +51,8 @@ function loadActions() {
 
     var actionCount = (!isNullOrWhiteSpace(editTemplate) + !isNullOrWhiteSpace(deleteTemplate));
 
-    if (scrudFactory.customActions) {
-        actionCount += scrudFactory.customActions.length;
+    if (window.scrudFactory.customActions) {
+        actionCount += window.scrudFactory.customActions.length;
     };
 
 
@@ -65,9 +65,9 @@ function loadActions() {
 
     var actions = editTemplate + deleteTemplate;
 
-    if (scrudFactory.customActions) {
-        var preActions = Enumerable.From(scrudFactory.customActions).Where(function (x) { return x.position === "before"; }).ToArray();
-        var postActions = Enumerable.From(scrudFactory.customActions).Where(function (x) { return x.position !== "before"; }).ToArray();
+    if (window.scrudFactory.customActions) {
+        var preActions = Enumerable.From(window.scrudFactory.customActions).Where(function (x) { return x.position === "before"; }).ToArray();
+        var postActions = Enumerable.From(window.scrudFactory.customActions).Where(function (x) { return x.position !== "before"; }).ToArray();
 
         actions = getActions(preActions) + actions + getActions(postActions);
     };

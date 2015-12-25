@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    var queryString = getQueryStringByName(scrudFactory.queryStringKey || "");
+    var queryString = getQueryStringByName(window.scrudFactory.queryStringKey || "");
 
     if (queryString) {
         loadEdit(queryString);

@@ -21,7 +21,7 @@ namespace Frapid.Config.Api.Tests
     {
         public static SmtpConfigController Fixture()
         {
-            SmtpConfigController controller = new SmtpConfigController(new SmtpConfigRepository(), "", new LoginView());
+            SmtpConfigController controller = new SmtpConfigController(new SmtpConfigRepository());
             return controller;
         }
 

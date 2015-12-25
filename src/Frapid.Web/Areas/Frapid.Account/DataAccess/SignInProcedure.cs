@@ -12,7 +12,7 @@ using Frapid.Framework.Extensions;
 namespace Frapid.Account.DataAccess
 {
     /// <summary>
-    /// Prepares, validates, and executes the function "account.sign_in(_email text, _office_id integer, _challenge text, _password text, _browser text, _ip_address text, _culture text)" on the database.
+    /// Prepares, validates, and executes the function "account.sign_in(_email text, _office_id integer, _password text, _browser text, _ip_address text, _culture text)" on the database.
     /// </summary>
     public class SignInProcedure : DbAccess, ISignInRepository
     {
@@ -46,10 +46,6 @@ namespace Frapid.Account.DataAccess
         /// </summary>
         public int OfficeId { get; set; }
         /// <summary>
-        /// Maps to "_challenge" argument of the function "account.sign_in".
-        /// </summary>
-        public string Challenge { get; set; }
-        /// <summary>
         /// Maps to "_password" argument of the function "account.sign_in".
         /// </summary>
         public string Password { get; set; }
@@ -67,27 +63,25 @@ namespace Frapid.Account.DataAccess
         public string Culture { get; set; }
 
         /// <summary>
-        /// Prepares, validates, and executes the function "account.sign_in(_email text, _office_id integer, _challenge text, _password text, _browser text, _ip_address text, _culture text)" on the database.
+        /// Prepares, validates, and executes the function "account.sign_in(_email text, _office_id integer, _password text, _browser text, _ip_address text, _culture text)" on the database.
         /// </summary>
         public SignInProcedure()
         {
         }
 
         /// <summary>
-        /// Prepares, validates, and executes the function "account.sign_in(_email text, _office_id integer, _challenge text, _password text, _browser text, _ip_address text, _culture text)" on the database.
+        /// Prepares, validates, and executes the function "account.sign_in(_email text, _office_id integer, _password text, _browser text, _ip_address text, _culture text)" on the database.
         /// </summary>
         /// <param name="email">Enter argument value for "_email" parameter of the function "account.sign_in".</param>
         /// <param name="officeId">Enter argument value for "_office_id" parameter of the function "account.sign_in".</param>
-        /// <param name="challenge">Enter argument value for "_challenge" parameter of the function "account.sign_in".</param>
         /// <param name="password">Enter argument value for "_password" parameter of the function "account.sign_in".</param>
         /// <param name="browser">Enter argument value for "_browser" parameter of the function "account.sign_in".</param>
         /// <param name="ipAddress">Enter argument value for "_ip_address" parameter of the function "account.sign_in".</param>
         /// <param name="culture">Enter argument value for "_culture" parameter of the function "account.sign_in".</param>
-        public SignInProcedure(string email, int officeId, string challenge, string password, string browser, string ipAddress, string culture)
+        public SignInProcedure(string email, int officeId, string password, string browser, string ipAddress, string culture)
         {
             this.Email = email;
             this.OfficeId = officeId;
-            this.Challenge = challenge;
             this.Password = password;
             this.Browser = browser;
             this.IpAddress = ipAddress;
@@ -111,21 +105,19 @@ namespace Frapid.Account.DataAccess
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
-            string query = "SELECT * FROM account.sign_in(@Email, @OfficeId, @Challenge, @Password, @Browser, @IpAddress, @Culture);";
+            string query = "SELECT * FROM account.sign_in(@Email, @OfficeId, @Password, @Browser, @IpAddress, @Culture);";
 
             query = query.ReplaceWholeWord("@Email", "@0::text");
             query = query.ReplaceWholeWord("@OfficeId", "@1::integer");
-            query = query.ReplaceWholeWord("@Challenge", "@2::text");
-            query = query.ReplaceWholeWord("@Password", "@3::text");
-            query = query.ReplaceWholeWord("@Browser", "@4::text");
-            query = query.ReplaceWholeWord("@IpAddress", "@5::text");
-            query = query.ReplaceWholeWord("@Culture", "@6::text");
+            query = query.ReplaceWholeWord("@Password", "@2::text");
+            query = query.ReplaceWholeWord("@Browser", "@3::text");
+            query = query.ReplaceWholeWord("@IpAddress", "@4::text");
+            query = query.ReplaceWholeWord("@Culture", "@5::text");
 
 
             List<object> parameters = new List<object>();
             parameters.Add(this.Email);
             parameters.Add(this.OfficeId);
-            parameters.Add(this.Challenge);
             parameters.Add(this.Password);
             parameters.Add(this.Browser);
             parameters.Add(this.IpAddress);

@@ -20,7 +20,9 @@
     var ajax = request();
 
     ajax.success(function (response) {
-        if (response.Status) {
+        localStorage.setItem("access_token", response);
+
+        if (response) {
             window.location = "/dashboard";
         } else {
             alert("Sorry, google registration is not allowed at this time.");

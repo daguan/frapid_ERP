@@ -1,0 +1,23 @@
+{
+	"ApplicationName": "Frapid.Core",
+	"AutoInstall": true,
+	"Thumbnail": null,
+	"Publisher": "MixERP Inc.",
+	"Url": "http://frapid.com",
+	"DocumentationUrl": "http://frapid.com",
+	"AssemblyName": null,
+	"Version": "1.0",
+	"RealeasedOn": null,
+	"Description": "Frapid Db Core",
+	"Category": "N/A",
+	"Bundle": "Frapid Framework",
+    "IsMeta": false,
+	"DbSchema": "core",
+	"BlankDbPath": "~/Areas/Frapid.Core/db/core-blank.sql",
+	"SampleDbPath": "~/Areas/Frapid.Core/db/core-sample.sql",
+	"InstallSample": false,
+	"My": null,
+    "OverrideTemplatePath":null,
+    "OverrideDestination":null,
+	"DependsOn": []
+}

@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static EmailExistsController Fixture()
         {
-            EmailExistsController controller = new EmailExistsController(new EmailExistsRepository(), "", new LoginView());
+            EmailExistsController controller = new EmailExistsController(new EmailExistsRepository());
             return controller;
         }
 

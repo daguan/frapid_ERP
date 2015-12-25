@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static GoogleUserExistsController Fixture()
         {
-            GoogleUserExistsController controller = new GoogleUserExistsController(new GoogleUserExistsRepository(), "", new LoginView());
+            GoogleUserExistsController controller = new GoogleUserExistsController(new GoogleUserExistsRepository());
             return controller;
         }
 

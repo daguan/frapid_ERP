@@ -16,8 +16,8 @@ namespace Frapid.Messaging
 
         public MailQueueManager(string catalog, EmailQueue mail)
         {
-            Catalog = catalog;
-            Email = mail;
+            this.Catalog = catalog;
+            this.Email = mail;
         }
 
         public EmailQueue Email { get; set; }
@@ -25,26 +25,26 @@ namespace Frapid.Messaging
 
         public void Add()
         {
-            if (!IsEnabled())
+            if (!this.IsEnabled())
             {
                 return;
             }
 
-            MailQueue.AddToQueue(Catalog, Email);
+            MailQueue.AddToQueue(this.Catalog, this.Email);
         }
 
         private bool IsEnabled()
         {
-            var config = new Config(Catalog);
+            var config = new Config(this.Catalog);
             return config.Enabled;
         }
 
         public async Task ProcessMailQueueAsync(IEmailProcessor processor)
         {
-            IEnumerable<EmailQueue> queue = MailQueue.GetMailInQueue(Catalog).ToList();
-            var config = new Config(Catalog);
+            IEnumerable<EmailQueue> queue = MailQueue.GetMailInQueue(this.Catalog).ToList();
+            var config = new Config(this.Catalog);
 
-            if (IsEnabled())
+            if (this.IsEnabled())
             {
                 foreach (var mail in queue)
                 {

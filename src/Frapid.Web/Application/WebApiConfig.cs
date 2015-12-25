@@ -2,7 +2,7 @@
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
-using Frapid.Framework;
+using Frapid.WebApi;
 using Serilog;
 
 namespace Frapid.Web
@@ -12,6 +12,7 @@ namespace Frapid.Web
         public static void Register(HttpConfiguration config)
         {
             Log.Information("Registering Web API.");
+            config.SuppressDefaultHostAuthentication();
             config.MapHttpAttributeRoutes();
             config.Routes.MapHttpRoute("VersionedApi", "api/v1.0/{schema}/{controller}/{action}/{id}",
                 new {id = RouteParameter.Optional});

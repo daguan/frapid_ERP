@@ -21,7 +21,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static LoginController Fixture()
         {
-            LoginController controller = new LoginController(new LoginRepository(), "", new LoginView());
+            LoginController controller = new LoginController(new LoginRepository());
             return controller;
         }
 

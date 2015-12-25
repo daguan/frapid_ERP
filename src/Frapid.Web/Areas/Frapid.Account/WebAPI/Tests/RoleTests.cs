@@ -21,7 +21,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static RoleController Fixture()
         {
-            RoleController controller = new RoleController(new RoleRepository(), "", new LoginView());
+            RoleController controller = new RoleController(new RoleRepository());
             return controller;
         }
 

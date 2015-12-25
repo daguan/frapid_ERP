@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static CanRegisterWithGoogleController Fixture()
         {
-            CanRegisterWithGoogleController controller = new CanRegisterWithGoogleController(new CanRegisterWithGoogleRepository(), "", new LoginView());
+            CanRegisterWithGoogleController controller = new CanRegisterWithGoogleController(new CanRegisterWithGoogleRepository());
             return controller;
         }
 

@@ -2,10 +2,12 @@
 using System.Web.Mvc;
 using Frapid.Account.InputModels;
 using Frapid.Account.RemoteAuthentication;
+using Frapid.Areas;
 using Npgsql;
 
 namespace Frapid.Account.Controllers
 {
+    [AntiForgery]
     public class GoogleSignInController : BaseAuthenticationController
     {
         [Route("account/google/sign-in")]

@@ -47,7 +47,7 @@ BEGIN
 
     IF NOT account.user_exists(_email) AND account.can_register_with_facebook() THEN
         INSERT INTO account.users(role_id, office_id, email, name)
-        SELECT account.get_registration_role_id(), account.get_registration_office_id(), _email, _name
+        SELECT account.get_registration_role_id(_email), account.get_registration_office_id(), _email, _name
         RETURNING user_id INTO _user_id;
     END IF;
 

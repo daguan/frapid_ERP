@@ -1,1 +1,22 @@
-﻿["localhost","dev.localhost","frapid.localhost","frapid.com"]
+﻿[
+  {
+	"DomainName": "localhost",
+	"AdminEmail": "binodnp@outlook.com"
+  },
+  {
+	"DomainName": "frapid.localhost",
+	"AdminEmail": "binodnp@outlook.com"
+  },
+  {
+	"DomainName": "dev.localhost",
+	"AdminEmail": "binodnp@outlook.com"
+  },
+  {
+	"DomainName": "frapid.com",
+	"AdminEmail": "binodnp@outlook.com"
+  },
+  {
+	"DomainName": "docs.frapid.com",
+	"AdminEmail": "binodnp@outlook.com"
+  }
+]

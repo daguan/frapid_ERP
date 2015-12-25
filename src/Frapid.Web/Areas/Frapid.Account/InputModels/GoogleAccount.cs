@@ -7,5 +7,6 @@ namespace Frapid.Account.InputModels
         public string Name { get; set; }
         public string Token { get; set; }
         public string Culture { get; set; }
+        public string FrapidAppId { get; set; }
     }
 }

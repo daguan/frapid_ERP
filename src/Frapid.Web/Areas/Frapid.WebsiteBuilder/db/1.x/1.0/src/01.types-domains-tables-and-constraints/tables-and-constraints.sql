@@ -19,7 +19,7 @@ CREATE TABLE website.categories
     alias                                       national character varying(50) NOT NULL UNIQUE,
     seo_keywords                                national character varying(50),
     seo_description                             national character varying(100),
-    audit_user_id                               integer,
+    audit_user_id                               integer REFERENCES account.users,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
                                                 DEFAULT(NOW())    
 );
@@ -30,7 +30,7 @@ CREATE TABLE website.contents
     category_id                                 integer NOT NULL REFERENCES website.categories,
     title                                       national character varying(100) NOT NULL,
     alias                                       national character varying(50) NOT NULL UNIQUE,
-    author_id                                   integer,
+    author_id                                   integer REFERENCES account.users,
     publish_on                                  TIMESTAMP WITH TIME ZONE NOT NULL,
     markdown                                    text,
     contents                                    text NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE website.contents
     seo_keywords                                national character varying(50) NOT NULL DEFAULT(''),
     seo_description                             national character varying(100) NOT NULL DEFAULT(''),
     is_homepage                                 boolean NOT NULL DEFAULT(false),
-    audit_user_id                               integer,
+    audit_user_id                               integer REFERENCES account.users,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
                                                 DEFAULT(NOW())    
 );
@@ -49,7 +49,7 @@ CREATE TABLE website.menus
     menu_id                                     SERIAL PRIMARY KEY,
     menu_name                                   national character varying(100),
     description                                 text,
-    audit_user_id                               integer,
+    audit_user_id                               integer REFERENCES account.users,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
                                                 DEFAULT(NOW())
 );
@@ -65,7 +65,7 @@ CREATE TABLE website.menu_items
     title                                       national character varying(100) NOT NULL,
     url                                         national character varying(500),
     content_id                                  integer REFERENCES website.contents,    
-    audit_user_id                               integer,
+    audit_user_id                               integer REFERENCES account.users,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
                                                 DEFAULT(NOW())    
 );
@@ -90,7 +90,7 @@ CREATE TABLE website.contacts
     display_contact_form                        boolean NOT NULL DEFAULT(true),
     sort                                        integer NOT NULL DEFAULT(0),
     status                                      boolean NOT NULL DEFAULT(true),
-    audit_user_id                               integer,
+    audit_user_id                               integer REFERENCES account.users,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
                                                 DEFAULT(NOW())    
 );

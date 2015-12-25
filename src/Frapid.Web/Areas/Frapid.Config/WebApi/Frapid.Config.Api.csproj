@@ -46,6 +46,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="Frapid.TokenManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\Frapid.TokenManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Frapid.WebApi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\Frapid.WebApi.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\Npgsql.2.2.6\lib\net45\Mono.Security.dll</HintPath>
       <Private>True</Private>
@@ -107,39 +115,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccessTypeController.cs" />
-    <Compile Include="AppController.cs" />
-    <Compile Include="AppDependencyController.cs" />
-    <Compile Include="ConfigMenuController.cs" />
-    <Compile Include="CreateAppController.cs" />
     <Compile Include="CreateFlagController.cs" />
-    <Compile Include="CreateMenuController.cs" />
-    <Compile Include="CurrencyController.cs" />
     <Compile Include="CustomFieldController.cs" />
     <Compile Include="CustomFieldDataTypeController.cs" />
     <Compile Include="CustomFieldDefinitionViewController.cs" />
     <Compile Include="CustomFieldFormController.cs" />
     <Compile Include="CustomFieldSetupController.cs" />
     <Compile Include="CustomFieldViewController.cs" />
-    <Compile Include="DefaultEntityAccessController.cs" />
     <Compile Include="EmailQueueController.cs" />
-    <Compile Include="EntityAccessController.cs" />
-    <Compile Include="Fakes\AccessTypeRepository.cs" />
-    <Compile Include="Fakes\AppDependencyRepository.cs" />
-    <Compile Include="Fakes\AppRepository.cs" />
-    <Compile Include="Fakes\CreateAppRepository.cs" />
     <Compile Include="Fakes\CreateFlagRepository.cs" />
-    <Compile Include="Fakes\CreateMenuRepository.cs" />
-    <Compile Include="Fakes\CurrencyRepository.cs" />
     <Compile Include="Fakes\CustomFieldDataTypeRepository.cs" />
     <Compile Include="Fakes\CustomFieldDefinitionViewRepository.cs" />
     <Compile Include="Fakes\CustomFieldFormRepository.cs" />
     <Compile Include="Fakes\CustomFieldRepository.cs" />
     <Compile Include="Fakes\CustomFieldSetupRepository.cs" />
     <Compile Include="Fakes\CustomFieldViewRepository.cs" />
-    <Compile Include="Fakes\DefaultEntityAccessRepository.cs" />
     <Compile Include="Fakes\EmailQueueRepository.cs" />
-    <Compile Include="Fakes\EntityAccessRepository.cs" />
     <Compile Include="Fakes\FilterNameViewRepository.cs" />
     <Compile Include="Fakes\FilterRepository.cs" />
     <Compile Include="Fakes\FlagRepository.cs" />
@@ -153,8 +144,6 @@
     <Compile Include="Fakes\HasAccessRepository.cs" />
     <Compile Include="Fakes\KanbanDetailRepository.cs" />
     <Compile Include="Fakes\KanbanRepository.cs" />
-    <Compile Include="Fakes\MenuRepository.cs" />
-    <Compile Include="Fakes\OfficeRepository.cs" />
     <Compile Include="Fakes\SmtpConfigRepository.cs" />
     <Compile Include="FilterController.cs" />
     <Compile Include="FilterNameViewController.cs" />
@@ -166,26 +155,12 @@
     <Compile Include="GetCustomFieldSetupIdByTableNameController.cs" />
     <Compile Include="GetFlagTypeIdController.cs" />
     <Compile Include="GetUserIdByLoginIdController.cs" />
-    <Compile Include="HasAccessController.cs" />
     <Compile Include="KanbanController.cs" />
     <Compile Include="KanbanDetailController.cs" />
-    <Compile Include="OfficeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmtpConfigController.cs" />
-    <Compile Include="Tests\AccessTypeRouteTests.cs" />
-    <Compile Include="Tests\AccessTypeTests.cs" />
-    <Compile Include="Tests\AppDependencyRouteTests.cs" />
-    <Compile Include="Tests\AppDependencyTests.cs" />
-    <Compile Include="Tests\AppRouteTests.cs" />
-    <Compile Include="Tests\AppTests.cs" />
-    <Compile Include="Tests\CreateAppRouteTests.cs" />
-    <Compile Include="Tests\CreateAppTests.cs" />
     <Compile Include="Tests\CreateFlagRouteTests.cs" />
     <Compile Include="Tests\CreateFlagTests.cs" />
-    <Compile Include="Tests\CreateMenuRouteTests.cs" />
-    <Compile Include="Tests\CreateMenuTests.cs" />
-    <Compile Include="Tests\CurrencyRouteTests.cs" />
-    <Compile Include="Tests\CurrencyTests.cs" />
     <Compile Include="Tests\CustomFieldDataTypeRouteTests.cs" />
     <Compile Include="Tests\CustomFieldDataTypeTests.cs" />
     <Compile Include="Tests\CustomFieldDefinitionViewRouteTests.cs" />
@@ -198,12 +173,8 @@
     <Compile Include="Tests\CustomFieldTests.cs" />
     <Compile Include="Tests\CustomFieldViewRouteTests.cs" />
     <Compile Include="Tests\CustomFieldViewTests.cs" />
-    <Compile Include="Tests\DefaultEntityAccessRouteTests.cs" />
-    <Compile Include="Tests\DefaultEntityAccessTests.cs" />
     <Compile Include="Tests\EmailQueueRouteTests.cs" />
     <Compile Include="Tests\EmailQueueTests.cs" />
-    <Compile Include="Tests\EntityAccessRouteTests.cs" />
-    <Compile Include="Tests\EntityAccessTests.cs" />
     <Compile Include="Tests\FilterNameViewRouteTests.cs" />
     <Compile Include="Tests\FilterNameViewTests.cs" />
     <Compile Include="Tests\FilterRouteTests.cs" />
@@ -224,16 +195,10 @@
     <Compile Include="Tests\GetFlagTypeIdTests.cs" />
     <Compile Include="Tests\GetUserIdByLoginIdRouteTests.cs" />
     <Compile Include="Tests\GetUserIdByLoginIdTests.cs" />
-    <Compile Include="Tests\HasAccessRouteTests.cs" />
-    <Compile Include="Tests\HasAccessTests.cs" />
     <Compile Include="Tests\KanbanDetailRouteTests.cs" />
     <Compile Include="Tests\KanbanDetailTests.cs" />
     <Compile Include="Tests\KanbanRouteTests.cs" />
     <Compile Include="Tests\KanbanTests.cs" />
-    <Compile Include="Tests\MenuRouteTests.cs" />
-    <Compile Include="Tests\MenuTests.cs" />
-    <Compile Include="Tests\OfficeRouteTests.cs" />
-    <Compile Include="Tests\OfficeTests.cs" />
     <Compile Include="Tests\SmtpConfigRouteTests.cs" />
     <Compile Include="Tests\SmtpConfigTests.cs" />
   </ItemGroup>

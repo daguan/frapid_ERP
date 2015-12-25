@@ -21,7 +21,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static UserController Fixture()
         {
-            UserController controller = new UserController(new UserRepository(), "", new LoginView());
+            UserController controller = new UserController(new UserRepository());
             return controller;
         }
 

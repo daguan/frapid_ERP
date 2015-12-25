@@ -8,7 +8,7 @@ namespace Frapid.Messaging
     {
         public Validator(string emailAddress)
         {
-            EmailAddress = emailAddress;
+            this.EmailAddress = emailAddress;
         }
 
         public bool IsValid { get; private set; }
@@ -16,19 +16,19 @@ namespace Frapid.Messaging
 
         public void Validate()
         {
-            IsValid = false;
+            this.IsValid = false;
 
-            if (string.IsNullOrWhiteSpace(EmailAddress))
+            if (string.IsNullOrWhiteSpace(this.EmailAddress))
             {
                 return;
             }
 
-            string emailAddress = EmailAddress;
+            string emailAddress = this.EmailAddress;
 
-            emailAddress = Regex.Replace(emailAddress, @"(@)(.+)$", DomainMapper);
+            emailAddress = Regex.Replace(emailAddress, @"(@)(.+)$", this.DomainMapper);
 
             // Return true if address is in valid e-mail format.
-            IsValid = Regex.IsMatch(emailAddress,
+            this.IsValid = Regex.IsMatch(emailAddress,
                 @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$",
                 RegexOptions.IgnoreCase);
@@ -46,7 +46,7 @@ namespace Frapid.Messaging
             }
             catch (ArgumentException)
             {
-                IsValid = true;
+                this.IsValid = true;
             }
             return match.Groups[1].Value + domainName;
         }

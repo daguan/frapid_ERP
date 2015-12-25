@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
+using Frapid.WebApi;
 
 namespace Frapid.Config.Api
 {
@@ -25,37 +27,31 @@ namespace Frapid.Config.Api
         /// <summary>
         ///     The EmailQueue repository.
         /// </summary>
-        private readonly IEmailQueueRepository EmailQueueRepository;
+        private IEmailQueueRepository EmailQueueRepository;
 
         public EmailQueueController()
         {
-            this._LoginId = AppUsers.GetCurrent().View.LoginId.To<long>();
-            this._UserId = AppUsers.GetCurrent().View.UserId.To<int>();
-            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
-            this._Catalog = AppUsers.GetCatalog();
-
-            this.EmailQueueRepository = new Frapid.Config.DataAccess.EmailQueue
-            {
-                _Catalog = this._Catalog,
-                _LoginId = this._LoginId,
-                _UserId = this._UserId
-            };
         }
 
-        public EmailQueueController(IEmailQueueRepository repository, string catalog, LoginView view)
+        public EmailQueueController(IEmailQueueRepository repository)
         {
-            this._LoginId = view.LoginId.To<long>();
-            this._UserId = view.UserId.To<int>();
-            this._OfficeId = view.OfficeId.To<int>();
-            this._Catalog = catalog;
-
             this.EmailQueueRepository = repository;
         }
 
-        public long _LoginId { get; }
-        public int _UserId { get; private set; }
-        public int _OfficeId { get; private set; }
-        public string _Catalog { get; }
+        protected override void Initialize(HttpControllerContext context)
+        {
+            base.Initialize(context);
+
+            if (this.EmailQueueRepository == null)
+            {
+                this.EmailQueueRepository = new Frapid.Config.DataAccess.EmailQueue
+                {
+                    _Catalog = this.MetaUser.Catalog,
+                    _LoginId = this.MetaUser.LoginId,
+                    _UserId = this.MetaUser.UserId
+                };
+            }
+        }
 
         /// <summary>
         ///     Creates meta information of "email queue" entity.
@@ -64,32 +60,159 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("meta")]
         [Route("~/api/config/email-queue/meta")]
-        [Authorize]
+        [RestAuthorize]
         public EntityView GetEntityView()
         {
-            if (this._LoginId == 0)
-            {
-                return new EntityView();
-            }
-
             return new EntityView
             {
                 PrimaryKey = "queue_id",
                 Columns = new List<EntityColumn>()
-                                {
-                                        new EntityColumn { ColumnName = "queue_id",  PropertyName = "QueueId",  DataType = "long",  DbDataType = "int8",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = true,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "from_name",  PropertyName = "FromName",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 256 },
-                                        new EntityColumn { ColumnName = "reply_to",  PropertyName = "ReplyTo",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 256 },
-                                        new EntityColumn { ColumnName = "subject",  PropertyName = "Subject",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 256 },
-                                        new EntityColumn { ColumnName = "send_to",  PropertyName = "SendTo",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 256 },
-                                        new EntityColumn { ColumnName = "attachments",  PropertyName = "Attachments",  DataType = "string",  DbDataType = "text",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "message",  PropertyName = "Message",  DataType = "string",  DbDataType = "text",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "added_on",  PropertyName = "AddedOn",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "delivered",  PropertyName = "Delivered",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "delivered_on",  PropertyName = "DeliveredOn",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "canceled",  PropertyName = "Canceled",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "canceled_on",  PropertyName = "CanceledOn",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
-                                }
+                {
+                        new EntityColumn
+                        {
+                                ColumnName = "queue_id",
+                                PropertyName = "QueueId",
+                                DataType = "long",
+                                DbDataType = "int8",
+                                IsNullable = false,
+                                IsPrimaryKey = true,
+                                IsSerial = true,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "from_name",
+                                PropertyName = "FromName",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 256
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "reply_to",
+                                PropertyName = "ReplyTo",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 256
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "subject",
+                                PropertyName = "Subject",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 256
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "send_to",
+                                PropertyName = "SendTo",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 256
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "attachments",
+                                PropertyName = "Attachments",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "message",
+                                PropertyName = "Message",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "added_on",
+                                PropertyName = "AddedOn",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "delivered",
+                                PropertyName = "Delivered",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "delivered_on",
+                                PropertyName = "DeliveredOn",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "canceled",
+                                PropertyName = "Canceled",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "canceled_on",
+                                PropertyName = "CanceledOn",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        }
+                }
             };
         }
 
@@ -100,7 +223,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
         [Route("~/api/config/email-queue/count")]
-        [Authorize]
+        [RestAuthorize]
         public long Count()
         {
             try
@@ -134,7 +257,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("all")]
         [Route("~/api/config/email-queue/all")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.EmailQueue> GetAll()
         {
             try
@@ -168,7 +291,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("export")]
         [Route("~/api/config/email-queue/export")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<dynamic> Export()
         {
             try
@@ -203,7 +326,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("{queueId}")]
         [Route("~/api/config/email-queue/{queueId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.EmailQueue Get(long queueId)
         {
             try
@@ -233,7 +356,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get")]
         [Route("~/api/config/email-queue/get")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.EmailQueue> Get([FromUri] long[] queueIds)
         {
             try
@@ -267,7 +390,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("first")]
         [Route("~/api/config/email-queue/first")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.EmailQueue GetFirst()
         {
             try
@@ -302,7 +425,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("previous/{queueId}")]
         [Route("~/api/config/email-queue/previous/{queueId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.EmailQueue GetPrevious(long queueId)
         {
             try
@@ -337,7 +460,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("next/{queueId}")]
         [Route("~/api/config/email-queue/next/{queueId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.EmailQueue GetNext(long queueId)
         {
             try
@@ -371,7 +494,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("last")]
         [Route("~/api/config/email-queue/last")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.EmailQueue GetLast()
         {
             try
@@ -405,7 +528,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
         [Route("~/api/config/email-queue")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.EmailQueue> GetPaginatedResult()
         {
             try
@@ -440,7 +563,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
         [Route("~/api/config/email-queue/page/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.EmailQueue> GetPaginatedResult(long pageNumber)
         {
             try
@@ -475,7 +598,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/config/email-queue/count-where")]
-        [Authorize]
+        [RestAuthorize]
         public long CountWhere([FromBody]JArray filters)
         {
             try
@@ -512,7 +635,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/config/email-queue/get-where/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.EmailQueue> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
@@ -548,7 +671,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count-filtered/{filterName}")]
         [Route("~/api/config/email-queue/count-filtered/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public long CountFiltered(string filterName)
         {
             try
@@ -584,7 +707,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get-filtered/{pageNumber}/{filterName}")]
         [Route("~/api/config/email-queue/get-filtered/{pageNumber}/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.EmailQueue> GetFiltered(long pageNumber, string filterName)
         {
             try
@@ -618,7 +741,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
         [Route("~/api/config/email-queue/display-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
             try
@@ -652,7 +775,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields")]
         [Route("~/api/config/email-queue/custom-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields()
         {
             try
@@ -686,7 +809,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields/{resourceId}")]
         [Route("~/api/config/email-queue/custom-fields/{resourceId}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             try
@@ -720,7 +843,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("add-or-edit")]
         [Route("~/api/config/email-queue/add-or-edit")]
-        [Authorize]
+        [RestAuthorize]
         public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             dynamic emailQueue = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
@@ -762,7 +885,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("add/{emailQueue}")]
         [Route("~/api/config/email-queue/add/{emailQueue}")]
-        [Authorize]
+        [RestAuthorize]
         public void Add(Frapid.Config.Entities.EmailQueue emailQueue)
         {
             if (emailQueue == null)
@@ -802,7 +925,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("PUT")]
         [Route("edit/{queueId}")]
         [Route("~/api/config/email-queue/edit/{queueId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Edit(long queueId, [FromBody] Frapid.Config.Entities.EmailQueue emailQueue)
         {
             if (emailQueue == null)
@@ -848,7 +971,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("bulk-import")]
         [Route("~/api/config/email-queue/bulk-import")]
-        [Authorize]
+        [RestAuthorize]
         public List<object> BulkImport([FromBody]JArray collection)
         {
             List<ExpandoObject> emailQueueCollection = this.ParseCollection(collection);
@@ -889,7 +1012,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("DELETE")]
         [Route("delete/{queueId}")]
         [Route("~/api/config/email-queue/delete/{queueId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Delete(long queueId)
         {
             try

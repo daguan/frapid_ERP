@@ -8,24 +8,24 @@
 };
 
 function initializeViews() {
-    if (scrudFactory.removeKanban || checkIfProcedure()) {
+    if (window.scrudFactory.removeKanban || checkIfProcedure()) {
         $('[data-target="kanban"]').remove();
         showTarget("grid");
     };
 
-    if (scrudFactory.removeFilter || checkIfProcedure()) {
+    if (window.scrudFactory.removeFilter || checkIfProcedure()) {
         $('[data-target="filter"]').remove();
         $("#FilterButton").remove();
         showTarget("grid");
     };
 
-    if (scrudFactory.removeImport || checkIfProcedure()) {
+    if (window.scrudFactory.removeImport || checkIfProcedure()) {
         $('[data-target="import"]').remove();
         showTarget("grid");
         $('a[data-target="grid"]').remove();
     };
 
-    if (scrudFactory.removeFlag) {
+    if (window.scrudFactory.removeFlag) {
         $("#FlagPopUnder").remove();
         $("#FlagButton").remove();
     };

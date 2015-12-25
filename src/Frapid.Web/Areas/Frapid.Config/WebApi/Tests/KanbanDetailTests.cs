@@ -21,7 +21,7 @@ namespace Frapid.Config.Api.Tests
     {
         public static KanbanDetailController Fixture()
         {
-            KanbanDetailController controller = new KanbanDetailController(new KanbanDetailRepository(), "", new LoginView());
+            KanbanDetailController controller = new KanbanDetailController(new KanbanDetailRepository());
             return controller;
         }
 

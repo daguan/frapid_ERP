@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
+using Frapid.WebApi;
 
 namespace Frapid.Config.Api
 {
@@ -25,37 +27,31 @@ namespace Frapid.Config.Api
         /// <summary>
         ///     The KanbanDetail repository.
         /// </summary>
-        private readonly IKanbanDetailRepository KanbanDetailRepository;
+        private IKanbanDetailRepository KanbanDetailRepository;
 
         public KanbanDetailController()
         {
-            this._LoginId = AppUsers.GetCurrent().View.LoginId.To<long>();
-            this._UserId = AppUsers.GetCurrent().View.UserId.To<int>();
-            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
-            this._Catalog = AppUsers.GetCatalog();
-
-            this.KanbanDetailRepository = new Frapid.Config.DataAccess.KanbanDetail
-            {
-                _Catalog = this._Catalog,
-                _LoginId = this._LoginId,
-                _UserId = this._UserId
-            };
         }
 
-        public KanbanDetailController(IKanbanDetailRepository repository, string catalog, LoginView view)
+        public KanbanDetailController(IKanbanDetailRepository repository)
         {
-            this._LoginId = view.LoginId.To<long>();
-            this._UserId = view.UserId.To<int>();
-            this._OfficeId = view.OfficeId.To<int>();
-            this._Catalog = catalog;
-
             this.KanbanDetailRepository = repository;
         }
 
-        public long _LoginId { get; }
-        public int _UserId { get; private set; }
-        public int _OfficeId { get; private set; }
-        public string _Catalog { get; }
+        protected override void Initialize(HttpControllerContext context)
+        {
+            base.Initialize(context);
+
+            if (this.KanbanDetailRepository == null)
+            {
+                this.KanbanDetailRepository = new Frapid.Config.DataAccess.KanbanDetail
+                {
+                    _Catalog = this.MetaUser.Catalog,
+                    _LoginId = this.MetaUser.LoginId,
+                    _UserId = this.MetaUser.UserId
+                };
+            }
+        }
 
         /// <summary>
         ///     Creates meta information of "kanban detail" entity.
@@ -64,26 +60,87 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("meta")]
         [Route("~/api/config/kanban-detail/meta")]
-        [Authorize]
+        [RestAuthorize]
         public EntityView GetEntityView()
         {
-            if (this._LoginId == 0)
-            {
-                return new EntityView();
-            }
-
             return new EntityView
             {
                 PrimaryKey = "kanban_detail_id",
                 Columns = new List<EntityColumn>()
-                                {
-                                        new EntityColumn { ColumnName = "kanban_detail_id",  PropertyName = "KanbanDetailId",  DataType = "long",  DbDataType = "int8",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = true,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "kanban_id",  PropertyName = "KanbanId",  DataType = "long",  DbDataType = "int8",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "rating",  PropertyName = "Rating",  DataType = "short",  DbDataType = "int2",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "resource_id",  PropertyName = "ResourceId",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 128 },
-                                        new EntityColumn { ColumnName = "audit_user_id",  PropertyName = "AuditUserId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "audit_ts",  PropertyName = "AuditTs",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
-                                }
+                {
+                        new EntityColumn
+                        {
+                                ColumnName = "kanban_detail_id",
+                                PropertyName = "KanbanDetailId",
+                                DataType = "long",
+                                DbDataType = "int8",
+                                IsNullable = false,
+                                IsPrimaryKey = true,
+                                IsSerial = true,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "kanban_id",
+                                PropertyName = "KanbanId",
+                                DataType = "long",
+                                DbDataType = "int8",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "rating",
+                                PropertyName = "Rating",
+                                DataType = "short",
+                                DbDataType = "int2",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "resource_id",
+                                PropertyName = "ResourceId",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 128
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_user_id",
+                                PropertyName = "AuditUserId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_ts",
+                                PropertyName = "AuditTs",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        }
+                }
             };
         }
 
@@ -94,7 +151,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
         [Route("~/api/config/kanban-detail/count")]
-        [Authorize]
+        [RestAuthorize]
         public long Count()
         {
             try
@@ -128,7 +185,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("all")]
         [Route("~/api/config/kanban-detail/all")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.KanbanDetail> GetAll()
         {
             try
@@ -162,7 +219,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("export")]
         [Route("~/api/config/kanban-detail/export")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<dynamic> Export()
         {
             try
@@ -197,7 +254,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("{kanbanDetailId}")]
         [Route("~/api/config/kanban-detail/{kanbanDetailId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.KanbanDetail Get(long kanbanDetailId)
         {
             try
@@ -227,7 +284,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get")]
         [Route("~/api/config/kanban-detail/get")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.KanbanDetail> Get([FromUri] long[] kanbanDetailIds)
         {
             try
@@ -261,7 +318,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("first")]
         [Route("~/api/config/kanban-detail/first")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.KanbanDetail GetFirst()
         {
             try
@@ -296,7 +353,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("previous/{kanbanDetailId}")]
         [Route("~/api/config/kanban-detail/previous/{kanbanDetailId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.KanbanDetail GetPrevious(long kanbanDetailId)
         {
             try
@@ -331,7 +388,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("next/{kanbanDetailId}")]
         [Route("~/api/config/kanban-detail/next/{kanbanDetailId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.KanbanDetail GetNext(long kanbanDetailId)
         {
             try
@@ -365,7 +422,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("last")]
         [Route("~/api/config/kanban-detail/last")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.KanbanDetail GetLast()
         {
             try
@@ -399,7 +456,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
         [Route("~/api/config/kanban-detail")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.KanbanDetail> GetPaginatedResult()
         {
             try
@@ -434,7 +491,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
         [Route("~/api/config/kanban-detail/page/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.KanbanDetail> GetPaginatedResult(long pageNumber)
         {
             try
@@ -469,7 +526,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/config/kanban-detail/count-where")]
-        [Authorize]
+        [RestAuthorize]
         public long CountWhere([FromBody]JArray filters)
         {
             try
@@ -506,7 +563,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/config/kanban-detail/get-where/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.KanbanDetail> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
@@ -542,7 +599,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count-filtered/{filterName}")]
         [Route("~/api/config/kanban-detail/count-filtered/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public long CountFiltered(string filterName)
         {
             try
@@ -578,7 +635,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get-filtered/{pageNumber}/{filterName}")]
         [Route("~/api/config/kanban-detail/get-filtered/{pageNumber}/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.KanbanDetail> GetFiltered(long pageNumber, string filterName)
         {
             try
@@ -612,7 +669,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
         [Route("~/api/config/kanban-detail/display-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
             try
@@ -646,7 +703,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields")]
         [Route("~/api/config/kanban-detail/custom-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields()
         {
             try
@@ -680,7 +737,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields/{resourceId}")]
         [Route("~/api/config/kanban-detail/custom-fields/{resourceId}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             try
@@ -714,7 +771,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("add-or-edit")]
         [Route("~/api/config/kanban-detail/add-or-edit")]
-        [Authorize]
+        [RestAuthorize]
         public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             dynamic kanbanDetail = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
@@ -756,7 +813,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("add/{kanbanDetail}")]
         [Route("~/api/config/kanban-detail/add/{kanbanDetail}")]
-        [Authorize]
+        [RestAuthorize]
         public void Add(Frapid.Config.Entities.KanbanDetail kanbanDetail)
         {
             if (kanbanDetail == null)
@@ -796,7 +853,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("PUT")]
         [Route("edit/{kanbanDetailId}")]
         [Route("~/api/config/kanban-detail/edit/{kanbanDetailId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Edit(long kanbanDetailId, [FromBody] Frapid.Config.Entities.KanbanDetail kanbanDetail)
         {
             if (kanbanDetail == null)
@@ -842,7 +899,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("bulk-import")]
         [Route("~/api/config/kanban-detail/bulk-import")]
-        [Authorize]
+        [RestAuthorize]
         public List<object> BulkImport([FromBody]JArray collection)
         {
             List<ExpandoObject> kanbanDetailCollection = this.ParseCollection(collection);
@@ -883,7 +940,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("DELETE")]
         [Route("delete/{kanbanDetailId}")]
         [Route("~/api/config/kanban-detail/delete/{kanbanDetailId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Delete(long kanbanDetailId)
         {
             try

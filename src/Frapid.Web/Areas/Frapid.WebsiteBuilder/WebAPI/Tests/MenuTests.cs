@@ -21,7 +21,7 @@ namespace Frapid.WebsiteBuilder.Api.Tests
     {
         public static WebsiteMenuController Fixture()
         {
-            WebsiteMenuController controller = new WebsiteMenuController(new MenuRepository(), "", new LoginView());
+            WebsiteMenuController controller = new WebsiteMenuController(new MenuRepository());
             return controller;
         }
 

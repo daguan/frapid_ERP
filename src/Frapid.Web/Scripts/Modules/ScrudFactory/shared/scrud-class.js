@@ -1,12 +1,12 @@
 ﻿function getClassName() {
-    if (scrudFactory.className) {
-        return scrudFactory.className;
+    if (window.scrudFactory.className) {
+        return window.scrudFactory.className;
     };
 
-    var table = scrudFactory.formTableName;
+    var table = window.scrudFactory.formTableName;
 
     if (!table) {
-        table = scrudFactory.viewTableName;
+        table = window.scrudFactory.viewTableName;
     }
 
     var plural = toProperCase(table.split(".")[1]);

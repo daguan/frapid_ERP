@@ -14,6 +14,7 @@ namespace Frapid.Account.Entities
         public int? OfficeId { get; set; }
         public string Browser { get; set; }
         public string IpAddress { get; set; }
+        public bool IsActive { get; set; }
         public DateTime LoginTimestamp { get; set; }
         public string Culture { get; set; }
     }

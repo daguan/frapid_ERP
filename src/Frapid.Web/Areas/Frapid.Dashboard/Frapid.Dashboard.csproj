@@ -121,9 +121,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="AreaRegistration.cs" />
     <Compile Include="Controllers\AppController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
@@ -143,12 +140,6 @@
     <Content Include="Views\Layouts\Dashboard.cshtml" />
     <Content Include="Views\Default\Apps.cshtml" />
     <Content Include="Views\Default\LandingPage.cshtml" />
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -172,7 +163,7 @@
           <IISUrl>http://localhost:50118/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>True</UseCustomServer>
-          <CustomServerUrl>http://localhost/dashboard</CustomServerUrl>
+          <CustomServerUrl>https://localhost/dashboard</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

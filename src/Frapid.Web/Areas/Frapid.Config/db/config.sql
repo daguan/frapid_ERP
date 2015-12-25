@@ -1,178 +1,32 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/00.db core/extensions.sql --<--<--
-CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/00.db core/postgresql-roles.sql --<--<--
-DO
-$$
-BEGIN
-    IF NOT EXISTS (SELECT * FROM pg_catalog.pg_roles WHERE rolname = 'frapid_db_user') THEN
-        CREATE ROLE frapid_db_user WITH LOGIN PASSWORD 'change-on-deployment';
-    END IF;
-
-    COMMENT ON ROLE mix_erp IS 'The default user for frapid databases.';
-
-    EXECUTE 'ALTER DATABASE ' || current_database() || ' OWNER TO frapid_db_user;';
-END
-$$
-LANGUAGE plpgsql;
-
-DO
-$$
-BEGIN
-    IF NOT EXISTS (SELECT * FROM pg_catalog.pg_roles WHERE rolname = 'frapid_report_user') THEN
-        CREATE ROLE frapid_report_user WITH LOGIN PASSWORD 'change-on-deployment';
-    END IF;
-
-    COMMENT ON ROLE mix_erp IS 'This user account is used by the Reporting Engine to run ad-hoc queries. It is strictly advised for this user to only have a read-only access to the database.';
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/01.types-domains-tables-and-constraints/domains.sql --<--<--
+﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 DROP SCHEMA IF EXISTS config CASCADE;
 CREATE SCHEMA config;
 
-DROP DOMAIN IF EXISTS public.money_strict CASCADE;
-CREATE DOMAIN public.money_strict
-AS DECIMAL(24, 4)
-CHECK
-(
-    VALUE > 0
-);
-
-
-DROP DOMAIN IF EXISTS public.money_strict2 CASCADE;
-CREATE DOMAIN public.money_strict2
-AS DECIMAL(24, 4)
-CHECK
-(
-    VALUE >= 0
-);
-
-DROP DOMAIN IF EXISTS public.integer_strict CASCADE;
-CREATE DOMAIN public.integer_strict
-AS integer
-CHECK
-(
-    VALUE > 0
-);
-
-DROP DOMAIN IF EXISTS public.integer_strict2 CASCADE;
-CREATE DOMAIN public.integer_strict2
-AS integer
-CHECK
-(
-    VALUE >= 0
-);
-
-DROP DOMAIN IF EXISTS public.smallint_strict CASCADE;
-CREATE DOMAIN public.smallint_strict
-AS smallint
-CHECK
-(
-    VALUE > 0
-);
-
-DROP DOMAIN IF EXISTS public.smallint_strict2 CASCADE;
-CREATE DOMAIN public.smallint_strict2
-AS smallint
-CHECK
-(
-    VALUE >= 0
-);
-
-DROP DOMAIN IF EXISTS public.decimal_strict CASCADE;
-CREATE DOMAIN public.decimal_strict
-AS decimal
-CHECK
-(
-    VALUE > 0
-);
-
-DROP DOMAIN IF EXISTS public.decimal_strict2 CASCADE;
-CREATE DOMAIN public.decimal_strict2
-AS decimal
-CHECK
-(
-    VALUE >= 0
-);
-
-DROP DOMAIN IF EXISTS public.color CASCADE;
-CREATE DOMAIN public.color
-AS text;
-
-DROP DOMAIN IF EXISTS public.image CASCADE;
-CREATE DOMAIN public.image
-AS text;
-
-
-DROP DOMAIN IF EXISTS public.html CASCADE;
-CREATE DOMAIN public.html
-AS text;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 CREATE TABLE config.kanbans
 (
-    kanban_id                               BIGSERIAL NOT NULL PRIMARY KEY,
-    object_name                             national character varying(128) NOT NULL,
-    user_id                                 integer,
-    kanban_name                             national character varying(128) NOT NULL,
-    description                             text,
-    audit_user_id                           integer,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
+    kanban_id                                   BIGSERIAL NOT NULL PRIMARY KEY,
+    object_name                                 national character varying(128) NOT NULL,
+    user_id                                     integer REFERENCES account.users,
+    kanban_name                                 national character varying(128) NOT NULL,
+    description                                 text,
+    audit_user_id                               integer REFERENCES account.users,
+    audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
+                                                DEFAULT(NOW())    
 );
 CREATE TABLE config.kanban_details
 (
-    kanban_detail_id                        BIGSERIAL NOT NULL PRIMARY KEY,
-    kanban_id                               bigint NOT NULL REFERENCES config.kanbans(kanban_id),
-    rating                                  smallint CHECK(rating>=0 AND rating<=5),
-    resource_id                             national character varying(128) NOT NULL,
-    audit_user_id                           integer NULL,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
+    kanban_detail_id                            BIGSERIAL NOT NULL PRIMARY KEY,
+    kanban_id                                   bigint NOT NULL REFERENCES config.kanbans(kanban_id),
+    rating                                      smallint CHECK(rating>=0 AND rating<=5),
+    resource_id                                 national character varying(128) NOT NULL,
+    audit_user_id                               integer NULL REFERENCES account.users,
+    audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
+                                                DEFAULT(NOW())    
 );
 
 CREATE UNIQUE INDEX kanban_details_kanban_id_resource_id_uix
 ON config.kanban_details(kanban_id, resource_id);
 
-CREATE TABLE config.currencies
-(
-    currency_code                           national character varying(12) PRIMARY KEY,
-    currency_symbol                         national character varying(12) NOT NULL,
-    currency_name                           national character varying(48) NOT NULL UNIQUE,
-    hundredth_name                          national character varying(48) NOT NULL,
-    audit_user_id                           integer,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())
-);
-
-CREATE TABLE config.offices
-(
-    office_id                               SERIAL PRIMARY KEY,
-    office_code                             national character varying(12) NOT NULL,
-    office_name                             national character varying(150) NOT NULL,
-    nick_name                               national character varying(50),
-    registration_date                       date,
-    currency_code                           national character varying(12) REFERENCES config.currencies,
-    po_box                                  national character varying(128),
-    address_line_1                          national character varying(128),   
-    address_line_2                          national character varying(128),
-    street                                  national character varying(50),
-    city                                    national character varying(50),
-    state                                   national character varying(50),
-    zip_code                                national character varying(24),
-    country                                 national character varying(50),
-    phone                                   national character varying(24),
-    fax                                     national character varying(24),
-    email                                   national character varying(128),
-    url                                     national character varying(50),
-    logo                                    public.image,
-    parent_office_id                        integer NULL REFERENCES config.offices,
-    audit_user_id                           integer NULL,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())
-);
 
 CREATE TABLE config.smtp_configs
 (
@@ -187,7 +41,7 @@ CREATE TABLE config.smtp_configs
     smtp_username                               national character varying(256) NOT NULL,
     smtp_password                               national character varying(256) NOT NULL,
     smtp_port                                   integer NOT NULL DEFAULT(587),
-    audit_user_id                               integer,
+    audit_user_id                               integer REFERENCES account.users,
     audit_ts                                    timestamp with time zone DEFAULT now()
 );
 
@@ -208,89 +62,22 @@ CREATE TABLE config.email_queue
     canceled_on                                 TIMESTAMP WITH TIME ZONE
 );
 
-CREATE TABLE config.apps
-(
-    app_name                                    national character varying(100) PRIMARY KEY,
-    name                                        national character varying(100),
-    version_number                              national character varying(100),
-    publisher                                   national character varying(100),
-    published_on                                date,
-    icon                                        national character varying(100),
-    landing_url                                 text
-);
-
-CREATE UNIQUE INDEX apps_app_name_uix
-ON config.apps(UPPER(app_name));
-
-CREATE TABLE config.app_dependencies
-(
-    app_dependency_id                           SERIAL PRIMARY KEY,
-    app_name                                    national character varying(100) REFERENCES config.apps,
-    depends_on                                  national character varying(100) REFERENCES config.apps
-);
-
-
-CREATE TABLE config.menus
-(
-    menu_id                                     SERIAL PRIMARY KEY,
-    sort                                        integer,
-    app_name                                    national character varying(100) NOT NULL REFERENCES config.apps,
-    menu_name                                   national character varying(100) NOT NULL,
-    url                                         text,
-    icon                                        national character varying(100),
-    parent_menu_id                              integer REFERENCES config.menus
-);
-
-CREATE UNIQUE INDEX menus_app_name_menu_name_uix
-ON config.menus(UPPER(app_name), UPPER(menu_name));
-
-
-CREATE TABLE config.access_types
-(
-    access_type_id                  integer NOT NULL PRIMARY KEY,
-    access_type_name                national character varying(48) NOT NULL UNIQUE
-);
-
-
-CREATE TABLE config.default_entity_access
-(
-    default_entity_access_id        SERIAL NOT NULL PRIMARY KEY,
-    entity_name                     national character varying(128) NULL,
-    role_id                         integer NOT NULL,
-    access_type_id                  integer NULL REFERENCES config.access_types,
-    allow_access                    boolean NOT NULL,
-    audit_user_id                   integer NULL,
-    audit_ts                        TIMESTAMP WITH TIME ZONE NULL 
-                                    DEFAULT(NOW())
-);
-
-CREATE TABLE config.entity_access
-(
-    entity_access_id                SERIAL NOT NULL PRIMARY KEY,
-    entity_name                     national character varying(128) NULL,
-    user_id                         integer NOT NULL,
-    access_type_id                  integer NULL REFERENCES config.access_types,
-    allow_access                    boolean NOT NULL,
-    audit_user_id                   integer NULL,
-    audit_ts                        TIMESTAMP WITH TIME ZONE NULL 
-                                    DEFAULT(NOW())
-);
 
 CREATE TABLE config.filters
 (
-    filter_id                       BIGSERIAL NOT NULL PRIMARY KEY,
-    object_name                     text NOT NULL,
-    filter_name                     text NOT NULL,
-    is_default                      boolean NOT NULL DEFAULT(false),
-    is_default_admin                boolean NOT NULL DEFAULT(false),
-    filter_statement                national character varying(12) NOT NULL DEFAULT('WHERE'),
-    column_name                     text NOT NULL,
-    filter_condition                integer NOT NULL,
-    filter_value                    text,
-    filter_and_value                text,
-    audit_user_id                   integer,
-    audit_ts                        TIMESTAMP WITH TIME ZONE NULL 
-                                    DEFAULT(NOW())
+    filter_id                                   BIGSERIAL NOT NULL PRIMARY KEY,
+    object_name                                 text NOT NULL,
+    filter_name                                 text NOT NULL,
+    is_default                                  boolean NOT NULL DEFAULT(false),
+    is_default_admin                            boolean NOT NULL DEFAULT(false),
+    filter_statement                            national character varying(12) NOT NULL DEFAULT('WHERE'),
+    column_name                                 text NOT NULL,
+    filter_condition                            integer NOT NULL,
+    filter_value                                text,
+    filter_and_value                            text,
+    audit_user_id                               integer REFERENCES account.users,
+    audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
+                                                DEFAULT(NOW())
 );
 
 CREATE INDEX filters_object_name_inx
@@ -298,76 +85,73 @@ ON config.filters(object_name);
 
 CREATE TABLE config.custom_field_data_types
 (
-    data_type                       national character varying(50) NOT NULL PRIMARY KEY,
-    is_number                       boolean DEFAULT(false),
-    is_date                         boolean DEFAULT(false),
-    is_boolean                      boolean DEFAULT(false),
-    is_long_text                    boolean DEFAULT(false)
+    data_type                                   national character varying(50) NOT NULL PRIMARY KEY,
+    is_number                                   boolean DEFAULT(false),
+    is_date                                     boolean DEFAULT(false),
+    is_boolean                                  boolean DEFAULT(false),
+    is_long_text                                boolean DEFAULT(false)
 );
 
 CREATE TABLE config.custom_field_forms
 (
-    form_name                       national character varying(100) NOT NULL PRIMARY KEY,
-    table_name                      national character varying(100) NOT NULL UNIQUE,
-    key_name                        national character varying(100) NOT NULL        
+    form_name                                   national character varying(100) NOT NULL PRIMARY KEY,
+    table_name                                  national character varying(100) NOT NULL UNIQUE,
+    key_name                                    national character varying(100) NOT NULL        
 );
 
 
 CREATE TABLE config.custom_field_setup
 (
-    custom_field_setup_id           SERIAL NOT NULL PRIMARY KEY,
-    form_name                       national character varying(100) NOT NULL
-                                    REFERENCES config.custom_field_forms,
-    field_order                     integer NOT NULL DEFAULT(0),
-    field_name                      national character varying(100) NOT NULL,
-    field_label                     national character varying(100) NOT NULL,                   
-    data_type                       national character varying(50)
-                                    REFERENCES config.custom_field_data_types,
-    description                     text NOT NULL
+    custom_field_setup_id                       SERIAL NOT NULL PRIMARY KEY,
+    form_name                                   national character varying(100) NOT NULL
+                                                REFERENCES config.custom_field_forms,
+    field_order                                 integer NOT NULL DEFAULT(0),
+    field_name                                  national character varying(100) NOT NULL,
+    field_label                                 national character varying(100) NOT NULL,                   
+    data_type                                   national character varying(50)
+                                                REFERENCES config.custom_field_data_types,
+    description                                 text NOT NULL
 );
 
 
 CREATE TABLE config.custom_fields
 (
-    custom_field_id             BIGSERIAL NOT NULL PRIMARY KEY,
-    custom_field_setup_id       integer NOT NULL REFERENCES config.custom_field_setup,
-    resource_id                 text NOT NULL,
-    value                       text
+    custom_field_id                             BIGSERIAL NOT NULL PRIMARY KEY,
+    custom_field_setup_id                       integer NOT NULL REFERENCES config.custom_field_setup,
+    resource_id                                 text NOT NULL,
+    value                                       text
 );
 
 
 CREATE TABLE config.flag_types
 (
-    flag_type_id                            SERIAL PRIMARY KEY,
-    flag_type_name                          national character varying(24) NOT NULL,
-    background_color                        color NOT NULL,
-    foreground_color                        color NOT NULL,
-    audit_user_id                           integer NULL,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL
-                                            DEFAULT(NOW())
+    flag_type_id                                SERIAL PRIMARY KEY,
+    flag_type_name                              national character varying(24) NOT NULL,
+    background_color                            color NOT NULL,
+    foreground_color                            color NOT NULL,
+    audit_user_id                               integer NULL REFERENCES account.users,
+    audit_ts                                    TIMESTAMP WITH TIME ZONE NULL
+                                                DEFAULT(NOW())
 );
 
 COMMENT ON TABLE config.flag_types IS 'Flags are used by users to mark transactions. The flags created by a user is not visible to others.';
 
 CREATE TABLE config.flags
 (
-    flag_id                                 BIGSERIAL PRIMARY KEY,
-    user_id                                 integer NOT NULL,
-    flag_type_id                            integer NOT NULL REFERENCES config.flag_types(flag_type_id),
-    resource                                text, --Fully qualified resource name. Example: transactions.non_gl_stock_master.
-    resource_key                            text, --The unique identifier for lookup. Example: non_gl_stock_master_id,
-    resource_id                             text, --The value of the unique identifier to lookup for,
-    flagged_on                              TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())
+    flag_id                                     BIGSERIAL PRIMARY KEY,
+    user_id                                     integer NOT NULL REFERENCES account.users,
+    flag_type_id                                integer NOT NULL REFERENCES config.flag_types(flag_type_id),
+    resource                                    text, --Fully qualified resource name. Example: transactions.non_gl_stock_master.
+    resource_key                                text, --The unique identifier for lookup. Example: non_gl_stock_master_id,
+    resource_id                                 text, --The value of the unique identifier to lookup for,
+    flagged_on                                  TIMESTAMP WITH TIME ZONE NULL 
+                                                DEFAULT(NOW())
 );
 
 CREATE UNIQUE INDEX flags_user_id_resource_resource_id_uix
 ON config.flags(user_id, UPPER(resource), UPPER(resource_key), UPPER(resource_id));
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
-INSERT INTO config.offices(office_code, office_name)
-SELECT 'DEF', 'Default';
-
 DO
 $$
 BEGIN
@@ -490,65 +274,6 @@ FROM config.flags
 INNER JOIN config.flag_types
 ON config.flags.flag_type_id = config.flag_types.flag_type_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.create_app.sql --<--<--
-DROP FUNCTION IF EXISTS config.create_app
-(
-    _app_name                                   text,
-    _name                                       text,
-    _version_number                             text,
-    _publisher                                  text,
-    _published_on                               date,
-    _icon                                       text,
-    _landing_url                                text,
-    _dependencies                               text[]
-);
-
-CREATE FUNCTION config.create_app
-(
-    _app_name                                   text,
-    _name                                       text,
-    _version_number                             text,
-    _publisher                                  text,
-    _published_on                               date,
-    _icon                                       text,
-    _landing_url                                text,
-    _dependencies                               text[]
-)
-RETURNS void
-AS
-$$
-BEGIN
-    IF EXISTS
-    (
-        SELECT 1
-        FROM config.apps
-        WHERE LOWER(config.apps.app_name) = LOWER(_app_name)
-    ) THEN
-        UPDATE config.apps
-        SET
-            name = _name,
-            version_number = _version_number,
-            publisher = _publisher,
-            published_on = _published_on,
-            icon = _icon,
-            landing_url = _landing_url
-        WHERE
-            app_name = _app_name;
-    ELSE
-        INSERT INTO config.apps(app_name, name, version_number, publisher, published_on, icon, landing_url)
-        SELECT _app_name, _name, _version_number, _publisher, _published_on, _icon, _landing_url;
-    END IF;
-
-    DELETE FROM config.app_dependencies
-    WHERE app_name = _app_name;
-
-    INSERT INTO config.app_dependencies(app_name, depends_on)
-    SELECT _app_name, UNNEST(_dependencies);
-END
-$$
-LANGUAGE plpgsql;
-
-
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.create_flag.sql --<--<--
 DROP FUNCTION IF EXISTS config.create_flag
 (
@@ -593,121 +318,6 @@ $$
 LANGUAGE plpgsql;
 
 
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.create_menu.sql --<--<--
-DROP FUNCTION IF EXISTS config.create_menu
-(
-    _sort                                       integer,
-    _app_name                                   text,
-    _menu_name                                  text,
-    _url                                        text,
-    _icon                                       text,
-    _parent_menu_id                             integer    
-);
-
-DROP FUNCTION IF EXISTS config.create_menu
-(
-    _sort                                       integer,
-    _app_name                                   text,
-    _menu_name                                  text,
-    _url                                        text,
-    _icon                                       text,
-    _parent_menu_name                           text
-);
-
-CREATE FUNCTION config.create_menu
-(
-    _sort                                       integer,
-    _app_name                                   text,
-    _menu_name                                  text,
-    _url                                        text,
-    _icon                                       text,
-    _parent_menu_id                             integer
-    
-)
-RETURNS integer
-AS
-$$
-    DECLARE _menu_id                            integer;
-BEGIN
-    IF EXISTS
-    (
-       SELECT 1
-       FROM config.menus
-       WHERE LOWER(app_name) = LOWER(_app_name)
-       AND LOWER(menu_name) = LOWER(_menu_name)
-    ) THEN
-        UPDATE config.menus
-        SET
-            sort = _sort,
-            url = _url,
-            icon = _icon,
-            parent_menu_id = _parent_menu_id
-       WHERE LOWER(app_name) = LOWER(_app_name)
-       AND LOWER(menu_name) = LOWER(_menu_name)
-       RETURNING menu_id INTO _menu_id;        
-    ELSE
-        INSERT INTO config.menus(sort, app_name, menu_name, url, icon, parent_menu_id)
-        SELECT _sort, _app_name, _menu_name, _url, _icon, _parent_menu_id
-        RETURNING menu_id INTO _menu_id;        
-    END IF;
-
-    RETURN _menu_id;
-END
-$$
-LANGUAGE plpgsql;
-
-
-CREATE FUNCTION config.create_menu
-(
-    _sort                                       integer,
-    _app_name                                   text,
-    _menu_name                                  text,
-    _url                                        text,
-    _icon                                       text,
-    _parent_menu_name                           text    
-)
-RETURNS integer
-AS
-$$
-    DECLARE _parent_menu_id                     integer;
-BEGIN
-    SELECT menu_id INTO _parent_menu_id
-    FROM config.menus
-    WHERE LOWER(menu_name) = LOWER(_parent_menu_name)
-    AND LOWER(app_name) = LOWER(_app_name);
-
-    RETURN config.create_menu(_sort, _app_name, _menu_name, _url, _icon, _parent_menu_id);
-END
-$$
-LANGUAGE plpgsql;
-
-
-DROP FUNCTION IF EXISTS config.create_menu
-(
-    _app_name                                   text,
-    _menu_name                                  text,
-    _url                                        text,
-    _icon                                       text,
-    _parent_menu_name                           text    
-);
-
-CREATE FUNCTION config.create_menu
-(
-    _app_name                                   text,
-    _menu_name                                  text,
-    _url                                        text,
-    _icon                                       text,
-    _parent_menu_name                           text    
-)
-RETURNS integer
-AS
-$$
-BEGIN
-    RETURN config.create_menu(0, _app_name, _menu_name, _url, _icon, _parent_menu_name);
-END
-$$
-LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_definition.sql --<--<--
 DROP FUNCTION IF EXISTS config.get_custom_field_definition
@@ -880,124 +490,29 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.has_access.sql --<--<--
-DROP FUNCTION IF EXISTS config.has_access(_user_id integer, _entity text, _access_type_id integer);
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/09.menus/0.menu.sql --<--<--
+SELECT * FROM core.create_app('Frapid.Config', 'Config', '1.0', 'MixERP Inc.', 'December 1, 2015', 'orange configure', '/dashboard/config/offices', null);
 
-CREATE FUNCTION config.has_access(_user_id integer, _entity text, _access_type_id integer)
-RETURNS boolean
-AS
-$$
-    DECLARE _role_id                    integer;
-    DECLARE _group_config               boolean = NULL;
-    DECLARE _user_config                boolean = NULL;
-    DECLARE _config                     boolean = true;
-BEGIN
-    SELECT role_id INTO _role_id FROM account.users WHERE user_id = _user_id;
+SELECT * FROM core.create_menu('Frapid.Config', 'Office', '/dashboard/config/offices', 'building outline', '');
+SELECT * FROM core.create_menu('Frapid.Config', 'Flags', '/dashboard/config/flags', 'flag', '');
+SELECT * FROM core.create_menu('Frapid.Config', 'SMTP', '/dashboard/config/smtp', 'at', '');
 
-    --GROUP config BASED ON ALL ENTITIES AND ALL ACCESS TYPES
-    IF EXISTS
-    (
-        SELECT * FROM config.default_entity_access
-        WHERE role_id = _role_id
-        AND NOT allow_access
-        AND access_type_id IS NULL
-        AND COALESCE(entity_name, '') = ''
-    ) THEN
-        _group_config = false;
-    END IF;
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/09.menus/1.menu-policy.sql --<--<--
+SELECT * FROM auth.create_app_menu_policy
+(
+    'User', 
+    core.get_office_id_by_office_name('Default'), 
+    'Frapid.Config',
+    '{Office, Flags}'::text[]
+);
 
-    --GROUP config BASED ON ALL ENTITIES AND SPECIFIED ACCESS TYPE
-    IF EXISTS
-    (
-        SELECT * FROM config.default_entity_access
-        WHERE role_id = _role_id
-        AND NOT allow_access
-        AND access_type_id = _access_type_id
-        AND COALESCE(entity_name, '') = ''
-    ) THEN
-        _group_config = false;
-    END IF;
- 
-
-    --GROUP config BASED ON SPECIFIED ENTITY AND ALL ACCESS TYPES
-    IF EXISTS
-    (
-        SELECT * FROM config.default_entity_access
-        WHERE role_id = _role_id
-        AND NOT allow_access
-        AND access_type_id IS NULL
-        AND entity_name = _entity
-    ) THEN
-        _group_config = false;
-    END IF;
-
-    --GROUP config BASED ON SPECIFIED ENTITY AND SPECIFIED ACCESS TYPE
-    IF EXISTS
-    (
-        SELECT * FROM config.default_entity_access
-        WHERE role_id = _role_id
-        AND NOT allow_access
-        AND access_type_id = _access_type_id
-        AND entity_name = _entity
-    ) THEN
-        _group_config = false;
-    END IF;
-
-
-    --USER config BASED ON ALL ENTITIES AND ALL ACCESS TYPES
-    SELECT allow_access INTO _user_config FROM config.entity_access
-    WHERE user_id = _user_id
-    AND access_type_id IS NULL
-    AND COALESCE(entity_name, '') = '';
-
-    --USER config BASED ON SPECIFIED ENTITY AND ALL ACCESS TYPES
-    IF(_user_config IS NULL) THEN
-        SELECT allow_access INTO _user_config 
-        FROM config.entity_access
-        WHERE user_id = _user_id
-        AND access_type_id IS NULL
-        AND entity_name = _entity;
-    END IF;
- 
-    --USER config BASED ON ALL ENTITIES AND SPECIFIED ACCESS TYPE
-    IF(_user_config IS NULL) THEN
-        SELECT allow_access INTO _user_config FROM config.entity_access
-        WHERE user_id = _user_id
-        AND access_type_id = _access_type_id
-        AND COALESCE(entity_name, '') = '';
-    END IF;
- 
-
-    --USER config BASED ON SPECIFIED ENTITY AND SPECIFIED ACCESS TYPE
-    IF(_user_config IS NULL) THEN
-        SELECT allow_access INTO _user_config FROM config.entity_access
-        WHERE user_id = _user_id
-        AND access_type_id = _access_type_id
-        AND entity_name = _entity;
-    END IF;
-
-    IF(_group_config IS NOT NULL) THEN
-        _config := _group_config;
-    END IF;
-
-    IF(_user_config IS NOT NULL) THEN
-        _config := _user_config;
-    END IF;
-
-    RETURN _config;
-END
-$$
-LANGUAGE plpgsql;
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/98.menu.sql --<--<--
-SELECT * FROM config.create_app('Frapid.Config', 'Config', '1.0', 'MixERP Inc.', 'December 1, 2015', 'orange configure', '/dashboard/config/offices', null);
-
-SELECT * FROM config.create_menu('Frapid.Config', 'Office', '/dashboard/config/offices', 'building outline', '');
-SELECT * FROM config.create_menu('Frapid.Config', 'Currency', '/dashboard/config/currencies', 'money', '');
-SELECT * FROM config.create_menu('Frapid.Config', 'Flags', '/dashboard/config/flags', 'flag', '');
-SELECT * FROM config.create_menu('Frapid.Config', 'SMTP', '/dashboard/config/smtp', 'at', '');
-SELECT * FROM config.create_menu('Frapid.Config', 'Menu Access', '/dashboard/config/menu-access', 'lock', '');
-SELECT * FROM config.create_menu('Frapid.Config', 'API Access', '/dashboard/config/api-access', 'key', '');
+SELECT * FROM auth.create_app_menu_policy
+(
+    'Administrator', 
+    core.get_office_id_by_office_name('Default'), 
+    'Frapid.Config',
+    '{*}'::text[]
+);
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/99.ownership.sql --<--<--

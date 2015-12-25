@@ -73,6 +73,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.DataAccess.dll</HintPath>
     </Reference>
+    <Reference Include="Frapid.DbPolicy, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Frapid.DbPolicy.dll</HintPath>
+    </Reference>
     <Reference Include="Frapid.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.Framework.dll</HintPath>
@@ -89,9 +93,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.NPoco.dll</HintPath>
     </Reference>
+    <Reference Include="Frapid.TokenManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Frapid.TokenManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Frapid.WebApi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Frapid.WebApi.dll</HintPath>
+    </Reference>
     <Reference Include="Frapid.WebsiteBuilder, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.WebsiteBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="jose-jwt, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\jose-jwt.1.9.0\lib\4.0\jose-jwt.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -169,8 +185,9 @@
     <Compile Include="Controllers\GoogleSignInController.cs" />
     <Compile Include="Controllers\Frontend\ResetController.cs" />
     <Compile Include="Controllers\SignOutController.cs" />
-    <Compile Include="DAL\Office.cs" />
-    <Compile Include="DAL\Reset.cs" />
+    <Compile Include="DAL\AccessTokens.cs" />
+    <Compile Include="DAL\Offices.cs" />
+    <Compile Include="DAL\ResetRequests.cs" />
     <Compile Include="DAL\SignIn.cs" />
     <Compile Include="Controllers\Backend\ConfigurationProfileController.cs" />
     <Compile Include="Controllers\Backend\RoleController.cs" />
@@ -183,13 +200,14 @@
     <Compile Include="Messaging\SignUpEmail.cs" />
     <Compile Include="Exceptions\PasswordConfirmException.cs" />
     <Compile Include="Controllers\Frontend\SignupController.cs" />
-    <Compile Include="DAL\Configuration.cs" />
+    <Compile Include="DAL\ConfigurationProfiles.cs" />
     <Compile Include="DAL\GoogleSignIn.cs" />
     <Compile Include="DAL\FacebookSignIn.cs" />
-    <Compile Include="DAL\Registration.cs" />
+    <Compile Include="DAL\Registrations.cs" />
     <Compile Include="DTO\ConfigurationProfile.cs" />
     <Compile Include="DTO\Registration.cs" />
     <Compile Include="DTO\Reset.cs" />
+    <Compile Include="StartupTask.cs" />
     <Compile Include="ViewModels\Language.cs" />
     <Compile Include="RemoteAuthentication\FacebookAuthentication.cs" />
     <Compile Include="Models\FacebookUserInfo.cs" />
@@ -220,19 +238,22 @@
     <Content Include="Views\ConfigurationProfile\Index.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Role\Index.cshtml" />
+    <Content Include="LICENSE" />
     <None Include="Views\EmailTemplate\Index.cshtml" />
     <Content Include="Views\EmailTemplate\Shared\Editor.cshtml" />
     <None Include="Views\Reset\Do.cshtml" />
     <None Include="Views\Reset\Index.cshtml" />
-    <Content Include="web.config" />
-    <None Include="web.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
-    <None Include="web.Release.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="DataAccess\Frapid.Account.DataAccess.csproj">
+      <Project>{92f69053-8676-4628-af71-0e9e27795c90}</Project>
+      <Name>Frapid.Account.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="Entities\Frapid.Account.Entities.csproj">
+      <Project>{682c3328-ddc3-458c-bb5f-9ab97ea42a0e}</Project>
+      <Name>Frapid.Account.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -251,7 +272,7 @@
           <IISUrl>http://localhost:49755/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>True</UseCustomServer>
-          <CustomServerUrl>http://localhost</CustomServerUrl>
+          <CustomServerUrl>https://localhost</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

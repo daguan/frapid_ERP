@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
+using Frapid.WebApi;
 
 namespace Frapid.Config.Api
 {
@@ -25,37 +27,31 @@ namespace Frapid.Config.Api
         /// <summary>
         ///     The SmtpConfig repository.
         /// </summary>
-        private readonly ISmtpConfigRepository SmtpConfigRepository;
+        private ISmtpConfigRepository SmtpConfigRepository;
 
         public SmtpConfigController()
         {
-            this._LoginId = AppUsers.GetCurrent().View.LoginId.To<long>();
-            this._UserId = AppUsers.GetCurrent().View.UserId.To<int>();
-            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
-            this._Catalog = AppUsers.GetCatalog();
-
-            this.SmtpConfigRepository = new Frapid.Config.DataAccess.SmtpConfig
-            {
-                _Catalog = this._Catalog,
-                _LoginId = this._LoginId,
-                _UserId = this._UserId
-            };
         }
 
-        public SmtpConfigController(ISmtpConfigRepository repository, string catalog, LoginView view)
+        public SmtpConfigController(ISmtpConfigRepository repository)
         {
-            this._LoginId = view.LoginId.To<long>();
-            this._UserId = view.UserId.To<int>();
-            this._OfficeId = view.OfficeId.To<int>();
-            this._Catalog = catalog;
-
             this.SmtpConfigRepository = repository;
         }
 
-        public long _LoginId { get; }
-        public int _UserId { get; private set; }
-        public int _OfficeId { get; private set; }
-        public string _Catalog { get; }
+        protected override void Initialize(HttpControllerContext context)
+        {
+            base.Initialize(context);
+
+            if (this.SmtpConfigRepository == null)
+            {
+                this.SmtpConfigRepository = new Frapid.Config.DataAccess.SmtpConfig
+                {
+                    _Catalog = this.MetaUser.Catalog,
+                    _LoginId = this.MetaUser.LoginId,
+                    _UserId = this.MetaUser.UserId
+                };
+            }
+        }
 
         /// <summary>
         ///     Creates meta information of "smtp config" entity.
@@ -64,33 +60,171 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("meta")]
         [Route("~/api/config/smtp-config/meta")]
-        [Authorize]
+        [RestAuthorize]
         public EntityView GetEntityView()
         {
-            if (this._LoginId == 0)
-            {
-                return new EntityView();
-            }
-
             return new EntityView
             {
                 PrimaryKey = "smtp_id",
                 Columns = new List<EntityColumn>()
-                                {
-                                        new EntityColumn { ColumnName = "smtp_id",  PropertyName = "SmtpId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = true,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "configuration_name",  PropertyName = "ConfigurationName",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 256 },
-                                        new EntityColumn { ColumnName = "enabled",  PropertyName = "Enabled",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "is_default",  PropertyName = "IsDefault",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "from_display_name",  PropertyName = "FromDisplayName",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 256 },
-                                        new EntityColumn { ColumnName = "from_email_address",  PropertyName = "FromEmailAddress",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 256 },
-                                        new EntityColumn { ColumnName = "smtp_host",  PropertyName = "SmtpHost",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 256 },
-                                        new EntityColumn { ColumnName = "smtp_enable_ssl",  PropertyName = "SmtpEnableSsl",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "smtp_username",  PropertyName = "SmtpUsername",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 256 },
-                                        new EntityColumn { ColumnName = "smtp_password",  PropertyName = "SmtpPassword",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 256 },
-                                        new EntityColumn { ColumnName = "smtp_port",  PropertyName = "SmtpPort",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "audit_user_id",  PropertyName = "AuditUserId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "audit_ts",  PropertyName = "AuditTs",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
-                                }
+                {
+                        new EntityColumn
+                        {
+                                ColumnName = "smtp_id",
+                                PropertyName = "SmtpId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = false,
+                                IsPrimaryKey = true,
+                                IsSerial = true,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "configuration_name",
+                                PropertyName = "ConfigurationName",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 256
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "enabled",
+                                PropertyName = "Enabled",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "is_default",
+                                PropertyName = "IsDefault",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "from_display_name",
+                                PropertyName = "FromDisplayName",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 256
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "from_email_address",
+                                PropertyName = "FromEmailAddress",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 256
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "smtp_host",
+                                PropertyName = "SmtpHost",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 256
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "smtp_enable_ssl",
+                                PropertyName = "SmtpEnableSsl",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "smtp_username",
+                                PropertyName = "SmtpUsername",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 256
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "smtp_password",
+                                PropertyName = "SmtpPassword",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 256
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "smtp_port",
+                                PropertyName = "SmtpPort",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_user_id",
+                                PropertyName = "AuditUserId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_ts",
+                                PropertyName = "AuditTs",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        }
+                }
             };
         }
 
@@ -101,7 +235,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
         [Route("~/api/config/smtp-config/count")]
-        [Authorize]
+        [RestAuthorize]
         public long Count()
         {
             try
@@ -135,7 +269,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("all")]
         [Route("~/api/config/smtp-config/all")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.SmtpConfig> GetAll()
         {
             try
@@ -169,7 +303,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("export")]
         [Route("~/api/config/smtp-config/export")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<dynamic> Export()
         {
             try
@@ -204,7 +338,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("{smtpId}")]
         [Route("~/api/config/smtp-config/{smtpId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.SmtpConfig Get(int smtpId)
         {
             try
@@ -234,7 +368,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get")]
         [Route("~/api/config/smtp-config/get")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.SmtpConfig> Get([FromUri] int[] smtpIds)
         {
             try
@@ -268,7 +402,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("first")]
         [Route("~/api/config/smtp-config/first")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.SmtpConfig GetFirst()
         {
             try
@@ -303,7 +437,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("previous/{smtpId}")]
         [Route("~/api/config/smtp-config/previous/{smtpId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.SmtpConfig GetPrevious(int smtpId)
         {
             try
@@ -338,7 +472,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("next/{smtpId}")]
         [Route("~/api/config/smtp-config/next/{smtpId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.SmtpConfig GetNext(int smtpId)
         {
             try
@@ -372,7 +506,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("last")]
         [Route("~/api/config/smtp-config/last")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.SmtpConfig GetLast()
         {
             try
@@ -406,7 +540,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
         [Route("~/api/config/smtp-config")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.SmtpConfig> GetPaginatedResult()
         {
             try
@@ -441,7 +575,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
         [Route("~/api/config/smtp-config/page/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.SmtpConfig> GetPaginatedResult(long pageNumber)
         {
             try
@@ -476,7 +610,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/config/smtp-config/count-where")]
-        [Authorize]
+        [RestAuthorize]
         public long CountWhere([FromBody]JArray filters)
         {
             try
@@ -513,7 +647,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/config/smtp-config/get-where/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.SmtpConfig> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
@@ -549,7 +683,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count-filtered/{filterName}")]
         [Route("~/api/config/smtp-config/count-filtered/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public long CountFiltered(string filterName)
         {
             try
@@ -585,7 +719,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get-filtered/{pageNumber}/{filterName}")]
         [Route("~/api/config/smtp-config/get-filtered/{pageNumber}/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.SmtpConfig> GetFiltered(long pageNumber, string filterName)
         {
             try
@@ -619,7 +753,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
         [Route("~/api/config/smtp-config/display-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
             try
@@ -653,7 +787,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields")]
         [Route("~/api/config/smtp-config/custom-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields()
         {
             try
@@ -687,7 +821,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields/{resourceId}")]
         [Route("~/api/config/smtp-config/custom-fields/{resourceId}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             try
@@ -721,7 +855,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("add-or-edit")]
         [Route("~/api/config/smtp-config/add-or-edit")]
-        [Authorize]
+        [RestAuthorize]
         public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             dynamic smtpConfig = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
@@ -763,7 +897,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("add/{smtpConfig}")]
         [Route("~/api/config/smtp-config/add/{smtpConfig}")]
-        [Authorize]
+        [RestAuthorize]
         public void Add(Frapid.Config.Entities.SmtpConfig smtpConfig)
         {
             if (smtpConfig == null)
@@ -803,7 +937,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("PUT")]
         [Route("edit/{smtpId}")]
         [Route("~/api/config/smtp-config/edit/{smtpId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Edit(int smtpId, [FromBody] Frapid.Config.Entities.SmtpConfig smtpConfig)
         {
             if (smtpConfig == null)
@@ -849,7 +983,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("bulk-import")]
         [Route("~/api/config/smtp-config/bulk-import")]
-        [Authorize]
+        [RestAuthorize]
         public List<object> BulkImport([FromBody]JArray collection)
         {
             List<ExpandoObject> smtpConfigCollection = this.ParseCollection(collection);
@@ -890,7 +1024,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("DELETE")]
         [Route("delete/{smtpId}")]
         [Route("~/api/config/smtp-config/delete/{smtpId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Delete(int smtpId)
         {
             try

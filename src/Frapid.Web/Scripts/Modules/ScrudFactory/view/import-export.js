@@ -39,7 +39,7 @@
 
 $("#DownloadTemplateButton").click(function () {
     function request() {
-        var url = scrudFactory.formAPI + "/export";
+        var url = window.scrudFactory.formAPI + "/export";
         return getAjaxRequest(url);
     };
 
@@ -54,7 +54,7 @@ $("#DownloadTemplateButton").click(function () {
             var uri = 'data:text/csv;charset=utf-8,' + escape(csv);
             el.href = uri;
             el.target = "_blank";
-            el.download = scrudFactory.title + ".csv";
+            el.download = window.scrudFactory.title + ".csv";
 
             $(el).removeClass("loading");
 

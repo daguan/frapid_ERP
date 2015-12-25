@@ -2,7 +2,6 @@ DROP FUNCTION IF EXISTS account.sign_in
 (
     _email                                  text,
     _office_id                              integer,
-    _challenge                              text,
     _password                               text,
     _browser                                text,
     _ip_address                             text,
@@ -13,7 +12,6 @@ CREATE FUNCTION account.sign_in
 (
     _email                                  text,
     _office_id                              integer,
-    _challenge                              text,
     _password                               text,
     _browser                                text,
     _ip_address                             text,
@@ -30,7 +28,7 @@ $$
     DECLARE _login_id                       bigint;
     DECLARE _user_id                        integer;
 BEGIN
-    IF account.is_restricted_user(_email) OR COALESCE(_challenge, '') = '' THEN
+    IF account.is_restricted_user(_email) THEN
         RETURN QUERY
         SELECT NULL::bigint, false, 'Access is denied'::text;
 
@@ -41,7 +39,7 @@ BEGIN
     (
         SELECT 1
         FROM account.users
-        WHERE encode(digest(_challenge || password, 'sha512'), 'hex') = _password
+        WHERE password = _password
     ) THEN
         RETURN QUERY
         SELECT NULL::bigint, false, 'Access is denied'::text;

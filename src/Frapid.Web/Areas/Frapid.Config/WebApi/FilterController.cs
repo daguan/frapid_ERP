@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
+using Frapid.WebApi;
 
 namespace Frapid.Config.Api
 {
@@ -25,37 +27,31 @@ namespace Frapid.Config.Api
         /// <summary>
         ///     The Filter repository.
         /// </summary>
-        private readonly IFilterRepository FilterRepository;
+        private IFilterRepository FilterRepository;
 
         public FilterController()
         {
-            this._LoginId = AppUsers.GetCurrent().View.LoginId.To<long>();
-            this._UserId = AppUsers.GetCurrent().View.UserId.To<int>();
-            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
-            this._Catalog = AppUsers.GetCatalog();
-
-            this.FilterRepository = new Frapid.Config.DataAccess.Filter
-            {
-                _Catalog = this._Catalog,
-                _LoginId = this._LoginId,
-                _UserId = this._UserId
-            };
         }
 
-        public FilterController(IFilterRepository repository, string catalog, LoginView view)
+        public FilterController(IFilterRepository repository)
         {
-            this._LoginId = view.LoginId.To<long>();
-            this._UserId = view.UserId.To<int>();
-            this._OfficeId = view.OfficeId.To<int>();
-            this._Catalog = catalog;
-
             this.FilterRepository = repository;
         }
 
-        public long _LoginId { get; }
-        public int _UserId { get; private set; }
-        public int _OfficeId { get; private set; }
-        public string _Catalog { get; }
+        protected override void Initialize(HttpControllerContext context)
+        {
+            base.Initialize(context);
+
+            if (this.FilterRepository == null)
+            {
+                this.FilterRepository = new Frapid.Config.DataAccess.Filter
+                {
+                    _Catalog = this.MetaUser.Catalog,
+                    _LoginId = this.MetaUser.LoginId,
+                    _UserId = this.MetaUser.UserId
+                };
+            }
+        }
 
         /// <summary>
         ///     Creates meta information of "filter" entity.
@@ -64,32 +60,159 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("meta")]
         [Route("~/api/config/filter/meta")]
-        [Authorize]
+        [RestAuthorize]
         public EntityView GetEntityView()
         {
-            if (this._LoginId == 0)
-            {
-                return new EntityView();
-            }
-
             return new EntityView
             {
                 PrimaryKey = "filter_id",
                 Columns = new List<EntityColumn>()
-                                {
-                                        new EntityColumn { ColumnName = "filter_id",  PropertyName = "FilterId",  DataType = "long",  DbDataType = "int8",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = true,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "object_name",  PropertyName = "ObjectName",  DataType = "string",  DbDataType = "text",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "filter_name",  PropertyName = "FilterName",  DataType = "string",  DbDataType = "text",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "is_default",  PropertyName = "IsDefault",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "is_default_admin",  PropertyName = "IsDefaultAdmin",  DataType = "bool",  DbDataType = "bool",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "filter_statement",  PropertyName = "FilterStatement",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 12 },
-                                        new EntityColumn { ColumnName = "column_name",  PropertyName = "ColumnName",  DataType = "string",  DbDataType = "text",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "filter_condition",  PropertyName = "FilterCondition",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "filter_value",  PropertyName = "FilterValue",  DataType = "string",  DbDataType = "text",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "filter_and_value",  PropertyName = "FilterAndValue",  DataType = "string",  DbDataType = "text",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "audit_user_id",  PropertyName = "AuditUserId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "audit_ts",  PropertyName = "AuditTs",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
-                                }
+                {
+                        new EntityColumn
+                        {
+                                ColumnName = "filter_id",
+                                PropertyName = "FilterId",
+                                DataType = "long",
+                                DbDataType = "int8",
+                                IsNullable = false,
+                                IsPrimaryKey = true,
+                                IsSerial = true,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "object_name",
+                                PropertyName = "ObjectName",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "filter_name",
+                                PropertyName = "FilterName",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "is_default",
+                                PropertyName = "IsDefault",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "is_default_admin",
+                                PropertyName = "IsDefaultAdmin",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "filter_statement",
+                                PropertyName = "FilterStatement",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 12
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "column_name",
+                                PropertyName = "ColumnName",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "filter_condition",
+                                PropertyName = "FilterCondition",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "filter_value",
+                                PropertyName = "FilterValue",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "filter_and_value",
+                                PropertyName = "FilterAndValue",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_user_id",
+                                PropertyName = "AuditUserId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_ts",
+                                PropertyName = "AuditTs",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        }
+                }
             };
         }
 
@@ -100,7 +223,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
         [Route("~/api/config/filter/count")]
-        [Authorize]
+        [RestAuthorize]
         public long Count()
         {
             try
@@ -134,7 +257,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("all")]
         [Route("~/api/config/filter/all")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.Filter> GetAll()
         {
             try
@@ -168,7 +291,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("export")]
         [Route("~/api/config/filter/export")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<dynamic> Export()
         {
             try
@@ -203,7 +326,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("{filterId}")]
         [Route("~/api/config/filter/{filterId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.Filter Get(long filterId)
         {
             try
@@ -233,7 +356,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get")]
         [Route("~/api/config/filter/get")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.Filter> Get([FromUri] long[] filterIds)
         {
             try
@@ -267,7 +390,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("first")]
         [Route("~/api/config/filter/first")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.Filter GetFirst()
         {
             try
@@ -302,7 +425,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("previous/{filterId}")]
         [Route("~/api/config/filter/previous/{filterId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.Filter GetPrevious(long filterId)
         {
             try
@@ -337,7 +460,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("next/{filterId}")]
         [Route("~/api/config/filter/next/{filterId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.Filter GetNext(long filterId)
         {
             try
@@ -371,7 +494,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("last")]
         [Route("~/api/config/filter/last")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.Filter GetLast()
         {
             try
@@ -405,7 +528,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
         [Route("~/api/config/filter")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.Filter> GetPaginatedResult()
         {
             try
@@ -440,7 +563,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
         [Route("~/api/config/filter/page/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.Filter> GetPaginatedResult(long pageNumber)
         {
             try
@@ -475,7 +598,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/config/filter/count-where")]
-        [Authorize]
+        [RestAuthorize]
         public long CountWhere([FromBody]JArray filters)
         {
             try
@@ -512,7 +635,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/config/filter/get-where/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.Filter> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
@@ -548,7 +671,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count-filtered/{filterName}")]
         [Route("~/api/config/filter/count-filtered/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public long CountFiltered(string filterName)
         {
             try
@@ -584,7 +707,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get-filtered/{pageNumber}/{filterName}")]
         [Route("~/api/config/filter/get-filtered/{pageNumber}/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.Filter> GetFiltered(long pageNumber, string filterName)
         {
             try
@@ -618,7 +741,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
         [Route("~/api/config/filter/display-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
             try
@@ -652,7 +775,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields")]
         [Route("~/api/config/filter/custom-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields()
         {
             try
@@ -686,7 +809,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields/{resourceId}")]
         [Route("~/api/config/filter/custom-fields/{resourceId}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             try
@@ -720,7 +843,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("add-or-edit")]
         [Route("~/api/config/filter/add-or-edit")]
-        [Authorize]
+        [RestAuthorize]
         public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             dynamic filter = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
@@ -762,7 +885,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("add/{filter}")]
         [Route("~/api/config/filter/add/{filter}")]
-        [Authorize]
+        [RestAuthorize]
         public void Add(Frapid.Config.Entities.Filter filter)
         {
             if (filter == null)
@@ -802,7 +925,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("PUT")]
         [Route("edit/{filterId}")]
         [Route("~/api/config/filter/edit/{filterId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Edit(long filterId, [FromBody] Frapid.Config.Entities.Filter filter)
         {
             if (filter == null)
@@ -848,7 +971,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("bulk-import")]
         [Route("~/api/config/filter/bulk-import")]
-        [Authorize]
+        [RestAuthorize]
         public List<object> BulkImport([FromBody]JArray collection)
         {
             List<ExpandoObject> filterCollection = this.ParseCollection(collection);
@@ -889,7 +1012,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("DELETE")]
         [Route("delete/{filterId}")]
         [Route("~/api/config/filter/delete/{filterId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Delete(long filterId)
         {
             try

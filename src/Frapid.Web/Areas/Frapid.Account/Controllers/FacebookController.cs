@@ -2,10 +2,12 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.Account.InputModels;
 using Frapid.Account.RemoteAuthentication;
+using Frapid.Areas;
 using Npgsql;
 
 namespace Frapid.Account.Controllers
 {
+    [AntiForgery]
     public class FacebookController : BaseAuthenticationController
     {
         [Route("account/facebook/sign-in")]

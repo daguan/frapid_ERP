@@ -21,7 +21,7 @@ namespace Frapid.WebsiteBuilder.Api.Tests
     {
         public static CategoryController Fixture()
         {
-            CategoryController controller = new CategoryController(new CategoryRepository(), "", new LoginView());
+            CategoryController controller = new CategoryController(new CategoryRepository());
             return controller;
         }
 

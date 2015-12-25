@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static FbUserExistsController Fixture()
         {
-            FbUserExistsController controller = new FbUserExistsController(new FbUserExistsRepository(), "", new LoginView());
+            FbUserExistsController controller = new FbUserExistsController(new FbUserExistsRepository());
             return controller;
         }
 

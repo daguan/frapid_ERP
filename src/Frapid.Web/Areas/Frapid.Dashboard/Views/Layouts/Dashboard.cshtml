@@ -287,7 +287,7 @@
             (function () {                
                 function loadMenus() {
                     function request() {
-                        var url = "/api/config/menu/all";
+                        var url = "/api/core/menu/all";
                         return window.getAjaxRequest(url);
                     };
 
@@ -338,5 +338,6 @@
             @RenderBody()
         </div>
     </div>
+    @Html.AntiForgeryToken()
 </body>
 </html>

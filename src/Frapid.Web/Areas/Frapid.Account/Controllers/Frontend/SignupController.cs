@@ -3,54 +3,55 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
-using Frapid.Account.DTO;
 using Frapid.Account.Exceptions;
 using Frapid.Account.Messaging;
+using Frapid.Areas;
 using Frapid.Framework.Extensions;
 using Frapid.WebsiteBuilder.Controllers;
 using Registration = Frapid.Account.ViewModels.Registration;
 
-namespace Frapid.Account.Controllers
+namespace Frapid.Account.Controllers.Frontend
 {
+    [AntiForgery]
     public class SignUpController : WebsiteBuilderController
     {
         [Route("account/sign-up")]
         [AllowAnonymous]
         public ActionResult Index()
         {
-            var profile = DAL.Configuration.GetActiveProfile();
+            var profile = DAL.ConfigurationProfiles.GetActiveProfile();
 
-            if (!profile.AllowRegistration || User.Identity.IsAuthenticated)
+            if (!profile.AllowRegistration || this.User.Identity.IsAuthenticated)
             {
-                return Redirect("/dashboard");
+                return this.Redirect("/dashboard");
             }
 
-            return View(GetRazorView<AreaRegistration>("SignUp/Index.cshtml"));
+            return this.View(this.GetRazorView<AreaRegistration>("SignUp/Index.cshtml"));
         }
 
         [Route("account/sign-up/confirmation-email-sent")]
         [AllowAnonymous]
         public ActionResult EmailSent()
         {
-            return View(GetRazorView<AreaRegistration>("SignUp/EmailSent.cshtml"));
+            return this.View(this.GetRazorView<AreaRegistration>("SignUp/EmailSent.cshtml"));
         }
 
         [Route("account/sign-up/confirm")]
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmAsync(string token)
         {
-            Guid id = token.To<Guid>();
+            var id = token.To<Guid>();
 
-            if (!DAL.Registration.ConfirmRegistration(id))
+            if (!DAL.Registrations.ConfirmRegistration(id))
             {
-                return View(GetRazorView<AreaRegistration>("SignUp/InvalidToken.cshtml"));
+                return this.View(this.GetRazorView<AreaRegistration>("SignUp/InvalidToken.cshtml"));
             }
 
-            DTO.Registration registration = DAL.Registration.Get(id);
-            WelcomeEmail email = new WelcomeEmail(registration);
+            var registration = DAL.Registrations.Get(id);
+            var email = new WelcomeEmail(registration);
             await email.SendAsync();
 
-            return View(GetRazorView<AreaRegistration>("SignUp/Welcome.cshtml"));
+            return this.View(this.GetRazorView<AreaRegistration>("SignUp/Welcome.cshtml"));
         }
 
         [Route("account/sign-up/validate-email")]
@@ -59,7 +60,7 @@ namespace Frapid.Account.Controllers
         public ActionResult ValidateEmail(string email)
         {
             Thread.Sleep(1000);
-            return string.IsNullOrWhiteSpace(email) ? Json(true) : Json(!DAL.Registration.EmailExists(email));
+            return string.IsNullOrWhiteSpace(email) ? this.Json(true) : this.Json(!DAL.Registrations.EmailExists(email));
         }
 
         [Route("account/sign-up")]
@@ -82,16 +83,16 @@ namespace Frapid.Account.Controllers
 
             Mapper.CreateMap<Registration, DTO.Registration>();
             var registration = Mapper.Map<DTO.Registration>(model);
-            string registrationId = DAL.Registration.Register(registration).ToString();
+            string registrationId = DAL.Registrations.Register(registration).ToString();
 
             if (string.IsNullOrWhiteSpace(registrationId))
             {
-                return Json(false);
+                return this.Json(false);
             }
 
             var email = new SignUpEmail(registration, registrationId);
             await email.SendAsync();
-            return Json(true);
+            return this.Json(true);
         }
     }
 }

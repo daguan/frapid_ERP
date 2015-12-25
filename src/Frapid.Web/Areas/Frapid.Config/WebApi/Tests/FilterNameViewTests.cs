@@ -19,7 +19,7 @@ namespace Frapid.Config.Api.Tests
     {
         public static FilterNameViewController Fixture()
         {
-            FilterNameViewController controller = new FilterNameViewController(new FilterNameViewRepository(), "", new LoginView());
+            FilterNameViewController controller = new FilterNameViewController(new FilterNameViewRepository());
             return controller;
         }
 

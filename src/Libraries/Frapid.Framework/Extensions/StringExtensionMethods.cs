@@ -1,9 +1,21 @@
+using System;
 using System.Text;
 
 namespace Frapid.Framework.Extensions
 {
     public static class StringExtensionMethods
     {
+        public static T ToEnum<T>(this string value, T defaultValue) where T : struct
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return defaultValue;
+            }
+
+            T result;
+            return Enum.TryParse(value, true, out result) ? result : defaultValue;
+        }
+
         public static string ReplaceWholeWord(this string s, string word, string bywhat)
         {
             char firstLetter = word[0];

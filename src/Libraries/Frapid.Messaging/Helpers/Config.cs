@@ -14,16 +14,16 @@ namespace Frapid.Messaging.Helpers
             {
                 return;
             }
-            Catalog = catalog;
-            Enabled = smtp.Enabled;
-            FromName = smtp.FromDisplayName;
-            FromEmail = smtp.FromEmailAddress;
-            SmtpHost = smtp.SmtpHost;
-            EnableSsl = smtp.SmtpEnableSsl;
-            SmtpPort = smtp.SmtpPort;
-            SmtpUsername = smtp.SmtpUsername;
-            SmtpUserPassword = GetSmtpUserPassword(smtp.SmtpPassword);
-            DeliveryMethod = SmtpDeliveryMethod.Network;
+            this.Catalog = catalog;
+            this.Enabled = smtp.Enabled;
+            this.FromName = smtp.FromDisplayName;
+            this.FromEmail = smtp.FromEmailAddress;
+            this.SmtpHost = smtp.SmtpHost;
+            this.EnableSsl = smtp.SmtpEnableSsl;
+            this.SmtpPort = smtp.SmtpPort;
+            this.SmtpUsername = smtp.SmtpUsername;
+            this.SmtpUserPassword = this.GetSmtpUserPassword(smtp.SmtpPassword);
+            this.DeliveryMethod = SmtpDeliveryMethod.Network;
         }
 
         public string Catalog { get; set; }

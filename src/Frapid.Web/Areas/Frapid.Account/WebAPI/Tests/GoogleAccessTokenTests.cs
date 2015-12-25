@@ -21,7 +21,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static GoogleAccessTokenController Fixture()
         {
-            GoogleAccessTokenController controller = new GoogleAccessTokenController(new GoogleAccessTokenRepository(), "", new LoginView());
+            GoogleAccessTokenController controller = new GoogleAccessTokenController(new GoogleAccessTokenRepository());
             return controller;
         }
 

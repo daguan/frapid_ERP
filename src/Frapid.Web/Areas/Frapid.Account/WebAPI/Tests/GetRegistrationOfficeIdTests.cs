@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static GetRegistrationOfficeIdController Fixture()
         {
-            GetRegistrationOfficeIdController controller = new GetRegistrationOfficeIdController(new GetRegistrationOfficeIdRepository(), "", new LoginView());
+            GetRegistrationOfficeIdController controller = new GetRegistrationOfficeIdController(new GetRegistrationOfficeIdRepository());
             return controller;
         }
 

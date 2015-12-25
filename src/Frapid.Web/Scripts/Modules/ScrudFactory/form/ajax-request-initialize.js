@@ -1,5 +1,5 @@
 ﻿function initializeAjaxRequest() {
-    $.each(scrudFactory.keys, function () {
+    $.each(window.scrudFactory.keys, function () {
         var el = $("[data-property=" + this.property + "]");
         var prop = el.attr("data-property");
 

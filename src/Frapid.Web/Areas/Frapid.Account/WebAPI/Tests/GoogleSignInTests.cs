@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static GoogleSignInController Fixture()
         {
-            GoogleSignInController controller = new GoogleSignInController(new GoogleSignInRepository(), "", new LoginView());
+            GoogleSignInController controller = new GoogleSignInController(new GoogleSignInRepository());
             return controller;
         }
 

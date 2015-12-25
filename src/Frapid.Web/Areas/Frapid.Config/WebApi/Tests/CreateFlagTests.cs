@@ -12,7 +12,7 @@ namespace Frapid.Config.Api.Tests
     {
         public static CreateFlagController Fixture()
         {
-            CreateFlagController controller = new CreateFlagController(new CreateFlagRepository(), "", new LoginView());
+            CreateFlagController controller = new CreateFlagController(new CreateFlagRepository());
             return controller;
         }
 

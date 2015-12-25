@@ -9,7 +9,6 @@ $("#SignInButton").click(function () {
 
     function getPassword(email, challenge, password) {
         var hashed = new window.jsSHA(email + password, 'TEXT').getHash('SHA-512', 'HEX');
-        hashed = new window.jsSHA(challenge + hashed, 'TEXT').getHash('SHA-512', 'HEX');
         return hashed;
     };
 
@@ -20,7 +19,6 @@ $("#SignInButton").click(function () {
         return;
     };
 
-    var el = $(this);
     bigError.html("");
     var segment = $("#SignInSegment");
     segment.addClass("loading");
@@ -29,7 +27,9 @@ $("#SignInButton").click(function () {
 
     var ajax = request(model);
     ajax.success(function (response) {
-        if (response.Status) {
+        localStorage.setItem("access_token", response);
+
+        if (response) {
             window.location = "/dashboard";
         } else {
             bigError.html(response.Message);
@@ -38,7 +38,7 @@ $("#SignInButton").click(function () {
         segment.removeClass("loading");
     });
 
-    ajax.fail(function (xhr) {
+    ajax.fail(function () {
         segment.removeClass("loading");
     });
 

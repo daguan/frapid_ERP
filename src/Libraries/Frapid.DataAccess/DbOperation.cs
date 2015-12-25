@@ -359,21 +359,11 @@ namespace Frapid.DataAccess
 
         private static bool ValidateParameters(NpgsqlCommand command)
         {
-            var commandTextParameters = GetCommandTextParameterCollection(command.CommandText);
+            var parameters = GetCommandTextParameterCollection(command.CommandText);
 
-            foreach (NpgsqlParameter npgsqlParameter in command.Parameters)
+            foreach (var parameter in from NpgsqlParameter parameter in command.Parameters let match = parameters.Any(c => parameter.ParameterName.Equals(c)) where !match select parameter)
             {
-                bool match = false;
-
-                foreach (string commandTextParameter in commandTextParameters.Where(commandTextParameter => npgsqlParameter.ParameterName.Equals(commandTextParameter)))
-                {
-                    match = true;
-                }
-
-                if (!match)
-                {
-                    throw new InvalidOperationException($"Invalid parameter name {npgsqlParameter.ParameterName}.");
-                }
+                throw new InvalidOperationException($"Invalid parameter name {parameter.ParameterName}.");
             }
 
             return true;

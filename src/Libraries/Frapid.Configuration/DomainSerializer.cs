@@ -16,32 +16,32 @@ namespace Frapid.Configuration
             this.FileName = fileName;
         }
 
-        public List<string> Get()
+        public List<ApprovedDomain> Get()
         {
-            List<string> urls = new List<string>();
+            var domains = new List<ApprovedDomain>();
 
             string path = HostingEnvironment.MapPath(Path + this.FileName);
 
             if (path == null)
             {
-                return urls;
+                return domains;
             }
 
             string contents = File.ReadAllText(path, Encoding.UTF8);
-            urls = JsonConvert.DeserializeObject<List<string>>(contents);
+            domains = JsonConvert.DeserializeObject<List<ApprovedDomain>>(contents);
 
-            return urls ?? new List<string>();
+            return domains ?? new List<ApprovedDomain>();
         }
 
-        public void Add(string url)
+        public void Add(ApprovedDomain domain)
         {
-            var urls = this.Get();
-            urls.Add(url);
+            var domains = this.Get();
+            domains.Add(domain);
 
-            this.Save(urls);
+            this.Save(domains);
         }
 
-        public void Save(List<string> urls)
+        public void Save(List<ApprovedDomain> urls)
         {
             string contents = JsonConvert.SerializeObject(urls);
             string path = HostingEnvironment.MapPath(Path + this.FileName);

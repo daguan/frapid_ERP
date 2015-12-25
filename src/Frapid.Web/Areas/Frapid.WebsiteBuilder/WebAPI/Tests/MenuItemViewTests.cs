@@ -19,7 +19,7 @@ namespace Frapid.WebsiteBuilder.Api.Tests
     {
         public static MenuItemViewController Fixture()
         {
-            MenuItemViewController controller = new MenuItemViewController(new MenuItemViewRepository(), "", new LoginView());
+            MenuItemViewController controller = new MenuItemViewController(new MenuItemViewRepository());
             return controller;
         }
 

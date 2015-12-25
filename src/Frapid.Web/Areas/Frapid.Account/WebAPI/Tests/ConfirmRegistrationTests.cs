@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static ConfirmRegistrationController Fixture()
         {
-            ConfirmRegistrationController controller = new ConfirmRegistrationController(new ConfirmRegistrationRepository(), "", new LoginView());
+            ConfirmRegistrationController controller = new ConfirmRegistrationController(new ConfirmRegistrationRepository());
             return controller;
         }
 

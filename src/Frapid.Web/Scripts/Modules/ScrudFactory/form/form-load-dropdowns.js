@@ -1,5 +1,5 @@
 ﻿function loadDropdowns() {
-    if (!dropdownsLoaded) {
+    if (!window.dropdownsLoaded) {
         var dropdowns = $(".form.factory select");
 
         dropdowns.each(function (i, v) {
@@ -22,6 +22,6 @@
             dropdown.dropdown({ placeholder: false });
         });
 
-        dropdownsLoaded = true;
+        window.dropdownsLoaded = true;
     };
 };

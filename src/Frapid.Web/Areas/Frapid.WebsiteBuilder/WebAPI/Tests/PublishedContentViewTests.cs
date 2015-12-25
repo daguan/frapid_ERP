@@ -19,7 +19,7 @@ namespace Frapid.WebsiteBuilder.Api.Tests
     {
         public static PublishedContentViewController Fixture()
         {
-            PublishedContentViewController controller = new PublishedContentViewController(new PublishedContentViewRepository(), "", new LoginView());
+            PublishedContentViewController controller = new PublishedContentViewController(new PublishedContentViewRepository());
             return controller;
         }
 

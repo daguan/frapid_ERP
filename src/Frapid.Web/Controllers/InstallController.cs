@@ -2,6 +2,7 @@ using System.Web.Mvc;
 using Frapid.Areas;
 using Frapid.Configuration;
 using Frapid.Installer;
+using System.Linq;
 
 namespace Frapid.Web.Controllers
 {
@@ -15,17 +16,20 @@ namespace Frapid.Web.Controllers
             var approved = new DomainSerializer("domains-approved.json");
             var installed = new DomainSerializer("domains-installed.json");
 
-            if (!approved.Get().Contains(domain))
+            
+
+            if (!approved.Get().Any(x => x.DomainName.Equals(domain)))
             {
                 return this.HttpNotFound();
             }
 
-            if (installed.Get().Contains(domain))
+            if (installed.Get().Any(x => x.DomainName.Equals(domain)))
             {
                 return this.Redirect("/");
             }
 
-            InstallationFactory.Setup(domain); //Background job
+            var setup = approved.Get().FirstOrDefault(x => x.DomainName.Equals(domain));
+            InstallationFactory.Setup(setup); //Background job
             return this.Content("Installing frapid, please visit the site after a few minutes.");
         }
     }

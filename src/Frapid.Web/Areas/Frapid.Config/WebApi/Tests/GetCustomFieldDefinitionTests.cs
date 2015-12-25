@@ -12,7 +12,7 @@ namespace Frapid.Config.Api.Tests
     {
         public static GetCustomFieldDefinitionController Fixture()
         {
-            GetCustomFieldDefinitionController controller = new GetCustomFieldDefinitionController(new GetCustomFieldDefinitionRepository(), "", new LoginView());
+            GetCustomFieldDefinitionController controller = new GetCustomFieldDefinitionController(new GetCustomFieldDefinitionRepository());
             return controller;
         }
 

@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static GetUserIdByEmailController Fixture()
         {
-            GetUserIdByEmailController controller = new GetUserIdByEmailController(new GetUserIdByEmailRepository(), "", new LoginView());
+            GetUserIdByEmailController controller = new GetUserIdByEmailController(new GetUserIdByEmailRepository());
             return controller;
         }
 

@@ -92,22 +92,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccessType.cs" />
-    <Compile Include="App.cs" />
-    <Compile Include="AppDependency.cs" />
-    <Compile Include="CreateAppProcedure.cs" />
     <Compile Include="CreateFlagProcedure.cs" />
-    <Compile Include="CreateMenuProcedure.cs" />
-    <Compile Include="Currency.cs" />
     <Compile Include="CustomField.cs" />
     <Compile Include="CustomFieldDataType.cs" />
     <Compile Include="CustomFieldDefinitionView.cs" />
     <Compile Include="CustomFieldForm.cs" />
     <Compile Include="CustomFieldSetup.cs" />
     <Compile Include="CustomFieldView.cs" />
-    <Compile Include="DefaultEntityAccess.cs" />
     <Compile Include="EmailQueue.cs" />
-    <Compile Include="EntityAccess.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="FilterNameView.cs" />
     <Compile Include="Flag.cs" />
@@ -119,22 +111,14 @@
     <Compile Include="GetFlagTypeIdProcedure.cs" />
     <Compile Include="GetUserIdByLoginIdProcedure.cs" />
     <Compile Include="HasAccessProcedure.cs" />
-    <Compile Include="IAccessTypeRepository.cs" />
-    <Compile Include="IAppDependencyRepository.cs" />
-    <Compile Include="IAppRepository.cs" />
-    <Compile Include="ICreateAppRepository.cs" />
     <Compile Include="ICreateFlagRepository.cs" />
-    <Compile Include="ICreateMenuRepository.cs" />
-    <Compile Include="ICurrencyRepository.cs" />
     <Compile Include="ICustomFieldDataTypeRepository.cs" />
     <Compile Include="ICustomFieldDefinitionViewRepository.cs" />
     <Compile Include="ICustomFieldFormRepository.cs" />
     <Compile Include="ICustomFieldRepository.cs" />
     <Compile Include="ICustomFieldSetupRepository.cs" />
     <Compile Include="ICustomFieldViewRepository.cs" />
-    <Compile Include="IDefaultEntityAccessRepository.cs" />
     <Compile Include="IEmailQueueRepository.cs" />
-    <Compile Include="IEntityAccessRepository.cs" />
     <Compile Include="IFilterNameViewRepository.cs" />
     <Compile Include="IFilterRepository.cs" />
     <Compile Include="IFlagRepository.cs" />
@@ -148,13 +132,9 @@
     <Compile Include="IHasAccessRepository.cs" />
     <Compile Include="IKanbanDetailRepository.cs" />
     <Compile Include="IKanbanRepository.cs" />
-    <Compile Include="IMenuRepository.cs" />
-    <Compile Include="IOfficeRepository.cs" />
     <Compile Include="ISmtpConfigRepository.cs" />
     <Compile Include="Kanban.cs" />
     <Compile Include="KanbanDetail.cs" />
-    <Compile Include="Menu.cs" />
-    <Compile Include="Office.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmtpConfig.cs" />
   </ItemGroup>

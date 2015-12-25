@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static FbSignInController Fixture()
         {
-            FbSignInController controller = new FbSignInController(new FbSignInRepository(), "", new LoginView());
+            FbSignInController controller = new FbSignInController(new FbSignInRepository());
             return controller;
         }
 

@@ -1,0 +1,23 @@
+{
+	"ApplicationName": "Frapid.Authorization",
+	"AutoInstall": true,
+	"Thumbnail": null,
+	"Publisher": "MixERP Inc.",
+	"Url": "http://frapid.com",
+	"DocumentationUrl": "http://frapid.com",
+	"AssemblyName": null,
+	"Version": "1.0",
+	"RealeasedOn": null,
+	"Description": "Frapid authorization module.",
+	"Category": "Core Modules",
+	"Bundle": "Frapid Framework",
+    "IsMeta": false,
+	"DbSchema": "policy",
+	"BlankDbPath": "~/Areas/Frapid.Authorization/db/authorization.sql",
+	"SampleDbPath": null,
+	"InstallSample": false,
+	"My": null,
+	"OverrideTemplatePath": null,
+    "OverrideDestination":null,
+	"DependsOn": ["Frapid.Account"]
+}

@@ -19,7 +19,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static SignInViewController Fixture()
         {
-            SignInViewController controller = new SignInViewController(new SignInViewRepository(), "", new LoginView());
+            SignInViewController controller = new SignInViewController(new SignInViewRepository());
             return controller;
         }
 

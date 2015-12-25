@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
+using Frapid.WebApi;
 
 namespace Frapid.Config.Api
 {
@@ -25,37 +27,31 @@ namespace Frapid.Config.Api
         /// <summary>
         ///     The CustomFieldForm repository.
         /// </summary>
-        private readonly ICustomFieldFormRepository CustomFieldFormRepository;
+        private ICustomFieldFormRepository CustomFieldFormRepository;
 
         public CustomFieldFormController()
         {
-            this._LoginId = AppUsers.GetCurrent().View.LoginId.To<long>();
-            this._UserId = AppUsers.GetCurrent().View.UserId.To<int>();
-            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
-            this._Catalog = AppUsers.GetCatalog();
-
-            this.CustomFieldFormRepository = new Frapid.Config.DataAccess.CustomFieldForm
-            {
-                _Catalog = this._Catalog,
-                _LoginId = this._LoginId,
-                _UserId = this._UserId
-            };
         }
 
-        public CustomFieldFormController(ICustomFieldFormRepository repository, string catalog, LoginView view)
+        public CustomFieldFormController(ICustomFieldFormRepository repository)
         {
-            this._LoginId = view.LoginId.To<long>();
-            this._UserId = view.UserId.To<int>();
-            this._OfficeId = view.OfficeId.To<int>();
-            this._Catalog = catalog;
-
             this.CustomFieldFormRepository = repository;
         }
 
-        public long _LoginId { get; }
-        public int _UserId { get; private set; }
-        public int _OfficeId { get; private set; }
-        public string _Catalog { get; }
+        protected override void Initialize(HttpControllerContext context)
+        {
+            base.Initialize(context);
+
+            if (this.CustomFieldFormRepository == null)
+            {
+                this.CustomFieldFormRepository = new Frapid.Config.DataAccess.CustomFieldForm
+                {
+                    _Catalog = this.MetaUser.Catalog,
+                    _LoginId = this.MetaUser.LoginId,
+                    _UserId = this.MetaUser.UserId
+                };
+            }
+        }
 
         /// <summary>
         ///     Creates meta information of "custom field form" entity.
@@ -64,23 +60,51 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("meta")]
         [Route("~/api/config/custom-field-form/meta")]
-        [Authorize]
+        [RestAuthorize]
         public EntityView GetEntityView()
         {
-            if (this._LoginId == 0)
-            {
-                return new EntityView();
-            }
-
             return new EntityView
             {
                 PrimaryKey = "form_name",
                 Columns = new List<EntityColumn>()
-                                {
-                                        new EntityColumn { ColumnName = "form_name",  PropertyName = "FormName",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "table_name",  PropertyName = "TableName",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "key_name",  PropertyName = "KeyName",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 }
-                                }
+                {
+                        new EntityColumn
+                        {
+                                ColumnName = "form_name",
+                                PropertyName = "FormName",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = true,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "table_name",
+                                PropertyName = "TableName",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "key_name",
+                                PropertyName = "KeyName",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        }
+                }
             };
         }
 
@@ -91,7 +115,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
         [Route("~/api/config/custom-field-form/count")]
-        [Authorize]
+        [RestAuthorize]
         public long Count()
         {
             try
@@ -125,7 +149,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("all")]
         [Route("~/api/config/custom-field-form/all")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.CustomFieldForm> GetAll()
         {
             try
@@ -159,7 +183,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("export")]
         [Route("~/api/config/custom-field-form/export")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<dynamic> Export()
         {
             try
@@ -194,7 +218,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("{formName}")]
         [Route("~/api/config/custom-field-form/{formName}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.CustomFieldForm Get(string formName)
         {
             try
@@ -224,7 +248,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get")]
         [Route("~/api/config/custom-field-form/get")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.CustomFieldForm> Get([FromUri] string[] formNames)
         {
             try
@@ -258,7 +282,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("first")]
         [Route("~/api/config/custom-field-form/first")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.CustomFieldForm GetFirst()
         {
             try
@@ -293,7 +317,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("previous/{formName}")]
         [Route("~/api/config/custom-field-form/previous/{formName}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.CustomFieldForm GetPrevious(string formName)
         {
             try
@@ -328,7 +352,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("next/{formName}")]
         [Route("~/api/config/custom-field-form/next/{formName}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.CustomFieldForm GetNext(string formName)
         {
             try
@@ -362,7 +386,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("last")]
         [Route("~/api/config/custom-field-form/last")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.CustomFieldForm GetLast()
         {
             try
@@ -396,7 +420,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
         [Route("~/api/config/custom-field-form")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.CustomFieldForm> GetPaginatedResult()
         {
             try
@@ -431,7 +455,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
         [Route("~/api/config/custom-field-form/page/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.CustomFieldForm> GetPaginatedResult(long pageNumber)
         {
             try
@@ -466,7 +490,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/config/custom-field-form/count-where")]
-        [Authorize]
+        [RestAuthorize]
         public long CountWhere([FromBody]JArray filters)
         {
             try
@@ -503,7 +527,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/config/custom-field-form/get-where/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.CustomFieldForm> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
@@ -539,7 +563,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count-filtered/{filterName}")]
         [Route("~/api/config/custom-field-form/count-filtered/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public long CountFiltered(string filterName)
         {
             try
@@ -575,7 +599,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get-filtered/{pageNumber}/{filterName}")]
         [Route("~/api/config/custom-field-form/get-filtered/{pageNumber}/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.CustomFieldForm> GetFiltered(long pageNumber, string filterName)
         {
             try
@@ -609,7 +633,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
         [Route("~/api/config/custom-field-form/display-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
             try
@@ -643,7 +667,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields")]
         [Route("~/api/config/custom-field-form/custom-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields()
         {
             try
@@ -677,7 +701,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields/{resourceId}")]
         [Route("~/api/config/custom-field-form/custom-fields/{resourceId}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             try
@@ -711,7 +735,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("add-or-edit")]
         [Route("~/api/config/custom-field-form/add-or-edit")]
-        [Authorize]
+        [RestAuthorize]
         public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             dynamic customFieldForm = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
@@ -753,7 +777,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("add/{customFieldForm}")]
         [Route("~/api/config/custom-field-form/add/{customFieldForm}")]
-        [Authorize]
+        [RestAuthorize]
         public void Add(Frapid.Config.Entities.CustomFieldForm customFieldForm)
         {
             if (customFieldForm == null)
@@ -793,7 +817,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("PUT")]
         [Route("edit/{formName}")]
         [Route("~/api/config/custom-field-form/edit/{formName}")]
-        [Authorize]
+        [RestAuthorize]
         public void Edit(string formName, [FromBody] Frapid.Config.Entities.CustomFieldForm customFieldForm)
         {
             if (customFieldForm == null)
@@ -839,7 +863,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("bulk-import")]
         [Route("~/api/config/custom-field-form/bulk-import")]
-        [Authorize]
+        [RestAuthorize]
         public List<object> BulkImport([FromBody]JArray collection)
         {
             List<ExpandoObject> customFieldFormCollection = this.ParseCollection(collection);
@@ -880,7 +904,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("DELETE")]
         [Route("delete/{formName}")]
         [Route("~/api/config/custom-field-form/delete/{formName}")]
-        [Authorize]
+        [RestAuthorize]
         public void Delete(string formName)
         {
             try

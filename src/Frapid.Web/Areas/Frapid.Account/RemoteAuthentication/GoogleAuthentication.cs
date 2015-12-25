@@ -10,7 +10,6 @@ using Frapid.Account.Messaging;
 using Frapid.Account.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Registration = Frapid.Account.DAL.Registration;
 
 namespace Frapid.Account.RemoteAuthentication
 {
@@ -20,7 +19,7 @@ namespace Frapid.Account.RemoteAuthentication
 
         public GoogleAuthentication()
         {
-            var profile = DAL.Configuration.GetActiveProfile();
+            var profile = DAL.ConfigurationProfiles.GetActiveProfile();
             ClientId = profile.GoogleSigninClientId;
         }
 
@@ -77,7 +76,7 @@ namespace Frapid.Account.RemoteAuthentication
 
             if (result.Status)
             {
-                if (!Registration.HasAccount(account.Email))
+                if (!Registrations.HasAccount(account.Email))
                 {
                     string template = "~/Catalogs/{catalog}/Areas/Frapid.Account/EmailTemplates/welcome-email-other.html";
                     var welcomeEmail = new WelcomeEmail(gUser, template, ProviderName);

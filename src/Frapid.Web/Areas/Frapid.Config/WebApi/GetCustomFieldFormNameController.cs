@@ -5,12 +5,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
+using Frapid.WebApi;
 using Frapid.Config.Entities;
 using Frapid.Config.DataAccess;
 namespace Frapid.Config.Api
@@ -22,29 +24,9 @@ namespace Frapid.Config.Api
     public class GetCustomFieldFormNameController : FrapidApiController
     {
         /// <summary>
-        /// Login id of application user accessing this API.
-        /// </summary>
-        public long _LoginId { get; set; }
-
-        /// <summary>
-        /// User id of application user accessing this API.
-        /// </summary>
-        public int _UserId { get; set; }
-
-        /// <summary>
-        /// Currently logged in office id of application user accessing this API.
-        /// </summary>
-        public int _OfficeId { get; set; }
-
-        /// <summary>
-        /// The name of the database where queries are being executed on.
-        /// </summary>
-        public string _Catalog { get; set; }
-
-        /// <summary>
         ///     The GetCustomFieldFormName repository.
         /// </summary>
-        private readonly IGetCustomFieldFormNameRepository repository;
+        private IGetCustomFieldFormNameRepository repository;
 
         public class Annotation
         {
@@ -54,29 +36,26 @@ namespace Frapid.Config.Api
 
         public GetCustomFieldFormNameController()
         {
-            this._LoginId = AppUsers.GetCurrent().View.LoginId.To<long>();
-            this._UserId = AppUsers.GetCurrent().View.UserId.To<int>();
-            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
-            this._Catalog = AppUsers.GetCatalog();
-
-            this.repository = new GetCustomFieldFormNameProcedure
-            {
-                _Catalog = this._Catalog,
-                _LoginId = this._LoginId,
-                _UserId = this._UserId
-            };
         }
 
-        public GetCustomFieldFormNameController(IGetCustomFieldFormNameRepository repository, string catalog, LoginView view)
+        public GetCustomFieldFormNameController(IGetCustomFieldFormNameRepository repository)
         {
-            this._LoginId = view.LoginId.To<long>();
-            this._UserId = view.UserId.To<int>();
-            this._OfficeId = view.OfficeId.To<int>();
-            this._Catalog = catalog;
-
             this.repository = repository;
         }
 
+        protected override void Initialize(HttpControllerContext context)
+        {
+            base.Initialize(context);
+            if (this.repository == null)
+            {
+                this.repository = new GetCustomFieldFormNameProcedure
+                {
+                    _Catalog = this.MetaUser.Catalog,
+                    _LoginId = this.MetaUser.LoginId,
+                    _UserId = this.MetaUser.UserId
+                };
+            }
+        }
         /// <summary>
         ///     Creates meta information of "get custom field form name" annotation.
         /// </summary>
@@ -84,19 +63,26 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("annotation")]
         [Route("~/api/config/procedures/get-custom-field-form-name/annotation")]
-        [Authorize]
+        [RestAuthorize]
         public EntityView GetAnnotation()
         {
-            if (this._LoginId == 0)
-            {
-                return new EntityView();
-            }
             return new EntityView
             {
                 Columns = new List<EntityColumn>()
-                                {
-                                        new EntityColumn { ColumnName = "_table_name",  PropertyName = "TableName",  DataType = "string",  DbDataType = "character varying",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
-                                }
+                {
+                        new EntityColumn
+                        {
+                                ColumnName = "_table_name",
+                                PropertyName = "TableName",
+                                DataType = "string",
+                                DbDataType = "character varying",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        }
+                }
             };
         }
 
@@ -106,7 +92,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("execute")]
         [Route("~/api/config/procedures/get-custom-field-form-name/execute")]
-        [Authorize]
+        [RestAuthorize]
         public string Execute([FromBody] Annotation annotation)
         {
             try

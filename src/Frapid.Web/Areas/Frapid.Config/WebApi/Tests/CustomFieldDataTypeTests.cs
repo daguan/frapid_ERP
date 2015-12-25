@@ -21,7 +21,7 @@ namespace Frapid.Config.Api.Tests
     {
         public static CustomFieldDataTypeController Fixture()
         {
-            CustomFieldDataTypeController controller = new CustomFieldDataTypeController(new CustomFieldDataTypeRepository(), "", new LoginView());
+            CustomFieldDataTypeController controller = new CustomFieldDataTypeController(new CustomFieldDataTypeRepository());
             return controller;
         }
 

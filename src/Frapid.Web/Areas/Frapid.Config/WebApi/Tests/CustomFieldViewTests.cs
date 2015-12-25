@@ -19,7 +19,7 @@ namespace Frapid.Config.Api.Tests
     {
         public static CustomFieldViewController Fixture()
         {
-            CustomFieldViewController controller = new CustomFieldViewController(new CustomFieldViewRepository(), "", new LoginView());
+            CustomFieldViewController controller = new CustomFieldViewController(new CustomFieldViewRepository());
             return controller;
         }
 

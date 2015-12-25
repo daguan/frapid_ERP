@@ -1,17 +1,17 @@
 ﻿function loadMeta(callback) {
     function request() {
-        var api = scrudFactory.formAPI;
+        var api = window.scrudFactory.formAPI;
 
         if (typeof (api) === "undefined") {
-            api = scrudFactory.viewAPI;
+            api = window.scrudFactory.viewAPI;
         };
 
         var url = api + "/meta";
         return getAjaxRequest(url);
     };
 
-    if (scrudFactory.ignoreMeta) {
-        metaDefinition = [];
+    if (window.scrudFactory.ignoreMeta) {
+        window.metaDefinition = [];
         if (typeof (callback) === "function") {
             callback();
         };
@@ -22,7 +22,7 @@
     var getMetaAjax = request();
 
     getMetaAjax.success(function (response) {
-        metaDefinition = response;
+        window.metaDefinition = response;
         if (typeof (callback) === "function") {
             callback();
         };

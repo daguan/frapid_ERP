@@ -4,4 +4,4 @@ Welcome to frapid.
 
 # Developer Guide
 
-Please follow the [documentation](docs/developer/index.md)
+Please follow the [documentation](docs/developer/readme.md)

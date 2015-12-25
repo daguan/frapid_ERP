@@ -11,8 +11,16 @@ CREATE TABLE account.roles
                                             DEFAULT(NOW())    
 );
 
-ALTER TABLE config.default_entity_access
-ADD FOREIGN KEY(role_id) REFERENCES account.roles;
+CREATE TABLE account.installed_domains
+(
+    domain_id                               SERIAL NOT NULL PRIMARY KEY,
+    domain_name                             national character varying(500),
+    admin_email                             national character varying(500)
+);
+
+CREATE UNIQUE INDEX installed_domains_domain_name_uix
+ON account.installed_domains(LOWER(domain_name));
+
 
 CREATE TABLE account.configuration_profiles
 (
@@ -20,7 +28,7 @@ CREATE TABLE account.configuration_profiles
     profile_name                            national character varying(100) NOT NULL UNIQUE,
     is_active                               boolean NOT NULL DEFAULT(true),    
     allow_registration                      boolean NOT NULL DEFAULT(true),
-    registration_office_id                  integer NOT NULL REFERENCES config.offices,
+    registration_office_id                  integer NOT NULL REFERENCES core.offices,
     registration_role_id                    integer NOT NULL REFERENCES account.roles,
     allow_facebook_registration             boolean NOT NULL DEFAULT(true),
     allow_google_registration               boolean NOT NULL DEFAULT(true),
@@ -60,7 +68,7 @@ CREATE TABLE account.users
     user_id                                 SERIAL PRIMARY KEY,
     email                                   national character varying(100) NOT NULL,
     password                                text,
-    office_id                               integer NOT NULL REFERENCES config.offices,
+    office_id                               integer NOT NULL REFERENCES core.offices,
     role_id                                 integer NOT NULL REFERENCES account.roles,
     name                                    national character varying(100),
     phone                                   national character varying(100),
@@ -74,48 +82,11 @@ CREATE TABLE account.users
 CREATE UNIQUE INDEX users_email_uix
 ON account.users(LOWER(email));
 
-ALTER TABLE config.entity_access
-ADD FOREIGN KEY(user_id) REFERENCES account.users;
-
-ALTER TABLE config.default_entity_access
+ALTER TABLE account.configuration_profiles
 ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
 
-ALTER TABLE config.entity_access
+ALTER TABLE account.roles
 ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
-
-ALTER TABLE website.contents
-ADD FOREIGN KEY(author_id) REFERENCES account.users;
-
-ALTER TABLE website.contacts
-ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
-
-ALTER TABLE website.menus
-ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
-
-ALTER TABLE website.menu_items
-ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
-
-ALTER TABLE website.menu_items
-ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
-
-ALTER TABLE config.filters
-ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
-
-ALTER TABLE config.kanbans
-ADD FOREIGN KEY(user_id) REFERENCES account.users;
-
-ALTER TABLE config.kanbans
-ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
-
-ALTER TABLE config.kanban_details
-ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
-
-ALTER TABLE config.flag_types
-ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
-
-ALTER TABLE config.flags
-ADD FOREIGN KEY(user_id) REFERENCES account.users;
-
 
 CREATE TABLE account.reset_requests
 (
@@ -131,25 +102,7 @@ CREATE TABLE account.reset_requests
     confirmed_on                            TIMESTAMP WITH TIME ZONE
 );
 
-ALTER TABLE config.currencies
-ADD CONSTRAINT currencies_users_fk
-FOREIGN KEY(audit_user_id)
-REFERENCES account.users;
 
-ALTER TABLE config.offices
-ADD CONSTRAINT offices_users_fk
-FOREIGN KEY(audit_user_id)
-REFERENCES account.users;
-
-ALTER TABLE account.configuration_profiles
-ADD CONSTRAINT configuration_profiles_users_fk
-FOREIGN KEY(audit_user_id)
-REFERENCES account.users;
-
-ALTER TABLE account.roles
-ADD CONSTRAINT roles_users_fk
-FOREIGN KEY(audit_user_id)
-REFERENCES account.users;
 
 
 CREATE TABLE account.fb_access_tokens
@@ -170,10 +123,63 @@ CREATE TABLE account.logins
 (
     login_id                                BIGSERIAL PRIMARY KEY,
     user_id                                 integer REFERENCES account.users,
-    office_id                               integer REFERENCES config.offices,
+    office_id                               integer REFERENCES core.offices,
     browser                                 text,
     ip_address                              national character varying(50),
+    is_active                               boolean NOT NULL DEFAULT(true),
     login_timestamp                         TIMESTAMP WITH TIME ZONE NOT NULL 
                                             DEFAULT(NOW()),
     culture                                 national character varying(12) NOT NULL    
 );
+
+DROP TABLE IF EXISTS account.access_tokens;
+DROP TABLE IF EXISTS account.applications;
+
+CREATE TABLE account.applications
+(
+    application_id                              uuid DEFAULT(gen_random_uuid()) PRIMARY KEY,
+    application_name                            national character varying(100) NOT NULL,
+    display_name                                national character varying(100),
+    version_number                              national character varying(100),
+    publisher                                   national character varying(100) NOT NULL,
+    published_on                                date,
+    application_url                             national character varying(500),
+    description                                 text,
+    browser_based_app                           boolean NOT NULL,
+    privacy_policy_url                          national character varying(500),
+    terms_of_service_url                        national character varying(500),
+    support_email                               national character varying(100),
+    culture                                     national character varying(12),
+    redirect_url                                national character varying(500),
+    app_secret                                  text UNIQUE,
+    audit_user_id                               integer REFERENCES account.users,
+    audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
+                                                DEFAULT(NOW())        
+);
+
+CREATE UNIQUE INDEX applications_app_name_uix
+ON account.applications(LOWER(application_name));
+
+CREATE TABLE account.access_tokens
+(
+    access_token_id                             uuid DEFAULT(gen_random_uuid()) PRIMARY KEY,
+    issued_by                                   text NOT NULL,
+    audience                                    text NOT NULL,
+    ip_address                                  text,
+    user_agent                                  text,
+    header                                      text,
+    subject                                     text,
+    token_id                                    text,
+    application_id                              uuid NULL REFERENCES account.applications,
+    login_id                                    bigint NOT NULL REFERENCES account.logins,
+    client_token                                text NOT NULL UNIQUE,
+    claims                                      text,
+    created_on                                  TIMESTAMP WITH TIME ZONE NOT NULL,
+    expires_on                                  TIMESTAMP WITH TIME ZONE NOT NULL,
+    revoked                                     boolean NOT NULL DEFAULT(false),
+    revoked_by                                  integer REFERENCES account.users,
+    revoked_on                                  TIMESTAMP WITH TIME ZONE
+);
+
+CREATE INDEX access_tokens_token_info_inx
+ON account.access_tokens(client_token, ip_address, user_agent);

@@ -1,7 +1,7 @@
 ﻿function getKeyColumnPosition() {
-    if (typeof (scrudFactory.keyColumnPosition) === "undefined") {
-        scrudFactory.keyColumnPosition = "3";
+    if (typeof (window.scrudFactory.keyColumnPosition) === "undefined") {
+        window.scrudFactory.keyColumnPosition = "3";
     };
 
-    return scrudFactory.keyColumnPosition;
+    return window.scrudFactory.keyColumnPosition;
 };

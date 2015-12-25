@@ -8,7 +8,7 @@ namespace Frapid.Dashboard.DAL
     {
         public static IEnumerable<DTO.App> Get()
         {
-            const string sql = "SELECT * FROM config.apps;";
+            const string sql = "SELECT * FROM core.apps;";
             return Factory.Get<DTO.App>(AppUsers.GetCatalog(), sql);
         }
     }

@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static CompleteResetController Fixture()
         {
-            CompleteResetController controller = new CompleteResetController(new CompleteResetRepository(), "", new LoginView());
+            CompleteResetController controller = new CompleteResetController(new CompleteResetRepository());
             return controller;
         }
 

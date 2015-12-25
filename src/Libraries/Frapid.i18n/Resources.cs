@@ -270,6 +270,28 @@ namespace Frapid.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Add a Kanban List
+		/// </summary>
+		public static string AddAKanbanList 
+		{
+			get
+			{
+				return Get("AddAKanbanList");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Add New
+		/// </summary>
+		public static string AddNew 
+		{
+			get
+			{
+				return Get("AddNew");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Add New Checklist
 		/// </summary>
 		public static string AddNewChecklist 
@@ -277,6 +299,28 @@ namespace Frapid.i18n.Resources
 			get
 			{
 				return Get("AddNewChecklist");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for And
+		/// </summary>
+		public static string And 
+		{
+			get
+			{
+				return Get("And");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Approve
+		/// </summary>
+		public static string Approve 
+		{
+			get
+			{
+				return Get("Approve");
 			}
 		}
 		
@@ -292,6 +336,83 @@ namespace Frapid.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Cancel
+		/// </summary>
+		public static string Cancel 
+		{
+			get
+			{
+				return Get("Cancel");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Close
+		/// </summary>
+		public static string Close 
+		{
+			get
+			{
+				return Get("Close");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Column Name
+		/// </summary>
+		public static string ColumnName 
+		{
+			get
+			{
+				return Get("ColumnName");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Condition
+		/// </summary>
+		public static string Condition 
+		{
+			get
+			{
+				return Get("Condition");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Create a Flag
+		/// </summary>
+		public static string CreateAFlag 
+		{
+			get
+			{
+				return Get("CreateAFlag");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Create Duplicate
+		/// </summary>
+		public static string CreateDuplicate 
+		{
+			get
+			{
+				return Get("CreateDuplicate");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Create New
+		/// </summary>
+		public static string CreateNew 
+		{
+			get
+			{
+				return Get("CreateNew");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Custom Fields
 		/// </summary>
 		public static string CustomFields 
@@ -299,6 +420,17 @@ namespace Frapid.i18n.Resources
 			get
 			{
 				return Get("CustomFields");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Data Import
+		/// </summary>
+		public static string DataImport 
+		{
+			get
+			{
+				return Get("DataImport");
 			}
 		}
 		
@@ -325,6 +457,17 @@ namespace Frapid.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Description
+		/// </summary>
+		public static string Description 
+		{
+			get
+			{
+				return Get("Description");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Edit
 		/// </summary>
 		public static string Edit 
@@ -347,6 +490,215 @@ namespace Frapid.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Export
+		/// </summary>
+		public static string Export 
+		{
+			get
+			{
+				return Get("Export");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Export Data
+		/// </summary>
+		public static string ExportData 
+		{
+			get
+			{
+				return Get("ExportData");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Export This Document
+		/// </summary>
+		public static string ExportThisDocument 
+		{
+			get
+			{
+				return Get("ExportThisDocument");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Export to Doc
+		/// </summary>
+		public static string ExportToDoc 
+		{
+			get
+			{
+				return Get("ExportToDoc");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Export to Excel
+		/// </summary>
+		public static string ExportToExcel 
+		{
+			get
+			{
+				return Get("ExportToExcel");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Export to PDF
+		/// </summary>
+		public static string ExportToPDF 
+		{
+			get
+			{
+				return Get("ExportToPDF");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Filter
+		/// </summary>
+		public static string Filter 
+		{
+			get
+			{
+				return Get("Filter");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Filter Condition
+		/// </summary>
+		public static string FilterCondition 
+		{
+			get
+			{
+				return Get("FilterCondition");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Filter Name
+		/// </summary>
+		public static string FilterName 
+		{
+			get
+			{
+				return Get("FilterName");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for First
+		/// </summary>
+		public static string First 
+		{
+			get
+			{
+				return Get("First");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Flag
+		/// </summary>
+		public static string Flag 
+		{
+			get
+			{
+				return Get("Flag");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Import Data
+		/// </summary>
+		public static string ImportData 
+		{
+			get
+			{
+				return Get("ImportData");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for KanbanId
+		/// </summary>
+		public static string KanbanId 
+		{
+			get
+			{
+				return Get("KanbanId");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for KanbanName
+		/// </summary>
+		public static string KanbanName 
+		{
+			get
+			{
+				return Get("KanbanName");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Last
+		/// </summary>
+		public static string Last 
+		{
+			get
+			{
+				return Get("Last");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Loading
+		/// </summary>
+		public static string Loading 
+		{
+			get
+			{
+				return Get("Loading");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Make As Default
+		/// </summary>
+		public static string MakeAsDefault 
+		{
+			get
+			{
+				return Get("MakeAsDefault");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Manage Filters
+		/// </summary>
+		public static string ManageFilters 
+		{
+			get
+			{
+				return Get("ManageFilters");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Next
+		/// </summary>
+		public static string Next 
+		{
+			get
+			{
+				return Get("Next");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for No
 		/// </summary>
 		public static string No 
@@ -365,6 +717,17 @@ namespace Frapid.i18n.Resources
 			get
 			{
 				return Get("None");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for OK
+		/// </summary>
+		public static string OK 
+		{
+			get
+			{
+				return Get("OK");
 			}
 		}
 		
@@ -402,6 +765,28 @@ namespace Frapid.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Previous
+		/// </summary>
+		public static string Previous 
+		{
+			get
+			{
+				return Get("Previous");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Print
+		/// </summary>
+		public static string Print 
+		{
+			get
+			{
+				return Get("Print");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Rating
 		/// </summary>
 		public static string Rating 
@@ -409,6 +794,50 @@ namespace Frapid.i18n.Resources
 			get
 			{
 				return Get("Rating");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Reason
+		/// </summary>
+		public static string Reason 
+		{
+			get
+			{
+				return Get("Reason");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Reject
+		/// </summary>
+		public static string Reject 
+		{
+			get
+			{
+				return Get("Reject");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Remove As Default
+		/// </summary>
+		public static string RemoveAsDefault 
+		{
+			get
+			{
+				return Get("RemoveAsDefault");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Return to View
+		/// </summary>
+		public static string ReturnToView 
+		{
+			get
+			{
+				return Get("ReturnToView");
 			}
 		}
 		
@@ -435,6 +864,17 @@ namespace Frapid.i18n.Resources
 		}
 		
 		/// <summary>
+		///   Localized string for Save This Filter
+		/// </summary>
+		public static string SaveThisFilter 
+		{
+			get
+			{
+				return Get("SaveThisFilter");
+			}
+		}
+		
+		/// <summary>
 		///   Localized string for Select
 		/// </summary>
 		public static string Select 
@@ -442,6 +882,17 @@ namespace Frapid.i18n.Resources
 			get
 			{
 				return Get("Select");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Select a Column
+		/// </summary>
+		public static string SelectAColumn 
+		{
+			get
+			{
+				return Get("SelectAColumn");
 			}
 		}
 		
@@ -464,17 +915,6 @@ namespace Frapid.i18n.Resources
 			get
 			{
 				return Get("SignIn");
-			}
-		}
-		
-		/// <summary>
-		///   Localized string for Task Completed Successfully
-		/// </summary>
-		public static string TaskCompletedSuccessfully 
-		{
-			get
-			{
-				return Get("TaskCompletedSuccessfully");
 			}
 		}
 		
@@ -508,6 +948,28 @@ namespace Frapid.i18n.Resources
 			get
 			{
 				return Get("Username");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Value
+		/// </summary>
+		public static string Value 
+		{
+			get
+			{
+				return Get("Value");
+			}
+		}
+		
+		/// <summary>
+		///   Localized string for Verification
+		/// </summary>
+		public static string Verification 
+		{
+			get
+			{
+				return Get("Verification");
 			}
 		}
 		

@@ -21,7 +21,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static ConfigurationProfileController Fixture()
         {
-            ConfigurationProfileController controller = new ConfigurationProfileController(new ConfigurationProfileRepository(), "", new LoginView());
+            ConfigurationProfileController controller = new ConfigurationProfileController(new ConfigurationProfileRepository());
             return controller;
         }
 

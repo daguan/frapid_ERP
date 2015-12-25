@@ -12,7 +12,7 @@ namespace Frapid.Config.Api.Tests
     {
         public static GetUserIdByLoginIdController Fixture()
         {
-            GetUserIdByLoginIdController controller = new GetUserIdByLoginIdController(new GetUserIdByLoginIdRepository(), "", new LoginView());
+            GetUserIdByLoginIdController controller = new GetUserIdByLoginIdController(new GetUserIdByLoginIdRepository());
             return controller;
         }
 

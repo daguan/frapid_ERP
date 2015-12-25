@@ -21,33 +21,32 @@ var getData = function (data) {
 };
 
 
+function getHeaders() {
+    var headers = {};
 
-var getAjax = function (url, data) {
-    var ajax;
-
-    if (data) {
-        ajax = $.ajax({
-            type: "POST",
-            url: url,
-            data: data,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json"
-        });
-    } else {
-        ajax = $.ajax({
-            type: "POST",
-            url: url,
-            data: "{}",
-            contentType: "application/json; charset=utf-8",
-            dataType: "json"
-        });
+    function getRequestVerificationToken() {
+        return $("[name=__RequestVerificationToken]").val();
     };
 
-    ajax.fail(function(xhr) {
-        logAjaxErrorMessage(xhr);
-    });
+    function getAccessToken() {
+        return localStorage.getItem("access_token");
+    };
 
-    return ajax;
+    function addHeader(name, value) {
+        if (name) {
+            headers[name] = value;
+        };
+    };
+
+
+    var token = getAccessToken();
+
+    if (token) {
+        addHeader("Authorization", "Bearer " + token);
+    };
+
+    addHeader("RequestVerificationToken", getRequestVerificationToken());
+    return headers;
 };
 
 var getAjaxRequest = function (url, type, data, bodyPost) {
@@ -63,6 +62,7 @@ var getAjaxRequest = function (url, type, data, bodyPost) {
         ajax = $.ajax({
             type: type,
             url: url,
+            headers: getHeaders(),
             data: data,
             contentType: "application/json; charset=utf-8",
             dataType: "json"
@@ -77,30 +77,6 @@ var getAjaxRequest = function (url, type, data, bodyPost) {
     });
 
     return ajax;
-};
-
-var ajaxUpdateVal = function (url, data, targetControls) {
-    var ajax;
-
-    if (data) {
-        ajax = getAjax(url, data);
-    } else {
-        ajax = getAjax(url);
-    };
-
-    ajax.success(function (msg) {
-        targetControls.each(function () {
-            $(this).val(msg.d).trigger('change');
-        });
-
-        if (typeof window.ajaxUpdateValCallback == "function") {
-            window.ajaxUpdateValCallback(targetControls);
-        };
-    });
-
-    ajax.error(function (xhr) {
-        logAjaxErrorMessage(xhr);
-    });
 };
 
 jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, keyField, valueField, isArray) {

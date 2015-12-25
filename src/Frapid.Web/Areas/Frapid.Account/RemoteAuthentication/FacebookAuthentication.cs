@@ -6,7 +6,6 @@ using Frapid.Account.DTO;
 using Frapid.Account.InputModels;
 using Frapid.Account.Messaging;
 using Frapid.Account.Models;
-using Registration = Frapid.Account.DAL.Registration;
 
 namespace Frapid.Account.RemoteAuthentication
 {
@@ -50,7 +49,7 @@ namespace Frapid.Account.RemoteAuthentication
 
             if (result.Status)
             {
-                if (!Registration.HasAccount(account.Email))
+                if (!Registrations.HasAccount(account.Email))
                 {
                     string template = "~/Catalogs/{catalog}/Areas/Frapid.Account/EmailTemplates/welcome-email-other.html";
                     var welcomeEmail = new WelcomeEmail(facebookUser, template, ProviderName);

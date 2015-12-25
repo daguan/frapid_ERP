@@ -16,7 +16,7 @@
 
 function loadAnnotation() {
     function request() {
-        var url = scrudFactory.viewAPI + "/annotation";
+        var url = window.scrudFactory.viewAPI + "/annotation";
         return getAjaxRequest(url);
     };
 
@@ -26,18 +26,18 @@ function loadAnnotation() {
 
     var ajax = request();
     ajax.success(function (response) {
-        if (!annotationLoaded) {
+        if (!window.annotationLoaded) {
             createAnnotationFields(response);
         };
 
-        annotationLoaded = true;
+        window.annotationLoaded = true;
     });
 };
 
 function createAnnotationFields(annotation) {
     $.each(annotation.Columns, function (i, v) {
-        if (scrudFactory.hiddenAnnotation) {
-            var isHidden = Enumerable.From(scrudFactory.hiddenAnnotation).Where(function (x) { return x === v.PropertyName; }).Count() === 1;
+        if (window.scrudFactory.hiddenAnnotation) {
+            var isHidden = Enumerable.From(window.scrudFactory.hiddenAnnotation).Where(function (x) { return x === v.PropertyName; }).Count() === 1;
             annotation.Columns[i].IsHidden = isHidden;
         };
     });
@@ -95,8 +95,8 @@ function addAnnotationField(item, fields, hidden) {
     var el = getField(item.PropertyName, type, true);
     el.attr("placeholder", item.PropertyName);
 
-    if (scrudFactory.defaultAnnotation) {
-        var defaultValue = Enumerable.From(scrudFactory.defaultAnnotation).Where(function (x) { return x.key === item.PropertyName; }).ToArray()[0];
+    if (window.scrudFactory.defaultAnnotation) {
+        var defaultValue = Enumerable.From(window.scrudFactory.defaultAnnotation).Where(function (x) { return x.key === item.PropertyName; }).ToArray()[0];
         var queryValue = getQueryStringByName("Annotation" + item.PropertyName);
 
         if (queryValue) {
@@ -123,7 +123,7 @@ function addAnnotationField(item, fields, hidden) {
 
 function executeFunction() {
     function request(annotation) {
-        var url = scrudFactory.viewAPI + "/execute";
+        var url = window.scrudFactory.viewAPI + "/execute";
         var data = JSON.stringify(annotation);
 
         return getAjaxRequest(url, "POST", data);

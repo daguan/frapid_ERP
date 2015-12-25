@@ -1,6 +1,3 @@
-INSERT INTO config.offices(office_code, office_name)
-SELECT 'DEF', 'Default';
-
 DO
 $$
 BEGIN

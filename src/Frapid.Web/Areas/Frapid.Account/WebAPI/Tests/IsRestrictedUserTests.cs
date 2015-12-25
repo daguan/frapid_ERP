@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static IsRestrictedUserController Fixture()
         {
-            IsRestrictedUserController controller = new IsRestrictedUserController(new IsRestrictedUserRepository(), "", new LoginView());
+            IsRestrictedUserController controller = new IsRestrictedUserController(new IsRestrictedUserRepository());
             return controller;
         }
 

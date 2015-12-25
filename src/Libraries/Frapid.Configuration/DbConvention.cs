@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Runtime.CompilerServices;
+﻿using System.Linq;
 using System.Web;
 
 namespace Frapid.Configuration
@@ -38,7 +36,7 @@ namespace Frapid.Configuration
 
             var serializer = new DomainSerializer("domains-approved.json");
 
-            return serializer.Get().Select(GetDbNameByConvention).Any(c => catalog.Equals(c));
+            return serializer.Get().Any(domain => GetDbNameByConvention(domain.DomainName) == catalog);
         }
 
         public static string GetCatalog(string url = "")

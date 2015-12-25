@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Http.Dispatcher;
-using Frapid.Framework;
+using Frapid.WebApi;
 
 namespace Frapid.Web
 {

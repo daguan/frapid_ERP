@@ -12,7 +12,7 @@ namespace Frapid.WebsiteBuilder.Api.Tests
     {
         public static AddEmailSubscriptionController Fixture()
         {
-            AddEmailSubscriptionController controller = new AddEmailSubscriptionController(new AddEmailSubscriptionRepository(), "", new LoginView());
+            AddEmailSubscriptionController controller = new AddEmailSubscriptionController(new AddEmailSubscriptionRepository());
             return controller;
         }
 

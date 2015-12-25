@@ -14,12 +14,12 @@ SELECT
     account.logins.login_timestamp,
     account.logins.culture,
     account.logins.office_id,
-    config.offices.office_name,
-    config.offices.office_code || ' (' || config.offices.office_name || ')' AS office
+    core.offices.office_name,
+    core.offices.office_code || ' (' || core.offices.office_name || ')' AS office
 FROM account.logins
 INNER JOIN account.users
 ON account.users.user_id = account.logins.user_id
 INNER JOIN account.roles
 ON account.roles.role_id = account.users.role_id
-INNER JOIN config.offices
-ON config.offices.office_id = account.logins.office_id;
+INNER JOIN core.offices
+ON core.offices.office_id = account.logins.office_id;

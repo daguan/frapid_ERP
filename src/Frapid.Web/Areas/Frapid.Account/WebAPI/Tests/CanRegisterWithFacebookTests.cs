@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static CanRegisterWithFacebookController Fixture()
         {
-            CanRegisterWithFacebookController controller = new CanRegisterWithFacebookController(new CanRegisterWithFacebookRepository(), "", new LoginView());
+            CanRegisterWithFacebookController controller = new CanRegisterWithFacebookController(new CanRegisterWithFacebookRepository());
             return controller;
         }
 

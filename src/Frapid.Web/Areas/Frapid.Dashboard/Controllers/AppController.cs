@@ -7,7 +7,7 @@ namespace Frapid.Dashboard.Controllers
     public class AppController : FrapidController
     {
         [Route("dashboard/my/apps")]
-        [Authorize]
+        [RestrictAnonymous]
         public ActionResult GetApps()
         {
             return Json(App.Get(), JsonRequestBehavior.AllowGet);

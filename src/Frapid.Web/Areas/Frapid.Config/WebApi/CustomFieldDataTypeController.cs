@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
+using Frapid.WebApi;
 
 namespace Frapid.Config.Api
 {
@@ -25,37 +27,31 @@ namespace Frapid.Config.Api
         /// <summary>
         ///     The CustomFieldDataType repository.
         /// </summary>
-        private readonly ICustomFieldDataTypeRepository CustomFieldDataTypeRepository;
+        private ICustomFieldDataTypeRepository CustomFieldDataTypeRepository;
 
         public CustomFieldDataTypeController()
         {
-            this._LoginId = AppUsers.GetCurrent().View.LoginId.To<long>();
-            this._UserId = AppUsers.GetCurrent().View.UserId.To<int>();
-            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
-            this._Catalog = AppUsers.GetCatalog();
-
-            this.CustomFieldDataTypeRepository = new Frapid.Config.DataAccess.CustomFieldDataType
-            {
-                _Catalog = this._Catalog,
-                _LoginId = this._LoginId,
-                _UserId = this._UserId
-            };
         }
 
-        public CustomFieldDataTypeController(ICustomFieldDataTypeRepository repository, string catalog, LoginView view)
+        public CustomFieldDataTypeController(ICustomFieldDataTypeRepository repository)
         {
-            this._LoginId = view.LoginId.To<long>();
-            this._UserId = view.UserId.To<int>();
-            this._OfficeId = view.OfficeId.To<int>();
-            this._Catalog = catalog;
-
             this.CustomFieldDataTypeRepository = repository;
         }
 
-        public long _LoginId { get; }
-        public int _UserId { get; private set; }
-        public int _OfficeId { get; private set; }
-        public string _Catalog { get; }
+        protected override void Initialize(HttpControllerContext context)
+        {
+            base.Initialize(context);
+
+            if (this.CustomFieldDataTypeRepository == null)
+            {
+                this.CustomFieldDataTypeRepository = new Frapid.Config.DataAccess.CustomFieldDataType
+                {
+                    _Catalog = this.MetaUser.Catalog,
+                    _LoginId = this.MetaUser.LoginId,
+                    _UserId = this.MetaUser.UserId
+                };
+            }
+        }
 
         /// <summary>
         ///     Creates meta information of "custom field data type" entity.
@@ -64,25 +60,75 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("meta")]
         [Route("~/api/config/custom-field-data-type/meta")]
-        [Authorize]
+        [RestAuthorize]
         public EntityView GetEntityView()
         {
-            if (this._LoginId == 0)
-            {
-                return new EntityView();
-            }
-
             return new EntityView
             {
                 PrimaryKey = "data_type",
                 Columns = new List<EntityColumn>()
-                                {
-                                        new EntityColumn { ColumnName = "data_type",  PropertyName = "DataType",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = false,  Value = "",  MaxLength = 50 },
-                                        new EntityColumn { ColumnName = "is_number",  PropertyName = "IsNumber",  DataType = "bool",  DbDataType = "bool",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "is_date",  PropertyName = "IsDate",  DataType = "bool",  DbDataType = "bool",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "is_boolean",  PropertyName = "IsBoolean",  DataType = "bool",  DbDataType = "bool",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "is_long_text",  PropertyName = "IsLongText",  DataType = "bool",  DbDataType = "bool",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
-                                }
+                {
+                        new EntityColumn
+                        {
+                                ColumnName = "data_type",
+                                PropertyName = "DataType",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = true,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 50
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "is_number",
+                                PropertyName = "IsNumber",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "is_date",
+                                PropertyName = "IsDate",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "is_boolean",
+                                PropertyName = "IsBoolean",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "is_long_text",
+                                PropertyName = "IsLongText",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        }
+                }
             };
         }
 
@@ -93,7 +139,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
         [Route("~/api/config/custom-field-data-type/count")]
-        [Authorize]
+        [RestAuthorize]
         public long Count()
         {
             try
@@ -127,7 +173,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("all")]
         [Route("~/api/config/custom-field-data-type/all")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.CustomFieldDataType> GetAll()
         {
             try
@@ -161,7 +207,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("export")]
         [Route("~/api/config/custom-field-data-type/export")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<dynamic> Export()
         {
             try
@@ -196,7 +242,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("{dataType}")]
         [Route("~/api/config/custom-field-data-type/{dataType}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.CustomFieldDataType Get(string dataType)
         {
             try
@@ -226,7 +272,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get")]
         [Route("~/api/config/custom-field-data-type/get")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.CustomFieldDataType> Get([FromUri] string[] dataTypes)
         {
             try
@@ -260,7 +306,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("first")]
         [Route("~/api/config/custom-field-data-type/first")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.CustomFieldDataType GetFirst()
         {
             try
@@ -295,7 +341,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("previous/{dataType}")]
         [Route("~/api/config/custom-field-data-type/previous/{dataType}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.CustomFieldDataType GetPrevious(string dataType)
         {
             try
@@ -330,7 +376,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("next/{dataType}")]
         [Route("~/api/config/custom-field-data-type/next/{dataType}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.CustomFieldDataType GetNext(string dataType)
         {
             try
@@ -364,7 +410,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("last")]
         [Route("~/api/config/custom-field-data-type/last")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Config.Entities.CustomFieldDataType GetLast()
         {
             try
@@ -398,7 +444,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
         [Route("~/api/config/custom-field-data-type")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.CustomFieldDataType> GetPaginatedResult()
         {
             try
@@ -433,7 +479,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
         [Route("~/api/config/custom-field-data-type/page/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.CustomFieldDataType> GetPaginatedResult(long pageNumber)
         {
             try
@@ -468,7 +514,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/config/custom-field-data-type/count-where")]
-        [Authorize]
+        [RestAuthorize]
         public long CountWhere([FromBody]JArray filters)
         {
             try
@@ -505,7 +551,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/config/custom-field-data-type/get-where/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.CustomFieldDataType> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
@@ -541,7 +587,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count-filtered/{filterName}")]
         [Route("~/api/config/custom-field-data-type/count-filtered/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public long CountFiltered(string filterName)
         {
             try
@@ -577,7 +623,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get-filtered/{pageNumber}/{filterName}")]
         [Route("~/api/config/custom-field-data-type/get-filtered/{pageNumber}/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Config.Entities.CustomFieldDataType> GetFiltered(long pageNumber, string filterName)
         {
             try
@@ -611,7 +657,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
         [Route("~/api/config/custom-field-data-type/display-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
             try
@@ -645,7 +691,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields")]
         [Route("~/api/config/custom-field-data-type/custom-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields()
         {
             try
@@ -679,7 +725,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields/{resourceId}")]
         [Route("~/api/config/custom-field-data-type/custom-fields/{resourceId}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             try
@@ -713,7 +759,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("add-or-edit")]
         [Route("~/api/config/custom-field-data-type/add-or-edit")]
-        [Authorize]
+        [RestAuthorize]
         public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             dynamic customFieldDataType = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
@@ -755,7 +801,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("add/{customFieldDataType}")]
         [Route("~/api/config/custom-field-data-type/add/{customFieldDataType}")]
-        [Authorize]
+        [RestAuthorize]
         public void Add(Frapid.Config.Entities.CustomFieldDataType customFieldDataType)
         {
             if (customFieldDataType == null)
@@ -795,7 +841,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("PUT")]
         [Route("edit/{dataType}")]
         [Route("~/api/config/custom-field-data-type/edit/{dataType}")]
-        [Authorize]
+        [RestAuthorize]
         public void Edit(string dataType, [FromBody] Frapid.Config.Entities.CustomFieldDataType customFieldDataType)
         {
             if (customFieldDataType == null)
@@ -841,7 +887,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("POST")]
         [Route("bulk-import")]
         [Route("~/api/config/custom-field-data-type/bulk-import")]
-        [Authorize]
+        [RestAuthorize]
         public List<object> BulkImport([FromBody]JArray collection)
         {
             List<ExpandoObject> customFieldDataTypeCollection = this.ParseCollection(collection);
@@ -882,7 +928,7 @@ namespace Frapid.Config.Api
         [AcceptVerbs("DELETE")]
         [Route("delete/{dataType}")]
         [Route("~/api/config/custom-field-data-type/delete/{dataType}")]
-        [Authorize]
+        [RestAuthorize]
         public void Delete(string dataType)
         {
             try

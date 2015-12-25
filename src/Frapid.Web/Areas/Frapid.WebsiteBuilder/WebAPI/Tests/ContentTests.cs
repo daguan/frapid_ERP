@@ -21,7 +21,7 @@ namespace Frapid.WebsiteBuilder.Api.Tests
     {
         public static ContentController Fixture()
         {
-            ContentController controller = new ContentController(new ContentRepository(), "", new LoginView());
+            ContentController controller = new ContentController(new ContentRepository());
             return controller;
         }
 

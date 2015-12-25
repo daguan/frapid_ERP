@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.Models;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
+using Frapid.WebApi;
 
 namespace Frapid.Account.Api
 {
@@ -25,37 +27,31 @@ namespace Frapid.Account.Api
         /// <summary>
         ///     The User repository.
         /// </summary>
-        private readonly IUserRepository UserRepository;
+        private IUserRepository UserRepository;
 
         public UserController()
         {
-            this._LoginId = AppUsers.GetCurrent().View.LoginId.To<long>();
-            this._UserId = AppUsers.GetCurrent().View.UserId.To<int>();
-            this._OfficeId = AppUsers.GetCurrent().View.OfficeId.To<int>();
-            this._Catalog = AppUsers.GetCatalog();
-
-            this.UserRepository = new Frapid.Account.DataAccess.User
-            {
-                _Catalog = this._Catalog,
-                _LoginId = this._LoginId,
-                _UserId = this._UserId
-            };
         }
 
-        public UserController(IUserRepository repository, string catalog, LoginView view)
+        public UserController(IUserRepository repository)
         {
-            this._LoginId = view.LoginId.To<long>();
-            this._UserId = view.UserId.To<int>();
-            this._OfficeId = view.OfficeId.To<int>();
-            this._Catalog = catalog;
-
             this.UserRepository = repository;
         }
 
-        public long _LoginId { get; }
-        public int _UserId { get; private set; }
-        public int _OfficeId { get; private set; }
-        public string _Catalog { get; }
+        protected override void Initialize(HttpControllerContext context)
+        {
+            base.Initialize(context);
+
+            if (this.UserRepository == null)
+            {
+                this.UserRepository = new Frapid.Account.DataAccess.User
+                {
+                    _Catalog = this.MetaUser.Catalog,
+                    _LoginId = this.MetaUser.LoginId,
+                    _UserId = this.MetaUser.UserId
+                };
+            }
+        }
 
         /// <summary>
         ///     Creates meta information of "user" entity.
@@ -64,30 +60,135 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("meta")]
         [Route("~/api/account/user/meta")]
-        [Authorize]
+        [RestAuthorize]
         public EntityView GetEntityView()
         {
-            if (this._LoginId == 0)
-            {
-                return new EntityView();
-            }
-
             return new EntityView
             {
                 PrimaryKey = "user_id",
                 Columns = new List<EntityColumn>()
-                                {
-                                        new EntityColumn { ColumnName = "user_id",  PropertyName = "UserId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = true,  IsSerial = true,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "email",  PropertyName = "Email",  DataType = "string",  DbDataType = "varchar",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "password",  PropertyName = "Password",  DataType = "string",  DbDataType = "text",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "office_id",  PropertyName = "OfficeId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "role_id",  PropertyName = "RoleId",  DataType = "int",  DbDataType = "int4",  IsNullable = false,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "name",  PropertyName = "Name",  DataType = "string",  DbDataType = "varchar",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "phone",  PropertyName = "Phone",  DataType = "string",  DbDataType = "varchar",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 100 },
-                                        new EntityColumn { ColumnName = "status",  PropertyName = "Status",  DataType = "bool",  DbDataType = "bool",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "audit_user_id",  PropertyName = "AuditUserId",  DataType = "int",  DbDataType = "int4",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 },
-                                        new EntityColumn { ColumnName = "audit_ts",  PropertyName = "AuditTs",  DataType = "DateTime",  DbDataType = "timestamptz",  IsNullable = true,  IsPrimaryKey = false,  IsSerial = false,  Value = "",  MaxLength = 0 }
-                                }
+                {
+                        new EntityColumn
+                        {
+                                ColumnName = "user_id",
+                                PropertyName = "UserId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = false,
+                                IsPrimaryKey = true,
+                                IsSerial = true,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "email",
+                                PropertyName = "Email",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "password",
+                                PropertyName = "Password",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "office_id",
+                                PropertyName = "OfficeId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "role_id",
+                                PropertyName = "RoleId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "name",
+                                PropertyName = "Name",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "phone",
+                                PropertyName = "Phone",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "status",
+                                PropertyName = "Status",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_user_id",
+                                PropertyName = "AuditUserId",
+                                DataType = "int",
+                                DbDataType = "int4",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "audit_ts",
+                                PropertyName = "AuditTs",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        }
+                }
             };
         }
 
@@ -98,7 +199,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count")]
         [Route("~/api/account/user/count")]
-        [Authorize]
+        [RestAuthorize]
         public long Count()
         {
             try
@@ -132,7 +233,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("all")]
         [Route("~/api/account/user/all")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.User> GetAll()
         {
             try
@@ -166,7 +267,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("export")]
         [Route("~/api/account/user/export")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<dynamic> Export()
         {
             try
@@ -201,7 +302,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("{userId}")]
         [Route("~/api/account/user/{userId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Account.Entities.User Get(int userId)
         {
             try
@@ -231,7 +332,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get")]
         [Route("~/api/account/user/get")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.User> Get([FromUri] int[] userIds)
         {
             try
@@ -265,7 +366,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("first")]
         [Route("~/api/account/user/first")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Account.Entities.User GetFirst()
         {
             try
@@ -300,7 +401,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("previous/{userId}")]
         [Route("~/api/account/user/previous/{userId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Account.Entities.User GetPrevious(int userId)
         {
             try
@@ -335,7 +436,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("next/{userId}")]
         [Route("~/api/account/user/next/{userId}")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Account.Entities.User GetNext(int userId)
         {
             try
@@ -369,7 +470,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("last")]
         [Route("~/api/account/user/last")]
-        [Authorize]
+        [RestAuthorize]
         public Frapid.Account.Entities.User GetLast()
         {
             try
@@ -403,7 +504,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("")]
         [Route("~/api/account/user")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.User> GetPaginatedResult()
         {
             try
@@ -438,7 +539,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("page/{pageNumber}")]
         [Route("~/api/account/user/page/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.User> GetPaginatedResult(long pageNumber)
         {
             try
@@ -473,7 +574,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("POST")]
         [Route("count-where")]
         [Route("~/api/account/user/count-where")]
-        [Authorize]
+        [RestAuthorize]
         public long CountWhere([FromBody]JArray filters)
         {
             try
@@ -510,7 +611,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("POST")]
         [Route("get-where/{pageNumber}")]
         [Route("~/api/account/user/get-where/{pageNumber}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.User> GetWhere(long pageNumber, [FromBody]JArray filters)
         {
             try
@@ -546,7 +647,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("count-filtered/{filterName}")]
         [Route("~/api/account/user/count-filtered/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public long CountFiltered(string filterName)
         {
             try
@@ -582,7 +683,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("get-filtered/{pageNumber}/{filterName}")]
         [Route("~/api/account/user/get-filtered/{pageNumber}/{filterName}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.Account.Entities.User> GetFiltered(long pageNumber, string filterName)
         {
             try
@@ -616,7 +717,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("display-fields")]
         [Route("~/api/account/user/display-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.DisplayField> GetDisplayFields()
         {
             try
@@ -650,7 +751,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields")]
         [Route("~/api/account/user/custom-fields")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields()
         {
             try
@@ -684,7 +785,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("GET", "HEAD")]
         [Route("custom-fields/{resourceId}")]
         [Route("~/api/account/user/custom-fields/{resourceId}")]
-        [Authorize]
+        [RestAuthorize]
         public IEnumerable<Frapid.DataAccess.Models.CustomField> GetCustomFields(string resourceId)
         {
             try
@@ -718,7 +819,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("POST")]
         [Route("add-or-edit")]
         [Route("~/api/account/user/add-or-edit")]
-        [Authorize]
+        [RestAuthorize]
         public object AddOrEdit([FromBody]Newtonsoft.Json.Linq.JArray form)
         {
             dynamic user = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
@@ -760,7 +861,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("POST")]
         [Route("add/{user}")]
         [Route("~/api/account/user/add/{user}")]
-        [Authorize]
+        [RestAuthorize]
         public void Add(Frapid.Account.Entities.User user)
         {
             if (user == null)
@@ -800,7 +901,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("PUT")]
         [Route("edit/{userId}")]
         [Route("~/api/account/user/edit/{userId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Edit(int userId, [FromBody] Frapid.Account.Entities.User user)
         {
             if (user == null)
@@ -846,7 +947,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("POST")]
         [Route("bulk-import")]
         [Route("~/api/account/user/bulk-import")]
-        [Authorize]
+        [RestAuthorize]
         public List<object> BulkImport([FromBody]JArray collection)
         {
             List<ExpandoObject> userCollection = this.ParseCollection(collection);
@@ -887,7 +988,7 @@ namespace Frapid.Account.Api
         [AcceptVerbs("DELETE")]
         [Route("delete/{userId}")]
         [Route("~/api/account/user/delete/{userId}")]
-        [Authorize]
+        [RestAuthorize]
         public void Delete(int userId)
         {
             try

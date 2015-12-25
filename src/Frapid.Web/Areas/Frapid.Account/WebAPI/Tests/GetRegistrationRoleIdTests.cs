@@ -12,7 +12,7 @@ namespace Frapid.Account.Api.Tests
     {
         public static GetRegistrationRoleIdController Fixture()
         {
-            GetRegistrationRoleIdController controller = new GetRegistrationRoleIdController(new GetRegistrationRoleIdRepository(), "", new LoginView());
+            GetRegistrationRoleIdController controller = new GetRegistrationRoleIdController(new GetRegistrationRoleIdRepository());
             return controller;
         }
 

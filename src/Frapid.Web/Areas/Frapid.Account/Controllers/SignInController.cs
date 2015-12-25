@@ -1,17 +1,19 @@
 ﻿using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Web.Mvc;
 using AutoMapper;
+using Frapid.Account.DAL;
 using Frapid.Account.DTO;
 using Frapid.Account.InputModels;
 using Frapid.Account.ViewModels;
+using Frapid.Areas;
 using Frapid.Configuration;
 using Npgsql;
-using Office = Frapid.Account.DAL.Office;
+using SignIn = Frapid.Account.ViewModels.SignIn;
 
 namespace Frapid.Account.Controllers
 {
+    [AntiForgery]
     public class SignInController : BaseAuthenticationController
     {
         [Route("account/sign-in")]
@@ -24,7 +26,7 @@ namespace Frapid.Account.Controllers
                 return Redirect("/dashboard");
             }
 
-            var profile = DAL.Configuration.GetActiveProfile();
+            var profile = ConfigurationProfiles.GetActiveProfile();
             Mapper.CreateMap<ConfigurationProfile, SignIn>();
             var model = Mapper.Map<SignIn>(profile);
 
@@ -37,22 +39,11 @@ namespace Frapid.Account.Controllers
         [AllowAnonymous]
         public ActionResult Do(SignInInfo model)
         {
-            Thread.Sleep(1000);
-
-            string challenge = Session["Challenge"].ToString();
-            if (model.Challenge != challenge)
-            {
-                return Redirect("/");
-            }
-
-            model.Browser = this.RemoteUser.Browser;
-            model.IpAddress = this.RemoteUser.IpAddress;
-
             try
             {
-                var result = DAL.SignIn.Do(model.Email, model.OfficeId, model.Challenge, model.Password,
-                    model.Browser, model.IpAddress, model.Culture);
-                return this.OnAuthenticated(result);
+                var result = DAL.SignIn.Do(model.Email, model.OfficeId, model.Password, this.RemoteUser.Browser,
+                    this.RemoteUser.IpAddress, model.Culture);
+                return this.OnAuthenticated(result, model);
             }
             catch (NpgsqlException)
             {
@@ -65,7 +56,7 @@ namespace Frapid.Account.Controllers
         [AllowAnonymous]
         public ActionResult GetOffices()
         {
-            return Json(Office.GetOffices(), JsonRequestBehavior.AllowGet);
+            return Json(Offices.GetOffices(), JsonRequestBehavior.AllowGet);
         }
 
         [Route("account/sign-in/languages")]

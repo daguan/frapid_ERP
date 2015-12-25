@@ -23,7 +23,7 @@ namespace Frapid.Installer
         {
             var serializer = new DomainSerializer("domains-approved.json");
             var domains = serializer.Get();
-            return domains.Any(domain => DbConvention.GetCatalog(domain) == this.Catalog);
+            return domains.Any(domain => DbConvention.GetCatalog(domain.DomainName) == this.Catalog);
         }
     }
 }
