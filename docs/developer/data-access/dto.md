@@ -6,7 +6,7 @@ Data transfer objects represent database objects instead of Entity Models. The w
 
 DTO classes are representation of database objects, which have ```underscore_separated_lowercase_identifiers```, as shown below
 
-```
+```plpgsql
 CREATE TABLE core.apps
 (
     app_name                national character varying(100) PRIMARY KEY,
@@ -26,7 +26,7 @@ whereas, the DTO classes
 * are decorated with ```"TableName" Attribute```.
 * are decorated with ```"PrimaryKey" Attribute```.
 
-```
+```cs
     [TableName("core.apps")]
     [PrimaryKey("app_name", AutoIncrement = false)]
     public sealed class App : IPoco
