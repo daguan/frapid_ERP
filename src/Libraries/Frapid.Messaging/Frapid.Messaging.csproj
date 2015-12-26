@@ -20,6 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -52,24 +54,25 @@
     <Compile Include="DAL\MailQueue.cs" />
     <Compile Include="DAL\Smtp.cs" />
     <Compile Include="DTO\EmailQueue.cs" />
-    <Compile Include="DTO\Smtp.cs" />
+    <Compile Include="DTO\SmtpConfig.cs" />
     <Compile Include="DTO\EmailMessage.cs" />
-    <Compile Include="EmailHelper.cs" />
+    <Compile Include="Smtp\EmailHelper.cs" />
     <Compile Include="EmailProcessor.cs" />
-    <Compile Include="EmailTemplateProcessor.cs" />
+    <Compile Include="IEmailConfig.cs" />
+    <Compile Include="Templating\MessageTemplateProcessor.cs" />
     <Compile Include="Helpers\AttachmentFactory.cs" />
-    <Compile Include="Helpers\Config.cs" />
-    <Compile Include="ICredentials.cs" />
+    <Compile Include="Smtp\Config.cs" />
+    <Compile Include="Smtp\ICredentials.cs" />
     <Compile Include="IEmailProcessor.cs" />
     <Compile Include="IMessage.cs" />
     <Compile Include="MailQueueManager.cs" />
-    <Compile Include="Processor.cs" />
+    <Compile Include="Smtp\Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SmtpCredentials.cs" />
+    <Compile Include="Smtp\SmtpCredentials.cs" />
     <Compile Include="DTO\SmtpHost.cs" />
     <Compile Include="Status.cs" />
     <Compile Include="Type.cs" />
-    <Compile Include="Validator.cs" />
+    <Compile Include="Smtp\Validator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

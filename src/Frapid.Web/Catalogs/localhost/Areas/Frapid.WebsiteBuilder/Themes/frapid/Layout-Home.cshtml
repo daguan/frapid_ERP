@@ -36,5 +36,6 @@
         @Html.Partial(WebsiteBuilderController.GetLayoutPath() + "/Subscription.cshtml")
     </section>
     @Html.Partial(footer)
+    @Html.AntiForgeryToken()
 </body>
 </html>

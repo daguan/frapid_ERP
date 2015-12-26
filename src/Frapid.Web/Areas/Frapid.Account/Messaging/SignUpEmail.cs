@@ -9,6 +9,7 @@ using Frapid.Account.DTO;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;
 using Frapid.Messaging.Helpers;
+using Frapid.Messaging.Smtp;
 
 namespace Frapid.Account.Messaging
 {
@@ -72,7 +73,7 @@ namespace Frapid.Account.Messaging
             var email = this.GetEmail(this._registration, subject, parsed);
             var queue = new MailQueueManager(catalog, email);
             queue.Add();
-            await queue.ProcessMailQueueAsync(EmailProcessor.GetDefault());
+            await queue.ProcessMailQueueAsync(EmailProcessor.GetDefault(catalog));
         }
     }
 }

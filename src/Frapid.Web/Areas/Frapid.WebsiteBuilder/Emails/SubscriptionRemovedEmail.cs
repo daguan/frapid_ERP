@@ -7,8 +7,6 @@ using System.Web;
 using System.Web.Hosting;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;
-using Frapid.Messaging.Helpers;
-using Frapid.WebsiteBuilder.Entities;
 using Frapid.WebsiteBuilder.ViewModels;
 
 namespace Frapid.WebsiteBuilder.Emails
@@ -41,7 +39,7 @@ namespace Frapid.WebsiteBuilder.Emails
 
         private EmailQueue GetEmail(string catalog, Subscribe model)
         {
-            var config = new Config(catalog);
+            var config = EmailProcessor.GetDefaultConfig(catalog);
             string domain = HttpContext.Current.Request.Url.Host;
             string subject = string.Format(CultureInfo.InvariantCulture, "You are now unsubscribed on {0}", domain);
 
@@ -64,7 +62,7 @@ namespace Frapid.WebsiteBuilder.Emails
                 var manager = new MailQueueManager(catalog, email);
                 manager.Add();
 
-                await manager.ProcessMailQueueAsync(EmailProcessor.GetDefault());
+                await manager.ProcessMailQueueAsync(EmailProcessor.GetDefault(catalog));
             }
             catch
             {

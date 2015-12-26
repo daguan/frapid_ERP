@@ -237,6 +237,13 @@
     <Content Include="Views\SubscriptionEmailTemplate\Shared\Editor.cshtml" />
     <None Include="Views\DashboardSubscription\Index.cshtml" />
     <None Include="Views\SubscriptionEmailTemplate\Welcome.cshtml" />
+    <Content Include="web.config" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -259,7 +266,7 @@
           <IISUrl>http://localhost:51260/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>True</UseCustomServer>
-          <CustomServerUrl>http://localhost</CustomServerUrl>
+          <CustomServerUrl>https://localhost</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

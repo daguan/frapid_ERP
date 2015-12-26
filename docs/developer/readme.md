@@ -7,6 +7,10 @@ licensed under MIT license. Please refer to the file contributing.md on the root
 
 Internationalization is handled by the module `Frapid.i18n`. For more information, read the [internationalization guide](i18n.md).
 
+# Authentication & Authorization 
+- [Preventing Anonymous Access to Controller Actions](auth/restrict-anonymous.md)
+- [Preventing Cross Site Request Forgery Attacks](auth/antiforgery.md)
+
 # Data Access & Restful APIs
 
 Frapid uses database first approach. Please follow these documents for more information:
@@ -18,15 +22,6 @@ Frapid uses database first approach. Please follow these documents for more info
 - [Creating Restful Web API](rest/api.md)
 - [Writing Tests against Web APIs](rest/test.md)
 
-# Frontend Development
-
-For the frontend development tasks, Frapid uses:
-
-- jQuery
-- AngularJS
-- Semantic UI
-- MixERP ScrudFactory framework for CRUD operations.
-- d3 and chartjs for Charting
-- linq.js for client side LINQ
-- papaparse for CSV parsing
-- qunit for writing tests.
+# Frapid Application Samples
+- [Hello World Application](#)
+- [Simple ScrudFactory Application](#)

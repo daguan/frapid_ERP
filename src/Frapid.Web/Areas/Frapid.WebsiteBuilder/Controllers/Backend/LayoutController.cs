@@ -8,6 +8,7 @@ using Frapid.WebsiteBuilder.ViewModels;
 
 namespace Frapid.WebsiteBuilder.Controllers.Backend
 {
+    [AntiForgery]
     public class LayoutController : DashboardController
     {
         [Route("dashboard/website/layouts/master")]

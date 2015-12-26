@@ -9,6 +9,7 @@ using System.Web.Hosting;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;
 using Frapid.Messaging.Helpers;
+using Frapid.Messaging.Smtp;
 using Frapid.WebsiteBuilder.ViewModels;
 
 namespace Frapid.WebsiteBuilder.Emails
@@ -49,8 +50,7 @@ namespace Frapid.WebsiteBuilder.Emails
 
         private string GetEmails(string catalog, int contactId)
         {
-            var config = new Config(catalog);
-
+            var config = EmailProcessor.GetDefaultConfig(catalog);
             var contact = DAL.Contacts.GetContact(contactId);
 
             if (contact == null)
@@ -82,7 +82,7 @@ namespace Frapid.WebsiteBuilder.Emails
                 var manager = new MailQueueManager(catalog, email);
                 manager.Add();
 
-                await manager.ProcessMailQueueAsync(EmailProcessor.GetDefault());
+                await manager.ProcessMailQueueAsync(EmailProcessor.GetDefault(catalog));
             }
             catch
             {

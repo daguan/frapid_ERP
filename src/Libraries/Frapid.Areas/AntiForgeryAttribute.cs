@@ -20,7 +20,6 @@ namespace Frapid.Areas
             if (request.IsAjaxRequest())
             {
                 var antiForgeryCookie = request.Cookies[AntiForgeryConfig.CookieName];
-
                 string cookieValue = antiForgeryCookie?.Value;
                 AntiForgery.Validate(cookieValue, request.Headers["RequestVerificationToken"]);
             }

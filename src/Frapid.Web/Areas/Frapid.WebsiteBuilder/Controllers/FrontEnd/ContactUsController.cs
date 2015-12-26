@@ -1,27 +1,23 @@
-﻿using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
+using Frapid.Areas;
 using Frapid.WebsiteBuilder.DAL;
 using Frapid.WebsiteBuilder.Emails;
 using Frapid.WebsiteBuilder.ViewModels;
 
 namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 {
+    [AntiForgery]
     public class ContactUsController : WebsiteBuilderController
     {
-        private const string TokenKey = "Token";
-
         [Route("contact-us")]
         [AllowAnonymous]
         public ActionResult Index()
         {
-            var model = new ViewModels.ContactUs();
+            var model = new ContactUs();
             var contacts = Contacts.GetContacts();
             model.Contacts = contacts;
-
-            this.Session[TokenKey] = model.Token;
-
             return this.View(this.GetRazorView<AreaRegistration>("ContactUs/Index.cshtml"), model);
         }
 
@@ -30,12 +26,6 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [HttpPost]
         public async Task<ActionResult> SendEmailAsync(ContactForm model)
         {
-            string token = this.Session[TokenKey].ToString();
-            if (token != model.Token)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
             model.Subject = "Contact Form : " + model.Subject;
             string catalog = AppUsers.GetCatalog();
             await new ContactUsEmail().SendAsync(catalog, model);

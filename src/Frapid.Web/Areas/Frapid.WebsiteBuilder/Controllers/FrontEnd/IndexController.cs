@@ -7,16 +7,10 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 {
     public class IndexController : WebsiteBuilderController
     {
-        private const string TokenKey = "Token";
-
         [Route("")]
         [Route("site/{categoryAlias}/{alias}")]
         public ActionResult Index(string categoryAlias = "", string alias = "")
         {
-            string token = Guid.NewGuid().ToString();
-            this.Session[TokenKey] = token;
-            this.ViewBag.Token = token;
-
             var content = DAL.Contents.GetPublished(categoryAlias, alias);
             Mapper.CreateMap<PublishedContentView, ViewModels.Content>();
             var model = Mapper.Map<ViewModels.Content>(content);

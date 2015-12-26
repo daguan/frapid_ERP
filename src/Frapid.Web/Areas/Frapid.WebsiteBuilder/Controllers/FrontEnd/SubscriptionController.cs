@@ -1,27 +1,24 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
+using Frapid.Areas;
 using Frapid.WebsiteBuilder.DAL;
 using Frapid.WebsiteBuilder.Emails;
 using Frapid.WebsiteBuilder.ViewModels;
 
 namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 {
+    [AntiForgery]
     public class SubscriptionController : WebsiteBuilderController
     {
-        private const string TokenKey = "Token";
-
         [Route("subscription/add")]
         [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult> AddAsync(Subscribe model)
         {
-            string token = this.Session[TokenKey].ToString();
-
             //ConfirmEmailAddress is a honeypot field
-            if (token != model.TokenHidden || !string.IsNullOrWhiteSpace(model.ConfirmEmailAddress))
+            if (!string.IsNullOrWhiteSpace(model.ConfirmEmailAddress))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -41,9 +38,6 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [AllowAnonymous]
         public ActionResult Remove()
         {
-            string token = Guid.NewGuid().ToString();
-            this.Session[TokenKey] = token;
-            this.ViewBag.Token = token;
             return this.View(this.GetRazorView<AreaRegistration>("Subscription/Remove.cshtml"));
         }
 
@@ -52,9 +46,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [HttpPost]
         public async Task<ActionResult> RemoveAsync(Subscribe model)
         {
-            string token = this.Session[TokenKey].ToString();
-
-            if (token != model.TokenHidden || !string.IsNullOrWhiteSpace(model.ConfirmEmailAddress))
+            if (!string.IsNullOrWhiteSpace(model.ConfirmEmailAddress))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }

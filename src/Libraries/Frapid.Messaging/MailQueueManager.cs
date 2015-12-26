@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Frapid.Messaging.DAL;
 using Frapid.Messaging.DTO;
-using Frapid.Messaging.Helpers;
+using Frapid.Messaging.Smtp;
 
 namespace Frapid.Messaging
 {
@@ -35,8 +35,8 @@ namespace Frapid.Messaging
 
         private bool IsEnabled()
         {
-            var config = new Config(this.Catalog);
-            return config.Enabled;
+            var processor = EmailProcessor.GetDefault(this.Catalog);
+            return processor != null && processor.IsEnabled;
         }
 
         public async Task ProcessMailQueueAsync(IEmailProcessor processor)
@@ -49,11 +49,9 @@ namespace Frapid.Messaging
                 foreach (var mail in queue)
                 {
                     var message = EmailHelper.GetMessage(config, mail);
-                    var host = EmailHelper.GetSmtpHost(config);
-                    var credentials = EmailHelper.GetCredentials(config);
                     var attachments = mail.Attachments?.Split(',').ToArray();
 
-                    bool success = await processor.SendAsync(message, host, credentials, false, attachments);
+                    bool success = await processor.SendAsync(message, false, attachments);
 
                     if (!success)
                     {

@@ -3,8 +3,9 @@
     public enum Status
     {
         Unknown = 0,
-        Executing = 1,
-        Completed = 2,
-        Failed = 3
+        Cancelled = 1,
+        Executing = 2,
+        Completed = 3,
+        Failed = 4
     }
 }

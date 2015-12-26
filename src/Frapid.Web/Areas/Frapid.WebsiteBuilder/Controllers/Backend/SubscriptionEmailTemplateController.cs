@@ -6,6 +6,7 @@ using Frapid.WebsiteBuilder.ViewModels;
 
 namespace Frapid.WebsiteBuilder.Controllers.Backend
 {
+    [AntiForgery]
     public class SubscriptionEmailTemplateController : DashboardController
     {
         [Route("dashboard/website/subscription/welcome")]
