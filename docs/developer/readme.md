@@ -16,7 +16,7 @@ Internationalization is handled by the module `Frapid.i18n`. For more informatio
 Frapid uses database first approach. Please follow these documents for more information:
 
 - [Database of Frapid](db.md)
-- [Creating Data Transfer Objects](dto.md)
+- [Creating Data Transfer Objects](data-access/dto.md)
 - [Creating Data Access Repositories](data-access/repository.md)
 - [Creating Data Access Classes](data-access/dac.md)
 - [Creating Restful Web API](rest/api.md)
