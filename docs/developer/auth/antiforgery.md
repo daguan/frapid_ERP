@@ -1,6 +1,6 @@
 # Preventing Cross Site Request Forgery
 
-The Cross Site Request Forgery attack is possible due to the good old cookies trusted by web servers. Since CSRF attack does not involve in stealing or tampering the cookie saved on the browsers, the exploit is usually dangerous. To perform a CSRF attack, the malicious website would simple perform a post to request to the webiste (say example.com) on behalf of the authenticated user(s).
+The Cross Site Request Forgery attack is possible due to the good old cookies trusted by web servers. Since CSRF attack does not involve in stealing or tampering the cookie saved on the browsers, the exploit is usually dangerous. To perform a CSRF attack, the malicious website would simple perform a post request to the webiste (say example.com) on behalf of the authenticated user(s).
 
 Since frapid uses JSON Web Tokens instead of FormsAuthentication cookies, CSRF attack would not be applicable in our case. Moreover, frapid uses the request verification token mechanism of ASP.net which enables the application to only accept requests from where it originated.
 
