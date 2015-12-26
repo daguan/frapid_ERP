@@ -2,7 +2,7 @@
 
 If you are familiar with ASP.net ```Authorize``` attribute, ```RestrictAnonymous``` is an extension of that.
 
-```
+```cs
 [RestrictAnonymous]
 public ActionResult Index()
 {
