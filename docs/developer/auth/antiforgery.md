@@ -8,7 +8,7 @@ Frapid uses JWT (Json Web Tokens) instead of FormsAuthentication for both MVC an
 
 Frapid also uses the request verification token mechanism of ASP.net which enables the application to only accept requests from where it originated. If your any of your controller actions accepts ```HTTP POST``` verb, you should decorate your controller class with ```[AntiForgery]```, as shown in the example below.
 
-```
+```cs
 using System.Text;
 using System.Web.Mvc;
 using Frapid.Areas;
