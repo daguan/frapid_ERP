@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
+using Frapid.Configuration;
+using Frapid.WebsiteBuilder.DAL;
 using Frapid.WebsiteBuilder.Entities;
+using Npgsql;
+using Content = Frapid.WebsiteBuilder.ViewModels.Content;
 
 namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 {
@@ -11,24 +16,52 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [Route("site/{categoryAlias}/{alias}")]
         public ActionResult Index(string categoryAlias = "", string alias = "")
         {
-            var content = DAL.Contents.GetPublished(categoryAlias, alias);
-            Mapper.CreateMap<PublishedContentView, ViewModels.Content>();
-            var model = Mapper.Map<ViewModels.Content>(content);
-
-            bool isHomepage = string.IsNullOrWhiteSpace(categoryAlias) && string.IsNullOrWhiteSpace(alias);
-
-            string path = GetLayoutPath();
-            string layout = isHomepage ? this.GetHomepageLayout() : this.GetLayout();
-
-            if (model == null)
+            try
             {
-                return this.View(GetLayoutPath() + "404.cshtml");
+                var content = Contents.GetPublished(categoryAlias, alias);
+                Mapper.CreateMap<PublishedContentView, Content>();
+                var model = Mapper.Map<Content>(content);
+
+                bool isHomepage = string.IsNullOrWhiteSpace(categoryAlias) && string.IsNullOrWhiteSpace(alias);
+
+                string path = GetLayoutPath();
+                string layout = isHomepage ? this.GetHomepageLayout() : this.GetLayout();
+
+                if (model == null)
+                {
+                    return this.View(GetLayoutPath() + "404.cshtml");
+                }
+
+                model.LayoutPath = path;
+                model.Layout = layout;
+
+                return this.View(this.GetRazorView<AreaRegistration>("Index/Index.cshtml"), model);
+            }
+            catch (NpgsqlException)
+            {
+#if DEBUG
+                throw;
+#endif
+                return RedirectToInstallationPage();
+            }
+        }
+
+        private ActionResult RedirectToInstallationPage()
+        {
+            string domain = DbConvention.GetDomain();
+
+            var approved = new DomainSerializer("domains-approved.json");
+            var installed = new DomainSerializer("domains-installed.json");
+
+            bool isApproved = approved.Get().Any(x => x.DomainName.Equals(domain));
+            bool isInstalled = installed.Get().Any(x => x.DomainName.Equals(domain));
+
+            if (isApproved && !isInstalled)
+            {
+                return Redirect("/install");
             }
 
-            model.LayoutPath = path;
-            model.Layout = layout;
-
-            return this.View(this.GetRazorView<AreaRegistration>("Index/Index.cshtml"), model);
+            return Content("Frapid cannot be installed due configuration errors. Please check application log for more information.");
         }
     }
 }

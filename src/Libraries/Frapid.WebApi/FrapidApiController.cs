@@ -22,10 +22,12 @@ namespace Frapid.WebApi
             string clientToken = context.Request.GetBearerToken();
             var provider = new Provider(DbConvention.GetCatalog());
             var token = provider.GetToken(clientToken);
+            string catalog = DbConvention.GetCatalog();
 
             if (token != null)
             {
-                AppUsers.SetCurrentLogin(token.LoginId);
+                AppUsers.SetCurrentLogin(catalog, token.LoginId);
+                var loginView = AppUsers.GetCurrent(catalog, token.LoginId);
 
                 this.MetaUser = new MetaUser
                 {
@@ -39,8 +41,16 @@ namespace Frapid.WebApi
                 var identity = new ClaimsIdentity(token.Claims);
 
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, token.LoginId.ToString(CultureInfo.InvariantCulture)));
-                identity.AddClaim(new Claim(ClaimTypes.Role, AppUsers.GetCurrent(token.LoginId).View.RoleName));
-                identity.AddClaim(new Claim(ClaimTypes.Email, AppUsers.GetCurrent(token.LoginId).View.Email));
+
+                if (loginView.RoleName != null)
+                {
+                    identity.AddClaim(new Claim(ClaimTypes.Role, loginView.RoleName));
+                }
+
+                if (loginView.Email != null)
+                {
+                    identity.AddClaim(new Claim(ClaimTypes.Email, loginView.Email));
+                }
 
                 context.RequestContext.Principal = new ClaimsPrincipal(identity);
             }

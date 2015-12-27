@@ -166,6 +166,8 @@ CREATE TABLE account.access_tokens
     access_token_id                             uuid DEFAULT(gen_random_uuid()) PRIMARY KEY,
     issued_by                                   text NOT NULL,
     audience                                    text NOT NULL,
+    ip_address                                  text,
+    user_agent                                  text,
     header                                      text,
     subject                                     text,
     token_id                                    text,
@@ -177,8 +179,11 @@ CREATE TABLE account.access_tokens
     expires_on                                  TIMESTAMP WITH TIME ZONE NOT NULL,
     revoked                                     boolean NOT NULL DEFAULT(false),
     revoked_by                                  integer REFERENCES account.users,
-    revoked_on                                  TIMESTAMP WITH TIME ZONE NOT NULL
+    revoked_on                                  TIMESTAMP WITH TIME ZONE
 );
+
+CREATE INDEX access_tokens_token_info_inx
+ON account.access_tokens(client_token, ip_address, user_agent);
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.add_installed_domain.sql --<--<--
@@ -730,6 +735,52 @@ $$
 LANGUAGE plpgsql;
 
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.is_valid_client_token.sql --<--<--
+DROP FUNCTION IF EXISTS account.is_valid_client_token(_client_token text, _ip_address text, _user_agent text);
+
+CREATE FUNCTION account.is_valid_client_token(_client_token text, _ip_address text, _user_agent text)
+RETURNS bool
+STABLE
+AS
+$$
+    DECLARE _created_on TIMESTAMP WITH TIME ZONE;
+    DECLARE _expires_on TIMESTAMP WITH TIME ZONE;
+    DECLARE _revoked boolean;
+BEGIN
+    IF(COALESCE(_client_token, '') = '') THEN
+        RETURN false;
+    END IF;
+
+    SELECT
+        created_on,
+        expires_on,
+        revoked
+    INTO
+        _created_on,
+        _expires_on,
+        _revoked    
+    FROM account.access_tokens
+    WHERE client_token = _client_token
+    AND ip_address = _ip_address
+    AND user_agent = _user_agent;
+    
+    IF(COALESCE(_revoked, true)) THEN
+        RETURN false;
+    END IF;
+
+    IF(_created_on > NOW()) THEN
+        RETURN false;
+    END IF;
+
+    IF(COALESCE(_expires_on, NOW()) <= NOW()) THEN
+        RETURN false;
+    END IF;
+    
+    RETURN true;
+END
+$$
+LANGUAGE plpgsql;
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.functions-and-logic/account.reset_account.sql --<--<--
 DROP FUNCTION IF EXISTS account.reset_account
 (
@@ -885,6 +936,33 @@ LANGUAGE plpgsql;
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.relationships/core.sql --<--<--
 ALTER TABLE core.offices
 ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/02.triggers/account.token_auto_expiry_trigger.sql --<--<--
+DROP FUNCTION IF EXISTS account.token_auto_expiry_trigger() CASCADE;
+
+CREATE FUNCTION account.token_auto_expiry_trigger()
+RETURNS trigger
+AS
+$$
+BEGIN
+    UPDATE account.access_tokens
+    SET 
+        revoked = true,
+        revoked_on = NOW()
+    WHERE ip_address = NEW.ip_address
+    AND user_agent = NEW.user_agent;
+
+    RETURN NEW;
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER account_token_auto_expiry_trigger
+BEFORE INSERT
+ON account.access_tokens
+FOR EACH ROW
+EXECUTE PROCEDURE account.token_auto_expiry_trigger();
+
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/03.menus/menus.sql --<--<--
 SELECT * FROM core.create_app('Frapid.Account', 'Account', '1.0', 'MixERP Inc.', 'December 1, 2015', 'grey lock', '/dashboard/account/configuration-profile', NULL::text[]);

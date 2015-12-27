@@ -1,4 +1,4 @@
-SELECT * FROM core.create_app('Frapid.Authorization', 'Authorization', '1.0', 'MixERP Inc.', 'December 1, 2015', 'grey lock', '/dashboard/authorization/menu-access/group-policy', '{Frapid.Account}'::text[]);
+SELECT * FROM core.create_app('Frapid.Authorization', 'Authorization', '1.0', 'MixERP Inc.', 'December 1, 2015', 'purple privacy', '/dashboard/authorization/menu-access/group-policy', '{Frapid.Account}'::text[]);
 
 SELECT * FROM core.create_menu('Frapid.Authorization', 'Entity Access Policy', '', 'lock', '');
 SELECT * FROM core.create_menu('Frapid.Authorization', 'Group Policy', '/dashboard/authorization/entity-access/group-policy', 'users', 'Entity Access Policy');

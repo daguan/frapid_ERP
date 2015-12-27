@@ -26,6 +26,7 @@ namespace Frapid.Installer.Models
         public string DbSchema { get; set; }
         public string BlankDbPath { get; set; }
         public string SampleDbPath { get; set; }
+        public string PatchFilePath { get; set; }
         public bool InstallSample { get; set; }
         public string My { get; set; }
         public string OverrideTemplatePath { get; set; }
@@ -34,7 +35,7 @@ namespace Frapid.Installer.Models
         [JsonIgnore]
         public List<Installable> Dependencies { get; private set; }
 
-        public List<string> DependsOn { get; set; }
+        public string[] DependsOn { get; set; }
 
         public void SetDependencies()
         {

@@ -15,9 +15,10 @@
 	"DbSchema": "i18n",
 	"BlankDbPath": "~/db/meta.sql",
 	"SampleDbPath": null,
+    "PatchFilePath" : null,
 	"InstallSample": false,
 	"My": null,
     "OverrideTemplatePath":"~/Override",
     "OverrideDestination":"~/Catalogs/{0}",
-	"DependsOn": []
+	"DependsOn": null
 }

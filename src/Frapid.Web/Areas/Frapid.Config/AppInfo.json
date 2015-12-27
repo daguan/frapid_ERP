@@ -15,9 +15,10 @@
 	"DbSchema": "config",
 	"BlankDbPath": "~/Areas/Frapid.Config/db/config.sql",
 	"SampleDbPath": null,
+    "PatchFilePath": null,
 	"InstallSample": false,
 	"My": "~/Areas/Frapid.Config/.my/db.sql",
 	"OverrideTemplatePath": null,
     "OverrideDestination":"~/Catalogs/{0}/Areas/Frapid.Config",
-	"DependsOn": [Frapid.Account]
+	"DependsOn": ["Frapid.Account"]
 }

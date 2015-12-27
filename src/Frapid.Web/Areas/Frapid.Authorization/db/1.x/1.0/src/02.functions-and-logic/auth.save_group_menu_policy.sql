@@ -20,14 +20,14 @@ BEGIN
     END IF;
     
     DELETE FROM auth.group_menu_access_policy
-    WHERE auth.group_menu_access_policy.menu_id NOT IN(SELECT * from explode_array(_menu_ids))
+    WHERE auth.group_menu_access_policy.menu_id NOT IN(SELECT * from unnest(_menu_ids))
     AND role_id = _role_id
     AND office_id = _office_id;
 
     WITH menus
     AS
     (
-        SELECT explode_array(_menu_ids) AS _menu_id
+        SELECT unnest(_menu_ids) AS _menu_id
     )
     
     INSERT INTO auth.group_menu_access_policy(role_id, office_id, menu_id)

@@ -15,9 +15,7 @@ namespace Frapid.Web.Controllers
 
             var approved = new DomainSerializer("domains-approved.json");
             var installed = new DomainSerializer("domains-installed.json");
-
-            
-
+           
             if (!approved.Get().Any(x => x.DomainName.Equals(domain)))
             {
                 return this.HttpNotFound();

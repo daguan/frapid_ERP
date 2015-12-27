@@ -123,9 +123,11 @@
   <ItemGroup>
     <Compile Include="AreaRegistration.cs" />
     <Compile Include="Controllers\AppController.cs" />
+    <Compile Include="Controllers\BackgroundController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="DAL\App.cs" />
     <Compile Include="DAL\Menu.cs" />
     <Compile Include="DTO\App.cs" />

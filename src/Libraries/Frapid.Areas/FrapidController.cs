@@ -34,6 +34,7 @@ namespace Frapid.Areas
             string clientToken = context.HttpContext.Request.GetClientToken();
             var provider = new Provider(DbConvention.GetCatalog());
             var token = provider.GetToken(clientToken);
+            string catalog = DbConvention.GetCatalog();
 
             if (token != null)
             {
@@ -41,11 +42,12 @@ namespace Frapid.Areas
 
                 if (isValid)
                 {
-                    AppUsers.SetCurrentLogin(token.LoginId);
+                    AppUsers.SetCurrentLogin(catalog, token.LoginId);
+                    var loginView = AppUsers.GetCurrent(catalog, token.LoginId);
 
                     this.MetaUser = new MetaUser
                     {
-                        Catalog = DbConvention.GetCatalog(),
+                        Catalog = catalog,
                         ClientToken = token.ClientToken,
                         LoginId = token.LoginId,
                         UserId = token.UserId,
@@ -53,10 +55,17 @@ namespace Frapid.Areas
                     };
 
                     var identity = new ClaimsIdentity(token.Claims, DefaultAuthenticationTypes.ApplicationCookie, ClaimTypes.NameIdentifier, ClaimTypes.Role);
-
                     identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, token.LoginId.ToString(CultureInfo.InvariantCulture)));
-                    identity.AddClaim(new Claim(ClaimTypes.Role, AppUsers.GetCurrent(token.LoginId).View.RoleName));
-                    identity.AddClaim(new Claim(ClaimTypes.Email, AppUsers.GetCurrent(token.LoginId).View.Email));
+
+                    if (loginView.RoleName != null)
+                    {
+                        identity.AddClaim(new Claim(ClaimTypes.Role, loginView.RoleName));
+                    }
+
+                    if (loginView.Email != null)
+                    {
+                        identity.AddClaim(new Claim(ClaimTypes.Email, loginView.Email));
+                    }
 
                     context.HttpContext.User = new ClaimsPrincipal(identity);
                 }

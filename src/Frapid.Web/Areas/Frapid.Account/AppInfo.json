@@ -13,11 +13,12 @@
 	"Bundle": "Frapid Framework",
     "IsMeta": false,
 	"DbSchema": "account",
-	"BlankDbPath": "~/Areas/Frapid.Account/db/1.x/1.0/db-blank.sql",
-	"SampleDbPath": "~/Areas/Frapid.Account/db/1.x/1.0/db-sample.sql",
+	"BlankDbPath": "~/Areas/Frapid.Account/db/1.x/1.0/account-blank.sql",
+	"SampleDbPath": "~/Areas/Frapid.Account/db/1.x/1.0/account-sample.sql",
+	"PatchFilePath": null,
 	"InstallSample": true,
 	"My": "~/Areas/Frapid.Account/.my/db.sql",
     "OverrideTemplatePath":"~/Areas/Frapid.Account/Override",
     "OverrideDestination":"~/Catalogs/{0}/Areas",
-	"DependsOn": ["Frapid.Db.Core"]
+	"DependsOn": ["Frapid.Core"]
 }

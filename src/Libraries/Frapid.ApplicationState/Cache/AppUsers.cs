@@ -13,67 +13,64 @@ namespace Frapid.ApplicationState.Cache
 {
     public static class AppUsers
     {
-        public static void SetCurrentLogin()
+        public static void SetCurrentLogin(string catalog)
         {
             long globalLoginId = HttpContext.Current.User.Identity.Name.To<long>();
-            SetCurrentLogin(globalLoginId);
+            SetCurrentLogin(catalog, globalLoginId);
         }
 
-        public static void SetCurrentLogin(long globalLoginId)
+        public static void SetCurrentLogin(string catalog, long loginId)
         {
-            if (globalLoginId <= 0)
+            if (loginId <= 0)
             {
                 return;
             }
 
-            string key = globalLoginId.ToString(CultureInfo.InvariantCulture);
+            string key = catalog + "-" + loginId.ToString(CultureInfo.InvariantCulture);
 
             if (MemoryCache.Default[key] != null)
             {
                 return;
             }
 
-            var metaLogin = GetMetaLogin(globalLoginId);
-            var dictionary = GetDictionary(metaLogin);
+            var metaLogin = GetMetaLogin(catalog, loginId);
+            var dictionary = GetDictionary(catalog, metaLogin);
 
             CacheFactory.AddToDefaultCache("Dictionary" + key, dictionary);
             CacheFactory.AddToDefaultCache(key, metaLogin);
         }
 
-        public static MetaLogin GetCurrent()
+        public static LoginView GetCurrent(string catalog = "")
         {
-            long globalLoginId = 0;
+            if (string.IsNullOrWhiteSpace(catalog))
+            {
+                catalog = GetCatalog();
+            }
+
+            long loginId = 0;
 
             if (HttpContext.Current.User != null)
             {
-                long.TryParse(HttpContext.Current.User.Identity.Name, out globalLoginId);
+                long.TryParse(HttpContext.Current.User.Identity.Name, out loginId);
             }
 
-            return GetCurrent(globalLoginId);
+            return GetCurrent(catalog, loginId);
         }
 
-        public static MetaLogin GetCurrent(long globalLoginId)
+        public static LoginView GetCurrent(string catalog, long loginId)
         {
-            var login = new MetaLogin();
+            var login = new LoginView();
 
-
-            if (globalLoginId != 0)
+            if (loginId == 0)
             {
-                var cacheObject = CacheFactory.GetFromDefaultCacheByKey(globalLoginId.ToString(CultureInfo.InvariantCulture));
-                login = cacheObject as MetaLogin;
+                return login;
             }
 
-            if (login == null)
-            {
-                login = new MetaLogin();
-            }
+            string key = catalog + "-" + loginId.ToString(CultureInfo.InvariantCulture);
+            var cacheObject = CacheFactory.GetFromDefaultCacheByKey(key);
+            login = cacheObject as LoginView;
 
-            if (login.View == null)
-            {
-                login.View = new LoginView();
-            }
-
-            return login;
+            return login ?? new LoginView();
         }
 
         public static long GetMetaLoginId(string catalog, long loginId)
@@ -82,32 +79,14 @@ namespace Frapid.ApplicationState.Cache
             return Factory.Scalar<long>(Factory.MetaDatabase, sql, catalog, loginId);
         }
 
-        public static MetaLogin GetMetaLogin(long globalLoginId)
+        public static LoginView GetMetaLogin(string catalog, long loginId)
         {
-            string sql = "SELECT * FROM public.frapid_logins WHERE global_login_id=@0;";
-            var login = Factory.Get<MetaLogin>(Factory.MetaDatabase, sql, globalLoginId).FirstOrDefault();
-
-            if (login == null)
-            {
-                return null;
-            }
-
-            string catalog = login.Catalog;
-
-            sql = "SELECT * FROM account.sign_in_view WHERE login_id=@0;";
-
-            var view = Factory.Get<LoginView>(catalog, sql, login.LoginId).FirstOrDefault();
-
-            if (view == null)
-            {
-                return null;
-            }
-
-            login.View = view;
-            return login;
+            const string sql = "SELECT * FROM account.sign_in_view WHERE login_id=@0;";
+            var view = Factory.Get<LoginView>(catalog, sql, loginId).FirstOrDefault();
+            return view;
         }
 
-        private static Dictionary<string, object> GetDictionary(MetaLogin metaLogin)
+        private static Dictionary<string, object> GetDictionary(string catalog, LoginView metaLogin)
         {
             var dictionary = new Dictionary<string, object>();
 
@@ -116,15 +95,15 @@ namespace Frapid.ApplicationState.Cache
                 return dictionary;
             }
 
-            dictionary.Add("Catalog", metaLogin.Catalog);
-            dictionary.Add("Culture", metaLogin.View.Culture);
-            dictionary.Add("Email", metaLogin.View.Email);
-            dictionary.Add("Office", metaLogin.View.Office);
-            dictionary.Add("OfficeId", metaLogin.View.OfficeId);
-            dictionary.Add("OfficeName", metaLogin.View.OfficeName);
-            dictionary.Add("RoleName", metaLogin.View.RoleName);
-            dictionary.Add("UserId", metaLogin.View.UserId);
-            dictionary.Add("UserName", metaLogin.View.Email);
+            dictionary.Add("Catalog", catalog);
+            dictionary.Add("Culture", metaLogin.Culture);
+            dictionary.Add("Email", metaLogin.Email);
+            dictionary.Add("Office", metaLogin.Office);
+            dictionary.Add("OfficeId", metaLogin.OfficeId);
+            dictionary.Add("OfficeName", metaLogin.OfficeName);
+            dictionary.Add("RoleName", metaLogin.RoleName);
+            dictionary.Add("UserId", metaLogin.UserId);
+            dictionary.Add("UserName", metaLogin.Email);
 
             return dictionary;
         }

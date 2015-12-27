@@ -15,9 +15,10 @@
 	"DbSchema": null,
 	"BlankDbPath": null,
 	"SampleDbPath": null,
+    "PatchFilePath" : null,    
 	"InstallSample": false,
 	"My": null,
-	"OverrideTemplatePath": null,
+	"OverrideTemplatePath": "~/Areas/Frapid.Dashboard/Override",
     "OverrideDestination": null,
-	"DependsOn": []
+	"DependsOn": null
 }

@@ -37,13 +37,13 @@ BEGIN
     SET allow_access = true
     WHERE user_id = _user_id
     AND office_id = _office_id
-    AND menu_id IN(SELECT * from explode_array(_allowed_menu_ids));
+    AND menu_id IN(SELECT * from unnest(_allowed_menu_ids));
 
     UPDATE auth.menu_access_policy
     SET disallow_access = true
     WHERE user_id = _user_id
     AND office_id = _office_id
-    AND menu_id IN(SELECT * from explode_array(_disallowed_menu_ids));
+    AND menu_id IN(SELECT * from unnest(_disallowed_menu_ids));
 
     
     RETURN;
