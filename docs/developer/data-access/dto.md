@@ -1,12 +1,12 @@
 # Data Transfer Objects
 
-Data transfer objects are used to represent database objects instead of Entity Models. The whole and sole purpose of DTOs is to facilitate data transfer without having any behavior at all.
+Data transfer objects represent database objects instead of Entity Models. The whole and sole purpose of DTO is to facilitate data transfer without having any behavior at all.
 
 ## DTO Convention
 
-DTO classes are representation of database entities. The actual database objects have ```underscore_separated_lowercase_identifiers```, as shown below
+DTO classes are representation of database objects, which have ```underscore_separated_lowercase_identifiers```, as shown below
 
-```
+```plpgsql
 CREATE TABLE core.apps
 (
     app_name                national character varying(100) PRIMARY KEY,
@@ -21,12 +21,12 @@ CREATE TABLE core.apps
 
 whereas, the DTO classes
 
-* Should implement ```IPoco interface```.
-* Should use ```PascalCaseIdentifiers```.
-* Are decorated with ```"TableName" Attribute```.
-* Are decorated with ```"PrimaryKey" Attribute```.
+* have ```PascalCaseIdentifiers```.
+* should implement ```IPoco interface```.
+* are decorated with ```"TableName" Attribute```.
+* are decorated with ```"PrimaryKey" Attribute```.
 
-```
+```cs
     [TableName("core.apps")]
     [PrimaryKey("app_name", AutoIncrement = false)]
     public sealed class App : IPoco

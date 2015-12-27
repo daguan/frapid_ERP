@@ -26,7 +26,7 @@ Frapid was built from the ground up for the cloud. Not only frapid supports web 
 frapid can also host several (hundred) website and application instances 
 running as a single IIS Website.
 
-** See Also **
+**See Also**
 
 [Database Naming Convention](docs/concepts/database-naming-convention.md)
 
