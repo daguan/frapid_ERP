@@ -9,6 +9,8 @@ namespace Frapid.Account
 {
     public class StartupTask : IStartupRegistration
     {
+        public string Description { get; set; } = "Upserting installed domains to the DB.";
+
         public void Register()
         {
             try

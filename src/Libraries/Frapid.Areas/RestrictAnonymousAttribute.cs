@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using Frapid.Framework.Extensions;
 using Frapid.TokenManager.DAL;
+using Serilog;
 
 namespace Frapid.Areas
 {
@@ -35,6 +37,10 @@ namespace Frapid.Areas
             }
 
             long loginId = context.ReadClaim<long>("loginid");
+            long userId = context.ReadClaim<int>("userid");
+            long officeId = context.ReadClaim<int>("officeid");
+            string email = context.ReadClaim<string>(ClaimTypes.Email);
+
             var expriesOn = new DateTime(context.ReadClaim<long>("exp"), DateTimeKind.Utc);
             string ipAddress = context.GetClientIpAddress();
             string userAgent = context.GetUserAgent();
@@ -46,12 +52,35 @@ namespace Frapid.Areas
                 return false;
             }
 
-            if (expriesOn <= DateTime.UtcNow)
+            if (loginId <= 0)
             {
+                Log.Warning(
+                    "Invalid login claims supplied. Access was denied to user {userId}/{email} for officeId {officeId} having the loginId {loginId}. Token: {clientToken}.",
+                    userId, email, officeId, loginId, clientToken);
+                Thread.Sleep(new Random().Next(1, 60)*1000);
                 return false;
             }
 
-            return loginId > 0 && AccessTokens.IsValid(clientToken, ipAddress, userAgent);
+            if (expriesOn <= DateTime.UtcNow)
+            {
+                Log.Debug(
+                    "Token expired. Access was denied to user {userId}/{email} for officeId {officeId} having the loginId {loginId}. Token: {clientToken}.",
+                    userId, email, officeId, loginId, clientToken);
+                return false;
+            }
+
+
+            bool isValid = AccessTokens.IsValid(clientToken, ipAddress, userAgent);
+
+            if (expriesOn <= DateTime.UtcNow)
+            {
+                Log.Debug(
+                    "Token invalid. Access was denied to user {userId}/{email} for officeId {officeId} having the loginId {loginId}. Token: {clientToken}.",
+                    userId, email, officeId, loginId, clientToken);
+                return false;
+            }
+
+            return isValid;
         }
 
         protected override bool AuthorizeCore(HttpContextBase context)

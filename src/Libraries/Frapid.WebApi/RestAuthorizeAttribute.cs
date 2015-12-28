@@ -1,9 +1,11 @@
 using System;
 using System.Security.Claims;
+using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using Frapid.Framework.Extensions;
 using Frapid.TokenManager.DAL;
+using Serilog;
 
 namespace Frapid.WebApi
 {
@@ -24,6 +26,10 @@ namespace Frapid.WebApi
             }
 
             long loginId = context.RequestContext.ReadClaim<long>("loginid");
+            long userId = context.RequestContext.ReadClaim<int>("userid");
+            long officeId = context.RequestContext.ReadClaim<int>("officeid");
+            string email = context.RequestContext.ReadClaim<string>(ClaimTypes.Email);
+
             var expriesOn = new DateTime(context.RequestContext.ReadClaim<long>("exp"), DateTimeKind.Utc);
             string ipAddress = context.Request.GetClientIpAddress();
             string userAgent = context.Request.GetUserAgent();
@@ -35,12 +41,36 @@ namespace Frapid.WebApi
                 return false;
             }
 
-            if (expriesOn <= DateTime.UtcNow)
+
+            if (loginId <= 0)
             {
+                Log.Warning(
+                    "Invalid login claims supplied. Access was denied to user {userId}/{email} for officeId {officeId} having the loginId {loginId}. Token: {clientToken}.",
+                    userId, email, officeId, loginId, clientToken);
+                Thread.Sleep(new Random().Next(1, 60)*1000);
                 return false;
             }
 
-            return loginId > 0 && AccessTokens.IsValid(clientToken, ipAddress, userAgent);
+            if (expriesOn <= DateTime.UtcNow)
+            {
+                Log.Debug(
+                    "Token expired. Access was denied to user {userId}/{email} for officeId {officeId} having the loginId {loginId}. Token: {clientToken}.",
+                    userId, email, officeId, loginId, clientToken);
+                return false;
+            }
+
+
+            bool isValid = AccessTokens.IsValid(clientToken, ipAddress, userAgent);
+
+            if (expriesOn <= DateTime.UtcNow)
+            {
+                Log.Debug(
+                    "Token invalid. Access was denied to user {userId}/{email} for officeId {officeId} having the loginId {loginId}. Token: {clientToken}.",
+                    userId, email, officeId, loginId, clientToken);
+                return false;
+            }
+
+            return isValid;
         }
     }
 }

@@ -23,6 +23,13 @@ Open IIS and create a new website as shown in this image.
 
 Click Ok.
 
+## Directory Permission
+
+Provide the following users write access to the directory `~/src/Frapid.Web`:
+
+* IIS AppPool\frapid (or IIS AppPool\yoursitename).
+* Authenticated Users (or Usuarios autenticados or utilisateurs authentifiés)
+
 ## Build Frapid
 
 Open the frapid solutions in the mentioned order and perform a build:
@@ -33,7 +40,6 @@ Open the frapid solutions in the mentioned order and perform a build:
 * ~/src/Frapid.Web/Areas/Frapid.Core/Frapid.Core.sln
 * ~/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/Frapid.WebsiteBuilder.sln
 * ~/src/Frapid.Web/Areas/Frapid.Account/Frapid.Account.sln
-
 
 Alternatively, you can also build frapid by running this batch file:
 
@@ -66,5 +72,12 @@ Create an account with [SendGrid](http://sendgrid.com/) and edit the configurati
 ## Sign Up
 
 Navigate to the [sign up page](https://localhost/account/sign-up) and create an account for yourself. Verify your account and login to the admin area.
+
+## Troubleshooting Installation Issues
+
+If you encounter installation issues, examine log files on [C:\frapid-logs](../configs/Parameters.config.md). If you want start over once again:
+
+* delete the database "localhost".
+* delete the file [DomainsInstalled.json](../configs/DomainsInstalled.json.md).
 
 [Return Back](../../README.md)

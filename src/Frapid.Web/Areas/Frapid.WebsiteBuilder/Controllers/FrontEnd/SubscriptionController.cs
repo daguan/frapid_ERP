@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
@@ -31,6 +32,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
                 await email.SendAsync(catalog, model);
             }
 
+            Thread.Sleep(1000);
             return Json("OK");
         }
 
@@ -59,6 +61,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
                 await email.SendAsync(catalog, model);
             }
 
+            Thread.Sleep(1000);
             return Json("OK");
         }
     }

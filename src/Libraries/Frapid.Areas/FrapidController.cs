@@ -38,7 +38,8 @@ namespace Frapid.Areas
 
             if (token != null)
             {
-                bool isValid = AccessTokens.IsValid(token.ClientToken, context.HttpContext.GetClientIpAddress(), context.HttpContext.GetUserAgent());
+                bool isValid = AccessTokens.IsValid(token.ClientToken, context.HttpContext.GetClientIpAddress(),
+                    context.HttpContext.GetUserAgent());
 
                 if (isValid)
                 {
@@ -54,8 +55,10 @@ namespace Frapid.Areas
                         OfficeId = token.OfficeId
                     };
 
-                    var identity = new ClaimsIdentity(token.Claims, DefaultAuthenticationTypes.ApplicationCookie, ClaimTypes.NameIdentifier, ClaimTypes.Role);
-                    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, token.LoginId.ToString(CultureInfo.InvariantCulture)));
+                    var identity = new ClaimsIdentity(token.Claims, DefaultAuthenticationTypes.ApplicationCookie,
+                        ClaimTypes.NameIdentifier, ClaimTypes.Role);
+                    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier,
+                        token.LoginId.ToString(CultureInfo.InvariantCulture)));
 
                     if (loginView.RoleName != null)
                     {

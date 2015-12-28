@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,7 @@ using Frapid.Configuration;
 using Frapid.Installer.Models;
 using Newtonsoft.Json;
 using Quartz;
+using Serilog;
 
 namespace Frapid.Installer
 {
@@ -15,14 +17,24 @@ namespace Frapid.Installer
         public void Execute(IJobExecutionContext context)
         {
             string url = context.JobDetail.Key.Name;
-            string catalog = DbConvention.GetCatalog(url);
-            var db = new DbInstaller(catalog);
-            db.Install();
 
-            var installables = GetInstallables();
-            foreach (var installable in installables)
+            try
             {
-                new AppInstaller(catalog, installable).Install();
+                string catalog = DbConvention.GetCatalog(url);
+                var db = new DbInstaller(catalog);
+                db.Install();
+
+                var installables = GetInstallables();
+
+                foreach (var installable in installables)
+                {
+                    new AppInstaller(catalog, installable).Install();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Could not install frapid on {url} due to errors. Exception: {Exception}", url, ex);
+                throw;
             }
         }
 

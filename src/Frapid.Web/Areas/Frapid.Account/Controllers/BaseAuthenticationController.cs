@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Globalization;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using Frapid.Account.DAL;
@@ -8,6 +8,7 @@ using Frapid.Account.InputModels;
 using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
 using Frapid.Configuration;
+using Frapid.TokenManager;
 
 namespace Frapid.Account.Controllers
 {
@@ -17,6 +18,7 @@ namespace Frapid.Account.Controllers
         {
             if (!result.Status)
             {
+                Thread.Sleep(new Random().Next(1, 5)*1000);
                 return Json(result);
             }
 
@@ -27,7 +29,7 @@ namespace Frapid.Account.Controllers
                 applicationId = model.ApplicationId;
             }
 
-            var manager = new TokenManager.Provider(AppUsers.GetCatalog(), applicationId, result.LoginId);
+            var manager = new Provider(AppUsers.GetCatalog(), applicationId, result.LoginId);
             var token = manager.GetToken();
 
             AccessTokens.Save(token, this.RemoteUser.IpAddress, this.RemoteUser.UserAgent);

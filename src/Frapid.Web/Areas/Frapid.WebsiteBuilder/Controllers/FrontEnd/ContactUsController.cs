@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
@@ -29,6 +30,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
             model.Subject = "Contact Form : " + model.Subject;
             string catalog = AppUsers.GetCatalog();
             await new ContactUsEmail().SendAsync(catalog, model);
+            Thread.Sleep(1000);
             return this.Json("OK");
         }
     }
