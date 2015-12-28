@@ -13,8 +13,8 @@ namespace Frapid.Web.Controllers
         {
             string domain = DbConvention.GetDomain();
 
-            var approved = new DomainSerializer("domains-approved.json");
-            var installed = new DomainSerializer("domains-installed.json");
+            var approved = new DomainSerializer("DomainsApproved.json");
+            var installed = new DomainSerializer("DomainsInstalled.json");
            
             if (!approved.Get().Any(x => x.DomainName.Equals(domain)))
             {

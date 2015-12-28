@@ -21,7 +21,7 @@ namespace Frapid.Installer
 
         public bool IsWellKnownDb()
         {
-            var serializer = new DomainSerializer("domains-approved.json");
+            var serializer = new DomainSerializer("DomainsApproved.json");
             var domains = serializer.Get();
             return domains.Any(domain => DbConvention.GetCatalog(domain.DomainName) == this.Catalog);
         }

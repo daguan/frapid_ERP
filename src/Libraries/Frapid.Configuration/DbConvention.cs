@@ -34,7 +34,7 @@ namespace Frapid.Configuration
                 catalog = GetDbNameByConvention(catalog);
             }
 
-            var serializer = new DomainSerializer("domains-approved.json");
+            var serializer = new DomainSerializer("DomainsApproved.json");
 
             return serializer.Get().Any(domain => GetDbNameByConvention(domain.DomainName) == catalog);
         }

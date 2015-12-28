@@ -13,7 +13,7 @@ namespace Frapid.Account
         {
             try
             {
-                var installed = new DomainSerializer("domains-installed.json");
+                var installed = new DomainSerializer("DomainsInstalled.json");
 
                 foreach (var repository in
                     from domain in installed.Get()

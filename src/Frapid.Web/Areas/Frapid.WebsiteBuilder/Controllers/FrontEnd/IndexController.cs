@@ -50,8 +50,8 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         {
             string domain = DbConvention.GetDomain();
 
-            var approved = new DomainSerializer("domains-approved.json");
-            var installed = new DomainSerializer("domains-installed.json");
+            var approved = new DomainSerializer("DomainsApproved.json");
+            var installed = new DomainSerializer("DomainsInstalled.json");
 
             bool isApproved = approved.Get().Any(x => x.DomainName.Equals(domain));
             bool isInstalled = installed.Get().Any(x => x.DomainName.Equals(domain));
