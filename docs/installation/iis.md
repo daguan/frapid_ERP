@@ -1,6 +1,6 @@
 # Installing Frapid on IIS
 
-This document assumes:
+This document assumes that :
 
 * you have already installed PostgreSQL Server 9.3 or above and have password for `postgres` user handy.
 * you have cloned frapid github repository locally.
