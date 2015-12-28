@@ -1,6 +1,6 @@
 # Database Naming Convention
 
-Depending on the domain name, frapid automatically creates and populates database.
+Depending on the domain name, frapid automatically creates and populates database for you.
 
 The periods (.) and dashes(-) are converted to underscores and special characters are removed.
 
