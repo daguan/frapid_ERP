@@ -26,7 +26,8 @@ Preferably, you can configure this from the [Admin Area](#) as well.
 	"ApiUser": "Your SendGrid User Name",
 	"ApiKey": "Your SendGrid API Key",
 	"Enabled": false
-}```
+}
+```
 
 ## Configuration Explained
 
