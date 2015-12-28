@@ -48,9 +48,9 @@ forces you to follow and keep track of things. Frapid uses best of both worlds.
 
 The root directory of frapid web application is:
 
-```src/Frapid.Web```
+`src/Frapid.Web`
 
-The master configuration files are available on the ```~/Resources/Configs``` directory.
+The master configuration files are available on the `~/Resources/Configs` directory.
 
 |File Name                                | Description              |
 |-----------------------------------------|--------------------------|
