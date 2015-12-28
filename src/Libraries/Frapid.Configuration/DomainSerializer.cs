@@ -27,6 +27,11 @@ namespace Frapid.Configuration
                 return domains;
             }
 
+            if (!File.Exists(path))
+            {
+                return domains;
+            }
+
             string contents = File.ReadAllText(path, Encoding.UTF8);
             domains = JsonConvert.DeserializeObject<List<ApprovedDomain>>(contents);
 

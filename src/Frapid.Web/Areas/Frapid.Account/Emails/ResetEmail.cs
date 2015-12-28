@@ -8,9 +8,8 @@ using Frapid.Account.DTO;
 using Frapid.ApplicationState.Cache;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;
-using Frapid.Messaging.Smtp;
 
-namespace Frapid.Account.Messaging
+namespace Frapid.Account.Emails
 {
     public class ResetEmail
     {
@@ -18,7 +17,7 @@ namespace Frapid.Account.Messaging
 
         public ResetEmail(Reset reset)
         {
-            _resetDetails = reset;
+            this._resetDetails = reset;
         }
 
         private string GetTemplate()
@@ -38,10 +37,10 @@ namespace Frapid.Account.Messaging
         private string ParseTemplate(string template)
         {
             string siteUrl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
-            string link = siteUrl + "/account/reset/confirm?token=" + _resetDetails.RequestId;
+            string link = siteUrl + "/account/reset/confirm?token=" + this._resetDetails.RequestId;
 
-            string parsed = template.Replace("{{Name}}", _resetDetails.Name);
-            parsed = parsed.Replace("{{EmailAddress}}", _resetDetails.Email);
+            string parsed = template.Replace("{{Name}}", this._resetDetails.Name);
+            parsed = parsed.Replace("{{EmailAddress}}", this._resetDetails.Email);
             parsed = parsed.Replace("{{ResetLink}}", link);
             parsed = parsed.Replace("{{SiteUrl}}", siteUrl);
 
@@ -62,15 +61,22 @@ namespace Frapid.Account.Messaging
 
         public async Task SendAsync()
         {
-            string template = GetTemplate();
-            string parsed = ParseTemplate(template);
+            string template = this.GetTemplate();
+            string parsed = this.ParseTemplate(template);
             string subject = "Your Password Reset Link for " + HttpContext.Current.Request.Url.Authority;
 
             string catalog = AppUsers.GetCatalog();
             var email = this.GetEmail(this._resetDetails, subject, parsed);
+
+            var processor = EmailProcessor.GetDefault(catalog);
+            if (string.IsNullOrWhiteSpace(email.ReplyTo))
+            {
+                email.ReplyTo = processor.Config.FromEmail;
+            }
+
             var queue = new MailQueueManager(catalog, email);
             queue.Add();
-            await queue.ProcessMailQueueAsync(EmailProcessor.GetDefault(catalog));
+            await queue.ProcessMailQueueAsync(processor);
         }
     }
 }

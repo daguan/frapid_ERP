@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.Account.DAL;
+using Frapid.Account.Emails;
 using Frapid.Account.InputModels;
-using Frapid.Account.Messaging;
 using Frapid.Areas;
 using Frapid.WebsiteBuilder.Controllers;
 using Reset = Frapid.Account.ViewModels.Reset;

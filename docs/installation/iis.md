@@ -1,6 +1,6 @@
 # Installing Frapid on IIS
 
-This document assumes :
+This document assumes:
 
 * you have already installed PostgreSQL Server 9.3 or above and have password for `postgres` user handy.
 * you have cloned frapid github repository locally.
@@ -23,7 +23,7 @@ Open IIS and create a new website as shown in this image.
 
 Click Ok.
 
-# Build Frapid
+## Build Frapid
 
 Open the frapid solutions in the mentioned order and perform a build:
 
@@ -39,12 +39,32 @@ Alternatively, you can also build frapid by running this batch file:
 
 * ~/builds/all.bat
 
-# Edit DbServer.config
+## Edit DbServer.config
 
-Edit the configuration file [DbServer.config](../configs/DbServer.config.md).
+Edit the configuration files:
 
-# Browse Frapid
+* [DbServer.config](../configs/DbServer.config.md) for database access.
+* [DomainsApproved.json](../configs/DomainsApproved.json.md) and change the "AdminEmail" for localhost domain to your own email address.
 
-Browse frapid on this url : [https://localhost](https://localhost) and wait a few minutes for the installation to complete.
+## Browse Frapid
 
-Reload the page.
+Browse frapid on this URL : [https://localhost](https://localhost) and confirm SSL certificate exception. Wait a few minutes for the installation to complete. Reload the page.
+You will notice that a database name "localhost" has been automatically created and populated for you.
+
+## Configure Email Provider
+
+Since you still do not have access to the admin area, you need to create an account for yourself. To verify your account, frapid will send account verification email.
+You need to configure a transactional email provider.
+
+Create an account with [SendGrid](http://sendgrid.com/) and edit the configuration file [~/Catalogs/localhost/Configs/SMTP/SendGrid.json](../configs/SendGrid.json.md).
+
+* Enter from email.
+* Enter API User.
+* Enter API Key.
+* Set Enabled to true.
+
+## Sign Up
+
+Navigate to the [sign up page](https://localhost/account/sign-up) and create an account for yourself. Verify your account and login to the admin area.
+
+[Return Back](../../README.md)

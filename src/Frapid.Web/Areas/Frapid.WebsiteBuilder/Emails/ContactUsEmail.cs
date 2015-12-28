@@ -82,7 +82,14 @@ namespace Frapid.WebsiteBuilder.Emails
                 var manager = new MailQueueManager(catalog, email);
                 manager.Add();
 
-                await manager.ProcessMailQueueAsync(EmailProcessor.GetDefault(catalog));
+                var processor = EmailProcessor.GetDefault(catalog);
+
+                if (string.IsNullOrWhiteSpace(email.ReplyTo))
+                {
+                    email.ReplyTo = processor.Config.FromEmail;
+                }
+
+                await manager.ProcessMailQueueAsync(processor);
             }
             catch
             {

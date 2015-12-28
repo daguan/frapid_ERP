@@ -3,8 +3,8 @@ using Facebook;
 using Frapid.Areas;
 using Frapid.Account.DAL;
 using Frapid.Account.DTO;
+using Frapid.Account.Emails;
 using Frapid.Account.InputModels;
-using Frapid.Account.Messaging;
 using Frapid.Account.Models;
 
 namespace Frapid.Account.RemoteAuthentication

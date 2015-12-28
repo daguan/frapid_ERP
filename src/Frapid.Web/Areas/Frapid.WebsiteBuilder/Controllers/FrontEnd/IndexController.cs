@@ -39,9 +39,6 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
             }
             catch (NpgsqlException)
             {
-#if DEBUG
-                throw;
-#endif
                 return RedirectToInstallationPage();
             }
         }

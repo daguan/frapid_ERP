@@ -8,9 +8,8 @@ using Frapid.Account.Models;
 using Frapid.ApplicationState.Cache;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;
-using Frapid.Messaging.Smtp;
 
-namespace Frapid.Account.Messaging
+namespace Frapid.Account.Emails
 {
     public class WelcomeEmail
     {
@@ -20,7 +19,7 @@ namespace Frapid.Account.Messaging
 
         public WelcomeEmail(IUserInfo user, string template = "", string provider = "")
         {
-            _user = user;
+            this._user = user;
             this._provider = provider;
             this._template = string.IsNullOrWhiteSpace(template)
                 ? "~/Catalogs/{catalog}/Areas/Frapid.Account/EmailTemplates/welcome-email.html"
@@ -45,10 +44,10 @@ namespace Frapid.Account.Messaging
         {
             string siteUrl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
 
-            string parsed = template.Replace("{{Name}}", _user.Name);
+            string parsed = template.Replace("{{Name}}", this._user.Name);
             parsed = parsed.Replace("{{Domain}}", HttpContext.Current.Request.Url.Authority);
             parsed = parsed.Replace("{{SiteUrl}}", siteUrl);
-            parsed = parsed.Replace("{{ProviderName}}", _provider);
+            parsed = parsed.Replace("{{ProviderName}}", this._provider);
 
             return parsed;
         }
@@ -67,14 +66,22 @@ namespace Frapid.Account.Messaging
 
         public async Task SendAsync()
         {
-            string template = GetTemplate();
-            string parsed = ParseTemplate(template);
+            string template = this.GetTemplate();
+            string parsed = this.ParseTemplate(template);
             string subject = "Welcome to " + HttpContext.Current.Request.Url.Authority;
             string catalog = AppUsers.GetCatalog();
             var email = this.GetEmail(this._user, subject, parsed);
+
+            var processor = EmailProcessor.GetDefault(catalog);
+
+            if (string.IsNullOrWhiteSpace(email.ReplyTo))
+            {
+                email.ReplyTo = processor.Config.FromEmail;
+            }
+
             var queue = new MailQueueManager(catalog, email);
             queue.Add();
-            await queue.ProcessMailQueueAsync(EmailProcessor.GetDefault(catalog));
+            await queue.ProcessMailQueueAsync(processor);
         }
     }
 }

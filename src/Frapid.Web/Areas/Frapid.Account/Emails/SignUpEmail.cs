@@ -4,14 +4,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
-using Frapid.ApplicationState.Cache;
 using Frapid.Account.DTO;
+using Frapid.ApplicationState.Cache;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;
-using Frapid.Messaging.Helpers;
-using Frapid.Messaging.Smtp;
 
-namespace Frapid.Account.Messaging
+namespace Frapid.Account.Emails
 {
     public class SignUpEmail
     {
@@ -70,10 +68,19 @@ namespace Frapid.Account.Messaging
             string subject = "Confirm Your Registration at " + HttpContext.Current.Request.Url.Authority;
 
             string catalog = AppUsers.GetCatalog();
+
             var email = this.GetEmail(this._registration, subject, parsed);
+
+            var processor = EmailProcessor.GetDefault(catalog);
+            if (string.IsNullOrWhiteSpace(email.ReplyTo))
+            {
+                email.ReplyTo = processor.Config.FromEmail;
+            }
+
             var queue = new MailQueueManager(catalog, email);
+
             queue.Add();
-            await queue.ProcessMailQueueAsync(EmailProcessor.GetDefault(catalog));
+            await queue.ProcessMailQueueAsync(processor);
         }
     }
 }

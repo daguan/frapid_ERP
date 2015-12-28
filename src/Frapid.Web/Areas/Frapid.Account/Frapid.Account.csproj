@@ -198,10 +198,10 @@
     <Compile Include="Controllers\Backend\UserController.cs" />
     <Compile Include="DTO\Office.cs" />
     <Compile Include="Exceptions\EmailConfirmException.cs" />
-    <Compile Include="Messaging\ResetEmail.cs" />
+    <Compile Include="Emails\ResetEmail.cs" />
     <Compile Include="Models\IUserInfo.cs" />
-    <Compile Include="Messaging\WelcomeEmail.cs" />
-    <Compile Include="Messaging\SignUpEmail.cs" />
+    <Compile Include="Emails\WelcomeEmail.cs" />
+    <Compile Include="Emails\SignUpEmail.cs" />
     <Compile Include="Exceptions\PasswordConfirmException.cs" />
     <Compile Include="Controllers\Frontend\SignupController.cs" />
     <Compile Include="DAL\ConfigurationProfiles.cs" />
