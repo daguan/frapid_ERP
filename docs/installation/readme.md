@@ -91,24 +91,6 @@ does not affect **bar.com**.
 | [SMTP\SendGrid.json](../configs/SendGrid.json.md) | Contains configuration of [SendGrid Transactional Email Service](http://sendgrid.com) related to `foo_com` instance.
 | [SMTP\Mailgun.json](../configs/Mailgun.json.md) | Contains configuration of [Mailgun Transactional Email Service](http://mailgun.com) related to `foo_com` instance.
 
-### Overrides
-
-Frapid searches for overridden views on the instance directory and loads them if found.
-
-For example: the view:
-
-`~/Areas/Frapid.Account/Views/SignUp/Index.cshtml`
-
-would be overridden by:
-
-`~/Catalogs/foo_com/Areas/Frapid.Account/Views/SignUp/Index.cshtml`
-
-for foo.com and
-
-`~/Catalogs/bar_com/Areas/Frapid.Account/Views/SignUp/Index.cshtml`
-
-for bar.com.
-
 
 ### Website Themes
 
