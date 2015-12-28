@@ -23,6 +23,7 @@ Since frapid has built-in support for Mailgun API, you just need to edit the con
 Preferably, you can configure this from the [Admin Area](#) as well.
 
 **~/Catalogs/<domain>/Configs/SMTP/Mailgun.json**
+
 ```json
 {
     "FromName" : "",
@@ -31,7 +32,8 @@ Preferably, you can configure this from the [Admin Area](#) as well.
 	"ApiKey": "Your Mailgun api key",
 	"SecretKey": "Your Mailgun secret",
 	"Enabled": false
-}```
+}
+```
 
 ## Configuration Explained
 
