@@ -34,7 +34,7 @@ Please be advised that once you correctly configure this file, frapid will autom
 | Password                    | Password for the above user. The default password is "change-on-deployment". If you changed password for this account on PostgreSQL Server, change it here as well. |
 | MetaDatabase                | The **master database** which contains multi-instance meta information. |
 | ReportUserId                | If not found, frapid will create a user called "report_user". This user **must have a read-only access to the database**. Leave it as it is if you want frapid to take care of this for you. |
-| ReportUserPassword          | Password for the above user. The default password is "change-on-deployment". If you happen to changed password for this account on PostgreSQL Server, change it here as well. |
+| ReportUserPassword          | Password for the above user. The default password is "change-on-deployment". If you changed password for this account on PostgreSQL Server, change it here as well. |
 | PostgreSQLBinDirectory      | Depending on where you installed PostgreSQL server, enter the correct location of the PostgreSQL bin directory. |
 
 ### Related Contents
