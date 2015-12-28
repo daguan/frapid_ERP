@@ -2,7 +2,7 @@
 
 When you start sending (several) hundreds of emails every day, you will soon realize that SMTP is not that efficient :
 
-* The email conversion rate is pretty low for you.
+* The email conversion rate is low and declining.
 * Most of your clients say that they do not get your emails at all.
 * A few clients report back to you that your emails were found inside the "Junk" or "Spam" folder.
 * An email server is not particularly happy with your speed of email submissions.
