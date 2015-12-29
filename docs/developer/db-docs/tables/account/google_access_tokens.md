@@ -4,8 +4,8 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | user_id | [ ] | integer | 0 |  |
-| 2 | token | [x] | text | 0 |  |
+| 1 | user_id | NOT NULL | integer | 0 |  |
+| 2 | token |  | text | 0 |  |
 
 
 

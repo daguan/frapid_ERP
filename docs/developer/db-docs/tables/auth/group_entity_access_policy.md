@@ -4,14 +4,14 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | group_entity_access_policy_id | [ ] | integer | 0 |  |
-| 2 | entity_name | [x] | character varying | 128 |  |
-| 3 | office_id | [ ] | integer | 0 |  |
-| 4 | role_id | [ ] | integer | 0 |  |
-| 5 | access_type_id | [x] | integer | 0 |  |
-| 6 | allow_access | [ ] | boolean | 0 |  |
-| 7 | audit_user_id | [x] | integer | 0 |  |
-| 8 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 1 | group_entity_access_policy_id | NOT NULL | integer | 0 |  |
+| 2 | entity_name |  | character varying | 128 |  |
+| 3 | office_id | NOT NULL | integer | 0 |  |
+| 4 | role_id | NOT NULL | integer | 0 |  |
+| 5 | access_type_id |  | integer | 0 |  |
+| 6 | allow_access | NOT NULL | boolean | 0 |  |
+| 7 | audit_user_id |  | integer | 0 |  |
+| 8 | audit_ts |  | timestamp with time zone | 0 |  |
 
 
 

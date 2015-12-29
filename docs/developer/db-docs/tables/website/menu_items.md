@@ -4,14 +4,14 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | menu_item_id | [ ] | integer | 0 |  |
-| 2 | menu_id | [x] | integer | 0 |  |
-| 3 | sort | [ ] | integer | 0 |  |
-| 4 | title | [ ] | character varying | 100 |  |
-| 5 | url | [x] | character varying | 500 |  |
-| 6 | content_id | [x] | integer | 0 |  |
-| 7 | audit_user_id | [x] | integer | 0 |  |
-| 8 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 1 | menu_item_id | NOT NULL | integer | 0 |  |
+| 2 | menu_id |  | integer | 0 |  |
+| 3 | sort | NOT NULL | integer | 0 |  |
+| 4 | title | NOT NULL | character varying | 100 |  |
+| 5 | url |  | character varying | 500 |  |
+| 6 | content_id |  | integer | 0 |  |
+| 7 | audit_user_id |  | integer | 0 |  |
+| 8 | audit_ts |  | timestamp with time zone | 0 |  |
 
 
 

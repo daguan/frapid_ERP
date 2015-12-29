@@ -4,14 +4,14 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | menu_access_policy_id | [ ] | bigint | 0 |  |
-| 2 | office_id | [ ] | integer | 0 |  |
-| 3 | menu_id | [ ] | integer | 0 |  |
-| 4 | user_id | [x] | integer | 0 |  |
-| 5 | allow_access | [x] | boolean | 0 |  |
-| 6 | disallow_access | [x] | boolean | 0 |  |
-| 7 | audit_user_id | [x] | integer | 0 |  |
-| 8 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 1 | menu_access_policy_id | NOT NULL | bigint | 0 |  |
+| 2 | office_id | NOT NULL | integer | 0 |  |
+| 3 | menu_id | NOT NULL | integer | 0 |  |
+| 4 | user_id |  | integer | 0 |  |
+| 5 | allow_access |  | boolean | 0 |  |
+| 6 | disallow_access |  | boolean | 0 |  |
+| 7 | audit_user_id |  | integer | 0 |  |
+| 8 | audit_ts |  | timestamp with time zone | 0 |  |
 
 
 

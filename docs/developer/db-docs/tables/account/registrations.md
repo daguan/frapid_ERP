@@ -4,16 +4,16 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | registration_id | [ ] | uuid | 0 |  |
-| 2 | name | [x] | character varying | 100 |  |
-| 3 | email | [ ] | character varying | 100 |  |
-| 4 | phone | [x] | character varying | 100 |  |
-| 5 | password | [x] | text | 0 |  |
-| 6 | browser | [x] | text | 0 |  |
-| 7 | ip_address | [x] | character varying | 50 |  |
-| 8 | registered_on | [ ] | timestamp with time zone | 0 |  |
-| 9 | confirmed | [x] | boolean | 0 |  |
-| 10 | confirmed_on | [x] | timestamp with time zone | 0 |  |
+| 1 | registration_id | NOT NULL | uuid | 0 |  |
+| 2 | name |  | character varying | 100 |  |
+| 3 | email | NOT NULL | character varying | 100 |  |
+| 4 | phone |  | character varying | 100 |  |
+| 5 | password |  | text | 0 |  |
+| 6 | browser |  | text | 0 |  |
+| 7 | ip_address |  | character varying | 50 |  |
+| 8 | registered_on | NOT NULL | timestamp with time zone | 0 |  |
+| 9 | confirmed |  | boolean | 0 |  |
+| 10 | confirmed_on |  | timestamp with time zone | 0 |  |
 
 
 

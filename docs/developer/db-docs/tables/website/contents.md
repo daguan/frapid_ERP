@@ -4,21 +4,21 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | content_id | [ ] | integer | 0 |  |
-| 2 | category_id | [ ] | integer | 0 |  |
-| 3 | title | [ ] | character varying | 100 |  |
-| 4 | alias | [ ] | character varying | 50 |  |
-| 5 | author_id | [x] | integer | 0 |  |
-| 6 | publish_on | [ ] | timestamp with time zone | 0 |  |
-| 7 | markdown | [x] | text | 0 |  |
-| 8 | contents | [ ] | text | 0 |  |
-| 9 | tags | [x] | text | 0 |  |
-| 10 | is_draft | [ ] | boolean | 0 |  |
-| 11 | seo_keywords | [ ] | character varying | 50 |  |
-| 12 | seo_description | [ ] | character varying | 100 |  |
-| 13 | is_homepage | [ ] | boolean | 0 |  |
-| 14 | audit_user_id | [x] | integer | 0 |  |
-| 15 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 1 | content_id | NOT NULL | integer | 0 |  |
+| 2 | category_id | NOT NULL | integer | 0 |  |
+| 3 | title | NOT NULL | character varying | 100 |  |
+| 4 | alias | NOT NULL | character varying | 50 |  |
+| 5 | author_id |  | integer | 0 |  |
+| 6 | publish_on | NOT NULL | timestamp with time zone | 0 |  |
+| 7 | markdown |  | text | 0 |  |
+| 8 | contents | NOT NULL | text | 0 |  |
+| 9 | tags |  | text | 0 |  |
+| 10 | is_draft | NOT NULL | boolean | 0 |  |
+| 11 | seo_keywords | NOT NULL | character varying | 50 |  |
+| 12 | seo_description | NOT NULL | character varying | 100 |  |
+| 13 | is_homepage | NOT NULL | boolean | 0 |  |
+| 14 | audit_user_id |  | integer | 0 |  |
+| 15 | audit_ts |  | timestamp with time zone | 0 |  |
 
 
 

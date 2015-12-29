@@ -4,27 +4,27 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | office_id | [ ] | integer | 0 |  |
-| 2 | office_code | [ ] | character varying | 12 |  |
-| 3 | office_name | [ ] | character varying | 150 |  |
-| 4 | nick_name | [x] | character varying | 50 |  |
-| 5 | registration_date | [x] | date | 0 |  |
-| 6 | po_box | [x] | character varying | 128 |  |
-| 7 | address_line_1 | [x] | character varying | 128 |  |
-| 8 | address_line_2 | [x] | character varying | 128 |  |
-| 9 | street | [x] | character varying | 50 |  |
-| 10 | city | [x] | character varying | 50 |  |
-| 11 | state | [x] | character varying | 50 |  |
-| 12 | zip_code | [x] | character varying | 24 |  |
-| 13 | country | [x] | character varying | 50 |  |
-| 14 | phone | [x] | character varying | 24 |  |
-| 15 | fax | [x] | character varying | 24 |  |
-| 16 | email | [x] | character varying | 128 |  |
-| 17 | url | [x] | character varying | 50 |  |
-| 18 | logo | [x] | image | 0 |  |
-| 19 | parent_office_id | [x] | integer | 0 |  |
-| 20 | audit_user_id | [x] | integer | 0 |  |
-| 21 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 1 | office_id | NOT NULL | integer | 0 |  |
+| 2 | office_code | NOT NULL | character varying | 12 |  |
+| 3 | office_name | NOT NULL | character varying | 150 |  |
+| 4 | nick_name |  | character varying | 50 |  |
+| 5 | registration_date |  | date | 0 |  |
+| 6 | po_box |  | character varying | 128 |  |
+| 7 | address_line_1 |  | character varying | 128 |  |
+| 8 | address_line_2 |  | character varying | 128 |  |
+| 9 | street |  | character varying | 50 |  |
+| 10 | city |  | character varying | 50 |  |
+| 11 | state |  | character varying | 50 |  |
+| 12 | zip_code |  | character varying | 24 |  |
+| 13 | country |  | character varying | 50 |  |
+| 14 | phone |  | character varying | 24 |  |
+| 15 | fax |  | character varying | 24 |  |
+| 16 | email |  | character varying | 128 |  |
+| 17 | url |  | character varying | 50 |  |
+| 18 | logo |  | image | 0 |  |
+| 19 | parent_office_id |  | integer | 0 |  |
+| 20 | audit_user_id |  | integer | 0 |  |
+| 21 | audit_ts |  | timestamp with time zone | 0 |  |
 
 
 

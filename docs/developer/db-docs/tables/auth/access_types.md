@@ -4,8 +4,8 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | access_type_id | [ ] | integer | 0 |  |
-| 2 | access_type_name | [ ] | character varying | 48 |  |
+| 1 | access_type_id | NOT NULL | integer | 0 |  |
+| 2 | access_type_name | NOT NULL | character varying | 48 |  |
 
 
 

@@ -4,13 +4,13 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | category_id | [ ] | integer | 0 |  |
-| 2 | category_name | [ ] | character varying | 100 |  |
-| 3 | alias | [ ] | character varying | 50 |  |
-| 4 | seo_keywords | [x] | character varying | 50 |  |
-| 5 | seo_description | [x] | character varying | 100 |  |
-| 6 | audit_user_id | [x] | integer | 0 |  |
-| 7 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 1 | category_id | NOT NULL | integer | 0 |  |
+| 2 | category_name | NOT NULL | character varying | 100 |  |
+| 3 | alias | NOT NULL | character varying | 50 |  |
+| 4 | seo_keywords |  | character varying | 50 |  |
+| 5 | seo_description |  | character varying | 100 |  |
+| 6 | audit_user_id |  | integer | 0 |  |
+| 7 | audit_ts |  | timestamp with time zone | 0 |  |
 
 
 

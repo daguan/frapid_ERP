@@ -4,11 +4,11 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | role_id | [ ] | integer | 0 |  |
-| 2 | role_name | [ ] | character varying | 100 |  |
-| 3 | is_administrator | [ ] | boolean | 0 |  |
-| 4 | audit_user_id | [x] | integer | 0 |  |
-| 5 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 1 | role_id | NOT NULL | integer | 0 |  |
+| 2 | role_name | NOT NULL | character varying | 100 |  |
+| 3 | is_administrator | NOT NULL | boolean | 0 |  |
+| 4 | audit_user_id |  | integer | 0 |  |
+| 5 | audit_ts |  | timestamp with time zone | 0 |  |
 
 
 

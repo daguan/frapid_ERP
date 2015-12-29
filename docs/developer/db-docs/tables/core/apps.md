@@ -4,13 +4,13 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | app_name | [ ] | character varying | 100 |  |
-| 2 | name | [x] | character varying | 100 |  |
-| 3 | version_number | [x] | character varying | 100 |  |
-| 4 | publisher | [x] | character varying | 100 |  |
-| 5 | published_on | [x] | date | 0 |  |
-| 6 | icon | [x] | character varying | 100 |  |
-| 7 | landing_url | [x] | text | 0 |  |
+| 1 | app_name | NOT NULL | character varying | 100 |  |
+| 2 | name |  | character varying | 100 |  |
+| 3 | version_number |  | character varying | 100 |  |
+| 4 | publisher |  | character varying | 100 |  |
+| 5 | published_on |  | date | 0 |  |
+| 6 | icon |  | character varying | 100 |  |
+| 7 | landing_url |  | text | 0 |  |
 
 
 

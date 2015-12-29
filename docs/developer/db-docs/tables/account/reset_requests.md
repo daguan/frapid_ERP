@@ -4,16 +4,16 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | request_id | [ ] | uuid | 0 |  |
-| 2 | user_id | [ ] | integer | 0 |  |
-| 3 | email | [x] | text | 0 |  |
-| 4 | name | [x] | text | 0 |  |
-| 5 | requested_on | [ ] | timestamp with time zone | 0 |  |
-| 6 | expires_on | [ ] | timestamp with time zone | 0 |  |
-| 7 | browser | [x] | text | 0 |  |
-| 8 | ip_address | [x] | character varying | 50 |  |
-| 9 | confirmed | [x] | boolean | 0 |  |
-| 10 | confirmed_on | [x] | timestamp with time zone | 0 |  |
+| 1 | request_id | NOT NULL | uuid | 0 |  |
+| 2 | user_id | NOT NULL | integer | 0 |  |
+| 3 | email |  | text | 0 |  |
+| 4 | name |  | text | 0 |  |
+| 5 | requested_on | NOT NULL | timestamp with time zone | 0 |  |
+| 6 | expires_on | NOT NULL | timestamp with time zone | 0 |  |
+| 7 | browser |  | text | 0 |  |
+| 8 | ip_address |  | character varying | 50 |  |
+| 9 | confirmed |  | boolean | 0 |  |
+| 10 | confirmed_on |  | timestamp with time zone | 0 |  |
 
 
 

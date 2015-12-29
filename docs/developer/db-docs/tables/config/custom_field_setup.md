@@ -4,13 +4,13 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | custom_field_setup_id | [ ] | integer | 0 |  |
-| 2 | form_name | [ ] | character varying | 100 |  |
-| 3 | field_order | [ ] | integer | 0 |  |
-| 4 | field_name | [ ] | character varying | 100 |  |
-| 5 | field_label | [ ] | character varying | 100 |  |
-| 6 | data_type | [x] | character varying | 50 |  |
-| 7 | description | [ ] | text | 0 |  |
+| 1 | custom_field_setup_id | NOT NULL | integer | 0 |  |
+| 2 | form_name | NOT NULL | character varying | 100 |  |
+| 3 | field_order | NOT NULL | integer | 0 |  |
+| 4 | field_name | NOT NULL | character varying | 100 |  |
+| 5 | field_label | NOT NULL | character varying | 100 |  |
+| 6 | data_type |  | character varying | 50 |  |
+| 7 | description | NOT NULL | text | 0 |  |
 
 
 

@@ -4,18 +4,18 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | menu_id | [ ] | integer | 0 |  |
-| 1 | menu_id | [ ] | integer | 0 |  |
-| 2 | sort | [x] | integer | 0 |  |
-| 2 | menu_name | [x] | character varying | 100 |  |
-| 3 | description | [x] | text | 0 |  |
-| 3 | app_name | [ ] | character varying | 100 |  |
-| 4 | audit_user_id | [x] | integer | 0 |  |
-| 4 | menu_name | [ ] | character varying | 100 |  |
-| 5 | audit_ts | [x] | timestamp with time zone | 0 |  |
-| 5 | url | [x] | text | 0 |  |
-| 6 | icon | [x] | character varying | 100 |  |
-| 7 | parent_menu_id | [x] | integer | 0 |  |
+| 1 | menu_id | NOT NULL | integer | 0 |  |
+| 1 | menu_id | NOT NULL | integer | 0 |  |
+| 2 | sort |  | integer | 0 |  |
+| 2 | menu_name |  | character varying | 100 |  |
+| 3 | description |  | text | 0 |  |
+| 3 | app_name | NOT NULL | character varying | 100 |  |
+| 4 | audit_user_id |  | integer | 0 |  |
+| 4 | menu_name | NOT NULL | character varying | 100 |  |
+| 5 | audit_ts |  | timestamp with time zone | 0 |  |
+| 5 | url |  | text | 0 |  |
+| 6 | icon |  | character varying | 100 |  |
+| 7 | parent_menu_id |  | integer | 0 |  |
 
 
 

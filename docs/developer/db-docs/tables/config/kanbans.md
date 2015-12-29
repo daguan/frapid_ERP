@@ -4,13 +4,13 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | kanban_id | [ ] | bigint | 0 |  |
-| 2 | object_name | [ ] | character varying | 128 |  |
-| 3 | user_id | [x] | integer | 0 |  |
-| 4 | kanban_name | [ ] | character varying | 128 |  |
-| 5 | description | [x] | text | 0 |  |
-| 6 | audit_user_id | [x] | integer | 0 |  |
-| 7 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 1 | kanban_id | NOT NULL | bigint | 0 |  |
+| 2 | object_name | NOT NULL | character varying | 128 |  |
+| 3 | user_id |  | integer | 0 |  |
+| 4 | kanban_name | NOT NULL | character varying | 128 |  |
+| 5 | description |  | text | 0 |  |
+| 6 | audit_user_id |  | integer | 0 |  |
+| 7 | audit_ts |  | timestamp with time zone | 0 |  |
 
 
 

@@ -4,13 +4,13 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | email_subscription_id | [ ] | uuid | 0 |  |
-| 2 | email | [ ] | character varying | 100 |  |
-| 3 | browser | [x] | text | 0 |  |
-| 4 | ip_address | [x] | character varying | 50 |  |
-| 5 | unsubscribed | [x] | boolean | 0 |  |
-| 6 | subscribed_on | [x] | timestamp with time zone | 0 |  |
-| 7 | unsubscribed_on | [x] | timestamp with time zone | 0 |  |
+| 1 | email_subscription_id | NOT NULL | uuid | 0 |  |
+| 2 | email | NOT NULL | character varying | 100 |  |
+| 3 | browser |  | text | 0 |  |
+| 4 | ip_address |  | character varying | 50 |  |
+| 5 | unsubscribed |  | boolean | 0 |  |
+| 6 | subscribed_on |  | timestamp with time zone | 0 |  |
+| 7 | unsubscribed_on |  | timestamp with time zone | 0 |  |
 
 
 

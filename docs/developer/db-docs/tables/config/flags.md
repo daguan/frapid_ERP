@@ -4,13 +4,13 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | flag_id | [ ] | bigint | 0 |  |
-| 2 | user_id | [ ] | integer | 0 |  |
-| 3 | flag_type_id | [ ] | integer | 0 |  |
-| 4 | resource | [x] | text | 0 |  |
-| 5 | resource_key | [x] | text | 0 |  |
-| 6 | resource_id | [x] | text | 0 |  |
-| 7 | flagged_on | [x] | timestamp with time zone | 0 |  |
+| 1 | flag_id | NOT NULL | bigint | 0 |  |
+| 2 | user_id | NOT NULL | integer | 0 |  |
+| 3 | flag_type_id | NOT NULL | integer | 0 |  |
+| 4 | resource |  | text | 0 |  |
+| 5 | resource_key |  | text | 0 |  |
+| 6 | resource_id |  | text | 0 |  |
+| 7 | flagged_on |  | timestamp with time zone | 0 |  |
 
 
 

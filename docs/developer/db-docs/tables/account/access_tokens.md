@@ -4,23 +4,23 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | access_token_id | [ ] | uuid | 0 |  |
-| 2 | issued_by | [ ] | text | 0 |  |
-| 3 | audience | [ ] | text | 0 |  |
-| 4 | ip_address | [x] | text | 0 |  |
-| 5 | user_agent | [x] | text | 0 |  |
-| 6 | header | [x] | text | 0 |  |
-| 7 | subject | [x] | text | 0 |  |
-| 8 | token_id | [x] | text | 0 |  |
-| 9 | application_id | [x] | uuid | 0 |  |
-| 10 | login_id | [ ] | bigint | 0 |  |
-| 11 | client_token | [ ] | text | 0 |  |
-| 12 | claims | [x] | text | 0 |  |
-| 13 | created_on | [ ] | timestamp with time zone | 0 |  |
-| 14 | expires_on | [ ] | timestamp with time zone | 0 |  |
-| 15 | revoked | [ ] | boolean | 0 |  |
-| 16 | revoked_by | [x] | integer | 0 |  |
-| 17 | revoked_on | [x] | timestamp with time zone | 0 |  |
+| 1 | access_token_id | NOT NULL | uuid | 0 |  |
+| 2 | issued_by | NOT NULL | text | 0 |  |
+| 3 | audience | NOT NULL | text | 0 |  |
+| 4 | ip_address |  | text | 0 |  |
+| 5 | user_agent |  | text | 0 |  |
+| 6 | header |  | text | 0 |  |
+| 7 | subject |  | text | 0 |  |
+| 8 | token_id |  | text | 0 |  |
+| 9 | application_id |  | uuid | 0 |  |
+| 10 | login_id | NOT NULL | bigint | 0 |  |
+| 11 | client_token | NOT NULL | text | 0 |  |
+| 12 | claims |  | text | 0 |  |
+| 13 | created_on | NOT NULL | timestamp with time zone | 0 |  |
+| 14 | expires_on | NOT NULL | timestamp with time zone | 0 |  |
+| 15 | revoked | NOT NULL | boolean | 0 |  |
+| 16 | revoked_by |  | integer | 0 |  |
+| 17 | revoked_on |  | timestamp with time zone | 0 |  |
 
 
 

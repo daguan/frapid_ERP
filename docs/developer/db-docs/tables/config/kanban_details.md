@@ -4,12 +4,12 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | kanban_detail_id | [ ] | bigint | 0 |  |
-| 2 | kanban_id | [ ] | bigint | 0 |  |
-| 3 | rating | [x] | smallint | 0 |  |
-| 4 | resource_id | [ ] | character varying | 128 |  |
-| 5 | audit_user_id | [x] | integer | 0 |  |
-| 6 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 1 | kanban_detail_id | NOT NULL | bigint | 0 |  |
+| 2 | kanban_id | NOT NULL | bigint | 0 |  |
+| 3 | rating |  | smallint | 0 |  |
+| 4 | resource_id | NOT NULL | character varying | 128 |  |
+| 5 | audit_user_id |  | integer | 0 |  |
+| 6 | audit_ts |  | timestamp with time zone | 0 |  |
 
 
 

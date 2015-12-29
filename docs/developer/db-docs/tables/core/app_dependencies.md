@@ -4,9 +4,9 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | app_dependency_id | [ ] | integer | 0 |  |
-| 2 | app_name | [x] | character varying | 100 |  |
-| 3 | depends_on | [x] | character varying | 100 |  |
+| 1 | app_dependency_id | NOT NULL | integer | 0 |  |
+| 2 | app_name |  | character varying | 100 |  |
+| 3 | depends_on |  | character varying | 100 |  |
 
 
 

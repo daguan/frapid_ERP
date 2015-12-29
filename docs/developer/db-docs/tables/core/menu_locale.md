@@ -4,10 +4,10 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | menu_locale_id | [ ] | integer | 0 |  |
-| 2 | menu_id | [ ] | integer | 0 |  |
-| 3 | culture | [ ] | character varying | 12 |  |
-| 4 | menu_text | [ ] | character varying | 250 |  |
+| 1 | menu_locale_id | NOT NULL | integer | 0 |  |
+| 2 | menu_id | NOT NULL | integer | 0 |  |
+| 3 | culture | NOT NULL | character varying | 12 |  |
+| 4 | menu_text | NOT NULL | character varying | 250 |  |
 
 
 

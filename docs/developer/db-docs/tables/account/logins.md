@@ -4,14 +4,14 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | login_id | [ ] | bigint | 0 |  |
-| 2 | user_id | [x] | integer | 0 |  |
-| 3 | office_id | [x] | integer | 0 |  |
-| 4 | browser | [x] | text | 0 |  |
-| 5 | ip_address | [x] | character varying | 50 |  |
-| 6 | is_active | [ ] | boolean | 0 |  |
-| 7 | login_timestamp | [ ] | timestamp with time zone | 0 |  |
-| 8 | culture | [ ] | character varying | 12 |  |
+| 1 | login_id | NOT NULL | bigint | 0 |  |
+| 2 | user_id |  | integer | 0 |  |
+| 3 | office_id |  | integer | 0 |  |
+| 4 | browser |  | text | 0 |  |
+| 5 | ip_address |  | character varying | 50 |  |
+| 6 | is_active | NOT NULL | boolean | 0 |  |
+| 7 | login_timestamp | NOT NULL | timestamp with time zone | 0 |  |
+| 8 | culture | NOT NULL | character varying | 12 |  |
 
 
 

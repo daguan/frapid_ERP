@@ -4,16 +4,16 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | user_id | [ ] | integer | 0 |  |
-| 2 | email | [ ] | character varying | 100 |  |
-| 3 | password | [x] | text | 0 |  |
-| 4 | office_id | [ ] | integer | 0 |  |
-| 5 | role_id | [ ] | integer | 0 |  |
-| 6 | name | [x] | character varying | 100 |  |
-| 7 | phone | [x] | character varying | 100 |  |
-| 8 | status | [x] | boolean | 0 |  |
-| 9 | audit_user_id | [x] | integer | 0 |  |
-| 10 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 1 | user_id | NOT NULL | integer | 0 |  |
+| 2 | email | NOT NULL | character varying | 100 |  |
+| 3 | password |  | text | 0 |  |
+| 4 | office_id | NOT NULL | integer | 0 |  |
+| 5 | role_id | NOT NULL | integer | 0 |  |
+| 6 | name |  | character varying | 100 |  |
+| 7 | phone |  | character varying | 100 |  |
+| 8 | status |  | boolean | 0 |  |
+| 9 | audit_user_id |  | integer | 0 |  |
+| 10 | audit_ts |  | timestamp with time zone | 0 |  |
 
 
 

@@ -4,9 +4,9 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | domain_id | [ ] | integer | 0 |  |
-| 2 | domain_name | [x] | character varying | 500 |  |
-| 3 | admin_email | [x] | character varying | 500 |  |
+| 1 | domain_id | NOT NULL | integer | 0 |  |
+| 2 | domain_name |  | character varying | 500 |  |
+| 3 | admin_email |  | character varying | 500 |  |
 
 
 

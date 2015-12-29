@@ -4,11 +4,11 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | data_type | [ ] | character varying | 50 |  |
-| 2 | is_number | [x] | boolean | 0 |  |
-| 3 | is_date | [x] | boolean | 0 |  |
-| 4 | is_boolean | [x] | boolean | 0 |  |
-| 5 | is_long_text | [x] | boolean | 0 |  |
+| 1 | data_type | NOT NULL | character varying | 50 |  |
+| 2 | is_number |  | boolean | 0 |  |
+| 3 | is_date |  | boolean | 0 |  |
+| 4 | is_boolean |  | boolean | 0 |  |
+| 5 | is_long_text |  | boolean | 0 |  |
 
 
 

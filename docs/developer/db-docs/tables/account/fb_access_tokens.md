@@ -4,9 +4,9 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | user_id | [ ] | integer | 0 |  |
-| 2 | fb_user_id | [x] | text | 0 |  |
-| 3 | token | [x] | text | 0 |  |
+| 1 | user_id | NOT NULL | integer | 0 |  |
+| 2 | fb_user_id |  | text | 0 |  |
+| 3 | token |  | text | 0 |  |
 
 
 

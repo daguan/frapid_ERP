@@ -4,9 +4,9 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | form_name | [ ] | character varying | 100 |  |
-| 2 | table_name | [ ] | character varying | 100 |  |
-| 3 | key_name | [ ] | character varying | 100 |  |
+| 1 | form_name | NOT NULL | character varying | 100 |  |
+| 2 | table_name | NOT NULL | character varying | 100 |  |
+| 3 | key_name | NOT NULL | character varying | 100 |  |
 
 
 

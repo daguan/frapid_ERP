@@ -4,10 +4,10 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | custom_field_id | [ ] | bigint | 0 |  |
-| 2 | custom_field_setup_id | [ ] | integer | 0 |  |
-| 3 | resource_id | [ ] | text | 0 |  |
-| 4 | value | [x] | text | 0 |  |
+| 1 | custom_field_id | NOT NULL | bigint | 0 |  |
+| 2 | custom_field_setup_id | NOT NULL | integer | 0 |  |
+| 3 | resource_id | NOT NULL | text | 0 |  |
+| 4 | value |  | text | 0 |  |
 
 
 

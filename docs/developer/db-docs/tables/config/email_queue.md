@@ -4,18 +4,18 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | queue_id | [ ] | bigint | 0 |  |
-| 2 | from_name | [ ] | character varying | 256 |  |
-| 3 | reply_to | [ ] | character varying | 256 |  |
-| 4 | subject | [ ] | character varying | 256 |  |
-| 5 | send_to | [ ] | character varying | 256 |  |
-| 6 | attachments | [x] | text | 0 |  |
-| 7 | message | [ ] | text | 0 |  |
-| 8 | added_on | [ ] | timestamp with time zone | 0 |  |
-| 9 | delivered | [ ] | boolean | 0 |  |
-| 10 | delivered_on | [x] | timestamp with time zone | 0 |  |
-| 11 | canceled | [ ] | boolean | 0 |  |
-| 12 | canceled_on | [x] | timestamp with time zone | 0 |  |
+| 1 | queue_id | NOT NULL | bigint | 0 |  |
+| 2 | from_name | NOT NULL | character varying | 256 |  |
+| 3 | reply_to | NOT NULL | character varying | 256 |  |
+| 4 | subject | NOT NULL | character varying | 256 |  |
+| 5 | send_to | NOT NULL | character varying | 256 |  |
+| 6 | attachments |  | text | 0 |  |
+| 7 | message | NOT NULL | text | 0 |  |
+| 8 | added_on | NOT NULL | timestamp with time zone | 0 |  |
+| 9 | delivered | NOT NULL | boolean | 0 |  |
+| 10 | delivered_on |  | timestamp with time zone | 0 |  |
+| 11 | canceled | NOT NULL | boolean | 0 |  |
+| 12 | canceled_on |  | timestamp with time zone | 0 |  |
 
 
 

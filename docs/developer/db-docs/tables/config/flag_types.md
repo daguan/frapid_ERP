@@ -4,12 +4,12 @@ Flags are used by users to mark transactions. The flags created by a user is not
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | flag_type_id | [ ] | integer | 0 |  |
-| 2 | flag_type_name | [ ] | character varying | 24 |  |
-| 3 | background_color | [ ] | color | 0 |  |
-| 4 | foreground_color | [ ] | color | 0 |  |
-| 5 | audit_user_id | [x] | integer | 0 |  |
-| 6 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 1 | flag_type_id | NOT NULL | integer | 0 |  |
+| 2 | flag_type_name | NOT NULL | character varying | 24 |  |
+| 3 | background_color | NOT NULL | color | 0 |  |
+| 4 | foreground_color | NOT NULL | color | 0 |  |
+| 5 | audit_user_id |  | integer | 0 |  |
+| 6 | audit_ts |  | timestamp with time zone | 0 |  |
 
 
 
