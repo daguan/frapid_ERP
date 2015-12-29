@@ -1,7 +1,7 @@
 # website.published_content_view view
 
 | Schema | [website](../../schemas/website.md) |
-| ------ | ----------------------------------------------- |
+| --- | --- |
 | Materialized View Name | published_content_view |
 | Owner | frapid_db_user |
 | Tablespace | DEFAULT |

@@ -1,7 +1,7 @@
 # account.sign_in_view view
 
 | Schema | [account](../../schemas/account.md) |
-| ------ | ----------------------------------------------- |
+| --- | --- |
 | Materialized View Name | sign_in_view |
 | Owner | frapid_db_user |
 | Tablespace | DEFAULT |

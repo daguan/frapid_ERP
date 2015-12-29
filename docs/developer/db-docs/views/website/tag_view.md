@@ -1,7 +1,7 @@
 # website.tag_view view
 
 | Schema | [website](../../schemas/website.md) |
-| ------ | ----------------------------------------------- |
+| --- | --- |
 | Materialized View Name | tag_view |
 | Owner | frapid_db_user |
 | Tablespace | DEFAULT |

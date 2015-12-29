@@ -1,7 +1,7 @@
 # website.menu_item_view view
 
 | Schema | [website](../../schemas/website.md) |
-| ------ | ----------------------------------------------- |
+| --- | --- |
 | Materialized View Name | menu_item_view |
 | Owner | frapid_db_user |
 | Tablespace | DEFAULT |

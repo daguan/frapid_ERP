@@ -1,7 +1,7 @@
 # public.image type
 
 | Schema | [public](../../schemas/public.md) |
-| ------ | ----------------------------------------------- |
+| --- | --- |
 | Type Name | image |
 | Base Type | text |
 | Owner | frapid_db_user |

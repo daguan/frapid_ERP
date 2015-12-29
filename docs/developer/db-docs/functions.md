@@ -1,7 +1,7 @@
 # Functions
 
 | # | Function | Owner | Description |
-| - | -------- | ----- | ----------- |
+| --- | --- | --- | --- |
 | 1 | [website](schemas/website.md).[add_email_subscription(_email text) RETURNS boolean](functions/website/add_email_subscription-5105895.md) | frapid_db_user |   |
 | 2 | [account](schemas/account.md).[add_installed_domain(_domain_name text, _admin_email text) RETURNS void](functions/account/add_installed_domain-5105379.md) | frapid_db_user |   |
 | 3 | [account](schemas/account.md).[can_confirm_registration(_token uuid) RETURNS boolean](functions/account/can_confirm_registration-5105380.md) | frapid_db_user |   |

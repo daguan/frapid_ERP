@@ -1,7 +1,7 @@
 # config.flag_view view
 
 | Schema | [config](../../schemas/config.md) |
-| ------ | ----------------------------------------------- |
+| --- | --- |
 | Materialized View Name | flag_view |
 | Owner | frapid_db_user |
 | Tablespace | DEFAULT |
