@@ -4,7 +4,7 @@ This document assumes:
 
 * you have already installed PostgreSQL Server 9.3 or above and have password for `postgres` user handy.
 * you have cloned frapid github repository locally.
-* you have understood the [installation basics](readme.md).
+* you have understood the [installation basics](README.md).
 
 Open IIS and create a new website as shown in this image.
 

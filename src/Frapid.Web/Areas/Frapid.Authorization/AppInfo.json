@@ -14,7 +14,7 @@
     "IsMeta": false,
 	"DbSchema": "auth",
 	"BlankDbPath": "~/Areas/Frapid.Authorization/db/auth-blank.sql",
-	"SampleDbPath": "~/Areas/Frapid.Authorization/db/auth-sample.sql",
+	"SampleDbPath": null,
 	"PatchFilePath": null,
 	"InstallSample": false,
 	"My": null,

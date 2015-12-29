@@ -13,4 +13,4 @@ public ActionResult Index()
 When you decorate a controller or action with ```RestrictAnonymous``` attribute, access to that controller or action will be forbidden to anonymous users.
 
 
-[Back to Developer Documentation](../readme.md)
+[Back to Developer Documentation](../README.md)

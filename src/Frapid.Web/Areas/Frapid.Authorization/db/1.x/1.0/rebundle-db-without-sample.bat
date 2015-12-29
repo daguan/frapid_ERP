@@ -1,5 +1,5 @@
 @echo off
-bundler\MixERP.Net.Utility.SqlBundler.exe ..\..\..\ "db/1.x/1.0" false false
+bundler\SqlBundler.exe ..\..\..\ "db/1.x/1.0" false
 copy auth.sql auth-blank.sql
 del auth.sql
 copy auth-blank.sql ..\..\auth-blank.sql

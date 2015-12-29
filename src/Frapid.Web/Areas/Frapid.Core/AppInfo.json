@@ -14,7 +14,7 @@
     "IsMeta": false,
 	"DbSchema": "core",
 	"BlankDbPath": "~/Areas/Frapid.Core/db/core-blank.sql",
-	"SampleDbPath": "~/Areas/Frapid.Core/db/core-sample.sql",
+	"SampleDbPath": null,
     "PatchFilePath": null,
 	"InstallSample": false,
 	"My": null,

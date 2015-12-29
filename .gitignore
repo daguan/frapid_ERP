@@ -2,7 +2,6 @@
 bin
 obj
 *.pdb
-*.exe
 *.suo
 *.user
 .my

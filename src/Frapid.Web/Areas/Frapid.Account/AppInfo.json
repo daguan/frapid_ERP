@@ -14,7 +14,7 @@
     "IsMeta": false,
 	"DbSchema": "account",
 	"BlankDbPath": "~/Areas/Frapid.Account/db/1.x/1.0/account-blank.sql",
-	"SampleDbPath": "~/Areas/Frapid.Account/db/1.x/1.0/account-sample.sql",
+	"SampleDbPath": null,
 	"PatchFilePath": null,
 	"InstallSample": true,
 	"My": "~/Areas/Frapid.Account/.my/db.sql",
