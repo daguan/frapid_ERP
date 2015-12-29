@@ -22,6 +22,13 @@ Frapid uses database first approach. Please follow these documents for more info
 - [Creating Restful Web API](rest/api.md)
 - [Writing Tests against Web APIs](rest/test.md)
 
+# Uncategorized
+
+- [Overridden Views](overrides.md)
+- [Creating Website Themes](website-builder/theme.md)
+- [.my Directory](db-my-directory.md)
+- [Running Background Tasks on Application Startup](i-startup-registration.md)
+
 # Frapid Application Samples
 - [Hello World Application](#)
 - [Simple ScrudFactory Application](#)
