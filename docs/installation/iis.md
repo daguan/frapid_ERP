@@ -1,6 +1,6 @@
 # Installing Frapid on IIS
 
-This document assumes:
+This document assumes that :
 
 * you have already installed PostgreSQL Server 9.3 or above and have password for `postgres` user handy.
 * you have cloned frapid github repository locally.
@@ -78,6 +78,7 @@ Navigate to the [sign up page](https://localhost/account/sign-up) and create an 
 If you encounter installation issues, examine log files on [C:\frapid-logs](../configs/Parameters.config.md). If you want start over once again:
 
 * delete the database "localhost".
+* delete the directory ~/Catalogs/localhost.
 * delete the file [DomainsInstalled.json](../configs/DomainsInstalled.json.md).
 
 [Return Back](../../README.md)
