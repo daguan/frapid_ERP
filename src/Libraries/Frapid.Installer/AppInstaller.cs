@@ -76,19 +76,20 @@ namespace Frapid.Installer
             }
 
             string db = this.Installable.BlankDbPath;
+            string path = HostingEnvironment.MapPath(db);
+            this.RunSql(catalog, path);
 
             if (this.Installable.InstallSample && !string.IsNullOrWhiteSpace(this.Installable.SampleDbPath))
             {
                 db = this.Installable.SampleDbPath;
+                path = HostingEnvironment.MapPath(db);
+                this.RunSql(catalog, path);
             }
-
-            string path = HostingEnvironment.MapPath(db);
-            this.RunSql(catalog, path);
         }
 
         private void RunSql(string catalog, string fromFile)
         {
-            if (string.IsNullOrWhiteSpace(fromFile))
+            if (string.IsNullOrWhiteSpace(fromFile) || File.Exists(fromFile).Equals(false))
             {
                 return;
             }

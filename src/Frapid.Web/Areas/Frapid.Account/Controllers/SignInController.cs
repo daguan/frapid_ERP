@@ -28,7 +28,7 @@ namespace Frapid.Account.Controllers
 
             var profile = ConfigurationProfiles.GetActiveProfile();
             Mapper.CreateMap<ConfigurationProfile, SignIn>();
-            var model = Mapper.Map<SignIn>(profile);
+            var model = Mapper.Map<SignIn>(profile) ?? new SignIn();
 
             return View(GetRazorView<AreaRegistration>("SignIn/Index.cshtml"), model);
         }
