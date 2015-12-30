@@ -1,10 +1,10 @@
 # Creating a Website Theme
 
-Frapid supports multiple themes per tenant. For foo.com domain, the themes directory is:
+Frapid supports multiple themes per tenant. For foo.com domain, you would upload your theme here:
 
 `~/Catalogs/foo_com/Areas/Frapid.WebsiteBuilder/Themes/<ThemeName>`
 
-Once a theme is uploaded to the themes directory, frapid will automatically discover it.
+Once you upload a new theme to the `Themes` directory, frapid will automatically discover and add it to the list of avaiable themes for `foo_com` tenant.
 
 ## Theme Components:
 
