@@ -53,7 +53,7 @@ Let's build a very basic theme using [Semantic UI](http://semantic-ui.com/).
 ### Basic Layout
 
 * Create a directory named `example` on `~/Catalogs/<YourTenant>/Areas/Frapid.WebsiteBuilder/Themes`.
-* Create an empty file called "Layout.cshtml" and Theme.config.
+* Create two empty files: Layout.cshtml and Theme.config.
 * Paste the following contents.
 
 **Layout.cshtml contents**
