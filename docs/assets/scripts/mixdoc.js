@@ -20,8 +20,7 @@ function processImages(html) {
     images.each(function () {
         var el = $(this);
         var src = path + el.attr("src");
-        $(this).attr("src", src);
-        $(this).addClass("ui bordered rounded image");
+        $(this).attr("src", src);        
     });
 
     
@@ -114,7 +113,7 @@ function loadDocument()
     var url = window.location.hash.replace("#", "");
     if(!url)
     {
-        url = "index.md";
+        url = "README.md";
         window.location.hash = url;
     }
     processDocument(url);    
@@ -173,7 +172,7 @@ function processDocument(url)
         processAnchors();
         processSocialSharing();
         processVideos();
-        $("table").addClass("ui celled striped table");
+        $("table").addClass("ui celled small compact striped collapsing table");
     };
     xhr.send();
 };

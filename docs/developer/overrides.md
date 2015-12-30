@@ -1,4 +1,4 @@
-### Overrides
+# Overrides
 
 Frapid searches for overridden views on the instance directory and loads them if found.
 
@@ -15,3 +15,5 @@ for foo.com and
 `~/Catalogs/bar_com/Areas/Frapid.Account/Views/SignUp/Index.cshtml`
 
 for bar.com.
+
+[Back to Developer Documentation](README.md)

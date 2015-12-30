@@ -1,20 +1,16 @@
 html, body, h1, h2, h3, h4, h5, div, p, li, code {
-    font-family : "Segoe UI", Arial;
-}
-
-p, li, td, a, pre, code
-{
-    font-weight:300;
+    font-family: "Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    color:#333333;
 }
 
 html, body{
-    font-size:16px;
+    font-size:12px;
     line-height:24px;
 }
 
 h1, h2, h3, h4, h5, strong, b, th
 {
-    font-weight:500!important;
+    color:#333333;
 }
 
 #story
@@ -46,7 +42,7 @@ footer, footer a, footer a:hover, footer li
 
 pre
 {
-    background-color: #EFEFEF;
+    background-color: rgba(0, 0, 0, 0.04);
     padding:16px;
     margin:8px 0;
     border:1px solid #DDD;
@@ -54,11 +50,15 @@ pre
 
 pre
 {
-	font-family: Consolas, monospace;
+	font-family: Consolas,"Liberation Mono",Menlo,Courier,monospace;
 }
 
 code {    
-    background-color: #EFEFEF;
+    padding: 0.2em 0px;
+    margin:0px;    
+    background-color: rgba(0, 0, 0, 0.04);
+    border-radius:3px;
+    word-wrap:break-word;
 }
 
 .sticky.contain-to-grid
@@ -81,12 +81,13 @@ aside a, aside a:hover
 
 a
 {
-    color:blue;
+    color:#5D78C0;
 }
 
-a:hover
+a:not(.header):hover
 {
-    color:red;
+    text-decoration:underline;
+    color:#073D8A;
 }
 
 

@@ -30684,6 +30684,5 @@ function processSocialSharing() {
 
 
 $(document).ready(function () {
-    $("img:not(.logo)").addClass("ui bordered centered rounded image");
     processSocialSharing();
 });

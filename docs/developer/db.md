@@ -22,17 +22,17 @@ Meta database contains global objects which are common to all instances. The met
 
 ## Sql Bundler
 
-It is advised to use [MixERP Sql Bundler Utility](mixerp-sql-bunlder.md).
+It is advised to use [MixERP Sql Bundler Utility](http://github.com/mixerp/sqlbundler).
 
 **Conventions**
 
 * do not create a single SQL script and keep everything on it. It is difficult to manage that way.
-* create your own directory structure [similar to frapid](#) and store individual sql files there.
+* create your own directory structure [similar to frapid](https://github.com/frapid/frapid/tree/master/src/Frapid.Web/db/meta/1.x/1.0/src) and store individual sql files there.
 * use SqlBundler.exe to bundle everything together to generate a single SQL file which contains.
 
 **How Sql Bundler Works?**
 
-Create a `.sqlbundle` file (`yaml` format) on your [db directory]().
+Create a `.sqlbundle` file (`yaml` format) on your [db directory](https://github.com/frapid/frapid/tree/master/src/Frapid.Web/db/meta/1.x/1.0).
 
 ```yaml
 - script-directory : db/1.x/1.0/src
@@ -52,3 +52,5 @@ path-to\SqlBundler.exe root-path sqlbundle-directory include_sample
 **Example**
 
 [https://github.com/frapid/frapid/blob/master/src/Frapid.Web/db/meta/1.x/1.0/rebundle.bat](https://github.com/frapid/frapid/blob/master/src/Frapid.Web/db/meta/1.x/1.0/rebundle.bat)
+
+[Back to Developer Documentation](README.md)

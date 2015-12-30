@@ -26,18 +26,15 @@ Frapid was built from the ground up for the cloud. Not only frapid supports web 
 frapid can also host several (hundred) website and application instances 
 running as a single IIS Website.
 
-**See Also**
+**Documentation**
 
-* [Database Naming Convention](docs/concepts/database-naming-convention.md)
-* [Installation Guide](docs/installation/README.md)
 * [Developer Documentation](docs/developer/README.md)
+* [Installation Guide](docs/installation/README.md)
+* [Database Naming Convention](docs/concepts/database-naming-convention.md)
+* [Credits](docs/credits/README.md)
 
 # Who Is Using Frapid?
 
 * [Our Own Site (CMS)](http://docs.frapid.com)
 * [MixERP (Backend Apps)](https://github.com/mixerp/mixerp/)
 * [Salesific CRM (CMS & Backend Apps)](https://github.com/binodnp/salesific-crm)
-
-# Read Further
-
-* [Credits](docs/credits/README.md)
