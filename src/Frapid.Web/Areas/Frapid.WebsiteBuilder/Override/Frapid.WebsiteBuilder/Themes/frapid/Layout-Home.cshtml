@@ -27,13 +27,14 @@
     @{
         string header = ViewBag.LayoutPath + "Header.cshtml";
         string footer = ViewBag.LayoutPath + "Footer.cshtml";
+        string subscription = ViewBag.LayoutPath + "Subscription.cshtml";
     }
 
     @Html.Partial(header)
 
     <section class="body">
         @RenderBody()
-        @Html.Partial(WebsiteBuilderController.GetLayoutPath() + "/Subscription.cshtml")
+        @Html.Partial(subscription)
     </section>
     @Html.Partial(footer)
     @Html.AntiForgeryToken()

@@ -31,18 +31,25 @@ namespace Frapid.Account.Controllers
 
             var manager = new Provider(AppUsers.GetCatalog(), applicationId, result.LoginId);
             var token = manager.GetToken();
+            string domain = DbConvention.GetDomain();
 
             AccessTokens.Save(token, this.RemoteUser.IpAddress, this.RemoteUser.UserAgent);
 
             var cookie = new HttpCookie("access_token")
             {
-                Domain = DbConvention.GetDomain(),
                 Value = token.ClientToken,
                 HttpOnly = true,
-                Secure = true
+                Secure = true,
+                Expires = token.ExpiresOn
             };
 
-            Response.Cookies.Add(cookie);
+            //localhost cookie is not supported by most browsers.
+            if (domain.ToLower() != "localhost")
+            {
+                cookie.Domain = domain;
+            }
+
+            this.Response.Cookies.Add(cookie);
             return Json(token.ClientToken);
         }
     }

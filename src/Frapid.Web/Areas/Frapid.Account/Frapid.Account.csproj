@@ -183,7 +183,6 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Controllers\Backend\EmailTemplateController.cs" />
     <Compile Include="Controllers\SignInController.cs" />
-    <Compile Include="AuthenticationManager.cs" />
     <Compile Include="Controllers\BaseAuthenticationController.cs" />
     <Compile Include="Controllers\FacebookController.cs" />
     <Compile Include="Controllers\GoogleSignInController.cs" />
