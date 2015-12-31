@@ -17,8 +17,8 @@ Frapid uses database first approach. Please follow these documents for more info
 
 - [Database of Frapid](db.md)
 - [Creating Data Transfer Objects](data-access/dto.md)
+- [Creating Data Access Repository Contracts](data-access/repository-contract.md)
 - [Creating Data Access Repositories](data-access/repository.md)
-- [Creating Data Access Classes](data-access/dac.md)
 - [Creating Restful Web API](rest/api.md)
 - [Writing Tests against Web APIs](rest/test.md)
 
@@ -27,8 +27,11 @@ Frapid uses database first approach. Please follow these documents for more info
 - [Overridden Views](overrides.md)
 - [Creating Website Themes](website-builder/theme.md)
 - [.my Directory](db-my-directory.md)
+- [AppInfo.json File](AppInfo.json.md)
 - [Running Background Tasks on Application Startup](i-startup-registration.md)
 
 # Frapid Application Samples
 - [Hello World Application](#)
 - [Simple ScrudFactory Application](#)
+
+[Back to Documentation Home](../../README.md)
