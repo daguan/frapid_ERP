@@ -96,6 +96,7 @@ For example, if your template contains `images/logo.png`, using the path `/my/te
 Now that you have understood the key elements, the master layout would be something like this.
 
 ```html
+@using Frapid.WebsiteBuilder.Controllers
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -106,7 +107,6 @@ Now that you have understood the key elements, the master layout would be someth
     <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.7/semantic.min.css" rel="stylesheet">
   </head>
   <body>
-    @using Frapid.WebsiteBuilder.Controllers
     @{
         string header = ViewBag.LayoutPath + "Header.cshtml";
         string footer = ViewBag.LayoutPath + "Footer.cshtml";
