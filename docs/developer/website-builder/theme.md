@@ -124,3 +124,5 @@ Congratulations, you have successfully built a theme for frapid.
 * [Multiple Layouts](multiple-layouts.md)
 * [Layout Sections](layout-sections.md)
 * [Displaying Menus from Database](menus.md)
+
+[Back to Developer Documentation](../README.md)
