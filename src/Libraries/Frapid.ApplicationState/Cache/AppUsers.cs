@@ -19,25 +19,30 @@ namespace Frapid.ApplicationState.Cache
             SetCurrentLogin(catalog, globalLoginId);
         }
 
-        public static void SetCurrentLogin(string catalog, long loginId)
+        public static LoginView SetCurrentLogin(string catalog, long loginId)
         {
             if (loginId <= 0)
             {
-                return;
+                return new LoginView();
             }
 
             string key = catalog + "-" + loginId.ToString(CultureInfo.InvariantCulture);
 
-            if (MemoryCache.Default[key] != null)
+            var cacheObject = CacheFactory.GetFromDefaultCacheByKey(key);
+            var login = cacheObject as LoginView;
+
+            if (login != null)
             {
-                return;
+                return login;
             }
 
-            var metaLogin = GetMetaLogin(catalog, loginId);
-            var dictionary = GetDictionary(catalog, metaLogin);
+            login = GetMetaLogin(catalog, loginId);
+            var dictionary = GetDictionary(catalog, login);
 
             CacheFactory.AddToDefaultCache("Dictionary" + key, dictionary);
-            CacheFactory.AddToDefaultCache(key, metaLogin);
+            CacheFactory.AddToDefaultCache(key, login);
+
+            return login;
         }
 
         public static LoginView GetCurrent(string catalog = "")
@@ -70,7 +75,7 @@ namespace Frapid.ApplicationState.Cache
             var cacheObject = CacheFactory.GetFromDefaultCacheByKey(key);
             login = cacheObject as LoginView;
 
-            return login ?? new LoginView();
+            return login ?? SetCurrentLogin(catalog, loginId);
         }
 
         public static long GetMetaLoginId(string catalog, long loginId)

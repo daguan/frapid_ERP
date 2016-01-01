@@ -1,34 +1,3 @@
-﻿@using Frapid.ApplicationState.Cache
-@model dynamic
-
-@{
-    ViewBag.Title = "Frapid Dashboard";
-    Layout = @ViewBag.Layout;
-}
-<div class="ui page grid">
-    <div class="sixteen wide column">
-        <div id="PhoneMenu" class="ui basic padded segment">
-            <div class="ui equal height grid">
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="ui visible bottom sidebar violet segment">
-    <div class="ui page grid">
-        <div class="column">
-            <a href="http://frapid.com" target="_blank">
-                <img class="ui image" height="30" src="/Static/images/logo.png" />
-                <span class="ui small grey header">
-                    Powered by Frapid Framework
-                </span>
-            </a>
-        </div>
-    </div>
-</div>
-
-<script>
-
     function loadIcons(apps) {
         function addIcon(app, target) {
             var div = $("<div/>");
@@ -75,5 +44,3 @@
     $(document).ready(function() {
         loadApps();
     });
-</script>
-

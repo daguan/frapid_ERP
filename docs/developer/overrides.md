@@ -1,19 +1,31 @@
 # Overrides
 
-Frapid searches for overridden views on the instance directory and loads them if found.
+Frapid searches for overridden views on the theme and instance directories and loads them if found:
 
-For example: the view:
+For:
+
+* **Domain Name**: fizbuzz.com
+* **Area Name** : Frapid.Account
+* **Controller Name** : SignUp
+* **Action Name** : Index
+* **Current Theme** : frapid
+
+When you request the view:
+
+```cs
+var view = View(GetRazorView<AreaRegistration>("SignUp/Index.cshtml"));
+```
+
+it will be searched on the current theme directory (~/Catalogs/fizzbuzz_com/Areas/Frapid.WebsiteBuilder/Themes/frapid/):
+
+`~/Catalogs/fizzbuzz_com/Areas/Frapid.WebsiteBuilder/Themes/frapid/Areas/Frapid.Account/Views/SignUp/Index.cshtml`
+
+if not found then
+
+`~/Catalogs/fizzbuzz_com/Areas/Frapid.Account/Views/SignUp/Index.cshtml`
+
+if not found then
 
 `~/Areas/Frapid.Account/Views/SignUp/Index.cshtml`
-
-would be overridden by:
-
-`~/Catalogs/foo_com/Areas/Frapid.Account/Views/SignUp/Index.cshtml`
-
-for foo.com and
-
-`~/Catalogs/bar_com/Areas/Frapid.Account/Views/SignUp/Index.cshtml`
-
-for bar.com.
 
 [Back to Developer Documentation](README.md)

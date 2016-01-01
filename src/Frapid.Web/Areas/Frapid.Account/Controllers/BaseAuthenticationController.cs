@@ -9,10 +9,11 @@ using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
 using Frapid.Configuration;
 using Frapid.TokenManager;
+using Frapid.WebsiteBuilder.Controllers;
 
 namespace Frapid.Account.Controllers
 {
-    public class BaseAuthenticationController : FrapidController
+    public class BaseAuthenticationController : WebsiteBuilderController
     {
         protected ActionResult OnAuthenticated(LoginResult result, SignInInfo model = null)
         {

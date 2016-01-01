@@ -64,6 +64,7 @@ CREATE TABLE website.menu_items
     sort                                        integer NOT NULL DEFAULT(0),
     title                                       national character varying(100) NOT NULL,
     url                                         national character varying(500),
+    target                                      national character varying(20),
     content_id                                  integer REFERENCES website.contents,    
     audit_user_id                               integer REFERENCES account.users,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 

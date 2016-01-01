@@ -8,7 +8,7 @@
         <div class="right menu">
             @foreach (var item in Menus.GetMenuItems("Default"))
             {
-                <a class="item" href="@item.Url">@item.Title</a>
+                <a class="item" target="@item.Target" href="@item.Url">@item.Title</a>
             }
         </div>
     </div>

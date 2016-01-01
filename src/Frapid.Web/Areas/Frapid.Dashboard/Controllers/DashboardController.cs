@@ -2,31 +2,45 @@
 using System.IO;
 using System.Web.Hosting;
 using System.Web.Mvc;
-using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
+using Frapid.Configuration;
 
 namespace Frapid.Dashboard.Controllers
 {
     public class DashboardController : FrapidController
     {
-        private static readonly string BasePath = "~/Areas/Frapid.Dashboard/Views";
-        private static readonly string LandingPage = BasePath + "/Default/LandingPage.cshtml";
-        private static readonly string LayoutByConvention = "~/Catalogs/{0}/Areas/Frapid.Dashboard/Views/Layouts/";
-        private static readonly string FallbackLayout = "~/Areas/Frapid.Dashboard/Views/Layouts/";
-        private static readonly string LayoutFile = "Dashboard.cshtml";
+        private static readonly string LandingPage = "~/Areas/Frapid.Dashboard/Views/Default/LandingPage.cshtml";
 
         public DashboardController()
         {
-            ViewBag.ViewPath = GetViewPath();
-            ViewBag.LayoutPath = GetLayoutPath();
-            ViewBag.LayoutFile = LayoutFile;
+            ViewBag.LayoutPath = this.GetLayoutPath();
+            ViewBag.LayoutFile = this.GetLayoutFile();
+        }
+
+        private string GetLayoutFile()
+        {
+            string theme = Configuration.GetDefaultTheme();
+            return ThemeConfiguration.GetLayout(theme);
+        }
+
+        private string GetLayoutPath()
+        {
+            string layout = Configuration.GetCurrentThemePath();
+            string layoutDirectory = HostingEnvironment.MapPath(layout);
+
+            if (layoutDirectory != null && Directory.Exists(layoutDirectory))
+            {
+                return layout;
+            }
+
+            return null;
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (!filterContext.HttpContext.Request.IsAjaxRequest())
             {
-                ViewBag.Layout = GetLayoutPath() + LayoutFile;
+                ViewBag.Layout = GetLayoutPath() + this.GetLayoutFile();
             }
         }
 
@@ -35,25 +49,53 @@ namespace Frapid.Dashboard.Controllers
             return View(this.HttpContext.Request.IsAjaxRequest() ? path : LandingPage, model);
         }
 
-        protected string GetViewPath(string view = "")
+        protected string GetRazorView(string areaName, string path)
         {
-            return BasePath + view;
-        }
+            string catalog = DbConvention.GetCatalog();
+            string theme = Configuration.GetDefaultTheme();
 
-        protected string GetLayoutPath()
-        {
-            string layout = LayoutByConvention;
-            string catalog = AppUsers.GetCatalog();
-            layout = string.Format(CultureInfo.InvariantCulture, layout, catalog);
 
-            string layoutDirectory = HostingEnvironment.MapPath(layout);
+            string overridePath = "~/Catalogs/{0}/Areas/Frapid.Dashboard/Themes/{1}/Areas/{2}/Views/" + path;
+            overridePath = string.Format(CultureInfo.InvariantCulture, overridePath, catalog, theme, areaName);
 
-            if (layoutDirectory != null && Directory.Exists(layoutDirectory))
+            if (System.IO.File.Exists(HostingEnvironment.MapPath(overridePath)))
             {
-                return layout;
+                return overridePath;
             }
 
-            return FallbackLayout;
+
+            overridePath = "~/Catalogs/{0}/Areas/{1}/Themes/{2}/Views/" + path;
+            overridePath = string.Format(CultureInfo.InvariantCulture, overridePath, catalog, areaName, theme);
+
+            if (System.IO.File.Exists(HostingEnvironment.MapPath(overridePath)))
+            {
+                return overridePath;
+            }
+
+            string defaultPath = "~/Areas/{0}/Views/{1}";
+            defaultPath = string.Format(CultureInfo.InvariantCulture, defaultPath, areaName, path);
+
+            return defaultPath;
+        }
+
+        protected string GetRazorView(string areaName, string controllerName, string actionName)
+        {
+            string path = controllerName.ToLower() + "/" + actionName.ToLower() + ".cshtml";
+            return this.GetRazorView(areaName, path);
+        }
+
+        protected string GetRazorView<T>(string path) where T : FrapidAreaRegistration, new()
+        {
+            FrapidAreaRegistration registration = new T();
+            return this.GetRazorView(registration.AreaName, path);
+        }
+
+        protected string GetRazorView<T>(string controllerName, string actionName)
+            where T : FrapidAreaRegistration, new()
+        {
+            FrapidAreaRegistration registration = new T();
+            string path = controllerName.ToLower() + "/" + actionName.ToLower() + ".cshtml";
+            return this.GetRazorView(registration.AreaName, path);
         }
     }
 }

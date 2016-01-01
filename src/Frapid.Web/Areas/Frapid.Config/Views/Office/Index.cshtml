@@ -10,11 +10,11 @@
 
     scrudFactory.title = "Offices";
 
-    scrudFactory.viewAPI = "/api/config/office";
-    scrudFactory.viewTableName = "config.offices";
+    scrudFactory.viewAPI = "/api/core/office";
+    scrudFactory.viewTableName = "core.offices";
 
-    scrudFactory.formAPI = "/api/config/office";
-    scrudFactory.formTableName = "config.offices";
+    scrudFactory.formAPI = "/api/core/office";
+    scrudFactory.formTableName = "core.offices";
 
     scrudFactory.disabledOnEdit = ["AuthorId"];
     scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
@@ -37,7 +37,7 @@
     scrudFactory.keys = [
         {
             property: "ParentOfficeId",
-            url: '/api/config/office/display-fields',
+            url: '/api/core/office/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"

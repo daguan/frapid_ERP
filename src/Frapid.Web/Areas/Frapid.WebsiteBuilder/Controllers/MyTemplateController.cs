@@ -1,7 +1,9 @@
 using System.IO;
+using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using Frapid.Configuration;
 
 namespace Frapid.WebsiteBuilder.Controllers
 {
@@ -13,6 +15,20 @@ namespace Frapid.WebsiteBuilder.Controllers
             if (string.IsNullOrWhiteSpace(resource))
             {
                 return HttpNotFound();
+            }
+
+            string configFile = HostingEnvironment.MapPath($"~/Catalogs/{DbConvention.GetCatalog()}/Configs/Frapid.config");
+
+            if (!System.IO.File.Exists(configFile))
+            {
+                return this.HttpNotFound();
+            }
+
+            var allowed = ConfigurationManager.ReadConfigurationValue(configFile, "MyAllowedResources").Split(',');
+
+            if (string.IsNullOrWhiteSpace(resource) || allowed.Count().Equals(0))
+            {
+                return this.HttpNotFound();
             }
 
             string directory = HostingEnvironment.MapPath(Configuration.GetCurrentThemePath());
@@ -29,8 +45,14 @@ namespace Frapid.WebsiteBuilder.Controllers
                 return HttpNotFound();
             }
 
-            string mimeType = GetMimeType(path);
+            string extension = Path.GetExtension(path);
 
+            if (!allowed.Contains(extension))
+            {
+                return this.HttpNotFound();
+            }
+
+            string mimeType = GetMimeType(path);
             return File(path, mimeType);
         }
 

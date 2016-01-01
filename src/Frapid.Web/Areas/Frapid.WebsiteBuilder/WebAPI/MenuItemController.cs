@@ -130,6 +130,18 @@ namespace Frapid.WebsiteBuilder.Api
                         },
                         new EntityColumn
                         {
+                                ColumnName = "target",
+                                PropertyName = "Target",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 20
+                        },
+                        new EntityColumn
+                        {
                                 ColumnName = "content_id",
                                 PropertyName = "ContentId",
                                 DataType = "int",

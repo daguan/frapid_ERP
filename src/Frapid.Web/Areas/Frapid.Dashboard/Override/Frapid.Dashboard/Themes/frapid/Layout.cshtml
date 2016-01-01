@@ -1,0 +1,53 @@
+﻿@model dynamic
+@using Frapid.ApplicationState.Cache
+@using Frapid.i18n
+@using Newtonsoft.Json
+<!DOCTYPE html>
+<html data-ng-app="FrapidApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="Frapid Framework" />
+    <title data-ng-bind="$root.title">@ViewBag.Title</title>
+    <link href="~/Scripts/semantic-ui/semantic.min.css" rel="stylesheet" />
+    <link href="~/dashboard/my/template/Contents/dashboard.css" rel="stylesheet" />
+    <script src="~/i18n/resources.js"></script>
+    <script src="~/bundles/backend.js"></script>
+    <script src="~/Scripts/frapid/utitlities/validator.js"></script>
+    <script src="/Scripts/angular-route.min.js"></script>
+    <script src="~/dashboard/my/template/Contents/theme-selector.js"></script>
+</head>
+<body>
+    <div class="background slider active"></div>
+    <div class="background slider"></div>
+
+    <div class="ui attached basic small stackable dashboard menu">
+        <a class="item" data-ng-click="toogleDashboard();">
+            <i class="mini pin icon"></i>
+        </a>
+        <div class="menu" data-scope="app-menus">
+
+        </div>
+        <div class="right menu">
+            <a class="item" href="/" target="_blank" title="Go to Website">
+                <i class="mini external icon"></i>
+            </a>
+            @{
+                string themeSelector = ViewBag.LayoutPath + "ThemeSelector.cshtml";
+            }
+            @Html.Partial(themeSelector);
+            <a class="item" href="/account/sign-out" target="_self">
+                <i class="mini log out icon"></i>
+            </a>
+        </div>
+    </div>
+    <div id="dashboard-container" class="ui basic attached segment" style="height: 100%;">
+        <div data-ng-view>
+            @RenderBody()
+        </div>
+    </div>
+    <script src="~/dashboard/my/template/Contents/dashboard.js"></script>
+    @Html.AntiForgeryToken()
+</body>
+</html>

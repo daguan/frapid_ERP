@@ -19,6 +19,8 @@ namespace Frapid.Dashboard.Controllers
         [RestrictAnonymous]
         public ActionResult GetMeta()
         {
+            var curent = AppUsers.GetCurrent();
+
             return Json(new ViewModels.Dashboard
             {
                 Culture = CultureManager.GetCurrent().Name,
@@ -26,10 +28,10 @@ namespace Frapid.Dashboard.Controllers
                 JqueryUIi18NPath = "/Scripts/jquery-ui/i18n/",
                 Today = DateTime.Now.ToShortDateString(),
                 Now = DateTime.Now.ToString(CultureManager.GetCurrent()),
-                UserId = AppUsers.GetCurrent().UserId,
-                User = AppUsers.GetCurrent().Email,
-                Office = AppUsers.GetCurrent().Office,
-                MetaView = AppUsers.GetCurrent(),
+                UserId = curent.UserId,
+                User = curent.Email,
+                Office = curent.Office,
+                MetaView = curent,
                 ShortDateFormat = CultureManager.GetShortDateFormat(),
                 LongDateFormat = CultureManager.GetLongDateFormat(),
                 ThousandSeparator = CultureManager.GetThousandSeparator(),
@@ -41,13 +43,6 @@ namespace Frapid.Dashboard.Controllers
                 DatepickerWeekStartDay = (int) CultureManager.GetCurrent().DateTimeFormat.FirstDayOfWeek,
                 DatepickerNumberOfMonths = "[2, 3]"
             }, JsonRequestBehavior.AllowGet);
-        }
-
-        [Route("dashboard/apps")]
-        [RestrictAnonymous]
-        public ActionResult GetApps()
-        {
-            return View(GetRazorView<AreaRegistration>("Default/Apps.cshtml"));
         }
     }
 }

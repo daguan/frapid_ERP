@@ -10,6 +10,7 @@ SELECT
     website.menu_items.sort,
     website.menu_items.title,
     website.menu_items.url,
+    website.menu_items.target,
     website.menu_items.content_id,
     website.contents.alias AS content_alias
 FROM website.menu_items

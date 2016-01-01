@@ -6,11 +6,11 @@ DELETE FROM website.menus;
 INSERT INTO website.menus(menu_name)
 SELECT 'Default';
 
-INSERT INTO website.menu_items(menu_id, title, url)
-SELECT 1, 'Home', '/' UNION ALL
-SELECT 1, 'Sign Up', '/account/sign-up' UNION ALL
-SELECT 1, 'Admin Area', '/dashboard' UNION ALL
-SELECT 1, 'Contact Us', '/contact-us';
+INSERT INTO website.menu_items(menu_id, title, url, target)
+SELECT 1, 'Home', '/', '' UNION ALL
+SELECT 1, 'Sign Up', '/account/sign-up', '_parent' UNION ALL
+SELECT 1, 'Admin Area', '/dashboard', '_parent' UNION ALL
+SELECT 1, 'Contact Us', '/contact-us', '';
 
 INSERT INTO website.categories(category_name, alias, seo_keywords, seo_description)
 SELECT 'Default', 'default', '', '';
