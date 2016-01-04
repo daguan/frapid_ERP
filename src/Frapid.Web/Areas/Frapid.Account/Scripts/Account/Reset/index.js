@@ -64,7 +64,7 @@ $("#ResetButton").click(function () {
 
     var formEl = $(".reset.password.segment");
     formEl.addClass("loading");
-    var model = window.getForm(formEl);
+    var model = window.serializeForm(formEl);
     var token = $("#TokenInputHidden").val();
     model.Token = token;
 

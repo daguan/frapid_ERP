@@ -1,17 +1,19 @@
 ﻿var bigError = $(".big.error");
 
-$("#SignInButton").click(function () {
+$("#LoginForm").submit(function (e) {
     function request(model) {
         var url = "/account/sign-in";
         var data = JSON.stringify(model);
+
         return window.getAjaxRequest(url, "POST", data);
     };
 
-    function getPassword(email, challenge, password) {
+    function getPassword(email, password) {
         var hashed = new window.jsSHA(email + password, 'TEXT').getHash('SHA-512', 'HEX');
         return hashed;
     };
 
+    e.preventDefault();
     var formEl = $("#LoginForm");
     var isValid = window.validator.validate(formEl);
 
@@ -22,23 +24,24 @@ $("#SignInButton").click(function () {
     bigError.html("");
     var segment = $("#SignInSegment");
     segment.addClass("loading");
-    var model = window.getForm(formEl);
-    model.Password = getPassword(model.Email, model.Challenge, model.Password);
+    var model = window.serializeForm(formEl);
+    model.Password = getPassword(model.Email, model.Password);
 
     var ajax = request(model);
-    ajax.success(function (response) {
-        localStorage.setItem("access_token", response);
 
+    ajax.success(function (response) {
         if (response) {
+            localStorage.setItem("access_token", response);
             window.location = "/dashboard";
         } else {
-            bigError.html(response.Message);
+            bigError.html("Access is denied.");
         };
 
         segment.removeClass("loading");
     });
 
     ajax.fail(function () {
+        bigError.html("Access is denied.");
         segment.removeClass("loading");
     });
 

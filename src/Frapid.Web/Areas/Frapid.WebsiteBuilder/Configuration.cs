@@ -21,6 +21,14 @@ namespace Frapid.WebsiteBuilder
             return Format(CultureInfo.InvariantCulture, path, catalog, theme);
         }
 
+        public static string GetThemeDirectory()
+        {
+            string catalog = AppUsers.GetCatalog();
+            string path = Path + "Themes";
+
+            return Format(CultureInfo.InvariantCulture, path, catalog);
+        }
+
         public static string GetWebsiteBuilderPath()
         {
             string catalog = AppUsers.GetCatalog();

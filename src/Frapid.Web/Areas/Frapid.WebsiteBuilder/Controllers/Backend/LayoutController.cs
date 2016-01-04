@@ -1,139 +1,45 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 using System.Text;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using Frapid.Areas;
 using Frapid.Dashboard.Controllers;
-using Frapid.WebsiteBuilder.ViewModels;
 
 namespace Frapid.WebsiteBuilder.Controllers.Backend
 {
     [AntiForgery]
     public class LayoutController : DashboardController
     {
-        [Route("dashboard/website/layouts/master")]
+        [Route("dashboard/website/layouts")]
         [RestrictAnonymous]
         public ActionResult Master()
         {
-            var model = this.GetModel(LayoutType.DefaultLayout);
-            return this.FrapidView(this.GetRazorView<AreaRegistration>("Layout/Master.cshtml"), model);
-        }
-        [Route("dashboard/website/layouts/master/home")]
-        [RestrictAnonymous]
-        public ActionResult Homepage()
-        {
-            var model = this.GetModel(LayoutType.HomepageLayout);
-            return this.FrapidView(this.GetRazorView<AreaRegistration>("Layout/Homepage.cshtml"), model);
-        }
-
-        [Route("dashboard/website/layouts/header")]
-        [RestrictAnonymous]
-        public ActionResult Header()
-        {
-            var model = this.GetModel(LayoutType.Header);
-            return this.FrapidView(this.GetRazorView<AreaRegistration>("Layout/Header.cshtml"), model);
-        }
-
-        [Route("dashboard/website/layouts/footer")]
-        [RestrictAnonymous]
-        public ActionResult Footer()
-        {
-            var model = this.GetModel(LayoutType.Footer);
-            return this.FrapidView(this.GetRazorView<AreaRegistration>("Layout/Footer.cshtml"), model);
-        }
-
-
-        [Route("dashboard/website/layouts/404-not-found-document")]
-        [RestrictAnonymous]
-        public ActionResult Http404Document()
-        {
-            var model = this.GetModel(LayoutType.Http404Document);
-            return this.FrapidView(this.GetRazorView<AreaRegistration>("Layout/Http404Document.cshtml"), model);
+            return this.FrapidView(this.GetRazorView<AreaRegistration>("Layout/Index.cshtml"));
         }
 
         [Route("dashboard/website/layouts/save")]
         [HttpPost]
         [RestrictAnonymous]
-        public ActionResult SaveLayoutFile(Layout layout)
+        public ActionResult SaveLayoutFile(string theme, string fileName, string contents)
         {
-            string path = HostingEnvironment.MapPath(Configuration.GetCurrentThemePath());
-            var type = (LayoutType)layout.Type;
+            string path = HostingEnvironment.MapPath(Configuration.GetThemeDirectory());
+            path += Path.Combine(path, theme);
 
-            switch (type)
+            if (!Directory.Exists(path))
             {
-                case LayoutType.DefaultLayout:
-                    path += "Layout.cshtml";
-                    break;
-                case LayoutType.HomepageLayout:
-                    path += "Layout-Home.cshtml";
-                    break;
-                case LayoutType.Header:
-                    path += "Header.cshtml";
-                    break;
-                case LayoutType.Footer:
-                    path += "Footer.cshtml";
-                    break;
-                case LayoutType.Http404Document:
-                    path += "404.cshtml";
-                    break;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            path += Path.Combine(path, fileName);
 
-            if (path == null)
+            if (!System.IO.File.Exists(path))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            System.IO.File.WriteAllText(path, layout.Contents, Encoding.UTF8);
+            System.IO.File.WriteAllText(path, contents, Encoding.UTF8);
             return this.Json("OK");
-        }
-
-        private Layout GetModel(LayoutType type)
-        {
-            string directory = HostingEnvironment.MapPath(Configuration.GetCurrentThemePath());
-            string path = directory;
-            string name = "";
-
-            switch (type)
-            {
-                case LayoutType.DefaultLayout:
-                    name = "Master Layout";
-                    path += "Layout.cshtml";
-                    break;
-                case LayoutType.HomepageLayout:
-                    name = "Homepage Layout";
-                    path += "Layout-Home.cshtml";
-                    break;
-                case LayoutType.Header:
-                    name = "Header";
-                    path += "Header.cshtml";
-                    break;
-                case LayoutType.Footer:
-                    name = "Footer";
-                    path += "Footer.cshtml";
-                    break;
-                case LayoutType.Http404Document:
-                    name = "Http 404 Not Found Document";
-                    path += "404.cshtml";
-                    break;
-            }
-
-            if (path == null)
-            {
-                return new Layout
-                {
-                    Contents = ""
-                };
-            }
-
-            string contents = System.IO.File.ReadAllText(path, Encoding.UTF8);
-
-            return new Layout
-            {
-                Name =  name,
-                Type= (int)type,
-                Contents = contents
-            };
         }
     }
 }

@@ -143,7 +143,6 @@
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
     <Content Include="Views\Default\Index.cshtml" />
-    <Content Include="Views\Layouts\Dashboard.cshtml" />
     <Content Include="Views\Default\LandingPage.cshtml" />
   </ItemGroup>
   <ItemGroup>

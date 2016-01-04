@@ -44,6 +44,7 @@ $.fn.upload = function (remote, data, successFn, progressFn) {
                     return myXhr;
                 },
                 data: formData,
+                headers: getHeaders(),
                 dataType: "json",
                 cache: false,
                 contentType: false,

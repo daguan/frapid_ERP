@@ -1,4 +1,4 @@
-function subscribe(el){
+﻿function subscribe(el){
     function request(model){
         var url = "/subscription/add";
         var data = JSON.stringify(model);
@@ -17,8 +17,7 @@ function subscribe(el){
 
         return isValid;
     };
-
-
+    
     el = $(el);
     $("#ConfirmEmailAddressInputEmail").hide();
     var form = el.closest(".form");
@@ -30,7 +29,7 @@ function subscribe(el){
     };
     
     form.addClass("loading");
-    var model = window.getForm(form);
+    var model = window.serializeForm(form);
     
     var ajax = request(model);
     

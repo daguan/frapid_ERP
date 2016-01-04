@@ -27,7 +27,7 @@ function unsubscribe() {
     };
 
     form.addClass("loading");
-    var model = window.getForm(form);
+    var model = window.serializeForm(form);
 
     var ajax = request(model);
 

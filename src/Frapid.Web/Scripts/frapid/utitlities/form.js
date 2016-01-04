@@ -13,21 +13,52 @@
 };
 
 
-function getForm(el) {
+function serializeForm(el) {
     function getControlName(id) {
         if (id) {
             var conventions = ["InputTel", "InputColor", "InputDate", "InputDateTime", "InputDateTimeLocal", "InputHidden", "InputNumber", "InputSearch", "InputTime", "InputUrl", "InputText", "InputPassword", "InputEmail", "Select", "Checkbox", "TextArea"];
             for (var i = 0; i < conventions.length; i++) {
                 var convention = conventions[i];
+                
                 if (id.endsWith(convention)) {
                     return id.replace(new RegExp(convention + "$"), "");
-                };
+                };                
             };
+
+            return id;
         };
 
         return "";
     };
 
+    function getVal(el){
+        var val = el.val();
+        var type = el.attr("type");
+        
+        if(!type){
+            return val;
+        };
+        
+        switch(type){
+            case "date":
+            case "datetime":
+            case "datetime-local":
+            case "time":
+                if(!val){
+                    return null;
+                };
+                
+                return val;
+                break;
+            case "checkbox":                
+                return el.is(":checked");
+            case "number":                
+                return parseFloat(val || null);
+            default:
+                return val;
+        };
+    };
+    
     var members = el.find(".field input, .field select, .field textarea");
     var form = {};
 
@@ -35,17 +66,18 @@ function getForm(el) {
         var item = $(this);
         var id = item.attr("id");
         var name = item.attr("name");
+        
         if (id) {
-            var val = item.val();
+            var val = getVal(item);
             var member = getControlName(id);
 
             if (member) {
                 form[member] = val;
             };
         } else if(name){
-            var val = item.val();
+            var val = getVal(item);
             var member = getControlName(name);
-
+            
             if (member) {
                 form[member] = val;
             };            

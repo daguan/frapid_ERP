@@ -75,7 +75,7 @@ $("#SignUpButton").click(function () {
 
     var formEl = $(".signup.segment");
     formEl.addClass("loading");
-    var model = window.getForm(formEl);
+    var model = window.serializeForm(formEl);
 
     model.Password = getPassword(model.Email, model.Password);
     model.ConfirmPassword = getPassword(model.Email, model.ConfirmPassword);

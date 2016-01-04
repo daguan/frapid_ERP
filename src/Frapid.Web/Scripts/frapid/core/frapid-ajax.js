@@ -69,13 +69,6 @@ var getAjaxRequest = function (url, type, data, bodyPost) {
         });
     };
 
-
-    ajax.fail(function (xhr) {
-        if(window.displayMessage){
-            displayMessage(getAjaxErrorMessage(xhr));            
-        };
-    });
-
     return ajax;
 };
 

@@ -17,14 +17,7 @@ namespace Frapid.WebsiteBuilder.Controllers
                 return HttpNotFound();
             }
 
-            string configFile = HostingEnvironment.MapPath($"~/Catalogs/{DbConvention.GetCatalog()}/Configs/Frapid.config");
-
-            if (!System.IO.File.Exists(configFile))
-            {
-                return this.HttpNotFound();
-            }
-
-            var allowed = ConfigurationManager.ReadConfigurationValue(configFile, "MyAllowedResources").Split(',');
+            var allowed = FrapidConfig.GetMyAllowedResources(DbConvention.GetCatalog());
 
             if (string.IsNullOrWhiteSpace(resource) || allowed.Count().Equals(0))
             {

@@ -34,7 +34,7 @@ function sendEmail(el) {
 
 
     formEl.addClass("loading");
-    var model = window.getForm(formEl);
+    var model = window.serializeForm(formEl);
 
 
     var ajax = request(model);

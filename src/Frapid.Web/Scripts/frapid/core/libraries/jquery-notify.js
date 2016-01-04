@@ -6,7 +6,7 @@ function displayMessage(a, b) {
     };
 };
 
-function displaySucess() {
+function displaySuccess() {
     if ($.notify) {
         $.notify(taskCompletedSuccessfully, "success");
     };

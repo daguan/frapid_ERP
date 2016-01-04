@@ -47,7 +47,7 @@
         };
 
         var emailFields = el.find('input[type=email]:visible');
-
+        
         $.each(emailFields, function () {
             var el = $(this);
             var val = el.val();

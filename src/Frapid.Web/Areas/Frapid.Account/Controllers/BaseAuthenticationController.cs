@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -10,6 +11,7 @@ using Frapid.Areas;
 using Frapid.Configuration;
 using Frapid.TokenManager;
 using Frapid.WebsiteBuilder.Controllers;
+using Newtonsoft.Json;
 
 namespace Frapid.Account.Controllers
 {
@@ -20,7 +22,7 @@ namespace Frapid.Account.Controllers
             if (!result.Status)
             {
                 Thread.Sleep(new Random().Next(1, 5)*1000);
-                return Json(result);
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden, JsonConvert.SerializeObject(result));
             }
 
             Guid? applicationId = null;

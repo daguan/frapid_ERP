@@ -19,7 +19,7 @@ $("#SaveButton").click(function () {
     var ajax = request(model);
 
     ajax.success(function () {
-        window.displaySucess();
+        window.displaySuccess();
     });
 });
 
@@ -40,7 +40,7 @@ function initializeAceEditor() {
     $("#editor").removeClass("initially, hidden");
     editor.setTheme("ace/theme/ambience");
     editor.getSession().setMode("ace/mode/html");
-    editor.setValue(content);
+    editor.setValue(content, -1);
 };
 
 initializeAceEditor();

@@ -29,7 +29,7 @@ $("#SetPasswordButton").click(function () {
 
     var formEl = $(".reset.password.segment");
     formEl.addClass("loading");
-    var model = window.getForm(formEl);
+    var model = window.serializeForm(formEl);
     var token = window.getQueryStringByName("token");
 
     var ajax = request(token, model.Password);

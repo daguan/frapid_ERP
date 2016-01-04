@@ -1,6 +1,6 @@
 var invalidFileExtensionLocalized = window.Resources.Warnings.InvalidFileExtension() || "Invalid file extension.";
 var uploaderInitialized = false;
-var allowedExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
+var allowedExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".zip"];
 var uploaderTemplate = '<div class="ui uploader field">\
                             <div class="">\
                                 <img src="{0}" class="ui rounded small vpad8 image preview">\
@@ -16,13 +16,14 @@ function initializeUploader() {
     var instances = $("input.image");
     instances.each(function () {
         var el = $(this);
+        
         el.parent().find(".uploader").remove();
         var val = el.val();
         var id = el.attr("id");
         var imagePath = "/Static/images/logo.png";
 
         if (val) {
-            imagePath = "/Resource/Static/Attachments/" + val;
+            imagePath = val;
         };
 
         el.attr("style", "display:none;");
@@ -34,17 +35,39 @@ function initializeUploader() {
 
     file.change(function () {
         if (isValidExtension(this)) {
-            readURL(this);
             var el = $(this);
+            readURL(this);
+            var handler = el.attr("data-handler");
+
+            var loaderTarget = el.attr("data-loader-id");
+            var targetSelector = el.attr("data-target");
             var segment = el.closest(".segment");
-            var target = $("#" + el.attr("data-target"));
+            
+            if (loaderTarget) {
+                segment = $("#" + loaderTarget);
+            };
 
-            segment.addClass("loading");
+            var target = null;
+            
+            if(targetSelector){
+                target = $("#" + targetSelector);                
+            };
 
-            el.upload("/FileUploadHanlder.ashx", function (uploadedFileName) {
-                target.val(uploadedFileName);
-                target.attr("data-val", uploadedFileName);
-                segment.removeClass("loading");
+            if(segment.length){
+                segment.addClass("loading");                
+            };
+
+            el.upload(handler, function (response) {
+                if(targetSelector && target && response){
+                    target.val(response);
+                    target.attr("data-val", response);
+                };
+                
+                if(segment.length){
+                    segment.removeClass("loading");                    
+                };
+                
+                el.trigger("done", [{response:response}]);
             }, function (progress, value) {
                 //not implemented yet.
             });
@@ -54,44 +77,45 @@ function initializeUploader() {
     uploaderInitialized = true;
 };
 
-function isValidExtension(el) {
+    function isValidExtension(el) {
+        if (el.type === "file") {
+            var fileName = el.value;
 
-    if (el.type === "file") {
-        var fileName = el.value;
+            if (fileName.length > 0) {
 
-        if (fileName.length > 0) {
+                var valid = false;
 
-            var valid = false;
+                for (var i = 0; i < allowedExtensions.length; i++) {
+                    var extension = allowedExtensions[i];
 
-            for (var i = 0; i < allowedExtensions.length; i++) {
-                var extension = allowedExtensions[i];
+                    if (fileName.substr(fileName.length - extension.length, extension.length).toLowerCase() === extension.toLowerCase()) {
+                        valid = true;
+                        break;
+                    };
+                };
 
-                if (fileName.substr(fileName.length - extension.length, extension.length).toLowerCase() === extension.toLowerCase()) {
-                    valid = true;
-                    break;
+                if (!valid) {                    
+                    displayMessage(invalidFileExtensionLocalized);
+                    $(el).trigger("error", [{message:invalidFileExtensionLocalized}]);
+                    el.value = "";
+                    return false;
                 };
             };
+        };
 
-            if (!valid) {
-                displayMessage(invalidFileExtensionLocalized);
-                el.value = "";
-                return false;
+        return true;
+    };
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var image = $(input).parent().parent().parent().find("img.preview");
+                image.attr('src', e.target.result).fadeIn(1000);
+                $(input).trigger("readComplete");
             };
+
+            reader.readAsDataURL(input.files[0]);
         };
-    };
-
-    return true;
-};
-
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            var image = $(input).parent().parent().parent().find("img.preview");
-            image.attr('src', e.target.result);
-        };
-
-        reader.readAsDataURL(input.files[0]);
-    };
-};
+    };    

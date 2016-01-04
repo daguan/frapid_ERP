@@ -106,7 +106,7 @@ function initializeAceEditor() {
     $("#editor").removeClass("initially, hidden");
     editor.setTheme("ace/theme/ambience");
     editor.getSession().setMode("ace/mode/html");
-    editor.setValue(content);
+    editor.setValue(content, -1);
 
     editor.on('input', function () {
         displayContent();

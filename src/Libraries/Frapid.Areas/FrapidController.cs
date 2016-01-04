@@ -1,5 +1,8 @@
 ﻿using System.Globalization;
+using System.Net;
+using System.Net.Mime;
 using System.Security.Claims;
+using System.Text;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Frapid.ApplicationState.Cache;
@@ -74,6 +77,12 @@ namespace Frapid.Areas
             }
 
             base.Initialize(context);
+        }
+
+        protected ActionResult AjaxFail(string message, HttpStatusCode statusCode)
+        {
+            this.Response.StatusCode = (int)statusCode;
+            return this.Content(message, MediaTypeNames.Text.Plain, Encoding.UTF8);
         }
     }
 }

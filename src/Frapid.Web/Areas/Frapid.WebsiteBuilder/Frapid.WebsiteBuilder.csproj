@@ -93,13 +93,28 @@
       <HintPath>packages\Npgsql.2.2.6\lib\net45\Mono.Security.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Npgsql, Version=2.2.6.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>packages\Npgsql.2.2.6\lib\net45\Npgsql.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>packages\Serilog.1.5.14\lib\net45\Serilog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.FullNetFx, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>packages\Serilog.1.5.14\lib\net45\Serilog.FullNetFx.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -163,6 +178,25 @@
     <Compile Include="Controllers\Backend\CategoryController.cs" />
     <Compile Include="Controllers\Backend\ContactController.cs" />
     <Compile Include="Controllers\Backend\DashboardSubscriptionController.cs" />
+    <Compile Include="Models\Themes\ResourceCreateException.cs" />
+    <Compile Include="Models\Themes\ResourceCreator.cs" />
+    <Compile Include="Models\Themes\ResourceRemoveException.cs" />
+    <Compile Include="Models\Themes\ResourceRemover.cs" />
+    <Compile Include="Models\Themes\ThemeCreateException.cs" />
+    <Compile Include="Models\Themes\ThemeCreator.cs" />
+    <Compile Include="Models\Themes\ThemeFileLocationException.cs" />
+    <Compile Include="Models\Themes\ThemeFileLocator.cs" />
+    <Compile Include="Models\Themes\ThemeDiscoverer.cs" />
+    <Compile Include="Models\Themes\ResourceUploader.cs" />
+    <Compile Include="Controllers\Backend\ThemeController.cs" />
+    <Compile Include="Models\Themes\ThemeDiscoveryException.cs" />
+    <Compile Include="Models\Themes\ThemeInfo.cs" />
+    <Compile Include="Models\Themes\ThemeInfoException.cs" />
+    <Compile Include="Models\Themes\ThemeInfoParser.cs" />
+    <Compile Include="Models\Themes\ThemeRemoveException.cs" />
+    <Compile Include="Models\Themes\ThemeRemover.cs" />
+    <Compile Include="Models\Themes\ThemeUploader.cs" />
+    <Compile Include="FrapidConfig.cs" />
     <Compile Include="Controllers\FrontEnd\ContactUsController.cs" />
     <Compile Include="Controllers\Backend\ContentController.cs" />
     <Compile Include="Controllers\FrontEnd\IndexController.cs" />
@@ -180,6 +214,10 @@
     <Compile Include="Emails\SubscriptionRemovedEmail.cs" />
     <Compile Include="Emails\SubscriptionWelcomeEmail.cs" />
     <Compile Include="Emails\ContactUsEmail.cs" />
+    <Compile Include="Models\Themes\ThemeResource.cs" />
+    <Compile Include="Models\Themes\ResourceUploadException.cs" />
+    <Compile Include="Models\Themes\ThemeInstallException.cs" />
+    <Compile Include="Models\Themes\ThemeUploadException.cs" />
     <Compile Include="ViewModels\ContactForm.cs" />
     <Compile Include="ViewModels\ContactUs.cs" />
     <Compile Include="ViewModels\IWebsitePage.cs" />
@@ -188,18 +226,17 @@
     <Compile Include="ViewModels\Content.cs" />
     <Compile Include="ThemeConfiguration.cs" />
     <Compile Include="ViewModels\Layout.cs" />
-    <Compile Include="ViewModels\LayoutType.cs" />
     <Compile Include="ViewModels\Subscribe.cs" />
     <Compile Include="ViewModels\Template.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\site.css" />
+    <Content Include="Content\Layout\Index.css" />
     <Content Include="Scripts\Subscription\Remove.js" />
     <Content Include="Scripts\Contents\EntityParser.js" />
     <Content Include="Scripts\Contents\Manage.js" />
     <Content Include="Scripts\ContactUs\ContactForm.js" />
     <Content Include="Scripts\SubscriptionEmailTemplate\Shared\Editor.js" />
-    <Content Include="Scripts\Layout\Shared\Editor.js" />
+    <Content Include="Scripts\Layout\Index.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
   </ItemGroup>
   <ItemGroup>
@@ -234,16 +271,16 @@
     <None Include="Views\Content\Manage.cshtml" />
     <Content Include="Views\Contact\Index.cshtml" />
     <Content Include="Views\MenuItem\Index.cshtml" />
-    <Content Include="Views\Layout\Shared\Editor.cshtml" />
-    <Content Include="Views\Layout\Master.cshtml" />
-    <Content Include="Views\Layout\Header.cshtml" />
-    <Content Include="Views\Layout\Footer.cshtml" />
-    <Content Include="Views\Layout\Homepage.cshtml" />
-    <Content Include="Views\Layout\Http404Document.cshtml" />
+    <Content Include="Views\Layout\Shared\UploadModal.cshtml" />
+    <Content Include="Views\Layout\Index.cshtml" />
     <Content Include="Views\Subscription\Remove.cshtml" />
     <Content Include="Views\SubscriptionEmailTemplate\SubscriptionRemoved.cshtml" />
     <Content Include="Views\SubscriptionEmailTemplate\Shared\Editor.cshtml" />
     <None Include="Views\DashboardSubscription\Index.cshtml" />
+    <Content Include="Views\Layout\Shared\FileModal.cshtml" />
+    <Content Include="Views\Layout\Shared\FolderModal.cshtml" />
+    <Content Include="Views\Layout\Shared\NewThemeModal.cshtml" />
+    <Content Include="Views\Layout\Shared\DeleteThemeModal.cshtml" />
     <None Include="Views\SubscriptionEmailTemplate\Welcome.cshtml" />
     <Content Include="web.config" />
     <None Include="web.Debug.config">

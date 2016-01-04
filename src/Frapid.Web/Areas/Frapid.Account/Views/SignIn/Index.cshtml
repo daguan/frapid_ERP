@@ -45,7 +45,7 @@
                 <input id="SocialLoginCheckbox" type="checkbox">
                 <label for="SocialLoginCheckbox">Social Login</label>
             </div>
-            <div class="ui stackable login form" id="LoginForm">
+            <form class="ui stackable login form" id="LoginForm">
                 <div class="field">
                     <label for="EmailInputEmail">Email Address</label>
                     <div class="ui left icon input">
@@ -74,13 +74,13 @@
                            value="@Model.Challenge" />
                 </div>
                 <div class="ui buttons">
-                    <button id="SignInButton" title="CRTL + RETURN" class="ui grey button" type="button">
+                    <button id="SignInButton" title="CRTL + RETURN" class="ui grey button" type="submit">
                         Sign In
                     </button>
                     <a class="ui button" href="/">Cancel</a>
                 </div>
                 <div class="exception field"></div>
-            </div>
+            </form>
             <div id="SocialLoginForm" class="ui login form" style="display: none;">
                 <div class="field">
                     <label for="SocialOfficeSelect">Select Office</label>
