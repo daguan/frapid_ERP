@@ -3,10 +3,13 @@
 }
 
 html,
-body,
-form {
+body {
     font-size: 12px;
     height: 100%;
+}
+
+#editor{
+    font-size:11pt;
 }
 
 [data-ng-view], [ng-view] {

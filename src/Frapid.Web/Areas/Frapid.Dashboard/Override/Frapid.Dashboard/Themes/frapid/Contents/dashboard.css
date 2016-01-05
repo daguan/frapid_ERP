@@ -1,3 +1,11 @@
+html, .jstree {
+    font-size: 9pt;
+}
+
+#editor{
+    font-size: 12pt;
+}
+
 #PhoneMenu a {
     display: block !important;
     text-align: center !important;
@@ -44,9 +52,6 @@
     display: none;
 }
 
-html, body, div, p, table, td, th {
-    font-size: 12px;
-}
 
 label, .ui.toggle.checkbox label {
     cursor: pointer;

@@ -39,6 +39,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.SendGridMail", "Inte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.Mailgun", "Integrations\Frapid.Mailgun\Frapid.Mailgun.csproj", "{123D352D-8DDF-49EF-9373-A4523A05DBDA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "frapid", "Libraries\Frapid.CommandLine\frapid.csproj", "{CD47926F-7148-49A1-AD08-A96B74A3A5F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Console", "Console", "{1FB0A4E1-7F94-4FCB-A26B-312A7A3B5036}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +109,10 @@ Global
 		{123D352D-8DDF-49EF-9373-A4523A05DBDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{123D352D-8DDF-49EF-9373-A4523A05DBDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{123D352D-8DDF-49EF-9373-A4523A05DBDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD47926F-7148-49A1-AD08-A96B74A3A5F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD47926F-7148-49A1-AD08-A96B74A3A5F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD47926F-7148-49A1-AD08-A96B74A3A5F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD47926F-7148-49A1-AD08-A96B74A3A5F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,5 +132,6 @@ Global
 		{EF3BDE7C-A3D5-493A-8817-BF47DF9CAE47} = {0DFA1BB9-74FE-4C63-B8AF-0B312ED992F6}
 		{695F3E2D-2DD0-418F-9805-B6400B6B4466} = {BF2A4AB4-6B8F-4AC1-B90A-4A238B082F85}
 		{123D352D-8DDF-49EF-9373-A4523A05DBDA} = {BF2A4AB4-6B8F-4AC1-B90A-4A238B082F85}
+		{CD47926F-7148-49A1-AD08-A96B74A3A5F6} = {1FB0A4E1-7F94-4FCB-A26B-312A7A3B5036}
 	EndGlobalSection
 EndGlobal
