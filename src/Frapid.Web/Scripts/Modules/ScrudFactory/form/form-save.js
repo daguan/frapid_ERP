@@ -9,7 +9,6 @@
         form.push(customFields);
 
         var data = JSON.stringify(form);
-        alert(data);
         return getAjaxRequest(url, "POST", data);
     };
 

@@ -34,8 +34,8 @@ namespace Frapid.WebApi
                     Catalog = DbConvention.GetCatalog(),
                     ClientToken = token.ClientToken,
                     LoginId = token.LoginId,
-                    UserId = token.UserId,
-                    OfficeId = token.OfficeId
+                    UserId = loginView.UserId.To<int>(),
+                    OfficeId = loginView.OfficeId.To<int>()
                 };
 
                 var identity = new ClaimsIdentity(token.Claims);
