@@ -24,7 +24,11 @@ namespace Frapid.Installer
         public bool HasSchema()
         {
             const string sql = "SELECT COUNT(*) FROM pg_catalog.pg_namespace WHERE nspname=@0;";
-            return Factory.Scalar<int>(this.Catalog, sql, this.Installable.DbSchema).Equals(1);
+
+            using (var db = DbProvider.Get(ConnectionString.GetSuperUserConnectionString(this.Catalog)).GetDatabase())
+            {
+                return db.ExecuteScalar<int>(sql, this.Installable.DbSchema).Equals(1);
+            }
         }
 
         public void Install()

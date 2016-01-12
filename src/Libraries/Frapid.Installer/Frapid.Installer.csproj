@@ -92,6 +92,10 @@
       <Project>{9bea3809-b6d5-4025-ae7e-868e5e7e9c76}</Project>
       <Name>Frapid.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Frapid.NPoco\Frapid.NPoco.csproj">
+      <Project>{58f77141-ffe7-45f6-b726-80100204e69d}</Project>
+      <Name>Frapid.NPoco</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -16,7 +16,13 @@ namespace Frapid.Installer
         public bool HasDb()
         {
             const string sql = "SELECT COUNT(*) FROM pg_catalog.pg_database WHERE datname=@0;";
-            return Factory.Scalar<int>(Factory.MetaDatabase, sql, this.Catalog).Equals(1);
+            string catalog = Factory.MetaDatabase;
+            string connectionString = ConnectionString.GetSuperUserConnectionString(catalog);
+
+            using (var db = DbProvider.Get(connectionString).GetDatabase())
+            {
+                return db.ExecuteScalar<int>(sql, this.Catalog).Equals(1);
+            }
         }
 
         public bool IsWellKnownDb()

@@ -73,7 +73,8 @@ CREATE TABLE account.users
     role_id                                 integer NOT NULL REFERENCES account.roles,
     name                                    national character varying(100),
     phone                                   national character varying(100),
-    status                                  boolean DEFAULT(true),    
+    status                                  boolean DEFAULT(true),
+    created_on                              TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
     audit_user_id                           integer REFERENCES account.users,
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    

@@ -492,8 +492,7 @@ LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/09.menus/0.menu.sql --<--<--
 SELECT * FROM core.create_app('Frapid.Config', 'Config', '1.0', 'MixERP Inc.', 'December 1, 2015', 'orange configure', '/dashboard/config/offices', null);
-
-SELECT * FROM core.create_menu('Frapid.Config', 'Office', '/dashboard/config/offices', 'building outline', '');
+SELECT * FROM core.create_menu('Frapid.Config', 'Offices', '/dashboard/config/offices', 'building outline', '');
 SELECT * FROM core.create_menu('Frapid.Config', 'Flags', '/dashboard/config/flags', 'flag', '');
 SELECT * FROM core.create_menu('Frapid.Config', 'SMTP', '/dashboard/config/smtp', 'at', '');
 
@@ -503,7 +502,7 @@ SELECT * FROM auth.create_app_menu_policy
     'User', 
     core.get_office_id_by_office_name('Default'), 
     'Frapid.Config',
-    '{Office, Flags}'::text[]
+    '{Offices, Flags}'::text[]
 );
 
 SELECT * FROM auth.create_app_menu_policy

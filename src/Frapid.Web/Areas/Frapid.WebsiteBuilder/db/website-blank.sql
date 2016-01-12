@@ -201,12 +201,7 @@ SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'View Contents', '/dashb
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Menus', '/dashboard/website/menus', 'star', 'Tasks');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Contacts', '/dashboard/website/contacts', 'phone', 'Tasks');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Subscriptions', '/dashboard/website/subscriptions', 'newspaper', 'Tasks');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Layout Manager', '', 'grid layout', '');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Master Layout (Homepage)', '/dashboard/website/layouts/master/home', 'block layout', 'Layout Manager');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Master Layout', '/dashboard/website/layouts/master', 'block layout', 'Layout Manager');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Header', '/dashboard/website/layouts/header', 'arrow circle outline up', 'Layout Manager');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Edit Footer', '/dashboard/website/layouts/footer', 'arrow circle outline down', 'Layout Manager');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', '404 Not Found Document', '/dashboard/website/layouts/404-not-found-document', 'warning circle', 'Layout Manager');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Layout Manager', '/dashboard/website/layouts', 'grid layout', '');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Email Templates', '', 'mail', '');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Subscription Added', '/dashboard/website/subscription/welcome', 'plus circle', 'Email Templates');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Subscription Removed', '/dashboard/website/subscription/removed', 'minus circle', 'Email Templates');
@@ -255,6 +250,7 @@ SELECT
     website.menu_items.sort,
     website.menu_items.title,
     website.menu_items.url,
+    website.menu_items.target,
     website.menu_items.content_id,
     website.contents.alias AS content_alias
 FROM website.menu_items
