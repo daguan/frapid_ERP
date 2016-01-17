@@ -32,7 +32,6 @@ namespace Frapid.Account.Api
         {
             public string Email { get; set; }
             public int OfficeId { get; set; }
-            public string Password { get; set; }
             public string Browser { get; set; }
             public string IpAddress { get; set; }
             public string Culture { get; set; }
@@ -93,18 +92,6 @@ namespace Frapid.Account.Api
                                 PropertyName = "OfficeId",
                                 DataType = "int",
                                 DbDataType = "integer",
-                                IsNullable = false,
-                                IsPrimaryKey = false,
-                                IsSerial = false,
-                                Value = "",
-                                MaxLength = 0
-                        },
-                        new EntityColumn
-                        {
-                                ColumnName = "_password",
-                                PropertyName = "Password",
-                                DataType = "string",
-                                DbDataType = "text",
                                 IsNullable = false,
                                 IsPrimaryKey = false,
                                 IsSerial = false,
@@ -217,7 +204,6 @@ namespace Frapid.Account.Api
             {
                 this.repository.Email = annotation.Email;
                 this.repository.OfficeId = annotation.OfficeId;
-                this.repository.Password = annotation.Password;
                 this.repository.Browser = annotation.Browser;
                 this.repository.IpAddress = annotation.IpAddress;
                 this.repository.Culture = annotation.Culture;

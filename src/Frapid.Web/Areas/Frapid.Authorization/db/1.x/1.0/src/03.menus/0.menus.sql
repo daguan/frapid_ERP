@@ -10,8 +10,16 @@ SELECT * FROM core.create_menu('Frapid.Authorization', 'User Policy', '/dashboar
 
 SELECT * FROM auth.create_app_menu_policy
 (
-    'Administrator', 
+    'Admin', 
     core.get_office_id_by_office_name('Default'), 
     'Frapid.Authorization',
+    '{*}'::text[]
+);
+
+SELECT * FROM auth.create_app_menu_policy
+(
+    'Admin', 
+    core.get_office_id_by_office_name('Default'), 
+    'Frapid.Account',
     '{*}'::text[]
 );

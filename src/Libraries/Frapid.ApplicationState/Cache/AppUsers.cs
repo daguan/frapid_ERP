@@ -75,7 +75,16 @@ namespace Frapid.ApplicationState.Cache
             var cacheObject = CacheFactory.GetFromDefaultCacheByKey(key);
             login = cacheObject as LoginView;
 
-            return login ?? SetCurrentLogin(catalog, loginId);
+            var view = login ?? SetCurrentLogin(catalog, loginId);
+
+            UpdateActivity(view.UserId.To<int>(), view.IpAddress, view.Browser);
+            return view;
+        }
+
+        private static void UpdateActivity(int userId, string ip, string browser)
+        {
+            const string sql = "UPDATE account.users SET last_seen_on=NOW(), last_ip=@0, last_browser=@1 WHERE user_id=@2;";
+            Factory.NonQuery(GetCatalog(), sql, ip, browser, userId);
         }
 
         public static long GetMetaLoginId(string catalog, long loginId)

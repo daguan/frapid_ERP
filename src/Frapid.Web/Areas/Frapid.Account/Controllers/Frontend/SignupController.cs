@@ -75,7 +75,7 @@ namespace Frapid.Account.Controllers.Frontend
 
             if (model.Email != model.ConfirmEmail)
             {
-                throw new PasswordConfirmException("Passwords do not match.");
+                throw new PasswordConfirmException("Emails do not match.");
             }
 
             model.Browser = this.RemoteUser.Browser;
@@ -83,6 +83,8 @@ namespace Frapid.Account.Controllers.Frontend
 
             Mapper.CreateMap<Registration, DTO.Registration>();
             var registration = Mapper.Map<DTO.Registration>(model);
+            registration.Password = PasswordManager.GetHashedPassword(model.Password.ToString());
+
             string registrationId = DAL.Registrations.Register(registration).ToString();
 
             if (string.IsNullOrWhiteSpace(registrationId))

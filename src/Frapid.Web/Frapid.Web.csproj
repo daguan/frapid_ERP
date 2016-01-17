@@ -924,7 +924,6 @@
     <Folder Include="Areas\" />
     <Folder Include="Catalogs\" />
     <Folder Include="Resources\" />
-    <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\Frapid.Areas\Frapid.Areas.csproj">

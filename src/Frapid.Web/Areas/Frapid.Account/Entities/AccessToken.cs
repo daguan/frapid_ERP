@@ -25,6 +25,6 @@ namespace Frapid.Account.Entities
         public DateTime ExpiresOn { get; set; }
         public bool Revoked { get; set; }
         public int? RevokedBy { get; set; }
-        public DateTime RevokedOn { get; set; }
+        public DateTime? RevokedOn { get; set; }
     }
 }

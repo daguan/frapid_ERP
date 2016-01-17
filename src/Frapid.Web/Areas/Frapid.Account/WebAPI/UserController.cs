@@ -166,6 +166,54 @@ namespace Frapid.Account.Api
                         },
                         new EntityColumn
                         {
+                                ColumnName = "created_on",
+                                PropertyName = "CreatedOn",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = false,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "last_seen_on",
+                                PropertyName = "LastSeenOn",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "last_ip",
+                                PropertyName = "LastIp",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "last_browser",
+                                PropertyName = "LastBrowser",
+                                DataType = "string",
+                                DbDataType = "text",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
                                 ColumnName = "audit_user_id",
                                 PropertyName = "AuditUserId",
                                 DataType = "int",

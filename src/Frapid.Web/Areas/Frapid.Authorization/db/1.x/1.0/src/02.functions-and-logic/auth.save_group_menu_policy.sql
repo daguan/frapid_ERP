@@ -1,15 +1,17 @@
-DROP FUNCTION IF EXISTS auth.save_group_menu_policy
+﻿DROP FUNCTION IF EXISTS auth.save_group_menu_policy
 (
     _role_id        integer,
     _office_id      integer,
-    _menu_ids       int[]
+    _menu_ids       int[],
+    _app_name       text
 );
 
 CREATE FUNCTION auth.save_group_menu_policy
 (
     _role_id        integer,
     _office_id      integer,
-    _menu_ids       int[]
+    _menu_ids       int[],
+    _app_name       text
 )
 RETURNS void
 AS
@@ -22,7 +24,13 @@ BEGIN
     DELETE FROM auth.group_menu_access_policy
     WHERE auth.group_menu_access_policy.menu_id NOT IN(SELECT * from unnest(_menu_ids))
     AND role_id = _role_id
-    AND office_id = _office_id;
+    AND office_id = _office_id
+    AND menu_id IN
+    (
+        SELECT menu_id
+        FROM core.menus
+        WHERE app_name = _app_name
+    );
 
     WITH menus
     AS

@@ -4,6 +4,7 @@ CREATE VIEW account.sign_in_view
 AS
 SELECT
     account.logins.login_id,
+    account.users.name,
     account.users.email,
     account.logins.user_id,
     account.roles.role_id,
@@ -15,7 +16,8 @@ SELECT
     account.logins.culture,
     account.logins.office_id,
     core.offices.office_name,
-    core.offices.office_code || ' (' || core.offices.office_name || ')' AS office
+    core.offices.office_code || ' (' || core.offices.office_name || ')' AS office,
+    account.users.last_seen_on
 FROM account.logins
 INNER JOIN account.users
 ON account.users.user_id = account.logins.user_id

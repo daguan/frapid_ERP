@@ -1,6 +1,6 @@
 ﻿$("#ConfirmEmailInputEmail").hide();
 $(document).ready(function () {
-    window.validator.initialize($(".reset.password.segment"));
+    window.validator.initialize($(".reset.plainPassword.segment"));
 });
 
 $("#EmailInputEmail").blur(function () {
@@ -42,7 +42,7 @@ $("#ResetButton").click(function () {
 
     function validate() {
         $(".big.error").html("");
-        var formEl = $(".reset.password.segment");
+        var formEl = $(".reset.plainPassword.segment");
         var isValid = window.validator.validate(formEl);
 
         var hp = $("#ConfirmEmailInputEmail").val();
@@ -62,7 +62,7 @@ $("#ResetButton").click(function () {
     };
 
 
-    var formEl = $(".reset.password.segment");
+    var formEl = $(".reset.plainPassword.segment");
     formEl.addClass("loading");
     var model = window.serializeForm(formEl);
     var token = $("#TokenInputHidden").val();

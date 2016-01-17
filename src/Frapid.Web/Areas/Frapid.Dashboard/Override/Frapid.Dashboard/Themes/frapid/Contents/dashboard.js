@@ -166,7 +166,7 @@ function buildMenus() {
 (function () {
     function loadMenus() {
         function request() {
-            var url = "/api/core/menu/all";
+            var url = "/dashboard/my/menus";
             return window.getAjaxRequest(url);
         };
 

@@ -74,6 +74,9 @@ CREATE TABLE account.users
     phone                                   national character varying(100),
     status                                  boolean DEFAULT(true),
     created_on                              TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
+	last_seen_on							TIMESTAMP WITH TIME ZONE,
+	last_ip									text,
+	last_browser							text,
     audit_user_id                           integer REFERENCES account.users,
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    

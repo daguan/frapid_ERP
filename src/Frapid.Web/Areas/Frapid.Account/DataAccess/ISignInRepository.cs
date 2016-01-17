@@ -11,7 +11,6 @@ namespace Frapid.Account.DataAccess
 
         string Email { get; set; }
         int OfficeId { get; set; }
-        string Password { get; set; }
         string Browser { get; set; }
         string IpAddress { get; set; }
         string Culture { get; set; }

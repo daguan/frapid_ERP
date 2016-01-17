@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using AutoMapper;
 using Frapid.Account.DAL;
@@ -39,10 +40,21 @@ namespace Frapid.Account.Controllers
         [AllowAnonymous]
         public ActionResult Do(SignInInfo model)
         {
+            if (!ModelState.IsValid)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
             try
             {
-                var result = DAL.SignIn.Do(model.Email, model.OfficeId, model.Password, this.RemoteUser.Browser,
-                    this.RemoteUser.IpAddress, model.Culture);
+                bool isValid = this.CheckPassword(model.Email, model.Password);
+
+                if (!isValid)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+
+                var result = DAL.SignIn.Do(model.Email, model.OfficeId, this.RemoteUser.Browser, this.RemoteUser.IpAddress, model.Culture);
                 return this.OnAuthenticated(result, model);
             }
             catch (NpgsqlException)

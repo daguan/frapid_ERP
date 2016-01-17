@@ -75,6 +75,9 @@ CREATE TABLE account.users
     phone                                   national character varying(100),
     status                                  boolean DEFAULT(true),
     created_on                              TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
+	last_seen_on							TIMESTAMP WITH TIME ZONE,
+	last_ip									text,
+	last_browser							text,
     audit_user_id                           integer REFERENCES account.users,
     audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
                                             DEFAULT(NOW())    
@@ -847,7 +850,6 @@ DROP FUNCTION IF EXISTS account.sign_in
 (
     _email                                  text,
     _office_id                              integer,
-    _password                               text,
     _browser                                text,
     _ip_address                             text,
     _culture                                text
@@ -857,7 +859,6 @@ CREATE FUNCTION account.sign_in
 (
     _email                                  text,
     _office_id                              integer,
-    _password                               text,
     _browser                                text,
     _ip_address                             text,
     _culture                                text
@@ -874,18 +875,6 @@ $$
     DECLARE _user_id                        integer;
 BEGIN
     IF account.is_restricted_user(_email) THEN
-        RETURN QUERY
-        SELECT NULL::bigint, false, 'Access is denied'::text;
-
-        RETURN;
-    END IF;
-
-    IF NOT EXISTS
-    (
-        SELECT 1
-        FROM account.users
-        WHERE password = _password
-    ) THEN
         RETURN QUERY
         SELECT NULL::bigint, false, 'Access is denied'::text;
 
@@ -997,6 +986,7 @@ CREATE VIEW account.sign_in_view
 AS
 SELECT
     account.logins.login_id,
+    account.users.name,
     account.users.email,
     account.logins.user_id,
     account.roles.role_id,
@@ -1008,7 +998,8 @@ SELECT
     account.logins.culture,
     account.logins.office_id,
     core.offices.office_name,
-    core.offices.office_code || ' (' || core.offices.office_name || ')' AS office
+    core.offices.office_code || ' (' || core.offices.office_name || ')' AS office,
+    account.users.last_seen_on
 FROM account.logins
 INNER JOIN account.users
 ON account.users.user_id = account.logins.user_id

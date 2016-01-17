@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Security;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -7,7 +8,6 @@ using Frapid.Account.DAL;
 using Frapid.Account.DTO;
 using Frapid.Account.InputModels;
 using Frapid.ApplicationState.Cache;
-using Frapid.Areas;
 using Frapid.Configuration;
 using Frapid.TokenManager;
 using Frapid.WebsiteBuilder.Controllers;
@@ -17,6 +17,18 @@ namespace Frapid.Account.Controllers
 {
     public class BaseAuthenticationController : WebsiteBuilderController
     {
+        protected bool CheckPassword(string email, string plainPassword)
+        {
+            var user = Users.Get(email);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            return PasswordManager.ValidateBcrypt(plainPassword, user.Password);
+        }
+
         protected ActionResult OnAuthenticated(LoginResult result, SignInInfo model = null)
         {
             if (!result.Status)

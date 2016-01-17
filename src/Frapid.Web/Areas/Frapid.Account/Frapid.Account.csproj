@@ -49,6 +49,10 @@
       <HintPath>packages\AutoMapper.4.1.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="BCrypt.Net, Version=0.1.5073.29922, Culture=neutral, PublicKeyToken=6bcd409ee6bc9292, processorArchitecture=MSIL">
+      <HintPath>packages\BCrypt-Official.0.1.109\lib\BCrypt.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Facebook, Version=6.0.10.0, Culture=neutral, PublicKeyToken=58cb4f2111d1e6de, processorArchitecture=MSIL">
       <HintPath>packages\Facebook.7.0.6\lib\net45\Facebook.dll</HintPath>
       <Private>True</Private>
@@ -172,6 +176,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="LICENSE.txt" />
     <Content Include="Scripts\Account\ResetConfirmation\index.js" />
     <Content Include="Scripts\Account\Reset\index.js" />
     <Content Include="Scripts\Account\SignIn\google.js" />
@@ -195,6 +200,7 @@
     <Compile Include="Controllers\Backend\ConfigurationProfileController.cs" />
     <Compile Include="Controllers\Backend\RoleController.cs" />
     <Compile Include="Controllers\Backend\UserController.cs" />
+    <Compile Include="DAL\Users.cs" />
     <Compile Include="DTO\Office.cs" />
     <Compile Include="Exceptions\EmailConfirmException.cs" />
     <Compile Include="Emails\ResetEmail.cs" />
@@ -210,6 +216,7 @@
     <Compile Include="DTO\ConfigurationProfile.cs" />
     <Compile Include="DTO\Registration.cs" />
     <Compile Include="DTO\Reset.cs" />
+    <Compile Include="PasswordManager.cs" />
     <Compile Include="StartupTask.cs" />
     <Compile Include="ViewModels\Language.cs" />
     <Compile Include="RemoteAuthentication\FacebookAuthentication.cs" />

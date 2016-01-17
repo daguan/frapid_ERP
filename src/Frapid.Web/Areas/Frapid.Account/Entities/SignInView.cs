@@ -10,6 +10,7 @@ namespace Frapid.Account.Entities
     public sealed class SignInView : IPoco
     {
         public long? LoginId { get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
         public int? UserId { get; set; }
         public int? RoleId { get; set; }
@@ -22,5 +23,6 @@ namespace Frapid.Account.Entities
         public int? OfficeId { get; set; }
         public string OfficeName { get; set; }
         public string Office { get; set; }
+        public DateTime? LastSeenOn { get; set; }
     }
 }

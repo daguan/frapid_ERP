@@ -1,8 +1,7 @@
-DROP FUNCTION IF EXISTS account.sign_in
+﻿DROP FUNCTION IF EXISTS account.sign_in
 (
     _email                                  text,
     _office_id                              integer,
-    _password                               text,
     _browser                                text,
     _ip_address                             text,
     _culture                                text
@@ -12,7 +11,6 @@ CREATE FUNCTION account.sign_in
 (
     _email                                  text,
     _office_id                              integer,
-    _password                               text,
     _browser                                text,
     _ip_address                             text,
     _culture                                text
@@ -29,18 +27,6 @@ $$
     DECLARE _user_id                        integer;
 BEGIN
     IF account.is_restricted_user(_email) THEN
-        RETURN QUERY
-        SELECT NULL::bigint, false, 'Access is denied'::text;
-
-        RETURN;
-    END IF;
-
-    IF NOT EXISTS
-    (
-        SELECT 1
-        FROM account.users
-        WHERE password = _password
-    ) THEN
         RETURN QUERY
         SELECT NULL::bigint, false, 'Access is denied'::text;
 

@@ -8,11 +8,6 @@ $("#LoginForm").submit(function (e) {
         return window.getAjaxRequest(url, "POST", data);
     };
 
-    function getPassword(email, password) {
-        var hashed = new window.jsSHA(email + password, 'TEXT').getHash('SHA-512', 'HEX');
-        return hashed;
-    };
-
     e.preventDefault();
     var formEl = $("#LoginForm");
     var isValid = window.validator.validate(formEl);
@@ -25,7 +20,6 @@ $("#LoginForm").submit(function (e) {
     var segment = $("#SignInSegment");
     segment.addClass("loading");
     var model = window.serializeForm(formEl);
-    model.Password = getPassword(model.Email, model.Password);
 
     var ajax = request(model);
 
