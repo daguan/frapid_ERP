@@ -2,6 +2,8 @@
 using System.Net;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using Frapid.Framework.Extensions;
+using Serilog;
 
 namespace Frapid.Areas
 {
@@ -17,15 +19,23 @@ namespace Frapid.Areas
                 return;
             }
 
-            if (request.IsAjaxRequest())
+            try
             {
-                var antiForgeryCookie = request.Cookies[AntiForgeryConfig.CookieName];
-                string cookieValue = antiForgeryCookie?.Value;
-                AntiForgery.Validate(cookieValue, request.Headers["RequestVerificationToken"]);
+                if (request.IsAjaxRequest())
+                {
+                    var antiForgeryCookie = request.Cookies[AntiForgeryConfig.CookieName];
+                    string cookieValue = antiForgeryCookie?.Value;
+                    AntiForgery.Validate(cookieValue, request.Headers["RequestVerificationToken"]);
+                }
+                else
+                {
+                    new ValidateAntiForgeryTokenAttribute().OnAuthorization(filterContext);
+                }
             }
-            else
+            catch (HttpAntiForgeryException ex)
             {
-                new ValidateAntiForgeryTokenAttribute().OnAuthorization(filterContext);
+                //Log and swallow
+                Log.Error("Invalid antiforgery cookie data.\nIP: {IP}\nBrowser: {Browser}\nUser Agener: {UserAgent}. Stack: {Exception}", filterContext.HttpContext.GetClientIpAddress(), filterContext.HttpContext.Request.Browser.Browser, filterContext.HttpContext.Request.UserAgent, ex);
             }
         }
     }

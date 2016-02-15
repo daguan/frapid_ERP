@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
+using Frapid.Areas.Authorization;
 using Frapid.Dashboard.DAL;
 using Frapid.i18n;
 
@@ -16,7 +17,7 @@ namespace Frapid.Dashboard.Controllers
             int officeId = AppUsers.GetCurrent().OfficeId;
             string culture = CultureManager.GetCurrent().TwoLetterISOLanguageName;
 
-            return Json(App.Get(userId, officeId, culture), JsonRequestBehavior.AllowGet);
+            return this.Ok(App.Get(userId, officeId, culture));
         }
     }
 }

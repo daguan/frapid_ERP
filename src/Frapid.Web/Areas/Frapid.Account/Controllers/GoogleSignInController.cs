@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.Account.InputModels;
 using Frapid.Account.RemoteAuthentication;
@@ -24,7 +25,7 @@ namespace Frapid.Account.Controllers
             }
             catch (NpgsqlException)
             {
-                return Json("Access is denied.");
+                return this.Failed("Access is denied.", HttpStatusCode.Forbidden);
             }
         }
     }

@@ -17,6 +17,7 @@
     <script src="~/Scripts/frapid/utitlities/validator.js"></script>
     <script src="/Scripts/angular-route.min.js"></script>
     <script src="~/dashboard/my/template/Contents/theme-selector.js"></script>
+    <script src="~/dashboard/my/template/Contents/apps.js"></script>
 </head>
 <body>
     <div class="background slider active"></div>
@@ -36,7 +37,7 @@
             @{
                 string themeSelector = ViewBag.LayoutPath + "ThemeSelector.cshtml";
             }
-            @Html.Partial(themeSelector);
+            @Html.Partial(themeSelector)
             <a class="item" href="/account/sign-out" target="_self">
                 <i class="mini log out icon"></i>
             </a>
@@ -49,5 +50,8 @@
     </div>
     <script src="~/dashboard/my/template/Contents/dashboard.js"></script>
     @Html.AntiForgeryToken()
+    <script src="/Scripts/underscore/underscore-min.js"></script>
+	<script src="/Scripts/inflection-js/inflection.js"></script>
+	<script src="/Scripts/frapid/utitlities/localizable.js"></script>
 </body>
 </html>

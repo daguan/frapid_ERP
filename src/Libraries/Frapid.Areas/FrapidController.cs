@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Net.Mime;
 using System.Security.Claims;
@@ -12,6 +13,7 @@ using Frapid.i18n;
 using Frapid.TokenManager;
 using Frapid.TokenManager.DAL;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 
 namespace Frapid.Areas
 {
@@ -79,7 +81,18 @@ namespace Frapid.Areas
             base.Initialize(context);
         }
 
-        protected ActionResult AjaxFail(string message, HttpStatusCode statusCode)
+        protected ActionResult Ok(object model = null)
+        {
+            if (model == null)
+            {
+                model = "OK";
+            }
+
+            string json = JsonConvert.SerializeObject(model);
+            return this.Content(json, "application/json");
+        }
+
+        protected ActionResult Failed(string message, HttpStatusCode statusCode)
         {
             this.Response.StatusCode = (int)statusCode;
             return this.Content(message, MediaTypeNames.Text.Plain, Encoding.UTF8);

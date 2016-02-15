@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Security;
-using Frapid.Areas;
+using Frapid.Account.DAL;
+using Frapid.Areas.Authorization;
 
 namespace Frapid.Account.Controllers
 {
@@ -13,7 +14,7 @@ namespace Frapid.Account.Controllers
         {
             if (this.MetaUser != null)
             {
-                DAL.AccessTokens.Revoke(this.MetaUser.ClientToken);
+                AccessTokens.Revoke(this.MetaUser.ClientToken);
             }
 
             FormsAuthentication.SignOut();

@@ -15,7 +15,7 @@
         right: 0;
         bottom: 0;
         left: 0;
-    }    
+    }
 </style>
 <div class="ui attached segment" style="height: 100%;">
     <div class="ui stackable divided doubling grid" style="height: 100%;">
@@ -72,10 +72,6 @@
                         <input type="date" class="date" data-entity="publish_on" value="@Model.PublishOn.ToShortDateString()" required="" />
                     </div>
                     <div class="field">
-                        <label>Seo Keywords</label>
-                        <input type="text" data-entity="seo_keywords" value="@Model.SeoKeywords" required="" />
-                    </div>
-                    <div class="field">
                         <label>Seo Description</label>
                         <input type="text" data-entity="seo_description" value="@Model.SeoDescription" required="" />
                     </div>
@@ -97,7 +93,7 @@
                 </div>
                 <div class="ui basic buttons">
                     <button class="ui basic button" id="SaveButton">Save</button>
-                    <a class="ui basic button" ng-href="../contents">Cancel</a>
+                    <a class="ui basic button" id="CancelButton">Cancel</a>
                 </div>
             </div>
 
@@ -119,7 +115,6 @@
                 </div>
                 <div class="column" style="height: 100%; overflow: auto;" data-target="preview">
                     <div id="content" class="body" data-entity="contents" data-raw="true">
-                        @Html.Raw(Model.Contents)
                     </div>
                 </div>
             </div>
@@ -127,7 +122,6 @@
         </div>
     </div>
 </div>
-
 
 <script>
     var html = "@Html.Encode(HttpUtility.JavaScriptStringEncode(Model.Contents))";

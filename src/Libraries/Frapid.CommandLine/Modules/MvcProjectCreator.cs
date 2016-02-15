@@ -63,6 +63,7 @@ namespace frapid.Modules
             this.ReplaceContent("MVCProject.csproj");
             this.ReplaceContent("MVCProject.sln");
             this.ReplaceContent(@"Properties\AssemblyInfo.cs");
+            this.ReplaceContent(@"Views\web.config");
             this.ReplaceContent("AreaRegistration.cs");
         }
 

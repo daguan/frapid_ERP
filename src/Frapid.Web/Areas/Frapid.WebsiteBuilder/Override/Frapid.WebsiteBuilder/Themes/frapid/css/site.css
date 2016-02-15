@@ -1,10 +1,58 @@
-.body, .body p, .body div, .story, footer, .body .button, .body .field, .body .field label, .body .field input, header .item {
-    font-family: "Pontano Sans", "Segoe UI", "Open Sans", "Myriad Set Pro","Lucida Grande","Helvetica Neue","Helvetica","Arial","Verdana","sans-serif"!important;
-    color:#808080;
+html, body, h1, h2, h3, h4, h5, .ui.header, 
+.ui.text.container,
+.ui.list .list>.item .header,.ui.list>.item .header,
+.ui.steps .step .title,
+.ui.menu, .item,
+.ui.button, .ui.input input,
+.ui.form input:not([type]),.ui.form input[type=text],.ui.form input[type=email],.ui.form input[type=search],.ui.form input[type=password],.ui.form input[type=date],.ui.form input[type=datetime-local],.ui.form input[type=tel],.ui.form input[type=time],.ui.form input[type=url],.ui.form input[type=number],
+.ui.message .header,
+.ui.card>.content>.header,.ui.cards>.card>.content>.header,
+.ui.items>.item>.content>.header,
+.ui.statistic>.value,.ui.statistics .statistic>.value,
+.ui.statistic>.label,.ui.statistics .statistic>.label,
+.ui.accordion .title:not(.ui),
+.ui.modal>.header,
+.ui.popup>.header,
+.ui.search>.results .result .title,
+.ui.search>.results>.message .header,
+.ui.category.search>.results .category>.name
+ {
+    font-family: "Myriad Set Pro","Helvetica Neue", Helvetica, "Segoe UI", Arial, Verdana, sans-serif!important;
 }
 
-.body h1, .body h2, .body h3, .body h4, .body h5, .body div.header, .body .header span {
-    font-family:"Josefin Sans", "Segoe UI", "Helvetica Neue","Helvetica","Arial","Verdana","sans-serif"!important;
+
+@media (max-width: 300px) {
+    html, body
+    {
+        font-size: 14px!important;    
+    }
+}
+
+@media (max-width: 768px) {
+    html, body
+    {
+        font-size: 12px!important;    
+    }
+}
+
+@media (min-width: 769px) {
+    html, body
+    {
+        font-size: 14px!important;    
+    }
+}
+
+@media (min-width: 1200px) {
+    html, body
+    {
+        font-size: 13px!important;    
+    }
+}
+
+
+
+.body, .body p, .body div, .story, footer, .body .button, .body .field, .body .field label, .body .field input, header .item {
+    color:#808080;
 }
 
 .subscription .inverted.segment p
@@ -37,10 +85,6 @@ header
 }
 
 
-
-.fixed.menu .item{
-    font-size:12px;
-}
 
 .vertically.padded.segment{
     padding-top:100px;
@@ -77,13 +121,13 @@ section.body .segment .container
 
 .caption.container
 {
-    padding:256px 0!important;
+    padding:172px 0!important;
 }
 
 
 .caption.container .header
 {
-    font-size:56px;
+    font-size:48px;
 }
 
 .caption.container *
@@ -98,7 +142,7 @@ section.body .segment .container
 
 .story.container .header
 {
-    font-size:36px;
+    font-size:32px;
 }
 
 .story.container .header span
@@ -132,7 +176,7 @@ a:hover{
 
 .ad.icon i
 {
-    font-size:26px;
+    font-size:22px;
 }
 
 footer

@@ -113,13 +113,13 @@ namespace Frapid.Core.DataAccess
         void Delete(int menuLocaleId);
 
         /// <summary>
-        /// Produces a paginated result of 10 MenuLocale classes.
+        /// Produces a paginated result of 50 MenuLocale classes.
         /// </summary>
         /// <returns>Returns the first page of collection of MenuLocale class.</returns>
         IEnumerable<Frapid.Core.Entities.MenuLocale> GetPaginatedResult();
 
         /// <summary>
-        /// Produces a paginated result of 10 MenuLocale classes.
+        /// Produces a paginated result of 50 MenuLocale classes.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result.</param>
         /// <returns>Returns collection of MenuLocale class.</returns>
@@ -135,7 +135,7 @@ namespace Frapid.Core.DataAccess
         long CountWhere(List<Frapid.DataAccess.Models.Filter> filters);
 
         /// <summary>
-        /// Performs a filtered pagination against IMenuLocaleRepository producing result of 10 items.
+        /// Performs a filtered pagination against IMenuLocaleRepository producing result of 50 items.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -150,7 +150,7 @@ namespace Frapid.Core.DataAccess
         long CountFiltered(string filterName);
 
         /// <summary>
-        /// Gets a filtered result of IMenuLocaleRepository producing a paginated result of 10.
+        /// Gets a filtered result of IMenuLocaleRepository producing a paginated result of 50.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filterName">The named filter.</param>

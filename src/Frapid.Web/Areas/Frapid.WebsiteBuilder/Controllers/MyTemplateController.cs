@@ -1,9 +1,12 @@
+using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using Frapid.Configuration;
+using Frapid.Framework.Extensions;
 
 namespace Frapid.WebsiteBuilder.Controllers
 {
@@ -45,8 +48,8 @@ namespace Frapid.WebsiteBuilder.Controllers
                 return this.HttpNotFound();
             }
 
-            string mimeType = GetMimeType(path);
-            return File(path, mimeType);
+            string mimeType = this.GetMimeType(path);
+            return this.File(path, mimeType);
         }
 
         private string GetMimeType(string fileName)

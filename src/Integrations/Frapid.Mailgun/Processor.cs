@@ -77,7 +77,7 @@ namespace Frapid.Mailgun
 
                 foreach (string recipient in email.SentTo.Split(','))
                 {
-                    request.AddParameter("to", recipient);
+                    request.AddParameter("to", recipient.Trim());
                 }
 
                 request.AddParameter("subject", email.Subject);

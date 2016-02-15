@@ -4,7 +4,9 @@ using System.Text;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using Frapid.Areas;
+using Frapid.Areas.Authorization;
 using Frapid.Dashboard.Controllers;
+using Frapid.WebsiteBuilder.Models;
 
 namespace Frapid.WebsiteBuilder.Controllers.Backend
 {
@@ -23,22 +25,13 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         [RestrictAnonymous]
         public ActionResult SaveLayoutFile(string theme, string fileName, string contents)
         {
-            string path = HostingEnvironment.MapPath(Configuration.GetThemeDirectory());
-            path += Path.Combine(path, theme);
+            bool result = LayoutManagerModel.SaveLayoutFile(theme, fileName, contents);
 
-            if (!Directory.Exists(path))
+            if (!result)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            path += Path.Combine(path, fileName);
-
-            if (!System.IO.File.Exists(path))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            System.IO.File.WriteAllText(path, contents, Encoding.UTF8);
             return this.Json("OK");
         }
     }

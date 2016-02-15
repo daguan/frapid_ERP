@@ -41,6 +41,7 @@ namespace Frapid.Web
         {
             return new[]
             {
+                "~/Scripts/Modules/ScrudFactory/view/block-begin.js",
                 "~/Scripts/Modules/ScrudFactory/view/initialization.js",
                 "~/Scripts/Modules/ScrudFactory/shared/conversion.js",
                 "~/Scripts/Modules/ScrudFactory/shared/field-factory.js",
@@ -84,7 +85,8 @@ namespace Frapid.Web
                 "~/Scripts/Modules/ScrudFactory/view/view-shared.js",
                 "~/Scripts/Modules/ScrudFactory/view/view-success.js",
                 "~/Scripts/Modules/ScrudFactory/view/events-on-doc-ready.js",
-                "~/Scripts/Modules/ScrudFactory/view/events-on-viewready.js"
+                "~/Scripts/Modules/ScrudFactory/view/events-on-viewready.js",
+                "~/Scripts/Modules/ScrudFactory/view/block-end.js"
             };
         }
 
@@ -92,6 +94,7 @@ namespace Frapid.Web
         {
             return new[]
             {
+                "~/Scripts/Modules/ScrudFactory/form/block-begin.js",
                 "~/Scripts/Modules/ScrudFactory/form/initialization.js",
                 "~/Scripts/Modules/ScrudFactory/shared/conversion.js",
                 "~/Scripts/Modules/ScrudFactory/shared/field-factory.js",
@@ -118,7 +121,8 @@ namespace Frapid.Web
                 "~/Scripts/Modules/ScrudFactory/form/event-on-doc-ready.js",
                 "~/Scripts/Modules/ScrudFactory/form/visibility.js",
                 "~/Scripts/Modules/ScrudFactory/form/trigger-events.js",
-                "~/Scripts/Modules/ScrudFactory/form/event-on-ajax-stop.js"
+                "~/Scripts/Modules/ScrudFactory/form/event-on-ajax-stop.js",
+                "~/Scripts/Modules/ScrudFactory/form/block-end.js"
             };
         }
         

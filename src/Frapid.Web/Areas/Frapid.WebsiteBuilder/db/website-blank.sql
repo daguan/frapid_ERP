@@ -5,10 +5,14 @@ CREATE SCHEMA website;
 CREATE TABLE website.email_subscriptions
 (
     email_subscription_id                       uuid PRIMARY KEY DEFAULT(gen_random_uuid()),
+	first_name									national character varying(100),
+	last_name									national character varying(100),
     email                                       national character varying(100) NOT NULL UNIQUE,
     browser                                     text,
     ip_address                                  national character varying(50),
-    unsubscribed                                boolean DEFAULT(false),    
+	confirmed									boolean DEFAULT(false),
+    confirmed_on                               	TIMESTAMP WITH TIME ZONE,
+    unsubscribed                                boolean DEFAULT(false),
     subscribed_on                               TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),    
     unsubscribed_on                             TIMESTAMP WITH TIME ZONE
 );
@@ -18,7 +22,6 @@ CREATE TABLE website.categories
     category_id                                 SERIAL NOT NULL PRIMARY KEY,
     category_name                               national character varying(100) NOT NULL,
     alias                                       national character varying(50) NOT NULL UNIQUE,
-    seo_keywords                                national character varying(50),
     seo_description                             national character varying(100),
     audit_user_id                               integer REFERENCES account.users,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
@@ -37,8 +40,7 @@ CREATE TABLE website.contents
     contents                                    text NOT NULL,
     tags                                        text,
     is_draft                                    boolean NOT NULL DEFAULT(true),
-    seo_keywords                                national character varying(50) NOT NULL DEFAULT(''),
-    seo_description                             national character varying(100) NOT NULL DEFAULT(''),
+    seo_description                             national character varying(1000) NOT NULL DEFAULT(''),
     is_homepage                                 boolean NOT NULL DEFAULT(false),
     audit_user_id                               integer REFERENCES account.users,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
@@ -230,11 +232,78 @@ SELECT * FROM auth.create_app_menu_policy
 
 SELECT * FROM auth.create_app_menu_policy
 (
-    'Administrator', 
+    'Admin', 
     core.get_office_id_by_office_name('Default'), 
     'Frapid.WebsiteBuilder',
     '{*}'::text[]
 );
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/05.triggers/website.email_subscription_confirmation_trigger.sql --<--<--
+DROP FUNCTION IF EXISTS website.email_subscription_confirmation_trigger() CASCADE;
+
+CREATE FUNCTION website.email_subscription_confirmation_trigger()
+RETURNS TRIGGER
+AS
+$$
+BEGIN
+    IF(NEW.confirmed) THEN
+        NEW.confirmed_on = NOW();
+    END IF;
+    
+    RETURN NEW;
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER email_subscription_confirmation_trigger 
+BEFORE UPDATE ON website.email_subscriptions 
+FOR EACH ROW
+EXECUTE PROCEDURE website.email_subscription_confirmation_trigger();
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/05.views/website.email_subscription_insert_view.sql --<--<--
+DROP VIEW IF EXISTS website.email_subscription_insert_view;
+
+CREATE VIEW website.email_subscription_insert_view
+AS
+SELECT * FROM website.email_subscriptions
+WHERE 1 = 0;
+
+
+SELECT * FROM website.email_subscription_insert_view;
+
+CREATE RULE log_subscriptions AS 
+ON INSERT TO website.email_subscription_insert_view
+DO INSTEAD 
+INSERT INTO website.email_subscriptions
+(
+    email, 
+    browser, 
+    ip_address, 
+    unsubscribed, 
+    subscribed_on, 
+    unsubscribed_on, 
+    first_name, 
+    last_name, 
+    confirmed
+)
+SELECT
+    NEW.email, 
+    NEW.browser, 
+    NEW.ip_address, 
+    NEW.unsubscribed, 
+    COALESCE(NEW.subscribed_on, NOW()), 
+    NEW.unsubscribed_on, 
+    NEW.first_name, 
+    NEW.last_name, 
+    NEW.confirmed
+WHERE NOT EXISTS
+(
+    SELECT 1 
+    FROM website.email_subscriptions
+    WHERE email = NEW.email
+);
+
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/05.views/website.menu_item_view.sql --<--<--
@@ -275,7 +344,6 @@ SELECT
     website.contents.markdown,
     website.contents.contents,
     website.contents.tags,
-    website.contents.seo_keywords,
     website.contents.seo_description,
     website.contents.is_homepage
 FROM website.contents
@@ -290,6 +358,41 @@ DROP VIEW IF EXISTS website.tag_view;
 CREATE VIEW website.tag_view
 AS
 SELECT DISTINCT unnest(regexp_split_to_array(tags, ',')) AS tag FROM website.contents;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/05.views/website.yesterdays_email_subscriptions.sql --<--<--
+DROP VIEW IF EXISTS website.yesterdays_email_subscriptions;
+
+CREATE VIEW website.yesterdays_email_subscriptions
+AS
+SELECT
+    email,
+    first_name,
+    last_name,
+    'subscribed' AS subscription_type
+FROM website.email_subscriptions
+WHERE subscribed_on::date = 'yesterday'::date
+AND NOT confirmed_on::date = 'yesterday'::date
+UNION ALL
+SELECT
+    email,
+    first_name,
+    last_name,
+    'unsubscribed'
+FROM website.email_subscriptions
+WHERE unsubscribed_on::date = 'yesterday'::date
+UNION ALL
+SELECT
+    email,
+    first_name,
+    last_name,
+    'confirmed'
+FROM website.email_subscriptions
+WHERE confirmed_on::date = 'yesterday'::date;
+
+
+
+
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/99.ownership.sql --<--<--

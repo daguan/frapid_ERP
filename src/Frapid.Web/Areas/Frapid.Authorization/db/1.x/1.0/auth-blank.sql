@@ -116,10 +116,48 @@ BEGIN
         AND menu_name = ANY(_menu_names);
     END IF;
     
-    PERFORM auth.save_group_menu_policy(_role_id, _office_id, _menu_ids);    
+    PERFORM auth.save_group_menu_policy(_role_id, _office_id, _menu_ids, _app_name);    
 END
 $$
 LANGUAGE plpgsql;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/1.x/1.0/src/02.functions-and-logic/auth.get_apps.sql --<--<--
+DROP FUNCTION IF EXISTS auth.get_apps(_user_id integer, _office_id integer, _culture text);
+
+CREATE FUNCTION auth.get_apps(_user_id integer, _office_id integer, _culture text)
+RETURNS TABLE
+(
+    app_name                            text,
+    name                                text,
+    version_number                      text,
+    publisher                           text,
+    published_on                        date,
+    icon                                text,
+    landing_url                         text
+)
+AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT
+        core.apps.app_name::text,
+        core.apps.name::text,
+        core.apps.version_number::text,
+        core.apps.publisher::text,
+        core.apps.published_on::date,
+        core.apps.icon::text,
+        core.apps.landing_url::text
+    FROM core.apps
+    WHERE core.apps.app_name IN
+    (
+        SELECT DISTINCT menus.app_name
+        FROM auth.get_menu(_user_id, _office_id, _culture)
+        AS menus
+    );
+END
+$$
+LANGUAGE plpgsql;
+
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/1.x/1.0/src/02.functions-and-logic/auth.get_group_menu_policy.sql --<--<--
 DROP FUNCTION IF EXISTS auth.get_group_menu_policy
@@ -543,14 +581,16 @@ DROP FUNCTION IF EXISTS auth.save_group_menu_policy
 (
     _role_id        integer,
     _office_id      integer,
-    _menu_ids       int[]
+    _menu_ids       int[],
+    _app_name       text
 );
 
 CREATE FUNCTION auth.save_group_menu_policy
 (
     _role_id        integer,
     _office_id      integer,
-    _menu_ids       int[]
+    _menu_ids       int[],
+    _app_name       text
 )
 RETURNS void
 AS
@@ -563,7 +603,13 @@ BEGIN
     DELETE FROM auth.group_menu_access_policy
     WHERE auth.group_menu_access_policy.menu_id NOT IN(SELECT * from unnest(_menu_ids))
     AND role_id = _role_id
-    AND office_id = _office_id;
+    AND office_id = _office_id
+    AND menu_id IN
+    (
+        SELECT menu_id
+        FROM core.menus
+        WHERE app_name = _app_name
+    );
 
     WITH menus
     AS
@@ -654,9 +700,17 @@ SELECT * FROM core.create_menu('Frapid.Authorization', 'User Policy', '/dashboar
 
 SELECT * FROM auth.create_app_menu_policy
 (
-    'Administrator', 
+    'Admin', 
     core.get_office_id_by_office_name('Default'), 
     'Frapid.Authorization',
+    '{*}'::text[]
+);
+
+SELECT * FROM auth.create_app_menu_policy
+(
+    'Admin', 
+    core.get_office_id_by_office_name('Default'), 
+    'Frapid.Account',
     '{*}'::text[]
 );
 

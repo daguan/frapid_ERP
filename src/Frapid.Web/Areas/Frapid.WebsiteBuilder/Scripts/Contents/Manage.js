@@ -35,7 +35,8 @@ $('[data-entity="title"]').keyup(function () {
     $('[data-entity="alias"]').val(getAlias($(this).val()));
 });
 
-$("#SaveButton").click(function () {
+
+function save() {
     function request(model) {
         var url = "/api/website/content/add-or-edit";
         var form = [];
@@ -58,9 +59,32 @@ $("#SaveButton").click(function () {
     var ajax = request(model);
 
 
-    ajax.success(function () {
-        location.href = "../contents";
+    ajax.success(function (response) {
+        window.displaySuccess();
+        var target;
+
+        if (!window.getQueryStringByName("ContentId")) {
+            target = window.updateQueryString("ContentId", response);
+            document.location.href = target;
+        };
     });
+};
+
+$("#CancelButton").click(function() {
+    var target = decodeURIComponent(window.getQueryStringByName("ReturnUrl")) || "../contents";
+
+    location.href = target;
+});
+
+$("#SaveButton").click(function () {
+    save();
+});
+
+$(window).keypress(function (event) {
+    if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) return true;
+    save();
+    event.preventDefault();
+    return false;
 });
 
 function displayContent() {
@@ -76,7 +100,12 @@ function displayContent() {
 
     if (isMarkdown) {
         html = window.marked(contents);
-        $("#content").html(html);
+        alert(html);
+        try {
+            $("#content").html(html);
+        } catch (e) {
+
+        } 
         return;
     };
 
@@ -117,9 +146,15 @@ initializeAceEditor();
 
 $(document).ready(function () {
     window.initalizeSelectApis();
+    var target = window.localStorage.getItem("autoOpenTarget");
+    if (target) {
+        maximize(target);
+    };
 });
 
 function maximize(target, width) {
+    window.localStorage.setItem("autoOpenTarget", target);
+
     var items = $("[data-target]");
     var el = $("[data-target=" + target + "]");
     items.hide();

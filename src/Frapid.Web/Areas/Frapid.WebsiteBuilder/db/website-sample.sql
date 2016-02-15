@@ -12,16 +12,16 @@ SELECT 1, 'Sign Up', '/account/sign-up', '_parent' UNION ALL
 SELECT 1, 'Admin Area', '/dashboard', '_parent' UNION ALL
 SELECT 1, 'Contact Us', '/contact-us', '';
 
-INSERT INTO website.categories(category_name, alias, seo_keywords, seo_description)
-SELECT 'Default', 'default', '', '';
+INSERT INTO website.categories(category_name, alias, seo_description)
+SELECT 'Default', 'default', '';
 
-INSERT INTO website.categories(category_name, alias, seo_keywords, seo_description)
-SELECT 'Legal', 'legal', '', '';
+INSERT INTO website.categories(category_name, alias, seo_description)
+SELECT 'Legal', 'legal', '';
 
 DELETE FROM website.contents;
 
-INSERT INTO website.contents(title, tags, alias, category_id, publish_on, is_draft, seo_keywords, seo_description, is_homepage, contents)
-SELECT 'Welcome to Frapid', 'frapid,cms', 'welcome-to-frapid', website.get_category_id_by_category_alias('default'), NOW(), false, 'frapid, cms, crm, erp, hrm', 'Homepage of Frapid Framework', true, '<div class="ui basic inverted attached segment" id="banner">
+INSERT INTO website.contents(title, tags, alias, category_id, publish_on, is_draft, seo_description, is_homepage, contents)
+SELECT 'Welcome to Frapid', 'frapid,cms', 'welcome-to-frapid', website.get_category_id_by_category_alias('default'), NOW(), false, 'Homepage of Frapid Framework', true, '<div class="ui basic inverted attached segment" id="banner">
     <div class="ui caption container">
         <div class="ui huge inverted header">
             Frapid Framework
@@ -156,14 +156,14 @@ SELECT 'Welcome to Frapid', 'frapid,cms', 'welcome-to-frapid', website.get_categ
 </div>';
 
     
-INSERT INTO website.contents(title, tags, alias, category_id, publish_on, is_draft, seo_keywords, seo_description, is_homepage, markdown, contents)
-SELECT 'Terms of Use', '', 'terms-of-use', website.get_category_id_by_category_alias('legal'), NOW(), false, 'terms of use', 'Terms of Use', false, '# Terms of Use
+INSERT INTO website.contents(title, tags, alias, category_id, publish_on, is_draft, seo_description, is_homepage, markdown, contents)
+SELECT 'Terms of Use', '', 'terms-of-use', website.get_category_id_by_category_alias('legal'), NOW(), false, 'Terms of Use', false, '# Terms of Use
 
 This document is empty.', '<h1 id="terms-of-use">Terms of Use</h1>
 <p>This document is empty.</p>';
 
-INSERT INTO website.contents(title, tags, alias, category_id, publish_on, is_draft, seo_keywords, seo_description, is_homepage, markdown, contents)
-SELECT 'Privacy Policy', '', 'privacy-policy', website.get_category_id_by_category_alias('legal'), NOW(), false, 'privacy policy', 'Privacy Policy', false, '# Privacy Policy
+INSERT INTO website.contents(title, tags, alias, category_id, publish_on, is_draft, seo_description, is_homepage, markdown, contents)
+SELECT 'Privacy Policy', '', 'privacy-policy', website.get_category_id_by_category_alias('legal'), NOW(), false, 'Privacy Policy', false, '# Privacy Policy
 
 This document is empty.', '<h1 id="privacy-policy">Privacy Policy</h1>
 <p>This document is empty.</p>';

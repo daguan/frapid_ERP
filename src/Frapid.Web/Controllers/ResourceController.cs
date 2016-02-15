@@ -12,7 +12,7 @@ namespace Frapid.Web.Controllers
     public class ResourceController : FrapidController
     {
         [Route("i18n/resources.js")]
-        [OutputCache(Duration = 31536000, VaryByParam = "none", Location = OutputCacheLocation.Client, NoStore = true)]
+        [OutputCache(Duration = 31536000, VaryByParam = "none", Location = OutputCacheLocation.Client)]
         public ActionResult Index()
         {
             string culture = CultureManager.GetCurrent().TwoLetterISOLanguageName;

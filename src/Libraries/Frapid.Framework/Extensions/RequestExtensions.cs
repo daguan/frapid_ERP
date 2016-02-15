@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Http.Controllers;
+using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 
 namespace Frapid.Framework.Extensions
@@ -20,6 +21,16 @@ namespace Frapid.Framework.Extensions
             }
 
             return string.Empty;
+        }
+
+        public static string GetClientIpAddress(this IRequest request)
+        {
+            object ipAddress;
+            if (request.Environment.TryGetValue("server.RemoteIpAddress", out ipAddress))
+            {
+                return ipAddress as string;
+            }
+            return null;
         }
 
         public static string GetClientIpAddress(this HttpRequestMessage request)
@@ -88,6 +99,22 @@ namespace Frapid.Framework.Extensions
         //ASP.net MVC
         public static string GetClientToken(this HttpRequestBase request)
         {
+            if (!request.Cookies.AllKeys.Contains("access_token"))
+            {
+                return string.Empty;
+            }
+
+            var cookie = request.Cookies["access_token"];
+            return cookie == null ? string.Empty : cookie.Value;
+        }
+
+        public static string GetClientToken(this IRequest request)
+        {
+            if (!request.Cookies.ContainsKey("access_token"))
+            {
+                return string.Empty;
+            }
+
             var cookie = request.Cookies["access_token"];
             return cookie == null ? string.Empty : cookie.Value;
         }

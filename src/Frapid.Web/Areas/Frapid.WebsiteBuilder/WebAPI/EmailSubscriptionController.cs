@@ -151,6 +151,54 @@ namespace Frapid.WebsiteBuilder.Api
                                 IsSerial = false,
                                 Value = "",
                                 MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "first_name",
+                                PropertyName = "FirstName",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "last_name",
+                                PropertyName = "LastName",
+                                DataType = "string",
+                                DbDataType = "varchar",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 100
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "confirmed",
+                                PropertyName = "Confirmed",
+                                DataType = "bool",
+                                DbDataType = "bool",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
+                        },
+                        new EntityColumn
+                        {
+                                ColumnName = "confirmed_on",
+                                PropertyName = "ConfirmedOn",
+                                DataType = "DateTime",
+                                DbDataType = "timestamptz",
+                                IsNullable = true,
+                                IsPrimaryKey = false,
+                                IsSerial = false,
+                                Value = "",
+                                MaxLength = 0
                         }
                 }
             };
@@ -462,7 +510,7 @@ namespace Frapid.WebsiteBuilder.Api
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 10 email subscriptions on each page, sorted by the property EmailSubscriptionId.
+        ///     Creates a paginated collection containing 50 email subscriptions on each page, sorted by the property EmailSubscriptionId.
         /// </summary>
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -496,7 +544,7 @@ namespace Frapid.WebsiteBuilder.Api
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 10 email subscriptions on each page, sorted by the property EmailSubscriptionId.
+        ///     Creates a paginated collection containing 50 email subscriptions on each page, sorted by the property EmailSubscriptionId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <returns>Returns the requested page from the collection.</returns>
@@ -567,7 +615,7 @@ namespace Frapid.WebsiteBuilder.Api
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 10 email subscriptions on each page, sorted by the property EmailSubscriptionId.
+        ///     Creates a filtered and paginated collection containing 50 email subscriptions on each page, sorted by the property EmailSubscriptionId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -639,7 +687,7 @@ namespace Frapid.WebsiteBuilder.Api
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 10 email subscriptions on each page, sorted by the property EmailSubscriptionId.
+        ///     Creates a filtered and paginated collection containing 50 email subscriptions on each page, sorted by the property EmailSubscriptionId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filterName">The named filter.</param>

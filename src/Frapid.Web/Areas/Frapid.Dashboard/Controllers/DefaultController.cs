@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
-using Frapid.Areas;
+using Frapid.Areas.Authorization;
 using Frapid.i18n;
 
 namespace Frapid.Dashboard.Controllers
@@ -21,7 +21,7 @@ namespace Frapid.Dashboard.Controllers
         {
             var curent = AppUsers.GetCurrent();
 
-            return Json(new ViewModels.Dashboard
+            return this.Ok(new ViewModels.Dashboard
             {
                 Culture = CultureManager.GetCurrent().Name,
                 Language = CultureManager.GetCurrent().TwoLetterISOLanguageName,
@@ -42,7 +42,7 @@ namespace Frapid.Dashboard.Controllers
                 DatepickerShowWeekNumber = true,
                 DatepickerWeekStartDay = (int) CultureManager.GetCurrent().DateTimeFormat.FirstDayOfWeek,
                 DatepickerNumberOfMonths = "[2, 3]"
-            }, JsonRequestBehavior.AllowGet);
+            });
         }
     }
 }

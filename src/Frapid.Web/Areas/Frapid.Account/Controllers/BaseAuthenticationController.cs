@@ -65,7 +65,7 @@ namespace Frapid.Account.Controllers
             }
 
             this.Response.Cookies.Add(cookie);
-            return Json(token.ClientToken);
+            return this.Ok(token.ClientToken);
         }
     }
 }

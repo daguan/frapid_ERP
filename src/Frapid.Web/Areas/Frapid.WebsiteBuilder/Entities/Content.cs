@@ -19,7 +19,6 @@ namespace Frapid.WebsiteBuilder.Entities
         public string Contents { get; set; }
         public string Tags { get; set; }
         public bool IsDraft { get; set; }
-        public string SeoKeywords { get; set; }
         public string SeoDescription { get; set; }
         public bool IsHomepage { get; set; }
         public int? AuditUserId { get; set; }

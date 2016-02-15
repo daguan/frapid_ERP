@@ -24,13 +24,13 @@ namespace Frapid.WebsiteBuilder.DataAccess
 
 
         /// <summary>
-        /// Produces a paginated result of 10 items from ITagViewRepository.
+        /// Produces a paginated result of 50 items from ITagViewRepository.
         /// </summary>
         /// <returns>Returns the first page of collection of "TagView" class.</returns>
         IEnumerable<Frapid.WebsiteBuilder.Entities.TagView> GetPaginatedResult();
 
         /// <summary>
-        /// Produces a paginated result of 10 items from ITagViewRepository.
+        /// Produces a paginated result of 50 items from ITagViewRepository.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result.</param>
         /// <returns>Returns collection of "TagView" class.</returns>
@@ -46,7 +46,7 @@ namespace Frapid.WebsiteBuilder.DataAccess
         long CountWhere(List<Frapid.DataAccess.Models.Filter> filters);
 
         /// <summary>
-        /// Produces a paginated result of 10 items using the supplied filters from ITagViewRepository.
+        /// Produces a paginated result of 50 items using the supplied filters from ITagViewRepository.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -61,7 +61,7 @@ namespace Frapid.WebsiteBuilder.DataAccess
         long CountFiltered(string filterName);
 
         /// <summary>
-        /// Produces a paginated result of 10 items using the supplied filter name from ITagViewRepository.
+        /// Produces a paginated result of 50 items using the supplied filter name from ITagViewRepository.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filterName">The named filter.</param>

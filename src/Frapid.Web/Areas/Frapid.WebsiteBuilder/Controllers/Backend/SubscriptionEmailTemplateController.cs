@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Web.Mvc;
 using Frapid.Areas;
+using Frapid.Areas.Authorization;
 using Frapid.Dashboard.Controllers;
 using Frapid.WebsiteBuilder.ViewModels;
 

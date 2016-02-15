@@ -49,6 +49,15 @@
             position: "before"
         }
     ];
+
+    $.get('/ScrudFactory/View.html', function (view) {
+        $.get('/ScrudFactory/Form.html', function (form) {
+            $("#ScrudFactoryView").html(view);
+            $("#ScrudFactoryForm").html(form);
+            $.cachedScript("/bundles/scrudfactory-view.js");
+            $.cachedScript("/bundles/scrudfactory-form.js");
+        });
+    });
 </script>
 
 

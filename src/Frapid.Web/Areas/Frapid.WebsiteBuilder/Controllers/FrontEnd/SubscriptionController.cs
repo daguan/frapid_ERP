@@ -33,7 +33,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
             }
 
             Thread.Sleep(1000);
-            return Json("OK");
+            return this.Ok();
         }
 
         [Route("subscription/remove")]
@@ -62,7 +62,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
             }
 
             Thread.Sleep(1000);
-            return Json("OK");
+            return this.Ok();
         }
     }
 }

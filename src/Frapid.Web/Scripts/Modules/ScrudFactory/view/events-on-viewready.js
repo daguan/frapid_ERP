@@ -9,6 +9,8 @@
 };
 
 $(document).on("viewready", function () {
+    window.localize();
+
     flagButton.click(function () {
         popUnder(flagPopUnder, flagButton);
     });

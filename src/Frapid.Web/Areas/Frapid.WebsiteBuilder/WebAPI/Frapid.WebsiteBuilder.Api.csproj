@@ -128,7 +128,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddEmailSubscriptionController.cs" />
-    <Compile Include="CategoryController.cs" />
     <Compile Include="ContactController.cs" />
     <Compile Include="ContentController.cs" />
     <Compile Include="EmailSubscriptionController.cs" />
@@ -179,6 +178,7 @@
     <Compile Include="Tests\RemoveEmailSubscriptionTests.cs" />
     <Compile Include="Tests\TagViewRouteTests.cs" />
     <Compile Include="Tests\TagViewTests.cs" />
+    <Compile Include="WebsiteCategoryController.cs" />
     <Compile Include="WebsiteMenuController.cs" />
   </ItemGroup>
   <ItemGroup>

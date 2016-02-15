@@ -16,5 +16,9 @@ namespace Frapid.WebsiteBuilder.Entities
         public bool? Unsubscribed { get; set; }
         public DateTime? SubscribedOn { get; set; }
         public DateTime? UnsubscribedOn { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public bool? Confirmed { get; set; }
+        public DateTime? ConfirmedOn { get; set; }
     }
 }

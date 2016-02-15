@@ -32,7 +32,7 @@
             @{
                 string themeSelector = ViewBag.LayoutPath + "ThemeSelector.cshtml";
             }
-            @Html.Partial(themeSelector);
+            @Html.Partial(themeSelector)
         </div>
     </div>
     <div class="vpad8"></div>
@@ -67,7 +67,10 @@
             </div>
         </div>
     </footer>
-    <script src="~/dashboard/my/template/Contents/menu.js"></script>
     @Html.AntiForgeryToken()
+    <script src="~/dashboard/my/template/Contents/menu.js"></script>
+    <script src="/Scripts/underscore/underscore-min.js"></script>
+	<script src="/Scripts/inflection-js/inflection.js"></script>
+	<script src="/Scripts/frapid/utitlities/localizable.js"></script>
 </body>
 </html>

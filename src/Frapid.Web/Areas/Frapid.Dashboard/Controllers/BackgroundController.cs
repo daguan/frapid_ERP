@@ -7,6 +7,7 @@ using System.Web.Hosting;
 using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
+using Frapid.Areas.Authorization;
 
 namespace Frapid.Dashboard.Controllers
 {
@@ -32,7 +33,7 @@ namespace Frapid.Dashboard.Controllers
             }
 
             var images = this.GetImages(directory, resourceDirectory);
-            return Json(images, JsonRequestBehavior.AllowGet);
+            return this.Ok(images);
         }
 
         public static IEnumerable<T> Shuffle<T>(

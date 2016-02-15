@@ -91,7 +91,29 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="DataAccess\Frapid.Core.DataAccess.csproj">
+      <Project>{bf0b076d-efd8-45d6-af5d-d2ae2aff3dc8}</Project>
+      <Name>Frapid.Core.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="Entities\Frapid.Core.Entities.csproj">
+      <Project>{010500ae-8a0b-4230-addf-dd7a17e4e522}</Project>
+      <Name>Frapid.Core.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="WebAPI\Frapid.Core.Api.csproj">
+      <Project>{793d1121-14e8-483c-836f-888c1b6ebf26}</Project>
+      <Name>Frapid.Core.Api</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="web.config" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

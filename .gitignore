@@ -1,4 +1,5 @@
 .hg
+.ignored
 bin
 obj
 *.pdb
@@ -8,3 +9,9 @@ obj
 src/Frapid.Web/Catalogs/
 DomainsInstalled.json
 src/Frapid.Web/Areas/MixERP.Forums/
+src/Frapid.Web/Areas/MixERP.We/
+src/Frapid.Web/Areas/MixERP.Me/
+src/Frapid.Web/Areas/Frapid.Forms/
+src/Frapid.Web/logo.png
+src/Frapid.Web/logo-inverted.png
+src/Frapid.Web/images/

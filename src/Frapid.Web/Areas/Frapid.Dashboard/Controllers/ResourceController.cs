@@ -3,12 +3,15 @@ using System.IO;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using System.Web.UI;
 using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
+using Frapid.Areas.Authorization;
 
 namespace Frapid.Dashboard.Controllers
 {
     [RestrictAnonymous]
+    [OutputCache(Duration = 60 * 60 * 24, Location = OutputCacheLocation.Client)]
     public class ResourceController : FrapidController
     {
         [Route("dashboard/resources/{*resource}")]
@@ -36,7 +39,6 @@ namespace Frapid.Dashboard.Controllers
             }
 
             string mimeType = MimeMapping.GetMimeMapping(path);
-
             return this.File(path, mimeType);
         }
     }

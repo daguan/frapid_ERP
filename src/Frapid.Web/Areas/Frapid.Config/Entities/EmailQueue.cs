@@ -21,5 +21,6 @@ namespace Frapid.Config.Entities
         public DateTime? DeliveredOn { get; set; }
         public bool Canceled { get; set; }
         public DateTime? CanceledOn { get; set; }
+        public DateTime SendOn { get; set; }
     }
 }

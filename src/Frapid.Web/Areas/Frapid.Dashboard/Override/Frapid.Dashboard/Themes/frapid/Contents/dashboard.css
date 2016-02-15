@@ -1,5 +1,5 @@
-html, .jstree {
-    font-size: 9pt;
+html, body, .jstree {
+    font-size: 14px;
 }
 
 #editor{
@@ -106,4 +106,10 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
     background-image: url('/Static/images/70white.png') !important;
     background-repeat: repeat;
     border: 1px dotted #e3e3e3;
+}
+
+.nowrap {
+    -moz-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

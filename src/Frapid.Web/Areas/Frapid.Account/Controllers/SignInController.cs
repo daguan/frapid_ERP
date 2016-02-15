@@ -59,7 +59,7 @@ namespace Frapid.Account.Controllers
             }
             catch (NpgsqlException)
             {
-                return Json("Access is denied.");
+                return this.Failed("Access is denied.", HttpStatusCode.Forbidden);
             }
         }
 
@@ -68,7 +68,7 @@ namespace Frapid.Account.Controllers
         [AllowAnonymous]
         public ActionResult GetOffices()
         {
-            return Json(Offices.GetOffices(), JsonRequestBehavior.AllowGet);
+            return this.Ok(Offices.GetOffices());
         }
 
         [Route("account/sign-in/languages")]
@@ -90,7 +90,7 @@ namespace Frapid.Account.Controllers
                     NativeName = info.NativeName
                 }).ToList();
 
-            return Json(languages, JsonRequestBehavior.AllowGet);
+            return this.Ok(languages);
         }
     }
 }

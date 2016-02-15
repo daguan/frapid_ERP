@@ -4,10 +4,14 @@ CREATE SCHEMA website;
 CREATE TABLE website.email_subscriptions
 (
     email_subscription_id                       uuid PRIMARY KEY DEFAULT(gen_random_uuid()),
+	first_name									national character varying(100),
+	last_name									national character varying(100),
     email                                       national character varying(100) NOT NULL UNIQUE,
     browser                                     text,
     ip_address                                  national character varying(50),
-    unsubscribed                                boolean DEFAULT(false),    
+	confirmed									boolean DEFAULT(false),
+    confirmed_on                               	TIMESTAMP WITH TIME ZONE,
+    unsubscribed                                boolean DEFAULT(false),
     subscribed_on                               TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),    
     unsubscribed_on                             TIMESTAMP WITH TIME ZONE
 );
@@ -17,7 +21,6 @@ CREATE TABLE website.categories
     category_id                                 SERIAL NOT NULL PRIMARY KEY,
     category_name                               national character varying(100) NOT NULL,
     alias                                       national character varying(50) NOT NULL UNIQUE,
-    seo_keywords                                national character varying(50),
     seo_description                             national character varying(100),
     audit_user_id                               integer REFERENCES account.users,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
@@ -36,8 +39,7 @@ CREATE TABLE website.contents
     contents                                    text NOT NULL,
     tags                                        text,
     is_draft                                    boolean NOT NULL DEFAULT(true),
-    seo_keywords                                national character varying(50) NOT NULL DEFAULT(''),
-    seo_description                             national character varying(100) NOT NULL DEFAULT(''),
+    seo_description                             national character varying(1000) NOT NULL DEFAULT(''),
     is_homepage                                 boolean NOT NULL DEFAULT(false),
     audit_user_id                               integer REFERENCES account.users,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 

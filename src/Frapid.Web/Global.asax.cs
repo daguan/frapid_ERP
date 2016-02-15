@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Web;
 
 namespace Frapid.Web
@@ -12,8 +13,23 @@ namespace Frapid.Web
                 return;
             }
 
-            string path = "https://" + this.Request.Url.Host + this.Request.Url.PathAndQuery;
-            this.Response.Redirect(path);
+            bool enforceSsl = ConfigurationManager.AppSettings["EnforceSSL"].ToLowerInvariant().Equals("true");
+
+            if (!enforceSsl)
+            {
+                return;
+            }
+
+            if (this.Request.Url.Scheme == "https")
+            {
+                this.Response.AddHeader("Strict-Transport-Security", "max-age=31536000");
+            }
+            else if (this.Request.Url.Scheme == "http")
+            {
+                string path = "https://" + this.Request.Url.Host + this.Request.Url.PathAndQuery;
+                this.Response.Status = "301 Moved Permanently";
+                this.Response.AddHeader("Location", path);
+            }
         }
     }
 }

@@ -24,13 +24,13 @@ namespace Frapid.Config.DataAccess
 
 
         /// <summary>
-        /// Produces a paginated result of 10 items from IFilterNameViewRepository.
+        /// Produces a paginated result of 50 items from IFilterNameViewRepository.
         /// </summary>
         /// <returns>Returns the first page of collection of "FilterNameView" class.</returns>
         IEnumerable<Frapid.Config.Entities.FilterNameView> GetPaginatedResult();
 
         /// <summary>
-        /// Produces a paginated result of 10 items from IFilterNameViewRepository.
+        /// Produces a paginated result of 50 items from IFilterNameViewRepository.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result.</param>
         /// <returns>Returns collection of "FilterNameView" class.</returns>
@@ -46,7 +46,7 @@ namespace Frapid.Config.DataAccess
         long CountWhere(List<Frapid.DataAccess.Models.Filter> filters);
 
         /// <summary>
-        /// Produces a paginated result of 10 items using the supplied filters from IFilterNameViewRepository.
+        /// Produces a paginated result of 50 items using the supplied filters from IFilterNameViewRepository.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -61,7 +61,7 @@ namespace Frapid.Config.DataAccess
         long CountFiltered(string filterName);
 
         /// <summary>
-        /// Produces a paginated result of 10 items using the supplied filter name from IFilterNameViewRepository.
+        /// Produces a paginated result of 50 items using the supplied filter name from IFilterNameViewRepository.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filterName">The named filter.</param>

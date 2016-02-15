@@ -113,13 +113,13 @@ namespace Frapid.Account.DataAccess
         void Delete(System.Guid registrationId);
 
         /// <summary>
-        /// Produces a paginated result of 10 Registration classes.
+        /// Produces a paginated result of 50 Registration classes.
         /// </summary>
         /// <returns>Returns the first page of collection of Registration class.</returns>
         IEnumerable<Frapid.Account.Entities.Registration> GetPaginatedResult();
 
         /// <summary>
-        /// Produces a paginated result of 10 Registration classes.
+        /// Produces a paginated result of 50 Registration classes.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result.</param>
         /// <returns>Returns collection of Registration class.</returns>
@@ -135,7 +135,7 @@ namespace Frapid.Account.DataAccess
         long CountWhere(List<Frapid.DataAccess.Models.Filter> filters);
 
         /// <summary>
-        /// Performs a filtered pagination against IRegistrationRepository producing result of 10 items.
+        /// Performs a filtered pagination against IRegistrationRepository producing result of 50 items.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -150,7 +150,7 @@ namespace Frapid.Account.DataAccess
         long CountFiltered(string filterName);
 
         /// <summary>
-        /// Gets a filtered result of IRegistrationRepository producing a paginated result of 10.
+        /// Gets a filtered result of IRegistrationRepository producing a paginated result of 50.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filterName">The named filter.</param>

@@ -618,7 +618,7 @@ namespace Frapid.Config.DataAccess
         }
 
         /// <summary>
-        /// Performs a select statement on table "config.filters" producing a paginated result of 10.
+        /// Performs a select statement on table "config.filters" producing a paginated result of 50.
         /// </summary>
         /// <returns>Returns the first page of collection of "Filter" class.</returns>
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
@@ -642,12 +642,12 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            const string sql = "SELECT * FROM config.filters ORDER BY filter_id LIMIT 10 OFFSET 0;";
+            const string sql = "SELECT * FROM config.filters ORDER BY filter_id LIMIT 50 OFFSET 0;";
             return Factory.Get<Frapid.Config.Entities.Filter>(this._Catalog, sql);
         }
 
         /// <summary>
-        /// Performs a select statement on table "config.filters" producing a paginated result of 10.
+        /// Performs a select statement on table "config.filters" producing a paginated result of 50.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result.</param>
         /// <returns>Returns collection of "Filter" class.</returns>
@@ -672,8 +672,8 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            long offset = (pageNumber - 1) * 10;
-            const string sql = "SELECT * FROM config.filters ORDER BY filter_id LIMIT 10 OFFSET @0;";
+            long offset = (pageNumber - 1) * 50;
+            const string sql = "SELECT * FROM config.filters ORDER BY filter_id LIMIT 50 OFFSET @0;";
 
             return Factory.Get<Frapid.Config.Entities.Filter>(this._Catalog, sql, offset);
         }
@@ -717,7 +717,7 @@ namespace Frapid.Config.DataAccess
         }
 
         /// <summary>
-        /// Performs a filtered select statement on table "config.filters" producing a paginated result of 10.
+        /// Performs a filtered select statement on table "config.filters" producing a paginated result of 50.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -743,7 +743,7 @@ namespace Frapid.Config.DataAccess
                 }
             }
 
-            long offset = (pageNumber - 1) * 10;
+            long offset = (pageNumber - 1) * 50;
             Sql sql = Sql.Builder.Append("SELECT * FROM config.filters WHERE 1 = 1");
 
             Frapid.DataAccess.FilterManager.AddFilters(ref sql, new Frapid.Config.Entities.Filter(), filters);
@@ -752,7 +752,7 @@ namespace Frapid.Config.DataAccess
 
             if (pageNumber > 0)
             {
-                sql.Append("LIMIT @0", 10);
+                sql.Append("LIMIT @0", 50);
                 sql.Append("OFFSET @0", offset);
             }
 
@@ -793,7 +793,7 @@ namespace Frapid.Config.DataAccess
         }
 
         /// <summary>
-        /// Performs a filtered select statement on table "config.filters" producing a paginated result of 10.
+        /// Performs a filtered select statement on table "config.filters" producing a paginated result of 50.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filterName">The named filter.</param>
@@ -821,7 +821,7 @@ namespace Frapid.Config.DataAccess
 
             List<Frapid.DataAccess.Models.Filter> filters = this.GetFilters(this._Catalog, filterName);
 
-            long offset = (pageNumber - 1) * 10;
+            long offset = (pageNumber - 1) * 50;
             Sql sql = Sql.Builder.Append("SELECT * FROM config.filters WHERE 1 = 1");
 
             Frapid.DataAccess.FilterManager.AddFilters(ref sql, new Frapid.Config.Entities.Filter(), filters);
@@ -830,7 +830,7 @@ namespace Frapid.Config.DataAccess
 
             if (pageNumber > 0)
             {
-                sql.Append("LIMIT @0", 10);
+                sql.Append("LIMIT @0", 50);
                 sql.Append("OFFSET @0", offset);
             }
 

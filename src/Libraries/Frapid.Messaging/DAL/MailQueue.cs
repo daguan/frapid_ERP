@@ -13,7 +13,7 @@ namespace Frapid.Messaging.DAL
 
         public static IEnumerable<EmailQueue> GetMailInQueue(string catlog)
         {
-            const string sql = "SELECT * FROM config.email_queue WHERE NOT delivered AND NOT canceled;";
+            const string sql = "SELECT * FROM config.email_queue WHERE NOT delivered AND NOT canceled AND send_on <= NOW();";
             return Factory.Get<EmailQueue>(catlog, sql);
         }
 

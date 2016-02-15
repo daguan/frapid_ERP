@@ -13,7 +13,6 @@ namespace Frapid.WebsiteBuilder.ViewModels
         public string Title { get; set; }
         public int CategoryId { get; set; }
         public string Tags { get; set; }
-        public string SeoKeywords { get; set; }
         public string SeoDescription { get; set; }
         public string LayoutPath { get; set; }
         public string Layout { get; set; }

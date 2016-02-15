@@ -496,6 +496,14 @@ SELECT * FROM core.create_menu('Frapid.Config', 'Offices', '/dashboard/config/of
 SELECT * FROM core.create_menu('Frapid.Config', 'Flags', '/dashboard/config/flags', 'flag', '');
 SELECT * FROM core.create_menu('Frapid.Config', 'SMTP', '/dashboard/config/smtp', 'at', '');
 
+SELECT * FROM auth.create_app_menu_policy
+(
+    'Admin', 
+    core.get_office_id_by_office_name('Default'), 
+    'Frapid.Config',
+    '{*}'::text[]
+);
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/09.menus/1.menu-policy.sql --<--<--
 SELECT * FROM auth.create_app_menu_policy
 (

@@ -136,7 +136,7 @@ function deleteItem(el) {
     });
 };
 
-saveButton.click(function () {
+function save() {
     function request(theme, container, file, contents) {
         var url = "/dashboard/my/website/themes/resources/edit/file";
 
@@ -151,17 +151,35 @@ saveButton.click(function () {
 
         return window.getAjaxRequest(url, "PUT", data);
     };
+    var el = saveButton;
+    var file = el.attr("data-path");
+
+    if (!file) {
+        return;
+    };
 
     if (!window.confirmAction()) {
         return;
     };
 
-    var el = $(this);
     var theme = themeDropdown.val();
     var container = "";
-    var file = el.attr("data-path");
     var contents = window.ace.edit("editor").getValue();
 
+    if (file.substring(file.length - 5) === ".less") {
+        window.less.render(contents, { compress: false }, function (e, output) {
+            var compiled = request(theme, container, file.replace(".less", ".css"), output.css);
+            compiled.success(function () {
+                window.displayMessage("Successfully saved compiled css file.", "success");
+            });
+        });
+        window.less.render(contents, { compress: true }, function (e, output) {
+            var compiled = request(theme, container, file.replace(".less", ".min.css"), output.css);
+            compiled.success(function () {
+                window.displayMessage("Successfully saved minified css file.", "success");
+            });
+        });
+    };
 
     if (!theme) {
         return;
@@ -176,7 +194,21 @@ saveButton.click(function () {
     ajax.success(function () {
         window.displaySuccess();
     });
+    
+};
+
+saveButton.click(function () {
+    save();
 });
+
+
+$(window).keypress(function (event) {
+    if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) return true;
+    save();
+    event.preventDefault();
+    return false;
+});
+
 
 function createFile(el) {
     function request(theme, container, file, contents) {
@@ -280,7 +312,7 @@ function displayBlob(path) {
 };
 
 function isContent(extension) {
-    var candidates = ["html", "cshtml", "vbhtml", "xml", "config", "js", "json", "css", "less", "md"];
+    var candidates = ["html", "cshtml", "vbhtml", "xml", "config", "js", "json", "css", "less", "scss", "md"];
     if (candidates.indexOf(extension) !== -1) {
         return true;
     };

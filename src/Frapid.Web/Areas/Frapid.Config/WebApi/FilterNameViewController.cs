@@ -122,7 +122,7 @@ namespace Frapid.Config.Api
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 10 filter name views on each page, sorted by the property .
+        ///     Creates a paginated collection containing 50 filter name views on each page, sorted by the property .
         /// </summary>
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -156,7 +156,7 @@ namespace Frapid.Config.Api
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 10 filter name views on each page, sorted by the property .
+        ///     Creates a paginated collection containing 50 filter name views on each page, sorted by the property .
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <returns>Returns the requested page from the collection.</returns>
@@ -228,7 +228,7 @@ namespace Frapid.Config.Api
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 10 filter name views on each page, sorted by the property .
+        ///     Creates a filtered and paginated collection containing 50 filter name views on each page, sorted by the property .
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -301,7 +301,7 @@ namespace Frapid.Config.Api
 
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 10 filter name views on each page, sorted by the property .
+        ///     Creates a filtered and paginated collection containing 50 filter name views on each page, sorted by the property .
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <param name="filterName">The named filter.</param>

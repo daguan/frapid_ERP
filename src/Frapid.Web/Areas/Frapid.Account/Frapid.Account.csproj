@@ -176,7 +176,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LICENSE.txt" />
     <Content Include="Scripts\Account\ResetConfirmation\index.js" />
     <Content Include="Scripts\Account\Reset\index.js" />
     <Content Include="Scripts\Account\SignIn\google.js" />
@@ -249,6 +248,8 @@
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Role\Index.cshtml" />
     <Content Include="LICENSE" />
+    <Content Include="AppInfo.json" />
+    <None Include="Properties\PublishProfiles\frapid-publish-profile.pubxml" />
     <None Include="Views\EmailTemplate\Index.cshtml" />
     <Content Include="Views\EmailTemplate\Shared\Editor.cshtml" />
     <None Include="Views\Reset\Do.cshtml" />
@@ -269,6 +270,10 @@
     <ProjectReference Include="Entities\Frapid.Account.Entities.csproj">
       <Project>{682c3328-ddc3-458c-bb5f-9ab97ea42a0e}</Project>
       <Name>Frapid.Account.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="WebAPI\Frapid.Account.Api.csproj">
+      <Project>{39c347f9-992f-46a2-a768-1049c87b4ef3}</Project>
+      <Name>Frapid.Account.Api</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

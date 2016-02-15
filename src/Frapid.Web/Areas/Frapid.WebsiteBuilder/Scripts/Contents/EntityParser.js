@@ -57,7 +57,10 @@ var entityParser = {
                 break;
             case "select":
                 if (el.attr("multiple")) {
-                    value = el.val().join(",");
+                    var items = el.val();
+                    if (items) {
+                        value = el.val().join(",");
+                    };
                 } else {
                     value = el.val();
                     value = parseValue(value, el.parent().attr("class"));

@@ -137,10 +137,10 @@ namespace Frapid.Core.Api
                         },
                         new EntityColumn
                         {
-                                ColumnName = "_parent_menu_name",
-                                PropertyName = "ParentMenuName",
-                                DataType = "string",
-                                DbDataType = "text",
+                                ColumnName = "_parent_menu_id",
+                                PropertyName = "ParentMenuId",
+                                DataType = "int",
+                                DbDataType = "integer",
                                 IsNullable = false,
                                 IsPrimaryKey = false,
                                 IsSerial = false,

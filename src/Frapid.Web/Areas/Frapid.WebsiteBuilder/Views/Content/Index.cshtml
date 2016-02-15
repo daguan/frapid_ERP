@@ -21,14 +21,23 @@
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
-    scrudFactory.addNewUrl = "contents/manage";
-    scrudFactory.editUrl = "contents/manage?ContentId=";
+    scrudFactory.addNewUrl = "contents/manage?ReturnUrl=" + encodeURIComponent(location.pathname + location.search);
+    scrudFactory.editUrl = "contents/manage?ReturnUrl=" + encodeURIComponent(location.pathname + location.search) + "&ContentId=";
 
     scrudFactory.card = {
         header: "Title",
         meta: "Alias",
         description: "SeoDescription"
     };    
+
+    $.get('/ScrudFactory/View.html', function (view) {
+        $.get('/ScrudFactory/Form.html', function (form) {
+            $("#ScrudFactoryView").html(view);
+            $("#ScrudFactoryForm").html(form);
+            $.cachedScript("/bundles/scrudfactory-view.js");
+            $.cachedScript("/bundles/scrudfactory-form.js");
+        });
+    });
 </script>
 
 

@@ -54,7 +54,7 @@ namespace Frapid.SendGridMail
                 var message = new SendGridMessage();
                 message.From = new MailAddress(email.FromEmail, email.FromName);
 
-                message.AddTo(email.SentTo.Split(',').ToList());
+                message.AddTo(email.SentTo.Split(',').Select(x=>x.Trim()).ToList());
                 message.Subject = email.Subject;
 
                 if (email.IsBodyHtml)

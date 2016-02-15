@@ -5,7 +5,9 @@ using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using Frapid.Areas;
+using Frapid.Areas.Authorization;
 using Frapid.Configuration;
+using Frapid.Framework.Extensions;
 using Frapid.WebsiteBuilder.Models.Themes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -22,7 +24,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
             var discoverer = new ThemeDiscoverer();
             var templates = discoverer.Discover();
 
-            return this.Json(templates, JsonRequestBehavior.AllowGet);
+            return this.Ok(templates);
         }
 
         [Route("dashboard/my/website/themes/create")]
@@ -32,7 +34,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         {
             if (!ModelState.IsValid)
             {
-                return this.AjaxFail("Invalid or incomplete theme information provided.", HttpStatusCode.BadRequest);
+                return this.Failed("Invalid or incomplete theme information provided.", HttpStatusCode.BadRequest);
             }
 
             try
@@ -42,10 +44,10 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
             }
             catch (ThemeCreateException ex)
             {
-                return this.AjaxFail(ex.Message, HttpStatusCode.InternalServerError);
+                return this.Failed(ex.Message, HttpStatusCode.InternalServerError);
             }
 
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            return this.Ok();
         }
 
         [Route("dashboard/my/website/themes/delete")]
@@ -60,10 +62,10 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
             }
             catch (ThemeRemoveException ex)
             {
-                return this.AjaxFail(ex.Message, HttpStatusCode.InternalServerError);
+                return this.Failed(ex.Message, HttpStatusCode.InternalServerError);
             }
 
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            return this.Ok();
         }
 
         [Route("dashboard/my/website/themes/resources")]
@@ -72,7 +74,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         {
             if (string.IsNullOrWhiteSpace(themeName))
             {
-                return this.AjaxFail("Invalid theme name", HttpStatusCode.BadRequest);
+                return this.Failed("Invalid theme name", HttpStatusCode.BadRequest);
             }
 
             string catalog = DbConvention.GetCatalog();
@@ -81,15 +83,16 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
 
             if (path == null || !Directory.Exists(path))
             {
-                return this.AjaxFail("Path not found", HttpStatusCode.NotFound);
+                return this.Failed("Path not found", HttpStatusCode.NotFound);
             }
 
             var resource = ThemeResource.Get(path);
             resource = ThemeResource.NormalizePath(path, resource);
+            
             string json = JsonConvert.SerializeObject(resource, Formatting.None,
                 new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
 
-            return Content(json);
+            return this.Content(json, "application/json");
         }
 
         [Route("dashboard/my/website/themes/blob")]
@@ -98,12 +101,13 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         {
             if (string.IsNullOrWhiteSpace(themeName) || string.IsNullOrWhiteSpace(file))
             {
-                return this.AjaxFail("Access is denied", HttpStatusCode.BadRequest);
+                return this.Failed("Access is denied", HttpStatusCode.BadRequest);
             }
 
             string path = new ThemeFileLocator(themeName, file).Locate();
-            string mimeType = GetMimeType(path);
-            return File(path, mimeType);
+
+            string mimeType = this.GetMimeType(path);
+            return this.File(path, mimeType);
         }
 
         private string GetMimeType(string fileName)
@@ -154,10 +158,10 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
             }
             catch (ResourceCreateException ex)
             {
-                return this.AjaxFail(ex.Message, HttpStatusCode.InternalServerError);
+                return this.Failed(ex.Message, HttpStatusCode.InternalServerError);
             }
 
-            return Json(new {success = true}, JsonRequestBehavior.AllowGet);
+            return this.Ok();
         }
 
         [Route("dashboard/my/website/themes/resources/delete")]
@@ -167,7 +171,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         {
             if (string.IsNullOrWhiteSpace(themeName) || string.IsNullOrWhiteSpace(resource))
             {
-                return this.AjaxFail("Access is denied", HttpStatusCode.BadRequest);
+                return this.Failed("Access is denied", HttpStatusCode.BadRequest);
             }
 
             try
@@ -177,10 +181,10 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
             }
             catch (ResourceRemoveException ex)
             {
-                return this.AjaxFail(ex.Message, HttpStatusCode.InternalServerError);
+                return this.Failed(ex.Message, HttpStatusCode.InternalServerError);
             }
 
-            return Json(new {success = true}, JsonRequestBehavior.AllowGet);
+            return this.Ok();
         }
 
         [Route("dashboard/my/website/themes/resources/upload")]
@@ -190,13 +194,13 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         {
             if (this.Request.Files.Count > 1)
             {
-                return this.AjaxFail("Only single file may be uploaded", HttpStatusCode.BadRequest);
+                return this.Failed("Only single file may be uploaded", HttpStatusCode.BadRequest);
             }
 
             var file = this.Request.Files[0];
             if (file == null)
             {
-                return this.AjaxFail("No file was uploaded", HttpStatusCode.BadRequest);
+                return this.Failed("No file was uploaded", HttpStatusCode.BadRequest);
             }
 
             try
@@ -206,10 +210,10 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
             }
             catch (ResourceUploadException ex)
             {
-                return this.AjaxFail(ex.Message, HttpStatusCode.InternalServerError);
+                return this.Failed(ex.Message, HttpStatusCode.InternalServerError);
             }
 
-            return Json(new {success = true}, JsonRequestBehavior.AllowGet);
+            return this.Ok();
         }
 
         [Route("dashboard/my/website/themes/upload")]
@@ -219,13 +223,13 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         {
             if (this.Request.Files.Count > 1)
             {
-                return this.AjaxFail("Only single file may be uploaded", HttpStatusCode.BadRequest);
+                return this.Failed("Only single file may be uploaded", HttpStatusCode.BadRequest);
             }
 
             var file = this.Request.Files[0];
             if (file == null)
             {
-                return this.AjaxFail("No file was uploaded", HttpStatusCode.BadRequest);
+                return this.Failed("No file was uploaded", HttpStatusCode.BadRequest);
             }
 
             try
@@ -235,7 +239,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
             }
             catch (ThemeUploadException ex)
             {
-                return this.AjaxFail(ex.Message, HttpStatusCode.InternalServerError);
+                return this.Failed(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -250,7 +254,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
 
             if (result.Equals(false))
             {
-                return this.AjaxFail("Invalid URL", HttpStatusCode.BadRequest);
+                return this.Failed("Invalid URL", HttpStatusCode.BadRequest);
             }
 
             try
@@ -260,7 +264,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
             }
             catch (ThemeUploadException ex)
             {
-                return this.AjaxFail(ex.Message, HttpStatusCode.InternalServerError);
+                return this.Failed(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -272,14 +276,14 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
             }
             catch (ThemeUploadException ex)
             {
-                return this.AjaxFail(ex.Message, HttpStatusCode.BadRequest);
+                return this.Failed(ex.Message, HttpStatusCode.BadRequest);
             }
             catch (ThemeInstallException ex)
             {
-                return this.AjaxFail(ex.Message, HttpStatusCode.BadRequest);
+                return this.Failed(ex.Message, HttpStatusCode.BadRequest);
             }
 
-            return Json(new {success = true}, JsonRequestBehavior.AllowGet);
+            return this.Ok();
         }
     }
 }

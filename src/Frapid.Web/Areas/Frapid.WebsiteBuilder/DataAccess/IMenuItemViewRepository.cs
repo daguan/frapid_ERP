@@ -28,13 +28,13 @@ namespace Frapid.WebsiteBuilder.DataAccess
         IEnumerable<DisplayField> GetDisplayFields();
 
         /// <summary>
-        /// Produces a paginated result of 10 items from IMenuItemViewRepository.
+        /// Produces a paginated result of 50 items from IMenuItemViewRepository.
         /// </summary>
         /// <returns>Returns the first page of collection of "MenuItemView" class.</returns>
         IEnumerable<Frapid.WebsiteBuilder.Entities.MenuItemView> GetPaginatedResult();
 
         /// <summary>
-        /// Produces a paginated result of 10 items from IMenuItemViewRepository.
+        /// Produces a paginated result of 50 items from IMenuItemViewRepository.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result.</param>
         /// <returns>Returns collection of "MenuItemView" class.</returns>
@@ -50,7 +50,7 @@ namespace Frapid.WebsiteBuilder.DataAccess
         long CountWhere(List<Frapid.DataAccess.Models.Filter> filters);
 
         /// <summary>
-        /// Produces a paginated result of 10 items using the supplied filters from IMenuItemViewRepository.
+        /// Produces a paginated result of 50 items using the supplied filters from IMenuItemViewRepository.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -65,7 +65,7 @@ namespace Frapid.WebsiteBuilder.DataAccess
         long CountFiltered(string filterName);
 
         /// <summary>
-        /// Produces a paginated result of 10 items using the supplied filter name from IMenuItemViewRepository.
+        /// Produces a paginated result of 50 items using the supplied filter name from IMenuItemViewRepository.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the paginated result. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filterName">The named filter.</param>

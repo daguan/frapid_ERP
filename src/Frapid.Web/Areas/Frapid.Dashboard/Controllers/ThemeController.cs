@@ -4,6 +4,7 @@ using System.Net;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using Frapid.Areas;
+using Frapid.Areas.Authorization;
 using Frapid.Configuration;
 
 namespace Frapid.Dashboard.Controllers
@@ -27,7 +28,7 @@ namespace Frapid.Dashboard.Controllers
             var directories = Directory.GetDirectories(path);
             var templates = directories.Select(directory => new DirectoryInfo(directory).Name).ToList();
 
-            return Json(templates, JsonRequestBehavior.AllowGet);
+            return this.Ok(templates);
         }
 
         [Route("dashboard/my/themes/set-default/{themeName}")]
@@ -59,7 +60,7 @@ namespace Frapid.Dashboard.Controllers
 
 
             ConfigurationManager.SetConfigurationValue(path, "DefaultTheme", themeName);
-            return Json("OK", JsonRequestBehavior.AllowGet);
+            return this.Ok();
         }
     }
 }

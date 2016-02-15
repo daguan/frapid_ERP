@@ -12,7 +12,6 @@ namespace Frapid.WebsiteBuilder.Entities
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string Alias { get; set; }
-        public string SeoKeywords { get; set; }
         public string SeoDescription { get; set; }
         public int? AuditUserId { get; set; }
         public DateTime? AuditTs { get; set; }

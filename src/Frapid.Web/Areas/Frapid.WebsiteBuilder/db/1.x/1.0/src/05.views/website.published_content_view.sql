@@ -13,7 +13,6 @@ SELECT
     website.contents.markdown,
     website.contents.contents,
     website.contents.tags,
-    website.contents.seo_keywords,
     website.contents.seo_description,
     website.contents.is_homepage
 FROM website.contents

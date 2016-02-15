@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
-using Frapid.Areas;
+using Frapid.Areas.Authorization;
 using Frapid.Dashboard.Controllers;
+using Frapid.WebsiteBuilder.DAL;
 using Frapid.WebsiteBuilder.Entities;
 
 namespace Frapid.WebsiteBuilder.Controllers.Backend
@@ -19,7 +20,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         [RestrictAnonymous]
         public ActionResult Manage(int contentId = 0)
         {
-            var model = DAL.Contents.Get(contentId) ?? new Content();
+            var model = Contents.Get(contentId) ?? new Content();
             return this.FrapidView(this.GetRazorView<AreaRegistration>("Content/Manage.cshtml"), model);
         }
     }

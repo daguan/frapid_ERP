@@ -106,12 +106,28 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="web.config" />
+    <Content Include="AppInfo.json" />
+    <None Include="Properties\PublishProfiles\frapid-publish-profile.pubxml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
     <None Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="DataAccess\Frapid.Config.DataAccess.csproj">
+      <Project>{6de77ac1-1b75-4f9b-ab18-57b5b47ada22}</Project>
+      <Name>Frapid.Config.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="Entities\Frapid.Config.Entities.csproj">
+      <Project>{14978e9f-28a4-440f-9b85-21d8c18a84af}</Project>
+      <Name>Frapid.Config.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="WebApi\Frapid.Config.Api.csproj">
+      <Project>{06ed5a8a-5d68-4816-8c2b-c7790f0a1d22}</Project>
+      <Name>Frapid.Config.Api</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

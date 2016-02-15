@@ -68,6 +68,7 @@ namespace frapid.Modules
 
             this.ReplaceContent(@"WebAPI\WebAPIProject.Api.csproj");
             this.ReplaceContent(@"WebAPI\Properties\AssemblyInfo.cs");
+            this.ReplaceContent(@"Views\web.config");
 
             this.ReplaceContent("WebAPIProject.csproj");
             this.ReplaceContent("WebAPIProject.sln");

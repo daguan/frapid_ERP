@@ -40,7 +40,3 @@
             loadIcons(response);
         });
     };
-
-    $(document).ready(function() {
-        loadApps();
-    });

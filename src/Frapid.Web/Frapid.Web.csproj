@@ -57,8 +57,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="jose-jwt, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Bin\jose-jwt.dll</HintPath>
+      <HintPath>..\packages\jose-jwt.1.9.0\lib\4.0\jose-jwt.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -232,6 +232,9 @@
     <Compile Include="Application\BundleConfig.cs" />
     <Compile Include="Application\ClassicAssemblyResolver.cs" />
     <Compile Include="Application\DefaultAssemblyResolver.cs" />
+    <Compile Include="Controllers\BundleController.cs" />
+    <Compile Include="Jobs\EndOfDayJob.cs" />
+    <Compile Include="Application\EodTaskRegistration.cs" />
     <Compile Include="Application\FilterConfig.cs" />
     <Compile Include="Application\LogManager.cs" />
     <Compile Include="Application\NPocoConfig.cs" />
@@ -255,6 +258,9 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="images\social\facebook.png" />
+    <Content Include="images\social\linkedin.png" />
+    <Content Include="images\social\twitter.png" />
     <Content Include="Scripts\angular-route.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -272,9 +278,41 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="AppInfo.json" />
+    <Content Include="Catalogs\web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Override\Areas\web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Override\Attachments\web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Override\Backups\web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Override\Configs\Applications.config" />
+    <Content Include="Override\Configs\Frapid.config" />
+    <Content Include="Override\Configs\SMTP\Mailgun.json" />
+    <Content Include="Override\Configs\SMTP\SendGrid.json" />
+    <Content Include="Override\Configs\web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Override\Documents\web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Override\Logs\web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Override\Static\web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Override\Temp\web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\frapid-publish-profile.pubxml" />
     <Content Include="Scripts\ajax-file-upload.js" />
     <Content Include="Scripts\angular\angular.min.js" />
@@ -311,6 +349,13 @@
     <Content Include="Scripts\d3\d3.js" />
     <Content Include="Scripts\d3\d3.min.js" />
     <Content Include="Scripts\date.js" />
+    <Content Include="Resources\Configs\DbServer.config" />
+    <Content Include="Resources\Configs\DomainsApproved.json" />
+    <Content Include="Resources\Configs\DomainsInstalled.json" />
+    <Content Include="Resources\Configs\JwtConfig.json" />
+    <Content Include="Resources\Configs\Parameters.config" />
+    <Content Include="Resources\Configs\web.config" />
+    <Content Include="Resources\web.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\frapid\core\array.js" />
     <Content Include="Scripts\frapid\core\browser.js" />
@@ -505,6 +550,8 @@
     <Content Include="Scripts\linq.js\test\testrunner.min.htm" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\Modules\ScrudFactory\form\ajax-request-initialize.js" />
+    <Content Include="Scripts\Modules\ScrudFactory\form\block-begin.js" />
+    <Content Include="Scripts\Modules\ScrudFactory\form\block-end.js" />
     <Content Include="Scripts\Modules\ScrudFactory\form\event-on-ajax-stop.js" />
     <Content Include="Scripts\Modules\ScrudFactory\form\event-on-doc-keydown.js" />
     <Content Include="Scripts\Modules\ScrudFactory\form\event-on-doc-ready.js" />
@@ -533,6 +580,8 @@
     <Content Include="Scripts\Modules\ScrudFactory\shared\view.js" />
     <Content Include="Scripts\Modules\ScrudFactory\view\add-button.js" />
     <Content Include="Scripts\Modules\ScrudFactory\view\ajax-load-page-count.js" />
+    <Content Include="Scripts\Modules\ScrudFactory\view\block-begin.js" />
+    <Content Include="Scripts\Modules\ScrudFactory\view\block-end.js" />
     <Content Include="Scripts\Modules\ScrudFactory\view\buttons-action.js" />
     <Content Include="Scripts\Modules\ScrudFactory\view\buttons-custom.js" />
     <Content Include="Scripts\Modules\ScrudFactory\view\buttons.js" />
@@ -922,8 +971,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\" />
-    <Folder Include="Catalogs\" />
-    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\Frapid.Areas\Frapid.Areas.csproj">

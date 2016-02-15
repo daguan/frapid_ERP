@@ -13,6 +13,7 @@ namespace Frapid.Messaging.DTO
         public string Attachments { get; set; }
         public string Message { get; set; }
         public DateTime AddedOn { get; set; }
+        public DateTime SendOn { get; set; }
         public bool Delivered { get; set; }
         public DateTime? DeliveredOn { get; set; }
         public bool Canceled { get; set; }

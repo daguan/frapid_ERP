@@ -14,6 +14,7 @@ SELECT
     account.logins.ip_address,
     account.logins.login_timestamp,
     account.logins.culture,
+    account.logins.is_active,
     account.logins.office_id,
     core.offices.office_name,
     core.offices.office_code || ' (' || core.offices.office_name || ')' AS office,

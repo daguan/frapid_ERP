@@ -1,9 +1,5 @@
-﻿using System;
-using System.Configuration;
-using System.Linq;
+﻿using System.Configuration;
 using System.Web.Hosting;
-using System.Xml;
-using System.Xml.Linq;
 
 namespace Frapid.Configuration
 {
@@ -47,15 +43,16 @@ namespace Frapid.Configuration
         }
 
         /// <summary>
-        /// Saves appSettings key configuration on the requested file.
+        ///     Saves appSettings key configuration on the requested file.
         /// </summary>
         /// <param name="path">Path to configuration file.</param>
         /// <param name="key">The key to edit.</param>
         /// <param name="value">The value to edit the key with.</param>
         public static void SetConfigurationValue(string path, string key, string value)
         {
-            var configFileMap = new ExeConfigurationFileMap { ExeConfigFilename = path };
-            var config = System.Configuration.ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+            var configFileMap = new ExeConfigurationFileMap {ExeConfigFilename = path};
+            var config = System.Configuration.ConfigurationManager.OpenMappedExeConfiguration(configFileMap,
+                ConfigurationUserLevel.None);
             var section = config.GetSection("appSettings") as AppSettingsSection;
 
             if (section?.Settings[key] != null)

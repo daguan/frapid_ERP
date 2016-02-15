@@ -19,7 +19,6 @@ namespace Frapid.WebsiteBuilder.Entities
         public string Markdown { get; set; }
         public string Contents { get; set; }
         public string Tags { get; set; }
-        public string SeoKeywords { get; set; }
         public string SeoDescription { get; set; }
         public bool? IsHomepage { get; set; }
     }

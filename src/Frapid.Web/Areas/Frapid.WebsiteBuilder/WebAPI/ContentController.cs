@@ -190,18 +190,6 @@ namespace Frapid.WebsiteBuilder.Api
                         },
                         new EntityColumn
                         {
-                                ColumnName = "seo_keywords",
-                                PropertyName = "SeoKeywords",
-                                DataType = "string",
-                                DbDataType = "varchar",
-                                IsNullable = false,
-                                IsPrimaryKey = false,
-                                IsSerial = false,
-                                Value = "",
-                                MaxLength = 50
-                        },
-                        new EntityColumn
-                        {
                                 ColumnName = "seo_description",
                                 PropertyName = "SeoDescription",
                                 DataType = "string",
@@ -558,7 +546,7 @@ namespace Frapid.WebsiteBuilder.Api
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 10 contents on each page, sorted by the property ContentId.
+        ///     Creates a paginated collection containing 50 contents on each page, sorted by the property ContentId.
         /// </summary>
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -592,7 +580,7 @@ namespace Frapid.WebsiteBuilder.Api
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 10 contents on each page, sorted by the property ContentId.
+        ///     Creates a paginated collection containing 50 contents on each page, sorted by the property ContentId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <returns>Returns the requested page from the collection.</returns>
@@ -663,7 +651,7 @@ namespace Frapid.WebsiteBuilder.Api
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 10 contents on each page, sorted by the property ContentId.
+        ///     Creates a filtered and paginated collection containing 50 contents on each page, sorted by the property ContentId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -735,7 +723,7 @@ namespace Frapid.WebsiteBuilder.Api
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 10 contents on each page, sorted by the property ContentId.
+        ///     Creates a filtered and paginated collection containing 50 contents on each page, sorted by the property ContentId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filterName">The named filter.</param>

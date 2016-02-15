@@ -20,6 +20,7 @@ namespace Frapid.Account.Entities
         public string IpAddress { get; set; }
         public DateTime? LoginTimestamp { get; set; }
         public string Culture { get; set; }
+        public bool? IsActive { get; set; }
         public int? OfficeId { get; set; }
         public string OfficeName { get; set; }
         public string Office { get; set; }

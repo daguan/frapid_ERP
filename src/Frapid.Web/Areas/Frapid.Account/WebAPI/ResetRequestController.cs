@@ -498,7 +498,7 @@ namespace Frapid.Account.Api
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 10 reset requests on each page, sorted by the property RequestId.
+        ///     Creates a paginated collection containing 50 reset requests on each page, sorted by the property RequestId.
         /// </summary>
         /// <returns>Returns the first page from the collection.</returns>
         [AcceptVerbs("GET", "HEAD")]
@@ -532,7 +532,7 @@ namespace Frapid.Account.Api
         }
 
         /// <summary>
-        ///     Creates a paginated collection containing 10 reset requests on each page, sorted by the property RequestId.
+        ///     Creates a paginated collection containing 50 reset requests on each page, sorted by the property RequestId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset.</param>
         /// <returns>Returns the requested page from the collection.</returns>
@@ -603,7 +603,7 @@ namespace Frapid.Account.Api
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 10 reset requests on each page, sorted by the property RequestId.
+        ///     Creates a filtered and paginated collection containing 50 reset requests on each page, sorted by the property RequestId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filters">The list of filter conditions.</param>
@@ -675,7 +675,7 @@ namespace Frapid.Account.Api
         }
 
         /// <summary>
-        ///     Creates a filtered and paginated collection containing 10 reset requests on each page, sorted by the property RequestId.
+        ///     Creates a filtered and paginated collection containing 50 reset requests on each page, sorted by the property RequestId.
         /// </summary>
         /// <param name="pageNumber">Enter the page number to produce the resultset. If you provide a negative number, the result will not be paginated.</param>
         /// <param name="filterName">The named filter.</param>

@@ -473,10 +473,17 @@ BEGIN
         WHERE LOWER(account.users.email) = LOWER(_email);
     END IF;
     
+	UPDATE account.logins 
+	SET is_active = false 
+	WHERE user_id=_user_id 
+	AND office_id = _office_id 
+	AND browser = _browser
+	AND ip_address = _ip_address;
+
     INSERT INTO account.logins(user_id, office_id, browser, ip_address, login_timestamp, culture)
     SELECT _user_id, _office_id, _browser, _ip_address, NOW(), _culture
     RETURNING account.logins.login_id INTO _login_id;
-
+	
     RETURN QUERY
     SELECT _login_id, true, 'Welcome'::text;
     RETURN;    
@@ -640,7 +647,13 @@ BEGIN
         WHERE user_id = _user_id;    
     END IF;
 
-        
+	UPDATE account.logins 
+	SET is_active = false 
+	WHERE user_id=_user_id 
+	AND office_id = _office_id 
+	AND browser = _browser
+	AND ip_address = _ip_address;
+
     INSERT INTO account.logins(user_id, office_id, browser, ip_address, login_timestamp, culture)
     SELECT _user_id, _office_id, _browser, _ip_address, NOW(), _culture
     RETURNING account.logins.login_id INTO _login_id;
@@ -885,6 +898,13 @@ BEGIN
     FROM account.users
     WHERE email = _email;
 
+	UPDATE account.logins 
+	SET is_active = false 
+	WHERE user_id=_user_id 
+	AND office_id = _office_id 
+	AND browser = _browser
+	AND ip_address = _ip_address;
+
     INSERT INTO account.logins(user_id, office_id, browser, ip_address, login_timestamp, culture)
     SELECT _user_id, _office_id, _browser, _ip_address, NOW(), _culture
     RETURNING account.logins.login_id INTO _login_id;
@@ -966,6 +986,7 @@ SELECT * FROM core.create_menu('Frapid.Account', 'Password Reset', '/dashboard/a
 SELECT * FROM core.create_menu('Frapid.Account', 'Welcome Email', '/dashboard/account/email-templates/welcome-email', 'star', 'Email Templates');
 SELECT * FROM core.create_menu('Frapid.Account', 'Welcome Email (3rd Party)', '/dashboard/account/email-templates/welcome-email-other', 'star outline', 'Email Templates');
 
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
 INSERT INTO account.roles
 SELECT 1000,   'Guest',                 false UNION ALL
@@ -996,6 +1017,7 @@ SELECT
     account.logins.ip_address,
     account.logins.login_timestamp,
     account.logins.culture,
+    account.logins.is_active,
     account.logins.office_id,
     core.offices.office_name,
     core.offices.office_code || ' (' || core.offices.office_name || ')' AS office,

@@ -1,7 +1,7 @@
 ﻿{
-    "FromName" : "",
-    "FromEmail" : "",
-	"ApiUser": "Your SendGrid User Name",
-	"ApiKey": "Your SendGrid Api Key",
-	"Enabled": false
+  "FromName": "",
+  "FromEmail": "",
+  "ApiUser": "Your SendGrid User Name",
+  "ApiKey": "Your SendGrid Api Key",
+  "Enabled": false
 }
