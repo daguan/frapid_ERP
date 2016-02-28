@@ -1,4 +1,4 @@
-﻿using Frapid.Account.Entities;
+﻿using Frapid.Account.DTO;
 using Frapid.ApplicationState.Cache;
 using Frapid.DataAccess;
 using Frapid.TokenManager;

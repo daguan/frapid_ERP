@@ -1,5 +1,5 @@
 ﻿var kanbanTemplate = '<div id="kanban{KanbanId}" class="ui segment">\
-                    <span class="ui violet left large label" data-kanban-id="{KanbanId}" title="{Description}">{KanbanName}</span>\
+                    <span class="ui teal left large label" data-kanban-id="{KanbanId}" title="{Description}">{KanbanName}</span>\
                     <div class="ui right floated tiny basic icon buttons">\
                         <a title="{AddNewCheckListLocalized}" class="ui basic button" href="javascript:void(0);" onclick="addKanban();"><i class="add icon"></i></a>\
                         <a title="{EditThisCheckListLocalized}" class="ui basic button" href="javascript:void(0);" onclick="editKanban(this);"><i class="edit icon"></i></a>\
@@ -11,9 +11,9 @@
 
 function createKanbanSegment(kanban) {
     var local = kanbanTemplate;
-    local = local.replace(/{KanbanId}/g, kanban.KanbanId);
-    local = local.replace(/{KanbanName}/g, kanban.KanbanName);
-    local = local.replace(/{Description}/g, kanban.Description);
+    local = local.replace(/{KanbanId}/g, kanban.kanban_id);
+    local = local.replace(/{KanbanName}/g, kanban.kanban_name);
+    local = local.replace(/{Description}/g, kanban.description);
     local = local.replace("{AddNewCheckListLocalized}", window.Resources.Titles.AddNewChecklist());
     local = local.replace("{EditThisCheckListLocalized}", window.Resources.Titles.EditThisChecklist());
     local = local.replace("{DeleteThisCheckListLocalized}", window.Resources.Titles.DeleteThisChecklist());
@@ -27,8 +27,8 @@ function createKanbans(kanbans) {
     $("#kanban").html("");
 
     var kanban = new Object();
-    kanban.KanbanId = "0";
-    kanban.KanbanName = window.Resources.Titles.Untitled();
+    kanban.kanban_id = "0";
+    kanban.kanban_name = window.Resources.Titles.Untitled();
     createKanbanSegment(kanban);
 
     $.each(kanbans, function (i, kanban) {
@@ -39,7 +39,7 @@ function createKanbans(kanbans) {
 };
 
 function getKanbans() {
-    var url = "/api/config/kanban/get-where/1";
+    var url = "/api/forms/config/kanban/get-where/1";
 
     var filters = [];
     filters.push(getAjaxColumnFilter("WHERE", "object_name", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));
@@ -55,7 +55,7 @@ function isKanban() {
     return target.toLowerCase() === "kanban";
 };
 
-function refreshKanbans() {
+function refreshKanbans(dontRefresh) {
     var ajax = getKanbans();
 
     ajax.success(function (response) {
@@ -64,7 +64,7 @@ function refreshKanbans() {
         if (!window.kanbans.length) {
             if (!isKanban()) {
                 var defaultView = window.getQueryStringByName("View") || "grid";
-                showView(defaultView);
+                showView(defaultView, dontRefresh);
             };
         };
 

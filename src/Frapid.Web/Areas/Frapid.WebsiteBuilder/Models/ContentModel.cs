@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Frapid.WebsiteBuilder.DAL;
-using Frapid.WebsiteBuilder.Entities;
+using Frapid.WebsiteBuilder.DTO;
 using Content = Frapid.WebsiteBuilder.ViewModels.Content;
 
 namespace Frapid.WebsiteBuilder.Models

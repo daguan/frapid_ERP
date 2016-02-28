@@ -201,6 +201,8 @@
     <Compile Include="Controllers\Backend\UserController.cs" />
     <Compile Include="DAL\Users.cs" />
     <Compile Include="DTO\Office.cs" />
+    <Compile Include="DTO\AccessToken.cs" />
+    <Compile Include="DTO\User.cs" />
     <Compile Include="Exceptions\EmailConfirmException.cs" />
     <Compile Include="Emails\ResetEmail.cs" />
     <Compile Include="Models\IUserInfo.cs" />
@@ -261,20 +263,6 @@
     <None Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="DataAccess\Frapid.Account.DataAccess.csproj">
-      <Project>{92f69053-8676-4628-af71-0e9e27795c90}</Project>
-      <Name>Frapid.Account.DataAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="Entities\Frapid.Account.Entities.csproj">
-      <Project>{682c3328-ddc3-458c-bb5f-9ab97ea42a0e}</Project>
-      <Name>Frapid.Account.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="WebAPI\Frapid.Account.Api.csproj">
-      <Project>{39c347f9-992f-46a2-a768-1049c87b4ef3}</Project>
-      <Name>Frapid.Account.Api</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

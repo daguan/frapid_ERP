@@ -56,6 +56,7 @@ CREATE TABLE config.email_queue
     attachments                                 text,
     message                                     text NOT NULL,
     added_on                                    TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
+	send_on										TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
     delivered                                   boolean NOT NULL DEFAULT(false),
     delivered_on                                TIMESTAMP WITH TIME ZONE,
     canceled                                    boolean NOT NULL DEFAULT(false),

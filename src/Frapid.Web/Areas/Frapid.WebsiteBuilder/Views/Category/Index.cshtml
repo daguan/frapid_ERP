@@ -14,14 +14,13 @@
 
     scrudFactory.title = "Content Categories";
 
-    scrudFactory.viewAPI = "/api/website/category";
+    scrudFactory.viewAPI = "/api/forms/website/category";
     scrudFactory.viewTableName = "website.categories";
 
-    scrudFactory.formAPI = "/api/website/category";
+    scrudFactory.formAPI = "/api/forms/website/category";
     scrudFactory.formTableName = "website.categories";
 
-    scrudFactory.disabledOnEdit = ["AuthorId"];
-    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
@@ -40,9 +39,9 @@
     ];
 
     scrudFactory.card = {
-        header: "CategoryName",
-        meta: "Alias",
-        description: "SeoDescription"
+        header: "category_name",
+        meta: "alias",
+        description: "seo_description"
     };
 
 

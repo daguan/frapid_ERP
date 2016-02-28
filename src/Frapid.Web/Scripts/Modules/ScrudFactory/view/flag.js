@@ -53,12 +53,12 @@ function displayFlaggedRows() {
 
 function initializeFlag() {
     function getFlagTypes() {
-        var url = "/api/config/flag-type/display-fields";
+        var url = "/api/forms/config/flag-type/display-fields";
         return getAjaxRequest(url);
     };
 
     function addFlag(flag) {
-        var url = "/api/config/flag/add-or-edit";
+        var url = "/api/forms/config/flag/add-or-edit";
         var form = [];
         form.push(flag);
         form.push(null);
@@ -68,7 +68,7 @@ function initializeFlag() {
     };
 
     function deleteFlag(flagId) {
-        var url = "/api/config/flag/delete/" + flagId;
+        var url = "/api/forms/config/flag/delete/" + flagId;
         return getAjaxRequest(url, "DELETE");
     };
 
@@ -179,7 +179,7 @@ function initializeFlag() {
     });
 
     function getFlagView(resource, userId, flagIds) {
-        var url = "/api/config/flag-view/get/";
+        var url = "/api/flag/get/";
         url += resource + "/";
         url += userId;
         url += "?resourceIds=";

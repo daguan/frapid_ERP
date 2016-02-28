@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Web.Hosting;
 using Newtonsoft.Json;
@@ -36,6 +37,22 @@ namespace Frapid.Configuration
             domains = JsonConvert.DeserializeObject<List<ApprovedDomain>>(contents);
 
             return domains ?? new List<ApprovedDomain>();
+        }
+
+        public List<string> GetTenantMembers()
+        {
+            var domains = new List<string>();
+            var approved = this.Get();
+
+            foreach (var domain in approved)
+            {
+                domains.Add(domain.DomainName);
+                domains.AddRange(domain.Synonyms);
+                domains.AddRange(domain.Synonyms.Select(synonym => domain.CdnPrefix + "." + synonym));
+                domains.Add(domain.CdnPrefix + "." + domain.DomainName);
+            }
+
+            return domains;
         }
 
         public void Add(ApprovedDomain domain)

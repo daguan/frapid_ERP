@@ -9,14 +9,13 @@
 
     scrudFactory.title = "User Management";
 
-    scrudFactory.viewAPI = "/api/account/user";
+    scrudFactory.viewAPI = "/api/forms/account/user";
     scrudFactory.viewTableName = "account.users";
 
-    scrudFactory.formAPI = "/api/account/user";
+    scrudFactory.formAPI = "/api/forms/account/user";
     scrudFactory.formTableName = "account.users";
 
-    scrudFactory.disabledOnEdit = ["AuthorId"];
-    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs", "Password"];
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts", "password"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
@@ -36,32 +35,32 @@
     ];
 
     scrudFactory.card = {
-        header: "Name"
+        header: "name"
     };
 
     scrudFactory.keys = [
         {
             property: "OfficeId",
-            url: '/api/core/office/display-fields',
+            url: '/api/forms/core/office/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "RoleId",
-            url: '/api/account/role/display-fields',
+            url: '/api/forms/account/role/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         }
     ];
 
-    $.get('/ScrudFactory/View.html', function (view) {
-        $.get('/ScrudFactory/Form.html', function (form) {
+    $.get('/ScrudFactory/View.html?id=' + Math.random(), function(view) {
+        $.get('/ScrudFactory/Form.html', function(form) {
             $("#ScrudFactoryView").html(view);
             $("#ScrudFactoryForm").html(form);
-            $.cachedScript("/bundles/scrudfactory-view.js");
-            $.cachedScript("/bundles/scrudfactory-form.js");
+            $.cachedScript("/bundles/scrudfactory-view.js?id=" + Math.random());
+            $.cachedScript("/bundles/scrudfactory-form.js?id=" + Math.random());
         });
     });
 </script>
@@ -69,3 +68,6 @@
 
 <div data-ng-include="'/ScrudFactory/View.html'"></div>
 <div data-ng-include="'/ScrudFactory/Form.html'"></div>
+<script>
+    
+</script>

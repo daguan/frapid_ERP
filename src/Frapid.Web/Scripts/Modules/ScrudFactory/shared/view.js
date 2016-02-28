@@ -1,11 +1,11 @@
-﻿function showView(target) {
+﻿function showView(target, dontRefresh) {
     if (!target) {
         target = $(".active[data-target]").attr("data-target") || "grid";
     };
 
     if (target === "FormView") {
         window.scrudView.hide();
-        window.scrudForm.fadeIn(500);
+        window.scrudForm.show();
     } else {
         //var url = updateQueryString("View", target);
         //window.history.replaceState({ path: url }, '', url);
@@ -13,8 +13,10 @@
         $("div[data-target]").hide();
         $("[data-target]").removeClass("active green");
         $('[data-target="' + target + '"]').show().addClass("active green");
-        window.scrudView.fadeIn(500);
-        loadPageCount(loadGrid);
-    };
+        window.scrudView.show();
 
+        if (!dontRefresh) {
+            loadPageCount(loadGrid);
+        };
+    };
 };

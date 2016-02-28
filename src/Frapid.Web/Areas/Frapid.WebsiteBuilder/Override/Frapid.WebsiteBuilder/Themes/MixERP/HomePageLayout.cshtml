@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Frapid.Areas
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -61,7 +62,7 @@
 @RenderBody()
 @Html.Partial(footer)
 @Html.Partial(cookieNotice)
-@Html.AntiForgeryToken()
+@Html.GetAntiForgeryToken()
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/1.1.1/typed.min.js"></script>
 <script src="/Scripts/semantic-ui/components/sidebar.min.js"></script>

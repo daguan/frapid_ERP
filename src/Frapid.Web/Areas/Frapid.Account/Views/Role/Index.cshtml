@@ -9,14 +9,13 @@
 
     scrudFactory.title = "Role Management";
 
-    scrudFactory.viewAPI = "/api/account/role";
+    scrudFactory.viewAPI = "/api/forms/account/role";
     scrudFactory.viewTableName = "account.roles";
 
-    scrudFactory.formAPI = "/api/account/role";
+    scrudFactory.formAPI = "/api/forms/account/role";
     scrudFactory.formTableName = "account.roles";
 
-    scrudFactory.disabledOnEdit = ["AuthorId"];
-    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;

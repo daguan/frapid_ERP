@@ -1,4 +1,4 @@
-using Frapid.WebsiteBuilder.DataAccess;
+using Frapid.DataAccess;
 
 namespace Frapid.WebsiteBuilder.DAL
 {
@@ -6,14 +6,14 @@ namespace Frapid.WebsiteBuilder.DAL
     {
         public static bool Add(string catalog, string email)
         {
-            var repository = new AddEmailSubscriptionProcedure(email) {_Catalog = catalog, SkipValidation = true};
-            return repository.Execute();
+            const string sql = "SELECT website.add_email_subscription(@0);";
+            return Factory.Scalar<bool>(catalog, sql, email);
         }
 
         public static bool Remove(string catalog, string email)
         {
-            var repository = new RemoveEmailSubscriptionProcedure(email) {_Catalog = catalog, SkipValidation = true};
-            return repository.Execute();
+            const string sql = "SELECT website.remove_email_subscription(@0);";
+            return Factory.Scalar<bool>(catalog, sql, email);
         }
     }
 }

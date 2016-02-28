@@ -12,7 +12,7 @@ using Owin;
 namespace Frapid.Web
 {
     public static class AccountConfig
-    {
+    {        
         public static void Register(IAppBuilder app)
         {
             var config = new HttpConfiguration();

@@ -2,16 +2,13 @@
 using Frapid.Configuration;
 using Frapid.i18n;
 using Frapid.NPoco;
-using Npgsql;
 
 namespace Frapid.DataAccess
 {
     public static class Factory
     {
-        public const string ProviderName = "Npgsql";
-
-        public static readonly string MetaDatabase =
-            ConfigurationManager.GetConfigurationValue("DbServerConfigFileLocation", "MetaDatabase");
+        public static readonly string ProviderName = DbProvider.ProviderName;
+        public static readonly string MetaDatabase = DbProvider.MetaDatabase;
 
         public static T Single<T>(string catalog, string sql, params object[] args)
         {
@@ -97,16 +94,20 @@ namespace Frapid.DataAccess
             }
         }
 
-        public static string GetDbErrorResource(NpgsqlException ex)
+        public static void Execute(string connectionString, string sql, params object[] args)
         {
-            string message = ResourceManager.TryGetResourceFromCache("DbErrors", ex.Code);
-
-            if (string.IsNullOrWhiteSpace(message) || message == ex.Code)
+            using (var db = DbProvider.Get(connectionString).GetDatabase())
             {
-                return ex.Message;
+                db.Execute(sql, args);
             }
+        }
 
-            return message;
+        public static T ExecuteScalar<T>(string connectionString, Sql sql)
+        {
+            using (var db = DbProvider.Get(connectionString).GetDatabase())
+            {
+                return db.ExecuteScalar<T>(sql);
+            }
         }
     }
 }

@@ -11,10 +11,10 @@ namespace Frapid.TokenManager
         private DateTime _expiresOn;
         private string _issuedBy;
         private long _loginId;
-        private int _userId;
         private int _officeId;
         private string _subject;
         private string _tokenId;
+        private int _userId;
 
         public Token()
         {

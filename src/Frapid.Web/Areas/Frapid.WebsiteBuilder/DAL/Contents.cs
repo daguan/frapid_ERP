@@ -2,7 +2,7 @@
 using System.Linq;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
-using Frapid.WebsiteBuilder.Entities;
+using Frapid.WebsiteBuilder.DTO;
 
 namespace Frapid.WebsiteBuilder.DAL
 {

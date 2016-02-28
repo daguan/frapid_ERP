@@ -1,53 +1,73 @@
-﻿var ignoredQueryStrings = ["TitleSuffix", "View", "Page"];
+﻿var ignoredQueryStrings = ["TitleSuffix", "View", "Page", "Filter"];
 
 $("#FilterName").text(window.Resources.Titles.Untitled());
 
-function getFilterName() {
-    if ($("#DefaultFilterSelect").val()) {
-        var filter = $("#DefaultFilterSelect").getSelectedText();
-        return filter;
+function getFilterName() {    
+    var el = $("[data-selected-filter]");
+    if (el.length) {
+        return el.attr("data-selected-filter");
     };
 
     return "";
 };
 
-function getAjaxFilters(queryStrings) {
+var getQuerystringFilters = function() {
     function getType(propertyName) {
         var type = window.Enumerable.From(metaDefinition.Columns)
-            .Where(function (x) { return x.PropertyName === propertyName }).FirstOrDefault();
-
+            .Where(function (x) { return x.ColumnName === propertyName }).FirstOrDefault();
+        
         if (type) {
-            return type.DataType;
+            return type.DbDataType;
         };
 
         return "";
     };
 
+    function isString(propertyName) {
+        var type = getType(propertyName);
+        if (stringTypes.indexOf(type) > -1) {
+            return true;
+        };
+
+        return false;
+    };
+
     function parseValue(propertyName, value) {
         var type = getType(propertyName);
 
-        if (type) {
-            switch (type) {
-                case "int":
-                case "short":
-                case "long":
-                    value = parseInt(value || null);
-                case "double":
-                case "decimal":
-                case "float":
-                    value = parseFloat(value || null);
-            };
+        if (wholeNumbers.indexOf(type) > -1) {
+            value = parseInt(value || null);
+            return value;
         };
+
+        if (decimalNumber.indexOf(type) > -1) {
+            value = parseFloat(value || null);
+            return value;
+        };
+
 
         return value;
     };
 
+
     var filters = [];
+    var queryStrings = getQueryStrings();
 
     $.each(queryStrings, function (index, item) {
         if (ignoredQueryStrings.indexOf(item.key) === -1) {
+            var key = toUnderscoreCase(item.key);
             var value = parseValue(item.key, item.value);
-            filters.push(getAjaxColumnFilter("WHERE", toUnderscoreCase(item.key), 0, value));
+
+            var targetEl = $("#filter_" + key);
+            if (targetEl.length) {
+                targetEl.val(value);
+            };
+
+            if (isString(item.key)) {
+                filters.push(getAjaxColumnFilter("WHERE", key, FilterConditions.IsLike, value));
+            } else {
+                filters.push(getAjaxColumnFilter("WHERE", key, FilterConditions.IsEqualTo, value));
+            };
         };
     });
 
@@ -71,7 +91,7 @@ function loadColumns() {
 $("#FilterNameInputText").keyup(function () {
     $("#FilterName").html(window.Resources.Titles.Untitled());
     if ($(this).val()) {
-        var filterName = stringFormat(window.Resources.Labels.NamedFilter(), $(this).val());
+        var filterName = $(this).val();
         $("#FilterName").html(filterName);
     };
 });
@@ -171,7 +191,7 @@ $("#ManageFiltersButton").click(function () {
 
 $("#SaveFilterButton").click(function () {
     function request(filterName, filters) {
-        var url = "/api/config/filter/recreate/" + window.scrudFactory.viewTableName + "/" + filterName;
+        var url = "/api/filter/recreate/" + window.scrudFactory.viewTableName + "/" + filterName;
         var data = JSON.stringify(filters);
 
         return getAjaxRequest(url, "PUT", data);
@@ -214,22 +234,22 @@ $("#SaveFilterButton").click(function () {
 
         var filter = new Object();
 
-        filter.FilterId = window.filterId;
-        filter.FilterStatement = "AND";
-        filter.ObjectName = window.scrudFactory.viewTableName;
-        filter.FilterName = filterNameInputText.val();
+        filter.filter_id = window.filterId;
+        filter.filter_statement = "AND";
+        filter.object_name = window.scrudFactory.viewTableName;
+        filter.filter_name = filterNameInputText.val();
 
-        filter.ColumnName = Enumerable.From(localizedHeaders)
+        filter.column_name = Enumerable.From(localizedHeaders)
             .Where(function (x) { return x.localized === columnName }).ToArray()[0].columnName;
 
-        filter.FilterCondition = parseInt(
+        filter.filter_condition = parseInt(
             Enumerable.From(filterConditions)
             .Where(function (x) { return x.text === condition })
             .ToArray()[0].value
             || 0);
 
-        filter.FilterValue = el.find("td:nth-child(4)").text();
-        filter.FilterAndValue = el.find("td:nth-child(5)").text();
+        filter.filter_value = el.find("td:nth-child(4)").text();
+        filter.filter_and_value = el.find("td:nth-child(5)").text();
         filters.push(filter);
     });
 
@@ -246,14 +266,76 @@ $("#SaveFilterButton").click(function () {
 });
 
 
+function getSelectedFilter() {
+    var filters = [];
+    var els = $("[data-filter-labels] .ui.label");
+
+    $.each(els, function () {
+        var el = $(this);
+        var columnName = el.attr("data-column-name");
+        var filterCondition = el.attr("data-filter-condition");
+        var filtervalue = el.attr("data-filter-value");
+        var andValue = el.attr("data-filter-and-value");
+
+        filters.push(getAjaxColumnFilter("WHERE", columnName, filterCondition, filtervalue, andValue));
+    });
+
+    var qs = getQuerystringFilters();
+    filters = filters.concat(qs);
+
+
+    return filters;
+};
+
+function showFilters(filters) {
+    var target = $("[data-filter-labels]");
+    target.html("");
+
+    $.each(filters, function(i, filter) {
+        var label = $("<a class='ui filter member label'>");
+        label.attr("data-column-name", filter.column_name);
+        label.attr("data-filter-condition", filter.filter_condition);
+        label.attr("data-filter-value", filter.filter_value);
+        label.attr("data-filter-and-value", filter.filter_and_value);
+
+        var filterCondition = Enumerable.From(filterConditions)
+            .Where(function (x) { return x.value === filter.filter_condition.toString() })
+            .Select(function (x) { return x.operator }).ToArray()[0];
+
+        var span = $("<span>");
+        var text = filter.column_name.replace(/_/g, " ");
+        text = toPascalCase(text);
+
+        text = text + " " + filterCondition + " " + filter.filter_value;
+
+        if (filter.filter_and_value) {
+            text = text + " AND " + filter.filter_and_value;
+        };
+
+        span.text(text);
+
+        var icon = $('<i class="delete icon"></i>');
+
+        label.append(span);
+        label.append(icon);
+        target.append(label);
+    });
+
+    $(".filter.section").show();
+    $(".filter.member.label i").click(function () {
+        $(this).parent().remove();
+        loadPageCount(loadGrid);
+    });
+};
+
 function createFilters(filters) {
     $("#FilterTable").find("tbody").html("");
 
     $.each(filters, function (i, filter) {
-        var selectedColumn = filter.ColumnName;
-        var filterCondition = filter.FilterCondition;
-        var value = filter.FilterValue;
-        var and = (filter.FilterAndValue || "");
+        var selectedColumn = filter.column_name;
+        var filterCondition = filter.filter_condition;
+        var value = filter.filter_value;
+        var and = (filter.filter_and_value || "");
 
         var css = "";
 
@@ -282,10 +364,27 @@ function deleteFilter(el) {
 
 };
 
+$("#RemoveDefaultFilterButton").click(function () {
+    function request() {
+        var url = "/api/filter/remove-default/" + window.scrudFactory.viewTableName;
+        return getAjaxRequest(url, "DELETE");
+    };
 
+    var ajax = request();
+
+    ajax.success(function () {
+        displayMessage(window.Resources.Labels.TaskCompletedSuccessfully(), "success");
+
+        $(".filter.modal").modal("close");
+    });
+
+    ajax.fail(function (xhr) {
+        logAjaxErrorMessage(xhr);
+    });
+});
 $("#MakeUserDefaultFilterButton").click(function () {
     function request(filterName) {
-        var url = "/api/config/filter/make-default/" + window.scrudFactory.viewTableName + "/" + filterName;
+        var url = "/api/filter/make-default/" + window.scrudFactory.viewTableName + "/" + filterName;
         return getAjaxRequest(url, "PUT");
     };
 

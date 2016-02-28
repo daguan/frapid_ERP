@@ -1,5 +1,6 @@
 ﻿@using Frapid.i18n
 @using Frapid.i18n.Resources
+@using Frapid.Areas
 @model Frapid.Account.ViewModels.SignIn
 
 <html>
@@ -106,7 +107,7 @@
             </div>
         </div>
     </div>
-    @Html.AntiForgeryToken()
+    @Html.GetAntiForgeryToken()
     <script>
         var fbAppId = '@Model.FacebookAppId';
         var fbScope = '@Model.FacebookScope';

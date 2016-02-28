@@ -18,7 +18,7 @@
     });
 
     $(".form.factory").hide();
-    $(".form.factory").fadeIn(300);
+    $(".form.factory").show();
 };
 
 $("#FirstButton").click(function () {

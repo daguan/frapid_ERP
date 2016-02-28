@@ -10,14 +10,13 @@
 
     scrudFactory.title = "Contents";
 
-    scrudFactory.viewAPI = "/api/website/content";
+    scrudFactory.viewAPI = "/api/forms/website/content";
     scrudFactory.viewTableName = "website.contents";
 
-    scrudFactory.formAPI = "/api/website/content";
+    scrudFactory.formAPI = "/api/forms/website/content";
     scrudFactory.formTableName = "website.contents";
 
-    scrudFactory.disabledOnEdit = ["AuthorId"];
-    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs", "Contents", "Markdown"];
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts", "contents", "markdown"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
@@ -25,9 +24,9 @@
     scrudFactory.editUrl = "contents/manage?ReturnUrl=" + encodeURIComponent(location.pathname + location.search) + "&ContentId=";
 
     scrudFactory.card = {
-        header: "Title",
-        meta: "Alias",
-        description: "SeoDescription"
+        header: "title",
+        meta: "alias",
+        description: "seo_description"
     };    
 
     $.get('/ScrudFactory/View.html', function (view) {

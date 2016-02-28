@@ -1,16 +1,22 @@
 ﻿function prepEntities(entities) {
-    //var numbers = ["short", "int", "long", "float", "double", "decimal"];
     var items = [];
 
     $.each(entities, function (i, v) {
         var entity = new Object();
 
         $.each(v, function (columnName, val) {
-            //var type = Enumerable.From(metaDefinition.Columns).Where(function (x) { return x.ColumnName === columnName }).ToArray()[0].DataType;
-
+            var type = Enumerable.From(metaDefinition.Columns).Where(function (x) { return x.ColumnName === columnName }).ToArray()[0].DbDataType;
+                        
             if (isNullOrWhiteSpace(val)) {
                 val = null;
-            };
+            } else {
+                if (wholeNumbers.indexOf(type) > -1) {
+                    val = parseInt(val);
+                } else if (decimalNumber.indexOf(type) > -1) {
+                    val = parseFloat(val);
+                };
+            }
+
 
             entity[columnName] = val;
         });
@@ -36,7 +42,7 @@ $("#file").change(function () {
         return;
     };
 
-    var supportedFileTypes = ["text/csv", "application/csv"];
+    var supportedFileTypes = ["text/csv", "application/csv", "text/comma-separated-values"];
 
     if (supportedFileTypes.indexOf(file.type) === -1) {
         $(".big.error").addClass("vpad8").html(stringFormat(window.Resources.Labels.UploadInvalidTryAgain(), file.type));
@@ -54,7 +60,6 @@ $("#file").change(function () {
         var result = reader.result;
         showProgress(progress, 50, window.Resources.Labels.SuccessfullyProcessedYourFile());
         var entities = Papa.parse(result, { "header": true, skipEmptyLines: true }).data;
-
         entities = prepEntities(entities);
 
         showProgress(progress, 50, window.Resources.Labels.RequestingImport());

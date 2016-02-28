@@ -10,19 +10,18 @@
 
     scrudFactory.title = "View Subscriptions";
 
-    scrudFactory.viewAPI = "/api/website/email-subscription";
+    scrudFactory.viewAPI = "/api/forms/website/email-subscription";
     scrudFactory.viewTableName = "website.email_subscriptions";
 
-    scrudFactory.formAPI = "/api/website/email-subscription";
+    scrudFactory.formAPI = "/api/forms/website/email-subscription";
     scrudFactory.formTableName = "website.email_subscriptions";
 
-    scrudFactory.disabledOnEdit = ["AuthorId"];
-    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.allowDelete = true;
 
     scrudFactory.card = {
-        meta: "SubscribedOn"
+        meta: "subscribedOn"
     };
 
     $.get('/ScrudFactory/View.html', function (view) {

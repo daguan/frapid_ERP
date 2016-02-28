@@ -15,7 +15,7 @@
 };
 
 function localizeHeaders(el) {
-    el.find("thead tr th").each(function () {
+    el.find("thead tr:first-child th").each(function () {
         var cell = $(this);
         var name = toUnderscoreCase(cell.text());
         var text = tryParseLocalizedResource(name);

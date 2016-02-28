@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Frapid.Account.Entities;
+using Frapid.Account.DTO;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
 

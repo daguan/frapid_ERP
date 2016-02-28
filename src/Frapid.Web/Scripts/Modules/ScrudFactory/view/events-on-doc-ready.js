@@ -48,10 +48,6 @@
         showTarget(view);
     };
 
-    $(".kanban.segments").css("width", (($(".segment").length - 1) * 300) + "px").fadeIn(500);
-    refreshKanbans();
+    $(".kanban.segments").css("width", (($(".segment").length - 1) * 300) + "px").show();
+    refreshKanbans(true);
 };
-
-$(document).ready(function () {
-    docready();
-});

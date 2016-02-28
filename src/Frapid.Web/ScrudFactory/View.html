@@ -72,6 +72,27 @@
         overflow: auto;
     }
 
+    .mini.dropdown .item {
+        font-size: 1.0em !important;
+    }
+
+    .ui.filter.list .list > .item a.header, .ui.filter.list > .item a.header {
+        color: #666 !important;
+        font-size: 0.9em;
+    }
+	
+	#ScrudView tr{
+		cursor: pointer;
+	  transition: background-color 1s ease;
+	}
+
+	#ScrudView tr:hover{
+		background-color: #FFF5DE;
+	}
+
+	#ScrudView td:hover{
+		background-color: #FCEDCA;
+	}
 </style>
 
 
@@ -108,23 +129,9 @@
         </p>
     </div>
 
-    <div id="FilterPopUnder" class="ui initially hidden form popunder segment" style="width:400px;z-index:3; position: absolute;">
-        <div class="ui grey header">
-            <span data-localize="Titles.SelectAFilter"></span>
-        </div>
-        <select class="ui fluid filter" id="DefaultFilterSelect"></select>
-        <p class="ui action buttons tpad8">
-            <a href="javascript:void(0);" onclick="$('#FilterPopUnder').fadeOut(500);" class="green small ui button" data-target="filter">
-                <span data-localize="Titles.CreateNew"></span>
-            </a>
-            <a href="javascript:void(0);" onclick="$('#FilterPopUnder').fadeOut(500);" class="red small ui button">
-                <span data-localize="Titles.Close"></span>
-            </a>
-        </p>
-    </div>
 
     <div id="VerificationPopUnder" class="ui initially hidden form popunder segment" style="width:400px;z-index:3; position: absolute;">
-        <div class="ui header">
+        <div class="ui grey header">
             <span data-localize="Titles.Verification"></span>
         </div>
         <div class="field">
@@ -148,12 +155,24 @@
     </div>
 
     <div class="ui stackable divided grid">
+        <div class="three wide column">
+            <div class="ui teal big header">Filters</div>
+            <div class="ui divider"></div>
+            <div data-filter-list class="ui relaxed filter list"></div>
+            <div class="ui small teal button" data-add-filter onclick="showView('filter', true)">Add New</div>
+            <div class="vpad8"></div>
+            <section class="filter section" style="display: none;">
+                <div class="ui teal header" data-filter-header></div>
+                <div class="ui divider"></div>
+                <div data-filter-labels class="ui small labels">
+                </div>
+            </section>
+
+        </div>
         <div class="thirteen wide column">
-            <div class="ui stackable grid">
-                <div class="ui sixteen wide column">
-                    <div class="title ui huge grey header"></div>
-                    <div id="description" class="ui info description message" style="display: none;">
-                    </div>
+            <div class="vpad16">
+                <div class="title ui huge grey header"></div>
+                <div id="description" class="ui info description message" style="display: none;">
                 </div>
             </div>
             <div id="KanbanForm" class="ui small modal">
@@ -203,9 +222,6 @@
                         <a id="FlagButton" class="ui basic button">
                             <span data-localize="Titles.Flag"></span>
                         </a>
-                        <a class="ui basic button" id="FilterButton">
-                            <span data-localize="Titles.Filter"></span>
-                        </a>
                         <div class="ui icon top left pointing dropdown basic button" id="ExportDropDown">
                             <span>
                                 <span data-localize="Titles.Export"></span>
@@ -235,8 +251,11 @@
                 </div>
                 <div class="right aligned four wide column">
                     <div class="ui basic icon action mini buttons">
-                        <a class="ui basic button" data-target="import" title="Import">
-                            <i class="upload layout mini icon"></i>
+                        <a class="ui basic button" data-target="grid" title="Grid View">
+                            <i class="grid layout mini icon"></i>
+                        </a>
+                        <a class="ui active green basic button" data-target="kanban" title="Kanban View">
+                            <i class="block layout mini icon"></i>
                         </a>
                         <a class="ui basic button" data-target="filter" title="Manage Filters">
                             <i class="icons">
@@ -244,12 +263,12 @@
                                 <i class="corner add mini icon"></i>
                             </i>
                         </a>
-                        <a class="ui active green basic button" data-target="kanban" title="Kanban View">
-                            <i class="block layout mini icon"></i>
+                        <a class="ui basic button" data-target="import" title="Import">
+                            <i class="upload layout mini icon"></i>
                         </a>
-                        <a class="ui basic button" data-target="grid" title="Grid View">
-                            <i class="grid layout mini icon"></i>
-                        </a>
+                        <a class="ui basic button" onclick="clearQuery();" title="Clear Filters">
+                            <i class="delete mini icon"></i>
+                        </a>                        
                     </div>
                 </div>
             </div>
@@ -271,8 +290,8 @@
                         </div>
                     </div>
 
-                    <div class="ui bottom hidden segment" data-target="filter">
-                        <div class="ui huge header">
+                    <div class="vpad16" data-target="filter">
+                        <div class="ui huge grey header">
                             <span id="FilterName">
                             </span>
                         </div>
@@ -335,7 +354,7 @@
                             </thead>
                             <tbody></tbody>
                         </table>
-                        <div class="ui large header">
+                        <div class="ui large grey header">
                             <span data-localize="Titles.SaveThisFilter"></span>
                         </div>
                         <div class="ui divider"></div>
@@ -363,7 +382,7 @@
 
                         <div class="ui filter small modal">
                             <i class="close icon"></i>
-                            <div class="ui huge header">
+                            <div class="ui huge grey header">
                                 <span data-localize="Titles.ManageFilters"></span>
                             </div>
                             <div class="content">
@@ -373,7 +392,7 @@
                                         <select class="ui search dropdown filter" id="FilterSelect"></select>
                                     </div>
                                     <div class="ui basic buttons">
-                                        <a class="ui close button" onclick="loadFilter();">
+                                        <a class="ui close button" onclick="loadFilterForEdit();">
                                             <span data-localize="Titles.Edit"></span>
                                         </a>
                                         <a class="ui close button" onclick="deleteSavedFilter();">
@@ -388,7 +407,7 @@
                             </div>
                             <div class="actions">
                                 <div class="ui basic buttons">
-                                    <a class="ui basic close button">
+                                    <a class="ui basic close button" id="RemoveDefaultFilterButton">
                                         <span data-localize="Titles.RemoveAsDefault"></span>
                                     </a>
                                     <a class="ui basic button" id="MakeUserDefaultFilterButton">
@@ -399,8 +418,8 @@
                         </div>
                     </div>
 
-                    <div class="ui hidden segment" data-target="import">
-                        <div class="ui huge header">
+                    <div class="vpad16" data-target="import">
+                        <div class="ui huge grey header">
                             <span data-localize="Titles.DataImport"></span>
                         </div>
 
@@ -449,43 +468,6 @@
                     </div>
 
                 </div>
-            </div>
-        </div>
-        <div class="three wide column">
-            <div class="ui violet big header">Quick Access</div>
-            <div class="ui divider"></div>
-
-            <div class="ui labels">
-                <a class="ui label">
-                    Category = Default
-                    <i class="delete icon"></i>
-                </a>
-                <br/>
-                <a class="ui label">
-                    Alias = default
-                    <i class="delete icon"></i>
-                </a>
-
-            </div>
-
-
-            <div class="ui grey header">Add a Filter</div>
-            <div class="ui stackable form">
-                <div class="field">
-                    <select class="ui search mini dropdown" data-scope="column"></select>
-
-                </div>
-                <div class="field">
-                    <select class="ui search mini dropdown" data-scope="filter-condition"></select>
-
-                </div>
-                <div class="field">
-                    <div class="ui mini icon input">
-                        <input type="text" placeholder="">
-                        <i class="search icon"></i>
-                    </div>
-                </div>
-                <div class="ui mini basic button">Save</div>
             </div>
         </div>
     </div>

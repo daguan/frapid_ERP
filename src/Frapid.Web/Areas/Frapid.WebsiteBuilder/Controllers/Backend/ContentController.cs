@@ -2,7 +2,7 @@
 using Frapid.Areas.Authorization;
 using Frapid.Dashboard.Controllers;
 using Frapid.WebsiteBuilder.DAL;
-using Frapid.WebsiteBuilder.Entities;
+using Frapid.WebsiteBuilder.DTO;
 
 namespace Frapid.WebsiteBuilder.Controllers.Backend
 {

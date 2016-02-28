@@ -10,6 +10,7 @@ using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
 using Frapid.Framework.Extensions;
 using Frapid.TokenManager;
+using Serilog;
 
 namespace Frapid.WebApi
 {
@@ -19,10 +20,12 @@ namespace Frapid.WebApi
 
         protected override void Initialize(HttpControllerContext context)
         {
-            string clientToken = context.Request.GetBearerToken();
-            var provider = new Provider(DbConvention.GetCatalog());
-            var token = provider.GetToken(clientToken);
             string catalog = DbConvention.GetCatalog();
+
+            string clientToken = context.Request.GetBearerToken();
+            var provider = new Provider(catalog);
+            var token = provider.GetToken(clientToken);
+
 
             if (token != null)
             {
@@ -31,7 +34,7 @@ namespace Frapid.WebApi
 
                 this.MetaUser = new MetaUser
                 {
-                    Catalog = DbConvention.GetCatalog(),
+                    Catalog = catalog,
                     ClientToken = token.ClientToken,
                     LoginId = token.LoginId,
                     UserId = loginView.UserId.To<int>(),
@@ -68,8 +71,9 @@ namespace Frapid.WebApi
                     .Where(p => p.IsSubclassOf(type)).Select(t => t.Assembly).ToList();
                 return items;
             }
-            catch (ReflectionTypeLoadException)
+            catch (ReflectionTypeLoadException ex)
             {
+                Log.Error("Could not register API members. {Exception}", ex);
                 //Swallow the exception
             }
 

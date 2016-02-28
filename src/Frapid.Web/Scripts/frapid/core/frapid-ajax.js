@@ -277,11 +277,11 @@ var getAjaxErrorMessage = function (xhr) {
 function getAjaxColumnFilter(statement, columnName, filterCondition, filtervalue, andValue) {
     var filter = new Object();
 
-    filter.FilterStatement = (statement || "WHERE");
-    filter.ColumnName = columnName;
-    filter.FilterCondition = filterCondition;
-    filter.FilterValue = filtervalue;
-    filter.FilterAndValue = andValue;
+    filter.filter_statement = (statement || "WHERE");
+    filter.column_name = columnName;
+    filter.filter_condition = filterCondition;
+    filter.filter_value = filtervalue;
+    filter.filter_and_value = andValue;
 
     return filter;
 };
@@ -289,11 +289,11 @@ function getAjaxColumnFilter(statement, columnName, filterCondition, filtervalue
 function getAjaxPropertyFilter(statement, propertyName, filterCondition, filtervalue, andValue) {
     var filter = new Object();
 
-    filter.FilterStatement = (statement || "WHERE");
-    filter.PropertyName = propertyName;
-    filter.FilterCondition = filterCondition;
-    filter.FilterValue = filtervalue;
-    filter.FilterAndValue = andValue;
+    filter.filter_statement = (statement || "WHERE");
+    filter.property_name = propertyName;
+    filter.filter_condition = filterCondition;
+    filter.filter_value = filtervalue;
+    filter.filter_and_value = andValue;
 
     return filter;
 };

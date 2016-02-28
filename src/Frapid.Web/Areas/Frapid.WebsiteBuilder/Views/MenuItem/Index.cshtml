@@ -10,14 +10,13 @@
 
     scrudFactory.title = "Menu Items";
 
-    scrudFactory.viewAPI = "/api/website/menu-item";
+    scrudFactory.viewAPI = "/api/forms/website/menu-item";
     scrudFactory.viewTableName = "website.menu_items";
 
-    scrudFactory.formAPI = "/api/website/menu-item";
+    scrudFactory.formAPI = "/api/forms/website/menu-item";
     scrudFactory.formTableName = "website.menu_items";
 
-    scrudFactory.disabledOnEdit = ["AuthorId"];
-    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
@@ -37,8 +36,8 @@
     ];
 
     scrudFactory.card = {
-        header: "Title",
-        description: "Url"
+        header: "title",
+        description: "url"
     };
 
     scrudFactory.back = {
@@ -49,14 +48,14 @@
     scrudFactory.keys = [
         {
             property: "MenuId",
-            url: '/api/website/menu/display-fields',
+            url: '/api/forms/website/menu/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "ContentId",
-            url: '/api/website/content/display-fields',
+            url: '/api/forms/website/content/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"

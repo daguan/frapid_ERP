@@ -10,14 +10,13 @@
 
     scrudFactory.title = "Menus";
 
-    scrudFactory.viewAPI = "/api/website/menu";
+    scrudFactory.viewAPI = "/api/forms/website/menu";
     scrudFactory.viewTableName = "website.menus";
 
-    scrudFactory.formAPI = "/api/website/menu";
+    scrudFactory.formAPI = "/api/forms/website/menu";
     scrudFactory.formTableName = "website.menus";
 
-    scrudFactory.disabledOnEdit = ["AuthorId"];
-    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
@@ -36,8 +35,8 @@
     ];
 
     scrudFactory.card = {
-        header: "MenuName",
-        description: "Description"
+        header: "menu_name",
+        description: "description"
     };
 
     scrudFactory.customActions = [

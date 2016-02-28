@@ -38,6 +38,7 @@ CREATE TABLE website.contents
     markdown                                    text,
     contents                                    text NOT NULL,
     tags                                        text,
+	hits										bigint,
     is_draft                                    boolean NOT NULL DEFAULT(true),
     seo_description                             national character varying(1000) NOT NULL DEFAULT(''),
     is_homepage                                 boolean NOT NULL DEFAULT(false),

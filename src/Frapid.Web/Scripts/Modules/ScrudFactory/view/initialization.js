@@ -14,7 +14,6 @@ var filterConditionSelect = $("#FilterConditionSelect");
 var valueInputText = $("#ValueInputText");
 var andInputText = $("#AndInputText");
 var commandItems = "<a onclick='deleteFilter(this);'><i class='delete icon'></i></a><a onclick='editFilter(this);'><i class='edit icon'></i></a><a onclick='$(this).parent().parent().toggleClass(\"warning\");'><i class='check mark icon'></i></a>";
-var filterPopUnder = $("#FilterPopUnder");
 var flagPopUnder = $("#FlagPopUnder");
 var flagButton = $("#FlagButton");
 var filterButton = $("#FilterButton");
@@ -23,16 +22,17 @@ var updateButton = $("#UpdateButton");
 var verificationPopUnder = $("#VerificationPopUnder");
 var reasonTextArea = $("#ReasonTextArea");
 
-var filterConditions = [{ "value": "0", "text": "IsEqualTo" },
-{ "value": "1", "text": "IsNotEqualTo" },
-{ "value": "2", "text": "IsLessThan" },
-{ "value": "3", "text": "IsLessThanEqualTo" },
-{ "value": "4", "text": "IsGreaterThan" },
-{ "value": "5", "text": "IsGreaterThanEqualTo" },
-{ "value": "6", "text": "IsBetween" },
-{ "value": "7", "text": "IsNotBetween" },
-{ "value": "8", "text": "IsLike" },
-{ "value": "9", "text": "IsNotLike" }];
+var filterConditions = [{ "value": "0", "text": "IsEqualTo", "operator": "=" },
+{ "value": "1", "text": "IsNotEqualTo", "operator" :"!=" },
+{ "value": "2", "text": "IsLessThan", "operator" : "<" },
+{ "value": "3", "text": "IsLessThanEqualTo", "operator": "<=" },
+{ "value": "4", "text": "IsGreaterThan", "operator": ">" },
+{ "value": "5", "text": "IsGreaterThanEqualTo", "operator": ">=" },
+{ "value": "6", "text": "IsBetween", "operator": "between" },
+{ "value": "7", "text": "IsNotBetween", "operator": "not between" },
+{ "value": "8", "text": "IsLike", "operator": "like" },
+{ "value": "9", "text": "IsNotLike", "operator": "not like" }
+];
 
 if (!scrudFactory.card) {
     scrudFactory.card = new Object();

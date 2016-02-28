@@ -9,13 +9,13 @@ namespace Frapid.Account.DAL
     {
         public static bool EmailExists(string email)
         {
-            const string sql = "SELECT * FROM account.email_exists(@0);";
+            const string sql = "SELECT account.email_exists(@0);";
             return Factory.Scalar<bool>(AppUsers.GetCatalog(), sql, email);
         }
 
         public static bool HasAccount(string email)
         {
-            const string sql = "SELECT * FROM account.has_account(@0);";
+            const string sql = "SELECT account.has_account(@0);";
             return Factory.Scalar<bool>(AppUsers.GetCatalog(), sql, email);
         }
 
@@ -27,7 +27,7 @@ namespace Frapid.Account.DAL
 
         public static bool ConfirmRegistration(Guid token)
         {
-            const string sql = "SELECT * FROM account.confirm_registration(@0);";
+            const string sql = "SELECT account.confirm_registration(@0);";
             return Factory.Scalar<bool>(AppUsers.GetCatalog(), sql, token);
         }
 

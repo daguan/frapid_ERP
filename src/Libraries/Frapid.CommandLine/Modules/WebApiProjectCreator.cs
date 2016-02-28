@@ -105,6 +105,8 @@ namespace frapid.Modules
 
             this.RenameFile("WebAPIProject.csproj", this.ProjectName + ".csproj");
             this.RenameFile("WebAPIProject.sln", this.ProjectName + ".sln");
+            this.RenameFile("WebAPIProject.sln.DotSettings", this.ProjectName + ".sln.DotSettings");
+            this.RenameFile("WebAPIProject.sln.DotSettings.user", this.ProjectName + ".sln.DotSettings.user");
         }
 
         private void CreateTempDirectory()

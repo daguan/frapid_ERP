@@ -1,17 +1,15 @@
 ﻿function loadPageCount(callback) {
-    function filteredRequest(queryStrings) {
-        var filters = getAjaxFilters(queryStrings);
-
+    function filteredRequest(filters) {
         var url = window.scrudFactory.viewAPI + "/count-where";
         var data = JSON.stringify(filters);
-
         return getAjaxRequest(url, "POST", data);
     };
 
-    function request(filterName) {
-        if (getFilterQueryStringCount()) {
-            var qs = getQueryStrings();
-            return filteredRequest(qs);
+    function request(filterName, filters) {
+        if (!filters && getFilterQueryStringCount()) {
+            filters = getQuerystringFilters();
+
+            return filteredRequest(filters);
         };
 
         var url = window.scrudFactory.viewAPI + "/count";
@@ -20,7 +18,13 @@
             url = window.scrudFactory.viewAPI + "/count-filtered/" + filterName;
         };
 
-        return getAjaxRequest(url);
+        if (!filters || !filters.length) {
+            return getAjaxRequest(url);
+        };
+
+        url = window.scrudFactory.viewAPI + "/count-where";
+        var data = JSON.stringify(filters);
+        return getAjaxRequest(url, "POST", data);
     };
 
     $(".view.dimmer").addClass("active");
@@ -34,8 +38,9 @@
     };
 
     var filterName = getFilterName();
+    var filters = getSelectedFilter();
 
-    var ajax = request(filterName, false);
+    var ajax = request(filterName, filters);
 
     ajax.success(function (response) {
         var pages = (Math.ceil(parseInt(response) / 10) || 1);

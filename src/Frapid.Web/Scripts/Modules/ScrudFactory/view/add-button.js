@@ -16,6 +16,6 @@
 addNewButton.click(function () {
     if (window.scrudForm.length) {
         window.scrudView.hide();
-        window.scrudForm.fadeIn(500);
+        window.scrudForm.show();
     };
 });

@@ -8,7 +8,6 @@ function getQueryStringByName(name) {
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 };
 
-//http://stackoverflow.com/questions/5999118/add-or-update-query-string-parameter
 function updateQueryString(key, value, url) {
     if (!url) {
         url = window.location.href;

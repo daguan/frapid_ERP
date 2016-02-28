@@ -17,6 +17,26 @@ namespace Frapid.Configuration
             return url;
         }
 
+        public static bool IsStaticDomain(string domain = "")
+        {
+            if (string.IsNullOrWhiteSpace(domain))
+            {
+                domain = GetDomain();
+            }
+
+            var approved = new DomainSerializer("DomainsApproved.json");
+            var approvedDomains = approved.Get();
+
+            var tenant = approvedDomains.FirstOrDefault(x => x.GetSubtenants().Contains(domain.ToLowerInvariant()));
+
+            return tenant != null && domain.StartsWith(tenant.CdnPrefix + ".");
+        }
+
+        private static string ConvertToDbName(string domain)
+        {
+            return domain.Replace(".", "_");
+        }
+
         public static string GetDbNameByConvention(string domain = "")
         {
             if (string.IsNullOrWhiteSpace(domain))
@@ -24,7 +44,15 @@ namespace Frapid.Configuration
                 domain = GetDomain();
             }
 
-            return domain.Replace(".", "_");
+            var approved = new DomainSerializer("DomainsApproved.json");
+            var tenant = approved.Get().FirstOrDefault(x => x.GetSubtenants().Contains(domain.ToLowerInvariant()));
+
+            if (tenant != null)
+            {
+                return ConvertToDbName(tenant.DomainName);
+            }
+
+            return ConvertToDbName(domain);
         }
 
         public static bool IsValidCatalog(string catalog = "")
@@ -35,6 +63,7 @@ namespace Frapid.Configuration
             }
 
             var serializer = new DomainSerializer("DomainsApproved.json");
+
 
             return serializer.Get().Any(domain => GetDbNameByConvention(domain.DomainName) == catalog);
         }

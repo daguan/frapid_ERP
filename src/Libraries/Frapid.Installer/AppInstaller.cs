@@ -7,6 +7,7 @@ using Frapid.DataAccess;
 using Frapid.Installer.Models;
 using Microsoft.VisualBasic.FileIO;
 using Npgsql;
+using Serilog;
 
 namespace Frapid.Installer
 {
@@ -35,6 +36,7 @@ namespace Frapid.Installer
         {
             foreach (var dependency in this.Installable.Dependencies)
             {
+                Log.Verbose($"Installing module {dependency.ApplicationName} because the module {this.Installable.ApplicationName} depends on it.");
                 new AppInstaller(this.Catalog, dependency).Install();
             }
 
@@ -70,12 +72,16 @@ namespace Frapid.Installer
 
             if (this.HasSchema())
             {
+                Log.Verbose($"Skipped {this.Installable.ApplicationName} schema creation because it already exists.");
                 return;
             }
+
+            Log.Verbose($"Creating schema {this.Installable.DbSchema}");
 
             string catalog = this.Catalog;
             if (this.Installable.IsMeta)
             {
+                Log.Verbose($"Creating database of {this.Installable.ApplicationName} under meta catalog {Factory.MetaDatabase}.");
                 catalog = Factory.MetaDatabase;
             }
 
@@ -85,6 +91,7 @@ namespace Frapid.Installer
 
             if (this.Installable.InstallSample && !string.IsNullOrWhiteSpace(this.Installable.SampleDbPath))
             {
+                Log.Verbose($"Creating sample data of {this.Installable.ApplicationName}.");
                 db = this.Installable.SampleDbPath;
                 path = HostingEnvironment.MapPath(db);
                 this.RunSql(catalog, path);
@@ -99,20 +106,15 @@ namespace Frapid.Installer
             }
 
             string sql = File.ReadAllText(fromFile);
+
+            //PetaPoco/NPoco Escape
+            //ORM: Remove this behavior if you change the ORM.
+            sql = sql.Replace("@", "@@");
+
+            Log.Verbose($"Running SQL {sql}");
+
             string connectionString = ConnectionString.GetSuperUserConnectionString(catalog);
-
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                using (var command = new NpgsqlCommand())
-                {
-                    command.CommandText = sql;
-                    command.Connection = connection;
-                    command.CommandType = CommandType.Text;
-
-                    connection.Open();
-                    command.ExecuteScalar();
-                }
-            }
+            Factory.Execute(connectionString, sql);
         }
 
 
@@ -139,6 +141,7 @@ namespace Frapid.Installer
                 return;
             }
 
+            Log.Verbose($"Creating overide. Source: {source}, desitation: {destination}.");
             FileSystem.CopyDirectory(source, destination, true);
         }
     }

@@ -5,7 +5,7 @@
 
 function deleteKanban(el) {
     function ajax(kanbanId) {
-        var url = "/api/config/kanban/delete/" + kanbanId;
+        var url = "/api/forms/config/kanban/delete/" + kanbanId;
         return getAjaxRequest(url, "DELETE");
     };
 
@@ -48,7 +48,7 @@ function editKanban(el) {
 
 function saveOrUpdateKanban() {
     function request(k) {
-        var url = "/api/config/kanban/add-or-edit";
+        var url = "/api/forms/config/kanban/add-or-edit";
 
         var form = [];
         form.push(k);

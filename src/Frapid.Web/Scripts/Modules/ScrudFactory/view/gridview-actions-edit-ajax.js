@@ -1,6 +1,6 @@
 ﻿function editRow(el, isCard) {
     function customFieldRequest(tableName, primaryKeyValue) {
-        var url = "/api/config/custom-field-view/get-where/1";
+        var url = "/api/views/config/custom-field-view/get-where/1";
 
         var filters = [];
 
@@ -57,7 +57,7 @@
         customFieldRequest(tableName, primaryKeyValue).success(function (msg) {
             displayCustomFields(msg);
             window.scrudView.hide();
-            window.scrudForm.fadeIn(500);
+            window.scrudForm.show();
         });
     });
 };

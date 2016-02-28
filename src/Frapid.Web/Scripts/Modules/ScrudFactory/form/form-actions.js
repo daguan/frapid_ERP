@@ -5,7 +5,7 @@
         $(".form.factory").hide();
         $("[data-primarykey]").val("");
         window.displayMessage(window.Resources.Labels.ItemDuplicated, "success");
-        $(".form.factory").fadeIn(1000);
+        $(".form.factory").show();
     };
 });
 

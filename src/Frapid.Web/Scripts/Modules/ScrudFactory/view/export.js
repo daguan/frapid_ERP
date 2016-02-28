@@ -1,5 +1,5 @@
 ﻿function getFileName() {
-    var filterName = ($("#DefaultFilterSelect").val() || "");
+    var filterName = getFilterName();
 
     if (filterName) {
         filterName += "-";

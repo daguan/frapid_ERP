@@ -69,7 +69,7 @@ function createAnnotationFields(annotation) {
 
     setRegionalFormat();
     loadDatepicker();
-    $("#Annotation").fadeIn();
+    $("#Annotation").show();
     executeFunction();
 };
 

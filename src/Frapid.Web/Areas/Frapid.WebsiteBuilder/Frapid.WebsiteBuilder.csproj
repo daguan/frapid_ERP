@@ -206,6 +206,10 @@
     <Compile Include="Controllers\Backend\ContactController.cs" />
     <Compile Include="Controllers\Backend\DashboardSubscriptionController.cs" />
     <Compile Include="ContentExtensions.cs" />
+    <Compile Include="DTO\Contact.cs" />
+    <Compile Include="DTO\Content.cs" />
+    <Compile Include="DTO\MenuItemView.cs" />
+    <Compile Include="DTO\PublishedContentView.cs" />
     <Compile Include="Plugins\ArticleExtension.cs" />
     <Compile Include="Plugins\FormsExtension.cs" />
     <Compile Include="Models\ContentModel.cs" />
@@ -284,20 +288,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="DataAccess\Frapid.WebsiteBuilder.DataAccess.csproj">
-      <Project>{6d84caf6-e1fa-4a5c-8ccc-a36aea06aa0b}</Project>
-      <Name>Frapid.WebsiteBuilder.DataAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="Entities\Frapid.WebsiteBuilder.Entities.csproj">
-      <Project>{F191307A-E582-48B2-81F9-78A1E2928D6D}</Project>
-      <Name>Frapid.WebsiteBuilder.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="WebAPI\Frapid.WebsiteBuilder.Api.csproj">
-      <Project>{c29e751d-3f5c-4204-b27a-56338f273beb}</Project>
-      <Name>Frapid.WebsiteBuilder.Api</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ContactUs\Index.cshtml" />
     <Content Include="Views\ContactUs\ContactForm.cshtml" />

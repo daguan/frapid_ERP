@@ -10,7 +10,7 @@
         return null;
     };
 
-    var el = $('<table class="ui striped nowrap scrudview table" id="ScrudView">');
+    var el = $('<table class="ui striped nowrap scrudview compact table" id="ScrudView">');
     var header = "<thead><tr>";
 
     var index = 0;
@@ -29,7 +29,19 @@
         index++;
     });
 
+    header += "</tr><tr class='ui small form'>";
+
+    $.each(json[0], function (name) {
+        if (window.scrudFactory.excludedColumns.indexOf(name) === -1) {
+            var input = "<input type='text' class='grid filter' data-member='" + name + "' id='filter_" + name + "' />";
+            header += "<th>" + input + "</th>";
+        };
+    });
+
+
     header += "</tr></thead>";
+
+
 
     $(header).appendTo(el);
 

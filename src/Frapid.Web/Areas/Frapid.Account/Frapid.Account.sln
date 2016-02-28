@@ -5,12 +5,6 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.Account", "Frapid.Account.csproj", "{8C157E84-F635-43D6-AC97-B9FF062D8DBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.Account.Entities", "Entities\Frapid.Account.Entities.csproj", "{682C3328-DDC3-458C-BB5F-9AB97EA42A0E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.Account.DataAccess", "DataAccess\Frapid.Account.DataAccess.csproj", "{92F69053-8676-4628-AF71-0E9E27795C90}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.Account.Api", "WebAPI\Frapid.Account.Api.csproj", "{39C347F9-992F-46A2-A768-1049C87B4EF3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,18 +15,6 @@ Global
 		{8C157E84-F635-43D6-AC97-B9FF062D8DBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C157E84-F635-43D6-AC97-B9FF062D8DBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C157E84-F635-43D6-AC97-B9FF062D8DBF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{682C3328-DDC3-458C-BB5F-9AB97EA42A0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{682C3328-DDC3-458C-BB5F-9AB97EA42A0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{682C3328-DDC3-458C-BB5F-9AB97EA42A0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{682C3328-DDC3-458C-BB5F-9AB97EA42A0E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92F69053-8676-4628-AF71-0E9E27795C90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92F69053-8676-4628-AF71-0E9E27795C90}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92F69053-8676-4628-AF71-0E9E27795C90}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92F69053-8676-4628-AF71-0E9E27795C90}.Release|Any CPU.Build.0 = Release|Any CPU
-		{39C347F9-992F-46A2-A768-1049C87B4EF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{39C347F9-992F-46A2-A768-1049C87B4EF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{39C347F9-992F-46A2-A768-1049C87B4EF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{39C347F9-992F-46A2-A768-1049C87B4EF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

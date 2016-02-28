@@ -72,7 +72,10 @@ namespace frapid.Modules
             string originalFile = Path.Combine(this.TempDirectory, original);
             string renamedFile = Path.Combine(this.TempDirectory, renamed);
 
-            File.Move(originalFile, renamedFile);
+            if (File.Exists(originalFile))
+            {
+                File.Move(originalFile, renamedFile);
+            }
         }
 
         private void ReplaceContent(string fileName)
@@ -90,6 +93,8 @@ namespace frapid.Modules
             Console.WriteLine("Renaming files");
             this.RenameFile("MVCProject.csproj", this.ProjectName + ".csproj");
             this.RenameFile("MVCProject.sln", this.ProjectName + ".sln");
+            this.RenameFile("MVCProject.sln.DotSettings", this.ProjectName + ".sln.DotSettings");
+            this.RenameFile("MVCProject.sln.DotSettings.user", this.ProjectName + ".sln.DotSettings.user");
         }
 
         private void CreateTempDirectory()

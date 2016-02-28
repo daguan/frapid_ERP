@@ -76,7 +76,8 @@ function loadActions() {
 
     var actionTemplate = stringFormat("<td>{0}</td><td>{1}</td>", actions, selectTemplate);
 
-    grid.find("th:first-child").before(header);
+    grid.find("tr:first-child th:first-child").before(header);
+    grid.find("tr:nth-child(2) th:first-child").before("<th colspan='2' class='right aligned'><button class='ui fluid clear query basic button' onclick='clearQuery();'>Start Over</button></th>");
 
 
     grid.find("tbody tr").each(function () {

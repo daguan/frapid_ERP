@@ -1,4 +1,4 @@
-﻿@model Frapid.WebsiteBuilder.Entities.Content
+﻿@model Frapid.WebsiteBuilder.DTO.Content
 
 @{
     bool isMarkDown = !string.IsNullOrWhiteSpace(Model.Markdown);
@@ -52,7 +52,7 @@
                                 data-entity="category_id"
                                 required=""
                                 data-placeholder="true"
-                                data-api="/api/website/category/display-fields"
+                                data-api="/api/forms/website/category/display-fields"
                                 data-api-value-field="Value"
                                 data-api-key-field="Key"
                                 data-api-selected-value="@Model.CategoryId"></select>
@@ -61,7 +61,7 @@
                         <label>Tags</label>
                         <select id="TagsSelect" class="ui fluid multiple search selection tag dropdown"
                                 data-entity="tags"
-                                data-api="/api/website/tag-view/all"
+                                data-api="/api/views/website/tag-view/all"
                                 data-api-value-field="Tag"
                                 data-api-key-field="Tag"
                                 data-api-selected-values="@Model.Tags"

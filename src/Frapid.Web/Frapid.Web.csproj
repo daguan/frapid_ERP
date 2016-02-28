@@ -56,6 +56,14 @@
       <HintPath>..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Glimpse.AspNet, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.AspNet.1.8.0\lib\net45\Glimpse.AspNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Glimpse.Core, Version=1.8.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.1.8.6\lib\net45\Glimpse.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="jose-jwt, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\jose-jwt.1.9.0\lib\4.0\jose-jwt.dll</HintPath>
       <Private>True</Private>
@@ -233,6 +241,7 @@
     <Compile Include="Application\ClassicAssemblyResolver.cs" />
     <Compile Include="Application\DefaultAssemblyResolver.cs" />
     <Compile Include="Controllers\BundleController.cs" />
+    <Compile Include="GlimpseSecurityPolicy.cs" />
     <Compile Include="Jobs\EndOfDayJob.cs" />
     <Compile Include="Application\EodTaskRegistration.cs" />
     <Compile Include="Application\FilterConfig.cs" />
@@ -906,7 +915,13 @@
     <Content Include="Scripts\app\home.viewmodel.js" />
     <Content Include="ScrudFactory\Form.html" />
     <Content Include="ScrudFactory\View.html" />
+    <Content Include="Static\images\70white.png" />
+    <Content Include="Static\images\logo-inverted-sm.png" />
+    <Content Include="Static\images\logo-inverted.png" />
+    <Content Include="Static\images\logo-sm.png" />
     <Content Include="Static\images\logo.png" />
+    <Content Include="Static\images\transparent20.png" />
+    <Content Include="Static\images\transparent50.png" />
     <Content Include="Stylesheets\Backend\frapid.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

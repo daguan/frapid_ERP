@@ -89,11 +89,15 @@
     };
 
     if (element.hasClass("date")) {
-        value = value.toFormattedDate();
+        if (value) {
+            value = value.toFormattedDate();
+        };
     };
 
     if (element.attr("data-type") === "time") {
-        value = getTime(value);
+        if (value) {
+            value = getTime(value);
+        };
     };
 
     if (column.DbDataType === "bool") {

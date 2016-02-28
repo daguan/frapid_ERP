@@ -10,14 +10,13 @@
 
     scrudFactory.title = "Flag Types";
 
-    scrudFactory.viewAPI = "/api/config/flag-type";
+    scrudFactory.viewAPI = "/api/form/config/flag-type";
     scrudFactory.viewTableName = "config.flag_types";
 
-    scrudFactory.formAPI = "/api/config/flag-type";
+    scrudFactory.formAPI = "/api/form/config/flag-type";
     scrudFactory.formTableName = "config.flag_types";
 
-    scrudFactory.disabledOnEdit = ["AuthorId"];
-    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;

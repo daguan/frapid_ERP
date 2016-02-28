@@ -16,7 +16,7 @@ namespace Frapid.Account.DAL
 
         public static void CompleteReset(string requestId, string password)
         {
-            const string sql = "SELECT * FROM account.complete_reset(@0::uuid, @1::text)";
+            const string sql = "SELECT account.complete_reset(@0::uuid, @1::text)";
             Factory.NonQuery(AppUsers.GetCatalog(), sql, requestId, password);
         }
 
@@ -30,7 +30,7 @@ namespace Frapid.Account.DAL
 
         public static bool HasActiveResetRequest(string email)
         {
-            const string sql = "SELECT * FROM account.has_active_reset_request(@0::text);";
+            const string sql = "SELECT account.has_active_reset_request(@0::text);";
             return Factory.Scalar<bool>(AppUsers.GetCatalog(), sql, email);
         }
     }

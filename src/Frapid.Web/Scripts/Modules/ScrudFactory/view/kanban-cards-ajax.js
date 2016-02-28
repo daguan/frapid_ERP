@@ -1,6 +1,6 @@
 ﻿function createCards() {
     function request(kanbanIds, resourceIds) {
-        var url = "/api/config/kanban-detail/get-by-resources/";
+        var url = "/api/kanban/get-by-resources/";
         url += "?kanbanIds=";
         url += kanbanIds.join("&kanbanIds=");
 
@@ -20,7 +20,7 @@
 
     var keyField = (window.scrudFactory.card.keyField || getIdField());
     var resourceIds = Enumerable.From(window.json).Select(function (x) { return x[keyField]; }).ToArray();
-    var kanbanIds = Enumerable.From(window.kanbans).Select(function (x) { return x.KanbanId; }).ToArray();
+    var kanbanIds = Enumerable.From(window.kanbans).Select(function (x) { return x.kanban_id; }).ToArray();
 
     var ajax = request(kanbanIds, resourceIds);
 
@@ -29,7 +29,10 @@
 
         $.each(window.json, function (i, v) {
             var key = getCardKey(v);
-            var kanbanDetail = (Enumerable.From(response).Where(function (detail) { return detail.ResourceId.toString() === key.toString() }).ToArray()[0] || new Object());
+            var kanbanDetail = (Enumerable.From(response).Where(function(detail) {
+                    return detail.resource_id.toString() === key.toString();
+            }).ToArray()[0] || new Object());
+
             createCard(v, key, kanbanDetail);
         });
 

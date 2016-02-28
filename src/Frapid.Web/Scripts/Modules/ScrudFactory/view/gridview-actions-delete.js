@@ -21,10 +21,6 @@
     var ajax = request(primaryKeyValue);
 
     ajax.success(function () {
-        var confirmed = confirm(window.Resources.Questions.TaskCompletedSuccessfullyRefreshView());
-
-        if (confirmed) {
-            loadPageCount(loadGrid);
-        };
+        loadPageCount(loadGrid);
     });
 };

@@ -21,7 +21,9 @@ namespace Frapid.Web
 
             if (FrapidApiController.GetMembers() != null)
             {
-                if (HttpRuntime.IISVersion < new Version("8.0.0.0"))
+                var version = HttpRuntime.IISVersion;
+
+                if (version != null && version < new Version("8.0.0.0"))
                 {
                     config.Services.Replace(typeof (IAssembliesResolver), new ClassicAssemblyResolver());
                 }

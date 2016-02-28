@@ -20,14 +20,19 @@ namespace Frapid.Installer
 
             try
             {
+                Log.Verbose($"Installing frapid on domain {url}.");
                 string catalog = DbConvention.GetCatalog(url);
+
+                Log.Verbose($"Creating database {catalog}.");
                 var db = new DbInstaller(catalog);
                 db.Install();
 
+                Log.Verbose("Installing modules.");
                 var installables = GetInstallables();
 
                 foreach (var installable in installables)
                 {
+                    Log.Verbose($"Installing module {installable.ApplicationName}.");
                     new AppInstaller(catalog, installable).Install();
                 }
             }

@@ -9,6 +9,8 @@ namespace Frapid.Configuration
     public static class DbProvider
     {
         public static FluentConfig Config;
+        public static readonly string ProviderName = ConfigurationManager.GetConfigurationValue("DbServerConfigFileLocation", "ProviderName");
+        public static readonly string MetaDatabase = ConfigurationManager.GetConfigurationValue("DbServerConfigFileLocation", "MetaDatabase");
 
         public static void Setup(Type type)
         {
@@ -29,7 +31,9 @@ namespace Frapid.Configuration
                             t =>
                                 t.GetCustomAttributes(true).OfType<TableNameAttribute>().FirstOrDefault()?.Value ??
                                 Inflector.AddUnderscores(Inflector.MakePlural(t.Name)).ToLower());
+
                         s.Columns.Named(m => Inflector.AddUnderscores(m.Name).ToLower());
+                        s.Columns.IgnoreWhere(x=> x.GetCustomAttributes<IgnoreAttribute>().Any());
                         s.PrimaryKeysNamed(t => Inflector.AddUnderscores(t.Name).ToLower() + "_id");
                         s.PrimaryKeysAutoIncremented(t => true);
                     }
@@ -39,6 +43,7 @@ namespace Frapid.Configuration
             }
             catch (ReflectionTypeLoadException)
             {
+                //Swallow
             }
         }
 
@@ -46,7 +51,7 @@ namespace Frapid.Configuration
         {
             return DatabaseFactory.Config(x =>
             {
-                x.UsingDatabase(() => new Database(connectionString, "Npgsql"));
+                x.UsingDatabase(() => new Database(connectionString, ProviderName));
                 x.WithFluentConfig(Config);
             });
         }

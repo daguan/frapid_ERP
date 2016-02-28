@@ -9,12 +9,12 @@
             window.scrudView.hide();
         };
 
-        window.scrudForm.fadeIn(500);
+        window.scrudForm.show();
     } else {
         if (window.scrudView.length) {
             window.scrudForm.hide();
         } else {
-            window.scrudForm.fadeIn(500);
+            window.scrudForm.show();
         };
     };
 };

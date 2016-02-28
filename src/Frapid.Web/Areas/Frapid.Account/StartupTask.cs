@@ -1,12 +1,20 @@
-using System.Linq;
-using Frapid.Account.DataAccess;
 using Frapid.Configuration;
+using Frapid.DataAccess;
 using Frapid.Framework;
 using Npgsql;
 using Serilog;
 
 namespace Frapid.Account
 {
+    public static class InstalledDomains
+    {
+        public static void Add(string catalog, string domainName, string adminEmail)
+        {
+            const string sql = "SELECT * FROM account.add_installed_domain(@0, @0);";
+            Factory.NonQuery(catalog, sql, domainName, adminEmail);
+        }
+    }
+
     public class StartupTask : IStartupRegistration
     {
         public string Description { get; set; } = "Upserting installed domains to the DB.";
@@ -17,18 +25,10 @@ namespace Frapid.Account
             {
                 var installed = new DomainSerializer("DomainsInstalled.json");
 
-                foreach (var repository in
-                    from domain in installed.Get()
-                    let catalog = DbConvention.GetDbNameByConvention(domain.DomainName)
-                    select new AddInstalledDomainProcedure
-                    {
-                        DomainName = domain.DomainName,
-                        AdminEmail = domain.AdminEmail,
-                        SkipValidation = true,
-                        _Catalog = catalog
-                    })
+                foreach (var domain in installed.Get())
                 {
-                    repository.Execute();
+                    string catalog = DbConvention.GetDbNameByConvention(domain.DomainName);
+                    InstalledDomains.Add(catalog, domain.DomainName, domain.AdminEmail);
                 }
             }
             catch (NpgsqlException ex)

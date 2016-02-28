@@ -1,14 +1,15 @@
 ﻿function loadGrid() {
-    function filteredRequest(pageNumber, queryStrings) {
+    function filteredRequest(pageNumber, filters) {
         var url = window.scrudFactory.viewAPI + "/get-where/" + pageNumber;
-        var data = JSON.stringify(getAjaxFilters(queryStrings));
+        var data = JSON.stringify(filters);
         return getAjaxRequest(url, "POST", data);
     };
 
-    function request(pageNumber, filterName, byOffice) {
-        if (getFilterQueryStringCount()) {
-            var queryStrings = getQueryStrings();
-            return filteredRequest(pageNumber, queryStrings, byOffice);
+    function request(pageNumber, filterName, filters) {
+        if (!filters && getFilterQueryStringCount()) {
+            filters = getQuerystringFilters();
+
+            return filteredRequest(pageNumber, filters);
         };
 
         var url = window.scrudFactory.viewAPI + "/page/" + pageNumber;
@@ -17,7 +18,13 @@
             url = window.scrudFactory.viewAPI + "/get-filtered/" + pageNumber + "/" + filterName;
         };
 
-        return getAjaxRequest(url);
+        if (!filters || !filters.length) {
+            return getAjaxRequest(url);
+        };
+
+        url = window.scrudFactory.viewAPI + "/get-where/" + pageNumber;
+        var data = JSON.stringify(filters);
+        return getAjaxRequest(url, "POST", data);
     };
 
     var pageNumber = getPageNumber();
@@ -31,7 +38,9 @@
     };
 
     $(".current.page.anchor").text(pageNumber);
-    var ajax = request(pageNumber, filterName, false);
+    var filters = getSelectedFilter();
+
+    var ajax = request(pageNumber, filterName, filters);
 
     ajax.success(function (response) {
         onViewSuccess(response);

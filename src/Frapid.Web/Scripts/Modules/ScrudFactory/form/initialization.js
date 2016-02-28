@@ -59,4 +59,3 @@ function createTabs() {
         createTabEls(this.id, this.name, this.active);
     });
 };
-

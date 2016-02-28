@@ -81,8 +81,8 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
             var approved = new DomainSerializer("DomainsApproved.json");
             var installed = new DomainSerializer("DomainsInstalled.json");
 
-            bool isApproved = approved.Get().Any(x => x.DomainName.Equals(domain));
-            bool isInstalled = installed.Get().Any(x => x.DomainName.Equals(domain));
+            bool isApproved = approved.Get().Any(x => x.GetSubtenants().Contains(domain.ToLowerInvariant()));
+            bool isInstalled = installed.Get().Any(x => x.GetSubtenants().Contains(domain.ToLowerInvariant()));
 
             if (isApproved && !isInstalled)
             {

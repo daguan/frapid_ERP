@@ -10,14 +10,13 @@
 
     scrudFactory.title = "Contacts";
 
-    scrudFactory.viewAPI = "/api/website/contact";
+    scrudFactory.viewAPI = "/api/forms/website/contact";
     scrudFactory.viewTableName = "website.contacts";
 
-    scrudFactory.formAPI = "/api/website/contact";
+    scrudFactory.formAPI = "/api/forms/website/contact";
     scrudFactory.formTableName = "website.contacts";
 
-    scrudFactory.disabledOnEdit = ["AuthorId"];
-    scrudFactory.excludedColumns = ["AuditUserId", "AuditTs"];
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;
@@ -42,9 +41,9 @@
     ];
 
     scrudFactory.card = {
-        header: "Title",
-        meta: "Name",
-        description: "Description"
+        header: "title",
+        meta: "name",
+        description: "description"
     };
 
     $.get('/ScrudFactory/View.html', function (view) {

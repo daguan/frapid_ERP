@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Frapid.Areas;
 using Frapid.Configuration;
@@ -15,18 +16,18 @@ namespace Frapid.Web.Controllers
 
             var approved = new DomainSerializer("DomainsApproved.json");
             var installed = new DomainSerializer("DomainsInstalled.json");
-           
-            if (!approved.Get().Any(x => x.DomainName.Equals(domain)))
+
+            if (!approved.GetTenantMembers().Any(x => x.Equals(domain)))
             {
                 return this.HttpNotFound();
             }
 
-            if (installed.Get().Any(x => x.DomainName.Equals(domain)))
+            if (installed.GetTenantMembers().Any(x => x.Equals(domain)))
             {
                 return this.Redirect("/");
             }
 
-            var setup = approved.Get().FirstOrDefault(x => x.DomainName.Equals(domain));
+            var setup = approved.Get().FirstOrDefault(x => x.GetSubtenants().Contains(domain.ToLowerInvariant()));
             InstallationFactory.Setup(setup); //Background job
             return this.Content("Installing frapid, please visit the site after a few minutes.");
         }

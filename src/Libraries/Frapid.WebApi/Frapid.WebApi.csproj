@@ -42,6 +42,7 @@
       <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
@@ -57,6 +58,10 @@
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Npgsql, Version=2.2.6.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Npgsql.2.2.6\lib\net45\Npgsql.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -93,9 +98,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\FilterRepository.cs" />
+    <Compile Include="DataAccess\FlagRepository.cs" />
+    <Compile Include="DataAccess\FormRepository.cs" />
+    <Compile Include="DataAccess\IFormRepository.cs" />
+    <Compile Include="DataAccess\IViewRepository.cs" />
+    <Compile Include="DataAccess\KanbanRepository.cs" />
+    <Compile Include="DataAccess\ViewRepository.cs" />
+    <Compile Include="Service\FilterApiController.cs" />
+    <Compile Include="Service\FlagApiController.cs" />
+    <Compile Include="Service\FormApiController.cs" />
     <Compile Include="FrapidApiController.cs" />
     <Compile Include="RestAuthorizeAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\KanbanApiController.cs" />
+    <Compile Include="Service\ViewApiController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -115,9 +132,17 @@
       <Project>{9BEA3809-B6D5-4025-AE7E-868E5E7E9C76}</Project>
       <Name>Frapid.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Frapid.DbPolicy\Frapid.DbPolicy.csproj">
+      <Project>{E2C5690C-EF80-4AFA-8107-5E58A936B15F}</Project>
+      <Name>Frapid.DbPolicy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Frapid.Framework\Frapid.Framework.csproj">
       <Project>{A4DEE358-3203-425C-80E9-8EBA0A01B73F}</Project>
       <Name>Frapid.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Frapid.NPoco\Frapid.NPoco.csproj">
+      <Project>{58f77141-ffe7-45f6-b726-80100204e69d}</Project>
+      <Name>Frapid.NPoco</Name>
     </ProjectReference>
     <ProjectReference Include="..\Frapid.TokenManager\Frapid.TokenManager.csproj">
       <Project>{EF3BDE7C-A3D5-493A-8817-BF47DF9CAE47}</Project>
