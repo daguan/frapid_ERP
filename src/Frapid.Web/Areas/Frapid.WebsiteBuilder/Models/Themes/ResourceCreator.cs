@@ -21,8 +21,8 @@ namespace Frapid.WebsiteBuilder.Models.Themes
                 throw new ResourceCreateException("Invalid theme or file name.");
             }
 
-            string catalog = DbConvention.GetCatalog();
-            string path = $"~/Catalogs/{catalog}/Areas/Frapid.WebsiteBuilder/Themes/{this.ThemeName}";
+            string tenant = DbConvention.GetTenant();
+            string path = $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{this.ThemeName}";
             path = HostingEnvironment.MapPath(path);
 
             if (path == null || !Directory.Exists(path))

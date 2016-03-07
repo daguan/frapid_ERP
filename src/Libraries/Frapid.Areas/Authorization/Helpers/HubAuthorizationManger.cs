@@ -24,7 +24,7 @@ namespace Frapid.Areas.Authorization.Helpers
         private static Token GetToken(HubCallerContext context)
         {
             string clientToken = context.Request.GetClientToken();
-            var provider = new Provider(DbConvention.GetCatalog());
+            var provider = new Provider(DbConvention.GetTenant());
             var token = provider.GetToken(clientToken);
             if (token != null)
             {
@@ -46,14 +46,14 @@ namespace Frapid.Areas.Authorization.Helpers
 
             if (token != null)
             {
-                string catalog = DbConvention.GetCatalog();
+                string tenant = DbConvention.GetTenant();
 
-                AppUsers.SetCurrentLogin(catalog, token.LoginId);
-                var loginView = AppUsers.GetCurrent(catalog, token.LoginId);
+                AppUsers.SetCurrentLogin(tenant, token.LoginId);
+                var loginView = AppUsers.GetCurrent(tenant, token.LoginId);
 
                 return new MetaUser
                 {
-                    Catalog = catalog,
+                    Tenant = tenant,
                     ClientToken = token.ClientToken,
                     LoginId = token.LoginId,
                     UserId = loginView.UserId,

@@ -19,6 +19,6 @@
 	"InstallSample": false,
 	"My": null,
     "OverrideTemplatePath":"~/Override",
-    "OverrideDestination":"~/Catalogs/{0}",
+    "OverrideDestination":"~/Tenants/{0}",
 	"DependsOn": null
 }

@@ -9,7 +9,7 @@ namespace Frapid.Dashboard.DAL
         public static IEnumerable<DTO.Menu> Get(int userId, int officeId, string cultureCode)
         {
             const string sql = "SELECT * FROM auth.get_menu(@0, @1, @2);";
-            return Factory.Get<DTO.Menu>(AppUsers.GetCatalog(), sql, userId, officeId, cultureCode);
+            return Factory.Get<DTO.Menu>(AppUsers.GetTenant(), sql, userId, officeId, cultureCode);
         }
     }
 }

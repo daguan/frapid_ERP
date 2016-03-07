@@ -9,7 +9,7 @@ namespace Frapid.DataAccess
         AccessTypeEnum AccessType { get; set; }
         bool HasAccess { get; }
         long LoginId { get; set; }
-        string Catalog { get; set; }
+        string Database { get; set; }
         void Validate();
     }
 }

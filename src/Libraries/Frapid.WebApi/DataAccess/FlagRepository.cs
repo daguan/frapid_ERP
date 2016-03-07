@@ -8,11 +8,11 @@ namespace Frapid.WebApi.DataAccess
 {
     public class FlagRepository : DbAccess
     {
-        public FlagRepository(string catalog, long loginId, int userId)
+        public FlagRepository(string database, long loginId, int userId)
         {
             this._ObjectNamespace = "config";
             this._ObjectName = "flag_view";
-            this.Catalog = catalog;
+            this.Database = database;
             this.LoginId = loginId;
             this.UserId = userId;
         }
@@ -20,7 +20,7 @@ namespace Frapid.WebApi.DataAccess
         public override string _ObjectNamespace { get; }
         public override string _ObjectName { get; }
         public string NameColumn { get; set; }
-        public string Catalog { get; set; }
+        public string Database { get; set; }
         public int UserId { get; set; }
         public bool IsValid { get; set; }
         public long LoginId { get; set; }
@@ -28,7 +28,7 @@ namespace Frapid.WebApi.DataAccess
 
         public IEnumerable<dynamic> Get(string resource, int userId, object[] resourceIds)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -37,7 +37,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -48,7 +48,7 @@ namespace Frapid.WebApi.DataAccess
 
             const string sql = "SELECT * FROM config.flag_view WHERE resource=@0 AND user_id=@1 AND resource_id IN (@2);";
 
-            return Factory.Get<dynamic>(this.Catalog, sql, resource, userId, resourceIds);
+            return Factory.Get<dynamic>(this.Database, sql, resource, userId, resourceIds);
         }
     }
 }

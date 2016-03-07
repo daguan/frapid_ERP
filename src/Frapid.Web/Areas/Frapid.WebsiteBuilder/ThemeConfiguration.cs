@@ -8,6 +8,7 @@ namespace Frapid.WebsiteBuilder
     {
         private const string DefaultLayout = "DefaultLayout";
         private const string HomepageLayout = "HomepageLayout";
+        private const string BlogLayout = "BlogLayout";
 
         public static string GetLayout(string theme)
         {
@@ -17,6 +18,11 @@ namespace Frapid.WebsiteBuilder
         public static string GetHomepageLayout(string theme)
         {
             return Get(theme, HomepageLayout);
+        }
+
+        public static string GetBlogLayout(string theme)
+        {
+            return Get(theme, BlogLayout);
         }
 
         public static string Get(string theme, string key)

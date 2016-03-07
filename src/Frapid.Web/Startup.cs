@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -24,11 +25,16 @@ namespace Frapid.Web
             {
                 map.UseCors(CorsOptions.AllowAll);
 
+
+                var configuration = new HubConfiguration
+                {
+                    EnableJavaScriptProxies = true
+                };
+
+                map.RunSignalR(configuration);
                 var authorizer = new HubAuthorizeAttribute();
                 var module = new AuthorizeModule(null, authorizer);
                 GlobalHost.HubPipeline.AddModule(module);
-
-                map.RunSignalR();
             });
 
             LogManager.InternalizeLogger();

@@ -19,6 +19,6 @@
 	"InstallSample": false,
 	"My": null,
 	"OverrideTemplatePath": "~/Areas/Frapid.Dashboard/Override",
-    "OverrideDestination":"~/Catalogs/{0}/Areas",
+    "OverrideDestination":"~/Tenants/{0}/Areas",
 	"DependsOn": null
 }

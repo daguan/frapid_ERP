@@ -1,0 +1,59 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Configure Website";
+    Layout = ViewBag.Layout;
+}
+
+<script>
+    var scrudFactory = new Object();
+
+    scrudFactory.title = "Configure Website";
+
+    scrudFactory.viewAPI = "/api/forms/website/configuration";
+    scrudFactory.viewTableName = "website.configuration";
+
+    scrudFactory.formAPI = "/api/forms/website/configuration";
+    scrudFactory.formTableName = "website.configuration";
+
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+
+    scrudFactory.allowDelete = true;
+    scrudFactory.allowEdit = true;
+
+    scrudFactory.live = "WebsiteName";
+
+    scrudFactory.layout = [
+        {
+            tab: "",
+            fields: [
+                ["ConfigurationId"],
+                ["DomainName", "WebsiteName"],
+                ["IsDefault", ""],
+                ["Description"],
+                ["BlogTitle", ""],
+                ["BlogDescription"]
+            ]
+        }
+    ];
+
+    scrudFactory.card = {
+        header: "website_name",
+        description: "description"
+    };
+
+    $.get('/ScrudFactory/View.html', function(view) {
+        $.get('/ScrudFactory/Form.html', function(form) {
+
+            $("#ScrudFactoryView").html(view);
+            $("#ScrudFactoryForm").html(form);
+            setTimeout(function() {
+                $.cachedScript("/bundles/scrudfactory-view.js");
+                $.cachedScript("/bundles/scrudfactory-form.js");
+            }, 100);
+        });
+    });
+</script>
+
+<div id="ScrudFactoryForm"></div>
+<div id="ScrudFactoryView"></div>

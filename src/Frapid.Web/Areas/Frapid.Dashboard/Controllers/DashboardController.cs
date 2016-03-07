@@ -44,19 +44,19 @@ namespace Frapid.Dashboard.Controllers
             }
         }
 
-        protected ViewResultBase FrapidView(string path, object model = null)
+        protected ContentResult FrapidView(string path, object model = null)
         {
-            return View(this.HttpContext.Request.IsAjaxRequest() ? path : LandingPage, model);
+            return this.View(this.HttpContext.Request.IsAjaxRequest() ? path : LandingPage, model);
         }
 
         protected string GetRazorView(string areaName, string path)
         {
-            string catalog = DbConvention.GetCatalog();
+            string tenant = DbConvention.GetTenant();
             string theme = Configuration.GetDefaultTheme();
 
 
-            string overridePath = "~/Catalogs/{0}/Areas/Frapid.Dashboard/Themes/{1}/Areas/{2}/Views/" + path;
-            overridePath = string.Format(CultureInfo.InvariantCulture, overridePath, catalog, theme, areaName);
+            string overridePath = "~/Tenants/{0}/Areas/Frapid.Dashboard/Themes/{1}/Areas/{2}/Views/" + path;
+            overridePath = string.Format(CultureInfo.InvariantCulture, overridePath, tenant, theme, areaName);
 
             if (System.IO.File.Exists(HostingEnvironment.MapPath(overridePath)))
             {
@@ -64,8 +64,8 @@ namespace Frapid.Dashboard.Controllers
             }
 
 
-            overridePath = "~/Catalogs/{0}/Areas/{1}/Themes/{2}/Views/" + path;
-            overridePath = string.Format(CultureInfo.InvariantCulture, overridePath, catalog, areaName, theme);
+            overridePath = "~/Tenants/{0}/Areas/{1}/Themes/{2}/Views/" + path;
+            overridePath = string.Format(CultureInfo.InvariantCulture, overridePath, tenant, areaName, theme);
 
             if (System.IO.File.Exists(HostingEnvironment.MapPath(overridePath)))
             {

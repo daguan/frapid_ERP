@@ -14,14 +14,14 @@ namespace Frapid.Messaging
         {
         }
 
-        public MailQueueManager(string catalog, EmailQueue mail)
+        public MailQueueManager(string database, EmailQueue mail)
         {
-            this.Catalog = catalog;
+            this.Database = database;
             this.Email = mail;
         }
 
         public EmailQueue Email { get; set; }
-        public string Catalog { get; set; }
+        public string Database { get; set; }
 
         public void Add()
         {
@@ -30,19 +30,19 @@ namespace Frapid.Messaging
                 return;
             }
 
-            MailQueue.AddToQueue(this.Catalog, this.Email);
+            MailQueue.AddToQueue(this.Database, this.Email);
         }
 
         private bool IsEnabled()
         {
-            var processor = EmailProcessor.GetDefault(this.Catalog);
+            var processor = EmailProcessor.GetDefault(this.Database);
             return processor != null && processor.IsEnabled;
         }
 
         public async Task ProcessMailQueueAsync(IEmailProcessor processor)
         {
-            IEnumerable<EmailQueue> queue = MailQueue.GetMailInQueue(this.Catalog).ToList();
-            var config = new Config(this.Catalog);
+            IEnumerable<EmailQueue> queue = MailQueue.GetMailInQueue(this.Database).ToList();
+            var config = new Config(this.Database);
 
             if (this.IsEnabled())
             {
@@ -62,7 +62,7 @@ namespace Frapid.Messaging
                     mail.DeliveredOn = DateTime.UtcNow;
 
 
-                    MailQueue.SetSuccess(this.Catalog, mail.QueueId);
+                    MailQueue.SetSuccess(this.Database, mail.QueueId);
                 }
             }
         }

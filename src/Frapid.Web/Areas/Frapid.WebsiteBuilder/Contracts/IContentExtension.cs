@@ -2,6 +2,6 @@
 {
     public interface IContentExtension
     {
-        string ParseHtml(string html);
+        string ParseHtml(string tenant, string html);
     }
 }

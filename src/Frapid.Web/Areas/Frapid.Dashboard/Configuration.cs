@@ -8,23 +8,23 @@ namespace Frapid.Dashboard
 {
     public class Configuration
     {
-        private const string Path = "~/Catalogs/{0}/Areas/Frapid.Dashboard/";
+        private const string Path = "~/Tenants/{0}/Areas/Frapid.Dashboard/";
         private const string ConfigFile = "Dashboard.config";
         private const string DefaultThemeKey = "DefaultTheme";
 
         public static string GetCurrentThemePath()
         {
-            string catalog = AppUsers.GetCatalog();
+            string tenant = AppUsers.GetTenant();
             string path = Path + "Themes/{1}/";
             string theme = GetDefaultTheme();
 
-            return Format(CultureInfo.InvariantCulture, path, catalog, theme);
+            return Format(CultureInfo.InvariantCulture, path, tenant, theme);
         }
 
         public static string GetDashboardPath()
         {
-            string catalog = AppUsers.GetCatalog();
-            string path = HostingEnvironment.MapPath(Format(CultureInfo.InvariantCulture, Path, catalog));
+            string tenant = AppUsers.GetTenant();
+            string path = HostingEnvironment.MapPath(Format(CultureInfo.InvariantCulture, Path, tenant));
 
             return path != null && !System.IO.Directory.Exists(path) ? Empty : path;
         }

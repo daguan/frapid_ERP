@@ -6,13 +6,13 @@ namespace Frapid.i18n.DAL
 {
     public static class DbResources
     {
-        static readonly string MetaCatalog = ConfigurationManager.GetConfigurationValue("DbServerConfigFileLocation", "MetaDatabase");
+        static readonly string MetaDatabase = ConfigurationManager.GetConfigurationValue("DbServerConfigFileLocation", "MetaDatabase");
 
         public static Dictionary<string, string> GetLocalizedResources()
         {
             const string sql = "SELECT * FROM i18n.localized_resource_view;";
 
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(MetaCatalog)).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(MetaDatabase)).GetDatabase())
             {
                 var dbResources = db.Query<dynamic>(sql);
 
@@ -34,7 +34,7 @@ namespace Frapid.i18n.DAL
         {
             const string sql =
                 "SELECT * FROM i18n.get_localization_table(@0) WHERE COALESCE(key, '') != '';";
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(MetaCatalog)).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(MetaDatabase)).GetDatabase())
             {
                 return db.Query<LocalizedResource>(sql, language);
             }

@@ -22,8 +22,8 @@ namespace Frapid.Dashboard.Controllers
                 return this.HttpNotFound();
             }
 
-            string directory = "~/Catalogs/{0}/Areas/Frapid.Dashboard/Resources/";
-            directory = string.Format(CultureInfo.InvariantCulture, directory, AppUsers.GetCatalog());
+            string directory = "~/Tenants/{0}/Areas/Frapid.Dashboard/Resources/";
+            directory = string.Format(CultureInfo.InvariantCulture, directory, AppUsers.GetTenant());
             directory = HostingEnvironment.MapPath(directory);
 
             if (directory == null)

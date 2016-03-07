@@ -39,7 +39,7 @@ namespace frapid.Commands.Create
 
         private bool CheckInstance()
         {
-            string path = @"{0}\Catalogs\{1}";
+            string path = @"{0}\Tenants\{1}";
             string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..");
 
             path = Format(path, directory, this.InstanceName);

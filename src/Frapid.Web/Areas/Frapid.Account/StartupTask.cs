@@ -8,10 +8,10 @@ namespace Frapid.Account
 {
     public static class InstalledDomains
     {
-        public static void Add(string catalog, string domainName, string adminEmail)
+        public static void Add(string database, string domainName, string adminEmail)
         {
             const string sql = "SELECT * FROM account.add_installed_domain(@0, @0);";
-            Factory.NonQuery(catalog, sql, domainName, adminEmail);
+            Factory.NonQuery(database, sql, domainName, adminEmail);
         }
     }
 
@@ -27,8 +27,8 @@ namespace Frapid.Account
 
                 foreach (var domain in installed.Get())
                 {
-                    string catalog = DbConvention.GetDbNameByConvention(domain.DomainName);
-                    InstalledDomains.Add(catalog, domain.DomainName, domain.AdminEmail);
+                    string database = DbConvention.GetDbNameByConvention(domain.DomainName);
+                    InstalledDomains.Add(database, domain.DomainName, domain.AdminEmail);
                 }
             }
             catch (NpgsqlException ex)

@@ -17,8 +17,8 @@ namespace Frapid.WebsiteBuilder.Models.Themes
 
         public void Delete()
         {
-            string catalog = DbConvention.GetCatalog();
-            string path = $"~/Catalogs/{catalog}/Areas/Frapid.WebsiteBuilder/Themes/{this.ThemeName}";
+            string tenant = DbConvention.GetTenant();
+            string path = $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{this.ThemeName}";
             path = HostingEnvironment.MapPath(path);
 
             if (path == null)

@@ -10,13 +10,18 @@ SELECT
     website.contents.title,
     website.contents.alias,
     website.contents.author_id,
+    account.users.name AS author_name,
     website.contents.markdown,
+    website.contents.publish_on,
     website.contents.contents,
     website.contents.tags,
     website.contents.seo_description,
-    website.contents.is_homepage
+    website.contents.is_homepage,
+    website.categories.is_blog
 FROM website.contents
 INNER JOIN website.categories
 ON website.categories.category_id = website.contents.category_id
+LEFT JOIN account.users
+ON website.contents.author_id = account.users.user_id
 WHERE NOT is_draft
 AND publish_on <= NOW();

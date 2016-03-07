@@ -17,9 +17,9 @@ namespace Frapid.Dashboard.Controllers
         [Route("dashboard/backgrounds")]
         public ActionResult Get()
         {
-            string resourceDirectory = HostingEnvironment.MapPath("~/Catalogs/{0}/Areas/Frapid.Dashboard/Resources");
-            string directory = "~/Catalogs/{0}/Areas/Frapid.Dashboard/Resources/backgrounds";
-            directory = string.Format(CultureInfo.InvariantCulture, directory, AppUsers.GetCatalog());
+            string resourceDirectory = HostingEnvironment.MapPath("~/Tenants/{0}/Areas/Frapid.Dashboard/Resources");
+            string directory = "~/Tenants/{0}/Areas/Frapid.Dashboard/Resources/backgrounds";
+            directory = string.Format(CultureInfo.InvariantCulture, directory, AppUsers.GetTenant());
             directory = HostingEnvironment.MapPath(directory);
 
             if (directory == null)

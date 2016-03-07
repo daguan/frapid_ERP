@@ -28,8 +28,8 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         public async Task<ActionResult> SendEmailAsync(ContactForm model)
         {
             model.Subject = "Contact Form : " + model.Subject;
-            string catalog = AppUsers.GetCatalog();
-            await new ContactUsEmail().SendAsync(catalog, model);
+            string tenant = AppUsers.GetTenant();
+            await new ContactUsEmail().SendAsync(tenant, model);
             Thread.Sleep(1000);
             return this.Json("OK");
         }

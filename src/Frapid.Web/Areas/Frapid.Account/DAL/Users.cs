@@ -9,7 +9,7 @@ namespace Frapid.Account.DAL
     {
         public static User Get(string email)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetCatalog())).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return db.FetchBy<User>(sql => sql.Where(u => u.Email == email)).FirstOrDefault();
             }

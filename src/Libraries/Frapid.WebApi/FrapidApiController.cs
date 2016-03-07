@@ -20,21 +20,21 @@ namespace Frapid.WebApi
 
         protected override void Initialize(HttpControllerContext context)
         {
-            string catalog = DbConvention.GetCatalog();
+            string database = DbConvention.GetTenant();
 
             string clientToken = context.Request.GetBearerToken();
-            var provider = new Provider(catalog);
+            var provider = new Provider(database);
             var token = provider.GetToken(clientToken);
 
 
             if (token != null)
             {
-                AppUsers.SetCurrentLogin(catalog, token.LoginId);
-                var loginView = AppUsers.GetCurrent(catalog, token.LoginId);
+                AppUsers.SetCurrentLogin(database, token.LoginId);
+                var loginView = AppUsers.GetCurrent(database, token.LoginId);
 
                 this.MetaUser = new MetaUser
                 {
-                    Catalog = catalog,
+                    Tenant = database,
                     ClientToken = token.ClientToken,
                     LoginId = token.LoginId,
                     UserId = loginView.UserId.To<int>(),

@@ -30,14 +30,10 @@
     };    
 
     $.get('/ScrudFactory/View.html', function (view) {
-        $.get('/ScrudFactory/Form.html', function (form) {
-            $("#ScrudFactoryView").html(view);
-            $("#ScrudFactoryForm").html(form);
-            $.cachedScript("/bundles/scrudfactory-view.js");
-            $.cachedScript("/bundles/scrudfactory-form.js");
-        });
+        $("#ScrudFactoryView").html(view);
+        $.cachedScript("/bundles/scrudfactory-view.js");
     });
 </script>
 
-
-<div data-ng-include="'/ScrudFactory/View.html'"></div>
+<div id="ScrudFactoryForm"></div>
+<div id="ScrudFactoryView"></div>

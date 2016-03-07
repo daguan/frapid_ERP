@@ -5,7 +5,7 @@ namespace Frapid.Messaging
 {
     public sealed class EmailProcessor
     {
-        public static IEmailProcessor GetDefault(string catalog)
+        public static IEmailProcessor GetDefault(string database)
         {
             var iType = typeof (IEmailProcessor);
             var members = AppDomain.CurrentDomain.GetAssemblies()
@@ -15,7 +15,7 @@ namespace Frapid.Messaging
 
             foreach (IEmailProcessor member in members)
             {
-                member.InitializeConfig(catalog);
+                member.InitializeConfig(database);
                 if (member.IsEnabled)
                 {
                     return member;
@@ -25,9 +25,9 @@ namespace Frapid.Messaging
             return null;
         }
 
-        public static IEmailConfig GetDefaultConfig(string catalog)
+        public static IEmailConfig GetDefaultConfig(string database)
         {
-            var processor = GetDefault(catalog);
+            var processor = GetDefault(database);
             return processor.Config;
         }
     }

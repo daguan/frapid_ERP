@@ -10,7 +10,7 @@ namespace Frapid.DbPolicy
         public string ObjectName { get; set; }
         public bool HasAccess { get; private set; }
         public long LoginId { get; set; }
-        public string Catalog { get; set; }
+        public string Database { get; set; }
 
         public void Validate()
         {
@@ -28,7 +28,7 @@ namespace Frapid.DbPolicy
             string entity = policy.ObjectNamespace + "." + policy.ObjectName;
             int type = (int) policy.AccessType;
 
-            bool result = Factory.Scalar<bool>(policy.Catalog, sql, policy.LoginId, entity, type);
+            bool result = Factory.Scalar<bool>(policy.Database, sql, policy.LoginId, entity, type);
             return result;
         }
     }

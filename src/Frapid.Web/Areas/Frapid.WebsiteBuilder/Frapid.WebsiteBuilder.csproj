@@ -203,13 +203,19 @@
     <Compile Include="Contracts\IContentExtension.cs" />
     <Compile Include="Contracts\IFormExtension.cs" />
     <Compile Include="Controllers\Backend\CategoryController.cs" />
+    <Compile Include="Controllers\Backend\ConfigurationController.cs" />
     <Compile Include="Controllers\Backend\ContactController.cs" />
     <Compile Include="Controllers\Backend\DashboardSubscriptionController.cs" />
     <Compile Include="ContentExtensions.cs" />
+    <Compile Include="Controllers\FrontEnd\BlogController.cs" />
+    <Compile Include="DAL\Configurations.cs" />
+    <Compile Include="DTO\Configuration.cs" />
     <Compile Include="DTO\Contact.cs" />
     <Compile Include="DTO\Content.cs" />
     <Compile Include="DTO\MenuItemView.cs" />
     <Compile Include="DTO\PublishedContentView.cs" />
+    <Compile Include="Extensions\StringExtension.cs" />
+    <Compile Include="StringExtension.cs" />
     <Compile Include="Plugins\ArticleExtension.cs" />
     <Compile Include="Plugins\FormsExtension.cs" />
     <Compile Include="Models\ContentModel.cs" />
@@ -254,6 +260,7 @@
     <Compile Include="Models\Themes\ResourceUploadException.cs" />
     <Compile Include="Models\Themes\ThemeInstallException.cs" />
     <Compile Include="Models\Themes\ThemeUploadException.cs" />
+    <Compile Include="ViewModels\Blog.cs" />
     <Compile Include="ViewModels\ContactForm.cs" />
     <Compile Include="ViewModels\ContactUs.cs" />
     <Compile Include="ViewModels\IWebsitePage.cs" />
@@ -310,6 +317,9 @@
     <Content Include="Views\Layout\Shared\DeleteThemeModal.cshtml" />
     <Content Include="Views\SubscriptionEmailTemplate\Welcome.cshtml" />
     <Content Include="web.config" />
+    <Content Include="Views\Blog\Home.cshtml" />
+    <Content Include="Views\Configuration\Index.cshtml" />
+    <Content Include="Views\Blog\Post.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

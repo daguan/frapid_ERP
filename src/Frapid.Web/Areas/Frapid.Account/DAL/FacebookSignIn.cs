@@ -12,7 +12,7 @@ namespace Frapid.Account.DAL
         {
             const string sql =
                 "SELECT * FROM account.fb_sign_in(@0::text,@1::text,@2::integer,@3::text,@4::text,@5::text,@6::text,@7::text);";
-            return Factory.Get<LoginResult>(AppUsers.GetCatalog(), sql, facebookUserId, email, officeId, name, token, browser,
+            return Factory.Get<LoginResult>(AppUsers.GetTenant(), sql, facebookUserId, email, officeId, name, token, browser,
                 ipAddress, culture).FirstOrDefault();
         }
     }

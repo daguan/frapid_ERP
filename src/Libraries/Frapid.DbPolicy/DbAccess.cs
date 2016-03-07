@@ -18,19 +18,19 @@ namespace Frapid.DbPolicy
         /// </summary>
         /// <param name="type">The access type being validated.</param>
         /// <param name="loginId">The login ID of application user making the request.</param>
-        /// <param name="catalog">The name of the database on which policy is being validated on.</param>
+        /// <param name="database">The name of the database on which policy is being validated on.</param>
         /// <param name="noException">
         ///     If this is switched off, UnauthorizedException is not thrown even when the caller does not
         ///     have access rights to this function.
         /// </param>
-        public void Validate(AccessTypeEnum type, long loginId, string catalog, bool noException)
+        public void Validate(AccessTypeEnum type, long loginId, string database, bool noException)
         {
             var policy = new PolicyValidator
             {
                 ObjectNamespace = this._ObjectNamespace,
                 ObjectName = this._ObjectName,
                 LoginId = loginId,
-                Catalog = catalog,
+                Database = database,
                 AccessType = type
             };
 

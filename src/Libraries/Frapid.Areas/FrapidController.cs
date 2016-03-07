@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Dynamic;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Mime;
 using System.Security.Claims;
@@ -13,6 +15,8 @@ using Frapid.i18n;
 using Frapid.TokenManager;
 using Frapid.TokenManager.DAL;
 using Microsoft.AspNet.Identity;
+using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
 
 namespace Frapid.Areas
@@ -22,6 +26,39 @@ namespace Frapid.Areas
         public RemoteUser RemoteUser { get; private set; }
         public MetaUser MetaUser { get; set; }
 
+        protected new virtual ContentResult View(string viewName, object model)
+        {
+            var controllerContext = this.ControllerContext;
+            var result = ViewEngines.Engines.FindView(controllerContext, viewName, null);
+
+            StringWriter output;
+            using (output = new StringWriter())
+            {
+                var dictionary = new ViewDataDictionary(model);
+
+                var dynamic = this.ViewBag as DynamicObject;
+
+                if (dynamic != null)
+                {
+                    var members = dynamic.GetDynamicMemberNames().ToList();
+
+                    foreach (string member in members)
+                    {
+                        var value = Versioned.CallByName(dynamic, member, CallType.Get);
+                        dictionary.Add(member, value);
+                    }
+                }
+
+
+                var viewContext = new ViewContext(controllerContext, result.View, dictionary,
+                    controllerContext.Controller.TempData, output);
+                result.View.Render(viewContext, output);
+                result.ViewEngine.ReleaseView(controllerContext, result.View);
+            }
+
+            return this.Content(CdnHelper.UseCdn(output.ToString()), "text/html");
+        }
+
         protected override void OnActionExecuting(ActionExecutingContext context)
         {
             this.RemoteUser = new RemoteUser
@@ -29,16 +66,17 @@ namespace Frapid.Areas
                 Browser = this.Request?.Browser.Browser,
                 IpAddress = this.Request?.UserHostAddress,
                 Culture = CultureManager.GetCurrent().Name,
-                UserAgent = this.Request?.UserAgent
+                UserAgent = this.Request?.UserAgent,
+                Country = this.Request?.ServerVariables["HTTP_CF_IPCOUNTRY"]
             };
         }
 
         protected override void Initialize(RequestContext context)
         {
             string clientToken = context.HttpContext.Request.GetClientToken();
-            var provider = new Provider(DbConvention.GetCatalog());
+            var provider = new Provider(DbConvention.GetTenant());
             var token = provider.GetToken(clientToken);
-            string catalog = DbConvention.GetCatalog();
+            string tenant = DbConvention.GetTenant();
 
             if (token != null)
             {
@@ -47,12 +85,12 @@ namespace Frapid.Areas
 
                 if (isValid)
                 {
-                    AppUsers.SetCurrentLogin(catalog, token.LoginId);
-                    var loginView = AppUsers.GetCurrent(catalog, token.LoginId);
+                    AppUsers.SetCurrentLogin(tenant, token.LoginId);
+                    var loginView = AppUsers.GetCurrent(tenant, token.LoginId);
 
                     this.MetaUser = new MetaUser
                     {
-                        Catalog = catalog,
+                        Tenant = tenant,
                         ClientToken = token.ClientToken,
                         LoginId = token.LoginId,
                         UserId = token.UserId,
@@ -94,7 +132,7 @@ namespace Frapid.Areas
 
         protected ActionResult Failed(string message, HttpStatusCode statusCode)
         {
-            this.Response.StatusCode = (int)statusCode;
+            this.Response.StatusCode = (int) statusCode;
             return this.Content(message, MediaTypeNames.Text.Plain, Encoding.UTF8);
         }
     }

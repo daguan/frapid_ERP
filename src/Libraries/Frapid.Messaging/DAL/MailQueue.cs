@@ -6,9 +6,9 @@ namespace Frapid.Messaging.DAL
 {
     internal static class MailQueue
     {
-        public static void AddToQueue(string catalog, EmailQueue queue)
+        public static void AddToQueue(string database, EmailQueue queue)
         {
-            Factory.Insert(catalog, queue, "config.email_queue", "queue_id");
+            Factory.Insert(database, queue, "config.email_queue", "queue_id");
         }
 
         public static IEnumerable<EmailQueue> GetMailInQueue(string catlog)
@@ -17,11 +17,11 @@ namespace Frapid.Messaging.DAL
             return Factory.Get<EmailQueue>(catlog, sql);
         }
 
-        public static void SetSuccess(string catalog, long queueId)
+        public static void SetSuccess(string database, long queueId)
         {
             const string sql =
                 "UPDATE config.email_queue SET delivered = true, delivered_on = NOW() WHERE queue_id = @0;";
-            Factory.NonQuery(catalog, sql, queueId);
+            Factory.NonQuery(database, sql, queueId);
         }
     }
 }

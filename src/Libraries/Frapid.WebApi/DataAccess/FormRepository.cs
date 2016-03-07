@@ -15,14 +15,14 @@ namespace Frapid.WebApi.DataAccess
 {
     public class FormRepository : DbAccess, IFormRepository
     {
-        public FormRepository(string schemaName, string tableName, string catalog, long loginId, int userId)
+        public FormRepository(string schemaName, string tableName, string database, long loginId, int userId)
         {
             this._ObjectNamespace = Sanitizer.SanitizeIdentifierName(schemaName);
             this._ObjectName = Sanitizer.SanitizeIdentifierName(tableName.Replace("-", "_"));
             this.LoginId = AppUsers.GetCurrent().LoginId;
             this.OfficeId = AppUsers.GetCurrent().OfficeId;
             this.UserId = AppUsers.GetCurrent().UserId;
-            this.Catalog = catalog;
+            this.Database = database;
             this.LoginId = loginId;
             this.UserId = userId;
 
@@ -40,7 +40,7 @@ namespace Frapid.WebApi.DataAccess
         public string FullyQualifiedObjectName { get; set; }
         public string PrimaryKey { get; set; }
         public string NameColumn { get; set; }
-        public string Catalog { get; set; }
+        public string Database { get; set; }
         public int UserId { get; set; }
         public bool IsValid { get; set; }
         public long LoginId { get; set; }
@@ -49,7 +49,7 @@ namespace Frapid.WebApi.DataAccess
 
         public long Count()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return 0;
             }
@@ -58,7 +58,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -69,12 +69,12 @@ namespace Frapid.WebApi.DataAccess
             }
 
             string sql = $"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName};";
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this.Database, sql);
         }
 
         public IEnumerable<dynamic> GetAll()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -83,7 +83,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.ExportData, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.ExportData, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -99,12 +99,12 @@ namespace Frapid.WebApi.DataAccess
                 sql += $" ORDER BY {this.PrimaryKey}";
             }
 
-            return Factory.Get<dynamic>(this.Catalog, sql);
+            return Factory.Get<dynamic>(this.Database, sql);
         }
 
         public dynamic Get(object primaryKey)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -113,7 +113,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -130,12 +130,12 @@ namespace Frapid.WebApi.DataAccess
 
 
             string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE {this.PrimaryKey}=@0;";
-            return Factory.Get<dynamic>(this.Catalog, sql, primaryKey).FirstOrDefault();
+            return Factory.Get<dynamic>(this.Database, sql, primaryKey).FirstOrDefault();
         }
 
         public dynamic GetFirst()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -144,7 +144,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -155,12 +155,12 @@ namespace Frapid.WebApi.DataAccess
             }
 
             string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} ORDER BY {this.PrimaryKey} LIMIT 1;";
-            return Factory.Get<dynamic>(this.Catalog, sql).FirstOrDefault();
+            return Factory.Get<dynamic>(this.Database, sql).FirstOrDefault();
         }
 
         public dynamic GetPrevious(object primaryKey)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -169,7 +169,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -181,12 +181,12 @@ namespace Frapid.WebApi.DataAccess
 
             string sql =
                 $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE {this.PrimaryKey} < @0 ORDER BY {this.PrimaryKey} DESC LIMIT 1;";
-            return Factory.Get<dynamic>(this.Catalog, sql, primaryKey).FirstOrDefault();
+            return Factory.Get<dynamic>(this.Database, sql, primaryKey).FirstOrDefault();
         }
 
         public dynamic GetNext(object primaryKey)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -195,7 +195,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -207,13 +207,13 @@ namespace Frapid.WebApi.DataAccess
 
             string sql =
                 $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE {this.PrimaryKey} > @0 ORDER BY {this.PrimaryKey} LIMIT 1;";
-            return Factory.Get<dynamic>(this.Catalog, sql, primaryKey).FirstOrDefault();
+            return Factory.Get<dynamic>(this.Database, sql, primaryKey).FirstOrDefault();
         }
 
 
         public dynamic GetLast()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -222,7 +222,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -233,12 +233,12 @@ namespace Frapid.WebApi.DataAccess
             }
 
             string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} ORDER BY {this.PrimaryKey} DESC LIMIT 1;";
-            return Factory.Get<dynamic>(this.Catalog, sql).FirstOrDefault();
+            return Factory.Get<dynamic>(this.Database, sql).FirstOrDefault();
         }
 
         public IEnumerable<dynamic> Get(object[] primaryKeys)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -247,7 +247,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -259,12 +259,12 @@ namespace Frapid.WebApi.DataAccess
 
             string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE {this.PrimaryKey} IN (@primaryKeys);";
 
-            return Factory.Get<dynamic>(this.Catalog, sql, new {primaryKeys});
+            return Factory.Get<dynamic>(this.Database, sql, new {primaryKeys});
         }
 
         public IEnumerable<CustomField> GetCustomFields(string resourceId)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -273,7 +273,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -288,17 +288,17 @@ namespace Frapid.WebApi.DataAccess
             {
                 sql =
                     $"SELECT * FROM config.custom_field_definition_view WHERE table_name='{this.FullyQualifiedObjectName}' ORDER BY field_order;";
-                return Factory.Get<CustomField>(this.Catalog, sql);
+                return Factory.Get<CustomField>(this.Database, sql);
             }
 
             sql =
                 $"SELECT * from config.get_custom_field_definition('{this.FullyQualifiedObjectName}'::text, @0::text) ORDER BY field_order;";
-            return Factory.Get<CustomField>(this.Catalog, sql, resourceId);
+            return Factory.Get<CustomField>(this.Database, sql, resourceId);
         }
 
         public IEnumerable<DisplayField> GetDisplayFields()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return new List<DisplayField>();
             }
@@ -307,7 +307,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -320,12 +320,12 @@ namespace Frapid.WebApi.DataAccess
 
             string sql =
                 $"SELECT {this.PrimaryKey} AS key, {this.NameColumn} as value FROM {this.FullyQualifiedObjectName};";
-            return Factory.Get<DisplayField>(this.Catalog, sql);
+            return Factory.Get<DisplayField>(this.Database, sql);
         }
 
         public object AddOrEdit(dynamic item, List<CustomField> customFields)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -350,7 +350,7 @@ namespace Frapid.WebApi.DataAccess
                          "WHERE form_name=config.get_custom_field_form_name('{this.FullyQualifiedObjectName}')" +
                          ");";
 
-            Factory.NonQuery(this.Catalog, sql);
+            Factory.NonQuery(this.Database, sql);
 
             if (customFields == null)
             {
@@ -363,7 +363,7 @@ namespace Frapid.WebApi.DataAccess
                       "SELECT config.get_custom_field_setup_id_by_table_name('{this.FullyQualifiedObjectName}', @0::character varying(100)), " +
                       "@1, @2;";
 
-                Factory.NonQuery(this.Catalog, sql, field.FieldName, primaryKeyValue, field.Value);
+                Factory.NonQuery(this.Database, sql, field.FieldName, primaryKeyValue, field.Value);
             }
 
             return primaryKeyValue;
@@ -371,7 +371,7 @@ namespace Frapid.WebApi.DataAccess
 
         public object Add(dynamic item)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -380,7 +380,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Create, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Create, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -390,7 +390,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            return Factory.Insert(this.Catalog, item, this.FullyQualifiedObjectName, this.PrimaryKey);
+            return Factory.Insert(this.Database, item, this.FullyQualifiedObjectName, this.PrimaryKey);
         }
 
         public List<object> BulkImport(List<ExpandoObject> items)
@@ -399,7 +399,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.ImportData, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.ImportData, this.LoginId, this.Database, false);
                 }
 
                 if (!this.HasAccess)
@@ -414,7 +414,7 @@ namespace Frapid.WebApi.DataAccess
             int line = 0;
             try
             {
-                using (var db = new Database(ConnectionString.GetConnectionString(this.Catalog), Factory.ProviderName))
+                using (var db = new Database(ConnectionString.GetConnectionString(this.Database), Factory.ProviderName))
                 {
                     using (var transaction = db.GetTransaction())
                     {
@@ -453,7 +453,7 @@ namespace Frapid.WebApi.DataAccess
 
         public void Update(dynamic item, object primaryKey)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return;
             }
@@ -462,7 +462,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Edit, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Edit, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -472,12 +472,12 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            Factory.Update(this.Catalog, item, primaryKey, this.FullyQualifiedObjectName, this.PrimaryKey);
+            Factory.Update(this.Database, item, primaryKey, this.FullyQualifiedObjectName, this.PrimaryKey);
         }
 
         public void Delete(object primaryKey)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return;
             }
@@ -486,7 +486,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Delete, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Delete, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -497,12 +497,12 @@ namespace Frapid.WebApi.DataAccess
             }
 
             string sql = $"DELETE FROM {this.FullyQualifiedObjectName} WHERE {this.PrimaryKey}=@0;";
-            Factory.NonQuery(this.Catalog, sql, primaryKey);
+            Factory.NonQuery(this.Database, sql, primaryKey);
         }
 
         public IEnumerable<dynamic> GetPaginatedResult()
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -511,7 +511,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -522,12 +522,12 @@ namespace Frapid.WebApi.DataAccess
             }
 
             string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} ORDER BY {this.PrimaryKey} LIMIT 50 OFFSET 0;";
-            return Factory.Get<dynamic>(this.Catalog, sql);
+            return Factory.Get<dynamic>(this.Database, sql);
         }
 
         public IEnumerable<dynamic> GetPaginatedResult(long pageNumber)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -536,7 +536,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -549,19 +549,19 @@ namespace Frapid.WebApi.DataAccess
             long offset = (pageNumber - 1)*50;
             string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} ORDER BY {this.PrimaryKey} LIMIT 50 OFFSET @0;";
 
-            return Factory.Get<dynamic>(this.Catalog, sql, offset);
+            return Factory.Get<dynamic>(this.Database, sql, offset);
         }
 
-        public List<Filter> GetFilters(string catalog, string filterName)
+        public List<Filter> GetFilters(string database, string filterName)
         {
             string sql =
                 $"SELECT * FROM config.filters WHERE object_name='{this.FullyQualifiedObjectName}' AND lower(filter_name)=lower(@0);";
-            return Factory.Get<Filter>(catalog, sql, filterName).ToList();
+            return Factory.Get<Filter>(database, sql, filterName).ToList();
         }
 
         public long CountWhere(List<Filter> filters)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return 0;
             }
@@ -570,7 +570,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -583,12 +583,12 @@ namespace Frapid.WebApi.DataAccess
             var sql = Sql.Builder.Append($"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
             FilterManager.AddFilters(ref sql, filters);
 
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this.Database, sql);
         }
 
         public IEnumerable<dynamic> GetWhere(long pageNumber, List<Filter> filters)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -597,7 +597,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -623,12 +623,12 @@ namespace Frapid.WebApi.DataAccess
                 sql.Append("OFFSET @0", offset);
             }
 
-            return Factory.Get<dynamic>(this.Catalog, sql);
+            return Factory.Get<dynamic>(this.Database, sql);
         }
 
         public long CountFiltered(string filterName)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return 0;
             }
@@ -637,7 +637,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -647,16 +647,16 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            var filters = this.GetFilters(this.Catalog, filterName);
+            var filters = this.GetFilters(this.Database, filterName);
             var sql = Sql.Builder.Append($"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
             FilterManager.AddFilters(ref sql, filters);
 
-            return Factory.Scalar<long>(this.Catalog, sql);
+            return Factory.Scalar<long>(this.Database, sql);
         }
 
         public IEnumerable<dynamic> GetFiltered(long pageNumber, string filterName)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -665,7 +665,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -675,7 +675,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            var filters = this.GetFilters(this.Catalog, filterName);
+            var filters = this.GetFilters(this.Database, filterName);
 
             long offset = (pageNumber - 1)*50;
             var sql = Sql.Builder.Append($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
@@ -693,7 +693,7 @@ namespace Frapid.WebApi.DataAccess
                 sql.Append("OFFSET @0", offset);
             }
 
-            return Factory.Get<dynamic>(this.Catalog, sql);
+            return Factory.Get<dynamic>(this.Database, sql);
         }
 
         private string GetTableName()
@@ -727,7 +727,7 @@ namespace Frapid.WebApi.DataAccess
 
         public EntityView GetMeta()
         {
-            return EntityView.Get(this.Catalog, this.PrimaryKey, this._ObjectNamespace, this.GetTableName());
+            return EntityView.Get(this.Database, this.PrimaryKey, this._ObjectNamespace, this.GetTableName());
         }
     }
 }

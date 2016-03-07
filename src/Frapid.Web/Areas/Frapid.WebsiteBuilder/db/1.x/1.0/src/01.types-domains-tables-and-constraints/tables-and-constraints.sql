@@ -1,6 +1,22 @@
 DROP SCHEMA IF EXISTS website CASCADE; --WEB BUILDER
 CREATE SCHEMA website;
 
+CREATE TABLE website.configurations
+(
+    configuration_id                                SERIAL PRIMARY KEY,
+    domain_name                                     national character varying(500) NOT NULL,
+    website_name                                    national character varying(500) NOT NULL,
+	description										text,
+	blog_title                                      national character varying(500),
+	blog_description							    text,	
+	is_default                                      boolean NOT NULL DEFAULT(true),
+    audit_user_id                                   integer REFERENCES account.users,
+    audit_ts                                        TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW())
+);
+
+CREATE UNIQUE INDEX configuration_domain_name_uix
+ON website.configurations(LOWER(domain_name));
+
 CREATE TABLE website.email_subscriptions
 (
     email_subscription_id                       uuid PRIMARY KEY DEFAULT(gen_random_uuid()),
@@ -22,6 +38,7 @@ CREATE TABLE website.categories
     category_name                               national character varying(100) NOT NULL,
     alias                                       national character varying(50) NOT NULL UNIQUE,
     seo_description                             national character varying(100),
+	is_blog										boolean NOT NULL DEFAULT(false),
     audit_user_id                               integer REFERENCES account.users,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
                                                 DEFAULT(NOW())    
@@ -31,10 +48,13 @@ CREATE TABLE website.contents
 (
     content_id                                  SERIAL NOT NULL PRIMARY KEY,
     category_id                                 integer NOT NULL REFERENCES website.categories,
-    title                                       national character varying(100) NOT NULL,
-    alias                                       national character varying(50) NOT NULL UNIQUE,
+    title                                       national character varying(500) NOT NULL,
+    alias                                       national character varying(250) NOT NULL UNIQUE,
     author_id                                   integer REFERENCES account.users,
     publish_on                                  TIMESTAMP WITH TIME ZONE NOT NULL,
+	created_on									TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
+    last_editor_id                              integer REFERENCES account.users,
+	last_edited_on							    TIMESTAMP WITH TIME ZONE,
     markdown                                    text,
     contents                                    text NOT NULL,
     tags                                        text,

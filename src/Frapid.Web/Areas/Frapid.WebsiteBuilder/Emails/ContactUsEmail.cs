@@ -16,18 +16,18 @@ namespace Frapid.WebsiteBuilder.Emails
 {
     public class ContactUsEmail
     {
-        private const string TemplatePath = "~/Catalogs/{0}/Areas/Frapid.WebsiteBuilder/EmailTemplates/contact-us.html";
+        private const string TemplatePath = "~/Tenants/{0}/Areas/Frapid.WebsiteBuilder/EmailTemplates/contact-us.html";
 
         private string ConvertLines(string message)
         {
             return Regex.Replace(message, @"\r\n?|\n", "<br />");
         }
 
-        private string GetMessage(string catalog, ContactForm model)
+        private string GetMessage(string tenant, ContactForm model)
         {
             string fallback = model.Email + " wrote : <br/><br/>" + this.ConvertLines(model.Message);
 
-            string file = HostingEnvironment.MapPath(string.Format(CultureInfo.InvariantCulture, TemplatePath, catalog));
+            string file = HostingEnvironment.MapPath(string.Format(CultureInfo.InvariantCulture, TemplatePath, tenant));
 
             if (file == null || !File.Exists(file))
             {
@@ -48,9 +48,9 @@ namespace Frapid.WebsiteBuilder.Emails
             return message;
         }
 
-        private string GetEmails(string catalog, int contactId)
+        private string GetEmails(string tenant, int contactId)
         {
-            var config = EmailProcessor.GetDefaultConfig(catalog);
+            var config = EmailProcessor.GetDefaultConfig(tenant);
             var contact = DAL.Contacts.GetContact(contactId);
 
             if (contact == null)
@@ -61,7 +61,7 @@ namespace Frapid.WebsiteBuilder.Emails
             return !string.IsNullOrWhiteSpace(contact.Recipients) ? contact.Recipients : contact.Email;
         }
 
-        private EmailQueue GetEmail(string catalog, ContactForm model)
+        private EmailQueue GetEmail(string tenant, ContactForm model)
         {
             return new EmailQueue
             {
@@ -69,20 +69,20 @@ namespace Frapid.WebsiteBuilder.Emails
                 FromName = model.Name,
                 ReplyTo = model.Email,
                 Subject = model.Subject,
-                Message = this.GetMessage(catalog, model),
-                SendTo = this.GetEmails(catalog, model.ContactId)
+                Message = this.GetMessage(tenant, model),
+                SendTo = this.GetEmails(tenant, model.ContactId)
             };
         }
 
-        public async Task SendAsync(string catalog, ContactForm model)
+        public async Task SendAsync(string tenant, ContactForm model)
         {
             try
             {
-                var email = this.GetEmail(catalog, model);
-                var manager = new MailQueueManager(catalog, email);
+                var email = this.GetEmail(tenant, model);
+                var manager = new MailQueueManager(tenant, email);
                 manager.Add();
 
-                var processor = EmailProcessor.GetDefault(catalog);
+                var processor = EmailProcessor.GetDefault(tenant);
 
                 if (string.IsNullOrWhiteSpace(email.ReplyTo))
                 {

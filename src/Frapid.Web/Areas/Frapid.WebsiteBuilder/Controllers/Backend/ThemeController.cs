@@ -77,8 +77,8 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
                 return this.Failed("Invalid theme name", HttpStatusCode.BadRequest);
             }
 
-            string catalog = DbConvention.GetCatalog();
-            string path = $"~/Catalogs/{catalog}/Areas/Frapid.WebsiteBuilder/Themes/{themeName}/";
+            string tenant = DbConvention.GetTenant();
+            string path = $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{themeName}/";
             path = HostingEnvironment.MapPath(path);
 
             if (path == null || !Directory.Exists(path))

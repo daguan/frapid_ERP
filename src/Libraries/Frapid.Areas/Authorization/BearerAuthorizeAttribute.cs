@@ -17,9 +17,9 @@ namespace Frapid.Areas.Authorization
         public override bool AuthorizeHubConnection(HubDescriptor descriptor, IRequest request)
         {
             string clientToken = request.GetClientToken();
-            var provider = new Provider(DbConvention.GetCatalog());
+            var provider = new Provider(DbConvention.GetTenant());
             var token = provider.GetToken(clientToken);
-            string catalog = DbConvention.GetCatalog();
+            string tenant = DbConvention.GetTenant();
 
             if (token != null)
             {
@@ -28,8 +28,8 @@ namespace Frapid.Areas.Authorization
 
                 if (isValid)
                 {
-                    AppUsers.SetCurrentLogin(catalog, token.LoginId);
-                    var loginView = AppUsers.GetCurrent(catalog, token.LoginId);
+                    AppUsers.SetCurrentLogin(tenant, token.LoginId);
+                    var loginView = AppUsers.GetCurrent(tenant, token.LoginId);
 
                     var identity = new ClaimsIdentity(token.Claims, DefaultAuthenticationTypes.ApplicationCookie,
                         ClaimTypes.NameIdentifier, ClaimTypes.Role);

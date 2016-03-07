@@ -10,15 +10,15 @@ namespace Frapid.TokenManager
 {
     public class Provider
     {
-        public Provider(string catalog) : this(catalog, null, long.MinValue)
+        public Provider(string database) : this(database, null, long.MinValue)
         {
         }
 
-        public Provider(string catalog, Guid? applicationId, long loginId)
+        public Provider(string database, Guid? applicationId, long loginId)
         {
             this.ApplicationId = applicationId;
             this.LoginId = loginId;
-            this.Catalog = catalog;
+            this.Database = database;
             this.TokenIssuerName = TokenConfig.TokenIssuerName;
             this.TokenValidHours = TokenConfig.TokenValidHours;
             this.Algorithm = TokenConfig.Algorithm;
@@ -26,7 +26,7 @@ namespace Frapid.TokenManager
         }
 
         public Guid? ApplicationId { get; set; }
-        public string Catalog { get; set; }
+        public string Database { get; set; }
         public long LoginId { get; set; }
         public string TokenIssuerName { get; set; }
         public int TokenValidHours { get; set; }
@@ -40,11 +40,11 @@ namespace Frapid.TokenManager
             token.AddHeader("typ", "JWT");
 
             token.IssuedBy = this.TokenIssuerName;
-            token.Audience = this.Catalog;
+            token.Audience = this.Database;
             token.CreatedOn = DateTime.UtcNow;
             token.ExpiresOn = DateTime.UtcNow.AddHours(this.TokenValidHours);
-            token.Subject = this.Catalog;
-            token.TokenId = this.Catalog + this.LoginId;
+            token.Subject = this.Database;
+            token.TokenId = this.Database + this.LoginId;
             token.LoginId = this.LoginId;
             token.ApplicationId = this.ApplicationId;
             token.ClientToken = this.Encode(token);

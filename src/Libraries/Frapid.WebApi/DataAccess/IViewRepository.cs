@@ -36,7 +36,7 @@ namespace Frapid.WebApi.DataAccess
         /// <returns>Returns collection of rows.</returns>
         IEnumerable<dynamic> GetPaginatedResult(long pageNumber);
 
-        List<Filter> GetFilters(string catalog, string filterName);
+        List<Filter> GetFilters(string database, string filterName);
 
         /// <summary>
         /// Performs a filtered count on IViewRepository.

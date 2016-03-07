@@ -14,9 +14,9 @@ namespace Frapid.SendGridMail
         public IEmailConfig Config { get; set; }
         public bool IsEnabled { get; set; }
 
-        public void InitializeConfig(string catalog)
+        public void InitializeConfig(string database)
         {
-            var config = SendGridMail.Config.Get(catalog);
+            var config = SendGridMail.Config.Get(database);
             this.Config = config;
 
             this.IsEnabled = this.Config.Enabled;

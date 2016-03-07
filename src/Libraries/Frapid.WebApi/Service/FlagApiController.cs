@@ -15,7 +15,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FlagRepository(this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FlagRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.Get(resource, userId, resourceIds);
             }
             catch (UnauthorizedException)

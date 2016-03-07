@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace Frapid.Configuration
 {
     public class ApprovedDomain
     {
         public string DomainName { get; set; }
-
+        public bool EnforceSsl { get; set; }
         public string CdnPrefix { get; set; }
         public string AdminEmail { get; set; }
 
         public string[] Synonyms { get; set; }
+
+        public object Do { get; internal set; }
 
         public List<string> GetSubtenants()
         {
@@ -24,7 +25,5 @@ namespace Frapid.Configuration
 
             return subtenants;
         }
-
-        public object Do { get; internal set; }
     }
 }

@@ -78,7 +78,7 @@ namespace Frapid.Account.RemoteAuthentication
             {
                 if (!Registrations.HasAccount(account.Email))
                 {
-                    string template = "~/Catalogs/{catalog}/Areas/Frapid.Account/EmailTemplates/welcome-email-other.html";
+                    string template = "~/Tenants/{tenant}/Areas/Frapid.Account/EmailTemplates/welcome-email-other.html";
                     var welcomeEmail = new WelcomeEmail(gUser, template, ProviderName);
                     await welcomeEmail.SendAsync();
                 }

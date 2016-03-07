@@ -22,14 +22,14 @@ namespace Frapid.Account.Emails
             this._user = user;
             this._provider = provider;
             this._template = string.IsNullOrWhiteSpace(template)
-                ? "~/Catalogs/{catalog}/Areas/Frapid.Account/EmailTemplates/welcome-email.html"
+                ? "~/Tenants/{tenant}/Areas/Frapid.Account/EmailTemplates/welcome-email.html"
                 : template;
         }
 
         private string GetTemplate()
         {
             string path = this._template;
-            path = path.Replace("{catalog}", AppUsers.GetCatalog());
+            path = path.Replace("{tenant}", AppUsers.GetTenant());
             path = HostingEnvironment.MapPath(path);
 
             if (!File.Exists(path))
@@ -69,17 +69,17 @@ namespace Frapid.Account.Emails
             string template = this.GetTemplate();
             string parsed = this.ParseTemplate(template);
             string subject = "Welcome to " + HttpContext.Current.Request.Url.Authority;
-            string catalog = AppUsers.GetCatalog();
+            string tenant = AppUsers.GetTenant();
             var email = this.GetEmail(this._user, subject, parsed);
 
-            var processor = EmailProcessor.GetDefault(catalog);
+            var processor = EmailProcessor.GetDefault(tenant);
 
             if (string.IsNullOrWhiteSpace(email.ReplyTo))
             {
                 email.ReplyTo = processor.Config.FromEmail;
             }
 
-            var queue = new MailQueueManager(catalog, email);
+            var queue = new MailQueueManager(tenant, email);
             queue.Add();
             await queue.ProcessMailQueueAsync(processor);
         }

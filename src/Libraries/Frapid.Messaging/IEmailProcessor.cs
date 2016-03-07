@@ -6,7 +6,7 @@ namespace Frapid.Messaging
     public interface IEmailProcessor
     {
         bool IsEnabled { get; set; }
-        void InitializeConfig(string catalog);
+        void InitializeConfig(string database);
 
         IEmailConfig Config { get; set; }
         Task<bool> SendAsync(EmailMessage email);

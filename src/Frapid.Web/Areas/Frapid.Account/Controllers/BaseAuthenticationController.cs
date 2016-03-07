@@ -44,7 +44,7 @@ namespace Frapid.Account.Controllers
                 applicationId = model.ApplicationId;
             }
 
-            var manager = new Provider(AppUsers.GetCatalog(), applicationId, result.LoginId);
+            var manager = new Provider(AppUsers.GetTenant(), applicationId, result.LoginId);
             var token = manager.GetToken();
             string domain = DbConvention.GetDomain();
 

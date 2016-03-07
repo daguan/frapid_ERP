@@ -7,12 +7,12 @@ namespace Frapid.Account
 {
     public class Configuration
     {
-        private const string Path = "~/Catalogs/{0}/Areas/Frapid.Account/";
+        private const string Path = "~/Tenants/{0}/Areas/Frapid.Account/";
 
         public static string GetOverridePath()
         {
-            string catalog = AppUsers.GetCatalog();
-            string path = HostingEnvironment.MapPath(string.Format(CultureInfo.InvariantCulture, Path, catalog));
+            string tenant = AppUsers.GetTenant();
+            string path = HostingEnvironment.MapPath(string.Format(CultureInfo.InvariantCulture, Path, tenant));
 
             return path != null && !Directory.Exists(path) ? string.Empty : path;
         }

@@ -24,8 +24,8 @@ namespace Frapid.Account.Emails
 
         private string GetTemplate()
         {
-            string path = "~/Catalogs/{catalog}/Areas/Frapid.Account/EmailTemplates/account-verification.html";
-            path = path.Replace("{catalog}", AppUsers.GetCatalog());
+            string path = $"~/Tenants/{AppUsers.GetTenant()}/Areas/Frapid.Account/EmailTemplates/account-verification.html";
+
             path = HostingEnvironment.MapPath(path);
 
             if (!File.Exists(path))
@@ -67,17 +67,17 @@ namespace Frapid.Account.Emails
             string parsed = this.ParseTemplate(template);
             string subject = "Confirm Your Registration at " + HttpContext.Current.Request.Url.Authority;
 
-            string catalog = AppUsers.GetCatalog();
+            string tenant = AppUsers.GetTenant();
 
             var email = this.GetEmail(this._registration, subject, parsed);
 
-            var processor = EmailProcessor.GetDefault(catalog);
+            var processor = EmailProcessor.GetDefault(tenant);
             if (string.IsNullOrWhiteSpace(email.ReplyTo))
             {
                 email.ReplyTo = processor.Config.FromEmail;
             }
 
-            var queue = new MailQueueManager(catalog, email);
+            var queue = new MailQueueManager(tenant, email);
 
             queue.Add();
             await queue.ProcessMailQueueAsync(processor);

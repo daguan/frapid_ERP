@@ -1,12 +1,9 @@
-using System;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using Frapid.Configuration;
-using Frapid.Framework.Extensions;
 
 namespace Frapid.WebsiteBuilder.Controllers
 {
@@ -20,7 +17,7 @@ namespace Frapid.WebsiteBuilder.Controllers
                 return HttpNotFound();
             }
 
-            var allowed = FrapidConfig.GetMyAllowedResources(DbConvention.GetCatalog());
+            var allowed = FrapidConfig.GetMyAllowedResources(DbConvention.GetTenant());
 
             if (string.IsNullOrWhiteSpace(resource) || allowed.Count().Equals(0))
             {

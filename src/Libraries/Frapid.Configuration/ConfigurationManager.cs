@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Web.Hosting;
+using Serilog;
 
 namespace Frapid.Configuration
 {
@@ -13,14 +14,19 @@ namespace Frapid.Configuration
         /// <returns>Returns the configuration value of the requested key.</returns>
         public static string GetConfigurationValue(string configFileName, string key)
         {
+            Log.Verbose($"Getting configuration key \"{key}\" on config file \"{configFileName}\".");
+
             if (configFileName == null)
             {
+                Log.Verbose($"Empty string returned for the key \"{key}\" because no config file name was provided.");
                 return string.Empty;
             }
 
             string fileName = System.Configuration.ConfigurationManager.AppSettings[configFileName];
+            Log.Verbose($"Configuration file for \"{configFileName}\" is {fileName}.");
 
             string path = HostingEnvironment.MapPath(fileName);
+
             return ReadConfigurationValue(path, key);
         }
 

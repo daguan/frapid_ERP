@@ -16,10 +16,10 @@ namespace Frapid.Mailgun
         public string SecretKey { get; set; }
         public bool Enabled { get; set; }
 
-        public static Config Get(string catalog)
+        public static Config Get(string tenant)
         {
-            string path = "~/Catalogs/{0}/Configs/SMTP/Mailgun.json";
-            path = string.Format(CultureInfo.InvariantCulture, path, catalog);
+            string path = "~/Tenants/{0}/Configs/SMTP/Mailgun.json";
+            path = string.Format(CultureInfo.InvariantCulture, path, tenant);
             path = HostingEnvironment.MapPath(path);
 
             if (path == null || !File.Exists(path))

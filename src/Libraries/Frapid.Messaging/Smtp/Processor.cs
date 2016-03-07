@@ -17,9 +17,9 @@ namespace Frapid.Messaging.Smtp
         public ICredentials Credentials { get; private set; }
         public bool IsEnabled { get; set; }
 
-        public void InitializeConfig(string catalog)
+        public void InitializeConfig(string database)
         {
-            var config = new Config(catalog);
+            var config = new Config(database);
             var host = EmailHelper.GetSmtpHost(config);
             var credentials = EmailHelper.GetCredentials(config);
 

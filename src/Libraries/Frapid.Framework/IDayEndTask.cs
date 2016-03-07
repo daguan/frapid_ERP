@@ -2,7 +2,7 @@
 {
     public interface IDayEndTask
     {
-        string[] Catalogs { get; set; }
+        string[] Tenants { get; set; }
         string Description { get; set; }
         void Register();
     }

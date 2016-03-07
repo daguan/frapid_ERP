@@ -15,10 +15,10 @@ namespace Frapid.SendGridMail
         public string FromEmail { get; set; }
         public bool Enabled { get; set; }
 
-        public static Config Get(string catalog)
+        public static Config Get(string tenant)
         {
-            string path = "~/Catalogs/{0}/Configs/SMTP/SendGrid.json";
-            path = string.Format(CultureInfo.InvariantCulture, path, catalog);
+            string path = "~/Tenants/{0}/Configs/SMTP/SendGrid.json";
+            path = string.Format(CultureInfo.InvariantCulture, path, tenant);
             path = HostingEnvironment.MapPath(path);
 
             if (path == null || !File.Exists(path))

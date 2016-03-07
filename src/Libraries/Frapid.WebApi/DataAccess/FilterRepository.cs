@@ -15,24 +15,24 @@ namespace Frapid.WebApi.DataAccess
         public override string _ObjectNamespace { get; }
         public override string _ObjectName { get; }
         public string NameColumn { get; set; }
-        public string Catalog { get; set; }
+        public string Database { get; set; }
         public int UserId { get; set; }
         public bool IsValid { get; set; }
         public long LoginId { get; set; }
         public int OfficeId { get; set; }
 
-        public FilterRepository(string catalog, long loginId, int userId)
+        public FilterRepository(string database, long loginId, int userId)
         {
             this._ObjectNamespace = "config";
             this._ObjectName = "filters";
-            this.Catalog = catalog;
+            this.Database = database;
             this.LoginId = loginId;
             this.UserId = userId;
         }
 
         public IEnumerable<dynamic> GetWhere(long pageNumber, List<Filter> filters)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -41,7 +41,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -63,7 +63,7 @@ namespace Frapid.WebApi.DataAccess
                 sql.Append("OFFSET @0", offset);
             }
 
-            return Factory.Get<dynamic>(this.Catalog, sql);
+            return Factory.Get<dynamic>(this.Database, sql);
         }
 
         public void MakeDefault(string objectName, string filterName)
@@ -72,7 +72,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.CreateFilter, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.CreateFilter, this.LoginId, this.Database, false);
                 }
 
                 if (!this.HasAccess)
@@ -83,7 +83,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             const string sql = "UPDATE config.filters SET is_default=true WHERE object_name=@0 AND filter_name=@1;";
-            Factory.NonQuery(this.Catalog, sql, objectName, filterName);
+            Factory.NonQuery(this.Database, sql, objectName, filterName);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Frapid.WebApi.DataAccess
         /// <exception cref="UnauthorizedException">Thown when the application user does not have sufficient privilege to perform this action.</exception>
         public void Delete(string filterName)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return;
             }
@@ -102,7 +102,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Delete, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Delete, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -112,7 +112,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             const string sql = "DELETE FROM config.filters WHERE filter_name=@0;";
-            Factory.NonQuery(this.Catalog, sql, filterName);
+            Factory.NonQuery(this.Database, sql, filterName);
         }
 
         public void RecreateFilters(string objectName, string filterName, List<ExpandoObject> filters)
@@ -121,7 +121,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Create, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Create, this.LoginId, this.Database, false);
                 }
 
                 if (!this.HasAccess)
@@ -132,7 +132,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
 
-            using (var db = new Database(ConnectionString.GetConnectionString(this.Catalog), Factory.ProviderName))
+            using (var db = new Database(ConnectionString.GetConnectionString(this.Database), Factory.ProviderName))
             {
                 using (var transaction = db.GetTransaction())
                 {
@@ -168,7 +168,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.CreateFilter, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.CreateFilter, this.LoginId, this.Database, false);
                 }
 
                 if (!this.HasAccess)
@@ -179,7 +179,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             const string sql = "UPDATE config.filters SET is_default=false WHERE object_name=@0;";
-            Factory.NonQuery(this.Catalog, sql, objectName);
+            Factory.NonQuery(this.Database, sql, objectName);
         }
     }
 }

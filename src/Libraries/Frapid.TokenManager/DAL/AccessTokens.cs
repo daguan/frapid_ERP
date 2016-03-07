@@ -8,7 +8,7 @@ namespace Frapid.TokenManager.DAL
         public static bool IsValid(string clientToken, string ipAddress, string userAgent)
         {
             const string sql = "SELECT * FROM account.is_valid_client_token(@0, @1, @2);";
-            return Factory.Scalar<bool>(DbConvention.GetCatalog(), sql, clientToken, ipAddress, userAgent);
+            return Factory.Scalar<bool>(DbConvention.GetTenant(), sql, clientToken, ipAddress, userAgent);
         }
     }
 }

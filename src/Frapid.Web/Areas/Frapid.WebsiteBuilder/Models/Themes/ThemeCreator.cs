@@ -19,8 +19,8 @@ namespace Frapid.WebsiteBuilder.Models.Themes
 
         private void CreateDirectory()
         {
-            string catalog = DbConvention.GetCatalog();
-            string directory = $"~/Catalogs/{catalog}/Areas/Frapid.WebsiteBuilder/Themes/{this.Info.ThemeName}";
+            string tenant = DbConvention.GetTenant();
+            string directory = $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{this.Info.ThemeName}";
             directory = HostingEnvironment.MapPath(directory);
 
             this.ThemeDirectory = directory;

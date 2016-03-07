@@ -6,7 +6,7 @@ namespace Frapid.WebsiteBuilder
 {
     public static class ContentExtensions
     {
-        public static string ParseHtml(string html)
+        public static string ParseHtml(string tenant, string html)
         {
             var iType = typeof(IContentExtension);
             var members = AppDomain.CurrentDomain.GetAssemblies()
@@ -14,7 +14,7 @@ namespace Frapid.WebsiteBuilder
                 .Where(x => iType.IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
                 .Select(Activator.CreateInstance);
 
-            return members.Cast<IContentExtension>().Aggregate(html, (current, member) => member.ParseHtml(current));
+            return members.Cast<IContentExtension>().Aggregate(html, (current, member) => member.ParseHtml(tenant, current));
         }
     }
 }

@@ -6,6 +6,6 @@
         public long LoginId { get; set; }
         public int UserId { get; set; }
         public int OfficeId { get; set; }
-        public string Catalog { get; set; }
+        public string Tenant { get; set; }
     }
 }

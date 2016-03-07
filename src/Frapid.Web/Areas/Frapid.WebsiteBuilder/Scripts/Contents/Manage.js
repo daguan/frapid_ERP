@@ -142,7 +142,6 @@ function initializeAceEditor() {
     });
 };
 
-initializeAceEditor();
 
 $(document).ready(function () {
     window.initalizeSelectApis();
@@ -150,6 +149,9 @@ $(document).ready(function () {
     if (target) {
         maximize(target);
     };
+    setTimeout(function() {
+        initializeAceEditor();
+    }, 200);
 });
 
 function maximize(target, width) {

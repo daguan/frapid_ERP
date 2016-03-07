@@ -296,7 +296,8 @@ function displayBlob(path) {
             var editor = window.ace.edit("editor");
             editor.setValue(response, -1);
             setAceMode(format);
-        });
+        }, "text");
+
         saveButton.show();
         $("#editor").fadeIn(300);
         return;

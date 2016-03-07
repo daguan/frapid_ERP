@@ -15,7 +15,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new KanbanRepository(this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new KanbanRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.Get(kanbanIds, resourceIds);
             }
             catch (UnauthorizedException)

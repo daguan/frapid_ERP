@@ -9,11 +9,11 @@ namespace Frapid.WebApi.DataAccess
 {
     public class KanbanRepository : DbAccess
     {
-        public KanbanRepository(string catalog, long loginId, int userId)
+        public KanbanRepository(string database, long loginId, int userId)
         {
             this._ObjectNamespace = "config";
             this._ObjectName = "kanban_details";
-            this.Catalog = catalog;
+            this.Database = database;
             this.LoginId = loginId;
             this.UserId = userId;
         }
@@ -21,7 +21,7 @@ namespace Frapid.WebApi.DataAccess
         public override string _ObjectNamespace { get; }
         public override string _ObjectName { get; }
         public string NameColumn { get; set; }
-        public string Catalog { get; set; }
+        public string Database { get; set; }
         public int UserId { get; set; }
         public bool IsValid { get; set; }
         public long LoginId { get; set; }
@@ -29,7 +29,7 @@ namespace Frapid.WebApi.DataAccess
 
         public IEnumerable<dynamic> Get(long[] kanbanIds, object[] resourceIds)
         {
-            if (string.IsNullOrWhiteSpace(this.Catalog))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
@@ -38,7 +38,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Catalog, false);
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
                 if (!this.HasAccess)
                 {
@@ -57,7 +57,7 @@ namespace Frapid.WebApi.DataAccess
 
 
             const string sql = "SELECT * FROM config.kanban_details WHERE kanban_id IN(@kanbans) AND resource_id IN (@resources);";
-            return Factory.Get<dynamic>(this.Catalog, sql,
+            return Factory.Get<dynamic>(this.Database, sql,
                 new
                 {
                     kanbans = kanbanIds

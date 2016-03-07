@@ -6,19 +6,19 @@ namespace Frapid.WebsiteBuilder
 {
     public static class FrapidConfig
     {
-        public static string[] GetMyAllowedResources(string catalog)
+        public static string[] GetMyAllowedResources(string tenant)
         {
-            return Get(catalog, "MyAllowedResources").Split(',');
+            return Get(tenant, "MyAllowedResources").Split(',');
         }
 
-        public static string[] GetAllowedUploadExtensions(string catalog)
+        public static string[] GetAllowedUploadExtensions(string tenant)
         {
-            return Get(catalog, "AllowedUploadExtensions").Split(',');
+            return Get(tenant, "AllowedUploadExtensions").Split(',');
         }
 
-        private static string Get(string catalog, string key)
+        private static string Get(string tenant, string key)
         {
-            string configFile = HostingEnvironment.MapPath($"~/Catalogs/{catalog}/Configs/Frapid.config");
+            string configFile = HostingEnvironment.MapPath($"~/Tenants/{tenant}/Configs/Frapid.config");
 
             return !File.Exists(configFile) ? string.Empty : ConfigurationManager.ReadConfigurationValue(configFile, key);
         }

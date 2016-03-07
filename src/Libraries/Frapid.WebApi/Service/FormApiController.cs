@@ -21,7 +21,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.GetMeta();
             }
             catch (UnauthorizedException)
@@ -51,7 +51,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.Count();
             }
             catch (UnauthorizedException)
@@ -82,7 +82,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.GetAll();
             }
             catch (UnauthorizedException)
@@ -112,7 +112,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.Get(primaryKey);
             }
             catch (UnauthorizedException)
@@ -142,7 +142,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.Get(primaryKeys);
             }
             catch (UnauthorizedException)
@@ -172,7 +172,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.GetFirst();
             }
             catch (UnauthorizedException)
@@ -202,7 +202,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.GetPrevious(primaryKey);
             }
             catch (UnauthorizedException)
@@ -232,7 +232,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.GetNext(primaryKey);
             }
             catch (UnauthorizedException)
@@ -262,7 +262,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.GetLast();
             }
             catch (UnauthorizedException)
@@ -292,7 +292,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.GetPaginatedResult();
             }
             catch (UnauthorizedException)
@@ -322,7 +322,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.GetPaginatedResult(pageNumber);
             }
             catch (UnauthorizedException)
@@ -353,7 +353,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var f = Filter.FromJArray(filters);
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.CountWhere(f);
             }
             catch (UnauthorizedException)
@@ -385,7 +385,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var f = Filter.FromJArray(filters);
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.GetWhere(pageNumber, f);
             }
             catch (UnauthorizedException)
@@ -415,7 +415,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.CountFiltered(filterName);
             }
             catch (UnauthorizedException)
@@ -445,7 +445,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.GetFiltered(pageNumber, filterName);
             }
             catch (UnauthorizedException)
@@ -475,7 +475,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.GetDisplayFields();
             }
             catch (UnauthorizedException)
@@ -505,7 +505,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.GetCustomFields(null);
             }
             catch (UnauthorizedException)
@@ -535,7 +535,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.GetCustomFields(resourceId);
             }
             catch (UnauthorizedException)
@@ -573,7 +573,7 @@ namespace Frapid.WebApi.Service
 
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.AddOrEdit(user, customFields);
             }
             catch (UnauthorizedException)
@@ -608,7 +608,7 @@ namespace Frapid.WebApi.Service
 
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 repository.Add(user);
             }
             catch (UnauthorizedException)
@@ -643,7 +643,7 @@ namespace Frapid.WebApi.Service
 
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 repository.Update(user, primaryKey);
             }
             catch (UnauthorizedException)
@@ -686,7 +686,7 @@ namespace Frapid.WebApi.Service
 
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return repository.BulkImport(userCollection);
             }
             catch (UnauthorizedException)
@@ -716,7 +716,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 repository.Delete(primaryKey);
             }
             catch (UnauthorizedException)

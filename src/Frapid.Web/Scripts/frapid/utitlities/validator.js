@@ -40,9 +40,12 @@
             $(this).parent().find("select").trigger("blur");
         });
 
-		
-		el.find(".dropdown").dropdown().on("blur", function(){
-			$(this).parent().find("select").trigger("blur");
+        el.find(".dropdown").dropdown().on("blur", function () {
+            $(this).parent().find("select").trigger("blur");
+        });
+
+        el.find(".dropdown").dropdown().on("change", function () {
+            $(this).parent().find("select").trigger("blur");
         });
 
         el.find("[required]:not(:disabled):not([readonly])").blur(function () {

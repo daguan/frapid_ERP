@@ -1,12 +1,11 @@
-using System;
 using Frapid.NPoco.FluentMappings;
 
 namespace Frapid.DataAccess.Models
 {
-    public class EntityColumn: IPoco
+    public class EntityColumn : IPoco
     {
-        private string _value;
         private string _columnName;
+        private string _value;
 
         public string ColumnName
         {
@@ -39,8 +38,6 @@ namespace Frapid.DataAccess.Models
         public bool IsPrimaryKey { get; set; }
         public bool IsSerial { get; set; }
         public string PropertyName { get; set; }
-
-        [Obsolete]
         public string DataType { get; set; }
     }
 }

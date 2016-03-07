@@ -11,7 +11,7 @@ namespace Frapid.Account.DAL
             string culture)
         {
             const string sql = "SELECT * FROM account.google_sign_in(@0::text, @1::integer, @2::text, @3::text, @4::text, @5::text, @6::text);";
-            return Factory.Get<LoginResult>(AppUsers.GetCatalog(), sql, email, officeId, name, token, browser,
+            return Factory.Get<LoginResult>(AppUsers.GetTenant(), sql, email, officeId, name, token, browser,
                 ipAddress, culture).FirstOrDefault();
         }
     }

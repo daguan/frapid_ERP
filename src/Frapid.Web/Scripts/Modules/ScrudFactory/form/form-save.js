@@ -9,6 +9,7 @@
         form.push(customFields);
 
         var data = JSON.stringify(form);
+
         return getAjaxRequest(url, "POST", data);
     };
 
@@ -30,7 +31,6 @@
         var val = null;
         if (el.length) {
             val = el.val();
-
             switch (dataType) {
                 case "System.Boolean":
                 case "bool":

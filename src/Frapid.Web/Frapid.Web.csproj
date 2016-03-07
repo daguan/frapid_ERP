@@ -56,14 +56,6 @@
       <HintPath>..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Glimpse.AspNet, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Glimpse.AspNet.1.8.0\lib\net45\Glimpse.AspNet.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Glimpse.Core, Version=1.8.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Glimpse.1.8.6\lib\net45\Glimpse.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="jose-jwt, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\jose-jwt.1.9.0\lib\4.0\jose-jwt.dll</HintPath>
       <Private>True</Private>
@@ -241,7 +233,6 @@
     <Compile Include="Application\ClassicAssemblyResolver.cs" />
     <Compile Include="Application\DefaultAssemblyResolver.cs" />
     <Compile Include="Controllers\BundleController.cs" />
-    <Compile Include="GlimpseSecurityPolicy.cs" />
     <Compile Include="Jobs\EndOfDayJob.cs" />
     <Compile Include="Application\EodTaskRegistration.cs" />
     <Compile Include="Application\FilterConfig.cs" />
@@ -288,9 +279,6 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="AppInfo.json" />
-    <Content Include="Catalogs\web.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>

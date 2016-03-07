@@ -6,15 +6,15 @@ namespace Frapid.Messaging.Smtp
 {
     public class Config : IEmailConfig
     {
-        public Config(string catalog)
+        public Config(string database)
         {
-            var smtp = GetSmtpConfig(catalog);
+            var smtp = GetSmtpConfig(database);
 
             if (smtp == null)
             {
                 return;
             }
-            this.Catalog = catalog;
+            this.Database = database;
             this.Enabled = smtp.Enabled;
             this.FromName = smtp.FromDisplayName;
             this.FromEmail = smtp.FromEmailAddress;
@@ -26,7 +26,7 @@ namespace Frapid.Messaging.Smtp
             this.DeliveryMethod = SmtpDeliveryMethod.Network;
         }
 
-        public string Catalog { get; set; }
+        public string Database { get; set; }
         public bool Enabled { get; set; }
         public bool EnableSsl { get; set; }
         public string FromName { get; set; }
@@ -38,9 +38,9 @@ namespace Frapid.Messaging.Smtp
         public SecureString SmtpUserPassword { get; set; }
         public string PickupDirectory { get; set; }
 
-        public static bool IsEnabled(string catalog)
+        public static bool IsEnabled(string database)
         {
-            var smtp = GetSmtpConfig(catalog);
+            var smtp = GetSmtpConfig(database);
 
             if (smtp == null)
             {
@@ -50,9 +50,9 @@ namespace Frapid.Messaging.Smtp
             return smtp.Enabled;
         }
 
-        private static SmtpConfig GetSmtpConfig(string catalog)
+        private static SmtpConfig GetSmtpConfig(string database)
         {
-            return DAL.Smtp.GetConfig(catalog);
+            return DAL.Smtp.GetConfig(database);
         }
 
         private SecureString GetSmtpUserPassword(string password)

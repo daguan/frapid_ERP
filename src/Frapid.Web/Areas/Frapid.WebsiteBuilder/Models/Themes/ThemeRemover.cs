@@ -29,8 +29,8 @@ namespace Frapid.WebsiteBuilder.Models.Themes
                 throw new ThemeRemoveException("Access is denied. You cannot remove this theme because it is in use.");
             }
 
-            string catalog = DbConvention.GetCatalog();
-            string path = $"~/Catalogs/{catalog}/Areas/Frapid.WebsiteBuilder/Themes/{this.ThemeName}";
+            string tenant = DbConvention.GetTenant();
+            string path = $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{this.ThemeName}";
             path = HostingEnvironment.MapPath(path);
 
             if (path == null || !Directory.Exists(path))

@@ -32,6 +32,9 @@
     <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\..\Frapid.Web\Bin\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -39,6 +42,7 @@
     <Reference Include="Microsoft.AspNet.SignalR.Core">
       <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
@@ -102,9 +106,12 @@
     <Compile Include="AntiForgeryAttribute.cs" />
     <Compile Include="Authorization\Helpers\AuthorizationManager.cs" />
     <Compile Include="Authorization\BearerAuthorizeAttribute.cs" />
+    <Compile Include="Caching\CacheConfig.cs" />
+    <Compile Include="CdnHelper.cs" />
     <Compile Include="FrapidAreaRegistration.cs" />
     <Compile Include="FrapidController.cs" />
     <Compile Include="Authorization\Helpers\HubAuthorizationManger.cs" />
+    <Compile Include="Caching\FrapidOutputCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteUser.cs" />
     <Compile Include="Authorization\RestrictAnonymousAttribute.cs" />

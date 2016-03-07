@@ -17,12 +17,12 @@ namespace Frapid.Account.DAL
 
             const string sql =
                 "UPDATE account.access_tokens SET revoked=true, revoked_on = NOW() WHERE client_token=@0;";
-            Factory.NonQuery(AppUsers.GetCatalog(), sql, clientToken);
+            Factory.NonQuery(AppUsers.GetTenant(), sql, clientToken);
         }
 
         public static void Save(Token token, string ipAddress, string userAgent)
         {
-            Factory.Insert(AppUsers.GetCatalog(), new AccessToken
+            Factory.Insert(AppUsers.GetTenant(), new AccessToken
             {
                 ApplicationId = token.ApplicationId,
                 Audience = token.Audience,

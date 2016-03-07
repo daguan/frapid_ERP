@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Configuration;
 using System.Web;
+using Frapid.Configuration;
+using Serilog;
 
 namespace Frapid.Web
 {
@@ -13,10 +14,12 @@ namespace Frapid.Web
                 return;
             }
 
-            bool enforceSsl = ConfigurationManager.AppSettings["EnforceSSL"].ToLowerInvariant().Equals("true");
+            string domain = DbConvention.GetDomain();
+            bool enforceSsl = DbConvention.EnforceSsl(domain);
 
             if (!enforceSsl)
             {
+                Log.Verbose($"SSL was not enforced on domain {domain}.");
                 return;
             }
 

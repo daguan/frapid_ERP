@@ -49,25 +49,19 @@ function getHeaders() {
     return headers;
 };
 
-var getAjaxRequest = function (url, type, data, bodyPost) {
+var getAjaxRequest = function (url, type, data) {
     if (!type) {
         type = "GET";
     };
 
-    var ajax;
-
-    if (type === "POST" && bodyPost) {
-        ajax = $.post(url, { '': data });
-    } else {
-        ajax = $.ajax({
-            type: type,
-            url: url,
-            headers: getHeaders(),
-            data: data,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json"
-        });
-    };
+    var ajax = $.ajax({
+        type: type,
+        url: url,
+        headers: getHeaders(),
+        data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json"
+    });
 
     return ajax;
 };

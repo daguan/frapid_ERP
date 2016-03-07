@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
+using Frapid.Areas.Caching;
 using Frapid.WebsiteBuilder.DAL;
 using Frapid.WebsiteBuilder.Emails;
 using Frapid.WebsiteBuilder.ViewModels;
@@ -24,12 +25,12 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            string catalog = AppUsers.GetCatalog();
+            string tenant = AppUsers.GetTenant();
 
-            if (EmailSubscriptions.Add(catalog, model.EmailAddress))
+            if (EmailSubscriptions.Add(tenant, model.EmailAddress))
             {
                 var email = new SubscriptionWelcomeEmail();
-                await email.SendAsync(catalog, model);
+                await email.SendAsync(tenant, model);
             }
 
             Thread.Sleep(1000);
@@ -38,6 +39,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
         [Route("subscription/remove")]
         [AllowAnonymous]
+        [FrapidOutputCache(CacheProfile = "RemoveSubscription")]
         public ActionResult Remove()
         {
             return this.View(this.GetRazorView<AreaRegistration>("Subscription/Remove.cshtml"));
@@ -53,12 +55,12 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            string catalog = AppUsers.GetCatalog();
+            string tenant = AppUsers.GetTenant();
 
-            if (EmailSubscriptions.Remove(catalog, model.EmailAddress))
+            if (EmailSubscriptions.Remove(tenant, model.EmailAddress))
             {
                 var email = new SubscriptionRemovedEmail();
-                await email.SendAsync(catalog, model);
+                await email.SendAsync(tenant, model);
             }
 
             Thread.Sleep(1000);

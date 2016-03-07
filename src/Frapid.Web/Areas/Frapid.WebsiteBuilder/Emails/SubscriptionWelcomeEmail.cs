@@ -16,14 +16,14 @@ namespace Frapid.WebsiteBuilder.Emails
     public class SubscriptionWelcomeEmail
     {
         private const string TemplatePath =
-            "~/Catalogs/{0}/Areas/Frapid.WebsiteBuilder/EmailTemplates/email-subscription-welcome.html";
+            "~/Tenants/{0}/Areas/Frapid.WebsiteBuilder/EmailTemplates/email-subscription-welcome.html";
 
-        private string GetMessage(string catalog, Subscribe model)
+        private string GetMessage(string tenant, Subscribe model)
         {
             string siteUrl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
             string domain = HttpContext.Current.Request.Url.Host;
 
-            string file = HostingEnvironment.MapPath(string.Format(CultureInfo.InvariantCulture, TemplatePath, catalog));
+            string file = HostingEnvironment.MapPath(string.Format(CultureInfo.InvariantCulture, TemplatePath, tenant));
 
             if (file == null || !File.Exists(file))
             {
@@ -39,9 +39,9 @@ namespace Frapid.WebsiteBuilder.Emails
             return message;
         }
 
-        private EmailQueue GetEmail(string catalog, Subscribe model)
+        private EmailQueue GetEmail(string tenant, Subscribe model)
         {
-            var config = EmailProcessor.GetDefaultConfig(catalog);
+            var config = EmailProcessor.GetDefaultConfig(tenant);
             string domain = HttpContext.Current.Request.Url.Host;
             string subject = string.Format(CultureInfo.InvariantCulture, "Thank you for subscribing to {0}", domain);
 
@@ -51,20 +51,20 @@ namespace Frapid.WebsiteBuilder.Emails
                 FromName = config.FromName,
                 ReplyTo = config.FromEmail,
                 Subject = subject,
-                Message = this.GetMessage(catalog, model),
+                Message = this.GetMessage(tenant, model),
                 SendTo = model.EmailAddress
             };
         }
 
-        public async Task SendAsync(string catalog, Subscribe model)
+        public async Task SendAsync(string teanant, Subscribe model)
         {
             try
             {
-                var email = this.GetEmail(catalog, model);
-                var manager = new MailQueueManager(catalog, email);
+                var email = this.GetEmail(teanant, model);
+                var manager = new MailQueueManager(teanant, email);
                 manager.Add();
 
-                var processor = EmailProcessor.GetDefault(catalog);
+                var processor = EmailProcessor.GetDefault(teanant);
 
                 if (string.IsNullOrWhiteSpace(email.ReplyTo))
                 {

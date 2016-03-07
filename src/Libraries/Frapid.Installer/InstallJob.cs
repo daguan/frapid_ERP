@@ -21,19 +21,20 @@ namespace Frapid.Installer
             try
             {
                 Log.Verbose($"Installing frapid on domain {url}.");
-                string catalog = DbConvention.GetCatalog(url);
+                string tenant = DbConvention.GetTenant(url);
 
-                Log.Verbose($"Creating database {catalog}.");
-                var db = new DbInstaller(catalog);
+                Log.Verbose($"Creating database {tenant}.");
+                var db = new DbInstaller(tenant);
                 db.Install();
 
-                Log.Verbose("Installing modules.");
+                Log.Verbose("Getting installables.");
                 var installables = GetInstallables();
+                Log.Information($"The following apps will be installed:\n\n {installables}.");
 
                 foreach (var installable in installables)
                 {
                     Log.Verbose($"Installing module {installable.ApplicationName}.");
-                    new AppInstaller(catalog, installable).Install();
+                    new AppInstaller(tenant, installable).Install();
                 }
             }
             catch (Exception ex)

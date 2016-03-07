@@ -15,9 +15,9 @@ namespace Frapid.Mailgun
         public IEmailConfig Config { get; set; }
         public bool IsEnabled { get; set; }
 
-        public void InitializeConfig(string catalog)
+        public void InitializeConfig(string database)
         {
-            var config = Mailgun.Config.Get(catalog);
+            var config = Mailgun.Config.Get(database);
             this.Config = config;
 
             this.IsEnabled = this.Config.Enabled;

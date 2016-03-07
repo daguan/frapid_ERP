@@ -10,42 +10,42 @@ namespace Frapid.DataAccess
         public static readonly string ProviderName = DbProvider.ProviderName;
         public static readonly string MetaDatabase = DbProvider.MetaDatabase;
 
-        public static T Single<T>(string catalog, string sql, params object[] args)
+        public static T Single<T>(string database, string sql, params object[] args)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(database)).GetDatabase())
             {
                 return db.Single<T>(sql, args);
             }
         }
 
-        public static IEnumerable<T> Get<T>(string catalog, string sql, params object[] args)
+        public static IEnumerable<T> Get<T>(string database, string sql, params object[] args)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(database)).GetDatabase())
             {
                 return db.Query<T>(sql, args);
             }
         }
 
-        public static IEnumerable<T> Get<T>(string catalog, string sql)
+        public static IEnumerable<T> Get<T>(string database, string sql)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(database)).GetDatabase())
             {
                 return db.Query<T>(sql);
             }
         }
 
-        public static IEnumerable<T> Get<T>(string catalog, Sql sql)
+        public static IEnumerable<T> Get<T>(string database, Sql sql)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(database)).GetDatabase())
             {
                 var retVal = db.Query<T>(sql);
                 return retVal;
             }
         }
 
-        public static object Insert(string catalog, object poco, string tableName = "", string primaryKeyName = "")
+        public static object Insert(string database, object poco, string tableName = "", string primaryKeyName = "")
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(database)).GetDatabase())
             {
                 if (!string.IsNullOrWhiteSpace(tableName) && !string.IsNullOrWhiteSpace(primaryKeyName))
                 {
@@ -56,10 +56,10 @@ namespace Frapid.DataAccess
             }
         }
 
-        public static object Update(string catalog, object poco, object primaryKeyValue, string tableName = "",
+        public static object Update(string database, object poco, object primaryKeyValue, string tableName = "",
             string primaryKeyName = "")
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(database)).GetDatabase())
             {
                 if (!string.IsNullOrWhiteSpace(tableName) && !string.IsNullOrWhiteSpace(primaryKeyName))
                 {
@@ -70,25 +70,25 @@ namespace Frapid.DataAccess
             }
         }
 
-        public static T Scalar<T>(string catalog, string sql, params object[] args)
+        public static T Scalar<T>(string database, string sql, params object[] args)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(database)).GetDatabase())
             {
                 return db.ExecuteScalar<T>(sql, args);
             }
         }
 
-        public static T Scalar<T>(string catalog, Sql sql)
+        public static T Scalar<T>(string database, Sql sql)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(database)).GetDatabase())
             {
                 return db.ExecuteScalar<T>(sql);
             }
         }
 
-        public static void NonQuery(string catalog, string sql, params object[] args)
+        public static void NonQuery(string database, string sql, params object[] args)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(catalog)).GetDatabase())
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(database)).GetDatabase())
             {
                 db.Execute(sql, args);
             }

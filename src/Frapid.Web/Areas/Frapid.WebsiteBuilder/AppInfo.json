@@ -19,6 +19,6 @@
 	"InstallSample": true,
 	"My": null,
 	"OverrideTemplatePath": "~/Areas/Frapid.WebsiteBuilder/Override",
-    "OverrideDestination":"~/Catalogs/{0}/Areas",
+    "OverrideDestination":"~/Tenants/{0}/Areas",
 	"DependsOn": ["Frapid.Config"]
 }

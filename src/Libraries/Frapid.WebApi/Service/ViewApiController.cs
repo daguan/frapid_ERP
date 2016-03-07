@@ -19,7 +19,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId,
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
                     this.MetaUser.UserId);
                 return repository.Count();
             }
@@ -51,7 +51,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId,
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
                     this.MetaUser.UserId);
                 return repository.Get();
             }
@@ -82,7 +82,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId,
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
                     this.MetaUser.UserId);
                 return repository.GetPaginatedResult();
             }
@@ -113,7 +113,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId,
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
                     this.MetaUser.UserId);
                 return repository.GetPaginatedResult(pageNumber);
             }
@@ -145,7 +145,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var f = Filter.FromJArray(filters);
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId,
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
                     this.MetaUser.UserId);
                 return repository.CountWhere(f);
             }
@@ -178,7 +178,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var f = Filter.FromJArray(filters);
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId,
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
                     this.MetaUser.UserId);
                 return repository.GetWhere(pageNumber, f);
             }
@@ -209,7 +209,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId,
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
                     this.MetaUser.UserId);
                 return repository.CountFiltered(filterName);
             }
@@ -240,7 +240,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId,
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
                     this.MetaUser.UserId);
                 return repository.GetFiltered(pageNumber, filterName);
             }
@@ -271,7 +271,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Catalog, this.MetaUser.LoginId,
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
                     this.MetaUser.UserId);
                 return repository.GetDisplayFields();
             }
