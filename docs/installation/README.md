@@ -71,7 +71,7 @@ does not affect **bar.com**.
 
 [By convention](../concepts/database-naming-convention.md), the configuration files for **foo.com** would be located on:
 
-`~/Catalogs/foo_com/Configs`
+`~/Tenants/foo_com/Configs`
 
 #### Instance Directories
 
@@ -96,7 +96,7 @@ does not affect **bar.com**.
 
 By convention, website themes would be found on:
 
-`~/Catalogs/foo_com/Areas/Frapid.WebsiteBuilder/Themes/<ThemeName>`
+`~/Tenants/foo_com/Areas/Frapid.WebsiteBuilder/Themes/<ThemeName>`
 
 Read more on the chapter [Creating Website Themes](../developer/website-builder/theme.md).
 

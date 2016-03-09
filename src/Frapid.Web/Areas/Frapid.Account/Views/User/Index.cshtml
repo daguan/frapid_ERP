@@ -9,10 +9,10 @@
 
     scrudFactory.title = "User Management";
 
-    scrudFactory.viewAPI = "/api/forms/account/user";
+    scrudFactory.viewAPI = "/api/forms/account/users";
     scrudFactory.viewTableName = "account.users";
 
-    scrudFactory.formAPI = "/api/forms/account/user";
+    scrudFactory.formAPI = "/api/forms/account/users";
     scrudFactory.formTableName = "account.users";
 
     scrudFactory.excludedColumns = ["audit_user_id", "audit_ts", "password"];
@@ -41,14 +41,14 @@
     scrudFactory.keys = [
         {
             property: "OfficeId",
-            url: '/api/forms/core/office/display-fields',
+            url: '/api/forms/core/offices/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "RoleId",
-            url: '/api/forms/account/role/display-fields',
+            url: '/api/forms/account/roles/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"

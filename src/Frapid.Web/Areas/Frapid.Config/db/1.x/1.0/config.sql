@@ -60,7 +60,8 @@ CREATE TABLE config.email_queue
     delivered                                   boolean NOT NULL DEFAULT(false),
     delivered_on                                TIMESTAMP WITH TIME ZONE,
     canceled                                    boolean NOT NULL DEFAULT(false),
-    canceled_on                                 TIMESTAMP WITH TIME ZONE
+    canceled_on                                 TIMESTAMP WITH TIME ZONE,
+	is_test										boolean NOT NULL DEFAULT(false)
 );
 
 

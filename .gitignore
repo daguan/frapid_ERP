@@ -6,11 +6,11 @@ obj
 *.suo
 *.user
 .my
-src/Frapid.Web/Catalogs/
+src/Frapid.Web/Tenants/
 DomainsInstalled.json
 src/Frapid.Web/Areas/MixERP.Forums/
-src/Frapid.Web/Areas/MixERP.We/
-src/Frapid.Web/Areas/MixERP.Me/
+src/Frapid.Web/Areas/MixERP.Helpdesk/
+src/Frapid.Web/Areas/MixERP.CRM/
 src/Frapid.Web/Areas/MixERP.Payments/
 src/Frapid.Web/Areas/Frapid.Forms/
 src/Frapid.Web/logo.png

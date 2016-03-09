@@ -11,7 +11,7 @@ namespace Frapid.WebApi.Service
     public class FilterApiController : FrapidApiController
     {
         [AcceptVerbs("PUT")]
-        [Route("~/api/filter/make-default/{objectName}/{filterName}")]
+        [Route("~/api/filters/make-default/{objectName}/{filterName}")]
         public void MakeDefault(string objectName, string filterName)
         {
             try
@@ -40,7 +40,7 @@ namespace Frapid.WebApi.Service
         }
 
         [AcceptVerbs("DELETE")]
-        [Route("~/api/filter/remove-default/{objectName}")]
+        [Route("~/api/filters/remove-default/{objectName}")]
         public void RemoveDefault(string objectName)
         {
             try
@@ -69,7 +69,7 @@ namespace Frapid.WebApi.Service
         }
 
         [AcceptVerbs("DELETE")]
-        [Route("~/api/filter/delete/by-name/{filterName}")]
+        [Route("~/api/filters/delete/by-name/{filterName}")]
         public void Delete(string filterName)
         {
             try
@@ -98,7 +98,7 @@ namespace Frapid.WebApi.Service
         }
 
         [AcceptVerbs("PUT")]
-        [Route("~/api/filter/recreate/{objectName}/{filterName}")]
+        [Route("~/api/filters/recreate/{objectName}/{filterName}")]
         public void RecreateFilters(string objectName, string filterName, [FromBody] List<ExpandoObject> collection)
         {
             try

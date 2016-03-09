@@ -1,6 +1,6 @@
 ﻿function createCards() {
     function request(kanbanIds, resourceIds) {
-        var url = "/api/kanban/get-by-resources/";
+        var url = "/api/kanbans/get-by-resources/";
         url += "?kanbanIds=";
         url += kanbanIds.join("&kanbanIds=");
 

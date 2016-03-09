@@ -18,7 +18,7 @@ For up to 12000 emails per month, [SendGrid is absolutely free](https://sendgrid
 Since frapid has built-in support for SendGrid API, you just need to edit the configuration file `SendGrid.json` and you're good to go. 
 Preferably, you can configure this from the [Admin Area](#) as well.
 
-**~/Catalogs/<domain>/Configs/SMTP/SendGrid.json**
+**~/Tenants/<domain>/Configs/SMTP/SendGrid.json**
 ```json
 {
     "FromName" : "",

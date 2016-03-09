@@ -9,10 +9,10 @@
 
     scrudFactory.title = "Configuration Profile";
 
-    scrudFactory.viewAPI = "/api/forms/account/configuration-profile";
+    scrudFactory.viewAPI = "/api/forms/account/configuration-profiles";
     scrudFactory.viewTableName = "account.configuration_profiles";
 
-    scrudFactory.formAPI = "/api/forms/account/configuration-profile";
+    scrudFactory.formAPI = "/api/forms/account/configuration-profiles";
     scrudFactory.formTableName = "account.configuration_profiles";
 
     scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
@@ -29,14 +29,14 @@
     scrudFactory.keys = [
         {
             property: "RegistrationOfficeId",
-            url: '/api/forms/core/office/display-fields',
+            url: '/api/forms/core/offices/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"
         },
         {
             property: "RegistrationRoleId",
-            url: '/api/forms/account/role/display-fields',
+            url: '/api/forms/account/roles/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"

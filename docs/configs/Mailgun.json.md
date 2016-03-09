@@ -22,7 +22,7 @@ Mailgun is one of the leading transaction email service providers. For up to 100
 Since frapid has built-in support for Mailgun API, you just need to edit the configuration file `Mailgun.json` and you're good to go. 
 Preferably, you can configure this from the [Admin Area](#) as well.
 
-**~/Catalogs/<domain>/Configs/SMTP/Mailgun.json**
+**~/Tenants/<domain>/Configs/SMTP/Mailgun.json**
 
 ```json
 {

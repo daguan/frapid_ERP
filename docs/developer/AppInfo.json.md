@@ -26,7 +26,7 @@ Here is an example AppInfo.json file of Account module.
 	"InstallSample": true,
 	"My": "~/Areas/Frapid.Account/.my/db.sql",
     "OverrideTemplatePath":"~/Areas/Frapid.Account/Override",
-    "OverrideDestination":"~/Catalogs/{0}/Areas",
+    "OverrideDestination":"~/Tenants/{0}/Areas",
 	"DependsOn": ["Frapid.Core"]
 }
 ```

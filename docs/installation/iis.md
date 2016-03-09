@@ -62,7 +62,7 @@ You will notice that a database name "localhost" has been automatically created 
 Since you still do not have access to the admin area, you need to create an account for yourself. To verify your account, frapid will send account verification email.
 You need to configure a transactional email provider.
 
-Create an account with [SendGrid](http://sendgrid.com/) and edit the configuration file [~/Catalogs/localhost/Configs/SMTP/SendGrid.json](../configs/SendGrid.json.md).
+Create an account with [SendGrid](http://sendgrid.com/) and edit the configuration file [~/Tenants/localhost/Configs/SMTP/SendGrid.json](../configs/SendGrid.json.md).
 
 * Enter from email.
 * Enter API User.
@@ -78,7 +78,7 @@ Navigate to the [sign up page](https://localhost/account/sign-up) and create an 
 If you encounter installation issues, examine log files on [C:\frapid-logs](../configs/Parameters.config.md). If you want start over once again:
 
 * delete the database "localhost".
-* delete the directory ~/Catalogs/localhost.
+* delete the directory ~/Tenants/localhost.
 * delete the file [DomainsInstalled.json](../configs/DomainsInstalled.json.md).
 
 [Return Back](../../README.md)

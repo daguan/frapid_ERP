@@ -38,7 +38,7 @@ $('[data-entity="title"]').keyup(function () {
 
 function save() {
     function request(model) {
-        var url = "/api/forms/website/content/add-or-edit";
+        var url = "/api/forms/website/contents/add-or-edit";
         var form = [];
         form.push(model);
         form.push(null);

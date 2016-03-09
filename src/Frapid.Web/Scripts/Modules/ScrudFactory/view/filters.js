@@ -191,7 +191,7 @@ $("#ManageFiltersButton").click(function () {
 
 $("#SaveFilterButton").click(function () {
     function request(filterName, filters) {
-        var url = "/api/filter/recreate/" + window.scrudFactory.viewTableName + "/" + filterName;
+        var url = "/api/filters/recreate/" + window.scrudFactory.viewTableName + "/" + filterName;
         var data = JSON.stringify(filters);
 
         return getAjaxRequest(url, "PUT", data);
@@ -366,7 +366,7 @@ function deleteFilter(el) {
 
 $("#RemoveDefaultFilterButton").click(function () {
     function request() {
-        var url = "/api/filter/remove-default/" + window.scrudFactory.viewTableName;
+        var url = "/api/filters/remove-default/" + window.scrudFactory.viewTableName;
         return getAjaxRequest(url, "DELETE");
     };
 
@@ -384,7 +384,7 @@ $("#RemoveDefaultFilterButton").click(function () {
 });
 $("#MakeUserDefaultFilterButton").click(function () {
     function request(filterName) {
-        var url = "/api/filter/make-default/" + window.scrudFactory.viewTableName + "/" + filterName;
+        var url = "/api/filters/make-default/" + window.scrudFactory.viewTableName + "/" + filterName;
         return getAjaxRequest(url, "PUT");
     };
 

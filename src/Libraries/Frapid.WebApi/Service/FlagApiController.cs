@@ -10,7 +10,7 @@ namespace Frapid.WebApi.Service
     public class FlagApiController : FrapidApiController
     {
         [AcceptVerbs("GET", "HEAD")]
-        [Route("~/api/flag/get/{resource}/{userId}")]
+        [Route("~/api/flags/get/{resource}/{userId}")]
         public IEnumerable<dynamic> Get(string resource, int userId, [FromUri] object[] resourceIds)
         {
             try

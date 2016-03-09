@@ -28,7 +28,7 @@ namespace Frapid.WebApi.DataAccess
 
             if (!string.IsNullOrWhiteSpace(this._ObjectNamespace) && !string.IsNullOrWhiteSpace(this._ObjectName))
             {
-                this.FullyQualifiedObjectName = this._ObjectNamespace + "." + Inflector.MakePlural(this._ObjectName);
+                this.FullyQualifiedObjectName = this._ObjectNamespace + "." + this._ObjectName;
                 this.PrimaryKey = this.GetCandidateKey();
                 this.NameColumn = this.GetNameColumn();
                 this.IsValid = true;
@@ -699,7 +699,7 @@ namespace Frapid.WebApi.DataAccess
         private string GetTableName()
         {
             string tableName = this._ObjectName.Replace("-", "_");
-            return Inflector.MakePlural(tableName);
+            return tableName;
         }
 
         private string GetCandidateKey()

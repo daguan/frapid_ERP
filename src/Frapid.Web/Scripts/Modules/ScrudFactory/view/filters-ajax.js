@@ -1,7 +1,7 @@
 ﻿
 function selectFilter(filterName) {
     function request(filterName) {
-        var url = "/api/forms/config/filter/get-where/-1";
+        var url = "/api/forms/config/filters/get-where/-1";
         var where = [];
 
         where.push(getAjaxColumnFilter("WHERE", "object_name", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));
@@ -105,7 +105,7 @@ function loadFilterNames() {
 
 function loadFilterForEdit() {
     function request(filterName) {
-        var url = "/api/forms/config/filter/get-where/-1";
+        var url = "/api/forms/config/filters/get-where/-1";
         var where = [];
 
         where.push(getAjaxColumnFilter("WHERE", "object_name", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));
@@ -134,7 +134,7 @@ function loadFilterForEdit() {
 
 function deleteSavedFilter() {
     function request(filterName) {
-        var url = "/api/filter/delete/by-name/" + filterName;
+        var url = "/api/filters/delete/by-name/" + filterName;
         return getAjaxRequest(url, "DELETE");
     };
 

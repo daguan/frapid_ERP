@@ -10,7 +10,7 @@ namespace Frapid.WebApi.Service
     public class KanbanApiController : FrapidApiController
     {
         [AcceptVerbs("GET", "HEAD")]
-        [Route("~/api/kanban/get-by-resources")]
+        [Route("~/api/kanbans/get-by-resources")]
         public IEnumerable<dynamic> Get([FromUri] long[] kanbanIds, [FromUri] object[] resourceIds)
         {
             try

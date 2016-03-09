@@ -39,7 +39,7 @@ function createKanbans(kanbans) {
 };
 
 function getKanbans() {
-    var url = "/api/forms/config/kanban/get-where/1";
+    var url = "/api/forms/config/kanbans/get-where/1";
 
     var filters = [];
     filters.push(getAjaxColumnFilter("WHERE", "object_name", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));

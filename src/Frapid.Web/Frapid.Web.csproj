@@ -233,6 +233,7 @@
     <Compile Include="Application\ClassicAssemblyResolver.cs" />
     <Compile Include="Application\DefaultAssemblyResolver.cs" />
     <Compile Include="Controllers\BundleController.cs" />
+    <Compile Include="FrapidApplication.cs" />
     <Compile Include="Jobs\EndOfDayJob.cs" />
     <Compile Include="Application\EodTaskRegistration.cs" />
     <Compile Include="Application\FilterConfig.cs" />
@@ -243,9 +244,6 @@
     <Compile Include="Application\WebApiConfig.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\linq.js\sample\LinqJS.cs" />
     <Compile Include="Startup.cs" />
@@ -255,9 +253,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Global.asax" />
     <Content Include="images\social\facebook.png" />
     <Content Include="images\social\linkedin.png" />
     <Content Include="images\social\twitter.png" />

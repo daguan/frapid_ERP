@@ -107,7 +107,7 @@ var menuBuilder = {
 
 function loadMenus() {
     function request() {
-        var url = "/api/core/menu/all";
+        var url = "/api/core/menus/all";
         return window.getAjaxRequest(url);
     };
 

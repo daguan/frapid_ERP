@@ -82,7 +82,10 @@ namespace frapid.Modules
             string originalFile = Path.Combine(this.TempDirectory, original);
             string renamedFile = Path.Combine(this.TempDirectory, renamed);
 
-            File.Move(originalFile, renamedFile);
+            if (File.Exists(originalFile))
+            {
+                File.Move(originalFile, renamedFile);
+            }
         }
 
         private void ReplaceContent(string fileName)

@@ -16,13 +16,13 @@ When you request the view:
 var view = View(GetRazorView<AreaRegistration>("SignUp/Index.cshtml"));
 ```
 
-it will be searched on the current theme directory (~/Catalogs/fizzbuzz_com/Areas/Frapid.WebsiteBuilder/Themes/frapid/):
+it will be searched on the current theme directory (~/Tenants/fizzbuzz_com/Areas/Frapid.WebsiteBuilder/Themes/frapid/):
 
-`~/Catalogs/fizzbuzz_com/Areas/Frapid.WebsiteBuilder/Themes/frapid/Areas/Frapid.Account/Views/SignUp/Index.cshtml`
+`~/Tenants/fizzbuzz_com/Areas/Frapid.WebsiteBuilder/Themes/frapid/Areas/Frapid.Account/Views/SignUp/Index.cshtml`
 
 if not found then
 
-`~/Catalogs/fizzbuzz_com/Areas/Frapid.Account/Views/SignUp/Index.cshtml`
+`~/Tenants/fizzbuzz_com/Areas/Frapid.Account/Views/SignUp/Index.cshtml`
 
 if not found then
 

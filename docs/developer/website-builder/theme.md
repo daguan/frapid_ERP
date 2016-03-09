@@ -2,7 +2,7 @@
 
 Frapid supports multiple themes per tenant. For foo.com domain, you would upload your theme here:
 
-`~/Catalogs/foo_com/Areas/Frapid.WebsiteBuilder/Themes/<ThemeName>`
+`~/Tenants/foo_com/Areas/Frapid.WebsiteBuilder/Themes/<ThemeName>`
 
 Once you upload a new theme to the `Themes` directory, frapid will automatically discover and add it to the list of avaiable themes for `foo_com` tenant.
 
@@ -52,7 +52,7 @@ Let's build a very basic theme using [Semantic UI](http://semantic-ui.com/).
 
 ### Basic Layout
 
-* Create a directory named `example` on `~/Catalogs/<YourTenant>/Areas/Frapid.WebsiteBuilder/Themes`.
+* Create a directory named `example` on `~/Tenants/<YourTenant>/Areas/Frapid.WebsiteBuilder/Themes`.
 * Create two empty files: Layout.cshtml and Theme.config.
 * Paste the following contents.
 
@@ -111,7 +111,7 @@ Let's build a very basic theme using [Semantic UI](http://semantic-ui.com/).
 ```
 ### Edit Configuration File
 
-Edit the configuration file `~/Catalogs/<YourTenant>/Areas/Frapid.WebsiteBuilder/WebsiteBuilder.config`
+Edit the configuration file `~/Tenants/<YourTenant>/Areas/Frapid.WebsiteBuilder/WebsiteBuilder.config`
 and set `DefaultTheme` to `example`.
 
 ### Preview the site

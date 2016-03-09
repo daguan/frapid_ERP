@@ -18,5 +18,6 @@ namespace Frapid.Messaging.DTO
         public DateTime? DeliveredOn { get; set; }
         public bool Canceled { get; set; }
         public DateTime? CanceledOn { get; set; }
+        public bool IsTest { get; set; }
     }
 }
