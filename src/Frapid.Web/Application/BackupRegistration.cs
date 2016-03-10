@@ -32,7 +32,7 @@ namespace Frapid.Web
             var trigger = TriggerBuilder.Create()
                 .WithIdentity("Backup", "PerformBackup")
                 .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(hour, minute)
-                    .InTimeZone(TimeZoneInfo.Local))
+                    .InTimeZone(TimeZoneInfo.Utc))
                 .Build();
 
             scheduler.ScheduleJob(job, trigger);
