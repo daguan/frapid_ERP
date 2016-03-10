@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Frapid.Framework;
+using Frapid.Web.Jobs;
 using Serilog;
 
 namespace Frapid.Web

@@ -6,13 +6,15 @@ namespace Frapid.Backups.Postgres
 {
     public sealed class Process
     {
-        public Process(DbServer server, string fileName)
+        public Process(DbServer server, string fileName, string tenant)
         {
             this.Server = server;
             this.PgDumpPath = Path.Combine(this.Server.BinDirectory, "pg_dump.exe"); ;
             this.FileName = fileName;
+            this.Tenant = tenant;
         }
 
+        public string Tenant { get; set; }
         public string BatchFileName { get; set; }
         public string PgDumpPath { get; set; }
         public DbServer Server { get; set; }
@@ -22,7 +24,7 @@ namespace Frapid.Backups.Postgres
 
         public bool Execute()
         {
-            var batchFile = new BatchFile(this.FileName, this.Server, this.PgDumpPath);
+            var batchFile = new BatchFile(this.FileName, this.Server, this.PgDumpPath, this.Tenant);
             this.BatchFileName = batchFile.Create();
 
             using (var process = new System.Diagnostics.Process())

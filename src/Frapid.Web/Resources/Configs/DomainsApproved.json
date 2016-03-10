@@ -4,6 +4,8 @@
 	"EnforceSsl": true,
 	"CdnDomain": "static.localhost",
 	"AdminEmail": "binodnp@outlook.com",
-	"Synonyms": ["test.localhost"]
+	"Synonyms": ["test.localhost"],
+	"BackupDirectory": "/backups/localhost",
+	"BackupDirectoryIsFixedPath": false
   }
 ]

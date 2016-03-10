@@ -12,13 +12,15 @@ namespace Frapid.Backups.Postgres
             this.FileName = fileName;
         }
 
-        public BatchFile(string fileName, DbServer server, string pgDumpPath)
+        public BatchFile(string fileName, DbServer server, string pgDumpPath, string tenant)
         {
             this.FileName = fileName;
             this.Server = server;
             this.PgDumpPath = pgDumpPath;
+            this.Tenant = tenant;
         }
 
+        public string Tenant;
         public DbServer Server { get; }
         public string PgDumpPath { get; }
         public string FileName { get; }
@@ -28,13 +30,16 @@ namespace Frapid.Backups.Postgres
             var commands = new StringBuilder();
 
             commands.Append("@echo off");
+            commands.Append(Environment.NewLine);
             commands.Append("SET PGPASSWORD=" + this.Server.Password);
+            commands.Append(Environment.NewLine);
 
             string command = @"""{0}"" --host ""{1}"" --port {2} --username ""{3}"" --format custom --blobs --verbose --file ""{4}"" ""{5}""";
 
             command = string.Format(CultureInfo.InvariantCulture, command, this.PgDumpPath, this.Server.HostName,
-                this.Server.PortNumber, this.Server.UserId, this.FileName, this.Server.DatabaseName);
+                this.Server.PortNumber, this.Server.UserId, this.FileName, this.Tenant);
             commands.Append(command);
+            commands.Append(Environment.NewLine);
             commands.Append("exit");
 
             string file = this.FileName + ".bat";

@@ -61,7 +61,7 @@ namespace Frapid.Backups
                 return HostingEnvironment.MapPath(domain.BackupDirectory);
             }
 
-            string path = $"/Tenants/{tenant}/backup";
+            string path = $"/Backups/{tenant}/backup";
             return HostingEnvironment.MapPath(path);
         }
 

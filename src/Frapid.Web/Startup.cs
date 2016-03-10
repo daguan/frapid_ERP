@@ -45,6 +45,7 @@ namespace Frapid.Web
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             NPocoConfig.Register();
             StartupRegistration.Register();
+            BackupRegistration.Register();
             EodTaskRegistration.Register();
             AccountConfig.Register(app);
         }

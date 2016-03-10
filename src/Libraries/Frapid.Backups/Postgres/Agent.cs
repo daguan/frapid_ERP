@@ -16,9 +16,7 @@ namespace Frapid.Backups.Postgres
 
         public bool Backup(Action<string> successCallback, Action<string> failCallback)
         {
-            string backupDirectory = HostingEnvironment.MapPath($"/Tenants/{this.Tenant}/Backups");
-
-            if (backupDirectory == null)
+            if (string.IsNullOrWhiteSpace(this.BackupFileLocation))
             {
                 string message = "Cannot find a suitable directory to create a PostgreSQL DB Backup.";
                 this.OnOnBackupFail(new ProgressInfo(message));
@@ -27,13 +25,13 @@ namespace Frapid.Backups.Postgres
 
             }
 
-            backupDirectory = Path.Combine(backupDirectory, this.FileName);
+            string backupDirectory = Path.Combine(this.BackupFileLocation, this.FileName);
             string path = Path.Combine(backupDirectory, "db.backup");
 
             Directory.CreateDirectory(backupDirectory);
 
 
-            var process = new Process(this.Server, path);
+            var process = new Process(this.Server, path, this.Tenant);
 
             process.Progress += delegate(ProgressInfo info)
             {

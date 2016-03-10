@@ -1,7 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Compression;
+using System.Text;
 using System.Web.Hosting;
 using Microsoft.VisualBasic.FileIO;
+using SearchOption = System.IO.SearchOption;
 
 namespace Frapid.Backups
 {
@@ -22,7 +25,8 @@ namespace Frapid.Backups
         public void AddTenantDataToBackup()
         {
             string source = HostingEnvironment.MapPath($"/Tenants/{this.Tenant}");
-            string destination = this.BackupPath;
+            string destination = Path.Combine(this.BackupPath, this.FileName);
+            this.BackupDirectory = destination;
 
             if (source != null)
             {
@@ -32,7 +36,7 @@ namespace Frapid.Backups
 
         public void Compress()
         {
-            ZipFile.CreateFromDirectory(this.BackupDirectory, this.BackupDirectory + ".zip");
+            ZipFile.CreateFromDirectory(this.BackupDirectory, this.BackupDirectory + ".zip", CompressionLevel.Optimal, false, Encoding.UTF8);
         }
 
         public void Clean()
