@@ -23,11 +23,11 @@ namespace Frapid.Areas
                 return path;
             }
 
-            if (!string.IsNullOrWhiteSpace(tenant.CdnPrefix))
+            if (!string.IsNullOrWhiteSpace(tenant.CdnDomain))
             {
                 var uri = HttpContext.Current.Request.Url;
 
-                return uri.Scheme + Uri.SchemeDelimiter + tenant.CdnPrefix + "." + tenant.DomainName +
+                return uri.Scheme + Uri.SchemeDelimiter + tenant.CdnDomain +
                        (uri.IsDefaultPort ? "" : ":" + uri.Port) + path;
             }
 

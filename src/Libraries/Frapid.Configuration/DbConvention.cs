@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using Serilog;
 
@@ -40,7 +41,7 @@ namespace Frapid.Configuration
 
             if (tenant != null)
             {
-                bool isStatic = domain.StartsWith(tenant.CdnPrefix + ".");
+                bool isStatic = domain.ToUpperInvariant().Equals(tenant.CdnDomain.ToUpperInvariant());
 
                 Log.Verbose(isStatic
                     ? $"The domain \"{domain}\" is a static domain."
@@ -124,6 +125,18 @@ namespace Frapid.Configuration
             }
 
             return result;
+        }
+
+        public static List<ApprovedDomain> GetDomains()
+        {
+            var serializer = new DomainSerializer("DomainsApproved.json");
+            return serializer.Get();
+        }
+
+        public static List<string> GetTenants()
+        {
+            var serializer = new DomainSerializer("DomainsApproved.json");
+            return serializer.Get().Select(member => GetDbNameByConvention(member.DomainName)).ToList();
         }
 
         public static string GetTenant(string url = "")

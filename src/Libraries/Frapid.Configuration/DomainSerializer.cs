@@ -48,8 +48,7 @@ namespace Frapid.Configuration
             {
                 domains.Add(domain.DomainName);
                 domains.AddRange(domain.Synonyms);
-                domains.AddRange(domain.Synonyms.Select(synonym => domain.CdnPrefix + "." + synonym));
-                domains.Add(domain.CdnPrefix + "." + domain.DomainName);
+                domains.Add(domain.CdnDomain);
             }
 
             return domains;

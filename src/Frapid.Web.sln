@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.Web", "Frapid.Web\Frapid.Web.csproj", "{77C7D586-FEE9-40E2-A1C4-699EF4B0A1F3}"
 EndProject
@@ -42,6 +42,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "frapid", "Libraries\Frapid.CommandLine\frapid.csproj", "{CD47926F-7148-49A1-AD08-A96B74A3A5F6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Console", "Console", "{1FB0A4E1-7F94-4FCB-A26B-312A7A3B5036}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frapid.Backups", "Libraries\Frapid.Backups\Frapid.Backups.csproj", "{8993AD31-C303-4CA0-92D9-C100585A78E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,6 +115,10 @@ Global
 		{CD47926F-7148-49A1-AD08-A96B74A3A5F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD47926F-7148-49A1-AD08-A96B74A3A5F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD47926F-7148-49A1-AD08-A96B74A3A5F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8993AD31-C303-4CA0-92D9-C100585A78E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8993AD31-C303-4CA0-92D9-C100585A78E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8993AD31-C303-4CA0-92D9-C100585A78E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8993AD31-C303-4CA0-92D9-C100585A78E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -133,5 +139,6 @@ Global
 		{695F3E2D-2DD0-418F-9805-B6400B6B4466} = {BF2A4AB4-6B8F-4AC1-B90A-4A238B082F85}
 		{123D352D-8DDF-49EF-9373-A4523A05DBDA} = {BF2A4AB4-6B8F-4AC1-B90A-4A238B082F85}
 		{CD47926F-7148-49A1-AD08-A96B74A3A5F6} = {1FB0A4E1-7F94-4FCB-A26B-312A7A3B5036}
+		{8993AD31-C303-4CA0-92D9-C100585A78E5} = {23C8FECB-C7F3-4FF1-B2FF-8B296420C8CB}
 	EndGlobalSection
 EndGlobal

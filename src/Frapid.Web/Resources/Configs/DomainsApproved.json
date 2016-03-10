@@ -2,15 +2,8 @@
   {
 	"DomainName": "localhost",
 	"EnforceSsl": true,
-	"CdnPrefix": "static",
+	"CdnDomain": "static.localhost",
 	"AdminEmail": "binodnp@outlook.com",
 	"Synonyms": ["test.localhost"]
-  },
-  {
-	"DomainName": "devel.localhost",
-	"EnforceSsl": true,
-	"CdnPrefix": "static",
-	"AdminEmail": "binodnp@outlook.com",
-	"Synonyms": ["devel2.localhost"]
   }
 ]
