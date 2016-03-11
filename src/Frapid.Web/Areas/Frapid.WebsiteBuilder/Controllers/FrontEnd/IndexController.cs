@@ -19,7 +19,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
     {
         [Route("")]
         [Route("site/{categoryAlias}/{alias}")]
-        [FrapidOutputCache(CacheProfile = "Content")]
+        [FrapidOutputCache(ProfileName = "Content")]
         public async Task<ActionResult> Index(string categoryAlias = "", string alias = "", bool isPost = false,
             FormCollection form = null)
         {
@@ -97,24 +97,6 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         public Task<ActionResult> PostAsync(FormCollection form)
         {
             return this.PostAsync(string.Empty, string.Empty, form);
-        }
-
-        private ActionResult RedirectToInstallationPage()
-        {
-            string domain = DbConvention.GetDomain();
-
-            var approved = new DomainSerializer("DomainsApproved.json");
-            var installed = new DomainSerializer("DomainsInstalled.json");
-
-            bool isApproved = approved.Get().Any(x => x.GetSubtenants().Contains(domain.ToLowerInvariant()));
-            bool isInstalled = installed.Get().Any(x => x.GetSubtenants().Contains(domain.ToLowerInvariant()));
-
-            if (isApproved && !isInstalled)
-            {
-                return Redirect("/install");
-            }
-
-            return Content("Frapid cannot be installed due configuration errors. Please check application log for more information.");
         }
     }
 }

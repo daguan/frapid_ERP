@@ -19,7 +19,17 @@ namespace Frapid.WebsiteBuilder.Controllers
                 this.Tenant = DbConvention.GetTenant(this.CurrentDomain);
             }
 
-            base.OnActionExecuting(context);
+            bool isStatic = DbConvention.IsStaticDomain(this.CurrentDomain);
+
+            if (isStatic)
+            {
+                //Static domains are strictly used for content caching only.
+                context.Result = new HttpNotFoundResult("The requested page does not exist.");
+            }
+            else
+            {
+                base.OnActionExecuting(context);
+            }
         }
 
         public WebsiteBuilderController()
