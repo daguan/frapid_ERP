@@ -1,0 +1,11 @@
+﻿[
+  {
+	"DomainName": "mixerp.org",
+	"EnforceSsl": true,
+	"CdnDomain": "cdn.mixerp.net",
+	"AdminEmail": "",
+	"Synonyms": [],
+	"BackupDirectory": "/backups/mixerp_org",
+	"BackupDirectoryIsFixedPath": false
+  }
+]

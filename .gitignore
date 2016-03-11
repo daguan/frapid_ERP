@@ -7,6 +7,7 @@ obj
 *.user
 .my
 src/Frapid.Web/Tenants/
+src/Frapid.Web/Resources/
 DomainsInstalled.json
 src/Frapid.Web/Areas/MixERP.Forums/
 src/Frapid.Web/Areas/MixERP.Helpdesk/
