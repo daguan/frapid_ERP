@@ -24,11 +24,7 @@ namespace Frapid.Areas.Caching
 
                 var config = CacheConfig.Get(tenant, profile);
 
-                if (config == null || this.IsStatic(context))
-                {
-                    context.HttpContext.Response.Cache.SetNoStore();
-                }
-                else
+                if (config != null)
                 {
                     this.Duration = config.Duration;
                     this.Location = config.Location;
@@ -42,18 +38,6 @@ namespace Frapid.Areas.Caching
             }
 
             base.OnActionExecuting(context);
-        }
-
-        private bool IsStatic(ActionExecutingContext context)
-        {
-            string domain = context.RequestContext.HttpContext.Request.Url?.DnsSafeHost;
-
-            if (string.IsNullOrWhiteSpace(domain))
-            {
-                return false;
-            }
-
-            return DbConvention.IsStaticDomain(domain);
         }
     }
 }

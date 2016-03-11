@@ -215,6 +215,7 @@
     <Compile Include="DTO\MenuItemView.cs" />
     <Compile Include="DTO\PublishedContentView.cs" />
     <Compile Include="Extensions\StringExtension.cs" />
+    <Compile Include="Helpers\BitmapHelper.cs" />
     <Compile Include="StringExtension.cs" />
     <Compile Include="Plugins\ArticleExtension.cs" />
     <Compile Include="Plugins\FormsExtension.cs" />

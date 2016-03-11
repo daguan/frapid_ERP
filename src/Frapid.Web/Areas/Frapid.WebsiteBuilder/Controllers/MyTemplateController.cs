@@ -3,11 +3,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using Frapid.Areas;
 using Frapid.Configuration;
 
 namespace Frapid.WebsiteBuilder.Controllers
 {
-    public class MyTemplateController : Controller
+    public class MyTemplateController : FrapidController
     {
         [Route("my/template/{*resource}")]
         public ActionResult Get(string resource = "")
