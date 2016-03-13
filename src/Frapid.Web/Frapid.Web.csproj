@@ -376,11 +376,11 @@
     <Content Include="Scripts\frapid\core\prototype\string.js" />
     <Content Include="Scripts\frapid\core\validation.js" />
     <Content Include="Scripts\frapid\core\window.js" />
-    <Content Include="Scripts\frapid\utitlities\countries.js" />
-    <Content Include="Scripts\frapid\utitlities\country-codes.js" />
-    <Content Include="Scripts\frapid\utitlities\localizable.js" />
-    <Content Include="Scripts\frapid\utitlities\form.js" />
-    <Content Include="Scripts\frapid\utitlities\validator.js" />
+    <Content Include="Scripts\frapid\utilities\countries.js" />
+    <Content Include="Scripts\frapid\utilities\country-codes.js" />
+    <Content Include="Scripts\frapid\utilities\localizable.js" />
+    <Content Include="Scripts\frapid\utilities\form.js" />
+    <Content Include="Scripts\frapid\utilities\validator.js" />
     <Content Include="Scripts\inflection-js\inflection.js" />
     <Content Include="Scripts\inflection-js\test\inflection_test.html" />
     <Content Include="Scripts\jquery-1.9.1.js" />

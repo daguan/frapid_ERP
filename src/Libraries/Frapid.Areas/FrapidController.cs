@@ -126,6 +126,7 @@ namespace Frapid.Areas
                 model = "OK";
             }
 
+            this.Response.StatusCode = 200;
             string json = JsonConvert.SerializeObject(model);
             return this.Content(json, "application/json");
         }

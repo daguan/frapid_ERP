@@ -6,6 +6,7 @@ obj
 *.suo
 *.user
 .my
+src/Frapid.Web/Backups/
 src/Frapid.Web/Tenants/
 src/Frapid.Web/Resources/
 DomainsInstalled.json
