@@ -17,6 +17,15 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
     [AntiForgery]
     public class IndexController : WebsiteBuilderController
     {
+        [Route("hit")]
+        [Route("site/{categoryAlias}/{alias}/hit")]
+        [HttpPost]
+        public ActionResult Counter(string categoryAlias = "", string alias = "")
+        {
+            ContentModel.AddHit(AppUsers.GetTenant(), categoryAlias, alias);
+            return this.Ok();
+        }
+
         [Route("")]
         [Route("site/{categoryAlias}/{alias}")]
         [FrapidOutputCache(ProfileName = "Content")]
@@ -35,14 +44,6 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
                     return this.View(GetLayoutPath() + "404.cshtml");
                 }
 
-                string database = AppUsers.GetTenant();
-
-                HostingEnvironment.QueueBackgroundWorkItem(x =>
-                {
-                    this.AddHit(database, model.ContentId);
-                });
-
-
                 Log.Verbose($"Parsing custom content extensions for \"{this.CurrentPageUrl}\".");
                 model.Contents = ContentExtensions.ParseHtml(this.Tenant, model.Contents);
                 Log.Verbose($"Parsing custom form extensions for \"{this.CurrentPageUrl}\".");
@@ -58,10 +59,6 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
             }
         }
 
-        private void AddHit(string database, int contentId)
-        {
-            ContentModel.AddHit(database, contentId);
-        }
 
         private Content GetContents(string categoryAlias, string alias, bool isPost = false, FormCollection form = null)
         {

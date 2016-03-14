@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
@@ -45,6 +46,7 @@ namespace Frapid.WebsiteBuilder.DAL
             }
         }
 
+
         public static IEnumerable<PublishedContentView> GetBlogContents()
         {
             using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
@@ -63,10 +65,22 @@ namespace Frapid.WebsiteBuilder.DAL
             }
         }
 
-        public static void AddHit(string database, int contentId)
+        internal static void AddHit(string database, string categoryAlias, string alias)
         {
-            const string sql = "UPDATE website.contents SET hits = COALESCE(website.contents.hits, 0) + 1 WHERE website.contents.content_id=@0;";
-            Factory.NonQuery(database, sql, contentId);
+            string sql;
+            if (string.IsNullOrWhiteSpace(categoryAlias) && string.IsNullOrWhiteSpace(alias))
+            {
+                sql = "UPDATE website.contents SET hits = COALESCE(website.contents.hits, 0) + 1 " +
+                      "WHERE is_homepage = true;";
+                Factory.NonQuery(database, sql, categoryAlias, alias);
+                return;
+            }
+
+            sql = "UPDATE website.contents SET hits = COALESCE(website.contents.hits, 0) + 1 " +
+                  "WHERE website.contents.content_id=(SELECT website.published_content_view.content_id FROM website.published_content_view " +
+                  "WHERE category_alias=@0 AND alias=@1);";
+            Factory.NonQuery(database, sql, categoryAlias, alias);
+            return;
         }
     }
 }

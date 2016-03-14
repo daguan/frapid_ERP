@@ -7,7 +7,7 @@ namespace Frapid.NPoco
     {
         public PocoColumn()
         {
-            ForceToUtc = true;
+            //ForceToUtc = true;
         }
 
         public TableInfo TableInfo;

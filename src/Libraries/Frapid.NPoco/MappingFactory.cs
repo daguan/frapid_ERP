@@ -382,7 +382,7 @@ namespace Frapid.NPoco
             // Standard DateTime->Utc mapper
             if (pc != null && pc.ForceToUtc && srcType == typeof(DateTime) && (dstType == typeof(DateTime) || dstType == typeof(DateTime?)))
             {
-                converter = delegate(object src) { return new DateTime(((DateTime)src).Ticks, DateTimeKind.Utc); };
+                converter = delegate(object src) { return new DateTime(((DateTime)src).ToUniversalTime().Ticks, DateTimeKind.Utc); };
                 return converter;
             }
 

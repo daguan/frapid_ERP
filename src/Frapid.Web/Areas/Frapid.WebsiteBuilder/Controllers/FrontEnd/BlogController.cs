@@ -13,7 +13,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
     public class BlogController : WebsiteBuilderController
     {
         [Route("blog/{categoryAlias}/{alias}")]
-        [FrapidOutputCache(CacheProfile = "BlogContent")]
+        [FrapidOutputCache(ProfileName = "BlogContent")]
         public ActionResult Post(string categoryAlias, string alias)
         {
             var model = ContentModel.GetContent(this.Tenant, categoryAlias, alias, true);
@@ -33,7 +33,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
             return this.View(this.GetRazorView<AreaRegistration>("Blog/Post.cshtml"), model);
         }
 
-        [FrapidOutputCache(CacheProfile = "BlogHome")]
+        [FrapidOutputCache(ProfileName = "BlogHome")]
         [Route("blog")]
         public ActionResult Home()
         {

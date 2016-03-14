@@ -16,6 +16,16 @@ namespace Frapid.Framework.Extensions
             return Enum.TryParse(value, true, out result) ? result : defaultValue;
         }
 
+        public static string Or(this string s, string or)
+        {
+            if (string.IsNullOrWhiteSpace(s))
+            {
+                return or;
+            }
+
+            return s;
+        }
+
         public static string ReplaceWholeWord(this string s, string word, string bywhat)
         {
             char firstLetter = word[0];

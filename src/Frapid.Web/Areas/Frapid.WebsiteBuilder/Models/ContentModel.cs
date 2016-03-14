@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Frapid.WebsiteBuilder.DAL;
@@ -36,9 +37,9 @@ namespace Frapid.WebsiteBuilder.Models
             return model;
         }
 
-        public static void AddHit(string database, int contentId)
+        internal static void AddHit(string database, string categoryAlias, string alias)
         {
-            Contents.AddHit(database, contentId);
+            Contents.AddHit(database, categoryAlias, alias);
         }
     }
 }

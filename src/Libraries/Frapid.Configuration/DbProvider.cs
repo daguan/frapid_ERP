@@ -39,6 +39,7 @@ namespace Frapid.Configuration
                     }
                 });
 
+
                 Config = fluentConfig;
             }
             catch (ReflectionTypeLoadException)
@@ -46,6 +47,7 @@ namespace Frapid.Configuration
                 //Swallow
             }
         }
+
 
         public static DatabaseFactory Get(string connectionString)
         {

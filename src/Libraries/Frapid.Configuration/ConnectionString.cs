@@ -62,7 +62,7 @@ namespace Frapid.Configuration
                 SslMode = SslMode.Prefer,
                 MinPoolSize = 10,
                 MaxPoolSize = 100,
-                ApplicationName = "Frapid"
+                ApplicationName = "Frapid"                
             }.ConnectionString;
         }
     }
