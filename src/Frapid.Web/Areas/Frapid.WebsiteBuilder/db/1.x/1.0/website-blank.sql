@@ -2,6 +2,22 @@
 DROP SCHEMA IF EXISTS website CASCADE; --WEB BUILDER
 CREATE SCHEMA website;
 
+CREATE TABLE website.configurations
+(
+    configuration_id                                SERIAL PRIMARY KEY,
+    domain_name                                     national character varying(500) NOT NULL,
+    website_name                                    national character varying(500) NOT NULL,
+	description										text,
+	blog_title                                      national character varying(500),
+	blog_description							    text,	
+	is_default                                      boolean NOT NULL DEFAULT(true),
+    audit_user_id                                   integer REFERENCES account.users,
+    audit_ts                                        TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW())
+);
+
+CREATE UNIQUE INDEX configuration_domain_name_uix
+ON website.configurations(LOWER(domain_name));
+
 CREATE TABLE website.email_subscriptions
 (
     email_subscription_id                       uuid PRIMARY KEY DEFAULT(gen_random_uuid()),
@@ -23,6 +39,7 @@ CREATE TABLE website.categories
     category_name                               national character varying(100) NOT NULL,
     alias                                       national character varying(50) NOT NULL UNIQUE,
     seo_description                             national character varying(100),
+	is_blog										boolean NOT NULL DEFAULT(false),
     audit_user_id                               integer REFERENCES account.users,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
                                                 DEFAULT(NOW())    
@@ -32,10 +49,13 @@ CREATE TABLE website.contents
 (
     content_id                                  SERIAL NOT NULL PRIMARY KEY,
     category_id                                 integer NOT NULL REFERENCES website.categories,
-    title                                       national character varying(100) NOT NULL,
-    alias                                       national character varying(50) NOT NULL UNIQUE,
+    title                                       national character varying(500) NOT NULL,
+    alias                                       national character varying(250) NOT NULL UNIQUE,
     author_id                                   integer REFERENCES account.users,
     publish_on                                  TIMESTAMP WITH TIME ZONE NOT NULL,
+	created_on									TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
+    last_editor_id                              integer REFERENCES account.users,
+	last_edited_on							    TIMESTAMP WITH TIME ZONE,
     markdown                                    text,
     contents                                    text NOT NULL,
     tags                                        text,
@@ -198,6 +218,7 @@ LANGUAGE plpgsql;
 SELECT * FROM core.create_app('Frapid.WebsiteBuilder', 'Website', '1.0', 'MixERP Inc.', 'December 1, 2015', 'world blue', '/dashboard/website/contents', null);
 
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Tasks', '', 'tasks icon', '');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Configuration', '/dashboard/website/configuration', 'configure icon', 'Tasks');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Manage Categories', '/dashboard/website/categories', 'sitemap icon', 'Tasks');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Add New Content', '/dashboard/website/contents/new', 'file', 'Tasks');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'View Contents', '/dashboard/website/contents', 'desktop', 'Tasks');
@@ -342,14 +363,19 @@ SELECT
     website.contents.title,
     website.contents.alias,
     website.contents.author_id,
+    account.users.name AS author_name,
     website.contents.markdown,
+    website.contents.publish_on,
     website.contents.contents,
     website.contents.tags,
     website.contents.seo_description,
-    website.contents.is_homepage
+    website.contents.is_homepage,
+    website.categories.is_blog
 FROM website.contents
 INNER JOIN website.categories
 ON website.categories.category_id = website.contents.category_id
+LEFT JOIN account.users
+ON website.contents.author_id = account.users.user_id
 WHERE NOT is_draft
 AND publish_on <= NOW();
 
@@ -358,7 +384,15 @@ DROP VIEW IF EXISTS website.tag_view;
 
 CREATE VIEW website.tag_view
 AS
-SELECT DISTINCT unnest(regexp_split_to_array(tags, ',')) AS tag FROM website.contents;
+WITH tags
+AS
+(
+SELECT DISTINCT unnest(regexp_split_to_array(tags, ',')) AS tag FROM website.contents
+)
+SELECT
+    ROW_NUMBER() OVER (ORDER BY tag) AS tag_id,
+    tag
+FROM tags;
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/05.views/website.yesterdays_email_subscriptions.sql --<--<--

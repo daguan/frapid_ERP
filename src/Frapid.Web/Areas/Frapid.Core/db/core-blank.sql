@@ -86,15 +86,52 @@ $BODY$
   ROWS 1000;
 
   
--- Function: poco_get_table_function_definition(text, text)
+DROP FUNCTION IF EXISTS get_app_data_type(_db_data_type text);
 
--- DROP FUNCTION poco_get_table_function_definition(text, text);
+CREATE FUNCTION get_app_data_type(_db_data_type text)
+RETURNS text
+STABLE
+AS
+$$
+BEGIN
+    IF(_db_data_type IN('int4', 'int', 'integer')) THEN
+        RETURN 'int';
+    END IF;
 
-CREATE OR REPLACE FUNCTION poco_get_table_function_definition(
-    IN _schema text,
-    IN _name text)
-  RETURNS TABLE(id bigint, column_name text, is_nullable text, udt_name text, column_default text, max_length integer, is_primary_key text) AS
-$BODY$
+    IF(_db_data_type IN('varchar', 'character varying', 'text')) THEN
+        RETURN 'string';
+    END IF;
+    
+    IF(_db_data_type IN('date', 'time', 'timestamp', 'timestamptz')) THEN
+        RETURN 'System.DateTime';
+    END IF;
+    
+    IF(_db_data_type IN('bool', 'boolean')) THEN
+        RETURN 'bool';
+    END IF;
+
+    RETURN $1;
+END
+$$
+LANGUAGE plpgsql;
+
+
+DROP FUNCTION IF EXISTS poco_get_table_function_definition(_schema text, _name text);
+
+CREATE FUNCTION poco_get_table_function_definition(_schema text, _name text)
+RETURNS TABLE
+(
+    id                      bigint,
+    column_name             text,
+    is_nullable             text,
+    udt_name                text,
+    column_default          text,
+    max_length              integer,
+    is_primary_key          text,
+    data_type               text
+)
+AS
+$$
     DECLARE _oid            oid;
     DECLARE _typoid         oid;
 BEGIN
@@ -106,7 +143,8 @@ BEGIN
         udt_name                text,
         column_default          text,
         max_length              integer default(0),
-        is_primary_key          text
+        is_primary_key          text,
+        data_type               text
     ) ON COMMIT DROP;
 
     SELECT        
@@ -154,6 +192,9 @@ BEGIN
         AND    attnum > 0
         AND    NOT attisdropped
         ORDER  BY attnum;
+
+        UPDATE temp_poco
+        SET data_type = public.get_app_data_type(temp_poco.udt_name);
         
         RETURN QUERY
         SELECT * FROM temp_poco;
@@ -178,6 +219,9 @@ BEGIN
         WHERE att.attrelid=(SELECT typrelid FROM pg_type WHERE pg_type.oid = _typoid)
         AND att.attnum > 0
         ORDER by attnum;
+
+        UPDATE temp_poco
+        SET data_type = public.get_app_data_type(temp_poco.udt_name);
 
         RETURN QUERY
         SELECT * FROM temp_poco;
@@ -205,6 +249,9 @@ BEGIN
             ''::text AS column_default
         FROM procs
         WHERE column_mode=ANY(ARRAY['t', 'o']);
+
+        UPDATE temp_poco
+        SET data_type = public.get_app_data_type(temp_poco.udt_name);
 
         RETURN QUERY
         SELECT * FROM temp_poco;
@@ -236,19 +283,14 @@ BEGIN
     AND att.attnum > 0
     ORDER by attnum;
 
+    UPDATE temp_poco
+    SET data_type = public.get_app_data_type(temp_poco.udt_name);
+
     RETURN QUERY
     SELECT * FROM temp_poco;
 END;
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100
-  ROWS 1000;
-ALTER FUNCTION poco_get_table_function_definition(text, text)
-  OWNER TO frapid_db_user;
-
--- Function: poco_get_tables(text)
-
--- DROP FUNCTION poco_get_tables(text);
+$$
+LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION poco_get_tables(IN _schema text)
   RETURNS TABLE(table_schema name, table_name name, table_type text, has_duplicate boolean) AS
