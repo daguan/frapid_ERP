@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Web.Mvc;
+using Frapid.ApplicationState.Cache;
 using Frapid.Areas.Caching;
-using Frapid.Configuration;
 using Frapid.WebsiteBuilder.DAL;
 using Frapid.WebsiteBuilder.Models;
 using Frapid.WebsiteBuilder.ViewModels;
@@ -12,6 +12,14 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 {
     public class BlogController : WebsiteBuilderController
     {
+        [Route("blog/{categoryAlias}/{alias}/hit")]
+        [HttpPost]
+        public ActionResult Counter(string categoryAlias = "", string alias = "")
+        {
+            ContentModel.AddHit(AppUsers.GetTenant(), categoryAlias, alias);
+            return this.Ok();
+        }
+
         [Route("blog/{categoryAlias}/{alias}")]
         [FrapidOutputCache(ProfileName = "BlogContent")]
         public ActionResult Post(string categoryAlias, string alias)
@@ -29,6 +37,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
             model.LayoutPath = path;
             model.Layout = layout;
+            model.Contents = ContentExtensions.ParseHtml(this.Tenant, model.Contents);
 
             return this.View(this.GetRazorView<AreaRegistration>("Blog/Post.cshtml"), model);
         }
