@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Hosting;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
@@ -53,7 +51,8 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
             }
             catch (NpgsqlException ex)
             {
-                Log.Error("An exception was encountered while trying to get content. More info:\nCategory alias: {categoryAlias}, alias: {alias}, is post: {isPost}, form: {form}. Exception\n{ex}.",
+                Log.Error(
+                    "An exception was encountered while trying to get content. More info:\nCategory alias: {categoryAlias}, alias: {alias}, is post: {isPost}, form: {form}. Exception\n{ex}.",
                     categoryAlias, alias, isPost, form, ex);
                 return new HttpNotFoundResult();
             }
