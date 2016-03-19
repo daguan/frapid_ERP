@@ -18,7 +18,11 @@ namespace Frapid.WebsiteBuilder.Models
                 return null;
             }
 
-            Mapper.CreateMap<PublishedContentView, Content>();
+            Mapper.Initialize(delegate (IMapperConfiguration configuration)
+            {
+                configuration.CreateMap<PublishedContentView, Content>();
+            });
+
             var model = Mapper.Map<List<Content>>(contents);
             return model;
         }
@@ -32,7 +36,12 @@ namespace Frapid.WebsiteBuilder.Models
                 return null;
             }
 
-            Mapper.CreateMap<PublishedContentView, Content>();
+
+            Mapper.Initialize(delegate (IMapperConfiguration configuration)
+            {
+                configuration.CreateMap<PublishedContentView, Content>();
+            });
+
             var model = Mapper.Map<Content>(content);
             return model;
         }

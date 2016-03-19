@@ -81,7 +81,11 @@ namespace Frapid.Account.Controllers.Frontend
             model.Browser = this.RemoteUser.Browser;
             model.IpAddress = this.RemoteUser.IpAddress;
 
-            Mapper.CreateMap<Registration, DTO.Registration>();
+            Mapper.Initialize(delegate (IMapperConfiguration configuration)
+            {
+                configuration.CreateMap<Registration, DTO.Registration>();
+            });
+
             var registration = Mapper.Map<DTO.Registration>(model);
             registration.Password = PasswordManager.GetHashedPassword(model.Password.ToString());
 
