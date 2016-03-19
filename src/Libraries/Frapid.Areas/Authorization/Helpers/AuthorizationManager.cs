@@ -7,7 +7,7 @@ using Frapid.TokenManager.DAL;
 using Microsoft.AspNet.SignalR.Hosting;
 using Serilog;
 
-namespace Frapid.Areas
+namespace Frapid.Areas.Authorization.Helpers
 {
     public static class AuthorizationManager
     {

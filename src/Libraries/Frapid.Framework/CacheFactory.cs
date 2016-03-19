@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Caching;
 
+
 namespace Frapid.Framework
 {
     public static class CacheFactory
@@ -15,7 +16,7 @@ namespace Frapid.Framework
             {
                 return;
             }
-            
+
             var cacheItem = new CacheItem(key, value);
 
             if (MemoryCache.Default[key] == null)

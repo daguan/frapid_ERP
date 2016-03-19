@@ -13,7 +13,7 @@
 	"Bundle": "Frapid Framework",
     "IsMeta": true,
 	"DbSchema": "i18n",
-	"BlankDbPath": "~/db/meta.sql",
+	"BlankDbPath": "~/db/PostgreSQL/meta.sql",
 	"SampleDbPath": null,
     "PatchFilePath" : null,
 	"InstallSample": false,

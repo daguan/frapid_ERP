@@ -1,19 +1,25 @@
-using System;
-using System.EnterpriseServices;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using System.Web.UI;
 using Frapid.Configuration;
-using Frapid.Framework.Extensions;
 
 namespace Frapid.Dashboard.Controllers
 {
-    public class MyTemplateController : Controller
+    public class MyTemplateController : DashboardController
     {
+        private readonly List<string> _exceptions = new List<string>() {".cshtml", ".vbhtml", ".aspx", ".ascx", ".cs", ".vb" };
+
+        /// <summary>
+        ///     Warning: Do not set the configuration "MyAllowedResources" to serve anything except static files.
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <returns></returns>
         [Route("dashboard/my/template/{*resource}")]
+        [OutputCache(Duration = 2592000, Location = OutputCacheLocation.Client)]
         public ActionResult Get(string resource = "")
         {
             string configFile =
@@ -26,7 +32,7 @@ namespace Frapid.Dashboard.Controllers
 
             var allowed = ConfigurationManager.ReadConfigurationValue(configFile, "MyAllowedResources").Split(',');
 
-            if (string.IsNullOrWhiteSpace(resource) || allowed.Count().Equals(0))
+            if (string.IsNullOrWhiteSpace(resource) || allowed.Length.Equals(0))
             {
                 return this.HttpNotFound();
             }
@@ -48,6 +54,11 @@ namespace Frapid.Dashboard.Controllers
             string extension = Path.GetExtension(path);
 
             if (!allowed.Contains(extension))
+            {
+                return this.HttpNotFound();
+            }
+
+            if (this._exceptions.Contains(extension))
             {
                 return this.HttpNotFound();
             }

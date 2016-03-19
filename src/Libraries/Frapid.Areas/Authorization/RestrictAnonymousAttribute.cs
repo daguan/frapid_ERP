@@ -2,7 +2,7 @@
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
-using AuthorizeAttribute = System.Web.Mvc.AuthorizeAttribute;
+using Frapid.Areas.Authorization.Helpers;
 
 namespace Frapid.Areas.Authorization
 {
