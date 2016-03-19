@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApprovedDomain.cs" />
+    <Compile Include="CacheConfig.cs" />
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="ConnectionString.cs" />
     <Compile Include="DbConvention.cs" />

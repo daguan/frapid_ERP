@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Frapid.Configuration">
-      <HintPath>..\..\Frapid.Web\Bin\Frapid.Configuration.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core">
       <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
@@ -50,10 +47,6 @@
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="StackExchange.Redis.StrongName, Version=1.0.316.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.0.488\lib\net45\StackExchange.Redis.StrongName.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -100,17 +93,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CacheFactory.cs" />
     <Compile Include="Extensions\Cast.cs" />
     <Compile Include="Extensions\RequestExtensions.cs" />
     <Compile Include="Extensions\StringExtensionMethods.cs" />
     <Compile Include="FileHelper.cs" />
-    <Compile Include="ICacheFactory.cs" />
     <Compile Include="IDayEndTask.cs" />
     <Compile Include="IStartupRegistration.cs" />
     <Compile Include="JsonHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RedisCacheFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -1,20 +1,20 @@
-﻿using System.Runtime.Caching;
+using System;
+using System.Runtime.Caching;
 
-
-namespace Frapid.Framework
+namespace Frapid.ApplicationState.CacheFactory
 {
-    public static class CacheFactory
+    public class MemoryCacheFactory:ICacheFactory
     {
-        public static void AddToDefaultCache(string key, object value)
+        public bool Add<T>(string key, T value, DateTimeOffset expiresAt)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
-                return;
+                return false;
             }
 
             if (value == null)
             {
-                return;
+                return false;
             }
 
             var cacheItem = new CacheItem(key, value);
@@ -27,16 +27,18 @@ namespace Frapid.Framework
             {
                 MemoryCache.Default[key] = cacheItem;
             }
+
+            return true;
         }
 
-        public static object GetFromDefaultCacheByKey(string key)
+        public T Get<T>(string key) where T : class
         {
             if (string.IsNullOrWhiteSpace(key))
             {
                 return null;
             }
 
-            return MemoryCache.Default.Get(key);
+            return MemoryCache.Default.Get(key) as T;
         }
     }
 }

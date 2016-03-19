@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Frapid.Framework
+namespace Frapid.ApplicationState
 {
     public interface ICacheFactory
     {

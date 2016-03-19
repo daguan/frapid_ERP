@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.Caching;
 using System.Web;
+using Frapid.ApplicationState.CacheFactory;
 using Frapid.ApplicationState.Models;
 using Frapid.Configuration;
 using Frapid.DataAccess;
-using Frapid.Framework;
 using Frapid.Framework.Extensions;
 
 namespace Frapid.ApplicationState.Cache
@@ -28,9 +28,9 @@ namespace Frapid.ApplicationState.Cache
 
             string key = tenant + "-" + loginId.ToString(CultureInfo.InvariantCulture);
 
-            var cacheObject = CacheFactory.GetFromDefaultCacheByKey(key);
-            var login = cacheObject as LoginView;
+            var factory = new DefaultCacheFactory();
 
+            var login = factory.Get<LoginView>(key);
             if (login != null)
             {
                 return login;
@@ -39,8 +39,9 @@ namespace Frapid.ApplicationState.Cache
             login = GetMetaLogin(tenant, loginId);
             var dictionary = GetDictionary(tenant, login);
 
-            CacheFactory.AddToDefaultCache("Dictionary" + key, dictionary);
-            CacheFactory.AddToDefaultCache(key, login);
+
+            factory.Add(tenant + "/dictionary/" + key, dictionary, DateTimeOffset.UtcNow.AddHours(2));
+            factory.Add(key, login, DateTimeOffset.UtcNow.AddHours(2));
 
             return login;
         }
@@ -72,8 +73,10 @@ namespace Frapid.ApplicationState.Cache
             }
 
             string key = tenant + "-" + loginId.ToString(CultureInfo.InvariantCulture);
-            var cacheObject = CacheFactory.GetFromDefaultCacheByKey(key);
-            login = cacheObject as LoginView;
+
+            var factory = new DefaultCacheFactory();
+
+            login = factory.Get<LoginView>(key);
 
             var view = login ?? SetCurrentLogin(tenant, loginId);
 
@@ -83,13 +86,15 @@ namespace Frapid.ApplicationState.Cache
 
         private static void UpdateActivity(int userId, string ip, string browser)
         {
-            const string sql = "UPDATE account.users SET last_seen_on=NOW(), last_ip=@0, last_browser=@1 WHERE user_id=@2;";
+            const string sql =
+                "UPDATE account.users SET last_seen_on=NOW(), last_ip=@0, last_browser=@1 WHERE user_id=@2;";
             Factory.NonQuery(GetTenant(), sql, ip, browser, userId);
         }
 
         public static long GetMetaLoginId(string database, long loginId)
         {
-            const string sql = "INSERT INTO public.frapid_logins(tenant, login_id) SELECT @0::text, @1::bigint RETURNING global_login_id;";
+            const string sql =
+                "INSERT INTO public.frapid_logins(tenant, login_id) SELECT @0::text, @1::bigint RETURNING global_login_id;";
             return Factory.Scalar<long>(Factory.MetaDatabase, sql, database, loginId);
         }
 

@@ -3,15 +3,21 @@ using Frapid.Configuration;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 
-namespace Frapid.Framework
+namespace Frapid.ApplicationState.CacheFactory
 {
     public class RedisCacheFactory : ICacheFactory
     {
+        public static ConnectionMultiplexer Redis { get; private set; }
+
         public static IDatabase GetDb()
         {
-            string cs = RedisConnectionString.GetConnectionString();
-            var redis = ConnectionMultiplexer.Connect(cs);
-            return redis.GetDatabase();
+            if (Redis == null)
+            {
+                string cs = RedisConnectionString.GetConnectionString();
+                Redis = ConnectionMultiplexer.Connect(cs);
+            }
+
+            return Redis.GetDatabase();
         }
 
         public bool Add<T>(string key, T value, DateTimeOffset expiresAt)

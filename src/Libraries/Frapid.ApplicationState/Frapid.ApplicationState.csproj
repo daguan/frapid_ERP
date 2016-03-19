@@ -35,6 +35,10 @@
       <HintPath>..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="StackExchange.Redis.StrongName, Version=1.0.316.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.0.488\lib\net45\StackExchange.Redis.StrongName.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -48,8 +52,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CacheFactory\DefaultCacheFactory.cs" />
+    <Compile Include="CacheFactory\MemoryCacheFactory.cs" />
+    <Compile Include="CacheFactory\RedisCacheFactory.cs" />
     <Compile Include="Cache\AppUsers.cs" />
     <Compile Include="Cache\MetaLoginHelper.cs" />
+    <Compile Include="ICacheFactory.cs" />
     <Compile Include="Models\LoginView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
