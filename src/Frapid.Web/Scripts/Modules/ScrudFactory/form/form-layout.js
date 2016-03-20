@@ -94,6 +94,7 @@ function createLayout(collection, container) {
 
 
 
+	$(document).trigger("layoutCreated");
     initializeAjaxRequest();
     initializeUploader();
 
@@ -107,7 +108,8 @@ function createLayout(collection, container) {
             $(".initial.value").html("");
             $("span.live").html(val);
         };
-    }
+    };
+
 
     $("input.live").keyup(function () {
         displayLive($(this).val());

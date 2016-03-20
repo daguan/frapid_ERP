@@ -8,6 +8,8 @@
             };
         };
     };
+
+    $(document).trigger("editDisplayed");
 };
 
 function displayCustomFields(items) {

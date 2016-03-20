@@ -4,6 +4,7 @@
         return getAjaxRequest(url);
     };
 
+	$(document).trigger("dataLoading");
     var ajax = request(id);
 
     ajax.success(function (response) {

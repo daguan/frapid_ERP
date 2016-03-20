@@ -21,10 +21,10 @@ namespace Frapid.Installer
             try
             {
                 Log.Verbose($"Installing frapid on domain {url}.");
-                string tenant = DbConvention.GetTenant(url);
+                string database = DbConvention.GetTenant(url);
 
-                Log.Verbose($"Creating database {tenant}.");
-                var db = new DbInstaller(tenant);
+                Log.Verbose($"Creating database {database}.");
+                var db = new DbInstaller(database);
                 db.Install();
 
                 Log.Verbose("Getting installables.");
@@ -34,8 +34,11 @@ namespace Frapid.Installer
                 foreach (var installable in installables)
                 {
                     Log.Verbose($"Installing module {installable.ApplicationName}.");
-                    new AppInstaller(tenant, installable).Install();
+                    new AppInstaller(database, installable).Install();
                 }
+
+                var tenant = new DomainSerializer("DomainsApproved.json").Get().FirstOrDefault(x => x.DomainName.Equals(url));
+                DbInstalledDomains.Add(tenant);
             }
             catch (Exception ex)
             {

@@ -54,7 +54,6 @@ namespace Frapid.Account.Controllers
             {
                 Value = token.ClientToken,
                 HttpOnly = true,
-                Secure = true,
                 Expires = token.ExpiresOn
             };
 

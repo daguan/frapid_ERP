@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="AppInstaller.cs" />
     <Compile Include="DbInspector.cs" />
+    <Compile Include="DbInstalledDomains.cs" />
     <Compile Include="DbInstaller.cs" />
     <Compile Include="DbInstallException.cs" />
     <Compile Include="InstallationFactory.cs" />
