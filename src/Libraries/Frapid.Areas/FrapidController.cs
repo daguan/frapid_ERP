@@ -56,7 +56,10 @@ namespace Frapid.Areas
                 result.ViewEngine.ReleaseView(controllerContext, result.View);
             }
 
-            return this.Content(CdnHelper.UseCdn(output.ToString()), "text/html");
+            string html = CdnHelper.UseCdn(output.ToString());
+            html = MinificationHelper.Minify(html);
+
+            return this.Content(html, "text/html");
         }
 
         protected override void OnActionExecuting(ActionExecutingContext context)
