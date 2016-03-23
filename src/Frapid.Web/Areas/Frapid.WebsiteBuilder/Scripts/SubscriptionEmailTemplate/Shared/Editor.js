@@ -38,7 +38,7 @@ function initializeAceEditor() {
     var editor = window.ace.edit("editor");
     editor.$blockScrolling = Infinity;
     $("#editor").removeClass("initially, hidden");
-    editor.setTheme("ace/theme/ambience");
+    editor.setTheme("ace/theme/sqlserver");
     editor.getSession().setMode("ace/mode/html");
     editor.setValue(content, -1);
 };

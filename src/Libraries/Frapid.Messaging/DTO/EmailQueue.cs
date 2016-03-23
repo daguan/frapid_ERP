@@ -7,7 +7,9 @@ namespace Frapid.Messaging.DTO
     {
         public long QueueId { get; set; }
         public string FromName { get; set; }
+        public string FromEmail { get; set; }
         public string ReplyTo { get; set; }
+        public string ReplyToName { get; set; }
         public string Subject { get; set; }
         public string SendTo { get; set; }
         public string Attachments { get; set; }

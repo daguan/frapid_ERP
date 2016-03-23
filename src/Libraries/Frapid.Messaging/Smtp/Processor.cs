@@ -19,7 +19,7 @@ namespace Frapid.Messaging.Smtp
 
         public void InitializeConfig(string database)
         {
-            var config = new Config(database);
+            var config = new Config(database, null);
             var host = EmailHelper.GetSmtpHost(config);
             var credentials = EmailHelper.GetCredentials(config);
 

@@ -51,11 +51,14 @@ namespace Frapid.SendGridMail
             {
                 email.Status = Status.Executing;
 
-                var message = new SendGridMessage();
-                message.From = new MailAddress(email.FromEmail, email.FromName);
+                var message = new SendGridMessage
+                {
+                    From = new MailAddress(email.FromEmail, email.FromName),
+                    ReplyTo = new[] {new MailAddress(email.ReplyToEmail, email.ReplyToName)},
+                    Subject = email.Subject
+                };
 
                 message.AddTo(email.SentTo.Split(',').Select(x=>x.Trim()).ToList());
-                message.Subject = email.Subject;
 
                 if (email.IsBodyHtml)
                 {

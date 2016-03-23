@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Frapid.Messaging.DAL;
@@ -22,12 +21,26 @@ namespace Frapid.Messaging
 
         public EmailQueue Email { get; set; }
         public string Database { get; set; }
+        public IEmailProcessor Processor { get; set; }
 
         public void Add()
         {
+            this.Processor = EmailProcessor.GetDefault(this.Database);
             if (!this.IsEnabled())
             {
                 return;
+            }
+
+            var config = new Config(this.Database, this.Processor);
+
+            if (string.IsNullOrWhiteSpace(this.Email.FromName))
+            {
+                this.Email.FromName = config.FromName;
+            }
+
+            if (string.IsNullOrWhiteSpace(this.Email.FromEmail))
+            {
+                this.Email.FromEmail = config.FromEmail;
             }
 
             MailQueue.AddToQueue(this.Database, this.Email);
@@ -35,14 +48,13 @@ namespace Frapid.Messaging
 
         private bool IsEnabled()
         {
-            var processor = EmailProcessor.GetDefault(this.Database);
-            return processor != null && processor.IsEnabled;
+            return this.Processor != null && this.Processor.IsEnabled;
         }
 
         public async Task ProcessMailQueueAsync(IEmailProcessor processor)
         {
-            IEnumerable<EmailQueue> queue = MailQueue.GetMailInQueue(this.Database).ToList();
-            var config = new Config(this.Database);
+            var queue = MailQueue.GetMailInQueue(this.Database).ToList();
+            var config = new Config(this.Database, this.Processor);
 
             if (this.IsEnabled())
             {

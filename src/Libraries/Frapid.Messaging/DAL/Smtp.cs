@@ -9,7 +9,7 @@ namespace Frapid.Messaging.DAL
         public static SmtpConfig GetConfig(string database)
         {
             const string sql = "SELECT * FROM config.smtp_configs WHERE enabled AND is_default LIMIT 1;";
-            return Factory.Get<DTO.SmtpConfig>(database, sql).FirstOrDefault();
+            return Factory.Get<SmtpConfig>(database, sql).FirstOrDefault();
         }
     }
 }

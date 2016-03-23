@@ -6,18 +6,33 @@ namespace Frapid.Messaging.Smtp
 {
     public class Config : IEmailConfig
     {
-        public Config(string database)
+        public Config(string tenant, IEmailProcessor processor)
         {
-            var smtp = GetSmtpConfig(database);
+            if (processor != null)
+            {
+                this.Tenant = tenant;
+                this.Enabled = processor.IsEnabled;
+                this.FromEmail = processor.Config.FromEmail;
+                this.FromName = processor.Config.FromName;
+                return;
+            }
+
+
+            //We do not have transactional email processor.
+            //Fall back to SMTP configuration
+
+
+            var smtp = GetSmtpConfig(tenant);
 
             if (smtp == null)
             {
                 return;
             }
-            this.Database = database;
+
+            this.Tenant = tenant;
             this.Enabled = smtp.Enabled;
             this.FromName = smtp.FromDisplayName;
-            this.FromEmail = smtp.FromEmailAddress;
+            this.FromEmail = smtp.FromEmailAddress;            
             this.SmtpHost = smtp.SmtpHost;
             this.EnableSsl = smtp.SmtpEnableSsl;
             this.SmtpPort = smtp.SmtpPort;
@@ -26,7 +41,7 @@ namespace Frapid.Messaging.Smtp
             this.DeliveryMethod = SmtpDeliveryMethod.Network;
         }
 
-        public string Database { get; set; }
+        public string Tenant { get; set; }
         public bool Enabled { get; set; }
         public bool EnableSsl { get; set; }
         public string FromName { get; set; }

@@ -74,6 +74,7 @@ namespace Frapid.Mailgun
 
                 request.AddParameter("domain", config.DomainName, ParameterType.UrlSegment);
                 request.AddParameter("from", this.GetEmailAccount(email.FromEmail, email.FromName));
+                request.AddParameter("reply-to", this.GetEmailAccount(email.ReplyToEmail, email.ReplyToName));
 
                 foreach (string recipient in email.SentTo.Split(','))
                 {

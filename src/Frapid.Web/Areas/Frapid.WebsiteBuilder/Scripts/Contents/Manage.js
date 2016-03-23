@@ -42,8 +42,9 @@ function save() {
         var form = [];
         form.push(model);
         form.push(null);
-
+        
         var data = JSON.stringify(form);
+
         return window.getAjaxRequest(url, "POST", data);
     };
 
@@ -70,7 +71,7 @@ function save() {
     });
 };
 
-$("#CancelButton").click(function() {
+$("#CancelButton").click(function () {
     var target = decodeURIComponent(window.getQueryStringByName("ReturnUrl")) || "../contents";
 
     location.href = target;
@@ -100,12 +101,12 @@ function displayContent() {
 
     if (isMarkdown) {
         html = window.marked(contents);
-        alert(html);
+
         try {
             $("#content").html(html);
         } catch (e) {
 
-        } 
+        }
         return;
     };
 
@@ -131,9 +132,15 @@ function initializeAceEditor() {
     };
 
     var editor = window.ace.edit("editor");
+    var contents = editor.getSession().getValue();
+
+    if (contents) {
+        return;//Do not load editor more than once.
+    };
+
     editor.$blockScrolling = Infinity;
     $("#editor").removeClass("initially, hidden");
-    editor.setTheme("ace/theme/ambience");
+    editor.setTheme("ace/theme/sqlserver");
     editor.getSession().setMode("ace/mode/html");
     editor.setValue(content, -1);
 
@@ -149,9 +156,10 @@ $(document).ready(function () {
     if (target) {
         maximize(target);
     };
-    setTimeout(function() {
+
+    setTimeout(function () {
         initializeAceEditor();
-    }, 200);
+    }, 2000);
 });
 
 function maximize(target, width) {
@@ -170,3 +178,7 @@ function maximize(target, width) {
     el.removeClass('sixteen wide').addClass(width);
     items.fadeIn();
 };
+
+setTimeout(function () {
+    initializeAceEditor();
+}, 2000);

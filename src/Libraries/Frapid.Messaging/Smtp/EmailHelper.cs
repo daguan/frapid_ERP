@@ -1,6 +1,5 @@
 ﻿using System;
 using Frapid.Messaging.DTO;
-using Frapid.Messaging.Helpers;
 
 namespace Frapid.Messaging.Smtp
 {
@@ -11,7 +10,9 @@ namespace Frapid.Messaging.Smtp
             var message = new EmailMessage
             {
                 FromName = mail.FromName,
-                FromEmail = mail.ReplyTo,
+                FromEmail = mail.FromEmail,
+                ReplyToEmail = mail.ReplyTo,
+                ReplyToName = mail.ReplyToName,
                 Subject = mail.Subject,
                 SentTo = mail.SendTo,
                 Message = mail.Message,
@@ -20,12 +21,6 @@ namespace Frapid.Messaging.Smtp
                 Status = Status.Unknown
             };
 
-
-            if (string.IsNullOrWhiteSpace(message.FromEmail))
-            {
-                message.FromName = config.FromName;
-                message.FromEmail = config.FromEmail;
-            }
 
             return message;
         }
@@ -49,7 +44,6 @@ namespace Frapid.Messaging.Smtp
                 Username = config.SmtpUsername,
                 Password = config.SmtpUserPassword
             };
-
         }
     }
 }
