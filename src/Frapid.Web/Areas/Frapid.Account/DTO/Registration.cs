@@ -1,5 +1,5 @@
 ﻿using System;
-using Frapid.Account.Models;
+using Frapid.Account.ViewModels;
 using Frapid.DataAccess;
 
 namespace Frapid.Account.DTO

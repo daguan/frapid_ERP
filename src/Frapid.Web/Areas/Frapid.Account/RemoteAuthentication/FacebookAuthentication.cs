@@ -5,7 +5,7 @@ using Frapid.Account.DAL;
 using Frapid.Account.DTO;
 using Frapid.Account.Emails;
 using Frapid.Account.InputModels;
-using Frapid.Account.Models;
+using Frapid.Account.ViewModels;
 
 namespace Frapid.Account.RemoteAuthentication
 {

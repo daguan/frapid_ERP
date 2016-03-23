@@ -2,13 +2,13 @@
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using AutoMapper;
 using Frapid.Account.DAL;
 using Frapid.Account.DTO;
 using Frapid.Account.InputModels;
 using Frapid.Account.ViewModels;
 using Frapid.Areas;
 using Frapid.Configuration;
+using Mapster;
 using Npgsql;
 using SignIn = Frapid.Account.ViewModels.SignIn;
 
@@ -18,7 +18,9 @@ namespace Frapid.Account.Controllers
     public class SignInController : BaseAuthenticationController
     {
         [Route("account/sign-in")]
+        [Route("account/sign-in/social")]
         [Route("account/log-in")]
+        [Route("account/log-in/social")]
         [AllowAnonymous]
         public ActionResult Index()
         {
@@ -29,13 +31,8 @@ namespace Frapid.Account.Controllers
 
             var profile = ConfigurationProfiles.GetActiveProfile();
 
-            Mapper.Initialize(delegate (IMapperConfiguration configuration)
-            {
-                configuration.CreateMap<ConfigurationProfile, SignIn>();
-            });
 
-            var model = Mapper.Map<SignIn>(profile) ?? new SignIn();
-
+            var model = profile.Adapt<SignIn>() ?? new SignIn();
             return View(GetRazorView<AreaRegistration>("SignIn/Index.cshtml"), model);
         }
 
@@ -59,7 +56,8 @@ namespace Frapid.Account.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                 }
 
-                var result = DAL.SignIn.Do(model.Email, model.OfficeId, this.RemoteUser.Browser, this.RemoteUser.IpAddress, model.Culture);
+                var result = DAL.SignIn.Do(model.Email, model.OfficeId, this.RemoteUser.Browser,
+                    this.RemoteUser.IpAddress, model.Culture);
                 return this.OnAuthenticated(result, model);
             }
             catch (NpgsqlException)

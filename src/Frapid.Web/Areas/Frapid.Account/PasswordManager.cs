@@ -4,7 +4,7 @@
     {
         public static bool ValidateBcrypt(string plainPassword, string hashedPassword)
         {
-            if (plainPassword == null || string.IsNullOrWhiteSpace(hashedPassword))
+            if (string.IsNullOrWhiteSpace(plainPassword)  || string.IsNullOrWhiteSpace(hashedPassword))
             {
                 return false;
             }

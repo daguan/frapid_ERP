@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
-using Frapid.Account.Models;
+using Frapid.Account.ViewModels;
 using Frapid.ApplicationState.Cache;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;

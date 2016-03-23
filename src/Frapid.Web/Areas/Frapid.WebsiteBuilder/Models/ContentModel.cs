@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using Frapid.WebsiteBuilder.DAL;
 using Frapid.WebsiteBuilder.DTO;
+using Mapster;
 using Content = Frapid.WebsiteBuilder.ViewModels.Content;
 
 namespace Frapid.WebsiteBuilder.Models
@@ -12,37 +11,24 @@ namespace Frapid.WebsiteBuilder.Models
     {
         public static List<Content> GetBlogContents()
         {
-            var contents = Contents.GetBlogContents();
-            if (contents == null || !contents.Any())
+            var contents = Contents.GetBlogContents().ToList();
+
+            if (!contents.Any())
             {
                 return null;
             }
 
-            Mapper.Initialize(delegate (IMapperConfiguration configuration)
-            {
-                configuration.CreateMap<PublishedContentView, Content>();
-            });
-
-            var model = Mapper.Map<List<Content>>(contents);
+            var model = contents.Adapt<List<Content>>();
             return model;
         }
 
 
-        public static Content GetContent(string tenant, string categoryAlias = "", string alias = "", bool isBlog = false)
+        public static Content GetContent(string tenant, string categoryAlias = "", string alias = "",
+            bool isBlog = false)
         {
             var content = Contents.GetPublished(tenant, categoryAlias, alias, isBlog);
-            if (content == null)
-            {
-                return null;
-            }
 
-
-            Mapper.Initialize(delegate (IMapperConfiguration configuration)
-            {
-                configuration.CreateMap<PublishedContentView, Content>();
-            });
-
-            var model = Mapper.Map<Content>(content);
+            var model = content?.Adapt<Content>();
             return model;
         }
 

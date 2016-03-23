@@ -51,6 +51,11 @@ uploadButton.click(function () {
     }).modal('show');
 });
 
+function confirmAction() {
+    var areYouSure = window.Resources.Questions.AreYouSure() || "Are you sure?";
+    return confirm(areYouSure);
+};
+
 fileInputFile.change(function () {
     window.clearTimeout(window.fileTimeOut);
 });

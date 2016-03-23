@@ -7,7 +7,7 @@ using Frapid.Account.DAL;
 using Frapid.Account.DTO;
 using Frapid.Account.Emails;
 using Frapid.Account.InputModels;
-using Frapid.Account.Models;
+using Frapid.Account.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

@@ -1,4 +1,4 @@
-﻿namespace Frapid.Account.Models
+﻿namespace Frapid.Account.ViewModels
 {
     public interface IUserInfo
     {

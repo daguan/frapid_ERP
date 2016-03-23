@@ -1,6 +1,4 @@
-﻿using System.Security;
-
-namespace Frapid.Account.ViewModels
+﻿namespace Frapid.Account.ViewModels
 {
     public class Registration
     {

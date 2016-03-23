@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Frapid.Messaging.DAL;
@@ -43,7 +44,15 @@ namespace Frapid.Messaging
                 this.Email.FromEmail = config.FromEmail;
             }
 
-            MailQueue.AddToQueue(this.Database, this.Email);
+            if (this.IsValidEmail(this.Email.FromEmail) && this.IsValidEmail(this.Email.SendTo))
+            {
+                MailQueue.AddToQueue(this.Database, this.Email);
+            }
+        }
+
+        private bool IsValidEmail(string emailAddress)
+        {
+            return new EmailAddressAttribute().IsValid(emailAddress);
         }
 
         private bool IsEnabled()

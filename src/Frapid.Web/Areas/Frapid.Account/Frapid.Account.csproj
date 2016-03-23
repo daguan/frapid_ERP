@@ -45,10 +45,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="BCrypt.Net, Version=0.1.5073.29922, Culture=neutral, PublicKeyToken=6bcd409ee6bc9292, processorArchitecture=MSIL">
       <HintPath>packages\BCrypt-Official.0.1.109\lib\BCrypt.Net.dll</HintPath>
       <Private>True</Private>
@@ -111,6 +107,10 @@
     </Reference>
     <Reference Include="jose-jwt, Version=1.9.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\jose-jwt.1.9.1\lib\4.0\jose-jwt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mapster, Version=2.1.0.0, Culture=neutral, PublicKeyToken=2f39883af23c29a8, processorArchitecture=MSIL">
+      <HintPath>packages\Mapster.2.3.0\lib\net45\Mapster.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -177,11 +177,13 @@
     <Content Include="Scripts\Account\SignIn\google.js" />
     <Content Include="Scripts\Account\SignIn\facebook.js" />
     <Content Include="Scripts\Account\SignIn\default.js" />
+    <Content Include="Scripts\Account\ChangePassword\index.js" />
     <Content Include="Scripts\Account\SignUp\signup.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
     <Compile Include="Controllers\Backend\EmailTemplateController.cs" />
+    <Compile Include="Controllers\Frontend\ChangePasswordController.cs" />
     <Compile Include="Controllers\SignInController.cs" />
     <Compile Include="Controllers\BaseAuthenticationController.cs" />
     <Compile Include="Controllers\FacebookController.cs" />
@@ -201,7 +203,9 @@
     <Compile Include="DTO\User.cs" />
     <Compile Include="Exceptions\EmailConfirmException.cs" />
     <Compile Include="Emails\ResetEmail.cs" />
-    <Compile Include="Models\IUserInfo.cs" />
+    <Compile Include="Models\ChangePasswordModel.cs" />
+    <Compile Include="Models\SignUpModel.cs" />
+    <Compile Include="ViewModels\IUserInfo.cs" />
     <Compile Include="Emails\WelcomeEmail.cs" />
     <Compile Include="Emails\SignUpEmail.cs" />
     <Compile Include="Exceptions\PasswordConfirmException.cs" />
@@ -215,15 +219,16 @@
     <Compile Include="DTO\Reset.cs" />
     <Compile Include="PasswordManager.cs" />
     <Compile Include="StartupTask.cs" />
+    <Compile Include="InputModels\ChangePassword.cs" />
     <Compile Include="ViewModels\Language.cs" />
     <Compile Include="RemoteAuthentication\FacebookAuthentication.cs" />
-    <Compile Include="Models\FacebookUserInfo.cs" />
+    <Compile Include="ViewModels\FacebookUserInfo.cs" />
     <Compile Include="RemoteAuthentication\GoogleAuthentication.cs" />
     <Compile Include="InputModels\GoogleAccount.cs" />
     <Compile Include="InputModels\FacebookAccount.cs" />
     <Compile Include="DTO\LoginResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\GoogleUserInfo.cs" />
+    <Compile Include="ViewModels\GoogleUserInfo.cs" />
     <Compile Include="ViewModels\Registration.cs" />
     <Compile Include="ViewModels\Reset.cs" />
     <Compile Include="InputModels\ResetInfo.cs" />
@@ -247,11 +252,13 @@
     <Content Include="Views\Role\Index.cshtml" />
     <Content Include="AppInfo.json" />
     <None Include="Properties\PublishProfiles\frapid-publish-profile.pubxml" />
+    <Content Include="Views\ChangePassword\Success.cshtml" />
     <None Include="Views\EmailTemplate\Index.cshtml" />
     <Content Include="Views\EmailTemplate\Shared\Editor.cshtml" />
     <None Include="Views\Reset\Do.cshtml" />
     <None Include="Views\Reset\Index.cshtml" />
     <Content Include="web.config" />
+    <Content Include="Views\ChangePassword\Index.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -259,6 +266,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

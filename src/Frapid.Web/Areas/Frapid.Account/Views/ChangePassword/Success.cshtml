@@ -1,0 +1,25 @@
+﻿@using Frapid.i18n
+@{
+    ViewBag.Title = "Change Password";
+    Layout = ViewBag.LayoutPath + ViewBag.Layout;
+}
+@if (CultureManager.IsRtl())
+{
+    <link rel="Stylesheet" href="@Href("~/bundles/master-page-rtl.css")"/>
+}
+else
+{
+    <link rel="Stylesheet" href="@Href("~/bundles/master-page.css")"/>
+}
+
+<div class="ui attached padded left aligned segment" style="min-height: 400px;">
+    <div class="ui container">
+        <div class="ui huge header">Password was changed</div>
+        <div class="ui positive message">Your password was changed successfully.</div>
+
+        <div class="ui small basic buttons">
+            <a href="/" class="ui basic button">Home</a>
+            <a href="/forums" class="ui basic button">Forums</a>
+        </div>
+    </div>
+</div>
