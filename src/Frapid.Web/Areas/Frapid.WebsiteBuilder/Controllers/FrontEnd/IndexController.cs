@@ -44,8 +44,11 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
                 Log.Verbose($"Parsing custom content extensions for \"{this.CurrentPageUrl}\".");
                 model.Contents = ContentExtensions.ParseHtml(this.Tenant, model.Contents);
+
                 Log.Verbose($"Parsing custom form extensions for \"{this.CurrentPageUrl}\".");
                 model.Contents = await FormsExtension.ParseHtml(model.Contents, isPost, form);
+
+                model.Contents = HitHelper.Add(model.Contents);
 
                 return this.View(this.GetRazorView<AreaRegistration>("Index/Index.cshtml"), model);
             }
