@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
@@ -15,6 +14,14 @@ namespace Frapid.WebsiteBuilder.DAL
             using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return db.FetchBy<Content>(sql => sql.Where(c => c.IsHomepage));
+            }
+        }
+
+        public static IEnumerable<PublishedContentView> GetAllPublishedContents()
+        {
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            {
+                return db.FetchBy<PublishedContentView>(sql => sql);
             }
         }
 
@@ -38,10 +45,10 @@ namespace Frapid.WebsiteBuilder.DAL
             using (var db = DbProvider.Get(ConnectionString.GetConnectionString(tenant)).GetDatabase())
             {
                 return db.FetchBy<PublishedContentView>(sql => sql
-                    .Where(c => c.Alias.ToLower().Equals(alias.ToLower()) 
-                            && c.CategoryAlias.ToLower().Equals(categoryAlias.ToLower())
-                            && c.IsBlog == isBlog
-                            ))
+                    .Where(c => c.Alias.ToLower().Equals(alias.ToLower())
+                                && c.CategoryAlias.ToLower().Equals(categoryAlias.ToLower())
+                                && c.IsBlog == isBlog
+                    ))
                     .FirstOrDefault();
             }
         }
@@ -51,7 +58,7 @@ namespace Frapid.WebsiteBuilder.DAL
         {
             using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
-                return db.FetchBy<PublishedContentView>(sql => sql.Where(x=>x.IsBlog)).Take(10);
+                return db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog)).Take(10);
             }
         }
 
@@ -60,7 +67,7 @@ namespace Frapid.WebsiteBuilder.DAL
             using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return
-                    db.FetchBy<PublishedContentView>(sql => sql.Where(c => c.IsHomepage == true).Limit(1))
+                    db.FetchBy<PublishedContentView>(sql => sql.Where(c => c.IsHomepage).Limit(1))
                         .FirstOrDefault();
             }
         }
@@ -80,7 +87,6 @@ namespace Frapid.WebsiteBuilder.DAL
                   "WHERE website.contents.content_id=(SELECT website.published_content_view.content_id FROM website.published_content_view " +
                   "WHERE category_alias=@0 AND alias=@1);";
             Factory.NonQuery(database, sql, categoryAlias, alias);
-            return;
         }
     }
 }

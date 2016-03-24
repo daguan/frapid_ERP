@@ -15,6 +15,7 @@ namespace Frapid.WebsiteBuilder.DTO
         public string Title { get; set; }
         public string Alias { get; set; }
         public DateTime PublishOn { get; set; }
+        public DateTime LastEditedOn { get; set; }
         public int AuthorId { get; set; }
         public string AuthorName { get; set; }
         public string Markdown { get; set; }

@@ -243,6 +243,7 @@
     <Compile Include="Application\ClassicAssemblyResolver.cs" />
     <Compile Include="Application\DefaultAssemblyResolver.cs" />
     <Compile Include="Controllers\BundleController.cs" />
+    <Compile Include="Controllers\SiteMapController.cs" />
     <Compile Include="FrapidApplication.cs" />
     <Compile Include="Jobs\EndOfDayJob.cs" />
     <Compile Include="Application\EodTaskRegistration.cs" />
@@ -981,6 +982,10 @@
     <Folder Include="Areas\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Libraries\Frapid.ApplicationState\Frapid.ApplicationState.csproj">
+      <Project>{ef3d84f8-3d64-45d7-9050-3ae204f5aa72}</Project>
+      <Name>Frapid.ApplicationState</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Libraries\Frapid.Areas\Frapid.Areas.csproj">
       <Project>{0361910A-7773-4EE9-861B-FFC5636D82D1}</Project>
       <Name>Frapid.Areas</Name>

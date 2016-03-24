@@ -13,6 +13,7 @@ SELECT
     account.users.name AS author_name,
     website.contents.markdown,
     website.contents.publish_on,
+    CASE WHEN website.contents.last_edited_on IS NULL THEN website.contents.publish_on ELSE website.contents.last_edited_on END AS last_edited_on,
     website.contents.contents,
     website.contents.tags,
     website.contents.seo_description,

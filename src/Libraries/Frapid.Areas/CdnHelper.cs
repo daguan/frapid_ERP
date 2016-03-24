@@ -62,10 +62,25 @@ namespace Frapid.Areas
             {
                 foreach (var node in links)
                 {
-                    var src = node.Attributes["href"];
-                    if (src != null)
+                    bool isStatic = true;
+
+                    var rel = node.Attributes["rel"];
+
+                    if (rel != null)
                     {
-                        node.Attributes["href"].Value = ToCdnResource(node.Attributes["href"].Value);
+                        if (new[] {"prev", "next", "canonical" }.Contains(rel.Value))
+                        {
+                            isStatic = false;
+                        }
+                    }
+
+                    if (isStatic)
+                    {
+                        var src = node.Attributes["href"];
+                        if (src != null)
+                        {
+                            node.Attributes["href"].Value = ToCdnResource(node.Attributes["href"].Value);
+                        }
                     }
                 }
             }
