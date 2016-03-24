@@ -7,7 +7,7 @@ using Frapid.WebsiteBuilder.DTO;
 
 namespace Frapid.WebsiteBuilder.DAL
 {
-    public class Contents
+    public static class Contents
     {
         public static IEnumerable<Content> GetContents()
         {
@@ -54,11 +54,38 @@ namespace Frapid.WebsiteBuilder.DAL
         }
 
 
-        public static IEnumerable<PublishedContentView> GetBlogContents()
+        public static IEnumerable<PublishedContentView> GetBlogContents(string categoryAlias, int limit, int offset)
         {
             using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
-                return db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog)).Take(10);
+                return
+                    db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog && x.CategoryAlias == categoryAlias))
+                        .Skip(offset)
+                        .Take(limit);
+            }
+        }
+
+        public static int CountBlogContents(string categoryAlias)
+        {
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            {
+                return db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog && x.CategoryAlias == categoryAlias)).Count;
+            }
+        }
+
+        public static int CountBlogContents()
+        {
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            {
+                return db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog)).Count;
+            }
+        }
+
+        public static IEnumerable<PublishedContentView> GetBlogContents(int limit, int offset)
+        {
+            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            {
+                return db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog)).Skip(offset).Take(limit);
             }
         }
 

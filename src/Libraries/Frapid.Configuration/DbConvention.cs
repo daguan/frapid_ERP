@@ -7,6 +7,28 @@ namespace Frapid.Configuration
 {
     public class DbConvention
     {
+        public static string GetBaseDomain(HttpContextBase context, bool includeScheme)
+        {
+            string domain = context.Request.Url?.DnsSafeHost;
+
+            if (string.IsNullOrWhiteSpace(domain))
+            {
+                return string.Empty;
+            }
+
+            var approved = new DomainSerializer("DomainsApproved.json");
+            var tenant = approved.Get().FirstOrDefault(x => x.GetSubtenants().Contains(domain.ToLowerInvariant()));
+            string domainName = domain;
+
+            if (tenant != null && includeScheme)
+            {
+                string scheme = context.Request.IsSecureConnection ? "https://" : "http://";
+                domainName = scheme + tenant.DomainName;
+            }
+
+            return domainName;
+        }
+
         public static string GetDomain()
         {
             if (HttpContext.Current == null)
@@ -121,7 +143,8 @@ namespace Frapid.Configuration
 
             if (!result)
             {
-                Log.Information($"The tenant \"{tenant}\" was not found on list of approved domains. Please check your configuration");
+                Log.Information(
+                    $"The tenant \"{tenant}\" was not found on list of approved domains. Please check your configuration");
             }
 
             return result;
@@ -146,7 +169,8 @@ namespace Frapid.Configuration
 
             if (!IsValidTenant(tenant))
             {
-                Log.Information($"Falling back to default tenant \"{defaultTenant}\" because the requested tenant \"{tenant}\" was invalid.");
+                Log.Information(
+                    $"Falling back to default tenant \"{defaultTenant}\" because the requested tenant \"{tenant}\" was invalid.");
                 tenant = defaultTenant;
             }
 

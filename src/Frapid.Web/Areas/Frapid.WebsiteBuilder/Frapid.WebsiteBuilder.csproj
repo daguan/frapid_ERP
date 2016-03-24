@@ -208,6 +208,11 @@
     <Compile Include="Controllers\Backend\DashboardSubscriptionController.cs" />
     <Compile Include="ContentExtensions.cs" />
     <Compile Include="Controllers\FrontEnd\BlogController.cs" />
+    <Compile Include="Syndication\Rss\RssChannel.cs" />
+    <Compile Include="Controllers\FrontEnd\RssController.cs" />
+    <Compile Include="Syndication\Rss\RssItem.cs" />
+    <Compile Include="Syndication\Rss\RssModel.cs" />
+    <Compile Include="Syndication\Rss\RssWriter.cs" />
     <Compile Include="DAL\Configurations.cs" />
     <Compile Include="DTO\Configuration.cs" />
     <Compile Include="DTO\Contact.cs" />

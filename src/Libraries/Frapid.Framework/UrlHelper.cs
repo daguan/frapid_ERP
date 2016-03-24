@@ -13,7 +13,9 @@ namespace Frapid.Framework
                 return result.ToString();
             }
 
-            return domain + "/" + path;
+            string url = domain + "/" + path;
+
+            return Uri.EscapeUriString(url);
         }
     }
 }

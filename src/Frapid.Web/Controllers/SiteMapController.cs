@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web.Mvc;
 using Frapid.Areas;
@@ -15,18 +16,13 @@ namespace Frapid.Web.Controllers
         [FrapidOutputCache(Duration = 30)]
         public ActionResult Index()
         {
-            string domain = this.Request.Url?.GetLeftPart(UriPartial.Authority);
-            var approved = new DomainSerializer("DomainsApproved.json");
-            var tenant = approved.Get().FirstOrDefault(x => x.GetSubtenants().Contains(domain.ToLowerInvariant()));
-            string domainName = domain;
+            string domain = DbConvention.GetBaseDomain(this.HttpContext, true);
 
-            if (tenant != null)
+            if (string.IsNullOrWhiteSpace(domain))
             {
-                string protocol = this.Request.IsSecureConnection ? "https://" : "http://";
-                domainName = protocol + tenant.DomainName;
+                return this.Failed("Could not generate sitemap.", HttpStatusCode.InternalServerError);
             }
-
-            string siteMap = SiteMapGenerator.Get(domainName);
+            string siteMap = SiteMapGenerator.Get(domain);
             return this.Content(siteMap, "text/xml", Encoding.UTF8);
         }
     }

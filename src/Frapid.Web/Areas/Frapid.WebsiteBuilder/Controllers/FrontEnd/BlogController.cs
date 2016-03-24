@@ -44,11 +44,17 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
         [FrapidOutputCache(ProfileName = "BlogHome")]
         [Route("blog")]
-        public ActionResult Home()
+        [Route("blog/{pageNumber}")]
+        public ActionResult Home(int pageNumber = 1)
         {
             try
             {
-                var contents = ContentModel.GetBlogContents();
+                if (pageNumber <= 0)
+                {
+                    pageNumber = 1;
+                }
+
+                var contents = ContentModel.GetBlogContents(pageNumber);
 
                 if (contents == null || !contents.Any())
                 {

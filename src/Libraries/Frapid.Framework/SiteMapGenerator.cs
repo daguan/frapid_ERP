@@ -27,6 +27,7 @@ namespace Frapid.Framework
                 writer.WriteStartElement("url");
 
                 WriteTag(ref writer, "loc", UrlHelper.CombineUrl(domain, url.Location));
+
                 WriteTag(ref writer, "lastmod", url.LastModified.ToString("yyyy-MM-ddTHH:mm:ssK"));
                 //W3C Datetime format
 
@@ -41,6 +42,8 @@ namespace Frapid.Framework
                     WriteTag(ref writer, "priority", url.Priority.ToString("F1"));
                 }
 
+                writer.WriteStartElement("mobile", "mobile", "namespace");
+                writer.WriteEndElement();
                 writer.WriteEndElement(); //url
             }
 

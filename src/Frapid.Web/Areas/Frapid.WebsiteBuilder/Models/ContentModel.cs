@@ -1,17 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Frapid.WebsiteBuilder.DAL;
-using Frapid.WebsiteBuilder.DTO;
+using Frapid.WebsiteBuilder.ViewModels;
 using Mapster;
-using Content = Frapid.WebsiteBuilder.ViewModels.Content;
 
 namespace Frapid.WebsiteBuilder.Models
 {
     public static class ContentModel
     {
-        public static List<Content> GetBlogContents()
+        public static List<Content> GetBlogContents(int pageNumber)
         {
-            var contents = Contents.GetBlogContents().ToList();
+            int pageSize = 10;
+            int offset = (pageNumber - 1)*pageSize;
+
+            var contents = Contents.GetBlogContents(pageSize, offset).ToList();
 
             if (!contents.Any())
             {
