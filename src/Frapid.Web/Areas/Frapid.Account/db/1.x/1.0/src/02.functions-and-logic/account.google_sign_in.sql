@@ -30,6 +30,13 @@ $$
     DECLARE _user_id                        integer;
     DECLARE _login_id                       bigint;
 BEGIN    
+    IF(COALESCE(_office_id, 0) = 0) THEN
+        IF(SELECT COUNT(*) = 1 FROM core.offices) THEN
+            SELECT office_id INTO _office_id
+            FROM core.offices;
+        END IF;
+    END IF;
+
     IF account.is_restricted_user(_email) THEN
         --LOGIN IS RESTRICTED TO THIS USER
         RETURN QUERY
@@ -65,7 +72,7 @@ BEGIN
 	AND ip_address = _ip_address;
 
     INSERT INTO account.logins(user_id, office_id, browser, ip_address, login_timestamp, culture)
-    SELECT _user_id, _office_id, _browser, _ip_address, NOW(), _culture
+    SELECT _user_id, _office_id, _browser, _ip_address, NOW(), COALESCE(_culture, '')
     RETURNING account.logins.login_id INTO _login_id;
 
     RETURN QUERY

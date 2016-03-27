@@ -29,6 +29,14 @@ namespace Frapid.Configuration
             return domainName;
         }
 
+        public static ApprovedDomain FindDomainByTenant(string tenant)
+        {
+            var approved = new DomainSerializer("DomainsApproved.json");
+            string domain = approved.GetTenantMembers().FirstOrDefault(x => GetTenant(x) == tenant);
+            var instance = approved.Get().FirstOrDefault(x => domain != null && x.GetSubtenants().Contains(domain.ToLowerInvariant()));
+            return instance;
+        }
+
         public static string GetDomain()
         {
             if (HttpContext.Current == null)
@@ -145,6 +153,28 @@ namespace Frapid.Configuration
             {
                 Log.Information(
                     $"The tenant \"{tenant}\" was not found on list of approved domains. Please check your configuration");
+            }
+
+            return result;
+        }
+
+        public static bool IsValidDomain(string domain = "")
+        {
+            if (string.IsNullOrWhiteSpace(domain))
+            {
+                domain = GetDomain();
+                Log.Verbose($"The empty domain was automatically resolved to \"{domain}\".");
+            }
+
+            var serializer = new DomainSerializer("DomainsApproved.json");
+
+
+            bool result = serializer.GetTenantMembers().Any(d => d == domain);
+
+            if (!result)
+            {
+                Log.Information(
+                    $"The domain \"{domain}\" was not found on list of approved domains. Please check your configuration");
             }
 
             return result;

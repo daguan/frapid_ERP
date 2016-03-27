@@ -2,6 +2,7 @@
 using Frapid.ApplicationState.Cache;
 using Frapid.Account.DTO;
 using Frapid.DataAccess;
+using Frapid.Framework.Extensions;
 
 namespace Frapid.Account.DAL
 {
@@ -12,7 +13,7 @@ namespace Frapid.Account.DAL
         {
             const string sql = "SELECT * FROM account.google_sign_in(@0::text, @1::integer, @2::text, @3::text, @4::text, @5::text, @6::text);";
             return Factory.Get<LoginResult>(AppUsers.GetTenant(), sql, email, officeId, name, token, browser,
-                ipAddress, culture).FirstOrDefault();
+                ipAddress, culture.Or("en-US")).FirstOrDefault();
         }
     }
 }

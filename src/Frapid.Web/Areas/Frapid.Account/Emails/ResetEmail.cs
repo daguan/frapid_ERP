@@ -51,7 +51,7 @@ namespace Frapid.Account.Emails
         {
             return new EmailQueue
             {
-                AddedOn = DateTime.Now,
+                AddedOn = DateTime.UtcNow,
                 FromName = model.Name,
                 Subject = subject,
                 Message = message,

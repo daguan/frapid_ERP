@@ -2,6 +2,7 @@
 using System.Web.Security;
 using Frapid.Account.DAL;
 using Frapid.Areas.Authorization;
+using Frapid.Configuration;
 
 namespace Frapid.Account.Controllers
 {
@@ -18,7 +19,24 @@ namespace Frapid.Account.Controllers
             }
 
             FormsAuthentication.SignOut();
-            return Redirect("/account/sign-in");
+            return this.Redirect(this.GetReturnUrl());
+        }
+
+        private string GetReturnUrl()
+        {
+            string returnUrl = "/";
+            var referrer = this.Request.UrlReferrer;
+            if (referrer != null)
+            {
+                string domain = referrer.DnsSafeHost;
+                bool wellKnown = DbConvention.IsValidDomain(domain);
+
+                if (wellKnown)
+                {
+                    returnUrl = referrer.ToString();
+                }
+            }
+            return returnUrl;
         }
     }
 }

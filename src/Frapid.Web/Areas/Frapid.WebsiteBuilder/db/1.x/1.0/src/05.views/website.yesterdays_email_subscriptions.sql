@@ -26,7 +26,3 @@ SELECT
     'confirmed'
 FROM website.email_subscriptions
 WHERE confirmed_on::date = 'yesterday'::date;
-
-
-
-

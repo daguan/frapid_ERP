@@ -8,6 +8,7 @@ using Frapid.Account.InputModels;
 using Frapid.Account.ViewModels;
 using Frapid.Areas;
 using Frapid.Configuration;
+using Frapid.Framework.Extensions;
 using Mapster;
 using Npgsql;
 using SignIn = Frapid.Account.ViewModels.SignIn;
@@ -57,7 +58,7 @@ namespace Frapid.Account.Controllers
                 }
 
                 var result = DAL.SignIn.Do(model.Email, model.OfficeId, this.RemoteUser.Browser,
-                    this.RemoteUser.IpAddress, model.Culture);
+                    this.RemoteUser.IpAddress, model.Culture.Or("en-US"));
                 return this.OnAuthenticated(result, model);
             }
             catch (NpgsqlException)

@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Frapid.Framework.Extensions;
 using Frapid.Messaging.DAL;
 using Frapid.Messaging.DTO;
 using Frapid.Messaging.Smtp;
@@ -34,6 +35,9 @@ namespace Frapid.Messaging
 
             var config = new Config(this.Database, this.Processor);
 
+            this.Email.ReplyTo = this.Email.ReplyTo.Or("");
+            this.Email.ReplyToName = this.Email.ReplyToName.Or("");
+
             if (string.IsNullOrWhiteSpace(this.Email.FromName))
             {
                 this.Email.FromName = config.FromName;
@@ -42,6 +46,13 @@ namespace Frapid.Messaging
             if (string.IsNullOrWhiteSpace(this.Email.FromEmail))
             {
                 this.Email.FromEmail = config.FromEmail;
+            }
+
+            var sysConfig = MessagingConfig.Get(this.Database);
+
+            if (sysConfig.TestMode)
+            {
+                this.Email.IsTest = true;
             }
 
             if (this.IsValidEmail(this.Email.FromEmail) && this.IsValidEmail(this.Email.SendTo))
