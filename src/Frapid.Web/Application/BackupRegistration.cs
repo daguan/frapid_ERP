@@ -16,8 +16,7 @@ namespace Frapid.Web
             scheduler.Start();
 
             var job = JobBuilder.Create<BackupJob>().WithIdentity("Backup", "PerformBackup").Build();
-            string backupScheduleUtc = ConfigurationManager.GetConfigurationValue("ParameterConfigFileLocation",
-                "BackupScheduleUTC");
+            string backupScheduleUtc = ConfigurationManager.GetConfigurationValue("ParameterConfigFileLocation", "BackupScheduleUTC");
             var scheduleData = backupScheduleUtc.Split(',');
 
             int hour = 0;

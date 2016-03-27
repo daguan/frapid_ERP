@@ -60,7 +60,8 @@ namespace Frapid.Account.Emails
                 FromName = model.Name,
                 Subject = subject,
                 Message = message,
-                SendTo = model.Email
+                SendTo = model.Email,
+                SendOn = DateTime.UtcNow
             };
         }
 

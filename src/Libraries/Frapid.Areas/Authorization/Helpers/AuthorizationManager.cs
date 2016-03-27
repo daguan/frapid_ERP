@@ -4,18 +4,12 @@ using System.Threading;
 using System.Web;
 using Frapid.Framework.Extensions;
 using Frapid.TokenManager.DAL;
-using Microsoft.AspNet.SignalR.Hosting;
 using Serilog;
 
 namespace Frapid.Areas.Authorization.Helpers
 {
     public static class AuthorizationManager
     {
-        public static bool IsAuthorized(INameValueCollection headers)
-        {
-            return false;
-        }
-
         public static bool IsAuthorized(HttpContextBase context)
         {
             if (context == null)
