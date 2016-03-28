@@ -54,9 +54,14 @@ namespace Frapid.SendGridMail
                 var message = new SendGridMessage
                 {
                     From = new MailAddress(email.FromEmail, email.FromName),
-                    ReplyTo = new[] {new MailAddress(email.ReplyToEmail, email.ReplyToName)},
                     Subject = email.Subject
                 };
+
+                if (!string.IsNullOrWhiteSpace(email.ReplyToEmail))
+                {
+                    message.ReplyTo = new[] {new MailAddress(email.ReplyToEmail, email.ReplyToName)};
+                }
+
 
                 message.AddTo(email.SentTo.Split(',').Select(x=>x.Trim()).ToList());
 

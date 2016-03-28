@@ -42,7 +42,7 @@ namespace Frapid.Framework
                     WriteTag(ref writer, "priority", url.Priority.ToString("F1"));
                 }
 
-                writer.WriteStartElement("mobile", "mobile", "namespace");
+                writer.WriteStartElement("mobile", "mobile", "http://www.google.com/schemas/sitemap-mobile/1.0");
                 writer.WriteEndElement();
                 writer.WriteEndElement(); //url
             }
