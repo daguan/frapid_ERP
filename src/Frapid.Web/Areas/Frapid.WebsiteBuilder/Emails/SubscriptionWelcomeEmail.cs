@@ -47,7 +47,7 @@ namespace Frapid.WebsiteBuilder.Emails
 
             return new EmailQueue
             {
-                AddedOn = DateTime.Now,
+                AddedOn = DateTime.UtcNow,
                 FromName = config.FromName,
                 ReplyTo = config.FromEmail,
                 Subject = subject,

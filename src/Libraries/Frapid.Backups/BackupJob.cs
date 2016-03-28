@@ -14,7 +14,7 @@ namespace Frapid.Backups
             ThreadPool.QueueUserWorkItem(callback =>
             {
                 var server = new DbServer();
-                string fileName = DateTime.Now.Ticks.ToString();
+                string fileName = DateTime.UtcNow.Ticks.ToString();
                 var domains = DbConvention.GetDomains();
 
                 foreach (var domain in domains)
