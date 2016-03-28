@@ -63,7 +63,23 @@ namespace Frapid.Messaging
 
         private bool IsValidEmail(string emailAddress)
         {
-            return new EmailAddressAttribute().IsValid(emailAddress);
+            bool valid = false;
+            var emails = emailAddress.Split(',').Select(x=>x.Trim()).ToArray();
+
+            if (emails.Any())
+            {
+                foreach (string email in emails)
+                {
+                    valid = new EmailAddressAttribute().IsValid(email);
+                }
+            }
+            else
+            {
+                valid = new EmailAddressAttribute().IsValid(emailAddress);
+            }
+
+
+            return valid;
         }
 
         private bool IsEnabled()

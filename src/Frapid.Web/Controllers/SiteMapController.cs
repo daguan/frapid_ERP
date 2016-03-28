@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web.Mvc;
@@ -13,7 +11,7 @@ namespace Frapid.Web.Controllers
     public class SiteMapController : FrapidController
     {
         [Route("sitemap.xml")]
-        [FrapidOutputCache(Duration = 30)]
+        [FrapidOutputCache(ProfileName = "Sitemap.xml")]
         public ActionResult Index()
         {
             string domain = DbConvention.GetBaseDomain(this.HttpContext, true);
