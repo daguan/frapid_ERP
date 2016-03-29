@@ -10,7 +10,7 @@ namespace Frapid.Areas
     {
         internal static string ToCdnResource(string path)
         {
-            if (!path.StartsWith("/") || path.ToLowerInvariant().StartsWith("/signalr"))
+            if (!path.StartsWith("/") || path.StartsWith("//") || path.ToLowerInvariant().StartsWith("/signalr"))
             {
                 return path;
             }
