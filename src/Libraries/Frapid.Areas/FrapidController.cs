@@ -26,7 +26,7 @@ namespace Frapid.Areas
         public RemoteUser RemoteUser { get; private set; }
         public MetaUser MetaUser { get; set; }
 
-        protected new virtual ContentResult View(string viewName, object model)
+        protected new virtual ContentResult View(string viewName, object model = null)
         {
             var controllerContext = this.ControllerContext;
             var result = ViewEngines.Engines.FindView(controllerContext, viewName, null);
