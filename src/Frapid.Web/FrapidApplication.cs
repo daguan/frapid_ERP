@@ -33,16 +33,13 @@ namespace Frapid.Web
         public void App_EndRequest(object sender, EventArgs e)
         {
             var context = HttpContext.Current;
+
             if (context.Response.StatusCode == 404)
             {
+                context.Response.TrySkipIisCustomErrors = true;
+
                 string path = context.Request.Url.AbsolutePath;
-                if (path != "/content-not-found")
-                {
-                    //context.Response.Clear();
-                    context.Response.TrySkipIisCustomErrors = true;
-                    //context.Response.Redirect("/content-not-found?path=" + path, true);
-                    context.Server.TransferRequest("/content-not-found?path=" + path, true);
-                }
+                context.Server.TransferRequest("/content-not-found?path=" + path, true);
             }
         }
 
