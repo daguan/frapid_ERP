@@ -200,14 +200,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
+    <Compile Include="ContentSearch.cs" />
     <Compile Include="Contracts\IContentExtension.cs" />
     <Compile Include="Contracts\IFormExtension.cs" />
+    <Compile Include="Contracts\IContentSearch.cs" />
     <Compile Include="Controllers\Backend\CategoryController.cs" />
     <Compile Include="Controllers\Backend\ConfigurationController.cs" />
     <Compile Include="Controllers\Backend\ContactController.cs" />
     <Compile Include="Controllers\Backend\DashboardSubscriptionController.cs" />
     <Compile Include="ContentExtensions.cs" />
     <Compile Include="Controllers\FrontEnd\BlogController.cs" />
+    <Compile Include="Controllers\FrontEnd\ErrorController.cs" />
+    <Compile Include="Models\ErrorModel.cs" />
     <Compile Include="Syndication\Rss\RssChannel.cs" />
     <Compile Include="Controllers\FrontEnd\RssController.cs" />
     <Compile Include="Syndication\Rss\RssItem.cs" />
@@ -278,6 +282,8 @@
     <Compile Include="ViewModels\Content.cs" />
     <Compile Include="ThemeConfiguration.cs" />
     <Compile Include="ViewModels\Layout.cs" />
+    <Compile Include="ViewModels\SearchResult.cs" />
+    <Compile Include="ViewModels\SearchResultContent.cs" />
     <Compile Include="ViewModels\Subscribe.cs" />
     <Compile Include="ViewModels\Template.cs" />
   </ItemGroup>
@@ -329,6 +335,7 @@
     <Content Include="Views\Blog\Home.cshtml" />
     <Content Include="Views\Configuration\Index.cshtml" />
     <Content Include="Views\Blog\Post.cshtml" />
+    <Content Include="Views\ErrorHandlers\404.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

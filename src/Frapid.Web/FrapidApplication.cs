@@ -21,6 +21,20 @@ namespace Frapid.Web
             {
                 Log.Error("Exception. {exception}", exception);
             }
+
+            var httpException = exception as HttpException;
+            if (httpException != null)
+            {
+                int statusCode = httpException.GetHttpCode();
+                context.Server.ClearError();
+
+                if (statusCode.Equals(404))
+                {
+                    string path = context.Request.Url.PathAndQuery;
+                    context.Response.TrySkipIisCustomErrors = true;
+                    context.Response.Redirect("/content-not-found?path=" + path, true);
+                }
+            }
         }
 
 

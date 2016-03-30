@@ -1,4 +1,7 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using HtmlAgilityPack;
 
 namespace Frapid.WebsiteBuilder.Extensions
 {
@@ -35,5 +38,45 @@ namespace Frapid.WebsiteBuilder.Extensions
             }
             return input;
         }
+
+        public static string Truncate(this string input, int limit = 50)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return string.Empty;
+            }
+
+            if (input.Length > limit)
+            {
+                int cutPos = new string(input.Take(limit).ToArray()).LastIndexOf(' ');
+                string result = new string(input.Take(cutPos).ToArray());
+
+                return result + " ...";
+            }
+
+
+            return input;
+        }
+
+        public static string ToText(this string html)
+        {
+            if (string.IsNullOrWhiteSpace(html))
+            {
+                return string.Empty;
+            }
+
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            var builder = new StringBuilder();
+            foreach (var node in doc.DocumentNode.SelectNodes("//text()"))
+            {
+                builder.Append(node.InnerText);
+            }
+
+            string text = HtmlEntity.DeEntitize(builder.ToString());
+            return Regex.Replace(text, @"\s+", " ").Trim();
+        }
+
     }
 }
