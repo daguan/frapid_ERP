@@ -10,6 +10,8 @@ namespace Frapid.Web
         public void Init(HttpApplication app)
         {
             app.BeginRequest += this.App_BeginRequest;
+            app.EndRequest += this.App_EndRequest;
+
             app.Error += this.App_Error;
         }
 
@@ -21,20 +23,6 @@ namespace Frapid.Web
             {
                 Log.Error("Exception. {exception}", exception);
             }
-
-            var httpException = exception as HttpException;
-            if (httpException != null)
-            {
-                int statusCode = httpException.GetHttpCode();
-                context.Server.ClearError();
-
-                if (statusCode.Equals(404))
-                {
-                    string path = context.Request.Url.PathAndQuery;
-                    context.Response.TrySkipIisCustomErrors = true;
-                    context.Response.Redirect("/content-not-found?path=" + path, true);
-                }
-            }
         }
 
 
@@ -42,7 +30,23 @@ namespace Frapid.Web
         {
         }
 
-        private void App_BeginRequest(object sender, EventArgs e)
+        public void App_EndRequest(object sender, EventArgs e)
+        {
+            var context = HttpContext.Current;
+            if (context.Response.StatusCode == 404)
+            {
+                string path = context.Request.Url.AbsolutePath;
+                if (path != "/content-not-found")
+                {
+                    //context.Response.Clear();
+                    context.Response.TrySkipIisCustomErrors = true;
+                    //context.Response.Redirect("/content-not-found?path=" + path, true);
+                    context.Server.TransferRequest("/content-not-found?path=" + path, true);
+                }
+            }
+        }
+
+        public void App_BeginRequest(object sender, EventArgs e)
         {
             var context = HttpContext.Current;
             if (context == null)
