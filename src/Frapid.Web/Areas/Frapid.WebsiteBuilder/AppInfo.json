@@ -8,7 +8,7 @@
 	"AssemblyName": "Frapid.WebsiteBuilder",
 	"Version": "1.0",
 	"RealeasedOn": null,
-	"Description": "Frapid webiste builder module.",
+	"Description": "Frapid website builder module.",
 	"Category": "Core Modules",
 	"Bundle": "Frapid Framework",
     "IsMeta": false,
