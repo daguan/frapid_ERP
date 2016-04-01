@@ -15,6 +15,11 @@ namespace Frapid.Web
             app.Error += this.App_Error;
         }
 
+
+        public void Dispose()
+        {
+        }
+
         private void App_Error(object sender, EventArgs e)
         {
             var context = HttpContext.Current;
@@ -25,20 +30,14 @@ namespace Frapid.Web
             }
         }
 
-
-        public void Dispose()
-        {
-        }
-
         public void App_EndRequest(object sender, EventArgs e)
         {
             var context = HttpContext.Current;
+            string path = context.Request.Url.AbsolutePath;
 
-            if (context.Response.StatusCode == 404)
+            if (context.Response.StatusCode == 404 && !(path.StartsWith("/api") || path.StartsWith("/dashboard")))
             {
                 context.Response.TrySkipIisCustomErrors = true;
-
-                string path = context.Request.Url.AbsolutePath;
                 context.Server.TransferRequest("/content-not-found?path=" + path, true);
             }
         }
@@ -52,7 +51,8 @@ namespace Frapid.Web
             }
 
             string domain = DbConvention.GetDomain();
-            Log.Verbose($"Got a {context.Request.HttpMethod} request {context.Request.AppRelativeCurrentExecutionFilePath} on domain {domain}.");
+            Log.Verbose(
+                $"Got a {context.Request.HttpMethod} request {context.Request.AppRelativeCurrentExecutionFilePath} on domain {domain}.");
 
             bool enforceSsl = DbConvention.EnforceSsl(domain);
 

@@ -30,7 +30,7 @@ ON config.kanban_details(kanban_id, resource_id);
 
 CREATE TABLE config.smtp_configs
 (
-    smtp_id                                     SERIAL PRIMARY KEY,
+    smtp_config_id                              SERIAL PRIMARY KEY,
     configuration_name                          national character varying(256) NOT NULL UNIQUE,
     enabled                                     boolean NOT NULL DEFAULT false,
     is_default                                  boolean NOT NULL DEFAULT false,

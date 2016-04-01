@@ -10,10 +10,10 @@
 
     scrudFactory.title = "Offices";
 
-    scrudFactory.viewAPI = "/api/form/core/offices";
+    scrudFactory.viewAPI = "/api/forms/core/offices";
     scrudFactory.viewTableName = "core.offices";
 
-    scrudFactory.formAPI = "/api/form/core/offices";
+    scrudFactory.formAPI = "/api/forms/core/offices";
     scrudFactory.formTableName = "core.offices";
 
     scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
@@ -36,7 +36,7 @@
     scrudFactory.keys = [
         {
             property: "ParentOfficeId",
-            url: '/api/form/core/offices/display-fields',
+            url: '/api/forms/core/offices/display-fields',
             data: null,
             valueField: "Key",
             textField: "Value"

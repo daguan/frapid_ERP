@@ -25,7 +25,7 @@ ON account.installed_domains(LOWER(domain_name));
 
 CREATE TABLE account.configuration_profiles
 (
-    profile_id                              SERIAL PRIMARY KEY,
+    configuration_profile_id                SERIAL PRIMARY KEY,
     profile_name                            national character varying(100) NOT NULL UNIQUE,
     is_active                               boolean NOT NULL DEFAULT(true),    
     allow_registration                      boolean NOT NULL DEFAULT(true),
