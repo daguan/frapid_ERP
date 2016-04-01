@@ -60,6 +60,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="DAL\MailQueue.cs" />
     <Compile Include="DAL\Smtp.cs" />
+    <Compile Include="DisposableEmailValidator.cs" />
     <Compile Include="DTO\EmailQueue.cs" />
     <Compile Include="DTO\SmtpConfig.cs" />
     <Compile Include="DTO\EmailMessage.cs" />

@@ -16,7 +16,12 @@ namespace Frapid.WebsiteBuilder
             return Get(tenant, "AllowedUploadExtensions").Split(',');
         }
 
-        private static string Get(string tenant, string key)
+        public static bool DisableCache(string tenant)
+        {
+            return Get(tenant, "DisableCache").ToUpperInvariant().Equals("TRUE");
+        }
+
+        public static string Get(string tenant, string key)
         {
             string configFile = HostingEnvironment.MapPath($"~/Tenants/{tenant}/Configs/Frapid.config");
 

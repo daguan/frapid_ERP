@@ -64,7 +64,7 @@ namespace Frapid.Messaging
         private bool IsValidEmail(string emailAddress)
         {
             bool valid = false;
-            var emails = emailAddress.Split(',').Select(x=>x.Trim()).ToArray();
+            var emails = emailAddress.Split(',').Select(x => x.Trim()).ToArray();
 
             if (emails.Any())
             {
@@ -78,6 +78,11 @@ namespace Frapid.Messaging
                 valid = new EmailAddressAttribute().IsValid(emailAddress);
             }
 
+            if (valid)
+            {
+                //Do not send email to dispoable email address
+                valid = !DisposableEmailValidator.IsDisposableEmail(this.Database, emailAddress);
+            }
 
             return valid;
         }
