@@ -50,7 +50,9 @@ CREATE TABLE config.email_queue
 (
     queue_id                                    BIGSERIAL NOT NULL PRIMARY KEY,
     from_name                                   national character varying(256) NOT NULL,
+    from_email                                  national character varying(256) NOT NULL,
     reply_to                                    national character varying(256) NOT NULL,
+    reply_to_name                               national character varying(256) NOT NULL,
     subject                                     national character varying(256) NOT NULL,
     send_to                                     national character varying(256) NOT NULL,
     attachments                                 text,
