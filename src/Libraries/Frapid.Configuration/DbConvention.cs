@@ -44,6 +44,7 @@ namespace Frapid.Configuration
                 Log.Information($"Cannot resolve a domain for current request because HttpContext was null.");
                 return string.Empty;
             }
+
             string url = HttpContext.Current.Request.Url.Authority;
 
             if (url.StartsWith("www."))

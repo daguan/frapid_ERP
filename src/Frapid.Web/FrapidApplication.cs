@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using Frapid.Areas;
 using Frapid.Configuration;
 using Serilog;
 
@@ -11,8 +12,20 @@ namespace Frapid.Web
         {
             app.BeginRequest += this.App_BeginRequest;
             app.EndRequest += this.App_EndRequest;
+            app.PostAuthenticateRequest += this.App_PostAuthenticateRequest;
 
             app.Error += this.App_Error;
+        }
+
+        private void App_PostAuthenticateRequest(object sender, EventArgs eventArgs)
+        {
+            string file = TenantStaticContentHelper.GetFile(HttpContext.Current);
+
+            if (!string.IsNullOrWhiteSpace(file))
+            {
+                //We found the requested file on the tenant's "wwwroot" directory.
+                HttpContext.Current.RewritePath(file);
+            }
         }
 
 
@@ -51,8 +64,7 @@ namespace Frapid.Web
             }
 
             string domain = DbConvention.GetDomain();
-            Log.Verbose(
-                $"Got a {context.Request.HttpMethod} request {context.Request.AppRelativeCurrentExecutionFilePath} on domain {domain}.");
+            Log.Verbose($"Got a {context.Request.HttpMethod} request {context.Request.AppRelativeCurrentExecutionFilePath} on domain {domain}.");
 
             bool enforceSsl = DbConvention.EnforceSsl(domain);
 
