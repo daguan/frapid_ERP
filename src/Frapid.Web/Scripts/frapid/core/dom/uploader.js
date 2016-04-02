@@ -36,10 +36,10 @@
 
         var file = $(".file");
 
-        file.change(function () {
+        file.off("change").on("change", function () {
             if (isValidExtension(this)) {
                 var el = $(this);
-                readURL(this);
+
                 var handler = el.attr("data-handler");
 
                 var loaderTarget = el.attr("data-loader-id");
@@ -55,6 +55,8 @@
                 if (targetSelector) {
                     target = $("#" + targetSelector);
                 };
+
+                readURL(this, segment);
 
                 if (segment.length) {
                     segment.addClass("loading");
@@ -109,12 +111,13 @@
         return true;
     };
 
-    function readURL(input) {
+    function readURL(input, loader) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                var image = $(input).parent().parent().parent().find("img.preview");
+                var image = loader.find("img.preview");
+				image.removeAttr('src');
                 image.attr('src', e.target.result).fadeIn(1000);
                 $(input).trigger("readComplete");
             };
