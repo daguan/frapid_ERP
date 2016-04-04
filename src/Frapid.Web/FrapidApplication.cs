@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web;
 using Frapid.Areas;
 using Frapid.Configuration;
@@ -43,16 +44,30 @@ namespace Frapid.Web
             }
         }
 
-        public void App_EndRequest(object sender, EventArgs e)
+        private void Handle404Error()
         {
             var context = HttpContext.Current;
+            int statusCode = context.Response.StatusCode;
+
+            if (statusCode != 404)
+            {
+                return;
+            }
+
             string path = context.Request.Url.AbsolutePath;
 
-            if (context.Response.StatusCode == 404 && !(path.StartsWith("/api") || path.StartsWith("/dashboard")))
+            var ignoredPaths = new[] { "/api", "/dashboard", "/content-not-found" };
+
+            if (!ignoredPaths.Any(x => path.StartsWith(x)))
             {
                 context.Response.TrySkipIisCustomErrors = true;
                 context.Server.TransferRequest("/content-not-found?path=" + path, true);
             }
+        }
+
+        public void App_EndRequest(object sender, EventArgs e)
+        {
+            this.Handle404Error();
         }
 
         public void App_BeginRequest(object sender, EventArgs e)

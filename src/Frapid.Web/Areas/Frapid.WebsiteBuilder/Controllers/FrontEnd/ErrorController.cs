@@ -17,6 +17,8 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
             model.LayoutPath = path;
             model.Layout = layout;
 
+            this.Response.Status = "404 Not Found";
+            this.Response.StatusCode = 404;
             return this.View(this.GetRazorView<AreaRegistration>("ErrorHandlers/404.cshtml"), model);
         }
     }
