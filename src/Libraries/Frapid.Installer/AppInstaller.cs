@@ -34,8 +34,7 @@ namespace Frapid.Installer
         {
             foreach (var dependency in this.Installable.Dependencies)
             {
-                Log.Verbose(
-                    $"Installing module {dependency.ApplicationName} because the module {this.Installable.ApplicationName} depends on it.");
+                Log.Verbose($"Installing module {dependency.ApplicationName} because the module {this.Installable.ApplicationName} depends on it.");
                 new AppInstaller(this.Database, dependency).Install();
             }
 

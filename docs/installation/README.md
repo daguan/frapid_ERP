@@ -38,6 +38,10 @@ git clone https://github.com/frapid/frapid
 
 Once you finish this step, you have a local frapid git repository on your hard drive.
 
+## Rename "_Config" Directory
+
+Rename the directory `~/Resources/_Config` to `~/Resources/Config`.
+
 
 ## Convention and Configuration over Convention or Configuration
 

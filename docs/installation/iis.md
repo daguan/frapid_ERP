@@ -54,7 +54,7 @@ Edit the configuration files:
 
 ## Browse Frapid
 
-Browse frapid on this URL : [https://localhost](https://localhost) and confirm SSL certificate exception. Wait a few minutes for the installation to complete. Reload the page.
+Browse frapid on this URL : [https://localhost/install](https://localhost/install) and confirm SSL certificate exception. Wait a few minutes for the installation to complete. Reload the page.
 You will notice that a database name "localhost" has been automatically created and populated for you.
 
 ## Configure Email Provider
