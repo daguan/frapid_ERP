@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Hosting;
 using Frapid.Configuration;
+using Frapid.Framework.Extensions;
 using Frapid.Installer.Models;
 using Newtonsoft.Json;
 using Quartz;
@@ -28,7 +29,7 @@ namespace Frapid.Installer
                 db.Install();
 
                 Log.Verbose("Getting installables.");
-                var installables = GetInstallables();
+                var installables = GetInstallables(database);
                 Log.Information($"The following apps will be installed:\n\n {installables}.");
 
                 foreach (var installable in installables)
@@ -37,7 +38,8 @@ namespace Frapid.Installer
                     new AppInstaller(database, installable).Install();
                 }
 
-                var tenant = new DomainSerializer("DomainsApproved.json").Get().FirstOrDefault(x => x.DomainName.Equals(url));
+                var tenant =
+                    new DomainSerializer("DomainsApproved.json").Get().FirstOrDefault(x => x.DomainName.Equals(url));
                 DbInstalledDomains.Add(tenant);
             }
             catch (Exception ex)
@@ -47,8 +49,22 @@ namespace Frapid.Installer
             }
         }
 
-        private static IEnumerable<Installable> GetInstallables()
+        private static List<string> GetDefaultInstallableNames(string tenant)
         {
+            string path = HostingEnvironment.MapPath("~/Override/Configs/Applications.config");
+            var apps =
+                ConfigurationManager.ReadConfigurationValue(path, "InstalledApplications")
+                    .Or("")
+                    .Split(',')
+                    .Select(x => x.Trim())
+                    .ToList();
+
+            return apps;
+        }
+
+        private static IEnumerable<Installable> GetInstallables(string tenant)
+        {
+            var defaultApps = GetDefaultInstallableNames(tenant);
             string root = HostingEnvironment.MapPath("~/");
             var installables = new List<Installable>();
 
@@ -65,7 +81,7 @@ namespace Frapid.Installer
             {
                 app.SetDependencies();
 
-                if (app.AutoInstall)
+                if (app.AutoInstall && defaultApps.Contains(app.ApplicationName))
                 {
                     installables.Add(app);
                 }

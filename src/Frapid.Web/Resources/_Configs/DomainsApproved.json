@@ -1,11 +1,11 @@
 ﻿[
   {
-	"DomainName": "mixerp.org",
+	"DomainName": "localhost",
 	"EnforceSsl": true,
-	"CdnDomain": "cdn.mixerp.net",
+	"CdnDomain": "",
 	"AdminEmail": "",
 	"Synonyms": [],
-	"BackupDirectory": "/backups/mixerp_org",
+	"BackupDirectory": "/backups/localhost",
 	"BackupDirectoryIsFixedPath": false
   }
 ]

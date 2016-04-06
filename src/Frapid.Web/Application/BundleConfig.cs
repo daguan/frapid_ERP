@@ -173,7 +173,7 @@ namespace Frapid.Web
         private static string[] GetLibrariesScript()
         {
             string[] libraries = {
-                "~/Scripts/jquery-2.1.4.js",
+                "~/Scripts/jquery-2.2.1.js",
                 "~/Scripts/jquery.address.js",
                 "~/Scripts/jquery-ui.js",
                 "~/Scripts/jquery-timePicker/jquery.timepicker.js",
