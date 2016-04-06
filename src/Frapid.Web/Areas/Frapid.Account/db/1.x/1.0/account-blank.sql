@@ -1085,6 +1085,9 @@ INNER JOIN core.offices
 ON core.offices.office_id = account.logins.office_id;
 
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/10.policy/access_policy.sql --<--<--
+SELECT * FROM auth.create_api_access_policy('{Admin}', core.get_office_id_by_office_name('Default'), '', '{*}', true);
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/1.x/1.0/src/99.ownership.sql --<--<--
 DO
 $$

@@ -519,11 +519,23 @@ SELECT * FROM auth.create_app_menu_policy
 
 SELECT * FROM auth.create_app_menu_policy
 (
-    'Administrator', 
+    'Admin', 
     core.get_office_id_by_office_name('Default'), 
     'Frapid.Config',
     '{*}'::text[]
 );
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/10.policy/access_policy.sql --<--<--
+SELECT * FROM auth.create_api_access_policy('{*}', 1, 'config.kanban_details', '{*}', true);
+SELECT * FROM auth.create_api_access_policy('{*}', 1, 'config.flag_types', '{*}', true);
+SELECT * FROM auth.create_api_access_policy('{*}', 1, 'config.flag_view', '{*}', true);
+SELECT * FROM auth.create_api_access_policy('{*}', 1, 'config.kanbans', '{*}', true);
+SELECT * FROM auth.create_api_access_policy('{*}', 1, 'config.filter_name_view', '{*}', true);
+
+SELECT * FROM auth.create_api_access_policy('{User}', core.get_office_id_by_office_name('Default'), 'core.offices', '{*}', true);
+SELECT * FROM auth.create_api_access_policy('{User}', core.get_office_id_by_office_name('Default'), 'config.flags', '{*}', true);
+SELECT * FROM auth.create_api_access_policy('{Admin}', core.get_office_id_by_office_name('Default'), '', '{*}', true);
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/99.ownership.sql --<--<--

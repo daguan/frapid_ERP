@@ -70,6 +70,71 @@ CREATE UNIQUE INDEX menu_access_policy_uix
 ON auth.menu_access_policy(office_id, menu_id, user_id);
 
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/1.x/1.0/src/02.functions-and-logic/auth.create_api_access_policy.sql --<--<--
+DROP FUNCTION IF EXISTS auth.create_api_access_policy
+(
+    _role_names                     text[],
+    _office_id                      integer,
+    _entity_name                    text,
+    _access_types                   text[],
+    _allow_access                   boolean
+);
+
+CREATE FUNCTION auth.create_api_access_policy
+(
+    _role_names                     text[],
+    _office_id                      integer,
+    _entity_name                    text,
+    _access_types                   text[],
+    _allow_access                   boolean
+)
+RETURNS void
+AS
+$$
+    DECLARE _role_id                integer;
+    DECLARE _role_ids               integer[];
+    DECLARE _access_type_ids        int[];
+BEGIN
+    IF(_role_names = '{*}'::text[]) THEN
+        SELECT
+            array_agg(role_id)
+        INTO
+            _role_ids
+        FROM account.roles;
+    ELSE
+        SELECT
+            array_agg(role_id)
+        INTO
+            _role_ids
+        FROM account.roles
+        WHERE role_name = ANY(_role_names);
+    END IF;
+
+    IF(_access_types = '{*}'::text[]) THEN
+        SELECT
+            array_agg(access_type_id)
+        INTO
+            _access_type_ids
+        FROM auth.access_types;
+    ELSE
+        SELECT
+            array_agg(access_type_id)
+        INTO
+            _access_type_ids
+        FROM auth.access_types
+        WHERE access_type_name = ANY(_access_types);
+    END IF;
+
+    IF(_role_ids IS NOT NULL) THEN
+        FOREACH _role_id IN ARRAY _role_ids
+        LOOP
+            PERFORM auth.save_api_group_policy(_role_id, _entity_name, _office_id, _access_type_ids, _allow_access);
+        END LOOP;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/1.x/1.0/src/02.functions-and-logic/auth.create_app_menu_policy.sql --<--<--
 DROP FUNCTION IF EXISTS auth.create_app_menu_policy
 (
@@ -473,107 +538,179 @@ CREATE FUNCTION auth.has_access(_user_id integer, _entity text, _access_type_id 
 RETURNS boolean
 AS
 $$
-    DECLARE _role_id                    integer;
-    DECLARE _group_config               boolean = NULL;
-    DECLARE _user_config                boolean = NULL;
-    DECLARE _config                     boolean = true;
-BEGIN
-    SELECT role_id INTO _role_id FROM account.users WHERE user_id = _user_id;
-
-    --GROUP AUTHORIZATION BASED ON ALL ENTITIES AND ALL ACCESS TYPES
-    IF EXISTS
-    (
-        SELECT * FROM auth.group_entity_access_policy
-        WHERE role_id = _role_id
-        AND NOT allow_access
-        AND access_type_id IS NULL
-        AND COALESCE(entity_name, '') = ''
-    ) THEN
-        _group_config = false;
-    END IF;
-
-    --GROUP AUTHORIZATION BASED ON ALL ENTITIES AND SPECIFIED ACCESS TYPE
-    IF EXISTS
-    (
-        SELECT * FROM auth.group_entity_access_policy
-        WHERE role_id = _role_id
-        AND NOT allow_access
-        AND access_type_id = _access_type_id
-        AND COALESCE(entity_name, '') = ''
-    ) THEN
-        _group_config = false;
-    END IF;
- 
-
-    --GROUP AUTHORIZATION BASED ON SPECIFIED ENTITY AND ALL ACCESS TYPES
-    IF EXISTS
-    (
-        SELECT * FROM auth.group_entity_access_policy
-        WHERE role_id = _role_id
-        AND NOT allow_access
-        AND access_type_id IS NULL
-        AND entity_name = _entity
-    ) THEN
-        _group_config = false;
-    END IF;
-
-    --GROUP AUTHORIZATION BASED ON SPECIFIED ENTITY AND SPECIFIED ACCESS TYPE
-    IF EXISTS
-    (
-        SELECT * FROM auth.group_entity_access_policy
-        WHERE role_id = _role_id
-        AND NOT allow_access
-        AND access_type_id = _access_type_id
-        AND entity_name = _entity
-    ) THEN
-        _group_config = false;
-    END IF;
-
-
+    DECLARE _role_id                                    integer;
+    DECLARE _group_all_policy                           boolean = false;
+    DECLARE _group_all_entity_specific_access_type      boolean = false;
+    DECLARE _group_specific_entity_all_access_type      boolean = false;
+    DECLARE _group_explicit_policy                      boolean = false;
+    DECLARE _effective_group_policy                     boolean = false;
+    DECLARE _user_all_policy                            boolean = false;
+    DECLARE _user_all_entity_specific_access_type       boolean = false;
+    DECLARE _user_specific_entity_all_access_type       boolean = false;
+    DECLARE _user_explicit_policy                       boolean = false;
+    DECLARE _effective_user_policy                      boolean = false;
+BEGIN    
     --USER AUTHORIZATION BASED ON ALL ENTITIES AND ALL ACCESS TYPES
-    SELECT allow_access INTO _user_config FROM auth.entity_access_policy
+    SELECT 
+        allow_access 
+    INTO 
+        _user_all_policy
+    FROM auth.entity_access_policy
     WHERE user_id = _user_id
     AND access_type_id IS NULL
     AND COALESCE(entity_name, '') = '';
 
-    --USER config BASED ON SPECIFIED ENTITY AND ALL ACCESS TYPES
-    IF(_user_config IS NULL) THEN
-        SELECT allow_access INTO _user_config 
-        FROM auth.entity_access_policy
-        WHERE user_id = _user_id
-        AND access_type_id IS NULL
-        AND entity_name = _entity;
-    END IF;
- 
     --USER AUTHORIZATION BASED ON ALL ENTITIES AND SPECIFIED ACCESS TYPE
-    IF(_user_config IS NULL) THEN
-        SELECT allow_access INTO _user_config FROM auth.entity_access_policy
-        WHERE user_id = _user_id
-        AND access_type_id = _access_type_id
-        AND COALESCE(entity_name, '') = '';
-    END IF;
- 
+    SELECT 
+        allow_access
+    INTO
+        _user_all_entity_specific_access_type
+    FROM auth.entity_access_policy
+    WHERE user_id = _user_id
+    AND access_type_id = _access_type_id
+    AND COALESCE(entity_name, '') = '';
+
+    --USER AUTHORIZATION BASED ON SPECIFIED ENTITY AND ALL ACCESS TYPES
+    SELECT
+        allow_access
+    INTO
+        _user_specific_entity_all_access_type
+    FROM auth.entity_access_policy
+    WHERE user_id = _user_id
+    AND access_type_id IS NULL
+    AND entity_name = _entity;
 
     --USER AUTHORIZATION BASED ON SPECIFIED ENTITY AND SPECIFIED ACCESS TYPE
-    IF(_user_config IS NULL) THEN
-        SELECT allow_access INTO _user_config FROM auth.entity_access_policy
-        WHERE user_id = _user_id
-        AND access_type_id = _access_type_id
-        AND entity_name = _entity;
+    SELECT 
+        allow_access
+    INTO
+        _user_explicit_policy
+    FROM auth.entity_access_policy
+    WHERE user_id = _user_id
+    AND access_type_id = _access_type_id
+    AND entity_name = _entity;
+
+    --EFFECTIVE USER POLICY BASED ON PRECEDENCE.
+    _effective_user_policy := COALESCE(_user_explicit_policy, _user_specific_entity_all_access_type, _user_all_entity_specific_access_type, _user_all_policy);
+
+    IF(_effective_user_policy IS NOT NULL) THEN
+        RETURN _effective_user_policy;
     END IF;
 
-    IF(_group_config IS NOT NULL) THEN
-        _config := _group_config;
-    END IF;
+    SELECT role_id INTO _role_id FROM account.users WHERE user_id = _user_id;
 
-    IF(_user_config IS NOT NULL) THEN
-        _config := _user_config;
-    END IF;
+    --GROUP AUTHORIZATION BASED ON ALL ENTITIES AND ALL ACCESS TYPES
+    SELECT 
+        allow_access 
+    INTO 
+        _group_all_policy
+    FROM auth.group_entity_access_policy
+    WHERE role_id = _role_id
+    AND access_type_id IS NULL
+    AND COALESCE(entity_name, '') = '';
 
-    RETURN _config;
+    --GROUP AUTHORIZATION BASED ON ALL ENTITIES AND SPECIFIED ACCESS TYPE
+    SELECT 
+        allow_access
+    INTO
+        _group_all_entity_specific_access_type
+    FROM auth.group_entity_access_policy
+    WHERE role_id = _role_id
+    AND access_type_id = _access_type_id
+    AND COALESCE(entity_name, '') = '';
+
+    --GROUP AUTHORIZATION BASED ON SPECIFIED ENTITY AND ALL ACCESS TYPES
+    SELECT
+        allow_access
+    INTO
+        _group_specific_entity_all_access_type
+    FROM auth.group_entity_access_policy
+    WHERE role_id = _role_id
+    AND access_type_id IS NULL
+    AND entity_name = _entity;
+
+    --GROUP AUTHORIZATION BASED ON SPECIFIED ENTITY AND SPECIFIED ACCESS TYPE
+    SELECT 
+        allow_access
+    INTO
+        _group_explicit_policy
+    FROM auth.group_entity_access_policy
+    WHERE role_id = _role_id
+    AND access_type_id = _access_type_id
+    AND entity_name = _entity;
+
+    --EFFECTIVE GROUP POLICY BASED ON PRECEDENCE.
+    _effective_group_policy := COALESCE(_group_explicit_policy, _group_specific_entity_all_access_type, _group_all_entity_specific_access_type, _group_all_policy);
+
+    RETURN COALESCE(_effective_group_policy, false);    
 END
 $$
 LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/1.x/1.0/src/02.functions-and-logic/auth.save_api_group_policy.sql --<--<--
+DROP FUNCTION IF EXISTS auth.save_api_group_policy
+(
+    _role_id            integer,
+    _entity_name        national character varying(128),
+    _office_id          integer,
+    _access_type_ids    int[],
+    _allow_access       boolean
+);
+
+CREATE FUNCTION auth.save_api_group_policy
+(
+    _role_id            integer,
+    _entity_name        national character varying(128),
+    _office_id          integer,
+    _access_type_ids    int[],
+    _allow_access       boolean
+)
+RETURNS void
+AS
+$$
+BEGIN
+    IF(_role_id IS NULL OR _office_id IS NULL) THEN
+        RETURN;
+    END IF;
+    
+    DELETE FROM auth.group_entity_access_policy
+    WHERE auth.group_entity_access_policy.access_type_id 
+    NOT IN
+    (
+        SELECT * from unnest(_access_type_ids)
+    )
+    AND role_id = _role_id
+    AND office_id = _office_id
+    AND entity_name = _entity_name
+    AND access_type_id IN
+    (
+        SELECT access_type_id
+        FROM auth.access_types
+    );
+
+    WITH access_types
+    AS
+    (
+        SELECT unnest(_access_type_ids) AS _access_type_id
+    )
+    
+    INSERT INTO auth.group_entity_access_policy(role_id, office_id, entity_name, access_type_id, allow_access)
+    SELECT _role_id, _office_id, _entity_name, _access_type_id, _allow_access
+    FROM access_types
+    WHERE _access_type_id NOT IN
+    (
+        SELECT access_type_id
+        FROM auth.group_entity_access_policy
+        WHERE auth.group_entity_access_policy.role_id = _role_id
+        AND auth.group_entity_access_policy.office_id = _office_id
+    );
+
+    RETURN;
+END
+$$
+LANGUAGE plpgsql;
+
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/1.x/1.0/src/02.functions-and-logic/auth.save_group_menu_policy.sql --<--<--
@@ -718,7 +855,7 @@ SELECT * FROM auth.create_app_menu_policy
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/1.x/1.0/src/03.menus/1.menu-policy.sql --<--<--
 SELECT * FROM auth.create_app_menu_policy
 (
-    'Administrator', 
+    'Admin', 
     core.get_office_id_by_office_name('Default'), 
     'Frapid.Authorization',
     '{*}'::text[]
@@ -736,14 +873,28 @@ SELECT * FROM auth.create_app_menu_policy
 
 SELECT * FROM auth.create_app_menu_policy
 (
-    'Administrator', 
+    'Admin', 
     core.get_office_id_by_office_name('Default'), 
     'Frapid.Account',
     '{*}'::text[]
 );
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
+INSERT INTO auth.access_types(access_type_id, access_type_name)
+SELECT 1, 'Read'            UNION ALL
+SELECT 2, 'Create'          UNION ALL
+SELECT 3, 'Edit'            UNION ALL
+SELECT 4, 'Delete'          UNION ALL
+SELECT 5, 'CreateFilter'    UNION ALL
+SELECT 6, 'DeleteFilter'    UNION ALL
+SELECT 7, 'Export'          UNION ALL
+SELECT 8, 'ExportData'      UNION ALL
+SELECT 9, 'ImportData'      UNION ALL
+SELECT 10, 'Execute'        UNION ALL
+SELECT 11, 'Verify';
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/1.x/1.0/src/10.policy/access_policy.sql --<--<--
+SELECT * FROM auth.create_api_access_policy('{Admin}', core.get_office_id_by_office_name('Default'), '', '{*}', true);
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/1.x/1.0/src/99.ownership.sql --<--<--
 DO

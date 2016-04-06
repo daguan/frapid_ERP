@@ -748,6 +748,9 @@ END
 $$
 LANGUAGE plpgsql;
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/1.x/1.0/src/10.policy/access_policy.sql --<--<--
+
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/1.x/1.0/src/99.ownership.sql --<--<--
 DO
 $$

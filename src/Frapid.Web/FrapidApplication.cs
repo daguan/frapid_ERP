@@ -54,13 +54,13 @@ namespace Frapid.Web
                 return;
             }
 
+            context.Response.TrySkipIisCustomErrors = true;
             string path = context.Request.Url.AbsolutePath;
 
             var ignoredPaths = new[] { "/api", "/dashboard", "/content-not-found" };
 
             if (!ignoredPaths.Any(x => path.StartsWith(x)))
             {
-                context.Response.TrySkipIisCustomErrors = true;
                 context.Server.TransferRequest("/content-not-found?path=" + path, true);
             }
         }

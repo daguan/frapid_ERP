@@ -727,6 +727,25 @@ namespace Frapid.WebApi.DataAccess
 
         public EntityView GetMeta()
         {
+            if (string.IsNullOrWhiteSpace(this.Database))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information(
+                        $"Access to view meta information on entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}");
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
             return EntityView.Get(this.Database, this.PrimaryKey, this._ObjectNamespace, this.GetTableName());
         }
     }
