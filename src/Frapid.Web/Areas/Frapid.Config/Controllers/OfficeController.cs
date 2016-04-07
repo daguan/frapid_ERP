@@ -8,6 +8,7 @@ namespace Frapid.Config.Controllers
     {
         [Route("dashboard/config/offices")]
         [RestrictAnonymous]
+        [MenuPolicy]
         public ActionResult Index()
         {
             return this.FrapidView(this.GetRazorView<AreaRegistration>("Office/Index.cshtml"));

@@ -1,7 +1,7 @@
 ﻿DROP FUNCTION IF EXISTS auth.save_api_group_policy
 (
     _role_id            integer,
-    _entity_name        national character varying(128),
+    _entity_name        national character varying(500),
     _office_id          integer,
     _access_type_ids    int[],
     _allow_access       boolean
@@ -10,7 +10,7 @@
 CREATE FUNCTION auth.save_api_group_policy
 (
     _role_id            integer,
-    _entity_name        national character varying(128),
+    _entity_name        national character varying(500),
     _office_id          integer,
     _access_type_ids    int[],
     _allow_access       boolean

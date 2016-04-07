@@ -136,8 +136,18 @@ namespace Frapid.Areas
 
         protected ActionResult Failed(string message, HttpStatusCode statusCode)
         {
-            this.Response.StatusCode = (int) statusCode;
+            this.Response.StatusCode = (int)statusCode;
             return this.Content(message, MediaTypeNames.Text.Plain, Encoding.UTF8);
+        }
+
+        protected ActionResult InvalidModelState()
+        {
+            return this.Failed("Invalid model state", HttpStatusCode.BadRequest);
+        }
+
+        protected ActionResult AccessDenied()
+        {
+            return this.Failed("Access is denied", HttpStatusCode.Forbidden);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Frapid.Account.Controllers.Backend
     {
         [Route("dashboard/account/user-management")]
         [RestrictAnonymous]
+        [MenuPolicy]
         public ActionResult Index()
         {
             return this.FrapidView(this.GetRazorView<AreaRegistration>("User/Index.cshtml"));

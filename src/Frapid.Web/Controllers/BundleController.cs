@@ -30,7 +30,7 @@ namespace Frapid.Web.Controllers
             }
 
             Thread.Sleep(5000);
-            return this.Failed("Very Naughty!", HttpStatusCode.BadGateway);
+            return this.Failed("Very Naughty!", HttpStatusCode.BadRequest);
         }
 
         private string Bundle(string files, string directory, string terminator = "")

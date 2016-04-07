@@ -29,7 +29,8 @@ BEGIN
     (
         SELECT menu_id
         FROM core.menus
-        WHERE app_name = _app_name
+        WHERE _app_name = ''
+        OR app_name = _app_name
     );
 
     WITH menus

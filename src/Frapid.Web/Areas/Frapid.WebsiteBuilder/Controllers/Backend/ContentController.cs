@@ -10,6 +10,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     {
         [Route("dashboard/website/contents")]
         [RestrictAnonymous]
+        [MenuPolicy]
         public ActionResult Index()
         {
             return this.FrapidView(this.GetRazorView<AreaRegistration>("Content/Index.cshtml"));
@@ -18,6 +19,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         [Route("dashboard/website/contents/manage")]
         [Route("dashboard/website/contents/new")]
         [RestrictAnonymous]
+        [MenuPolicy]
         public ActionResult Manage(int contentId = 0)
         {
             var model = Contents.Get(contentId) ?? new Content();

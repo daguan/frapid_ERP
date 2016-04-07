@@ -8,6 +8,7 @@ namespace Frapid.Config.Controllers
     {
         [Route("dashboard/config/api-access")]
         [RestrictAnonymous]
+        [MenuPolicy]
         public ActionResult Index()
         {
             return this.FrapidView(this.GetRazorView<AreaRegistration>("ApiAccess/Index.cshtml"));

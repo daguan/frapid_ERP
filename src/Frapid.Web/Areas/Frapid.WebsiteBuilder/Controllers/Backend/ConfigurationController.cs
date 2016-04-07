@@ -8,6 +8,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     {
         [Route("dashboard/website/configuration")]
         [RestrictAnonymous]
+        [MenuPolicy]
         public ActionResult Index()
         {
             return this.FrapidView(this.GetRazorView<AreaRegistration>("Configuration/Index.cshtml"));

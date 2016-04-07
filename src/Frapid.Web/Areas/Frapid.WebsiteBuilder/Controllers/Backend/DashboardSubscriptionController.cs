@@ -8,6 +8,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     {
         [Route("dashboard/website/subscriptions")]
         [RestrictAnonymous]
+        [MenuPolicy]
         public ActionResult Index()
         {
             return this.FrapidView(this.GetRazorView<AreaRegistration>("DashboardSubscription/Index.cshtml"));

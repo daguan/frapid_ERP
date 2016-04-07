@@ -8,6 +8,7 @@ namespace Frapid.Config.Controllers
     {
         [Route("dashboard/config/flags")]
         [RestrictAnonymous]
+        [MenuPolicy]
         public ActionResult Index()
         {
             return this.FrapidView(this.GetRazorView<AreaRegistration>("Flag/Index.cshtml"));

@@ -14,7 +14,7 @@ ON auth.access_types(UPPER(access_type_name));
 CREATE TABLE auth.group_entity_access_policy
 (
     group_entity_access_policy_id           SERIAL NOT NULL PRIMARY KEY,
-    entity_name                             national character varying(128) NULL,
+    entity_name                             national character varying(500) NULL,
     office_id                               integer NOT NULL REFERENCES core.offices,
     role_id                                 integer NOT NULL REFERENCES account.roles,
     access_type_id                          integer NULL REFERENCES auth.access_types,
@@ -27,7 +27,7 @@ CREATE TABLE auth.group_entity_access_policy
 CREATE TABLE auth.entity_access_policy
 (
     entity_access_policy_id                 SERIAL NOT NULL PRIMARY KEY,
-    entity_name                             national character varying(128) NULL,
+    entity_name                             national character varying(500) NULL,
     office_id                               integer NOT NULL REFERENCES core.offices,
     user_id                                 integer NOT NULL REFERENCES account.users,
     access_type_id                          integer NULL REFERENCES auth.access_types,

@@ -8,6 +8,7 @@ namespace Frapid.Config.Controllers
     {
         [Route("dashboard/config/currencies")]
         [RestrictAnonymous]
+        [MenuPolicy]
         public ActionResult Index()
         {
             return this.FrapidView(this.GetRazorView<AreaRegistration>("Currency/Index.cshtml"));

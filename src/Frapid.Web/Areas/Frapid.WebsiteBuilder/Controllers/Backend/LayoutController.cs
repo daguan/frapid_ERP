@@ -15,6 +15,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     {
         [Route("dashboard/website/layouts")]
         [RestrictAnonymous]
+        [MenuPolicy]
         public ActionResult Master()
         {
             return this.FrapidView(this.GetRazorView<AreaRegistration>("Layout/Index.cshtml"));

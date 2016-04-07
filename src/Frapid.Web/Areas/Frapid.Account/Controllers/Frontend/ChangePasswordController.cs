@@ -26,7 +26,7 @@ namespace Frapid.Account.Controllers.Frontend
         {
             if (!ModelState.IsValid)
             {
-                return this.Failed("Invalid model state.", HttpStatusCode.BadRequest);
+                return this.InvalidModelState();
             }
 
             bool result = await ChangePasswordModel.ChangePassword(model, this.RemoteUser);

@@ -13,6 +13,7 @@ namespace Frapid.Account.Controllers.Backend
     {
         [Route("dashboard/account/email-templates/{file}")]
         [RestrictAnonymous]
+        [MenuPolicy]
         public ActionResult Index(string file)
         {
             string contents = this.GetContents(file);

@@ -63,7 +63,7 @@ namespace Frapid.Account.Controllers
             }
             catch (NpgsqlException)
             {
-                return this.Failed("Access is denied.", HttpStatusCode.Forbidden);
+                return this.AccessDenied();
             }
         }
 

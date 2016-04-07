@@ -12,6 +12,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     {
         [Route("dashboard/website/subscription/welcome")]
         [RestrictAnonymous]
+        [MenuPolicy]
         public ActionResult Welcome()
         {
             string path = this.GetWelcomeTemplatePath();
@@ -22,6 +23,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
 
         [Route("dashboard/website/subscription/removed")]
         [RestrictAnonymous]
+        [MenuPolicy]
         public ActionResult Removed()
         {
             string path = this.GetSubscriptionRemovedTemplatePath();

@@ -15,7 +15,7 @@ ON auth.access_types(UPPER(access_type_name));
 CREATE TABLE auth.group_entity_access_policy
 (
     group_entity_access_policy_id           SERIAL NOT NULL PRIMARY KEY,
-    entity_name                             national character varying(128) NULL,
+    entity_name                             national character varying(500) NULL,
     office_id                               integer NOT NULL REFERENCES core.offices,
     role_id                                 integer NOT NULL REFERENCES account.roles,
     access_type_id                          integer NULL REFERENCES auth.access_types,
@@ -28,7 +28,7 @@ CREATE TABLE auth.group_entity_access_policy
 CREATE TABLE auth.entity_access_policy
 (
     entity_access_policy_id                 SERIAL NOT NULL PRIMARY KEY,
-    entity_name                             national character varying(128) NULL,
+    entity_name                             national character varying(500) NULL,
     office_id                               integer NOT NULL REFERENCES core.offices,
     user_id                                 integer NOT NULL REFERENCES account.users,
     access_type_id                          integer NULL REFERENCES auth.access_types,
@@ -652,7 +652,7 @@ LANGUAGE plpgsql;
 DROP FUNCTION IF EXISTS auth.save_api_group_policy
 (
     _role_id            integer,
-    _entity_name        national character varying(128),
+    _entity_name        national character varying(500),
     _office_id          integer,
     _access_type_ids    int[],
     _allow_access       boolean
@@ -661,7 +661,7 @@ DROP FUNCTION IF EXISTS auth.save_api_group_policy
 CREATE FUNCTION auth.save_api_group_policy
 (
     _role_id            integer,
-    _entity_name        national character varying(128),
+    _entity_name        national character varying(500),
     _office_id          integer,
     _access_type_ids    int[],
     _allow_access       boolean
@@ -745,7 +745,8 @@ BEGIN
     (
         SELECT menu_id
         FROM core.menus
-        WHERE app_name = _app_name
+        WHERE _app_name = ''
+        OR app_name = _app_name
     );
 
     WITH menus
@@ -828,8 +829,8 @@ LANGUAGE plpgsql;
 SELECT * FROM core.create_app('Frapid.Authorization', 'Authorization', '1.0', 'MixERP Inc.', 'December 1, 2015', 'purple privacy', '/dashboard/authorization/menu-access/group-policy', '{Frapid.Account}'::text[]);
 
 SELECT * FROM core.create_menu('Frapid.Authorization', 'Entity Access Policy', '', 'lock', '');
-SELECT * FROM core.create_menu('Frapid.Authorization', 'Group Policy', '/dashboard/authorization/entity-access/group-policy', 'users', 'Entity Access Policy');
-SELECT * FROM core.create_menu('Frapid.Authorization', 'User Policy', '/dashboard/authorization/entity-access/user-policy', 'user', 'Entity Access Policy');
+SELECT * FROM core.create_menu('Frapid.Authorization', 'Group Entity Access Policy', '/dashboard/authorization/entity-access/group-policy', 'users', 'Entity Access Policy');
+SELECT * FROM core.create_menu('Frapid.Authorization', 'User Entity Access Policy', '/dashboard/authorization/entity-access/user-policy', 'user', 'Entity Access Policy');
 SELECT * FROM core.create_menu('Frapid.Authorization', 'Menu Access Policy', '', 'toggle on', '');
 SELECT * FROM core.create_menu('Frapid.Authorization', 'Group Policy', '/dashboard/authorization/menu-access/group-policy', 'users', 'Menu Access Policy');
 SELECT * FROM core.create_menu('Frapid.Authorization', 'User Policy', '/dashboard/authorization/menu-access/user-policy', 'user', 'Menu Access Policy');
@@ -892,6 +893,21 @@ SELECT 8, 'ExportData'      UNION ALL
 SELECT 9, 'ImportData'      UNION ALL
 SELECT 10, 'Execute'        UNION ALL
 SELECT 11, 'Verify';
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/1.x/1.0/src/05.views/auth.entity_view.sql --<--<--
+DROP VIEW IF EXISTS auth.entity_view;
+
+CREATE VIEW auth.entity_view
+AS
+SELECT 
+    information_schema.tables.table_schema, 
+    information_schema.tables.table_name, 
+    information_schema.tables.table_schema || '.' ||
+    information_schema.tables.table_name AS object_name, 
+    information_schema.tables.table_type
+FROM information_schema.tables 
+WHERE (information_schema.tables.table_type='BASE TABLE' OR information_schema.tables.table_type='VIEW')
+AND table_schema NOT IN ('pg_catalog', 'information_schema');
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/1.x/1.0/src/10.policy/access_policy.sql --<--<--
 SELECT * FROM auth.create_api_access_policy('{Admin}', core.get_office_id_by_office_name('Default'), '', '{*}', true);

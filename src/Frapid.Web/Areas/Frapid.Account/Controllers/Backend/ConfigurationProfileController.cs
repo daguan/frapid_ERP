@@ -8,6 +8,7 @@ namespace Frapid.Account.Controllers.Backend
     {
         [Route("dashboard/account/configuration-profile")]
         [RestrictAnonymous]
+        [MenuPolicy]
         public ActionResult Index()
         {
             return this.FrapidView(this.GetRazorView<AreaRegistration>("ConfigurationProfile/Index.cshtml"));

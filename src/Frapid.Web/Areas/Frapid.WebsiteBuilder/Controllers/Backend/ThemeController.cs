@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using Frapid.Areas;
 using Frapid.Areas.Authorization;
 using Frapid.Configuration;
-using Frapid.Framework.Extensions;
 using Frapid.WebsiteBuilder.Models.Themes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -34,7 +33,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         {
             if (!ModelState.IsValid)
             {
-                return this.Failed("Invalid or incomplete theme information provided.", HttpStatusCode.BadRequest);
+                return this.InvalidModelState();
             }
 
             try
@@ -88,7 +87,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
 
             var resource = ThemeResource.Get(path);
             resource = ThemeResource.NormalizePath(path, resource);
-            
+
             string json = JsonConvert.SerializeObject(resource, Formatting.None,
                 new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
 
@@ -101,7 +100,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         {
             if (string.IsNullOrWhiteSpace(themeName) || string.IsNullOrWhiteSpace(file))
             {
-                return this.Failed("Access is denied", HttpStatusCode.BadRequest);
+                return this.AccessDenied();
             }
 
             string path = new ThemeFileLocator(themeName, file).Locate();
@@ -171,7 +170,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         {
             if (string.IsNullOrWhiteSpace(themeName) || string.IsNullOrWhiteSpace(resource))
             {
-                return this.Failed("Access is denied", HttpStatusCode.BadRequest);
+                return this.AccessDenied();
             }
 
             try
