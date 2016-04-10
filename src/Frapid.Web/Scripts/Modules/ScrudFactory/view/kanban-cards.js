@@ -130,7 +130,7 @@ function getImageField(entity) {
 
     $.each(entity, function (i) {
         if (!imageField) {
-            if (i.toLowerCase().indexOf("image") !== -1) {
+            if (i.toLowerCase().indexOf("photo") !== -1) {
                 imageField = i;
             };
         };
@@ -183,7 +183,7 @@ function createCard(dynamic, key, kanbanDetail) {
     if (imageField) {
         var src = getCardField(dynamic, imageField);
         if (src) {
-            var image = $('<div class="image" />');
+            var image = $('<div class="photo" />');
             var img = $("<img />");
             img.attr("src", "/api/forms/config/attachments/document/300/250/" + src);
 

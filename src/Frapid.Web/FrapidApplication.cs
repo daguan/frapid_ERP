@@ -38,6 +38,7 @@ namespace Frapid.Web
         {
             var context = HttpContext.Current;
             var exception = context.Server.GetLastError();
+
             if (exception != null)
             {
                 Log.Error("Exception. {exception}", exception);
@@ -54,6 +55,7 @@ namespace Frapid.Web
                 return;
             }
 
+            context.Server.ClearError();
             context.Response.TrySkipIisCustomErrors = true;
             string path = context.Request.Url.AbsolutePath;
 
@@ -73,6 +75,7 @@ namespace Frapid.Web
         public void App_BeginRequest(object sender, EventArgs e)
         {
             var context = HttpContext.Current;
+
             if (context == null)
             {
                 return;

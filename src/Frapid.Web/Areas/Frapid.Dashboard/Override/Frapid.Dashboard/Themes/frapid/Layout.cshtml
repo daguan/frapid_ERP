@@ -10,12 +10,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="description" content="Frapid Framework" />
     <title data-ng-bind="$root.title">@ViewBag.Title</title>
-    <link href="~/Scripts/semantic-ui/semantic.min.css" rel="stylesheet" />
-    <link href="~/dashboard/my/template/Contents/dashboard.css" rel="stylesheet" />
+
+    <link href="/bundler/get.css?v=1&directory=/&files=Scripts/semantic-ui/semantic.min.css,Scripts/jquery-ui/css/custom-theme/jquery-ui.min.css" rel="stylesheet" />
+    <link href="/dashboard/my/template/Contents/dashboard.css" rel="stylesheet" />
+
     <script src="~/i18n/resources.js"></script>
     <script src="~/bundles/backend.js"></script>
-    <script src="~/Scripts/frapid/utilities/validator.js"></script>
-    <script src="/Scripts/angular-route.min.js"></script>
+	
+    <script src="/bundler/get.js?directory=/&files=Scripts/frapid/utilities/validator.js,Scripts/angular-route.min.js"></script>
+
     <script src="~/dashboard/my/template/Contents/theme-selector.js"></script>
     <script src="~/dashboard/my/template/Contents/apps.js"></script>
 </head>
@@ -50,8 +53,6 @@
     </div>
     <script src="~/dashboard/my/template/Contents/dashboard.js"></script>
     @Html.AntiForgeryToken()
-    <script src="/Scripts/underscore/underscore-min.js"></script>
-	<script src="/Scripts/inflection-js/inflection.js"></script>
-	<script src="/Scripts/frapid/utilities/localizable.js"></script>
+	<script src="/bundler/get.js?directory=/&files=Scripts/underscore/underscore-min.js,Scripts/inflection-js/inflection.js,Scripts/frapid/utilities/localizable.js"></script>
 </body>
 </html>

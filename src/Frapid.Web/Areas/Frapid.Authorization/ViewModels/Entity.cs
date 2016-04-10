@@ -15,10 +15,18 @@ namespace Frapid.Authorization.ViewModels
             var data = Entities.Get();
             var english = new CultureInfo("en-US", false).TextInfo;
 
-            return data.Select(item => new Entity
+            var entities = data.Select(item => new Entity
             {
                 ObjectId = item.ObjectName, Name = english.ToTitleCase(item.ObjectName.Replace(".", ": ").Replace("_", " "))
             }).OrderBy(x=>x.ObjectId).ToList();
+
+            entities.Insert(0, new Entity
+            {
+                ObjectId = "",
+                Name = "All Objects"
+            });
+
+            return entities;
         }
     }
 }

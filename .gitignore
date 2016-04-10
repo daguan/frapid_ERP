@@ -19,3 +19,11 @@ src/Frapid.Web/Areas/Frapid.Forms/
 src/Frapid.Web/logo.png
 src/Frapid.Web/logo-inverted.png
 src/Frapid.Web/images/
+src/Frapid.Web/Areas/MixERP.Production/
+src/Frapid.Web/Areas/MixERP.Payroll/
+src/Frapid.Web/Areas/MixERP.HRM/
+src/Frapid.Web/Areas/MixERP.Finance/
+src/Frapid.Web/Areas/MixERP.Sales/
+src/Frapid.Web/Areas/MixERP.Purchase/
+src/Frapid.Web/Areas/MixERP.Inventory/
+src/Frapid.Web/Areas/MixERP.BackOffice/

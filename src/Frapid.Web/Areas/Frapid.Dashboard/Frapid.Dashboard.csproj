@@ -128,7 +128,7 @@
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
-    <Compile Include="Controllers\MenuPolicyAttribute.cs" />
+    <Compile Include="MenuPolicyAttribute.cs" />
     <Compile Include="Controllers\MyTemplateController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\ThemeController.cs" />

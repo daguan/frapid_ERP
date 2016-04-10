@@ -15,7 +15,7 @@
     };
 
     switch (dataType) {
-        case "image":
+        case "photo":
             return $("<input type='text' class='image' />");
         case "int4":
         case "int8":
@@ -71,7 +71,7 @@ function editScrudFormElement(targetEl, value) {
 
         targetEl.val(value);
 
-        if (targetEl.attr("data-type") === "image") {
+        if (targetEl.attr("data-type") === "photo") {
             initializeUploader();
         };
 

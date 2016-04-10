@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Frapid.Areas.Authorization;
+using Frapid.Dashboard;
 using Frapid.Dashboard.Controllers;
 using Frapid.WebsiteBuilder.DAL;
 using Frapid.WebsiteBuilder.DTO;
@@ -19,7 +20,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         [Route("dashboard/website/contents/manage")]
         [Route("dashboard/website/contents/new")]
         [RestrictAnonymous]
-        [MenuPolicy]
+        [MenuPolicy(OverridePath = "/dashboard/website/contents")]
         public ActionResult Manage(int contentId = 0)
         {
             var model = Contents.Get(contentId) ?? new Content();

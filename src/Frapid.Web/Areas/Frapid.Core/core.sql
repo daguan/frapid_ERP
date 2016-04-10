@@ -98,8 +98,8 @@ DROP DOMAIN IF EXISTS public.color CASCADE;
 CREATE DOMAIN public.color
 AS text;
 
-DROP DOMAIN IF EXISTS public.image CASCADE;
-CREATE DOMAIN public.image
+DROP DOMAIN IF EXISTS public.photo CASCADE;
+CREATE DOMAIN public.photo
 AS text;
 
 
@@ -178,7 +178,7 @@ CREATE TABLE core.offices
     fax                                         national character varying(24),
     email                                       national character varying(128),
     url                                         national character varying(50),
-    logo                                        public.image,
+    logo                                        public.photo,
     parent_office_id                            integer NULL REFERENCES core.offices,
     audit_user_id                               integer NULL,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 

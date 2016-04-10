@@ -1,7 +1,7 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/00.db core/extensions.sql --<--<--
+﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/PostgreSQL/meta/1.x/1.0/src/00.db core/extensions.sql --<--<--
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/00.db core/postgresql-roles.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/PostgreSQL/meta/1.x/1.0/src/00.db core/postgresql-roles.sql --<--<--
 DO
 $$
 BEGIN
@@ -30,7 +30,7 @@ LANGUAGE plpgsql;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/PostgreSQL/meta/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 DROP SCHEMA IF EXISTS i18n CASCADE;
 CREATE SCHEMA i18n;
 
@@ -53,7 +53,7 @@ CREATE TABLE i18n.localized_resources
     value                                       text
 );
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/05.views/0.resource_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/PostgreSQL/meta/1.x/1.0/src/05.views/0.resource_view.sql --<--<--
 DROP VIEW IF EXISTS i18n.resource_view;
 
 CREATE VIEW i18n.resource_view
@@ -67,7 +67,7 @@ FROM i18n.localized_resources
 INNER JOIN i18n.resources
 ON i18n.localized_resources.resource_id = i18n.resources.resource_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/05.views/localized_resource_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/PostgreSQL/meta/1.x/1.0/src/05.views/localized_resource_view.sql --<--<--
 DROP VIEW IF EXISTS i18n.localized_resource_view;
 
 CREATE VIEW i18n.localized_resource_view
@@ -79,7 +79,7 @@ SELECT
 FROM i18n.resource_view;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/06.functions-and-logic/add_localized_resource.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/PostgreSQL/meta/1.x/1.0/src/06.functions-and-logic/add_localized_resource.sql --<--<--
 DROP FUNCTION IF EXISTS i18n.add_localized_resource
 (
     _resource_class  text,
@@ -133,7 +133,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/06.functions-and-logic/add_resource.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/PostgreSQL/meta/1.x/1.0/src/06.functions-and-logic/add_resource.sql --<--<--
 DROP FUNCTION IF EXISTS i18n.add_resource
 (
     resource_class  text,
@@ -161,7 +161,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/06.functions-and-logic/get_localization_table.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/PostgreSQL/meta/1.x/1.0/src/06.functions-and-logic/get_localization_table.sql --<--<--
 DROP FUNCTION IF EXISTS i18n.get_localization_table(text);
 
 CREATE FUNCTION i18n.get_localization_table
@@ -216,7 +216,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/06.functions-and-logic/get_output_for.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/PostgreSQL/meta/1.x/1.0/src/06.functions-and-logic/get_output_for.sql --<--<--
 DROP FUNCTION IF EXISTS i18n.get_output_for(national character varying(3));
 
 CREATE FUNCTION i18n.get_output_for(national character varying(3))
@@ -246,7 +246,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/06.functions-and-logic/get_resource.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/PostgreSQL/meta/1.x/1.0/src/06.functions-and-logic/get_resource.sql --<--<--
 DROP FUNCTION IF EXISTS i18n.get_resource(_culture_code text, _resource_class text, _key text);
 
 CREATE FUNCTION i18n.get_resource(_culture_code text, _resource_class text, _key text)
@@ -284,7 +284,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/10.Localization/0.neutral-resource(en)/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/PostgreSQL/meta/1.x/1.0/src/10.Localization/0.neutral-resource(en)/language.sql --<--<--
 SELECT i18n.add_localized_resource('Titles', '', 'SignIn', 'Sign In');
 SELECT i18n.add_localized_resource('Titles', '', 'Username', 'Username');
 SELECT i18n.add_localized_resource('Titles', '', 'Password', 'Password');
@@ -380,7 +380,7 @@ SELECT i18n.add_localized_resource('Labels', '', 'NamedFilter', 'Filter: {0}.');
 SELECT i18n.add_localized_resource('DbErrors', '', 'TableNotFound', 'The table was not found.');
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/99.ownership.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/PostgreSQL/meta/1.x/1.0/src/99.ownership.sql --<--<--
 DO
 $$
     DECLARE this record;

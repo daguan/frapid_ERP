@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Frapid.Account.ViewModels;
 using Frapid.Areas;
 using Frapid.Areas.Authorization;
+using Frapid.Dashboard;
 using Frapid.Dashboard.Controllers;
 
 namespace Frapid.Account.Controllers.Backend

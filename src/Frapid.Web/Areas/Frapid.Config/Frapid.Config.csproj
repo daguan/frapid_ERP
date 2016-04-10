@@ -46,10 +46,26 @@
     <Reference Include="Frapid.Areas">
       <HintPath>..\..\bin\Frapid.Areas.dll</HintPath>
     </Reference>
+    <Reference Include="Frapid.Configuration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Frapid.Configuration.dll</HintPath>
+    </Reference>
     <Reference Include="Frapid.Dashboard">
       <HintPath>..\..\bin\Frapid.Dashboard.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>packages\Serilog.1.5.14\lib\net45\Serilog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.FullNetFx, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>packages\Serilog.1.5.14\lib\net45\Serilog.FullNetFx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -82,17 +98,28 @@
     <Compile Include="AreaRegistration.cs" />
     <Compile Include="Controllers\ApiAccessController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
+    <Compile Include="Controllers\FileManagerController.cs" />
     <Compile Include="Controllers\FlagController.cs" />
     <Compile Include="Controllers\MenuAccessController.cs" />
     <Compile Include="Controllers\OfficeController.cs" />
     <Compile Include="Controllers\SmtpController.cs" />
+    <Compile Include="FrapidConfig.cs" />
+    <Compile Include="Models\FileManagerResource.cs" />
+    <Compile Include="Models\ResourceCreateException.cs" />
+    <Compile Include="Models\ResourceCreator.cs" />
+    <Compile Include="Models\ResourceRemoveException.cs" />
+    <Compile Include="Models\ResourceRemover.cs" />
+    <Compile Include="Models\ResourceUploader.cs" />
+    <Compile Include="Models\ResourceUploadException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\FileManager\Index.css" />
+    <Content Include="Scripts\FileManager\Index.js" />
     <Content Include="Views\web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Currency\Index.cshtml" />
@@ -107,7 +134,12 @@
   <ItemGroup>
     <Content Include="web.config" />
     <Content Include="AppInfo.json" />
+    <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\frapid-publish-profile.pubxml" />
+    <Content Include="Views\FileManager\Index.cshtml" />
+    <Content Include="Views\FileManager\Shared\FileModal.cshtml" />
+    <Content Include="Views\FileManager\Shared\FolderModal.cshtml" />
+    <Content Include="Views\FileManager\Shared\UploadModal.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Frapid.Areas.Authorization;
+using Frapid.Dashboard;
 using Frapid.Dashboard.Controllers;
 
 namespace Frapid.WebsiteBuilder.Controllers.Backend

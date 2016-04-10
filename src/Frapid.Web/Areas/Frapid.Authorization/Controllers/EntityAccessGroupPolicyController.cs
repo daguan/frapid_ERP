@@ -4,6 +4,7 @@ using Frapid.Areas;
 using Frapid.Areas.Authorization;
 using Frapid.Authorization.Models;
 using Frapid.Authorization.ViewModels;
+using Frapid.Dashboard;
 using Frapid.Dashboard.Controllers;
 
 namespace Frapid.Authorization.Controllers

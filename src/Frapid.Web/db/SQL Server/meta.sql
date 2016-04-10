@@ -1,85 +1,83 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/00.db core/extensions.sql --<--<--
-CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/00.db core/sql-server-roles.sql --<--<--
+CREATE LOGIN frapid_db_user WITH PASSWORD = 'change-on-deployment';
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/00.db core/postgresql-roles.sql --<--<--
-DO
-$$
+IF NOT EXISTS 
+(
+	SELECT * FROM sys.database_principals 
+	WHERE name = 'frapid_db_user'
+)
 BEGIN
-    IF NOT EXISTS (SELECT * FROM pg_catalog.pg_roles WHERE rolname = 'frapid_db_user') THEN
-        CREATE ROLE frapid_db_user WITH LOGIN PASSWORD 'change-on-deployment';
-    END IF;
+    CREATE USER frapid_db_user FOR LOGIN frapid_db_user;
+    EXEC sp_addrolemember 'db_owner', 'frapid_db_user';
+END;
+GO
 
-    COMMENT ON ROLE frapid_db_user IS 'The default user for frapid databases.';
+CREATE LOGIN report_user WITH PASSWORD = 'change-on-deployment';
 
-    EXECUTE 'ALTER DATABASE ' || current_database() || ' OWNER TO frapid_db_user;';
-END
-$$
-LANGUAGE plpgsql;
 
-DO
-$$
+IF NOT EXISTS 
+(
+	SELECT * FROM sys.database_principals 
+	WHERE name = 'report_user'
+)
 BEGIN
-    IF NOT EXISTS (SELECT * FROM pg_catalog.pg_roles WHERE rolname = 'report_user') THEN
-        CREATE ROLE report_user WITH LOGIN PASSWORD 'change-on-deployment';
-    END IF;
-
-    COMMENT ON ROLE report_user IS 'This user account is used by the Reporting Engine to run ad-hoc queries. It is strictly advised for this user to only have a read-only access to the database.';
-END
-$$
-LANGUAGE plpgsql;
+    CREATE USER report_user FOR LOGIN report_user;
+    EXEC sp_addrolemember 'db_datareader', 'frapid_db_user';
+END;
+GO
 
 
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
-DROP SCHEMA IF EXISTS i18n CASCADE;
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 CREATE SCHEMA i18n;
 
 CREATE TABLE i18n.resources
 (
-  resource_id                                   SERIAL PRIMARY KEY,
-  resource_class                                text,
-  key                                           text,
-  value                                         text
+  resource_id                                   int IDENTITY PRIMARY KEY,
+  resource_class                                national character varying(4000) UNIQUE,
+  [key]                                         national character varying(4000),
+  value                                         national character varying(MAX)
 );
-
-CREATE UNIQUE INDEX resource_class_key_uix
-ON i18n.resources(LOWER(resource_class), LOWER(key));
 
 CREATE TABLE i18n.localized_resources
 (
-    localized_resource_id                       BIGSERIAL PRIMARY KEY,
+    localized_resource_id                       bigint IDENTITY PRIMARY KEY,
     resource_id                                 integer NOT NULL REFERENCES i18n.resources,
     culture_code                                national character varying(5) NOT NULL,
-    value                                       text
+    value                                       national character varying(4000)
 );
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/05.views/0.resource_view.sql --<--<--
-DROP VIEW IF EXISTS i18n.resource_view;
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/05.views/0.resource_view.sql --<--<--
+IF EXISTS(SELECT * FROM sys.views WHERE object_id = OBJECT_ID('i18n.resource_view'))
+DROP VIEW i18n.resource_view;
+
+GO
 
 CREATE VIEW i18n.resource_view
 AS
 SELECT 
-    resource_class, '' as culture, key, value
+    resource_class, '' as culture, [key], value
 FROM i18n.resources
 UNION ALL
-SELECT resource_class, culture_code, key, i18n.localized_resources.value 
+SELECT resource_class, culture_code, [key], i18n.localized_resources.value 
 FROM i18n.localized_resources
 INNER JOIN i18n.resources
 ON i18n.localized_resources.resource_id = i18n.resources.resource_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/05.views/localized_resource_view.sql --<--<--
-DROP VIEW IF EXISTS i18n.localized_resource_view;
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/05.views/localized_resource_view.sql --<--<--
+IF EXISTS(SELECT * FROM sys.views WHERE object_id = OBJECT_ID('i18n.localized_resource_view'))
+DROP VIEW i18n.localized_resource_view;
+
+GO
 
 CREATE VIEW i18n.localized_resource_view
 AS
 SELECT
-    resource_class || 
-    CASE WHEN COALESCE(culture, '') = '' THEN '' ELSE '.' || culture END 
-    || '.' || key as key, value 
+    resource_class + 
+    CASE WHEN COALESCE(culture, '') = '' THEN '' ELSE '.' + culture END 
+    + '.' + [key] as [key], value 
 FROM i18n.resource_view;
 
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/06.functions-and-logic/add_localized_resource.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/06.functions-and-logic/add_localized_resource.sql --<--<--
 DROP FUNCTION IF EXISTS i18n.add_localized_resource
 (
     _resource_class  text,
@@ -133,7 +131,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/06.functions-and-logic/add_resource.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/06.functions-and-logic/add_resource.sql --<--<--
 DROP FUNCTION IF EXISTS i18n.add_resource
 (
     resource_class  text,
@@ -161,7 +159,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/06.functions-and-logic/get_localization_table.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/06.functions-and-logic/get_localization_table.sql --<--<--
 DROP FUNCTION IF EXISTS i18n.get_localization_table(text);
 
 CREATE FUNCTION i18n.get_localization_table
@@ -216,7 +214,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/06.functions-and-logic/get_output_for.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/06.functions-and-logic/get_output_for.sql --<--<--
 DROP FUNCTION IF EXISTS i18n.get_output_for(national character varying(3));
 
 CREATE FUNCTION i18n.get_output_for(national character varying(3))
@@ -246,7 +244,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/06.functions-and-logic/get_resource.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/06.functions-and-logic/get_resource.sql --<--<--
 DROP FUNCTION IF EXISTS i18n.get_resource(_culture_code text, _resource_class text, _key text);
 
 CREATE FUNCTION i18n.get_resource(_culture_code text, _resource_class text, _key text)
@@ -284,7 +282,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/10.Localization/0.neutral-resource(en)/language.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/10.Localization/0.neutral-resource(en)/language.sql --<--<--
 SELECT i18n.add_localized_resource('Titles', '', 'SignIn', 'Sign In');
 SELECT i18n.add_localized_resource('Titles', '', 'Username', 'Username');
 SELECT i18n.add_localized_resource('Titles', '', 'Password', 'Password');
@@ -380,7 +378,7 @@ SELECT i18n.add_localized_resource('Labels', '', 'NamedFilter', 'Filter: {0}.');
 SELECT i18n.add_localized_resource('DbErrors', '', 'TableNotFound', 'The table was not found.');
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/meta/1.x/1.0/src/99.ownership.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/99.ownership.sql --<--<--
 DO
 $$
     DECLARE this record;

@@ -35,7 +35,7 @@ namespace Frapid.WebsiteBuilder.Models.Themes
 
             if (!Directory.Exists(path))
             {
-                throw new ResourceCreateException("Could not create the file or directory in an invalid directory path.");
+                throw new ResourceCreateException("Could not create the file or directory is an invalid directory path.");
             }
 
             path = Path.Combine(path, this.File);
