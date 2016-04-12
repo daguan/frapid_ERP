@@ -6,7 +6,7 @@ namespace Frapid.WebsiteBuilder.ViewModels
     {
         public string Title { get; set; }
         public string Contents { get; set; }
-        public DateTime LastUpdatedOn { get; set; }
+        public DateTimeOffset LastUpdatedOn { get; set; }
         public string LinkUrl { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Frapid.ApplicationState.Cache;
+using Frapid.Configuration;
 using Frapid.DataAccess;
 
 namespace Frapid.Dashboard.DAL

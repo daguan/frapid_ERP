@@ -1,29 +1,28 @@
 IF OBJECT_ID('auth.get_menu') IS NOT NULL
-DROP PROCEDURE auth.get_menu;
+DROP FUNCTION auth.get_menu;
 
 GO
 
 
-CREATE PROCEDURE auth.get_menu
+CREATE FUNCTION auth.get_menu
 (
     @user_id                            integer, 
     @office_id                          integer, 
     @culture                            national character varying(500)
 )
+RETURNS @result TABLE
+(
+	menu_id                             integer,
+	app_name                            national character varying(500),
+	menu_name                           national character varying(500),
+	url                                 national character varying(500),
+	sort                                integer,
+	icon                                national character varying(500),
+	parent_menu_id                      integer
+)
 AS
 BEGIN
-    SET NOCOUNT ON;
 
-	DECLARE @result TABLE
-	(
-		menu_id                             integer,
-		app_name                            character varying,
-		menu_name                           character varying,
-		url                                 national character varying(500),
-		sort                                integer,
-		icon                                character varying,
-		parent_menu_id                      integer
-	);
 
     DECLARE @role_id                    integer;
 
@@ -86,7 +85,7 @@ BEGIN
     WHERE core.menu_locale.culture = @culture;
     
 
-    SELECT * FROM @result;
+    RETURN;
 END;
 
 --EXECUTE auth.get_menu 1, 1, '';

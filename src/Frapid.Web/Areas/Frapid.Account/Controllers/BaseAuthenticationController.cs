@@ -54,7 +54,7 @@ namespace Frapid.Account.Controllers
             {
                 Value = token.ClientToken,
                 HttpOnly = true,
-                Expires = token.ExpiresOn
+                Expires = token.ExpiresOn.DateTime
             };
 
             //localhost cookie is not supported by most browsers.

@@ -597,18 +597,17 @@ Remember:
 
 CREATE TABLE core.week_days
 (
-	week_day_id                 integer NOT NULL CHECK(week_day_id > =1 AND week_day_id < =7) PRIMARY KEY,
-	week_day_code               national character varying(12) NOT NULL UNIQUE,
-	week_day_name               national character varying(50) NOT NULL UNIQUE
+	week_day_id                 			integer NOT NULL CHECK(week_day_id >=1 AND week_day_id <=7) PRIMARY KEY,
+	week_day_code               			national character varying(12) NOT NULL UNIQUE,
+	week_day_name               			national character varying(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE core.genders
 (
 	gender_code                             national character varying(4) NOT NULL PRIMARY KEY,
 	gender_name                             national character varying(50) NOT NULL UNIQUE,
-	audit_user_id                           integer NULL REFERENCES account.users(user_id),
-	audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-											DEFAULT(NOW())    
+	audit_user_id                           integer,
+	audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW())    
 );
 
 CREATE TABLE core.marital_statuses
@@ -617,9 +616,8 @@ CREATE TABLE core.marital_statuses
 	marital_status_code                     national character varying(12) NOT NULL UNIQUE,
 	marital_status_name                     national character varying(128) NOT NULL,
 	is_legally_recognized_marriage          boolean NOT NULL DEFAULT(false),
-	audit_user_id                           integer NULL REFERENCES account.users(user_id),    
-	audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-											DEFAULT(NOW())
+	audit_user_id                           integer,    
+	audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW())
 );
 
 

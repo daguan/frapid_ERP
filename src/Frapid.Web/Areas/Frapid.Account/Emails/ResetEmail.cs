@@ -51,12 +51,12 @@ namespace Frapid.Account.Emails
         {
             return new EmailQueue
             {
-                AddedOn = DateTime.UtcNow,
+                AddedOn = DateTimeOffset.UtcNow,
                 FromName = model.Name,
                 Subject = subject,
                 Message = message,
                 SendTo = model.Email,
-                SendOn = DateTime.UtcNow
+                SendOn = DateTimeOffset.UtcNow
             };
         }
 

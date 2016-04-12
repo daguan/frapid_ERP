@@ -7,8 +7,8 @@ namespace Frapid.TokenManager
     public class Token
     {
         private string _audience;
-        private DateTime _createdOn;
-        private DateTime _expiresOn;
+        private DateTimeOffset _createdOn;
+        private DateTimeOffset _expiresOn;
         private string _issuedBy;
         private long _loginId;
         private int _officeId;
@@ -55,7 +55,7 @@ namespace Frapid.TokenManager
         public List<Claim> Claims { get; }
         public string ClientToken { get; set; }
 
-        public DateTime CreatedOn
+        public DateTimeOffset CreatedOn
         {
             get { return this._createdOn; }
             set
@@ -65,7 +65,7 @@ namespace Frapid.TokenManager
             }
         }
 
-        public DateTime ExpiresOn
+        public DateTimeOffset ExpiresOn
         {
             get { return this._expiresOn; }
             set

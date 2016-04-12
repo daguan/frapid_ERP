@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Frapid.Configuration;
-using Frapid.DataAccess;
+using Frapid.Installer.DAL;
 
 namespace Frapid.Installer
 {
@@ -15,14 +15,7 @@ namespace Frapid.Installer
 
         public bool HasDb()
         {
-            const string sql = "SELECT COUNT(*) FROM pg_catalog.pg_database WHERE datname=@0;";
-            string database = Factory.MetaDatabase;
-            string connectionString = ConnectionString.GetSuperUserConnectionString(database);
-
-            using (var db = DbProvider.Get(connectionString).GetDatabase())
-            {
-                return db.ExecuteScalar<int>(sql, this.Database).Equals(1);
-            }
+            return Store.HasDb(this.Database);
         }
 
         public bool IsWellKnownDb()

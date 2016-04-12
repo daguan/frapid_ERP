@@ -23,7 +23,7 @@ BEGIN
 	(
 		login_id                                bigint,
 		status                                  bit,
-		message                                 text
+		message                                 national character varying(100)
 	);
 
 
@@ -38,8 +38,10 @@ BEGIN
 
     IF account.is_restricted_user(@email) = 1
     BEGIN
+		INSERT INTO @result
         SELECT CAST(NULL AS bigint), 0, 'Access is denied';
 
+		SELECT * FROM @result;
         RETURN;
     END;
 
@@ -59,7 +61,10 @@ BEGIN
 
     SET @login_id = SCOPE_IDENTITY();
     
+	INSERT INTO @result
     SELECT @login_id, 1, 'Welcome';
+
+	SELECT * FROM @result;
     RETURN;    
 END;
 

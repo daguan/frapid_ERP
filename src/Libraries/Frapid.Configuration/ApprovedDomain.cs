@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Frapid.Configuration
 {
@@ -18,10 +17,8 @@ namespace Frapid.Configuration
 
         public List<string> GetSubtenants()
         {
-            var subtenants = new List<string>();
+            var subtenants = new List<string> {this.DomainName, this.CdnDomain};
 
-            subtenants.Add(this.DomainName);
-            subtenants.Add(this.CdnDomain);
             subtenants.AddRange(this.Synonyms);
 
             return subtenants;

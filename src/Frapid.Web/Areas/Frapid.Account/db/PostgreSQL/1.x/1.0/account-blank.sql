@@ -367,7 +367,8 @@ BEGIN
     INSERT INTO account.users(email, password, office_id, role_id, name, phone)
     SELECT email, password, _office_id, account.get_registration_role_id(email), name, phone
     FROM account.registrations
-    WHERE registration_id = _token;
+    WHERE registration_id = _token
+	AND NOT confirmed;
 
     UPDATE account.registrations
     SET 
@@ -621,6 +622,22 @@ BEGIN
     RETURN user_id
     FROM account.users
     WHERE LOWER(account.users.email) = LOWER(_email);
+END
+$$
+LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_user_id_by_login_id.sql --<--<--
+DROP FUNCTION IF EXISTS account.get_user_id_by_login_id(_login_id bigint);
+
+CREATE FUNCTION account.get_user_id_by_login_id(_login_id bigint)
+RETURNS integer
+AS
+$$
+BEGIN
+    RETURN user_id
+    FROM account.logins
+    WHERE account.logins.login_id = _login_id;
 END
 $$
 LANGUAGE plpgsql;

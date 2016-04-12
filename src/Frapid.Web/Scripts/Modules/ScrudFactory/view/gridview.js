@@ -68,7 +68,7 @@
                 if (column) {
                     var dataType = column.DbDataType;
 
-                    if (dataType === "date") {
+                    if (["date", "datetime", "datetimeoffset"].indexOf(dataType) > -1) {
                         if (val == null) {
                             val = "";
                         };

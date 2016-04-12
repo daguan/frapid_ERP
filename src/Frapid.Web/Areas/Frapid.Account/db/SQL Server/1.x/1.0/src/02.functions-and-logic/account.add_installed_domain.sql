@@ -20,7 +20,8 @@ BEGIN
     BEGIN
         UPDATE account.installed_domains
         SET admin_email = @admin_email
-        WHERE domain_name = @domain_name;        
+        WHERE domain_name = @domain_name;
+		RETURN;
     END;
 
     INSERT INTO account.installed_domains(domain_name, admin_email)

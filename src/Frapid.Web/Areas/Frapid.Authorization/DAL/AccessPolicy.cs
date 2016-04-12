@@ -13,7 +13,7 @@ namespace Frapid.Authorization.DAL
     {
         public static IEnumerable<GroupEntityAccessPolicy> GetGroupPolicy(int officeId, int roleId)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return
                     db.FetchBy<GroupEntityAccessPolicy>(
@@ -23,7 +23,7 @@ namespace Frapid.Authorization.DAL
 
         public static void SaveGroupPolicy(int officeId, int roleId, List<AccessPolicyInfo> policies)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 db.BeginTransaction();
 
@@ -53,7 +53,7 @@ namespace Frapid.Authorization.DAL
 
         public static object GetPolicy(int officeId, int userId)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return
                     db.FetchBy<EntityAccessPolicy>(
@@ -63,7 +63,7 @@ namespace Frapid.Authorization.DAL
 
         public static void SavePolicy(int officeId, int userId, List<AccessPolicyInfo> policies)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 db.BeginTransaction();
 

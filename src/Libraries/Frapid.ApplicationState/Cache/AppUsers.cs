@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
@@ -8,6 +9,7 @@ using Frapid.ApplicationState.Models;
 using Frapid.Configuration;
 using Frapid.DataAccess;
 using Frapid.Framework.Extensions;
+using Frapid.NPoco;
 
 namespace Frapid.ApplicationState.Cache
 {
@@ -86,16 +88,18 @@ namespace Frapid.ApplicationState.Cache
 
         private static void UpdateActivity(int userId, string ip, string browser)
         {
-            const string sql =
-                "UPDATE account.users SET last_seen_on=NOW(), last_ip=@0, last_browser=@1 WHERE user_id=@2;";
-            Factory.NonQuery(GetTenant(), sql, ip, browser, userId);
-        }
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(GetTenant())).GetDatabase())
+            {
+                var sql = new Sql("UPDATE account.users SET ");
+                sql.Append("last_seen_on = @0", DateTimeOffset.UtcNow);
+                sql.Append(",");
+                sql.Append("last_ip = @0", ip);
+                sql.Append(",");
+                sql.Append("last_browser = @0", browser);
+                sql.Where("user_id=@0", userId);
 
-        public static long GetMetaLoginId(string database, long loginId)
-        {
-            const string sql =
-                "INSERT INTO public.frapid_logins(tenant, login_id) SELECT @0::text, @1::bigint RETURNING global_login_id;";
-            return Factory.Scalar<long>(Factory.MetaDatabase, sql, database, loginId);
+                db.Execute(sql);
+            }
         }
 
         public static LoginView GetMetaLogin(string database, long loginId)

@@ -8,7 +8,7 @@ namespace Frapid.WebsiteBuilder.ViewModels
         public string Alias { get; set; }
         public int? AuthorId { get; set; }
         public string AuthorName { get; set; }
-        public DateTime PublishOn { get; set; }
+        public DateTimeOffset PublishOn { get; set; }
         public string Contents { get; set; }
         public bool IsDraft { get; set; }
         public string Title { get; set; }

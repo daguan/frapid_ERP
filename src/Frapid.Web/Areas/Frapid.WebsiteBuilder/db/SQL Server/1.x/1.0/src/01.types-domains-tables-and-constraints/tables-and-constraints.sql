@@ -38,8 +38,8 @@ CREATE TABLE website.email_subscriptions
 CREATE TABLE website.categories
 (
     category_id                                 integer IDENTITY NOT NULL PRIMARY KEY,
-    category_name                               national character varying(100) NOT NULL,
-    alias                                       national character varying(50) NOT NULL UNIQUE,
+    category_name                               national character varying(250) NOT NULL,
+    alias                                       national character varying(250) NOT NULL UNIQUE,
     seo_description                             national character varying(100),
 	is_blog										bit NOT NULL DEFAULT(0),
     audit_user_id                               integer REFERENCES account.users,
@@ -52,7 +52,7 @@ CREATE TABLE website.contents
     content_id                                  integer IDENTITY NOT NULL PRIMARY KEY,
     category_id                                 integer NOT NULL REFERENCES website.categories,
     title                                       national character varying(500) NOT NULL,
-    alias                                       national character varying(250) NOT NULL UNIQUE,
+    alias                                       national character varying(500) NOT NULL UNIQUE,
     author_id                                   integer REFERENCES account.users,
     publish_on                                  datetimeoffset NOT NULL,
 	created_on									datetimeoffset NOT NULL DEFAULT(getutcdate()),

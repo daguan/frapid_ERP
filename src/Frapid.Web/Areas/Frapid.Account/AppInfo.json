@@ -13,7 +13,7 @@
 	"Bundle": "Frapid Framework",
     "IsMeta": false,
 	"DbSchema": "account",
-	"BlankDbPath": "~/Areas/Frapid.Account/db/1.x/1.0/account-blank.sql",
+	"BlankDbPath": "~/Areas/Frapid.Account/db/{DbServer}/1.x/1.0/account-blank.sql",
 	"SampleDbPath": null,
 	"PatchFilePath": null,
 	"InstallSample": true,

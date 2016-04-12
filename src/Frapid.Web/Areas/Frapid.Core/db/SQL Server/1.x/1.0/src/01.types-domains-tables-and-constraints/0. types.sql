@@ -1,7 +1,9 @@
-GO
+IF OBJECT_ID('dbo.drop_schema') IS NOT NULL
 EXECUTE dbo.drop_schema 'core';
 GO
+
 CREATE SCHEMA core;
+
 GO
 
 IF TYPE_ID(N'dbo.money_strict') IS NULL

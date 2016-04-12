@@ -1,9 +1,10 @@
-﻿DROP FUNCTION IF EXISTS auth.has_access(_user_id integer, _entity text, _access_type_id integer);
+﻿DROP FUNCTION IF EXISTS auth.has_access(_login_id bigint, _entity text, _access_type_id integer);
 
-CREATE FUNCTION auth.has_access(_user_id integer, _entity text, _access_type_id integer)
+CREATE FUNCTION auth.has_access(_login_id bigint, _entity text, _access_type_id integer)
 RETURNS boolean
 AS
 $$
+    DECLARE _user_id                                    integer = account.get_user_id_by_login_id(_login_id);
     DECLARE _role_id                                    integer;
     DECLARE _group_all_policy                           boolean = false;
     DECLARE _group_all_entity_specific_access_type      boolean = false;

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Frapid.ApplicationState.Cache;
+using Frapid.Configuration;
 using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.DbPolicy;
@@ -116,7 +117,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             string sql =
-                $"SELECT {this.PrimaryKey} AS key, {this.NameColumn} as value FROM {this.FullyQualifiedObjectName};";
+                $"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName};";
             return Factory.Get<DisplayField>(this.Database, sql);
         }
 
@@ -236,8 +237,8 @@ namespace Frapid.WebApi.DataAccess
 
             if (pageNumber > 0)
             {
-                sql.Append("LIMIT @0", 50);
-                sql.Append("OFFSET @0", offset);
+                sql.Append(FrapidDbServer.AddOffset("@0"), offset);
+                sql.Append(FrapidDbServer.AddLimit("@0"), 50);
             }
 
             return Factory.Get<dynamic>(this.Database, sql);
@@ -303,8 +304,8 @@ namespace Frapid.WebApi.DataAccess
 
             if (pageNumber > 0)
             {
-                sql.Append("LIMIT @0", 50);
-                sql.Append("OFFSET @0", offset);
+                sql.Append(FrapidDbServer.AddOffset("@0"), offset);
+                sql.Append(FrapidDbServer.AddLimit("@0"), 50);
             }
 
             return Factory.Get<dynamic>(this.Database, sql);

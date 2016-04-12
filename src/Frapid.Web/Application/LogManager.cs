@@ -32,7 +32,7 @@ namespace Frapid.Web
         {
             string applicationLogDirectory = GetLogDirectory();
             string filePath = Path.Combine(applicationLogDirectory,
-                DateTime.UtcNow.Date.ToShortDateString().Replace(@"/", "-"), "log.txt");
+                DateTimeOffset.UtcNow.Date.ToShortDateString().Replace(@"/", "-"), "log.txt");
             return filePath;
         }
 

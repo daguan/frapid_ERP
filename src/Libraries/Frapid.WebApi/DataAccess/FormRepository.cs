@@ -291,9 +291,8 @@ namespace Frapid.WebApi.DataAccess
                 return Factory.Get<CustomField>(this.Database, sql);
             }
 
-            sql =
-                $"SELECT * from config.get_custom_field_definition('{this.FullyQualifiedObjectName}'::text, @0::text) ORDER BY field_order;";
-            return Factory.Get<CustomField>(this.Database, sql, resourceId);
+            sql = FrapidDbServer.GetProcedureCommand("config.get_custom_field_definition", new[] {"@0", "@1"});
+            return Factory.Get<CustomField>(this.Database, sql, this.FullyQualifiedObjectName, resourceId);
         }
 
         public IEnumerable<DisplayField> GetDisplayFields()
@@ -319,7 +318,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             string sql =
-                $"SELECT {this.PrimaryKey} AS key, {this.NameColumn} as value FROM {this.FullyQualifiedObjectName};";
+                $"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName};";
             return Factory.Get<DisplayField>(this.Database, sql);
         }
 
@@ -331,7 +330,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             item.audit_user_id = this.UserId;
-            item.audit_ts = DateTime.UtcNow;
+            item.audit_ts = DateTimeOffset.UtcNow;
 
             object primaryKeyValue = PropertyManager.GetPropertyValue(item, this.PrimaryKey);
 
@@ -414,7 +413,7 @@ namespace Frapid.WebApi.DataAccess
             int line = 0;
             try
             {
-                using (var db = new Database(ConnectionString.GetConnectionString(this.Database), Factory.ProviderName))
+                using (var db = new Database(FrapidDbServer.GetConnectionString(this.Database), Factory.ProviderName))
                 {
                     using (var transaction = db.GetTransaction())
                     {
@@ -423,7 +422,7 @@ namespace Frapid.WebApi.DataAccess
                             line++;
 
                             item.audit_user_id = this.UserId;
-                            item.audit_ts = DateTime.UtcNow;
+                            item.audit_ts = DateTimeOffset.UtcNow;
 
                             object primaryKeyValue = PropertyManager.GetPropertyValue(item, this.PrimaryKey);
 
@@ -490,8 +489,7 @@ namespace Frapid.WebApi.DataAccess
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information(
-                        $"Access to delete entity \"{this.FullyQualifiedObjectName}\" with Primary Key {this.PrimaryKey} was denied to the user with Login ID {this.LoginId}.");
+                    Log.Information($"Access to delete entity \"{this.FullyQualifiedObjectName}\" with Primary Key {this.PrimaryKey} was denied to the user with Login ID {this.LoginId}.");
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -547,16 +545,21 @@ namespace Frapid.WebApi.DataAccess
             }
 
             long offset = (pageNumber - 1)*50;
-            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} ORDER BY {this.PrimaryKey} LIMIT 50 OFFSET @0;";
+            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} ORDER BY {this.PrimaryKey}";
+
+            sql += FrapidDbServer.AddOffset("@0");
+            sql += FrapidDbServer.AddLimit("50");
 
             return Factory.Get<dynamic>(this.Database, sql, offset);
         }
 
         public List<Filter> GetFilters(string database, string filterName)
         {
-            string sql =
-                $"SELECT * FROM config.filters WHERE object_name='{this.FullyQualifiedObjectName}' AND lower(filter_name)=lower(@0);";
-            return Factory.Get<Filter>(database, sql, filterName).ToList();
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            {
+                return db.FetchBy<Filter>(sql => sql.Where(u => u.ObjectName.Equals(this.FullyQualifiedObjectName)
+                && u.FilterName.ToUpperInvariant().Equals(filterName.ToUpperInvariant())));
+            }
         }
 
         public long CountWhere(List<Filter> filters)
@@ -619,8 +622,8 @@ namespace Frapid.WebApi.DataAccess
 
             if (pageNumber > 0)
             {
-                sql.Append("LIMIT @0", 50);
-                sql.Append("OFFSET @0", offset);
+                sql.Append(FrapidDbServer.AddOffset("@0"), offset);
+                sql.Append(FrapidDbServer.AddLimit("@0"), 50);
             }
 
             return Factory.Get<dynamic>(this.Database, sql);
@@ -689,8 +692,8 @@ namespace Frapid.WebApi.DataAccess
 
             if (pageNumber > 0)
             {
-                sql.Append("LIMIT @0", 50);
-                sql.Append("OFFSET @0", offset);
+                sql.Append(FrapidDbServer.AddOffset("@0"), offset);
+                sql.Append(FrapidDbServer.AddLimit("@0"), 50);
             }
 
             return Factory.Get<dynamic>(this.Database, sql);

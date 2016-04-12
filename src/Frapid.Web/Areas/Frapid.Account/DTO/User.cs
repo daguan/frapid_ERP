@@ -16,11 +16,11 @@ namespace Frapid.Account.DTO
         public string Name { get; set; }
         public string Phone { get; set; }
         public bool? Status { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime? LastSeenOn { get; set; }
+        public DateTimeOffset CreatedOn { get; set; }
+        public DateTimeOffset? LastSeenOn { get; set; }
         public string LastIp { get; set; }
         public string LastBrowser { get; set; }
         public int? AuditUserId { get; set; }
-        public DateTime? AuditTs { get; set; }
+        public DateTimeOffset? AuditTs { get; set; }
     }
 }

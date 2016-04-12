@@ -1,5 +1,3 @@
-GO
-
 CREATE TABLE core.apps
 (
     app_name                                    national character varying(100) PRIMARY KEY,

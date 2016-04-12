@@ -9,6 +9,7 @@ GO
 CREATE PROCEDURE dbo.drop_schema(@name nvarchar(500), @showsql bit = 0)
 AS
 BEGIN
+	SET XACT_ABORT ON;
     SET NOCOUNT ON;
 
       DECLARE @sql nvarchar(max);
@@ -17,6 +18,9 @@ BEGIN
            row_id  int IDENTITY,
            command nvarchar(max)
         );
+
+      INSERT INTO @commands
+      SELECT 'SET XACT_ABORT ON;';
 
       INSERT INTO @commands
       SELECT 'BEGIN TRY';
@@ -145,6 +149,9 @@ BEGIN
 
       INSERT INTO @commands
       SELECT '    BEGIN';
+
+      INSERT INTO @commands
+      SELECT '        IF XACT_STATE() <> 0';
 
       INSERT INTO @commands
       SELECT '        ROLLBACK TRANSACTION;';

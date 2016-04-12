@@ -13,7 +13,7 @@
 	"Bundle": "Frapid Framework",
     "IsMeta": false,
 	"DbSchema": "auth",
-	"BlankDbPath": "~/Areas/Frapid.Authorization/db/auth-blank.sql",
+	"BlankDbPath": "~/Areas/Frapid.Authorization/db/{DbServer}/auth-blank.sql",
 	"SampleDbPath": null,
 	"PatchFilePath": null,
 	"InstallSample": false,

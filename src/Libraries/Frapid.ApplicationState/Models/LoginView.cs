@@ -14,11 +14,11 @@ namespace Frapid.ApplicationState.Models
         public bool IsAdministrator { get; set; }
         public string Browser { get; set; }
         public string IpAddress { get; set; }
-        public DateTime LoginTimestamp { get; set; }
+        public DateTimeOffset LoginTimestamp { get; set; }
         public string Culture { get; set; }
         public int OfficeId { get; set; }
         public string OfficeName { get; set; }
         public string Office { get; set; }
-        public DateTime LastSeenOn { get; set; }
+        public DateTimeOffset LastSeenOn { get; set; }
     }
 }

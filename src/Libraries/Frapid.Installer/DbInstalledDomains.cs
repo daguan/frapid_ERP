@@ -8,7 +8,8 @@ namespace Frapid.Installer
         public static void Add(ApprovedDomain tenant)
         {
             string database = DbConvention.GetDbNameByConvention(tenant.DomainName);
-            using (var db = DbProvider.Get(ConnectionString.GetSuperUserConnectionString(database)).GetDatabase())
+
+            using (var db = DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(database)).GetDatabase())
             {
                 dynamic poco = new ExpandoObject();
                 poco.domain_name = tenant.DomainName;

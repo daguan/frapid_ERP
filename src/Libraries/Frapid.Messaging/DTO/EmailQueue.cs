@@ -1,8 +1,10 @@
 using System;
 using Frapid.DataAccess;
+using Frapid.NPoco;
 
 namespace Frapid.Messaging.DTO
 {
+    [TableName("config.email_queue")]
     public sealed class EmailQueue : IPoco
     {
         public long QueueId { get; set; }
@@ -14,12 +16,12 @@ namespace Frapid.Messaging.DTO
         public string SendTo { get; set; }
         public string Attachments { get; set; }
         public string Message { get; set; }
-        public DateTime AddedOn { get; set; }
-        public DateTime SendOn { get; set; }
+        public DateTimeOffset AddedOn { get; set; }
+        public DateTimeOffset SendOn { get; set; }
         public bool Delivered { get; set; }
-        public DateTime? DeliveredOn { get; set; }
+        public DateTimeOffset? DeliveredOn { get; set; }
         public bool Canceled { get; set; }
-        public DateTime? CanceledOn { get; set; }
+        public DateTimeOffset? CanceledOn { get; set; }
         public bool IsTest { get; set; }
     }
 }

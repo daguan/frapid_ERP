@@ -12,7 +12,7 @@ namespace Frapid.Messaging.DTO
         public string Subject { get; set; }
         public string Message { get; set; }
         public Type Type { get; set; }
-        public DateTime EventDateUtc { get; set; }
+        public DateTimeOffset EventDateUtc { get; set; }
         public Status Status { get; set; }
         public bool IsBodyHtml { get; set; } = true;
     }

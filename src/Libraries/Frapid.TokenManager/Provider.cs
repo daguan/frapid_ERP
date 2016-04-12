@@ -41,8 +41,8 @@ namespace Frapid.TokenManager
 
             token.IssuedBy = this.TokenIssuerName;
             token.Audience = this.Database;
-            token.CreatedOn = DateTime.UtcNow;
-            token.ExpiresOn = DateTime.UtcNow.AddHours(this.TokenValidHours);
+            token.CreatedOn = DateTimeOffset.UtcNow;
+            token.ExpiresOn = DateTimeOffset.UtcNow.AddHours(this.TokenValidHours);
             token.Subject = this.Database;
             token.TokenId = this.Database + this.LoginId;
             token.LoginId = this.LoginId;

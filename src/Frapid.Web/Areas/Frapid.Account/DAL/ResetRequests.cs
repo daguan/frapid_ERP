@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Frapid.Account.InputModels;
 using Frapid.ApplicationState.Cache;
+using Frapid.Configuration;
 using Frapid.DataAccess;
 
 namespace Frapid.Account.DAL
@@ -16,13 +17,13 @@ namespace Frapid.Account.DAL
 
         public static void CompleteReset(string requestId, string password)
         {
-            const string sql = "SELECT account.complete_reset(@0::uuid, @1::text)";
+            string sql = FrapidDbServer.GetProcedureCommand("account.complete_reset", new[] {"@0", "@1"});
             Factory.NonQuery(AppUsers.GetTenant(), sql, requestId, password);
         }
 
         public static DTO.Reset Request(ResetInfo model)
         {
-            const string sql = "SELECT * FROM account.reset_account(@0::text, @1::text, @2::text);";
+            string sql = FrapidDbServer.GetProcedureCommand("account.reset_account", new[] { "@0", "@1", "@2" });
             return
                 Factory.Get<DTO.Reset>(AppUsers.GetTenant(), sql, model.Email, model.Browser, model.IpAddress)
                     .FirstOrDefault();

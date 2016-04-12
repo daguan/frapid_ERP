@@ -18,7 +18,7 @@ namespace Frapid.Installer.Models
         public string DocumentationUrl { get; set; }
         public string AssemblyName { get; set; }
         public string Version { get; set; }
-        public DateTime? RealeasedOn { get; set; }
+        public DateTimeOffset? RealeasedOn { get; set; }
         public string Description { get; set; }
         public string Category { get; set; }
         public string Bundle { get; set; }

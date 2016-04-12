@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Frapid.Configuration;
 
 namespace Frapid.DataAccess.Models
 {
@@ -11,16 +12,22 @@ namespace Frapid.DataAccess.Models
 
         public static EntityView Get(string database, string primaryKey, string schemaName, string tableName)
         {
-            const string sql =
-                @"SELECT 
+            var db = FrapidDbServer.GetServer();
+            string sql = @"SELECT 
                     column_name, 
-                    is_nullable = 'YES' AS is_nullable, 
+                    is_nullable = 'YES' AS is_nullable,
                     udt_name as db_data_type,
                     column_default as value,
                     max_length,
                     is_primary_key = 'YES' AS is_primary_key,
                     data_type
                 FROM public.poco_get_table_function_definition(@0::text, @1::text);";
+
+            if (!db.ProviderName.ToUpperInvariant().Equals("NPGSQL"))
+            {
+                string procedure = FrapidDbServer.DefaultSchemaQualify("poco_get_table_function_definition");
+                sql = db.GetProcedureCommand(procedure, new[] {"@0", "@1"});
+            }
 
             var columns = Factory.Get<EntityColumn>(database, sql, schemaName, tableName).ToList();
 

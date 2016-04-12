@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
+using Frapid.Configuration;
 using Frapid.DataAccess;
 using Frapid.Messaging.DTO;
 
@@ -12,18 +14,23 @@ namespace Frapid.Messaging.DAL
             Factory.Insert(database, queue, "config.email_queue", "queue_id");
         }
 
-        [Obsolete("This is a roadblock for SQL Server Port. Use NPoco instead of plain SQL query.")]
-        public static IEnumerable<EmailQueue> GetMailInQueue(string catlog)
+        public static IEnumerable<EmailQueue> GetMailInQueue(string database)
         {
-            const string sql = "SELECT * FROM config.email_queue WHERE is_test = false AND delivered = false AND canceled = false AND send_on <= NOW();";
-            return Factory.Get<EmailQueue>(catlog, sql);
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database)).GetDatabase())
+            {
+                return db.FetchBy<EmailQueue>(sql => sql
+                    .Where(u => !u.IsTest && !u.Delivered && !u.Canceled && u.SendOn <= DateTimeOffset.UtcNow));
+            }
         }
 
-        [Obsolete("This is a roadblock for SQL Server Port. Use NPoco instead of plain SQL query.")]
         public static void SetSuccess(string database, long queueId)
         {
-            const string sql = "UPDATE config.email_queue SET delivered = true, delivered_on = NOW() WHERE queue_id = @0;";
-            Factory.NonQuery(database, sql, queueId);
+            dynamic poco = new ExpandoObject();
+            poco.queue_id = queueId;
+            poco.delivered = true;
+            poco.delivered_on = DateTimeOffset.UtcNow;
+
+            Factory.Update(database, poco, queueId, "config.email_queue", "queue_id");
         }
     }
 }

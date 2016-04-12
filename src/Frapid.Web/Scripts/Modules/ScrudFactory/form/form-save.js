@@ -34,6 +34,7 @@
             switch (dataType) {
                 case "System.Boolean":
                 case "bool":
+                case "bit":
                     val = val === "yes" ? true : false;
                     break;
                 case "DateTime":

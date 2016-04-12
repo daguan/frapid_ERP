@@ -10,7 +10,7 @@ namespace Frapid.WebsiteBuilder.DAL
     {
         public static IEnumerable<Contact> GetContacts()
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return db.FetchBy<Contact>(sql => sql.Where(c => c.Status))
                     .OrderBy(c => c.Sort)
@@ -20,7 +20,7 @@ namespace Frapid.WebsiteBuilder.DAL
 
         public static Contact GetContact(int contactId)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return db.FetchBy<Contact>(sql => sql.Where(c => c.ContactId.Equals(contactId))).FirstOrDefault();
             }

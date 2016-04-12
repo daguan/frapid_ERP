@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Frapid.DataAccess;
+using Frapid.Configuration;
 using Frapid.Messaging.DTO;
 
 namespace Frapid.Messaging.DAL
@@ -8,8 +8,10 @@ namespace Frapid.Messaging.DAL
     {
         public static SmtpConfig GetConfig(string database)
         {
-            const string sql = "SELECT * FROM config.smtp_configs WHERE enabled AND is_default LIMIT 1;";
-            return Factory.Get<SmtpConfig>(database, sql).FirstOrDefault();
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database)).GetDatabase())
+            {
+                return db.FetchBy<SmtpConfig>(sql => sql.Where(u => u.Enabled && u.IsDefault)).FirstOrDefault();
+            }
         }
     }
 }

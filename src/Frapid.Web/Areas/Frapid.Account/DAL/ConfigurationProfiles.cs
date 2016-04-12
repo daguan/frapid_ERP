@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Frapid.Account.DTO;
 using Frapid.ApplicationState.Cache;
-using Frapid.DataAccess;
+using Frapid.Configuration;
 
 namespace Frapid.Account.DAL
 {
@@ -9,8 +9,10 @@ namespace Frapid.Account.DAL
     {
         public static ConfigurationProfile GetActiveProfile()
         {
-            const string sql = "SELECT * FROM account.configuration_profiles WHERE is_active;";
-            return Factory.Get<ConfigurationProfile>(AppUsers.GetTenant(), sql).FirstOrDefault();
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            {
+                return db.FetchBy<ConfigurationProfile>(sql => sql.Where(u => u.IsActive)).FirstOrDefault();
+            }
         }
     }
 }

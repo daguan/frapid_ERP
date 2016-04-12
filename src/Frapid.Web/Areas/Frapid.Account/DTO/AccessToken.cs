@@ -20,10 +20,10 @@ namespace Frapid.Account.DTO
         public long LoginId { get; set; }
         public string ClientToken { get; set; }
         public string Claims { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime ExpiresOn { get; set; }
+        public DateTimeOffset CreatedOn { get; set; }
+        public DateTimeOffset ExpiresOn { get; set; }
         public bool Revoked { get; set; }
         public int? RevokedBy { get; set; }
-        public DateTime? RevokedOn { get; set; }
+        public DateTimeOffset? RevokedOn { get; set; }
     }
 }

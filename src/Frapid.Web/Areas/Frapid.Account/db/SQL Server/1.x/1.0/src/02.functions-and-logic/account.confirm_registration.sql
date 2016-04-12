@@ -17,7 +17,8 @@ BEGIN
 
     IF(@can_confirm = 0)
     BEGIN
-        RETURN 0;
+        SELECT 0;
+        RETURN;
     END;
 
     SELECT
@@ -29,7 +30,8 @@ BEGIN
     INSERT INTO account.users(email, password, office_id, role_id, name, phone)
     SELECT email, password, @office_id, account.get_registration_role_id(email), name, phone
     FROM account.registrations
-    WHERE registration_id = @token;
+    WHERE registration_id = @token
+	AND confirmed = 0;
 
     UPDATE account.registrations
     SET 
@@ -37,7 +39,7 @@ BEGIN
         confirmed_on = getutcdate()
     WHERE registration_id = @token;
     
-    RETURN 1;
+    SELECT 1;
 END;
 
 GO

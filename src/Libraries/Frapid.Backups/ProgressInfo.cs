@@ -10,11 +10,11 @@ namespace Frapid.Backups
     {
         public ProgressInfo(string message)
         {
-            this.Timestamp = DateTime.UtcNow;
+            this.Timestamp = DateTimeOffset.UtcNow;
             this.Message = message;
         }
 
-        public DateTime Timestamp { get; private set; }
+        public DateTimeOffset Timestamp { get; private set; }
         public string Message { get; set; }
     }
 }

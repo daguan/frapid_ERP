@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Net;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using Frapid.Areas;
-using Frapid.Areas.Authorization;
 using Frapid.Web;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -18,7 +14,7 @@ using Owin;
 namespace Frapid.Web
 {
     public class Startup
-    {       
+    {
         public void Configuration(IAppBuilder app)
         {
             app.Map("/signalr", map =>

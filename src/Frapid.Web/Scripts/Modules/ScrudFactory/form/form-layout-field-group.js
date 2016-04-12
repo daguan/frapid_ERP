@@ -104,6 +104,10 @@
         value = value ? "yes" : "no";
     };
 
+    if (column.DbDataType === "bit") {
+        value = value === "1" ? "yes" : "no";
+    };
+
     if (value) {
         element.attr("data-value", value);
         element.val(value);

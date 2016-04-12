@@ -59,8 +59,8 @@ namespace Frapid.WebApi.DataAccess
 
             if (pageNumber > 0)
             {
-                sql.Append("LIMIT @0", 50);
-                sql.Append("OFFSET @0", offset);
+                sql.Append(FrapidDbServer.AddOffset("@0"), offset);
+                sql.Append(FrapidDbServer.AddLimit("@0"), 50);
             }
 
             return Factory.Get<dynamic>(this.Database, sql);
@@ -132,7 +132,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
 
-            using (var db = new Database(ConnectionString.GetConnectionString(this.Database), Factory.ProviderName))
+            using (var db = new Database(FrapidDbServer.GetConnectionString(this.Database), Factory.ProviderName))
             {
                 using (var transaction = db.GetTransaction())
                 {
@@ -152,7 +152,7 @@ namespace Frapid.WebApi.DataAccess
                     foreach (dynamic filter in filters)
                     {
                         filter.audit_user_id = this.UserId;
-                        filter.audit_ts = System.DateTime.UtcNow;
+                        filter.audit_ts = System.DateTimeOffset.UtcNow;
 
                         db.Insert("config.filters", "filter_id", true, filter);
                     }

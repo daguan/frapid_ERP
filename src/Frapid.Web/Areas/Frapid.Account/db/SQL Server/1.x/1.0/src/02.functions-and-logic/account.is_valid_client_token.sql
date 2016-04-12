@@ -3,7 +3,7 @@ DROP FUNCTION account.is_valid_client_token;
 
 GO
 
-CREATE FUNCTION account.is_valid_client_token(@client_token national character varying(500), @ip_address national character varying(500), @user_agent national character varying(500))
+CREATE FUNCTION account.is_valid_client_token(@client_token national character varying(MAX), @ip_address national character varying(500), @user_agent national character varying(500))
 RETURNS bit
 AS
 BEGIN

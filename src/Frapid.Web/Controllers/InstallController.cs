@@ -1,9 +1,8 @@
-using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Frapid.Areas;
 using Frapid.Configuration;
 using Frapid.Installer;
-using System.Linq;
 
 namespace Frapid.Web.Controllers
 {

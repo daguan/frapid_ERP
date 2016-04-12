@@ -8,7 +8,7 @@ namespace Frapid.WebsiteBuilder.DAL
     {
         public static DTO.Configuration GetDefaultConfiguration()
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return db.FetchBy<DTO.Configuration>(sql => sql.Where(c => c.IsDefault)).FirstOrDefault();
             }

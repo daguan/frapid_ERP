@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web.Hosting;
 
 namespace Frapid.Messaging
@@ -35,7 +36,7 @@ namespace Frapid.Messaging
                 return false;
             }
 
-            string contents = File.ReadAllText(configPath);
+            string contents = File.ReadAllText(configPath, Encoding.UTF8);
             var domains = contents.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None).Select(x=>x.ToUpperInvariant().Trim());
             return domains.Any(domain => email.ToUpperInvariant().EndsWith(domain));
         }

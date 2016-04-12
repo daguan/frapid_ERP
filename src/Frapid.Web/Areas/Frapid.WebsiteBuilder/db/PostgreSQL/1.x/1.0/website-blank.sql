@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 DROP SCHEMA IF EXISTS website CASCADE; --WEB BUILDER
 CREATE SCHEMA website;
 
@@ -36,8 +36,8 @@ CREATE TABLE website.email_subscriptions
 CREATE TABLE website.categories
 (
     category_id                                 SERIAL NOT NULL PRIMARY KEY,
-    category_name                               national character varying(100) NOT NULL,
-    alias                                       national character varying(50) NOT NULL UNIQUE,
+    category_name                               national character varying(250) NOT NULL,
+    alias                                       national character varying(250) NOT NULL UNIQUE,
     seo_description                             national character varying(100),
 	is_blog										boolean NOT NULL DEFAULT(false),
     audit_user_id                               integer REFERENCES account.users,
@@ -50,7 +50,7 @@ CREATE TABLE website.contents
     content_id                                  SERIAL NOT NULL PRIMARY KEY,
     category_id                                 integer NOT NULL REFERENCES website.categories,
     title                                       national character varying(500) NOT NULL,
-    alias                                       national character varying(250) NOT NULL UNIQUE,
+    alias                                       national character varying(500) NOT NULL UNIQUE,
     author_id                                   integer REFERENCES account.users,
     publish_on                                  TIMESTAMP WITH TIME ZONE NOT NULL,
 	created_on									TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
@@ -120,7 +120,7 @@ CREATE TABLE website.contacts
                                                 DEFAULT(NOW())    
 );
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/02.functions-and-logic/website.add_email_subscription.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/website.add_email_subscription.sql --<--<--
 DROP FUNCTION IF EXISTS website.add_email_subscription
 (
     _email                                  text
@@ -151,7 +151,35 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/02.functions-and-logic/website.get_category_id_by_category_name.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/website.add_hit.sql --<--<--
+DROP FUNCTION IF EXISTS website.add_hit(_category_alias national character varying(250), _alias national character varying(500));
+
+CREATE FUNCTION website.add_hit(_category_alias national character varying(250), _alias national character varying(500))
+RETURNS void
+AS
+$$
+BEGIN
+	IF(COALESCE(_alias, '') = '' AND COALESCE(_category_alias, '') = '') THEN
+		UPDATE website.contents SET hits = COALESCE(website.contents.hits, 0) + 1 
+		WHERE is_homepage;
+
+		RETURN;
+	END IF;
+
+	UPDATE website.contents SET hits = COALESCE(website.contents.hits, 0) + 1 
+	WHERE website.contents.content_id
+	=
+	(
+		SELECT website.published_content_view.content_id 
+		FROM website.published_content_view
+		WHERE category_alias=_category_alias AND alias=_alias
+	);
+END
+$$
+LANGUAGE plpgsql;
+
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/website.get_category_id_by_category_name.sql --<--<--
 DROP FUNCTION IF EXISTS website.get_category_id_by_category_name(_category_name text);
 
 CREATE FUNCTION website.get_category_id_by_category_name(_category_name text)
@@ -180,7 +208,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/02.functions-and-logic/website.remove_email_subscription.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/website.remove_email_subscription.sql --<--<--
 DROP FUNCTION IF EXISTS website.remove_email_subscription
 (
     _email                                  text
@@ -214,7 +242,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/03.menus/menus.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/03.menus/menus.sql --<--<--
 SELECT * FROM core.create_app('Frapid.WebsiteBuilder', 'Website', '1.0', 'MixERP Inc.', 'December 1, 2015', 'world blue', '/dashboard/website/contents', null);
 
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Tasks', '', 'tasks icon', '');
@@ -261,7 +289,7 @@ SELECT * FROM auth.create_app_menu_policy
 );
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/05.triggers/website.email_subscription_confirmation_trigger.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.triggers/website.email_subscription_confirmation_trigger.sql --<--<--
 DROP FUNCTION IF EXISTS website.email_subscription_confirmation_trigger() CASCADE;
 
 CREATE FUNCTION website.email_subscription_confirmation_trigger()
@@ -283,7 +311,7 @@ BEFORE UPDATE ON website.email_subscriptions
 FOR EACH ROW
 EXECUTE PROCEDURE website.email_subscription_confirmation_trigger();
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/05.views/website.email_subscription_insert_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.email_subscription_insert_view.sql --<--<--
 DROP VIEW IF EXISTS website.email_subscription_insert_view;
 
 CREATE VIEW website.email_subscription_insert_view
@@ -328,7 +356,7 @@ WHERE NOT EXISTS
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/05.views/website.menu_item_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.menu_item_view.sql --<--<--
 DROP VIEW IF EXISTS website.menu_item_view;
 
 CREATE VIEW website.menu_item_view
@@ -350,7 +378,7 @@ ON website.menus.menu_id = website.menu_items.menu_id
 LEFT JOIN website.contents
 ON website.contents.content_id = website.menu_items.content_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/05.views/website.published_content_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.published_content_view.sql --<--<--
 DROP VIEW IF EXISTS website.published_content_view;
 
 CREATE VIEW website.published_content_view
@@ -380,7 +408,7 @@ ON website.contents.author_id = account.users.user_id
 WHERE NOT is_draft
 AND publish_on <= NOW();
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/05.views/website.tag_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.tag_view.sql --<--<--
 DROP VIEW IF EXISTS website.tag_view;
 
 CREATE VIEW website.tag_view
@@ -396,7 +424,7 @@ SELECT
 FROM tags;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/05.views/website.yesterdays_email_subscriptions.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.yesterdays_email_subscriptions.sql --<--<--
 DROP VIEW IF EXISTS website.yesterdays_email_subscriptions;
 
 CREATE VIEW website.yesterdays_email_subscriptions
@@ -426,7 +454,7 @@ SELECT
 FROM website.email_subscriptions
 WHERE confirmed_on::date = 'yesterday'::date;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/10.policy/access_policy.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/10.policy/access_policy.sql --<--<--
 SELECT * FROM auth.create_api_access_policy('{Content Editor, User, Admin}', core.get_office_id_by_office_name('Default'), 'website.categories', '{*}', true);
 SELECT * FROM auth.create_api_access_policy('{Content Editor, User, Admin}', core.get_office_id_by_office_name('Default'), 'website.contents', '{*}', true);
 SELECT * FROM auth.create_api_access_policy('{User, Admin}', core.get_office_id_by_office_name('Default'), 'website.menus', '{*}', true);
@@ -435,7 +463,7 @@ SELECT * FROM auth.create_api_access_policy('{User, Admin}', core.get_office_id_
 SELECT * FROM auth.create_api_access_policy('{Admin}', core.get_office_id_by_office_name('Default'), 'website.configurations', '{*}', true);
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/1.x/1.0/src/99.ownership.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/99.ownership.sql --<--<--
 DO
 $$
     DECLARE this record;

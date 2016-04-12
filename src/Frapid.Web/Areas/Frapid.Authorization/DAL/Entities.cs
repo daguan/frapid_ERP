@@ -9,7 +9,7 @@ namespace Frapid.Authorization.DAL
     {
         public static IEnumerable<EntityView> Get()
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return db.FetchBy<EntityView>(sql => sql);
             }

@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using Frapid.Configuration;
-using Frapid.DataAccess;
+﻿using Frapid.Installer.DAL;
 using Serilog;
 
 namespace Frapid.Installer
@@ -27,7 +25,8 @@ namespace Frapid.Installer
 
             if (!canInstall)
             {
-                Log.Verbose($"Cannot create a database under the name \"{this.Tenant}\" because the name is not a well-known tenant name.");
+                Log.Verbose(
+                    $"Cannot create a database under the name \"{this.Tenant}\" because the name is not a well-known tenant name.");
             }
 
             if (!hasDb && canInstall)
@@ -42,12 +41,7 @@ namespace Frapid.Installer
 
         private void CreateDb()
         {
-            string sql = "CREATE DATABASE {0} WITH ENCODING='UTF8' TEMPLATE=template0 LC_COLLATE='C' LC_CTYPE='C';";
-            sql = string.Format(CultureInfo.InvariantCulture, sql, Sanitizer.SanitizeIdentifierName(this.Tenant.ToLower()));
-
-            string database = Factory.MetaDatabase;
-            string connectionString = ConnectionString.GetSuperUserConnectionString(database);
-            Factory.Execute(connectionString, sql);
+            Store.CreateDb(this.Tenant);
         }
     }
 }

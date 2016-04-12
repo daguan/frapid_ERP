@@ -17,7 +17,7 @@ namespace Frapid.Messaging.Smtp
                 SentTo = mail.SendTo,
                 Message = mail.Message,
                 Type = Type.Outward,
-                EventDateUtc = DateTime.UtcNow,
+                EventDateUtc = DateTimeOffset.UtcNow,
                 Status = Status.Unknown
             };
 

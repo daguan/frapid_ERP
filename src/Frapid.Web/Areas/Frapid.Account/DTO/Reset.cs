@@ -10,8 +10,8 @@ namespace Frapid.Account.DTO
         public int UserId { get; set; }
         public string Email { get; set; }
         public string Name { get; set; }
-        public DateTime RequestedOn { get; set; }
-        public DateTime ExpiresOn { get; set; }
+        public DateTimeOffset RequestedOn { get; set; }
+        public DateTimeOffset ExpiresOn { get; set; }
         public string Browser { get; set; }
         public string IpAddress { get; set; }
     }

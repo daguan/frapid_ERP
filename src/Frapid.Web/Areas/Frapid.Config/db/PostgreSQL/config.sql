@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 DROP SCHEMA IF EXISTS config CASCADE;
 CREATE SCHEMA config;
 
@@ -155,13 +155,13 @@ CREATE TABLE config.flags
 CREATE UNIQUE INDEX flags_user_id_resource_resource_id_uix
 ON config.flags(user_id, UPPER(resource), UPPER(resource_key), UPPER(resource_id));
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
 DO
 $$
 BEGIN
     IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Text') THEN
         INSERT INTO config.custom_field_data_types(data_type, is_number)
-        SELECT 'Text', true;
+        SELECT 'Text', false;
     END IF;
 
     IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Number') THEN
@@ -188,7 +188,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/05.views/config.custom_field_definition_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/05.views/config.custom_field_definition_view.sql --<--<--
 DROP VIEW IF EXISTS config.custom_field_definition_view;
 
 CREATE VIEW config.custom_field_definition_view
@@ -216,7 +216,7 @@ INNER JOIN config.custom_field_forms
 ON config.custom_field_forms.form_name = config.custom_field_setup.form_name
 ORDER BY field_order;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/05.views/config.custom_field_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/05.views/config.custom_field_view.sql --<--<--
 DROP VIEW IF EXISTS config.custom_field_view;
 
 CREATE VIEW config.custom_field_view
@@ -246,7 +246,7 @@ INNER JOIN config.custom_fields
 ON config.custom_fields.custom_field_setup_id = config.custom_field_setup.custom_field_setup_id
 ORDER BY field_order;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/05.views/config.filter_name_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/05.views/config.filter_name_view.sql --<--<--
 DROP VIEW IF EXISTS config.filter_name_view;
 
 CREATE VIEW config.filter_name_view
@@ -258,7 +258,7 @@ SELECT
     is_default
 FROM config.filters;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/05.views/config.flag_view.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/05.views/config.flag_view.sql --<--<--
 DROP VIEW IF EXISTS config.flag_view;
 
 CREATE VIEW config.flag_view
@@ -278,7 +278,7 @@ FROM config.flags
 INNER JOIN config.flag_types
 ON config.flags.flag_type_id = config.flag_types.flag_type_id;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.create_flag.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/config.create_flag.sql --<--<--
 DROP FUNCTION IF EXISTS config.create_flag
 (
     user_id_            integer,
@@ -323,7 +323,7 @@ LANGUAGE plpgsql;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_definition.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_definition.sql --<--<--
 DROP FUNCTION IF EXISTS config.get_custom_field_definition
 (
     _table_name             text,
@@ -396,7 +396,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_form_name.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_form_name.sql --<--<--
 DROP FUNCTION IF EXISTS config.get_custom_field_form_name
 (
     _table_name character varying
@@ -418,7 +418,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_setup_id_by_table_name.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_setup_id_by_table_name.sql --<--<--
 DROP FUNCTION IF EXISTS config.get_custom_field_setup_id_by_table_name
 (
     _schema_name national character varying(100), 
@@ -445,7 +445,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.get_flag_type_id.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/config.get_flag_type_id.sql --<--<--
 DROP FUNCTION IF EXISTS config.get_flag_type_id
 (
     user_id_        integer,
@@ -477,7 +477,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/06.functions-and-logic/config.get_user_id_by_login_id.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/config.get_user_id_by_login_id.sql --<--<--
 DROP FUNCTION IF EXISTS config.get_user_id_by_login_id(_login_id bigint);
 
 CREATE FUNCTION config.get_user_id_by_login_id(_login_id bigint)
@@ -494,7 +494,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/09.menus/0.menu.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/09.menus/0.menu.sql --<--<--
 SELECT * FROM core.create_app('Frapid.Config', 'Config', '1.0', 'MixERP Inc.', 'December 1, 2015', 'orange configure', '/dashboard/config/offices', null);
 SELECT * FROM core.create_menu('Frapid.Config', 'Offices', '/dashboard/config/offices', 'building outline', '');
 SELECT * FROM core.create_menu('Frapid.Config', 'Flags', '/dashboard/config/flags', 'flag', '');
@@ -509,7 +509,7 @@ SELECT * FROM auth.create_app_menu_policy
     '{*}'::text[]
 );
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/09.menus/1.menu-policy.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/09.menus/1.menu-policy.sql --<--<--
 SELECT * FROM auth.create_app_menu_policy
 (
     'User', 
@@ -527,7 +527,7 @@ SELECT * FROM auth.create_app_menu_policy
 );
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/10.policy/access_policy.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/10.policy/access_policy.sql --<--<--
 SELECT * FROM auth.create_api_access_policy('{*}', 1, 'config.kanban_details', '{*}', true);
 SELECT * FROM auth.create_api_access_policy('{*}', 1, 'config.flag_types', '{*}', true);
 SELECT * FROM auth.create_api_access_policy('{*}', 1, 'config.flag_view', '{*}', true);
@@ -539,7 +539,7 @@ SELECT * FROM auth.create_api_access_policy('{User}', core.get_office_id_by_offi
 SELECT * FROM auth.create_api_access_policy('{Admin}', core.get_office_id_by_office_name('Default'), '', '{*}', true);
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/1.x/1.0/src/99.ownership.sql --<--<--
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/99.ownership.sql --<--<--
 DO
 $$
     DECLARE this record;

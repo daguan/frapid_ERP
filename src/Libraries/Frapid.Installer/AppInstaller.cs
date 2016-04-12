@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using System.IO;
 using System.Web.Hosting;
-using Frapid.Configuration;
 using Frapid.DataAccess;
+using Frapid.Installer.DAL;
 using Frapid.Installer.Models;
 using Microsoft.VisualBasic.FileIO;
 using Serilog;
@@ -20,21 +20,17 @@ namespace Frapid.Installer
         public Installable Installable { get; }
         protected string Database { get; set; }
 
-        public bool HasSchema()
+        public bool HasSchema(string database)
         {
-            const string sql = "SELECT COUNT(*) FROM pg_catalog.pg_namespace WHERE nspname=@0;";
-
-            using (var db = DbProvider.Get(ConnectionString.GetSuperUserConnectionString(this.Database)).GetDatabase())
-            {
-                return db.ExecuteScalar<int>(sql, this.Installable.DbSchema).Equals(1);
-            }
+            return Store.HasSchema(database, this.Installable.DbSchema);
         }
 
         public void Install()
         {
             foreach (var dependency in this.Installable.Dependencies)
             {
-                Log.Verbose($"Installing module {dependency.ApplicationName} because the module {this.Installable.ApplicationName} depends on it.");
+                Log.Verbose(
+                    $"Installing module {dependency.ApplicationName} because the module {this.Installable.ApplicationName} depends on it.");
                 new AppInstaller(this.Database, dependency).Install();
             }
 
@@ -63,19 +59,6 @@ namespace Frapid.Installer
 
         protected void CreateSchema()
         {
-            if (string.IsNullOrWhiteSpace(this.Installable.DbSchema))
-            {
-                return;
-            }
-
-            if (this.HasSchema())
-            {
-                Log.Verbose($"Skipped {this.Installable.ApplicationName} schema creation because it already exists.");
-                return;
-            }
-
-            Log.Verbose($"Creating schema {this.Installable.DbSchema}");
-
             string database = this.Database;
             if (this.Installable.IsMeta)
             {
@@ -83,6 +66,20 @@ namespace Frapid.Installer
                     $"Creating database of {this.Installable.ApplicationName} under meta database {Factory.MetaDatabase}.");
                 database = Factory.MetaDatabase;
             }
+
+            if (string.IsNullOrWhiteSpace(this.Installable.DbSchema))
+            {
+                return;
+            }
+
+            if (this.HasSchema(database))
+            {
+                Log.Verbose($"Skipped {this.Installable.ApplicationName} schema creation because it already exists.");
+                return;
+            }
+
+            Log.Verbose($"Creating schema {this.Installable.DbSchema}");
+
 
             string db = this.Installable.BlankDbPath;
             string path = HostingEnvironment.MapPath(db);
@@ -99,21 +96,7 @@ namespace Frapid.Installer
 
         private void RunSql(string database, string fromFile)
         {
-            if (string.IsNullOrWhiteSpace(fromFile) || File.Exists(fromFile).Equals(false))
-            {
-                return;
-            }
-
-            string sql = File.ReadAllText(fromFile);
-
-            //PetaPoco/NPoco Escape
-            //ORM: Remove this behavior if you change the ORM.
-            sql = sql.Replace("@", "@@");
-
-            Log.Verbose($"Running SQL {sql}");
-
-            string connectionString = ConnectionString.GetSuperUserConnectionString(database);
-            Factory.Execute(connectionString, sql);
+            Store.RunSql(database, fromFile);
         }
 
 

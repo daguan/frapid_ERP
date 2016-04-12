@@ -1,4 +1,5 @@
-﻿using Frapid.DataAccess;
+﻿using Frapid.Configuration;
+using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 
 namespace Frapid.DbPolicy
@@ -24,7 +25,8 @@ namespace Frapid.DbPolicy
                 return false;
             }
 
-            const string sql = "SELECT * FROM auth.has_access(config.get_user_id_by_login_id(@0), @1, @2);";
+            string sql = FrapidDbServer.GetProcedureCommand("auth.has_access", new[] {"@0", "@1", "@2"});
+
             string entity = policy.ObjectNamespace + "." + policy.ObjectName;
             int type = (int) policy.AccessType;
 

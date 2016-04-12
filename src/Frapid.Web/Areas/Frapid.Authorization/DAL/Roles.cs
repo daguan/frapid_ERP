@@ -10,7 +10,7 @@ namespace Frapid.Authorization.DAL
     {
         public static IEnumerable<Role> GetRoles()
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return db.FetchBy<Role>(sql => sql).OrderByDescending(x => x.RoleId);
             }

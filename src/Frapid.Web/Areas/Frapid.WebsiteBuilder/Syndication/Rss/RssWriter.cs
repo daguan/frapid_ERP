@@ -53,7 +53,7 @@ namespace Frapid.WebsiteBuilder.Syndication.Rss
             return Encoding.UTF8.GetString(xml.ToArray());
         }
 
-        public static string ToRfc822DateString(this DateTime date)
+        public static string ToRfc822DateString(this DateTimeOffset date)
         {
             int offset = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
             string timeZone = "+" + offset.ToString().PadLeft(2, '0');

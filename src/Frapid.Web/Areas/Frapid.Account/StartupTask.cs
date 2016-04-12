@@ -1,3 +1,4 @@
+using System;
 using Frapid.Configuration;
 using Frapid.DataAccess;
 using Frapid.Framework;
@@ -10,7 +11,7 @@ namespace Frapid.Account
     {
         public static void Add(string database, string domainName, string adminEmail)
         {
-            const string sql = "SELECT * FROM account.add_installed_domain(@0, @1);";
+            string sql = FrapidDbServer.GetProcedureCommand("account.add_installed_domain", new[] {"@0", "@1"});
             Factory.NonQuery(database, sql, domainName, adminEmail);
         }
     }
@@ -31,7 +32,7 @@ namespace Frapid.Account
                     InstalledDomains.Add(database, domain.DomainName, domain.AdminEmail);
                 }
             }
-            catch (NpgsqlException ex)
+            catch (Exception ex)
             {
                 Log.Error("Could not execute AddInstalledDomainProcedure. Exception: {Exception}", ex);
             }

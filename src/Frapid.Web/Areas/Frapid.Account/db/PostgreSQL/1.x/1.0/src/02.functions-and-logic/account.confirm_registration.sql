@@ -25,7 +25,8 @@ BEGIN
     INSERT INTO account.users(email, password, office_id, role_id, name, phone)
     SELECT email, password, _office_id, account.get_registration_role_id(email), name, phone
     FROM account.registrations
-    WHERE registration_id = _token;
+    WHERE registration_id = _token
+	AND NOT confirmed;
 
     UPDATE account.registrations
     SET 

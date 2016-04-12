@@ -10,11 +10,11 @@ namespace Frapid.WebsiteBuilder.Syndication.Rss
         /// <summary>
         /// The publication date for the content in the channel.
         /// </summary>
-        public DateTime PublishDate { get; set; }
+        public DateTimeOffset PublishDate { get; set; }
         /// <summary>
         /// The last time the content of the channel changed.
         /// </summary>
-        public DateTime LastBuildDate { get; set; }
+        public DateTimeOffset LastBuildDate { get; set; }
         /// <summary>
         /// Specify one or more categories that the channel belongs to.
         /// </summary>

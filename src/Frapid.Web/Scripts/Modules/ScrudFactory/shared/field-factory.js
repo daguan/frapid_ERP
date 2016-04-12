@@ -32,11 +32,14 @@
             return $("<input type='text' class='currency' />");
         case "text":
             return $("<textarea />");
+        case "datetimeoffset":
+        case "datetime":
         case "timestamp":
         case "timestamptz":
         case "date":
             return $("<input type='text' class='date' />");
         case "bool":
+        case "bit":
             var el = $("<select class='ui search dropdown' />");
             var option = "<option";
 
@@ -78,7 +81,7 @@ function editScrudFormElement(targetEl, value) {
         if (targetEl.is("select")) {
             var type = targetEl.attr("data-type");
 
-            if (type === "bool") {
+            if (["bool", "bit"].indexOf(type) > -1) {
                 value = value ? "yes" : "no";
             };
 

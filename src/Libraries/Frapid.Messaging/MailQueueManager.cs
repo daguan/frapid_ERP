@@ -112,7 +112,7 @@ namespace Frapid.Messaging
                     }
 
                     mail.Delivered = true;
-                    mail.DeliveredOn = DateTime.UtcNow;
+                    mail.DeliveredOn = DateTimeOffset.UtcNow;
 
 
                     MailQueue.SetSuccess(this.Database, mail.QueueId);

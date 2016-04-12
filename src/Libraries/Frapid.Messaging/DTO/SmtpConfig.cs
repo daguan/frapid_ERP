@@ -1,11 +1,13 @@
 using System;
 using Frapid.DataAccess;
+using Frapid.NPoco;
 
 namespace Frapid.Messaging.DTO
 {
+    [TableName("config.smtp_configs")]
     public sealed class SmtpConfig : IPoco
     {
-        public int SmtpId { get; set; }
+        public int SmtpConfigId { get; set; }
         public string ConfigurationName { get; set; }
         public bool Enabled { get; set; }
         public bool IsDefault { get; set; }
@@ -16,7 +18,7 @@ namespace Frapid.Messaging.DTO
         public string SmtpUsername { get; set; }
         public string SmtpPassword { get; set; }
         public int? AuditUserId { get; set; }
-        public DateTime? AuditTs { get; set; }
+        public DateTimeOffset? AuditTs { get; set; }
         public int SmtpPort { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿IF OBJECT_ID('auth.get_apps') IS NOT NULL
+﻿
+
+IF OBJECT_ID('auth.get_apps') IS NOT NULL
 DROP FUNCTION auth.get_apps;
 
 GO

@@ -12,7 +12,7 @@ namespace Frapid.i18n.DAL
         {
             const string sql = "SELECT * FROM i18n.localized_resource_view;";
 
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(MetaDatabase)).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(MetaDatabase)).GetDatabase())
             {
                 var dbResources = db.Query<dynamic>(sql);
 
@@ -33,8 +33,8 @@ namespace Frapid.i18n.DAL
         public static IEnumerable<LocalizedResource> GetLocalizationTable(string language)
         {
             const string sql =
-                "SELECT * FROM i18n.get_localization_table(@0) WHERE COALESCE(key, '') != '';";
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(MetaDatabase)).GetDatabase())
+                "SELECT * FROM i18n.get_localization_table(@0) WHERE COALESCE(\"key\", '') != '';";
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(MetaDatabase)).GetDatabase())
             {
                 return db.Query<LocalizedResource>(sql, language);
             }

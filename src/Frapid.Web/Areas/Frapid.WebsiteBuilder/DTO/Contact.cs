@@ -26,6 +26,6 @@ namespace Frapid.WebsiteBuilder.DTO
         public int Sort { get; set; }
         public bool Status { get; set; }
         public int? AuditUserId { get; set; }
-        public DateTime? AuditTs { get; set; }
+        public DateTimeOffset? AuditTs { get; set; }
     }
 }

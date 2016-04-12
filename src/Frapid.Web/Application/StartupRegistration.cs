@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using Frapid.Framework;
 using Serilog;
 
@@ -15,7 +18,7 @@ namespace Frapid.Web
                 var members = AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(x => x.GetTypes())
                     .Where(x => iType.IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
-                    .Select(Activator.CreateInstance);
+                    .Select(Activator.CreateInstance).ToList();
 
                 foreach (IStartupRegistration member in members)
                 {
@@ -32,10 +35,24 @@ namespace Frapid.Web
                     }
                 }
             }
-            catch (Exception ex)
+            catch (ReflectionTypeLoadException ex)
             {
-                Log.Error("{Exception}", ex);
-                throw;
+                var sb = new StringBuilder();
+                foreach (var loaderException in ex.LoaderExceptions)
+                {
+                    sb.AppendLine(loaderException.Message);
+                    var assemblyNotFound = loaderException as FileNotFoundException;
+
+                    if (!string.IsNullOrEmpty(assemblyNotFound?.FusionLog))
+                    {
+                        sb.AppendLine("Fusion Log:");
+                        sb.AppendLine(assemblyNotFound.FusionLog);
+                    }
+
+                    sb.AppendLine();
+                }
+
+                Log.Error(sb.ToString());
             }
         }
     }

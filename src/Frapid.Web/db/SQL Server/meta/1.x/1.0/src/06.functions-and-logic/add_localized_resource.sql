@@ -1,52 +1,50 @@
-DROP FUNCTION IF EXISTS i18n.add_localized_resource
-(
-    _resource_class  text,
-    _culture_code    text,
-    _key             text,
-    _value           text
-);
+IF OBJECT_ID('i18n.add_localized_resource') IS NOT NULL
+DROP PROCEDURE i18n.add_localized_resource;
 
-CREATE FUNCTION i18n.add_localized_resource
+GO
+
+CREATE PROCEDURE i18n.add_localized_resource
 (
-    _resource_class  text,
-    _culture_code    text,
-    _key             text,
-    _value           text
+    @resource_class		national character varying(4000),
+    @culture_code		national character varying(4000),
+    @key				national character varying(4000),
+    @value				national character varying(4000)
 )
-RETURNS void 
-VOLATILE
 AS
-$$
-    DECLARE _resource_id    integer;
 BEGIN
-    IF(COALESCE(_culture_code, '') = '') THEN
-        PERFORM i18n.add_resource(_resource_class, _key, _value);
-        RETURN;
-    END IF;
-       
-    SELECT resource_id INTO _resource_id
-    FROM i18n.resources
-    WHERE UPPER(resource_class) = UPPER(_resource_class)
-    AND UPPER(key) = UPPER(_key);
+    DECLARE @resource_id    integer;
 
-    IF(_resource_id IS NOT NULL) THEN
+    IF(COALESCE(@culture_code, '') = '')
+    BEGIN
+        EXECUTE i18n.add_resource @resource_class, @key, @value;
+        RETURN;
+    END;
+       
+    SELECT @resource_id = resource_id
+    FROM i18n.resources
+    WHERE resource_class = @resource_class
+    AND [key] = @key;
+
+    IF(@resource_id IS NOT NULL)
+    BEGIN
         IF EXISTS
         (
             SELECT 1 FROM i18n.localized_resources 
-            WHERE i18n.localized_resources.resource_id=_resource_id
-            AND culture_code = _culture_code
-        ) THEN
+            WHERE i18n.localized_resources.resource_id=@resource_id
+            AND culture_code = @culture_code
+        )
+        BEGIN
             UPDATE i18n.localized_resources
-            SET value=_value
-            WHERE i18n.localized_resources.resource_id=_resource_id
-            AND culture_code = _culture_code;
+            SET value=@value
+            WHERE i18n.localized_resources.resource_id=@resource_id
+            AND culture_code = @culture_code;
 
             RETURN;
-        END IF;
+        END;
 
         INSERT INTO i18n.localized_resources(resource_id, culture_code, value)
-        SELECT _resource_id, _culture_code, _value;
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
+        SELECT @resource_id, @culture_code, @value;
+    END;
+END;
+
+GO

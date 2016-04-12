@@ -49,7 +49,7 @@ namespace Frapid.Areas.Authorization.Helpers
                 return false;
             }
 
-            if (expriesOn <= DateTime.UtcNow)
+            if (expriesOn <= DateTimeOffset.UtcNow)
             {
                 Log.Debug(
                     "Token expired. Access was denied to user {userId}/{email} for officeId {officeId} having the loginId {loginId}. Token: {clientToken}.",
@@ -60,7 +60,7 @@ namespace Frapid.Areas.Authorization.Helpers
 
             bool isValid = AccessTokens.IsValid(clientToken, ipAddress, userAgent);
 
-            if (expriesOn <= DateTime.UtcNow)
+            if (expriesOn <= DateTimeOffset.UtcNow)
             {
                 Log.Debug(
                     "Token invalid. Access was denied to user {userId}/{email} for officeId {officeId} having the loginId {loginId}. Token: {clientToken}.",

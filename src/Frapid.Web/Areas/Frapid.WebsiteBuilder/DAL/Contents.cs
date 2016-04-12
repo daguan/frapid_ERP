@@ -11,7 +11,7 @@ namespace Frapid.WebsiteBuilder.DAL
     {
         public static IEnumerable<Content> GetContents()
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return db.FetchBy<Content>(sql => sql.Where(c => c.IsHomepage));
             }
@@ -19,7 +19,7 @@ namespace Frapid.WebsiteBuilder.DAL
 
         public static IEnumerable<PublishedContentView> GetAllPublishedContents()
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return db.FetchBy<PublishedContentView>(sql => sql);
             }
@@ -27,7 +27,7 @@ namespace Frapid.WebsiteBuilder.DAL
 
         public static Content Get(int contentId)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return db.FetchBy<Content>(sql => sql
                     .Where(c => c.ContentId == contentId))
@@ -42,7 +42,7 @@ namespace Frapid.WebsiteBuilder.DAL
                 return GetDefault();
             }
 
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(tenant)).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant)).GetDatabase())
             {
                 return db.FetchBy<PublishedContentView>(sql => sql
                     .Where(c => c.Alias.ToLower().Equals(alias.ToLower())
@@ -56,7 +56,7 @@ namespace Frapid.WebsiteBuilder.DAL
 
         public static IEnumerable<PublishedContentView> GetBlogContents(string categoryAlias, int limit, int offset)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return
                     db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog && x.CategoryAlias == categoryAlias))
@@ -67,7 +67,7 @@ namespace Frapid.WebsiteBuilder.DAL
 
         public static int CountBlogContents(string categoryAlias)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return
                     db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog && x.CategoryAlias == categoryAlias))
@@ -77,7 +77,7 @@ namespace Frapid.WebsiteBuilder.DAL
 
         public static int CountBlogContents()
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog)).Count;
             }
@@ -85,7 +85,7 @@ namespace Frapid.WebsiteBuilder.DAL
 
         public static IEnumerable<PublishedContentView> GetBlogContents(int limit, int offset)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog)).Skip(offset).Take(limit);
             }
@@ -93,7 +93,7 @@ namespace Frapid.WebsiteBuilder.DAL
 
         public static PublishedContentView GetDefault()
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return
                     db.FetchBy<PublishedContentView>(sql => sql.Where(c => c.IsHomepage).Limit(1))
@@ -103,24 +103,13 @@ namespace Frapid.WebsiteBuilder.DAL
 
         internal static void AddHit(string database, string categoryAlias, string alias)
         {
-            string sql;
-            if (string.IsNullOrWhiteSpace(categoryAlias) && string.IsNullOrWhiteSpace(alias))
-            {
-                sql = "UPDATE website.contents SET hits = COALESCE(website.contents.hits, 0) + 1 " +
-                      "WHERE is_homepage = true;";
-                Factory.NonQuery(database, sql, categoryAlias, alias);
-                return;
-            }
-
-            sql = "UPDATE website.contents SET hits = COALESCE(website.contents.hits, 0) + 1 " +
-                  "WHERE website.contents.content_id=(SELECT website.published_content_view.content_id FROM website.published_content_view " +
-                  "WHERE category_alias=@0 AND alias=@1);";
+            string sql = FrapidDbServer.GetProcedureCommand("website.add_hit", new []{"@0", "@1"});
             Factory.NonQuery(database, sql, categoryAlias, alias);
         }
 
         public static List<PublishedContentView> Search(string query)
         {
-            using (var db = DbProvider.Get(ConnectionString.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
             {
                 return
                     db.FetchBy<PublishedContentView>(

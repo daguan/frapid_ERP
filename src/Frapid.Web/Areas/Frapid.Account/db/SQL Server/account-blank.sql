@@ -114,14 +114,14 @@ CREATE TABLE account.fb_access_tokens
 (
     user_id										integer PRIMARY KEY REFERENCES account.users,
     fb_user_id									national character varying(500),
-    token										national character varying(500)
+    token										national character varying(MAX)
 );
 
 
 CREATE TABLE account.google_access_tokens
 (
     user_id										integer PRIMARY KEY REFERENCES account.users,
-    token										national character varying(500)
+    token										national character varying(MAX)
 );
 
 CREATE TABLE account.logins
@@ -173,8 +173,8 @@ CREATE TABLE account.access_tokens
     token_id                                    national character varying(500),
     application_id                              uniqueidentifier NULL REFERENCES account.applications,
     login_id                                    bigint NOT NULL REFERENCES account.logins,
-    client_token                                national character varying(500) NOT NULL UNIQUE,
-    claims                                      national character varying(500),
+    client_token                                national character varying(MAX),
+    claims                                      national character varying(MAX),
     created_on                                  datetimeoffset NOT NULL,
     expires_on                                  datetimeoffset NOT NULL,
     revoked                                     bit NOT NULL DEFAULT(0),
@@ -207,7 +207,8 @@ BEGIN
     BEGIN
         UPDATE account.installed_domains
         SET admin_email = @admin_email
-        WHERE domain_name = @domain_name;        
+        WHERE domain_name = @domain_name;
+		RETURN;
     END;
 
     INSERT INTO account.installed_domains(domain_name, admin_email)
@@ -362,7 +363,8 @@ BEGIN
 
     IF(@can_confirm = 0)
     BEGIN
-        RETURN 0;
+        SELECT 0;
+        RETURN;
     END;
 
     SELECT
@@ -374,7 +376,8 @@ BEGIN
     INSERT INTO account.users(email, password, office_id, role_id, name, phone)
     SELECT email, password, @office_id, account.get_registration_role_id(email), name, phone
     FROM account.registrations
-    WHERE registration_id = @token;
+    WHERE registration_id = @token
+	AND confirmed = 0;
 
     UPDATE account.registrations
     SET 
@@ -382,11 +385,10 @@ BEGIN
         confirmed_on = getutcdate()
     WHERE registration_id = @token;
     
-    RETURN 1;
+    SELECT 1;
 END;
 
 GO
-
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.email_exists.sql --<--<--
 IF OBJECT_ID('account.email_exists') IS NOT NULL
@@ -683,6 +685,29 @@ END;
 
 GO
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_user_id_by_login_id.sql --<--<--
+IF OBJECT_ID('account.get_user_id_by_login_id') IS NOT NULL
+DROP FUNCTION account.get_user_id_by_login_id;
+
+GO
+
+CREATE FUNCTION account.get_user_id_by_login_id(@login_id bigint)
+RETURNS integer
+AS
+BEGIN
+    RETURN
+    (
+		SELECT
+		user_id
+		FROM account.logins
+		WHERE account.logins.login_id = @login_id
+	);
+END;
+
+
+GO
+
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.google_sign_in.sql --<--<--
 IF OBJECT_ID('account.google_sign_in') IS NOT NULL
 DROP PROCEDURE account.google_sign_in;
@@ -891,7 +916,7 @@ DROP FUNCTION account.is_valid_client_token;
 
 GO
 
-CREATE FUNCTION account.is_valid_client_token(@client_token national character varying(500), @ip_address national character varying(500), @user_agent national character varying(500))
+CREATE FUNCTION account.is_valid_client_token(@client_token national character varying(MAX), @ip_address national character varying(500), @user_agent national character varying(500))
 RETURNS bit
 AS
 BEGIN
@@ -1024,7 +1049,7 @@ BEGIN
 	(
 		login_id                                bigint,
 		status                                  bit,
-		message                                 text
+		message                                 national character varying(100)
 	);
 
 
@@ -1039,8 +1064,10 @@ BEGIN
 
     IF account.is_restricted_user(@email) = 1
     BEGIN
+		INSERT INTO @result
         SELECT CAST(NULL AS bigint), 0, 'Access is denied';
 
+		SELECT * FROM @result;
         RETURN;
     END;
 
@@ -1060,13 +1087,15 @@ BEGIN
 
     SET @login_id = SCOPE_IDENTITY();
     
+	INSERT INTO @result
     SELECT @login_id, 1, 'Welcome';
+
+	SELECT * FROM @result;
     RETURN;    
 END;
 
 
 GO
-
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.user_exists.sql --<--<--
 IF OBJECT_ID('account.user_exists') IS NOT NULL

@@ -1,3 +1,4 @@
+using Frapid.Configuration;
 using Frapid.DataAccess;
 
 namespace Frapid.WebsiteBuilder.DAL
@@ -6,13 +7,13 @@ namespace Frapid.WebsiteBuilder.DAL
     {
         public static bool Add(string database, string email)
         {
-            const string sql = "SELECT website.add_email_subscription(@0);";
+            string sql = FrapidDbServer.GetProcedureCommand("website.add_email_subscription", new[] {"@0"});
             return Factory.Scalar<bool>(database, sql, email);
         }
 
         public static bool Remove(string database, string email)
         {
-            const string sql = "SELECT website.remove_email_subscription(@0);";
+            string sql = FrapidDbServer.GetProcedureCommand("website.remove_email_subscription", new[] {"@0"});
             return Factory.Scalar<bool>(database, sql, email);
         }
     }

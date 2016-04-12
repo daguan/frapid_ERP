@@ -111,19 +111,37 @@ BEGIN
 END;
 GO
 
+
 IF OBJECT_ID('dbo.parse_default') IS NOT NULL
 DROP PROCEDURE dbo.parse_default;
 
 GO
 
-CREATE PROCEDURE dbo.parse_default(@default national character varying(MAX))
+CREATE PROCEDURE dbo.parse_default
+(
+	@default			national character varying(MAX), 
+	@parsed				national character varying(MAX) OUTPUT
+)
 AS
 BEGIN
-	DECLARE @result national character varying(MAX);
-	DECLARE @sql national character varying(MAX);
-	SET @sql = 'SELECT ' + @default;
+	SET NOCOUNT ON;
+	DECLARE @result		TABLE (parsed national character varying(MAX));
+	DECLARE @sql		national character varying(MAX);
 	
-	EXECUTE sp_executesql @sql;
+	IF(@default IS NOT NULL)
+	BEGIN
+		BEGIN TRY
+			SET @sql = 'SELECT ' + @default;
+
+			INSERT INTO @result
+			EXECUTE @parsed = sp_executesql @sql;
+
+			SELECT @parsed = parsed
+			FROM @result;
+		END TRY
+		BEGIN CATCH
+		END CATCH
+	END;
 END;
 
 GO
@@ -159,24 +177,32 @@ END
 GO
 
 IF OBJECT_ID('dbo.poco_get_table_function_definition') is not null
-DROP FUNCTION dbo.poco_get_table_function_definition;
+DROP PROCEDURE dbo.poco_get_table_function_definition;
 
 GO
 
-CREATE FUNCTION dbo.poco_get_table_function_definition(@schema national character varying(100), @name national character varying(100))
-RETURNS @result TABLE
-(
-    id                      int,
-    column_name             national character varying(100),
-    is_nullable             national character varying(100),
-    udt_name                national character varying(100),
-    column_default          national character varying(100),
-    max_length              national character varying(100),
-    is_primary_key          national character varying(100),
-    data_type               national character varying(100)
-)
+CREATE PROCEDURE dbo.poco_get_table_function_definition(@schema national character varying(100), @name national character varying(100))
 AS
 BEGIN
+	DECLARE @total_rows			int;
+	DECLARE @this_row			int = 0;
+	DECLARE @default			national character varying(100);
+	DECLARE @parsed				national character varying(100);
+
+	DECLARE @result TABLE
+	(
+		row_id					int IDENTITY,
+		id                      int,
+		column_name             national character varying(100),
+		nullable				national character varying(100),
+		db_data_type            national character varying(100),
+		value					national character varying(100),
+		max_length              national character varying(100),
+		primary_key				national character varying(100),
+		data_type               national character varying(100),
+		is_serial				bit DEFAULT(0)
+	);
+
     IF EXISTS
     (
         SELECT *
@@ -185,7 +211,7 @@ BEGIN
         AND table_name=@name
     )
     BEGIN
-        INSERT INTO @result(id, column_name, is_nullable, udt_name, column_default, max_length, is_primary_key, data_type)
+        INSERT INTO @result(id, column_name, nullable, db_data_type, value, max_length, primary_key, data_type)
         SELECT
 			information_schema.columns.ordinal_position,
 			information_schema.columns.column_name,
@@ -199,8 +225,31 @@ BEGIN
         WHERE 1 = 1
         AND information_schema.columns.table_schema = @schema
         AND information_schema.columns.table_name = @name;
+
+		SET @total_rows = @@ROWCOUNT;
     END;
 
+
+
+	WHILE @this_row<@total_rows
+	BEGIN
+		SET @this_row = @this_row + 1;
+		SELECT 
+			@default = value
+		FROM @result
+		WHERE row_id=@this_row;
+
+		EXECUTE dbo.parse_default @default, @parsed = @parsed OUTPUT;
+		UPDATE @result
+		SET value = @parsed
+		WHERE row_id=@this_row;
+	END;
+
+	UPDATE @result
+	SET is_serial = COLUMNPROPERTY(OBJECT_ID(@schema + '.' + @name), column_name, 'IsIdentity');
+
+
+	SELECT * FROM @result;
     RETURN;
 END;
 
@@ -208,10 +257,12 @@ GO
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/0. types.sql --<--<--
-GO
+IF OBJECT_ID('dbo.drop_schema') IS NOT NULL
 EXECUTE dbo.drop_schema 'core';
 GO
+
 CREATE SCHEMA core;
+
 GO
 
 IF TYPE_ID(N'dbo.money_strict') IS NULL
@@ -301,6 +352,7 @@ GO
 CREATE PROCEDURE dbo.drop_schema(@name nvarchar(500), @showsql bit = 0)
 AS
 BEGIN
+	SET XACT_ABORT ON;
     SET NOCOUNT ON;
 
       DECLARE @sql nvarchar(max);
@@ -309,6 +361,9 @@ BEGIN
            row_id  int IDENTITY,
            command nvarchar(max)
         );
+
+      INSERT INTO @commands
+      SELECT 'SET XACT_ABORT ON;';
 
       INSERT INTO @commands
       SELECT 'BEGIN TRY';
@@ -439,6 +494,9 @@ BEGIN
       SELECT '    BEGIN';
 
       INSERT INTO @commands
+      SELECT '        IF XACT_STATE() <> 0';
+
+      INSERT INTO @commands
       SELECT '        ROLLBACK TRANSACTION;';
 
       INSERT INTO @commands
@@ -521,8 +579,6 @@ GO
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/1. tables-and-constraints.sql --<--<--
-GO
-
 CREATE TABLE core.apps
 (
     app_name                                    national character varying(100) PRIMARY KEY,
@@ -850,8 +906,29 @@ GO
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/99.ownership.sql --<--<--
+IF NOT EXISTS
+(
+	SELECT * FROM sys.database_principals
+	WHERE name = 'frapid_db_user'
+)
+BEGIN
+CREATE USER frapid_db_user FROM LOGIN frapid_db_user;
+END
+GO
+
 EXEC sp_addrolemember  @rolename = 'db_owner', @membername  = 'frapid_db_user'
+GO
+
+IF NOT EXISTS
+(
+	SELECT * FROM sys.database_principals
+	WHERE name = 'report_user'
+)
+BEGIN
+CREATE USER report_user FROM LOGIN report_user;
+END
 GO
 
 EXEC sp_addrolemember  @rolename = 'db_datareader', @membername  = 'report_user'
 GO
+

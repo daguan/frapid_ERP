@@ -9,12 +9,17 @@ namespace Frapid.Web
     {
         public static void RegisterBundles(BundleCollection bundles)
         {
-            BundleTable.EnableOptimizations = true;
 
             if (HttpContext.Current.IsDebuggingEnabled)
             {
                 BundleTable.EnableOptimizations = false;
                 BundleTable.Bundles.ToList().ForEach(bundle => bundle.Transforms.Clear());
+                BundleTable.Bundles.ResetAll();
+                BundleTable.Bundles.Clear(); 
+            }
+            else
+            {
+                BundleTable.EnableOptimizations = true;
             }
 
             AddBundle(bundles, "~/bundles/frapid-core.js", GetFrapidCoreScript());

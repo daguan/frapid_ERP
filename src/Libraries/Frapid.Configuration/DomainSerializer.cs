@@ -64,7 +64,7 @@ namespace Frapid.Configuration
 
         public void Save(List<ApprovedDomain> urls)
         {
-            string contents = JsonConvert.SerializeObject(urls);
+            string contents = JsonConvert.SerializeObject(urls, Formatting.Indented);
             string path = HostingEnvironment.MapPath(Path + this.FileName);
 
             if (path == null)

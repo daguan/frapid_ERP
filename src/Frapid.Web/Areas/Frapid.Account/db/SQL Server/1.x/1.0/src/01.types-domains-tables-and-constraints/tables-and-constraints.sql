@@ -113,14 +113,14 @@ CREATE TABLE account.fb_access_tokens
 (
     user_id										integer PRIMARY KEY REFERENCES account.users,
     fb_user_id									national character varying(500),
-    token										national character varying(500)
+    token										national character varying(MAX)
 );
 
 
 CREATE TABLE account.google_access_tokens
 (
     user_id										integer PRIMARY KEY REFERENCES account.users,
-    token										national character varying(500)
+    token										national character varying(MAX)
 );
 
 CREATE TABLE account.logins
@@ -172,8 +172,8 @@ CREATE TABLE account.access_tokens
     token_id                                    national character varying(500),
     application_id                              uniqueidentifier NULL REFERENCES account.applications,
     login_id                                    bigint NOT NULL REFERENCES account.logins,
-    client_token                                national character varying(500) NOT NULL UNIQUE,
-    claims                                      national character varying(500),
+    client_token                                national character varying(MAX),
+    claims                                      national character varying(MAX),
     created_on                                  datetimeoffset NOT NULL,
     expires_on                                  datetimeoffset NOT NULL,
     revoked                                     bit NOT NULL DEFAULT(0),

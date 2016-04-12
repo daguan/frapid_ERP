@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Frapid.ApplicationState.Cache;
+using Frapid.Configuration;
 using Frapid.DataAccess;
 
 namespace Frapid.Account.DAL
@@ -21,13 +22,17 @@ namespace Frapid.Account.DAL
 
         public static object Register(DTO.Registration registration)
         {
-            registration.RegisteredOn = DateTime.UtcNow;
-            return Factory.Insert(AppUsers.GetTenant(), registration, "account.registrations", "registration_id");
+            registration.RegistrationId = Guid.NewGuid();
+            registration.RegisteredOn = DateTimeOffset.UtcNow;
+
+            Factory.Insert(AppUsers.GetTenant(), registration, "account.registrations", "registration_id", false);
+
+            return registration.RegistrationId;
         }
 
         public static bool ConfirmRegistration(Guid token)
         {
-            const string sql = "SELECT account.confirm_registration(@0);";
+            string sql = FrapidDbServer.GetProcedureCommand("account.confirm_registration", new[] { "@0"});
             return Factory.Scalar<bool>(AppUsers.GetTenant(), sql, token);
         }
 

@@ -13,7 +13,7 @@ namespace Frapid.WebsiteBuilder.DTO
         public string Title { get; set; }
         public string Alias { get; set; }
         public int? AuthorId { get; set; }
-        public DateTime PublishOn { get; set; }
+        public DateTimeOffset PublishOn { get; set; }
         public string Markdown { get; set; }
         public string Contents { get; set; }
         public string Tags { get; set; }
@@ -21,6 +21,6 @@ namespace Frapid.WebsiteBuilder.DTO
         public string SeoDescription { get; set; }
         public bool IsHomepage { get; set; }
         public int? AuditUserId { get; set; }
-        public DateTime? AuditTs { get; set; }
+        public DateTimeOffset? AuditTs { get; set; }
     }
 }
