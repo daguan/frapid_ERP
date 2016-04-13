@@ -4,8 +4,8 @@
     {
         string ProviderName { get; }
         void CreateDb(string tenant);
-        bool HasDb(string dbName);
-        bool HasSchema(string database, string schema);
-        void RunSql(string database, string fromFile);
+        bool HasDb(string tenant, string database);
+        bool HasSchema(string tenant, string database, string schema);
+        void RunSql(string tenant, string database, string fromFile);
     }
 }

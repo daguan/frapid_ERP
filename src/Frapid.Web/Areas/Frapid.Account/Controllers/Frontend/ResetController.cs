@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Frapid.Account.DAL;
 using Frapid.Account.Emails;
 using Frapid.Account.InputModels;
+using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
 using Frapid.WebsiteBuilder.Controllers;
 using Reset = Frapid.Account.ViewModels.Reset;
@@ -38,13 +39,14 @@ namespace Frapid.Account.Controllers.Frontend
 
             model.Browser = this.RemoteUser.Browser;
             model.IpAddress = this.RemoteUser.IpAddress;
+            string tenant = AppUsers.GetTenant();
 
-            if (DAL.ResetRequests.HasActiveResetRequest(model.Email))
+            if (DAL.ResetRequests.HasActiveResetRequest(tenant, model.Email))
             {
                 return this.Json(true);
             }
 
-            var result = DAL.ResetRequests.Request(model);
+            var result = DAL.ResetRequests.Request(tenant, model);
 
             if (result.UserId <= 0)
             {
@@ -63,7 +65,9 @@ namespace Frapid.Account.Controllers.Frontend
         public ActionResult ValidateEmail(string email)
         {
             Thread.Sleep(1000);
-            return string.IsNullOrWhiteSpace(email) ? this.Json(true) : this.Json(!Registrations.HasAccount(email));
+            string tenant = AppUsers.GetTenant();
+
+            return string.IsNullOrWhiteSpace(email) ? this.Json(true) : this.Json(!Registrations.HasAccount(tenant, email));
         }
 
         [Route("account/reset/email-sent")]
@@ -82,7 +86,9 @@ namespace Frapid.Account.Controllers.Frontend
                 return this.Redirect("/site/404");
             }
 
-            var reset = DAL.ResetRequests.GetIfActive(token);
+            string tenant = AppUsers.GetTenant();
+
+            var reset = DAL.ResetRequests.GetIfActive(tenant, token);
 
             if (reset == null)
             {
@@ -105,10 +111,12 @@ namespace Frapid.Account.Controllers.Frontend
                 return this.Json(false);
             }
 
-            var reset = DAL.ResetRequests.GetIfActive(token);
+            string tenant = AppUsers.GetTenant();
+
+            var reset = DAL.ResetRequests.GetIfActive(tenant, token);
             if (reset != null)
             {
-                DAL.ResetRequests.CompleteReset(token, password);
+                DAL.ResetRequests.CompleteReset(tenant, token, password);
                 return this.Json(true);
             }
 

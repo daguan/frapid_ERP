@@ -1,5 +1,6 @@
 ﻿[
   {
+	"DbProvider": "Npgsql",
 	"DomainName": "localhost",
 	"EnforceSsl": true,
 	"CdnDomain": "",

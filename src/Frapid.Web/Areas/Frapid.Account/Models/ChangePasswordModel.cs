@@ -23,8 +23,9 @@ namespace Frapid.Account.Models
                 return false;
             }
 
+            string tenant = AppUsers.GetTenant();
             string email = AppUsers.GetCurrent().Email;
-            var frapidUser = Users.Get(email);
+            var frapidUser = Users.Get(tenant, email);
 
             bool oldPasswordIsValid = PasswordManager.ValidateBcrypt(model.OldPassword, frapidUser.Password);
             if (!oldPasswordIsValid)
@@ -34,7 +35,7 @@ namespace Frapid.Account.Models
             }
 
             string newPassword = PasswordManager.GetHashedPassword(model.Password);
-            Users.ChangePassword(userId, newPassword, user);
+            Users.ChangePassword(tenant, userId, newPassword, user);
             return true;
         }
     }

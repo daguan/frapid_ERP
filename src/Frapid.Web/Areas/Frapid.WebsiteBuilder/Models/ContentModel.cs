@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Frapid.ApplicationState.Cache;
 using Frapid.WebsiteBuilder.DAL;
 using Frapid.WebsiteBuilder.ViewModels;
 using Mapster;
@@ -12,8 +13,9 @@ namespace Frapid.WebsiteBuilder.Models
         {
             int pageSize = 10;
             int offset = (pageNumber - 1)*pageSize;
+            string tenant = AppUsers.GetTenant();
 
-            var contents = Contents.GetBlogContents(pageSize, offset).ToList();
+            var contents = Contents.GetBlogContents(tenant, pageSize, offset).ToList();
 
             if (!contents.Any())
             {

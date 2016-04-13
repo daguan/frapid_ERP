@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Frapid.ApplicationState.Cache;
 using Frapid.Authorization.DAL;
 
 namespace Frapid.Authorization.ViewModels
@@ -12,7 +13,8 @@ namespace Frapid.Authorization.ViewModels
 
         public static IEnumerable<Entity> GetEntities()
         {
-            var data = Entities.Get();
+            string tenant = AppUsers.GetTenant();
+            var data = Entities.Get(tenant);
             var english = new CultureInfo("en-US", false).TextInfo;
 
             var entities = data.Select(item => new Entity

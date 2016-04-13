@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
-using Frapid.ApplicationState.Cache;
 using Frapid.Authorization.DTO;
 using Frapid.Configuration;
+using Frapid.Configuration.Db;
 
 namespace Frapid.Authorization.DAL
 {
     public static class Users
     {
-        public static IEnumerable<User> GetUsers()
+        public static IEnumerable<User> GetUsers(string tenant)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return db.FetchBy<User>(sql => sql.Where(x=>x.Status));
+                return db.FetchBy<User>(sql => sql.Where(x => x.Status));
             }
         }
     }

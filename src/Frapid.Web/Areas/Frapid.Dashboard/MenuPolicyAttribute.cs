@@ -17,8 +17,9 @@ namespace Frapid.Dashboard
             int userId = AppUsers.GetCurrent().UserId;
             int officeId = AppUsers.GetCurrent().OfficeId;
             string culture = AppUsers.GetCurrent().Culture;
+            string tenant = AppUsers.GetTenant();
 
-            var policy = Menu.Get(userId, officeId, culture);
+            var policy = Menu.Get(tenant, userId, officeId, culture);
 
             if (!policy.Any(x => x.Url.Equals(path)))
             {

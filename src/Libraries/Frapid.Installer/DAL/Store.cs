@@ -7,11 +7,10 @@ namespace Frapid.Installer.DAL
 {
     public static class Store
     {
-        private static readonly IStore DbServer = GetDbAbstraction();
-
-        private static IStore GetDbAbstraction()
+        private static IStore GetDbServer(string tenant)
         {
-            string providerName = ConfigurationManager.GetConfigurationValue("DbServerConfigFileLocation", "ProviderName");
+            var site = DbConvention.GetSite(tenant);
+            string providerName = site.DbProvider;
 
             try
             {
@@ -37,22 +36,22 @@ namespace Frapid.Installer.DAL
 
         public static void CreateDb(string tenant)
         {
-            DbServer.CreateDb(tenant);
+            GetDbServer(tenant).CreateDb(tenant);
         }
 
-        public static bool HasDb(string dbName)
+        public static bool HasDb(string tenant, string dbName)
         {
-            return DbServer.HasDb(dbName);
+            return GetDbServer(tenant).HasDb(tenant, dbName);
         }
 
-        public static bool HasSchema(string database, string schema)
+        public static bool HasSchema(string tenant, string database, string schema)
         {
-            return DbServer.HasSchema(database, schema);
+            return GetDbServer(tenant).HasSchema(tenant, database, schema);
         }
 
-        public static void RunSql(string database, string fromFile)
+        public static void RunSql(string tenant, string database, string fromFile)
         {
-            DbServer.RunSql(database, fromFile);
+            GetDbServer(tenant).RunSql(tenant, database, fromFile);
         }
     }
 }

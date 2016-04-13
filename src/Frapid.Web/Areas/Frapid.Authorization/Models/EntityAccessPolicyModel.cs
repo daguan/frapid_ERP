@@ -15,8 +15,9 @@ namespace Frapid.Authorization.Models
                 return new UserEntityAccessPolicy();
             }
 
-            var offices = Offices.GetOffices();
-            var users = Users.GetUsers();
+            string tenant = AppUsers.GetTenant();
+            var offices = Offices.GetOffices(tenant);
+            var users = Users.GetUsers(tenant);
 
 
             return new UserEntityAccessPolicy
@@ -35,7 +36,8 @@ namespace Frapid.Authorization.Models
                 return new List<AccessPolicyInfo>();
             }
 
-            var data = AccessPolicy.GetPolicy(officeId, userId);
+            string tenant = AppUsers.GetTenant();
+            var data = AccessPolicy.GetPolicy(tenant, officeId, userId);
             return data.Adapt<List<AccessPolicyInfo>>();
         }
 
@@ -46,7 +48,8 @@ namespace Frapid.Authorization.Models
                 return;
             }
 
-            AccessPolicy.SavePolicy(officeId, userId, model);
+            string tenant = AppUsers.GetTenant();
+            AccessPolicy.SavePolicy(tenant, officeId, userId, model);
         }
     }
 }

@@ -7,10 +7,10 @@ namespace Frapid.Account.DAL
 {
     public static class Offices
     {
-        public static IEnumerable<Office> GetOffices()
+        public static IEnumerable<Office> GetOffices(string tenant)
         {
             const string sql = "SELECT office_id, office_name FROM core.offices;";
-            return Factory.Get<Office>(AppUsers.GetTenant(), sql);
+            return Factory.Get<Office>(tenant, sql);
         }
     }
 }

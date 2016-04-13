@@ -25,7 +25,7 @@ namespace Frapid.DbPolicy
                 return false;
             }
 
-            string sql = FrapidDbServer.GetProcedureCommand("auth.has_access", new[] {"@0", "@1", "@2"});
+            string sql = FrapidDbServer.GetProcedureCommand(policy.Database, "auth.has_access", new[] {"@0", "@1", "@2"});
 
             string entity = policy.ObjectNamespace + "." + policy.ObjectName;
             int type = (int) policy.AccessType;

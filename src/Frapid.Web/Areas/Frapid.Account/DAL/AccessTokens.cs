@@ -8,7 +8,7 @@ namespace Frapid.Account.DAL
 {
     public static class AccessTokens
     {
-        public static void Revoke(string clientToken)
+        public static void Revoke(string tenant, string clientToken)
         {
             if (string.IsNullOrWhiteSpace(clientToken))
             {
@@ -17,12 +17,12 @@ namespace Frapid.Account.DAL
 
             const string sql =
                 "UPDATE account.access_tokens SET revoked=true, revoked_on = NOW() WHERE client_token=@0;";
-            Factory.NonQuery(AppUsers.GetTenant(), sql, clientToken);
+            Factory.NonQuery(tenant, sql, clientToken);
         }
 
-        public static void Save(Token token, string ipAddress, string userAgent)
+        public static void Save(string tenant, Token token, string ipAddress, string userAgent)
         {
-            Factory.Insert(AppUsers.GetTenant(), new AccessToken
+            Factory.Insert(tenant, new AccessToken
             {
                 ApplicationId = token.ApplicationId,
                 Audience = token.Audience,

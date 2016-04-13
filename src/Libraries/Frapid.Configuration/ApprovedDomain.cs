@@ -4,6 +4,7 @@ namespace Frapid.Configuration
 {
     public class ApprovedDomain
     {
+        public string DbProvider { get; set; }
         public string DomainName { get; set; }
         public string BackupDirectory { get; set; }
         public bool BackupDirectoryIsFixedPath { get; set; }

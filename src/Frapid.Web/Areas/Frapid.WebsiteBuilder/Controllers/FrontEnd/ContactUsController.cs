@@ -16,8 +16,10 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [AllowAnonymous]
         public ActionResult Index()
         {
+            string tenant = AppUsers.GetTenant();
             var model = new ContactUs();
-            var contacts = Contacts.GetContacts();
+
+            var contacts = Contacts.GetContacts(tenant);
             model.Contacts = contacts;
             return this.View(this.GetRazorView<AreaRegistration>("ContactUs/Index.cshtml"), model);
         }

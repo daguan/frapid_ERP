@@ -51,7 +51,7 @@ namespace Frapid.WebsiteBuilder.Emails
         private string GetEmails(string tenant, int contactId)
         {
             var config = EmailProcessor.GetDefaultConfig(tenant);
-            var contact = DAL.Contacts.GetContact(contactId);
+            var contact = DAL.Contacts.GetContact(tenant, contactId);
 
             if (contact == null)
             {

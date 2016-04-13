@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
+using Frapid.Configuration.Db;
 using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.DbPolicy;
@@ -291,7 +292,7 @@ namespace Frapid.WebApi.DataAccess
                 return Factory.Get<CustomField>(this.Database, sql);
             }
 
-            sql = FrapidDbServer.GetProcedureCommand("config.get_custom_field_definition", new[] {"@0", "@1"});
+            sql = FrapidDbServer.GetProcedureCommand(this.Database, "config.get_custom_field_definition", new[] {"@0", "@1"});
             return Factory.Get<CustomField>(this.Database, sql, this.FullyQualifiedObjectName, resourceId);
         }
 
@@ -413,7 +414,7 @@ namespace Frapid.WebApi.DataAccess
             int line = 0;
             try
             {
-                using (var db = new Database(FrapidDbServer.GetConnectionString(this.Database), Factory.ProviderName))
+                using (var db = new Database(FrapidDbServer.GetConnectionString(this.Database), Factory.GetProviderName(this.Database)))
                 {
                     using (var transaction = db.GetTransaction())
                     {
@@ -547,15 +548,15 @@ namespace Frapid.WebApi.DataAccess
             long offset = (pageNumber - 1)*50;
             string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} ORDER BY {this.PrimaryKey}";
 
-            sql += FrapidDbServer.AddOffset("@0");
-            sql += FrapidDbServer.AddLimit("50");
+            sql += FrapidDbServer.AddOffset(this.Database, "@0");
+            sql += FrapidDbServer.AddLimit(this.Database, "50");
 
             return Factory.Get<dynamic>(this.Database, sql, offset);
         }
 
-        public List<Filter> GetFilters(string database, string filterName)
+        public List<Filter> GetFilters(string tenant, string filterName)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 return db.FetchBy<Filter>(sql => sql.Where(u => u.ObjectName.Equals(this.FullyQualifiedObjectName)
                 && u.FilterName.ToUpperInvariant().Equals(filterName.ToUpperInvariant())));
@@ -622,8 +623,8 @@ namespace Frapid.WebApi.DataAccess
 
             if (pageNumber > 0)
             {
-                sql.Append(FrapidDbServer.AddOffset("@0"), offset);
-                sql.Append(FrapidDbServer.AddLimit("@0"), 50);
+                sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), offset);
+                sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
             }
 
             return Factory.Get<dynamic>(this.Database, sql);
@@ -692,8 +693,8 @@ namespace Frapid.WebApi.DataAccess
 
             if (pageNumber > 0)
             {
-                sql.Append(FrapidDbServer.AddOffset("@0"), offset);
-                sql.Append(FrapidDbServer.AddLimit("@0"), 50);
+                sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), offset);
+                sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
             }
 
             return Factory.Get<dynamic>(this.Database, sql);

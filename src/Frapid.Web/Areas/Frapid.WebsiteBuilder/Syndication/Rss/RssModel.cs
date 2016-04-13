@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
@@ -21,15 +22,16 @@ namespace Frapid.WebsiteBuilder.Syndication.Rss
 
             List<PublishedContentView> contents;
             string category = string.Empty;
+            string tenant = AppUsers.GetTenant();
 
             if (!string.IsNullOrWhiteSpace(categoryAlias))
             {
-                contents = Contents.GetBlogContents(categoryAlias, limit, offset).ToList();
+                contents = Contents.GetBlogContents(tenant, categoryAlias, limit, offset).ToList();
                 category = contents.Select(x => x.CategoryName).FirstOrDefault();
             }
             else
             {
-                contents = Contents.GetBlogContents(limit, offset).ToList();
+                contents = Contents.GetBlogContents(tenant, limit, offset).ToList();
             }
 
 

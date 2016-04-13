@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using Frapid.Configuration;
+using Frapid.Configuration.Db;
 using Frapid.DataAccess;
 using Frapid.Messaging.DTO;
 
@@ -16,7 +17,7 @@ namespace Frapid.Messaging.DAL
 
         public static IEnumerable<EmailQueue> GetMailInQueue(string database)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database)).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database), database).GetDatabase())
             {
                 return db.FetchBy<EmailQueue>(sql => sql
                     .Where(u => !u.IsTest && !u.Delivered && !u.Canceled && u.SendOn <= DateTimeOffset.UtcNow));

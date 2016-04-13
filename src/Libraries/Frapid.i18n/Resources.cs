@@ -5,6 +5,7 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using Frapid.Configuration;
 using Frapid.i18n;
 using System.Threading.Tasks;
 
@@ -12,9 +13,14 @@ namespace Frapid.i18n.Resources
 {
 	public class DbErrors
 	{
-		public static string Get(string key)
+		public static string Get(string key, string tenant = "")
 		{
-			return ResourceManager.GetString("DbErrors", key);
+		    if (string.IsNullOrWhiteSpace(tenant))
+		    {
+		        tenant = DbConvention.GetTenant();
+		    }
+
+			return ResourceManager.GetString(tenant, "DbErrors", key);
 		}
 		
 		/// <summary>
@@ -30,9 +36,14 @@ namespace Frapid.i18n.Resources
 	}
 	public class Labels
 	{
-		public static string Get(string key)
+		public static string Get(string key, string tenant = "")
 		{
-			return ResourceManager.GetString("Labels", key);
+		    if (string.IsNullOrWhiteSpace(tenant))
+		    {
+		        tenant = DbConvention.GetTenant();
+		    }
+
+			return ResourceManager.GetString(tenant, "Labels", key);
 		}
 		
 		/// <summary>
@@ -202,9 +213,14 @@ namespace Frapid.i18n.Resources
 	}
 	public class Questions
 	{
-		public static string Get(string key)
+		public static string Get(string key, string tenant = "")
 		{
-			return ResourceManager.GetString("Questions", key);
+		    if (string.IsNullOrWhiteSpace(tenant))
+		    {
+		        tenant = DbConvention.GetTenant();
+		    }
+
+			return ResourceManager.GetString(tenant, "Questions", key);
 		}
 		
 		/// <summary>
@@ -242,9 +258,14 @@ namespace Frapid.i18n.Resources
 	}
 	public class Titles
 	{
-		public static string Get(string key)
+		public static string Get(string key, string tenant = "")
 		{
-			return ResourceManager.GetString("Titles", key);
+		    if (string.IsNullOrWhiteSpace(tenant))
+		    {
+		        tenant = DbConvention.GetTenant();
+		    }
+
+			return ResourceManager.GetString(tenant, "Titles", key);
 		}
 		
 		/// <summary>
@@ -1008,9 +1029,14 @@ namespace Frapid.i18n.Resources
 	}
 	public class Warnings
 	{
-		public static string Get(string key)
+		public static string Get(string key, string tenant = "")
 		{
-			return ResourceManager.GetString("Warnings", key);
+		    if (string.IsNullOrWhiteSpace(tenant))
+		    {
+		        tenant = DbConvention.GetTenant();
+		    }
+
+			return ResourceManager.GetString(tenant, "Warnings", key);
 		}
 		
 		/// <summary>

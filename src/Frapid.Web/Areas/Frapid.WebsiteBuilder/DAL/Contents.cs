@@ -2,6 +2,7 @@
 using System.Linq;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
+using Frapid.Configuration.Db;
 using Frapid.DataAccess;
 using Frapid.WebsiteBuilder.DTO;
 
@@ -9,25 +10,25 @@ namespace Frapid.WebsiteBuilder.DAL
 {
     public static class Contents
     {
-        public static IEnumerable<Content> GetContents()
+        public static IEnumerable<Content> GetContents(string tenant)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 return db.FetchBy<Content>(sql => sql.Where(c => c.IsHomepage));
             }
         }
 
-        public static IEnumerable<PublishedContentView> GetAllPublishedContents()
+        public static IEnumerable<PublishedContentView> GetAllPublishedContents(string tenant)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 return db.FetchBy<PublishedContentView>(sql => sql);
             }
         }
 
-        public static Content Get(int contentId)
+        public static Content Get(string tenant, int contentId)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 return db.FetchBy<Content>(sql => sql
                     .Where(c => c.ContentId == contentId))
@@ -39,10 +40,10 @@ namespace Frapid.WebsiteBuilder.DAL
         {
             if (string.IsNullOrWhiteSpace(alias))
             {
-                return GetDefault();
+                return GetDefault(tenant);
             }
 
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant)).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 return db.FetchBy<PublishedContentView>(sql => sql
                     .Where(c => c.Alias.ToLower().Equals(alias.ToLower())
@@ -54,9 +55,9 @@ namespace Frapid.WebsiteBuilder.DAL
         }
 
 
-        public static IEnumerable<PublishedContentView> GetBlogContents(string categoryAlias, int limit, int offset)
+        public static IEnumerable<PublishedContentView> GetBlogContents(string tenant, string categoryAlias, int limit, int offset)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 return
                     db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog && x.CategoryAlias == categoryAlias))
@@ -65,9 +66,9 @@ namespace Frapid.WebsiteBuilder.DAL
             }
         }
 
-        public static int CountBlogContents(string categoryAlias)
+        public static int CountBlogContents(string tenant, string categoryAlias)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 return
                     db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog && x.CategoryAlias == categoryAlias))
@@ -75,25 +76,25 @@ namespace Frapid.WebsiteBuilder.DAL
             }
         }
 
-        public static int CountBlogContents()
+        public static int CountBlogContents(string tenant)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 return db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog)).Count;
             }
         }
 
-        public static IEnumerable<PublishedContentView> GetBlogContents(int limit, int offset)
+        public static IEnumerable<PublishedContentView> GetBlogContents(string tenant, int limit, int offset)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 return db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog)).Skip(offset).Take(limit);
             }
         }
 
-        public static PublishedContentView GetDefault()
+        public static PublishedContentView GetDefault(string tenant)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 return
                     db.FetchBy<PublishedContentView>(sql => sql.Where(c => c.IsHomepage).Limit(1))
@@ -101,15 +102,15 @@ namespace Frapid.WebsiteBuilder.DAL
             }
         }
 
-        internal static void AddHit(string database, string categoryAlias, string alias)
+        internal static void AddHit(string tenant, string categoryAlias, string alias)
         {
-            string sql = FrapidDbServer.GetProcedureCommand("website.add_hit", new []{"@0", "@1"});
-            Factory.NonQuery(database, sql, categoryAlias, alias);
+            string sql = FrapidDbServer.GetProcedureCommand(tenant, "website.add_hit", new []{"@0", "@1"});
+            Factory.NonQuery(tenant, sql, categoryAlias, alias);
         }
 
-        public static List<PublishedContentView> Search(string query)
+        public static List<PublishedContentView> Search(string tenant, string query)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(AppUsers.GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 return
                     db.FetchBy<PublishedContentView>(

@@ -1,5 +1,6 @@
-using System.Dynamic;
 using Frapid.Configuration;
+using Frapid.Configuration.Db;
+using Frapid.NPoco;
 
 namespace Frapid.Installer
 {
@@ -9,13 +10,10 @@ namespace Frapid.Installer
         {
             string database = DbConvention.GetDbNameByConvention(tenant.DomainName);
 
-            using (var db = DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(database)).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(database, database), database).GetDatabase())
             {
-                dynamic poco = new ExpandoObject();
-                poco.domain_name = tenant.DomainName;
-                poco.admin_email = tenant.AdminEmail;
-
-                db.Insert("account.installed_domains", "domain_id", true, poco);
+                var sql = new Sql("INSERT INTO account.installed_domains(domain_name, admin_email) SELECT @0, @1;", tenant.DomainName, tenant.AdminEmail);
+                db.Execute(sql);
             }
         }
     }

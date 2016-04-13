@@ -1,4 +1,5 @@
-﻿using Frapid.Installer.DAL;
+﻿using Frapid.Configuration.Db;
+using Frapid.Installer.DAL;
 using Serilog;
 
 namespace Frapid.Installer
@@ -14,7 +15,8 @@ namespace Frapid.Installer
 
         public bool Install()
         {
-            var inspector = new DbInspector(this.Tenant);
+            string meta = DbProvider.GetMetaDatabase(this.Tenant);
+            var inspector = new DbInspector(this.Tenant, meta);
             bool hasDb = inspector.HasDb();
             bool canInstall = inspector.IsWellKnownDb();
 

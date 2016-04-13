@@ -7,6 +7,7 @@ using System.Web;
 using Frapid.ApplicationState.CacheFactory;
 using Frapid.ApplicationState.Models;
 using Frapid.Configuration;
+using Frapid.Configuration.Db;
 using Frapid.DataAccess;
 using Frapid.Framework.Extensions;
 using Frapid.NPoco;
@@ -88,7 +89,7 @@ namespace Frapid.ApplicationState.Cache
 
         private static void UpdateActivity(int userId, string ip, string browser)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(GetTenant())).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(GetTenant()), GetTenant()).GetDatabase())
             {
                 var sql = new Sql("UPDATE account.users SET ");
                 sql.Append("last_seen_on = @0", DateTimeOffset.UtcNow);

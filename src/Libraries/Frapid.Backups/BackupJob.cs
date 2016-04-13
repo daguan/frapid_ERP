@@ -13,7 +13,6 @@ namespace Frapid.Backups
         {
             ThreadPool.QueueUserWorkItem(callback =>
             {
-                var server = new DbServer();
                 string fileName = DateTimeOffset.UtcNow.Ticks.ToString();
                 var domains = DbConvention.GetDomains();
 
@@ -23,6 +22,7 @@ namespace Frapid.Backups
                     string directory = this.GetBackupDirectory(domain, tenant);
 
 
+                    var server = new DbServer(tenant);
                     var agent = this.GetAgent(server, fileName, tenant, directory);
 
                     try

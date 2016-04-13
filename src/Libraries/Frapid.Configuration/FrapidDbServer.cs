@@ -7,11 +7,10 @@ namespace Frapid.Configuration
 {
     public static class FrapidDbServer
     {
-        private static readonly IDbServer Server = GetServer();
-
-        public static IDbServer GetServer()
+        public static IDbServer GetServer(string tenant)
         {
-            string providerName = ConfigurationManager.GetConfigurationValue("DbServerConfigFileLocation", "ProviderName");
+            var site = DbConvention.GetSite(tenant);
+            string providerName = site.DbProvider;
 
             try
             {
@@ -35,51 +34,67 @@ namespace Frapid.Configuration
             return new PostgreSQL();
         }
 
-        public static string GetConnectionString(string database = "", string userId = "", string password = "")
+        public static string GetConnectionString(string tenant, string database = "", string userId = "", string password = "")
         {
-            return Server.GetConnectionString(database, userId, password);
+            if (string.IsNullOrWhiteSpace(database))
+            {
+                database = tenant;
+            }
+
+            return GetServer(tenant).GetConnectionString(tenant, database, userId, password);
         }
 
-        public static string GetSuperUserConnectionString(string database = "")
+        public static string GetSuperUserConnectionString(string tenant, string database = "")
         {
-            return Server.GetSuperUserConnectionString(database);
+            if (string.IsNullOrWhiteSpace(database))
+            {
+                database = tenant;
+            }
+
+            return GetServer(tenant).GetSuperUserConnectionString(tenant, database);
         }
 
-        public static string GetMetaConnectionString()
+        public static string GetMetaConnectionString(string tenant)
         {
-            return Server.GetConnectionString();
+            return GetServer(tenant).GetMetaConnectionString(tenant);
         }
 
-        public static string GetConnectionString(string host, string database, string username, string password,
+        public static string GetConnectionString(string tenant, string host, string database, string username, string password,
             int port)
         {
-            return Server.GetConnectionString(host, database, username, password, port);
+            if (string.IsNullOrWhiteSpace(database))
+            {
+                database = tenant;
+            }
+
+            return GetServer(tenant).GetConnectionString(tenant, host, database, username, password, port);
         }
 
         /// <summary>
         /// Do not use this function if the any of the paramters come from user input.
         /// </summary>
+        /// <param name="tenant">The database or tenant name.</param>
         /// <param name="procedureName">Name of the stored procedure or function.</param>
         /// <param name="parameters">List of parameters of the function</param>
         /// <returns></returns>
-        public static string GetProcedureCommand(string procedureName, string[] parameters)
+        public static string GetProcedureCommand(string tenant, string procedureName, string[] parameters)
         {
-            return Server.GetProcedureCommand(procedureName, parameters);
+            return GetServer(tenant).GetProcedureCommand(procedureName, parameters);
         }
 
-        public static string DefaultSchemaQualify(string input)
+        public static string DefaultSchemaQualify(string tenant, string input)
         {
-            return Server.DefaultSchemaQualify(input);
+            return GetServer(tenant).DefaultSchemaQualify(input);
         }
 
-        public static string AddLimit(string limit)
+        public static string AddLimit(string tenant, string limit)
         {
-            return Server.AddLimit(limit);
+            return GetServer(tenant).AddLimit(limit);
         }
 
-        public static string AddOffset(string offset)
+        public static string AddOffset(string tenant, string offset)
         {
-            return Server.AddOffset(offset);
+            return GetServer(tenant).AddOffset(offset);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Security;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -17,16 +16,11 @@ namespace Frapid.Account.Controllers
 {
     public class BaseAuthenticationController : WebsiteBuilderController
     {
-        protected bool CheckPassword(string email, string plainPassword)
+        protected bool CheckPassword(string tenant, string email, string plainPassword)
         {
-            var user = Users.Get(email);
+            var user = Users.Get(tenant, email);
 
-            if (user == null)
-            {
-                return false;
-            }
-
-            return PasswordManager.ValidateBcrypt(plainPassword, user.Password);
+            return user != null && PasswordManager.ValidateBcrypt(plainPassword, user.Password);
         }
 
         protected ActionResult OnAuthenticated(LoginResult result, SignInInfo model = null)
@@ -47,8 +41,9 @@ namespace Frapid.Account.Controllers
             var manager = new Provider(AppUsers.GetTenant(), applicationId, result.LoginId);
             var token = manager.GetToken();
             string domain = DbConvention.GetDomain();
+            string tenant = AppUsers.GetTenant();
 
-            AccessTokens.Save(token, this.RemoteUser.IpAddress, this.RemoteUser.UserAgent);
+            AccessTokens.Save(tenant, token, this.RemoteUser.IpAddress, this.RemoteUser.UserAgent);
 
             var cookie = new HttpCookie("access_token")
             {

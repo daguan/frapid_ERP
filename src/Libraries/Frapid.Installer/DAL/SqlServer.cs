@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using Frapid.Configuration;
+using Frapid.Configuration.Db;
 using Frapid.DataAccess;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
@@ -19,34 +20,34 @@ namespace Frapid.Installer.DAL
             string sql = "CREATE DATABASE [{0}];";
             sql = string.Format(CultureInfo.InvariantCulture, sql, Sanitizer.SanitizeIdentifierName(tenant.ToLower()));
 
-            string database = Factory.MetaDatabase;
-            string connectionString = FrapidDbServer.GetSuperUserConnectionString(database);
-            Factory.Execute(connectionString, sql);
+            string database = Factory.GetMetaDatabase(tenant);
+            string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
+            Factory.Execute(connectionString, tenant, sql);
         }
 
-        public bool HasDb(string dbName)
+        public bool HasDb(string tenant, string database)
         {
             const string sql = "SELECT COUNT(*) FROM master.dbo.sysdatabases WHERE name=@0;";
-            string database = Factory.MetaDatabase;
-            string connectionString = FrapidDbServer.GetSuperUserConnectionString(database);
 
-            using (var db = DbProvider.Get(connectionString).GetDatabase())
+            string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
+
+            using (var db = DbProvider.Get(connectionString, tenant).GetDatabase())
             {
-                return db.ExecuteScalar<int>(sql, dbName).Equals(1);
+                return db.ExecuteScalar<int>(sql, tenant).Equals(1);
             }
         }
 
-        public bool HasSchema(string database, string schema)
+        public bool HasSchema(string tenant, string database, string schema)
         {
             const string sql = "SELECT COUNT(*) FROM sys.schemas WHERE name=@0;";
 
-            using (var db = DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(database)).GetDatabase())
+            using (var db = DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(tenant, database), tenant).GetDatabase())
             {
                 return db.ExecuteScalar<int>(sql, schema).Equals(1);
             }
         }
 
-        public void RunSql(string database, string fromFile)
+        public void RunSql(string tenant, string database, string fromFile)
         {
             fromFile = fromFile.Replace("{DbServer}", "SQL Server");
             if (string.IsNullOrWhiteSpace(fromFile) || File.Exists(fromFile).Equals(false))
@@ -59,7 +60,7 @@ namespace Frapid.Installer.DAL
 
             Log.Verbose($"Running SQL {sql}");
 
-            string connectionString = FrapidDbServer.GetSuperUserConnectionString(database);
+            string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
 
             using (var sqlConnection = new SqlConnection(connectionString))
             {

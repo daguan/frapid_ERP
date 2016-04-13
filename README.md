@@ -38,5 +38,4 @@ running as a single IIS Website.
 * [MixERP Website](https://mixerp.org)
 * [MixERP Community Forums (Private App)](https://mixerp.org)
 * [MixERP 2.0](https://github.com/mixerp/mixerp)
-* [Extems EMS](https://github.com/mixerp/extems)
-* [Salesific CRM](https://github.com/mixerp/salesific-crm)
+* [Frapid Website](https://frapid.com)

@@ -12,7 +12,8 @@ namespace Frapid.DataAccess.Models
 
         public static EntityView Get(string database, string primaryKey, string schemaName, string tableName)
         {
-            var db = FrapidDbServer.GetServer();
+            var db = FrapidDbServer.GetServer(database);
+
             string sql = @"SELECT 
                     column_name, 
                     is_nullable = 'YES' AS is_nullable,
@@ -25,7 +26,7 @@ namespace Frapid.DataAccess.Models
 
             if (!db.ProviderName.ToUpperInvariant().Equals("NPGSQL"))
             {
-                string procedure = FrapidDbServer.DefaultSchemaQualify("poco_get_table_function_definition");
+                string procedure = FrapidDbServer.DefaultSchemaQualify(database, "poco_get_table_function_definition");
                 sql = db.GetProcedureCommand(procedure, new[] {"@0", "@1"});
             }
 

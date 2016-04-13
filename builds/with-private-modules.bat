@@ -21,4 +21,5 @@ rmdir %~dp0..\src\Frapid.Web\bin /Q /S
 @echo Building Helpdesk Module
 "%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/MixERP.Helpdesk/MixERP.Helpdesk.sln /p:VisualStudioVersion=14.0
 @echo Done
+"C:\Program Files\Redis\redis-cli" "flushall"
 pause

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Frapid.ApplicationState.Cache;
 using Frapid.Framework;
 using Frapid.WebsiteBuilder.DAL;
 
@@ -9,7 +10,8 @@ namespace Frapid.WebsiteBuilder
     {
         public List<SiteMapUrl> Generate()
         {
-            var all = Contents.GetAllPublishedContents().ToList();
+            string tenant = AppUsers.GetTenant();
+            var all = Contents.GetAllPublishedContents(tenant).ToList();
             var contents = all.Where(x=>!x.IsBlog).ToList();
             var blogs = all.Where(x => x.IsBlog).ToList();
             var home = all.FirstOrDefault(x => x.IsHomepage);

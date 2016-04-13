@@ -3,9 +3,9 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Frapid.Account.DAL;
-using Frapid.Account.DTO;
 using Frapid.Account.InputModels;
 using Frapid.Account.ViewModels;
+using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
 using Frapid.Configuration;
 using Frapid.Framework.Extensions;
@@ -30,7 +30,8 @@ namespace Frapid.Account.Controllers
                 return Redirect("/dashboard");
             }
 
-            var profile = ConfigurationProfiles.GetActiveProfile();
+            string tenant = AppUsers.GetTenant();
+            var profile = ConfigurationProfiles.GetActiveProfile(tenant);
 
 
             var model = profile.Adapt<SignIn>() ?? new SignIn();
@@ -50,14 +51,15 @@ namespace Frapid.Account.Controllers
 
             try
             {
-                bool isValid = this.CheckPassword(model.Email, model.Password);
+                string tenant = AppUsers.GetTenant();
+                bool isValid = this.CheckPassword(tenant, model.Email, model.Password);
 
                 if (!isValid)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                 }
 
-                var result = DAL.SignIn.Do(model.Email, model.OfficeId, this.RemoteUser.Browser,
+                var result = DAL.SignIn.Do(tenant, model.Email, model.OfficeId, this.RemoteUser.Browser,
                     this.RemoteUser.IpAddress, model.Culture.Or("en-US"));
                 return this.OnAuthenticated(result, model);
             }
@@ -72,7 +74,8 @@ namespace Frapid.Account.Controllers
         [AllowAnonymous]
         public ActionResult GetOffices()
         {
-            return this.Ok(Offices.GetOffices());
+            string tenant = AppUsers.GetTenant();
+            return this.Ok(Offices.GetOffices(tenant));
         }
 
         [Route("account/sign-in/languages")]

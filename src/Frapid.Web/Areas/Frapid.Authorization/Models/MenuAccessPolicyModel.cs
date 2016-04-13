@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Frapid.ApplicationState.Cache;
 using Frapid.Authorization.DAL;
 using Frapid.Authorization.DTO;
@@ -16,9 +15,10 @@ namespace Frapid.Authorization.Models
                 return new UserMenuPolicy();
             }
 
-            var offices = Offices.GetOffices();
-            var users = Users.GetUsers();
-            var menus = Menus.GetMenus();
+            string tenant = AppUsers.GetTenant();
+            var offices = Offices.GetOffices(tenant);
+            var users = Users.GetUsers(tenant);
+            var menus = Menus.GetMenus(tenant);
             return new UserMenuPolicy
             {
                 Menus = menus,
@@ -29,7 +29,8 @@ namespace Frapid.Authorization.Models
 
         public static void Save(UserMenuPolicyInfo model)
         {
-            Menus.SavePolicy(model.OfficeId, model.UserId, model.Allowed, model.Disallowed);
+            string tenant = AppUsers.GetTenant();
+            Menus.SavePolicy(tenant, model.OfficeId, model.UserId, model.Allowed, model.Disallowed);
         }
 
 
@@ -40,7 +41,8 @@ namespace Frapid.Authorization.Models
                 return new List<MenuAccessPolicy>();
             }
 
-            return Menus.GetPolicy(officeId, userId);
+            string tenant = AppUsers.GetTenant();
+            return Menus.GetPolicy(tenant, officeId, userId);
         }
     }
 }

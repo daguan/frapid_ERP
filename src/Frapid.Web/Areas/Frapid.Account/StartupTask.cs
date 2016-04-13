@@ -2,7 +2,6 @@ using System;
 using Frapid.Configuration;
 using Frapid.DataAccess;
 using Frapid.Framework;
-using Npgsql;
 using Serilog;
 
 namespace Frapid.Account
@@ -11,7 +10,7 @@ namespace Frapid.Account
     {
         public static void Add(string database, string domainName, string adminEmail)
         {
-            string sql = FrapidDbServer.GetProcedureCommand("account.add_installed_domain", new[] {"@0", "@1"});
+            string sql = FrapidDbServer.GetProcedureCommand(database, "account.add_installed_domain", new[] {"@0", "@1"});
             Factory.NonQuery(database, sql, domainName, adminEmail);
         }
     }

@@ -65,13 +65,15 @@
     <Compile Include="ApprovedDomain.cs" />
     <Compile Include="CacheConfig.cs" />
     <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="Db\HStore.cs" />
+    <Compile Include="Db\Mapper.cs" />
     <Compile Include="FrapidDbServer.cs" />
     <Compile Include="DbConvention.cs" />
     <Compile Include="DomainSerializer.cs" />
     <Compile Include="DbServer\IDbServer.cs" />
     <Compile Include="DbServer\PostgreSQL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DbProvider.cs" />
+    <Compile Include="Db\DbProvider.cs" />
     <Compile Include="RedisConfig.cs" />
     <Compile Include="RedisConnectionString.cs" />
     <Compile Include="DbServer\SqlServer.cs" />

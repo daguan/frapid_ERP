@@ -193,6 +193,13 @@ namespace Frapid.Configuration
             return serializer.Get().Select(member => GetDbNameByConvention(member.DomainName)).ToList();
         }
 
+        public static ApprovedDomain GetSite(string tenant)
+        {
+            var serializer = new DomainSerializer("DomainsApproved.json");
+            var site = serializer.Get().FirstOrDefault(domain => GetDbNameByConvention(domain.DomainName) == tenant);
+            return site;
+        }
+
         public static string GetTenant(string url = "")
         {
             string tenant = GetDbNameByConvention(url);

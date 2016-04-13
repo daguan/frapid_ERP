@@ -1,16 +1,14 @@
 ﻿using System.Collections.Generic;
-using Frapid.ApplicationState.Cache;
-using Frapid.Configuration;
 using Frapid.DataAccess;
 
 namespace Frapid.Dashboard.DAL
 {
     public static class Menu
     {
-        public static IEnumerable<DTO.Menu> Get(int userId, int officeId, string cultureCode)
+        public static IEnumerable<DTO.Menu> Get(string tenant, int userId, int officeId, string cultureCode)
         {
             const string sql = "SELECT * FROM auth.get_menu(@0, @1, @2);";
-            return Factory.Get<DTO.Menu>(AppUsers.GetTenant(), sql, userId, officeId, cultureCode);
+            return Factory.Get<DTO.Menu>(tenant, sql, userId, officeId, cultureCode);
         }
     }
 }

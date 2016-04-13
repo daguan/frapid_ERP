@@ -3,6 +3,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
+using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
 using Frapid.i18n;
 using Frapid.i18n.DAL;
@@ -16,16 +17,17 @@ namespace Frapid.Web.Controllers
         public ActionResult Index()
         {
             string culture = CultureManager.GetCurrent().TwoLetterISOLanguageName;
-            string script = GetScript(culture);
+            string tenant = AppUsers.GetTenant();
+            string script = GetScript(tenant, culture);
             return this.Content(script, "text/javascript", Encoding.UTF8);
         }
 
-        private static string GetScript(string culture)
+        private static string GetScript(string tenant, string culture)
         {
             var script = new StringBuilder();
             script.Append("var Resources = {");
 
-            var resources = DbResources.GetLocalizationTable(culture);
+            var resources = DbResources.GetLocalizationTable(tenant, culture);
 
             var resourceClassGroup = resources
                 .GroupBy(r => r.ResourceClass)

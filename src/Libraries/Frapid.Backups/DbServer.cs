@@ -1,12 +1,15 @@
-﻿using Frapid.Configuration;
+﻿using System.Web.Hosting;
+using Frapid.Configuration;
+using Frapid.Configuration.Db;
 using Frapid.Framework.Extensions;
 
 namespace Frapid.Backups
 {
     public sealed class DbServer
     {
-        public DbServer()
+        public DbServer(string tenant)
         {
+            this.Tenant = tenant;
             this.ProviderName = this.GetConfig("ProviderName");
             this.BinDirectory = this.GetConfig("PostgreSQLBinDirectory");
             this.DatabaseBackupDirectory = this.GetConfig("DatabaseBackupDirectory");
@@ -18,6 +21,7 @@ namespace Frapid.Backups
             this.Validate();
         }
 
+        public string Tenant { get; set; }
         public string ProviderName { get; set; }
         public string BinDirectory { get; set; }
         public string DatabaseBackupDirectory { get; set; }
@@ -29,7 +33,10 @@ namespace Frapid.Backups
 
         private string GetConfig(string key)
         {
-            return ConfigurationManager.GetConfigurationValue("DbServerConfigFileLocation", key);
+            string path = DbProvider.GetDbConfigurationFilePath(this.Tenant);
+            path = HostingEnvironment.MapPath(path);
+
+            return ConfigurationManager.ReadConfigurationValue(path, key);
         }
 
         public void Validate()

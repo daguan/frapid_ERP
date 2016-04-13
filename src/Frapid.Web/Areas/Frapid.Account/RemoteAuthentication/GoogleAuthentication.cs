@@ -2,12 +2,13 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Frapid.Areas;
 using Frapid.Account.DAL;
 using Frapid.Account.DTO;
 using Frapid.Account.Emails;
 using Frapid.Account.InputModels;
 using Frapid.Account.ViewModels;
+using Frapid.ApplicationState.Cache;
+using Frapid.Areas;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -19,7 +20,8 @@ namespace Frapid.Account.RemoteAuthentication
 
         public GoogleAuthentication()
         {
-            var profile = DAL.ConfigurationProfiles.GetActiveProfile();
+            string tenant = AppUsers.GetTenant();
+            var profile = ConfigurationProfiles.GetActiveProfile(tenant);
             ClientId = profile.GoogleSigninClientId;
         }
 
@@ -72,11 +74,15 @@ namespace Frapid.Account.RemoteAuthentication
                 Email = account.Email,
                 Name = account.Name
             };
-            var result = GoogleSignIn.SignIn(account.Email, account.OfficeId, account.Name, account.Token, user.Browser, user.IpAddress, account.Culture);
+
+            string tenant = AppUsers.GetTenant();
+
+            var result = GoogleSignIn.SignIn(tenant, account.Email, account.OfficeId, account.Name, account.Token, user.Browser,
+                user.IpAddress, account.Culture);
 
             if (result.Status)
             {
-                if (!Registrations.HasAccount(account.Email))
+                if (!Registrations.HasAccount(tenant, account.Email))
                 {
                     string template = "~/Tenants/{tenant}/Areas/Frapid.Account/EmailTemplates/welcome-email-other.html";
                     var welcomeEmail = new WelcomeEmail(gUser, template, ProviderName);

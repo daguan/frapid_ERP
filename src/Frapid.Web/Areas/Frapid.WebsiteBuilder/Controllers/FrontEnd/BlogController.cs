@@ -68,7 +68,9 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
                 string theme = this.GetTheme();
                 string layout = ThemeConfiguration.GetBlogLayout(theme);
-                var configuration = Configurations.GetDefaultConfiguration();
+                string tenant = AppUsers.GetTenant();
+
+                var configuration = Configurations.GetDefaultConfiguration(tenant);
 
                 var model = new Blog
                 {

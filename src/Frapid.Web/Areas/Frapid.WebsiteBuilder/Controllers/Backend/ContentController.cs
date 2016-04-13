@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Frapid.ApplicationState.Cache;
 using Frapid.Areas.Authorization;
 using Frapid.Dashboard;
 using Frapid.Dashboard.Controllers;
@@ -23,7 +24,8 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         [MenuPolicy(OverridePath = "/dashboard/website/contents")]
         public ActionResult Manage(int contentId = 0)
         {
-            var model = Contents.Get(contentId) ?? new Content();
+            string tenant = AppUsers.GetTenant();
+            var model = Contents.Get(tenant, contentId) ?? new Content();
             return this.FrapidView(this.GetRazorView<AreaRegistration>("Content/Manage.cshtml"), model);
         }
     }

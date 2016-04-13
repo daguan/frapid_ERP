@@ -16,8 +16,9 @@ namespace Frapid.Dashboard.Controllers
             int userId = AppUsers.GetCurrent().UserId;
             int officeId = AppUsers.GetCurrent().OfficeId;
             string culture = CultureManager.GetCurrent().TwoLetterISOLanguageName;
+            string tenant = AppUsers.GetTenant();
 
-            return this.Ok(Menu.Get(userId, officeId, culture));
+            return this.Ok(Menu.Get(tenant, userId, officeId, culture));
         }
     }
 }

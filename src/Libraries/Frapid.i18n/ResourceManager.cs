@@ -16,6 +16,7 @@ namespace Frapid.i18n
         /// <summary>
         ///     Gets the localized resource.
         /// </summary>
+        /// <param name="tenant">The name of the database or tenant.</param>
         /// <param name="resourceClass">The name of the resource class.</param>
         /// <param name="resourceKey">The resource key.</param>
         /// <param name="cultureCode">
@@ -24,14 +25,14 @@ namespace Frapid.i18n
         /// </param>
         /// <returns></returns>
         /// <exception cref="MissingManifestResourceException">Thrown when the resource key is not found on the specified class.</exception>
-        public static string GetString(string resourceClass, string resourceKey, string cultureCode = null)
+        public static string GetString(string tenant, string resourceClass, string resourceKey, string cultureCode = null)
         {
             if (string.IsNullOrWhiteSpace(resourceClass))
             {
                 return resourceKey;
             }
 
-            string result = TryGetResourceFromCache(resourceClass, resourceKey, cultureCode);
+            string result = TryGetResourceFromCache(tenant, resourceClass, resourceKey, cultureCode);
 
             if (result != null)
             {
@@ -59,7 +60,7 @@ namespace Frapid.i18n
             return culture;
         }
 
-        private static IDictionary<string, string> GetCache()
+        private static IDictionary<string, string> GetCache(string tenant)
         {
             IDictionary<string, string> cache;
             var cacheItem = MemoryCache.Default.Get("Resources");
@@ -81,13 +82,14 @@ namespace Frapid.i18n
                 return cache;
             }
 
-            InitializeResourcesAsync();
-            return GetCache();
+            InitializeResourcesAsync(tenant);
+            return GetCache(tenant);
         }
 
         /// <summary>
         ///     Get the localized resource without throwing an exception if the resource is not found.
         /// </summary>
+        /// <param name="tenant">The name of the current tenant or database.</param>
         /// <param name="resourceClass">The name of the resource class.</param>
         /// <param name="resourceKey">The resource key.</param>
         /// <param name="cultureCode">
@@ -95,12 +97,12 @@ namespace Frapid.i18n
         ///     If this optional parameter is left empty, the current culture will be used.
         /// </param>
         /// <returns></returns>
-        public static string TryGetResourceFromCache(string resourceClass, string resourceKey, string cultureCode = null)
+        public static string TryGetResourceFromCache(string tenant, string resourceClass, string resourceKey, string cultureCode = null)
         {
             while (true)
             {
                 var culture = GetCulture(cultureCode);                
-                var cache = GetCache();
+                var cache = GetCache(tenant);
 
                 string cacheKey = resourceClass + "." + culture.Name + "." + resourceKey;
                 string result;
@@ -139,9 +141,9 @@ namespace Frapid.i18n
             }
         }
 
-        private static void InitializeResourcesAsync()
+        private static void InitializeResourcesAsync(string tenant)
         {
-            IDictionary<string, string> resources = DbResources.GetLocalizedResources();
+            IDictionary<string, string> resources = DbResources.GetLocalizedResources(tenant);
             CacheFactory.AddToDefaultCache("Resources", resources);
         }
     }

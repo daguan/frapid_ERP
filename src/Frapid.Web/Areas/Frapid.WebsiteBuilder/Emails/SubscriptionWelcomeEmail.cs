@@ -56,15 +56,15 @@ namespace Frapid.WebsiteBuilder.Emails
             };
         }
 
-        public async Task SendAsync(string teanant, Subscribe model)
+        public async Task SendAsync(string tenant, Subscribe model)
         {
             try
             {
-                var email = this.GetEmail(teanant, model);
-                var manager = new MailQueueManager(teanant, email);
+                var email = this.GetEmail(tenant, model);
+                var manager = new MailQueueManager(tenant, email);
                 manager.Add();
 
-                var processor = EmailProcessor.GetDefault(teanant);
+                var processor = EmailProcessor.GetDefault(tenant);
 
                 if (string.IsNullOrWhiteSpace(email.ReplyTo))
                 {

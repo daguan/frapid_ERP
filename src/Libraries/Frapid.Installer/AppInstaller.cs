@@ -11,18 +11,20 @@ namespace Frapid.Installer
 {
     public class AppInstaller
     {
-        public AppInstaller(string database, Installable installable)
+        public AppInstaller(string tenant, string database, Installable installable)
         {
+            this.Tenant = tenant;
             this.Database = database;
             this.Installable = installable;
         }
 
         public Installable Installable { get; }
+        protected string Tenant { get; set; }
         protected string Database { get; set; }
 
         public bool HasSchema(string database)
         {
-            return Store.HasSchema(database, this.Installable.DbSchema);
+            return Store.HasSchema(this.Tenant, database, this.Installable.DbSchema);
         }
 
         public void Install()
@@ -31,7 +33,7 @@ namespace Frapid.Installer
             {
                 Log.Verbose(
                     $"Installing module {dependency.ApplicationName} because the module {this.Installable.ApplicationName} depends on it.");
-                new AppInstaller(this.Database, dependency).Install();
+                new AppInstaller(this.Tenant, this.Database, dependency).Install();
             }
 
             this.CreateSchema();
@@ -49,22 +51,23 @@ namespace Frapid.Installer
             string database = this.Database;
             if (this.Installable.IsMeta)
             {
-                database = Factory.MetaDatabase;
+                database = Factory.GetMetaDatabase(database);
             }
 
             string db = this.Installable.My;
             string path = HostingEnvironment.MapPath(db);
-            this.RunSql(database, path);
+            this.RunSql(database, database, path);
         }
 
         protected void CreateSchema()
         {
             string database = this.Database;
+
             if (this.Installable.IsMeta)
             {
                 Log.Verbose(
-                    $"Creating database of {this.Installable.ApplicationName} under meta database {Factory.MetaDatabase}.");
-                database = Factory.MetaDatabase;
+                    $"Creating database of {this.Installable.ApplicationName} under meta database {Factory.GetMetaDatabase(this.Database)}.");
+                database = Factory.GetMetaDatabase(this.Database);
             }
 
             if (string.IsNullOrWhiteSpace(this.Installable.DbSchema))
@@ -83,20 +86,20 @@ namespace Frapid.Installer
 
             string db = this.Installable.BlankDbPath;
             string path = HostingEnvironment.MapPath(db);
-            this.RunSql(database, path);
+            this.RunSql(database, database, path);
 
             if (this.Installable.InstallSample && !string.IsNullOrWhiteSpace(this.Installable.SampleDbPath))
             {
                 Log.Verbose($"Creating sample data of {this.Installable.ApplicationName}.");
                 db = this.Installable.SampleDbPath;
                 path = HostingEnvironment.MapPath(db);
-                this.RunSql(database, path);
+                this.RunSql(database, database, path);
             }
         }
 
-        private void RunSql(string database, string fromFile)
+        private void RunSql(string tenant, string database, string fromFile)
         {
-            Store.RunSql(database, fromFile);
+            Store.RunSql(tenant, database, fromFile);
         }
 
 

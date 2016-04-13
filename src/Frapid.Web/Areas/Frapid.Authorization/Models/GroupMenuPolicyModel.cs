@@ -13,9 +13,12 @@ namespace Frapid.Authorization.Models
                 return new GroupMenuPolicy();
             }
 
-            var offices = Offices.GetOffices();
-            var roles = Roles.GetRoles();
-            var menus = Menus.GetMenus();
+            string tenant = AppUsers.GetTenant();
+
+            var offices = Offices.GetOffices(tenant);
+            var roles = Roles.GetRoles(tenant);
+            var menus = Menus.GetMenus(tenant);
+
             return new GroupMenuPolicy
             {
                 Menus = menus,
@@ -31,7 +34,8 @@ namespace Frapid.Authorization.Models
                 return new GroupMenuPolicyInfo();
             }
 
-            var menuIds = Menus.GetGroupPolicy(officeId, roleId);
+            string tenant = AppUsers.GetTenant();
+            var menuIds = Menus.GetGroupPolicy(tenant, officeId, roleId);
             return new GroupMenuPolicyInfo
             {
                 RoleId = roleId,
@@ -47,7 +51,8 @@ namespace Frapid.Authorization.Models
                 return;
             }
 
-            Menus.SaveGroupPolicy(model.OfficeId, model.RoleId, model.MenuIds);
+            string tenant = AppUsers.GetTenant();
+            Menus.SaveGroupPolicy(tenant, model.OfficeId, model.RoleId, model.MenuIds);
         }
     }
 }

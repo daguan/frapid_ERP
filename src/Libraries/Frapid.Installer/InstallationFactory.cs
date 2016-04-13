@@ -9,8 +9,6 @@ namespace Frapid.Installer
     {
         public static void Setup(ApprovedDomain domain)
         {
-            new DomainSerializer("DomainsInstalled.json").Add(domain);
-
             var factory = new StdSchedulerFactory();
             var scheduler = factory.GetScheduler();
             scheduler.Start();

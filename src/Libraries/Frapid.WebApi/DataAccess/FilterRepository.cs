@@ -59,8 +59,8 @@ namespace Frapid.WebApi.DataAccess
 
             if (pageNumber > 0)
             {
-                sql.Append(FrapidDbServer.AddOffset("@0"), offset);
-                sql.Append(FrapidDbServer.AddLimit("@0"), 50);
+                sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), offset);
+                sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
             }
 
             return Factory.Get<dynamic>(this.Database, sql);
@@ -132,7 +132,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
 
-            using (var db = new Database(FrapidDbServer.GetConnectionString(this.Database), Factory.ProviderName))
+            using (var db = new Database(FrapidDbServer.GetConnectionString(this.Database), Factory.GetProviderName(this.Database)))
             {
                 using (var transaction = db.GetTransaction())
                 {
