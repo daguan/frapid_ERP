@@ -11,7 +11,6 @@ using System.Web.Routing;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
 using Frapid.Framework.Extensions;
-using Frapid.i18n;
 using Frapid.TokenManager;
 using Frapid.TokenManager.DAL;
 using Microsoft.AspNet.Identity;
@@ -64,14 +63,7 @@ namespace Frapid.Areas
 
         protected override void OnActionExecuting(ActionExecutingContext context)
         {
-            this.RemoteUser = new RemoteUser
-            {
-                Browser = this.Request?.Browser.Browser,
-                IpAddress = this.Request?.UserHostAddress,
-                Culture = CultureManager.GetCurrent().Name,
-                UserAgent = this.Request?.UserAgent,
-                Country = this.Request?.ServerVariables["HTTP_CF_IPCOUNTRY"]
-            };
+            this.RemoteUser = RemoteUser.Get(this.HttpContext);
         }
 
         protected override void Initialize(RequestContext context)
@@ -136,7 +128,7 @@ namespace Frapid.Areas
 
         protected ActionResult Failed(string message, HttpStatusCode statusCode)
         {
-            this.Response.StatusCode = (int)statusCode;
+            this.Response.StatusCode = (int) statusCode;
             return this.Content(message, MediaTypeNames.Text.Plain, Encoding.UTF8);
         }
 

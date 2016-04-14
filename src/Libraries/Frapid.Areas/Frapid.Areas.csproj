@@ -115,6 +115,8 @@
     <Compile Include="Authorization\BearerAuthorizeAttribute.cs" />
     <Compile Include="Caching\CacheConfig.cs" />
     <Compile Include="CdnHelper.cs" />
+    <Compile Include="DnsSpamLookup.cs" />
+    <Compile Include="DnsSpamLookupResult.cs" />
     <Compile Include="FrapidAreaRegistration.cs" />
     <Compile Include="FrapidController.cs" />
     <Compile Include="Authorization\Helpers\HubAuthorizationManger.cs" />
