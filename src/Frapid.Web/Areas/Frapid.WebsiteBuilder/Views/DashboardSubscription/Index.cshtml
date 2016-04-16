@@ -16,21 +16,17 @@
     scrudFactory.formAPI = "/api/forms/website/email-subscriptions";
     scrudFactory.formTableName = "website.email_subscriptions";
 
-    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts"];
+    scrudFactory.excludedColumns = ["audit_user_id", "audit_ts", "email_subscription_id"];
 
-    scrudFactory.allowDelete = true;
+    scrudFactory.allowDelete = false;
 
     scrudFactory.card = {
         meta: "subscribedOn"
     };
 
     $.get('/ScrudFactory/View.html', function (view) {
-        $.get('/ScrudFactory/Form.html', function (form) {
-            $("#ScrudFactoryView").html(view);
-            $("#ScrudFactoryForm").html(form);
-            $.cachedScript("/bundles/scrudfactory-view.js");
-            $.cachedScript("/bundles/scrudfactory-form.js");
-        });
+        $("#ScrudFactoryView").html(view);
+        $.cachedScript("/bundles/scrudfactory-view.js");
     });
 </script>
 

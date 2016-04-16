@@ -1,7 +1,6 @@
 using System;
-using System.Linq;
-using System.Reflection;
-using Frapid.NPoco;
+using System.Runtime.CompilerServices;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace Frapid.DataAccess
 {
@@ -9,7 +8,9 @@ namespace Frapid.DataAccess
     {
         public static object GetPropertyValue(object target, string name)
         {
-            var site = System.Runtime.CompilerServices.CallSite<Func<System.Runtime.CompilerServices.CallSite, object, object>>.Create(Microsoft.CSharp.RuntimeBinder.Binder.GetMember(0, name, target.GetType(), new[] { Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo.Create(0, null) }));
+            var site =
+                CallSite<Func<CallSite, object, object>>.Create(Binder.GetMember(0, name, target.GetType(),
+                    new[] {CSharpArgumentInfo.Create(0, null)}));
             return site.Target(site, target);
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Frapid.Configuration.DbServer;
+using Frapid.NPoco;
 using Serilog;
 
 namespace Frapid.Configuration
@@ -95,6 +96,11 @@ namespace Frapid.Configuration
         public static string AddOffset(string tenant, string offset)
         {
             return GetServer(tenant).AddOffset(offset);
+        }
+
+        public static string AddReturnInsertedKey(string tenant, string primaryKeyName)
+        {
+            return GetServer(tenant).AddReturnInsertedKey(primaryKeyName);
         }
     }
 }

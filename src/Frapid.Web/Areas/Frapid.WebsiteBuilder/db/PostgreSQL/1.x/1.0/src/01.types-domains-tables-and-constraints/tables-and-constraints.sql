@@ -3,15 +3,15 @@ CREATE SCHEMA website;
 
 CREATE TABLE website.configurations
 (
-    configuration_id                                SERIAL PRIMARY KEY,
-    domain_name                                     national character varying(500) NOT NULL,
-    website_name                                    national character varying(500) NOT NULL,
-	description										text,
-	blog_title                                      national character varying(500),
-	blog_description							    text,	
-	is_default                                      boolean NOT NULL DEFAULT(true),
-    audit_user_id                                   integer REFERENCES account.users,
-    audit_ts                                        TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW())
+    configuration_id                            SERIAL PRIMARY KEY,
+    domain_name                                 national character varying(500) NOT NULL,
+    website_name                                national character varying(500) NOT NULL,
+	description									text,
+	blog_title                                  national character varying(500),
+	blog_description							text,	
+	is_default                                  boolean NOT NULL DEFAULT(true),
+    audit_user_id                               integer REFERENCES account.users,
+    audit_ts                                    TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW())
 );
 
 CREATE UNIQUE INDEX configuration_domain_name_uix
@@ -29,7 +29,9 @@ CREATE TABLE website.email_subscriptions
     confirmed_on                               	TIMESTAMP WITH TIME ZONE,
     unsubscribed                                boolean DEFAULT(false),
     subscribed_on                               TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),    
-    unsubscribed_on                             TIMESTAMP WITH TIME ZONE
+    unsubscribed_on                             TIMESTAMP WITH TIME ZONE,
+    audit_user_id                               integer REFERENCES account.users,
+    audit_ts                                    TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW())
 );
 
 CREATE TABLE website.categories

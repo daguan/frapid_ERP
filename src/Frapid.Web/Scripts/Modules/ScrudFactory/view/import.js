@@ -14,8 +14,12 @@
                     val = parseInt(val);
                 } else if (decimalNumber.indexOf(type) > -1) {
                     val = parseFloat(val);
+                } else if (dateTypes.indexOf(type) > -1) {
+                    //
+                } else if (booleans.indexOf(type) > -1) {
+                    val = (["true", "t", "yes", "y", "1"].indexOf(val.toString().toLowerCase()) > -1);
                 };
-            }
+            };
 
 
             entity[columnName] = val;
@@ -42,7 +46,7 @@ $("#file").change(function () {
         return;
     };
 
-    var supportedFileTypes = ["text/csv", "application/csv", "text/comma-separated-values"];
+    var supportedFileTypes = ["text/csv", "application/csv", "text/comma-separated-values", "application/vnd.ms-excel"];
 
     if (supportedFileTypes.indexOf(file.type) === -1) {
         $(".big.error").addClass("vpad8").html(stringFormat(window.Resources.Labels.UploadInvalidTryAgain(), file.type));

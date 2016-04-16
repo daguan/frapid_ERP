@@ -13,9 +13,14 @@ function parseLocalizedDate(dateString) {
     };
 
     var date = Date.parseExact(dateString, window.shortDateFormat);
-    var offset = date.getTimezoneOffset() * 60000;
 
-    return removeTimezone(new Date(date.getTime() - offset).toISOString());
+    if (date) {
+        var offset = date.getTimezoneOffset() * 60000;
+
+        return removeTimezone(new Date(date.getTime() - offset).toISOString());
+    }
+
+    return dateString;
 };
 
 function removeTimezone(dateTime) {

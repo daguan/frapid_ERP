@@ -5,6 +5,7 @@
 
     var els = $(".form.factory [data-property]");
 
+
     $.each(els, function() {
         var el = $(this);
         var property = $(this).attr("data-property");

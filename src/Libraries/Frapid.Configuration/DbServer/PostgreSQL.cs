@@ -1,4 +1,5 @@
 ﻿using System.Web.Hosting;
+using Frapid.Configuration.Db;
 using Frapid.Framework.Extensions;
 using Npgsql;
 
@@ -117,6 +118,11 @@ namespace Frapid.Configuration.DbServer
         public string AddOffset(string offset)
         {
             return $" OFFSET {offset}";
+        }
+
+        public string AddReturnInsertedKey(string primaryKeyName)
+        {
+            return $"RETURNING {Sanitizer.SanitizeIdentifierName(primaryKeyName)}";
         }
     }
 }

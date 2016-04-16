@@ -131,13 +131,16 @@
                 var el = $(this);
 
                 var allowed = el.is(":checked");
-                var accessTypeId = el.attr("data-type");
 
-                model.push({
-                    EntityName: objectId,
-                    AccessTypeId: accessTypeId,
-                    AllowAccess: allowed
-                });
+                if (allowed) {
+                    var accessTypeId = el.attr("data-type");
+
+                    model.push({
+                        EntityName: objectId,
+                        AccessTypeId: accessTypeId,
+                        AllowAccess: allowed
+                    });
+                };
             });
 
         });

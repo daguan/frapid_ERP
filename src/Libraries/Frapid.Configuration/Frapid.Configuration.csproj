@@ -67,6 +67,7 @@
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="Db\HStore.cs" />
     <Compile Include="Db\Mapper.cs" />
+    <Compile Include="Db\Sanitizer.cs" />
     <Compile Include="FrapidDbServer.cs" />
     <Compile Include="DbConvention.cs" />
     <Compile Include="DomainSerializer.cs" />

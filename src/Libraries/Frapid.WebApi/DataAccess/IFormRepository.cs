@@ -78,20 +78,22 @@ namespace Frapid.WebApi.DataAccess
         /// </summary>
         /// <param name="form">The dynamic IFormRepository class to insert or update.</param>
         /// <param name="customFields">The custom field collection.</param>
-        object AddOrEdit(dynamic form, List<CustomField> customFields);
+        object AddOrEdit(Dictionary<string, object> form, List<CustomField> customFields);
 
         /// <summary>
         ///     Inserts the instance of dynamic class to IFormRepository.
         /// </summary>
         /// <param name="form">The instance of IFormRepository class to insert.</param>
-        object Add(dynamic form);
+        /// <param name="customFields">The custom field collection.</param>
+        /// <param name="skipPrimaryKey">When skipped, the API will ignore primary key value on insert.</param>
+        object Add(Dictionary<string, object> form, List<CustomField> customFields, bool skipPrimaryKey);
 
         /// <summary>
         ///     Inserts or updates multiple instances of dynamic class to IFormRepository.;
         /// </summary>
         /// <param name="forms">List of IFormRepository instances to import.</param>
         /// <returns>Returns list of inserted object ids.</returns>
-        List<object> BulkImport(List<ExpandoObject> forms);
+        List<object> BulkImport(List<Dictionary<string, object>> forms);
 
 
         /// <summary>
@@ -99,7 +101,8 @@ namespace Frapid.WebApi.DataAccess
         /// </summary>
         /// <param name="form">The instance of IFormRepository class to update.</param>
         /// <param name="primaryKey">The value of the primary key which will be updated.</param>
-        void Update(dynamic form, object primaryKey);
+        /// <param name="customFields">The custom field collection.</param>
+        void Update(Dictionary<string, object> form, object primaryKey, List<CustomField> customFields);
 
         /// <summary>
         ///     Deletes the item from  IFormRepository against the primary key value.

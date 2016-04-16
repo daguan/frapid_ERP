@@ -2,6 +2,18 @@
 
 $("#FilterName").text(window.Resources.Titles.Untitled());
 
+function getFilterType(columnName) {
+    var type = window.Enumerable.From(metaDefinition.Columns)
+        .Where(function (x) { return x.ColumnName === columnName }).FirstOrDefault();
+
+    if (type) {
+        return type.DataType;
+    };
+
+    return "";
+};
+
+
 function getFilterName() {    
     var el = $("[data-selected-filter]");
     if (el.length) {
@@ -32,21 +44,24 @@ var getQuerystringFilters = function() {
         return false;
     };
 
-    function parseValue(propertyName, value) {
+    function parseValue(propertyName, val) {
         var type = getType(propertyName);
 
-        if (wholeNumbers.indexOf(type) > -1) {
-            value = parseInt(value || null);
-            return value;
+        if (isNullOrWhiteSpace(val)) {
+            val = null;
+        } else {
+            if (wholeNumbers.indexOf(type) > -1) {
+                val = parseInt(val);
+            } else if (decimalNumber.indexOf(type) > -1) {
+                val = parseFloat(val);
+            } else if (dateTypes.indexOf(type) > -1) {
+                val = window.parseLocalizedDate(val);
+            } else if (booleans.indexOf(type) > -1) {
+                val = (["true", "t", "yes", "y", "1"].indexOf(val.toString().toLowerCase()) > -1);
+            };
         };
 
-        if (decimalNumber.indexOf(type) > -1) {
-            value = parseFloat(value || null);
-            return value;
-        };
-
-
-        return value;
+        return val;
     };
 
 
@@ -57,6 +72,7 @@ var getQuerystringFilters = function() {
         if (ignoredQueryStrings.indexOf(item.key) === -1) {
             var key = toUnderscoreCase(item.key);
             var value = parseValue(item.key, item.value);
+            var type = getFilterType(item.key);
 
             var targetEl = $("#filter_" + key);
             if (targetEl.length) {
@@ -64,9 +80,9 @@ var getQuerystringFilters = function() {
             };
 
             if (isString(item.key)) {
-                filters.push(getAjaxColumnFilter("WHERE", key, FilterConditions.IsLike, value));
+                filters.push(getAjaxColumnFilter("WHERE", key, type, FilterConditions.IsLike, value));
             } else {
-                filters.push(getAjaxColumnFilter("WHERE", key, FilterConditions.IsEqualTo, value));
+                filters.push(getAjaxColumnFilter("WHERE", key, type, FilterConditions.IsEqualTo, value));
             };
         };
     });
@@ -242,6 +258,8 @@ $("#SaveFilterButton").click(function () {
         filter.column_name = Enumerable.From(localizedHeaders)
             .Where(function (x) { return x.localized === columnName }).ToArray()[0].columnName;
 
+        filter.data_type = getFilterType(filter.column_name);
+
         filter.filter_condition = parseInt(
             Enumerable.From(filterConditions)
             .Where(function (x) { return x.text === condition })
@@ -273,11 +291,12 @@ function getSelectedFilter() {
     $.each(els, function () {
         var el = $(this);
         var columnName = el.attr("data-column-name");
+        var dataType = el.attr("data-type");
         var filterCondition = el.attr("data-filter-condition");
         var filtervalue = el.attr("data-filter-value");
         var andValue = el.attr("data-filter-and-value");
 
-        filters.push(getAjaxColumnFilter("WHERE", columnName, filterCondition, filtervalue, andValue));
+        filters.push(getAjaxColumnFilter("WHERE", columnName, dataType, filterCondition, filtervalue, andValue));
     });
 
     var qs = getQuerystringFilters();
@@ -288,12 +307,14 @@ function getSelectedFilter() {
 };
 
 function showFilters(filters) {
+
     var target = $("[data-filter-labels]");
     target.html("");
 
     $.each(filters, function(i, filter) {
         var label = $("<a class='ui filter member label'>");
         label.attr("data-column-name", filter.column_name);
+        label.attr("data-type", filter.data_type);
         label.attr("data-filter-condition", filter.filter_condition);
         label.attr("data-filter-value", filter.filter_value);
         label.attr("data-filter-and-value", filter.filter_and_value);

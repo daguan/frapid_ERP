@@ -4,8 +4,8 @@
 
         var filters = [];
 
-        filters.push(window.getAjaxColumnFilter("WHERE", "table_name", FilterConditions.IsEqualTo, tableName));
-        filters.push(window.getAjaxColumnFilter("AND", "resource_id", FilterConditions.IsEqualTo, primaryKeyValue));
+        filters.push(window.getAjaxColumnFilter("WHERE", "table_name", "string", FilterConditions.IsEqualTo, tableName));
+        filters.push(window.getAjaxColumnFilter("AND", "resource_id", "string", FilterConditions.IsEqualTo, primaryKeyValue));
 
         var data = JSON.stringify(filters);
 
@@ -52,6 +52,8 @@
 
     ajax.success(function (response) {
         window.editData = response;
+        window.editing = true;
+
         displayEdit(response, false);
 
         customFieldRequest(tableName, primaryKeyValue).success(function (msg) {

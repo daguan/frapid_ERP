@@ -9,6 +9,7 @@
 
     ajax.success(function (response) {
         window.editData = response;
+        window.editing = true;
         $("#scrud").html("");
         $("#scrud-tab-menus").html("");
         $("#scrud-tab-members").html("");

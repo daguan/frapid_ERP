@@ -42,8 +42,8 @@ function getKanbans() {
     var url = "/api/forms/config/kanbans/get-where/1";
 
     var filters = [];
-    filters.push(getAjaxColumnFilter("WHERE", "object_name", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));
-    filters.push(getAjaxColumnFilter("WHERE", "user_id", FilterConditions.IsEqualTo, parseInt(window.userId)));
+    filters.push(getAjaxColumnFilter("WHERE", "object_name", "string", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));
+    filters.push(getAjaxColumnFilter("WHERE", "user_id", "int", FilterConditions.IsEqualTo, parseInt(window.userId)));
 
     var data = JSON.stringify(filters);
 

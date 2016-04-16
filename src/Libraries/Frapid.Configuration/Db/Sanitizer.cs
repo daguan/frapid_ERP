@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace Frapid.DataAccess
+namespace Frapid.Configuration.Db
 {
     public static class Sanitizer
     {

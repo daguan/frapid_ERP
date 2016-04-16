@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
+using Frapid.Configuration.Db;
 using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.DbPolicy;
@@ -142,7 +143,14 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} ORDER BY {this.PrimaryKey} LIMIT 50 OFFSET 0;";
+            //"SELECT * FROM {this.FullyQualifiedObjectName} 
+            //ORDER BY {this.PrimaryKey} LIMIT 50 OFFSET 0;";
+
+            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName}");
+            sql.OrderBy(this.PrimaryKey);
+            sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
+            sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
+
             return Factory.Get<dynamic>(this.Database, sql);
         }
 
@@ -168,9 +176,16 @@ namespace Frapid.WebApi.DataAccess
             }
 
             long offset = (pageNumber - 1)*50;
-            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} ORDER BY {this.PrimaryKey} LIMIT 50 OFFSET @0;";
 
-            return Factory.Get<dynamic>(this.Database, sql, offset);
+            //"SELECT * FROM {this.FullyQualifiedObjectName} 
+            //ORDER BY {this.PrimaryKey} LIMIT 50 OFFSET @0;";
+
+            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName}");
+            sql.OrderBy(this.PrimaryKey);
+            sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), offset);
+            sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
+
+            return Factory.Get<dynamic>(this.Database, sql);
         }
 
         public List<Filter> GetFilters(string database, string filterName)
@@ -332,7 +347,9 @@ namespace Frapid.WebApi.DataAccess
                 candidateKey += "_id";
             }
 
-            return candidateKey ?? "";
+            candidateKey  = candidateKey ?? "";
+
+            return Sanitizer.SanitizeIdentifierName(candidateKey);
         }
 
         private string GetNameColumnByConvention()

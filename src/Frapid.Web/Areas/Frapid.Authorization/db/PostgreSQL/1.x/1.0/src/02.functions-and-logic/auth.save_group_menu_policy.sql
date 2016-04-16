@@ -6,16 +6,26 @@
     _app_name       text
 );
 
+
+DROP FUNCTION IF EXISTS auth.save_group_menu_policy
+(
+    _role_id        integer,
+    _office_id      integer,
+    _menus          text,
+    _app_name       text
+);
+
 CREATE FUNCTION auth.save_group_menu_policy
 (
     _role_id        integer,
     _office_id      integer,
-    _menu_ids       int[],
+    _menus          text,
     _app_name       text
 )
 RETURNS void
 AS
 $$
+    DECLARE _menu_ids      integer[] = public.text_to_int_array(_menus);
 BEGIN
     IF(_role_id IS NULL OR _office_id IS NULL) THEN
         RETURN;

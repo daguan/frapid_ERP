@@ -181,10 +181,11 @@ BEGIN
         AND menu_name = ANY(_menu_names);
     END IF;
     
-    PERFORM auth.save_group_menu_policy(_role_id, _office_id, _menu_ids, _app_name);    
+    PERFORM auth.save_group_menu_policy(_role_id, _office_id, array_to_string(_menu_ids, ','), _app_name);    
 END
 $$
 LANGUAGE plpgsql;
+
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.get_apps.sql --<--<--
 DROP FUNCTION IF EXISTS auth.get_apps(_user_id integer, _office_id integer, _culture text);
@@ -723,16 +724,26 @@ DROP FUNCTION IF EXISTS auth.save_group_menu_policy
     _app_name       text
 );
 
+
+DROP FUNCTION IF EXISTS auth.save_group_menu_policy
+(
+    _role_id        integer,
+    _office_id      integer,
+    _menus          text,
+    _app_name       text
+);
+
 CREATE FUNCTION auth.save_group_menu_policy
 (
     _role_id        integer,
     _office_id      integer,
-    _menu_ids       int[],
+    _menus          text,
     _app_name       text
 )
 RETURNS void
 AS
 $$
+    DECLARE _menu_ids      integer[] = public.text_to_int_array(_menus);
 BEGIN
     IF(_role_id IS NULL OR _office_id IS NULL) THEN
         RETURN;
@@ -777,20 +788,22 @@ DROP FUNCTION IF EXISTS auth.save_user_menu_policy
 (
     _user_id                        integer,
     _office_id                      integer,
-    _allowed_menu_ids               int[],
-    _disallowed_menu_ids            int[]
+    _allowed                        text,
+    _disallowed                     text
 );
 
 CREATE FUNCTION auth.save_user_menu_policy
 (
     _user_id                        integer,
     _office_id                      integer,
-    _allowed_menu_ids               int[],
-    _disallowed_menu_ids            int[]
+    _allowed                        text,
+    _disallowed                     text
 )
 RETURNS void
 VOLATILE AS
 $$
+    DECLARE _allowed_menu_ids       integer[] = public.text_to_int_array(_allowed);
+    DECLARE _disallowed_menu_ids    integer[] = public.text_to_int_array(_disallowed);
 BEGIN
     INSERT INTO auth.menu_access_policy(office_id, user_id, menu_id)
     SELECT _office_id, _user_id, core.menus.menu_id

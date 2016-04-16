@@ -40,8 +40,11 @@ namespace Frapid.NPoco
             Type type;
             if (member is FieldInfo)
                 type = ((FieldInfo) member).FieldType;
-            else
+            else if (member is PropertyInfo)
                 type = ((PropertyInfo) member).PropertyType;
+            else
+                type = member.GetType();
+
             return type;
         }
 

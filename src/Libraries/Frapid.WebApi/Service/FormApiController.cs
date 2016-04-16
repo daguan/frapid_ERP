@@ -563,10 +563,10 @@ namespace Frapid.WebApi.Service
         [RestAuthorize]
         public object AddOrEdit(string schemaName, string tableName, [FromBody] JArray form)
         {
-            dynamic user = form[0].ToObject<ExpandoObject>(JsonHelper.GetJsonSerializer());
+            var item = form[0].ToObject<Dictionary<string, object>>();
             var customFields = form[1].ToObject<List<CustomField>>(JsonHelper.GetJsonSerializer());
 
-            if (user == null)
+            if (item == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
             }
@@ -574,7 +574,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.AddOrEdit(user, customFields);
+                return repository.AddOrEdit(item, customFields);
             }
             catch (UnauthorizedException)
             {
@@ -597,11 +597,15 @@ namespace Frapid.WebApi.Service
         }
 
         [AcceptVerbs("POST")]
-        [Route("~/api/forms/{schemaName}/{tableName}/add/{user}")]
+        [Route("~/api/forms/{schemaName}/{tableName}/add")]
+        [Route("~/api/forms/{schemaName}/{tableName}/add/{skipPrimaryKey:bool}")]
         [RestAuthorize]
-        public void Add(string schemaName, string tableName, dynamic user)
+        public void Add(string schemaName, string tableName, [FromBody] JArray form, bool skipPrimaryKey = true)
         {
-            if (user == null)
+            var item = form[0].ToObject<Dictionary<string, object>>();
+            var customFields = form[1].ToObject<List<CustomField>>(JsonHelper.GetJsonSerializer());
+
+            if (item == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
             }
@@ -609,7 +613,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                repository.Add(user);
+                repository.Add(item, customFields, skipPrimaryKey);
             }
             catch (UnauthorizedException)
             {
@@ -634,9 +638,12 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("PUT")]
         [Route("~/api/forms/{schemaName}/{tableName}/edit/{primaryKey}")]
         [RestAuthorize]
-        public void Edit(string schemaName, string tableName, string primaryKey, [FromBody] dynamic user)
+        public void Edit(string schemaName, string tableName, string primaryKey, [FromBody] JArray form)
         {
-            if (user == null)
+            var item = form[0].ToObject<Dictionary<string, object>>();
+            var customFields = form[1].ToObject<List<CustomField>>(JsonHelper.GetJsonSerializer());
+
+            if (item == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
             }
@@ -644,7 +651,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                repository.Update(user, primaryKey);
+                repository.Update(item, primaryKey, customFields);
             }
             catch (UnauthorizedException)
             {
@@ -666,9 +673,9 @@ namespace Frapid.WebApi.Service
 #endif
         }
 
-        private List<ExpandoObject> ParseCollection(JArray collection)
+        private List<Dictionary<string, object>> ParseCollection(JArray collection)
         {
-            return JsonConvert.DeserializeObject<List<ExpandoObject>>(collection.ToString(),
+            return JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(collection.ToString(),
                 JsonHelper.GetJsonSerializerSettings());
         }
 
@@ -677,9 +684,9 @@ namespace Frapid.WebApi.Service
         [RestAuthorize]
         public List<object> BulkImport(string schemaName, string tableName, [FromBody] JArray collection)
         {
-            var userCollection = this.ParseCollection(collection);
+            var items = this.ParseCollection(collection);
 
-            if (userCollection == null || userCollection.Count.Equals(0))
+            if (items == null || items.Count.Equals(0))
             {
                 return null;
             }
@@ -687,7 +694,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.BulkImport(userCollection);
+                return repository.BulkImport(items);
             }
             catch (UnauthorizedException)
             {

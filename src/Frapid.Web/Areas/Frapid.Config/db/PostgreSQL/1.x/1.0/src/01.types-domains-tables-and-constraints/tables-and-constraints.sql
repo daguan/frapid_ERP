@@ -75,6 +75,7 @@ CREATE TABLE config.filters
     is_default_admin                            boolean NOT NULL DEFAULT(false),
     filter_statement                            national character varying(12) NOT NULL DEFAULT('WHERE'),
     column_name                                 text NOT NULL,
+	data_type									text NOT NULL DEFAULT(''),
     filter_condition                            integer NOT NULL,
     filter_value                                text,
     filter_and_value                            text,

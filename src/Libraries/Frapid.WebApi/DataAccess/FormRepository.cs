@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
@@ -155,7 +154,11 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} ORDER BY {this.PrimaryKey} LIMIT 1;";
+            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName}");
+            sql.OrderBy(this.PrimaryKey);
+            sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
+            sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 1);
+
             return Factory.Get<dynamic>(this.Database, sql).FirstOrDefault();
         }
 
@@ -180,9 +183,17 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            string sql =
-                $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE {this.PrimaryKey} < @0 ORDER BY {this.PrimaryKey} DESC LIMIT 1;";
-            return Factory.Get<dynamic>(this.Database, sql, primaryKey).FirstOrDefault();
+
+            //$"SELECT * FROM {this.FullyQualifiedObjectName} WHERE {this.PrimaryKey} < @0 
+            //ORDER BY {this.PrimaryKey} DESC LIMIT 1;";
+
+            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName}");
+            sql.Where($"{this.PrimaryKey} < @0", primaryKey);
+            sql.Append($"ORDER BY {this.PrimaryKey} DESC");
+            sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
+            sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 1);
+
+            return Factory.Get<dynamic>(this.Database, sql).FirstOrDefault();
         }
 
         public dynamic GetNext(object primaryKey)
@@ -206,9 +217,16 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            string sql =
-                $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE {this.PrimaryKey} > @0 ORDER BY {this.PrimaryKey} LIMIT 1;";
-            return Factory.Get<dynamic>(this.Database, sql, primaryKey).FirstOrDefault();
+            //$"SELECT * FROM {this.FullyQualifiedObjectName} WHERE {this.PrimaryKey} > @0 
+            //ORDER BY {this.PrimaryKey} LIMIT 1;";
+
+            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName}");
+            sql.Where($"{this.PrimaryKey} > @0", primaryKey);
+            sql.OrderBy(this.PrimaryKey);
+            sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
+            sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 1);
+
+            return Factory.Get<dynamic>(this.Database, sql).FirstOrDefault();
         }
 
 
@@ -233,7 +251,14 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} ORDER BY {this.PrimaryKey} DESC LIMIT 1;";
+            //$"SELECT * FROM {this.FullyQualifiedObjectName} 
+            //ORDER BY {this.PrimaryKey} DESC LIMIT 1;";
+
+            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName}");
+            sql.Append($"ORDER BY {this.PrimaryKey} DESC");
+            sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
+            sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 1);
+
             return Factory.Get<dynamic>(this.Database, sql).FirstOrDefault();
         }
 
@@ -292,7 +317,8 @@ namespace Frapid.WebApi.DataAccess
                 return Factory.Get<CustomField>(this.Database, sql);
             }
 
-            sql = FrapidDbServer.GetProcedureCommand(this.Database, "config.get_custom_field_definition", new[] {"@0", "@1"});
+            sql = FrapidDbServer.GetProcedureCommand(this.Database, "config.get_custom_field_definition",
+                new[] {"@0", "@1"});
             return Factory.Get<CustomField>(this.Database, sql, this.FullyQualifiedObjectName, resourceId);
         }
 
@@ -323,77 +349,28 @@ namespace Frapid.WebApi.DataAccess
             return Factory.Get<DisplayField>(this.Database, sql);
         }
 
-        public object AddOrEdit(dynamic item, List<CustomField> customFields)
+        public object AddOrEdit(Dictionary<string, object> item, List<CustomField> customFields)
         {
             if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
 
-            item.audit_user_id = this.UserId;
-            item.audit_ts = DateTimeOffset.UtcNow;
-
-            object primaryKeyValue = PropertyManager.GetPropertyValue(item, this.PrimaryKey);
+            var primaryKeyValue = item[this.PrimaryKey];
 
             if (primaryKeyValue != null)
             {
-                this.Update(item, primaryKeyValue);
+                this.Update(item, primaryKeyValue, customFields);
             }
             else
             {
-                primaryKeyValue = this.Add(item);
-            }
-
-            string sql = $"DELETE FROM config.custom_fields WHERE custom_field_setup_id IN(" +
-                         "SELECT custom_field_setup_id " +
-                         "FROM config.custom_field_setup " +
-                         "WHERE form_name=config.get_custom_field_form_name('{this.FullyQualifiedObjectName}')" +
-                         ");";
-
-            Factory.NonQuery(this.Database, sql);
-
-            if (customFields == null)
-            {
-                return primaryKeyValue;
-            }
-
-            foreach (var field in customFields)
-            {
-                sql = $"INSERT INTO config.custom_fields(custom_field_setup_id, resource_id, value) " +
-                      "SELECT config.get_custom_field_setup_id_by_table_name('{this.FullyQualifiedObjectName}', @0::character varying(100)), " +
-                      "@1, @2;";
-
-                Factory.NonQuery(this.Database, sql, field.FieldName, primaryKeyValue, field.Value);
+                primaryKeyValue = this.Add(item, customFields, true);
             }
 
             return primaryKeyValue;
         }
 
-        public object Add(dynamic item)
-        {
-            if (string.IsNullOrWhiteSpace(this.Database))
-            {
-                return null;
-            }
-
-            if (!this.SkipValidation)
-            {
-                if (!this.Validated)
-                {
-                    this.Validate(AccessTypeEnum.Create, this.LoginId, this.Database, false);
-                }
-                if (!this.HasAccess)
-                {
-                    Log.Information(
-                        $"Access to add entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}. {item}");
-                    throw new UnauthorizedException("Access is denied.");
-                }
-            }
-
-            return Factory.Insert(this.Database, item, this.FullyQualifiedObjectName, this.PrimaryKey);
-        }
-
-        public List<object> BulkImport(List<ExpandoObject> items)
+        public List<object> BulkImport(List<Dictionary<string, object>> items)
         {
             if (!this.SkipValidation)
             {
@@ -414,27 +391,60 @@ namespace Frapid.WebApi.DataAccess
             int line = 0;
             try
             {
-                using (var db = new Database(FrapidDbServer.GetConnectionString(this.Database), Factory.GetProviderName(this.Database)))
+                using (
+                    var db = new Database(FrapidDbServer.GetConnectionString(this.Database),
+                        Factory.GetProviderName(this.Database)))
                 {
                     using (var transaction = db.GetTransaction())
                     {
-                        foreach (dynamic item in items)
+                        foreach (var item in items)
                         {
                             line++;
 
-                            item.audit_user_id = this.UserId;
-                            item.audit_ts = DateTimeOffset.UtcNow;
+                            item["audit_user_id"] = this.UserId;
+                            item["audit_ts"] = DateTimeOffset.UtcNow;
 
-                            object primaryKeyValue = PropertyManager.GetPropertyValue(item, this.PrimaryKey);
+                            var primaryKeyValue = item[this.PrimaryKey];
 
                             if (primaryKeyValue != null)
                             {
                                 result.Add(primaryKeyValue);
-                                db.Update(this.FullyQualifiedObjectName, this.PrimaryKey, item, primaryKeyValue);
+                                var sql = new Sql("UPDATE " + this.FullyQualifiedObjectName + " SET");
+
+                                int index = 0;
+
+                                foreach (var prop in item.Where(x => !x.Key.Equals(this.PrimaryKey)))
+                                {
+                                    if (index > 0)
+                                    {
+                                        sql.Append(",");
+                                    }
+
+                                    sql.Append(Sanitizer.SanitizeIdentifierName(prop.Key) + "=@0", prop.Value);
+                                    index++;
+                                }
+
+
+                                sql.Where(this.PrimaryKey + "=@0", primaryKeyValue);
+
+                                db.Execute(sql);
                             }
                             else
                             {
-                                result.Add(db.Insert(this.FullyQualifiedObjectName, this.PrimaryKey, item));
+                                string columns = string.Join(",",
+                                    item.Where(x => !x.Key.Equals(this.PrimaryKey))
+                                        .Select(x => Sanitizer.SanitizeIdentifierName(x.Key)));
+                                string parameters = string.Join(",",
+                                    Enumerable.Range(0, item.Count - 1).Select(x => "@" + x));
+                                var arguments =
+                                    item.Where(x => !x.Key.Equals(this.PrimaryKey)).Select(x => x.Value).ToArray();
+
+                                var sql = new Sql("INSERT INTO " + this.FullyQualifiedObjectName + "(" + columns + ")");
+                                sql.Append("SELECT " + parameters, arguments);
+
+                                sql.Append(FrapidDbServer.AddReturnInsertedKey(this.Database, this.PrimaryKey));
+
+                                result.Add(db.ExecuteScalar<object>(sql));
                             }
                         }
 
@@ -451,7 +461,7 @@ namespace Frapid.WebApi.DataAccess
             }
         }
 
-        public void Update(dynamic item, object primaryKey)
+        public void Update(Dictionary<string, object> item, object primaryKeyValue, List<CustomField> customFields)
         {
             if (string.IsNullOrWhiteSpace(this.Database))
             {
@@ -472,7 +482,33 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            Factory.Update(this.Database, item, primaryKey, this.FullyQualifiedObjectName, this.PrimaryKey);
+            item["audit_user_id"] = this.UserId;
+            item["audit_ts"] = DateTimeOffset.UtcNow;
+
+            using (
+                var db = DbProvider.Get(FrapidDbServer.GetConnectionString(this.Database), this.Database).GetDatabase())
+            {
+                var sql = new Sql("UPDATE " + this.FullyQualifiedObjectName + " SET");
+
+                int index = 0;
+
+                foreach (var prop in item.Where(x => !x.Key.Equals(this.PrimaryKey)))
+                {
+                    if (index > 0)
+                    {
+                        sql.Append(",");
+                    }
+
+                    sql.Append(Sanitizer.SanitizeIdentifierName(prop.Key) + "=@0", prop.Value);
+                    index++;
+                }
+
+
+                sql.Where(this.PrimaryKey + "=@0", primaryKeyValue);
+
+                db.Execute(sql);
+                this.AddCustomFields(primaryKeyValue, customFields);
+            }
         }
 
         public void Delete(object primaryKey)
@@ -490,7 +526,8 @@ namespace Frapid.WebApi.DataAccess
                 }
                 if (!this.HasAccess)
                 {
-                    Log.Information($"Access to delete entity \"{this.FullyQualifiedObjectName}\" with Primary Key {this.PrimaryKey} was denied to the user with Login ID {this.LoginId}.");
+                    Log.Information(
+                        $"Access to delete entity \"{this.FullyQualifiedObjectName}\" with Primary Key {this.PrimaryKey} was denied to the user with Login ID {this.LoginId}.");
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -520,7 +557,12 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} ORDER BY {this.PrimaryKey} LIMIT 50 OFFSET 0;";
+
+            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName}");
+            sql.OrderBy(this.PrimaryKey);
+            sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
+            sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
+
             return Factory.Get<dynamic>(this.Database, sql);
         }
 
@@ -559,7 +601,7 @@ namespace Frapid.WebApi.DataAccess
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 return db.FetchBy<Filter>(sql => sql.Where(u => u.ObjectName.Equals(this.FullyQualifiedObjectName)
-                && u.FilterName.ToUpperInvariant().Equals(filterName.ToUpperInvariant())));
+                                                                && u.FilterName.ToLower().Equals(filterName.ToLower())));
             }
         }
 
@@ -700,6 +742,82 @@ namespace Frapid.WebApi.DataAccess
             return Factory.Get<dynamic>(this.Database, sql);
         }
 
+        public object Add(Dictionary<string, object> item, List<CustomField> customFields, bool skipPrimaryKey)
+        {
+            if (string.IsNullOrWhiteSpace(this.Database))
+            {
+                return null;
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Create, this.LoginId, this.Database, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information(
+                        $"Access to add entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}. {item}");
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            item["audit_user_id"] = this.UserId;
+            item["audit_ts"] = DateTimeOffset.UtcNow;
+
+            using (
+                var db = DbProvider.Get(FrapidDbServer.GetConnectionString(this.Database), this.Database).GetDatabase())
+            {
+                string columns = string.Join(",",
+                    skipPrimaryKey
+                        ? item.Where(x => !x.Key.Equals(this.PrimaryKey))
+                            .Select(x => Sanitizer.SanitizeIdentifierName(x.Key))
+                        : item.Select(x => Sanitizer.SanitizeIdentifierName(x.Key)));
+
+                string parameters = string.Join(",",
+                    Enumerable.Range(0, skipPrimaryKey ? item.Count - 1 : item.Count).Select(x => "@" + x));
+
+                var arguments = skipPrimaryKey
+                    ? item.Where(x => !x.Key.Equals(this.PrimaryKey)).Select(x => x.Value).ToArray()
+                    : item.Select(x => x.Value).ToArray();
+
+                var sql = new Sql("INSERT INTO " + this.FullyQualifiedObjectName + "(" + columns + ")");
+                sql.Append("SELECT " + parameters, arguments);
+
+                sql.Append(FrapidDbServer.AddReturnInsertedKey(this.Database, this.PrimaryKey));
+
+                var primaryKeyValue = db.ExecuteScalar<object>(sql);
+                this.AddCustomFields(primaryKeyValue, customFields);
+                return primaryKeyValue;
+            }
+        }
+
+        public void AddCustomFields(object primaryKeyValue, List<CustomField> customFields)
+        {
+            string sql = $"DELETE FROM config.custom_fields WHERE custom_field_setup_id IN(" +
+                         "SELECT custom_field_setup_id " +
+                         "FROM config.custom_field_setup " +
+                         "WHERE form_name=config.get_custom_field_form_name('{this.FullyQualifiedObjectName}')" +
+                         ");";
+
+            Factory.NonQuery(this.Database, sql);
+
+            if (customFields == null)
+            {
+                return;
+            }
+
+            foreach (var field in customFields)
+            {
+                sql = $"INSERT INTO config.custom_fields(custom_field_setup_id, resource_id, value) " +
+                      "SELECT config.get_custom_field_setup_id_by_table_name('{this.FullyQualifiedObjectName}', @0::character varying(100)), " +
+                      "@1, @2;";
+
+                Factory.NonQuery(this.Database, sql, field.FieldName, primaryKeyValue, field.Value);
+            }
+        }
+
         private string GetTableName()
         {
             string tableName = this._ObjectName.Replace("-", "_");
@@ -714,7 +832,9 @@ namespace Frapid.WebApi.DataAccess
                 candidateKey += "_id";
             }
 
-            return candidateKey ?? "";
+            candidateKey = candidateKey ?? "";
+
+            return Sanitizer.SanitizeIdentifierName(candidateKey);
         }
 
         private string GetNameColumn()

@@ -125,5 +125,10 @@ namespace Frapid.Configuration.DbServer
         {
             return $" OFFSET {offset} ROWS";
         }
+
+        public string AddReturnInsertedKey(string primaryKeyName)
+        {
+            return "; SELECT SCOPE_IDENTITY();";
+        }
     }
 }

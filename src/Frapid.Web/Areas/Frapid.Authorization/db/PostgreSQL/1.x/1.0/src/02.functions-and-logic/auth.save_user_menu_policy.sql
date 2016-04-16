@@ -2,20 +2,22 @@ DROP FUNCTION IF EXISTS auth.save_user_menu_policy
 (
     _user_id                        integer,
     _office_id                      integer,
-    _allowed_menu_ids               int[],
-    _disallowed_menu_ids            int[]
+    _allowed                        text,
+    _disallowed                     text
 );
 
 CREATE FUNCTION auth.save_user_menu_policy
 (
     _user_id                        integer,
     _office_id                      integer,
-    _allowed_menu_ids               int[],
-    _disallowed_menu_ids            int[]
+    _allowed                        text,
+    _disallowed                     text
 )
 RETURNS void
 VOLATILE AS
 $$
+    DECLARE _allowed_menu_ids       integer[] = public.text_to_int_array(_allowed);
+    DECLARE _disallowed_menu_ids    integer[] = public.text_to_int_array(_disallowed);
 BEGIN
     INSERT INTO auth.menu_access_policy(office_id, user_id, menu_id)
     SELECT _office_id, _user_id, core.menus.menu_id

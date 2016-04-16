@@ -24,6 +24,7 @@
 
         url = window.scrudFactory.viewAPI + "/count-where";
         var data = JSON.stringify(filters);
+
         return getAjaxRequest(url, "POST", data);
     };
 

@@ -20,7 +20,7 @@ BEGIN
 END;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.poco.sql --<--<--
-GO
+
 
 IF OBJECT_ID('dbo.get_app_data_type') IS NOT NULL
 DROP FUNCTION dbo.get_app_data_type;
@@ -216,7 +216,9 @@ BEGIN
 			information_schema.columns.ordinal_position,
 			information_schema.columns.column_name,
 			information_schema.columns.is_nullable,
-			information_schema.columns.data_type,
+			CASE WHEN information_schema.columns.domain_name IS NOT NULL 
+			THEN information_schema.columns.domain_name
+			ELSE information_schema.columns.data_type END AS data_type,
 			information_schema.columns.column_default,
 			information_schema.columns.character_maximum_length,
 			dbo.is_primary_key(@schema, @name, information_schema.columns.column_name),
@@ -234,6 +236,7 @@ BEGIN
 	WHILE @this_row<@total_rows
 	BEGIN
 		SET @this_row = @this_row + 1;
+
 		SELECT 
 			@default = value
 		FROM @result
@@ -243,6 +246,8 @@ BEGIN
 		UPDATE @result
 		SET value = @parsed
 		WHERE row_id=@this_row;
+
+		SET @parsed = NULL;
 	END;
 
 	UPDATE @result

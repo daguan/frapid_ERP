@@ -126,14 +126,14 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, keyField
                 expression = valueField.replace("{{", "").replace("}}", "");
                 text = eval(expression);
             } else {
-                text = this[valueField].toString();
+                text = (this[valueField] || "").toString();
             };
 
             if (valueIsExpression) {
                 expression = keyField.replace("{{", "").replace("}}", "");
                 value = eval(expression);
             } else {
-                value = this[keyField].toString();
+                value = (this[keyField] || "").toString();
             };
         };
 
@@ -268,11 +268,12 @@ var getAjaxErrorMessage = function (xhr) {
     return "";
 };
 
-function getAjaxColumnFilter(statement, columnName, filterCondition, filtervalue, andValue) {
+function getAjaxColumnFilter(statement, columnName, dataType, filterCondition, filtervalue, andValue) {
     var filter = new Object();
 
     filter.filter_statement = (statement || "WHERE");
     filter.column_name = columnName;
+    filter.data_type = dataType;
     filter.filter_condition = filterCondition;
     filter.filter_value = filtervalue;
     filter.filter_and_value = andValue;

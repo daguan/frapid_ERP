@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
 using Frapid.DataAccess;
 using Frapid.Messaging.DTO;
+using Frapid.NPoco;
 
 namespace Frapid.Messaging.DAL
 {
@@ -26,12 +26,16 @@ namespace Frapid.Messaging.DAL
 
         public static void SetSuccess(string database, long queueId)
         {
-            dynamic poco = new ExpandoObject();
-            poco.queue_id = queueId;
-            poco.delivered = true;
-            poco.delivered_on = DateTimeOffset.UtcNow;
+            var sql = new Sql("UPDATE config.email_queue SET");
+            sql.Append("queue_id=@0, ", queueId);
+            sql.Append("delivered=@0, ", true);
+            sql.Append("delivered_on=@0, ", DateTimeOffset.UtcNow);
+            sql.Where("queue_id=@0, ", queueId);
 
-            Factory.Update(database, poco, queueId, "config.email_queue", "queue_id");
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database), database).GetDatabase())
+            {
+                db.Execute(sql);
+            }
         }
     }
 }

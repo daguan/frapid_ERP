@@ -1,11 +1,68 @@
-﻿CREATE OR REPLACE FUNCTION poco_get_table_function_annotation(
-    IN _schema_name text,
-    IN _table_name text)
-  RETURNS TABLE(id integer, column_name text, is_nullable text, udt_name text, column_default text, max_length integer, is_primary_key text) AS
-$BODY$
+﻿DROP FUNCTION IF EXISTS public.text_to_int_array
+(
+    _input                              text,
+    _remove_nulls                       boolean
+);
+
+CREATE FUNCTION public.text_to_int_array
+(
+    _input                              text,
+    _remove_nulls                       boolean = true
+)
+RETURNS integer[]
+STABLE
+AS
+$$
+    DECLARE _int_array                  integer[];
+BEGIN
+    WITH items
+    AS
+    (
+        SELECT
+            item, 
+            item ~ '^[0-9]+$' AS is_number
+        FROM 
+            unnest(regexp_split_to_array(_input, ',')) AS item
+    )
+    SELECT
+        array_agg(item)
+    INTO
+        _int_array
+    FROM items
+    WHERE is_number;
+
+    RETURN _int_array;   
+END
+$$
+LANGUAGE plpgsql;
+
+
+DROP FUNCTION IF EXISTS public.poco_get_table_function_annotation
+(
+    _schema_name            text,
+    _table_name             text
+);
+
+CREATE FUNCTION public.poco_get_table_function_annotation
+(
+    _schema_name            text,
+    _table_name             text
+)
+RETURNS TABLE
+(
+    id                      integer, 
+    column_name             text, 
+    nullable                text, 
+    udt_name                text, 
+    column_default          text, 
+    max_length              integer, 
+    primary_key             text
+) AS
+$$
     DECLARE _args           text;
 BEGIN
     DROP TABLE IF EXISTS temp_annonation;
+
     CREATE TEMPORARY TABLE temp_annonation
     (
         id                      SERIAL,
@@ -43,10 +100,8 @@ BEGIN
     RETURN QUERY
     SELECT * FROM temp_annonation;
 END
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100
-  ROWS 1000;
+$$
+LANGUAGE plpgsql;
 
   
 DROP FUNCTION IF EXISTS get_app_data_type(_db_data_type text);
@@ -79,18 +134,18 @@ $$
 LANGUAGE plpgsql;
 
 
-DROP FUNCTION IF EXISTS poco_get_table_function_definition(_schema text, _name text);
+DROP FUNCTION IF EXISTS public.poco_get_table_function_definition(_schema text, _name text);
 
-CREATE FUNCTION poco_get_table_function_definition(_schema text, _name text)
+CREATE FUNCTION public.poco_get_table_function_definition(_schema text, _name text)
 RETURNS TABLE
 (
     id                      bigint,
     column_name             text,
-    is_nullable             text,
+    nullable                text,
     udt_name                text,
     column_default          text,
     max_length              integer,
-    is_primary_key          text,
+    primary_key             text,
     data_type               text
 )
 AS
@@ -255,9 +310,17 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION poco_get_tables(IN _schema text)
-  RETURNS TABLE(table_schema name, table_name name, table_type text, has_duplicate boolean) AS
-$BODY$
+DROP FUNCTION IF EXISTS public.poco_get_tables(_schema text);
+
+CREATE FUNCTION public.poco_get_tables(_schema text)
+RETURNS TABLE
+(
+    table_schema                name, 
+    table_name                  name, 
+    table_type                  text, 
+    has_duplicate               boolean
+) AS
+$$
 BEGIN
     CREATE TEMPORARY TABLE _t
     (
@@ -311,26 +374,22 @@ BEGIN
     RETURN QUERY
     SELECT * FROM _t;
 END
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100
-  ROWS 1000;
-ALTER FUNCTION poco_get_tables(text)
-  OWNER TO frapid_db_user;
+$$
+LANGUAGE plpgsql;
 
-  -- Function: parse_default(text)
+DROP FUNCTION IF EXISTS public.parse_default(text);
 
--- DROP FUNCTION parse_default(text);
-
-CREATE OR REPLACE FUNCTION parse_default(text)
-  RETURNS text AS
-$BODY$
-DECLARE _sql text;
-DECLARE _val text;
+CREATE OR REPLACE FUNCTION public.parse_default(text)
+RETURNS text 
+AS
+$$
+    DECLARE _sql text;
+    DECLARE _val text;
 BEGIN
-    IF($1 LIKE '%::%' AND $1 NOT LIKE 'nextval%') THEN
+    IF($1 NOT LIKE 'nextval%') THEN
         _sql := 'SELECT ' || $1;
         EXECUTE _sql INTO _val;
+        RAISE NOTICE '%', _sql;
         RETURN _val;
     END IF;
 
@@ -340,23 +399,16 @@ BEGIN
 
     RETURN $1;
 END
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
-ALTER FUNCTION parse_default(text)
-  OWNER TO frapid_db_user;
+$$
+LANGUAGE plpgsql;
 
--- Function: explode_array(anyarray)
+DROP FUNCTION IF EXISTS public.explode_array(in_array anyarray);
 
--- DROP FUNCTION explode_array(anyarray);
-
-CREATE OR REPLACE FUNCTION explode_array(in_array anyarray)
-  RETURNS SETOF anyelement AS
-$BODY$
+CREATE FUNCTION public.explode_array(in_array anyarray)
+RETURNS SETOF anyelement
+IMMUTABLE
+AS
+$$
     SELECT ($1)[s] FROM generate_series(1,array_upper($1, 1)) AS s;
-$BODY$
-  LANGUAGE sql IMMUTABLE
-  COST 100
-  ROWS 1000;
-ALTER FUNCTION explode_array(anyarray)
-  OWNER TO frapid_db_user;
+$$
+LANGUAGE sql;

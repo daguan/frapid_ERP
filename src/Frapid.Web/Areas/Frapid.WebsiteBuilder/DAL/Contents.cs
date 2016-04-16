@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
 using Frapid.DataAccess;
@@ -55,7 +54,8 @@ namespace Frapid.WebsiteBuilder.DAL
         }
 
 
-        public static IEnumerable<PublishedContentView> GetBlogContents(string tenant, string categoryAlias, int limit, int offset)
+        public static IEnumerable<PublishedContentView> GetBlogContents(string tenant, string categoryAlias, int limit,
+            int offset)
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
@@ -104,7 +104,7 @@ namespace Frapid.WebsiteBuilder.DAL
 
         internal static void AddHit(string tenant, string categoryAlias, string alias)
         {
-            string sql = FrapidDbServer.GetProcedureCommand(tenant, "website.add_hit", new []{"@0", "@1"});
+            string sql = FrapidDbServer.GetProcedureCommand(tenant, "website.add_hit", new[] {"@0", "@1"});
             Factory.NonQuery(tenant, sql, categoryAlias, alias);
         }
 

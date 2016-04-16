@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Frapid.NPoco;
 using NpgsqlTypes;
 
@@ -34,6 +35,7 @@ namespace Frapid.Configuration.Db
                             return new DateTimeOffset((DateTime) tstz);
                         }
                     }
+
                     if (x is NpgsqlTimeStamp)
                     {
                         if (destType == typeof (DateTime))
@@ -45,6 +47,7 @@ namespace Frapid.Configuration.Db
                             return (DateTime?) (NpgsqlTimeStamp) x;
                         }
                     }
+
                     if (x is NpgsqlDate)
                     {
                         if (destType == typeof (DateTime))
@@ -56,19 +59,27 @@ namespace Frapid.Configuration.Db
                             return (DateTime?) (NpgsqlDate) x;
                         }
                     }
+
                     if (x is DateTime)
                     {
-                        if (destType == typeof (DateTimeOffset))
+                        if (destType == typeof (DateTimeOffset) || destType == typeof (DateTimeOffset?))
                         {
+                            //x is not null
                             return new DateTimeOffset((DateTime) x);
                         }
+
+                        return x;
                     }
+
                     if (x is DateTimeOffset)
                     {
-                        if (destType == typeof (DateTime))
+                        if (destType == typeof (DateTime) || destType == typeof (DateTime?))
                         {
+                            //x is not null
                             return ((DateTimeOffset) x).DateTime;
                         }
+
+                        return (DateTimeOffset) x;
                     }
 
                     return x;
@@ -85,9 +96,20 @@ namespace Frapid.Configuration.Db
 
         public override Func<object, object> GetToDbConverter(Type destType, Type sourceType)
         {
+            if (sourceType == null)
+            {
+                return x => x;
+            }
+
+
             if (sourceType == typeof (HStore))
             {
                 return x => ((HStore) x).ToSqlString();
+            }
+
+            if (sourceType == typeof (string) && destType == typeof (bool))
+            {
+                return x => new[] {"TRUE", "YES", "T"}.Contains(x.ToString().ToUpperInvariant());
             }
 
             return base.GetToDbConverter(destType, sourceType);

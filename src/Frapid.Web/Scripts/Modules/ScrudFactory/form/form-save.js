@@ -1,8 +1,28 @@
 ﻿saveButton.click(function () {
     triggerOnSavingEvent();
 
-    function request(entity, customFields) {
-        var url = window.scrudFactory.formAPI + "/add-or-edit";
+    function getType() {
+        function skipPrimaryKey() {
+            return $("[data-primarykey]").is("[readonly]");
+        };
+
+        var type = "add";
+
+        if (!skipPrimaryKey()) {
+            type += "/false";
+        };
+
+        if (window.editing) {
+            type = "edit";
+        };
+
+        return type;
+    };
+
+
+    function request(type, entity, customFields) {
+        var url = window.scrudFactory.formAPI + "/" + type;
+
         var form = [];
 
         form.push(entity);
@@ -26,33 +46,29 @@
 
     bigError.removeClass("vpad16").html("");
 
-    function getFormValue(columnName, dataType, isSerial, dbDataType) {
+    function getFormValue(columnName, type, isSerial, dbDataType) {
+        debugger;
         var el = $("#" + columnName);
         var val = null;
         if (el.length) {
             val = el.val();
-            switch (dataType) {
-                case "System.Boolean":
-                case "bool":
-                case "bit":
-                    val = val === "yes" ? true : false;
-                    break;
-                case "DateTime":
+
+            if (isNullOrWhiteSpace(val)) {
+                val = null;
+            } else {
+                if (wholeNumbers.indexOf(type) > -1) {
+                    val = parseInt(val);
+                } else if (decimalNumber.indexOf(type) > -1) {
+                    val = parseFloat(val);
+                } else if (dateTypes.indexOf(type) > -1) {
                     if (dbDataType === "time") {
                         val = val || null;
                     } else {
                         val = window.parseLocalizedDate(val) || null;
                     };
-                    break;
-                case "short":
-                case "int":
-                case "long":
-                case "float":
-                case "double":
-                case "decimal":
-                    val = parseFloat(val || null);
-                    break;
-                default:
+                } else if (booleans.indexOf(type) > -1) {
+                    val = (["true", "t", "yes", "y", "1"].indexOf(val.toString().toLowerCase()) > -1);
+                } else {
                     val = val.toString().trim();
 
                     if (el.is("select")) {
@@ -60,10 +76,8 @@
                             val = null;
                         };
                     };
-
-                    break;
+                };
             };
-
         };
 
         if (isSerial) {
@@ -103,7 +117,7 @@
     };
 
 
-    var ajax = request(entity, customFields);
+    var ajax = request(getType(), entity, customFields);
 
     ajax.success(function () {
         saveButton.removeClass("loading");

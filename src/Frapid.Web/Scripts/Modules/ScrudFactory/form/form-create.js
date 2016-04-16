@@ -23,6 +23,7 @@
 
     ajax.success(function (response) {
         window.metaInfo = response;
+
         createLayout(response.Columns, scrud);
 
         if (getSchema()) {

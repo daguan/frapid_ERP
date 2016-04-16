@@ -37,12 +37,15 @@ namespace Frapid.Authorization.DAL
 
                 foreach (var policy in policies)
                 {
-                    dynamic poco = new ExpandoObject();
-                    poco.entity_name = policy.EntityName;
-                    poco.office_id = officeId;
-                    poco.role_id = roleId;
-                    poco.access_type_id = policy.AccessTypeId;
-                    poco.allow_access = policy.AllowAccess;
+                    var poco = new GroupEntityAccessPolicy
+                    {
+                        EntityName = policy.EntityName,
+                        OfficeId = officeId,
+                        RoleId = roleId,
+                        AccessTypeId = policy.AccessTypeId,
+                        AllowAccess = policy.AllowAccess
+                    };
+
 
                     db.Insert("auth.group_entity_access_policy", "group_entity_access_policy_id", true, poco);
                 }
@@ -77,12 +80,15 @@ namespace Frapid.Authorization.DAL
 
                 foreach (var policy in policies)
                 {
-                    dynamic poco = new ExpandoObject();
-                    poco.entity_name = policy.EntityName;
-                    poco.office_id = officeId;
-                    poco.user_id = userId;
-                    poco.access_type_id = policy.AccessTypeId;
-                    poco.allow_access = policy.AllowAccess;
+                    var poco = new EntityAccessPolicy
+                    {
+                        EntityName = policy.EntityName,
+                        OfficeId = officeId,
+                        UserId = userId,
+                        AccessTypeId = policy.AccessTypeId,
+                        AllowAccess = policy.AllowAccess
+                    };
+
 
                     db.Insert("auth.entity_access_policy", "entity_access_policy_id", true, poco);
                 }

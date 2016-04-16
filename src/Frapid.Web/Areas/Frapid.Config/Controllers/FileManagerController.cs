@@ -46,6 +46,14 @@ namespace Frapid.Config.Controllers
             return this.Content(json, "application/json");
         }
 
+        [Route("dashboard/config/file-manager/resources/edit/file")]
+        [RestrictAnonymous]
+        [HttpPut]
+        public ActionResult EditFile(string themeName, string container, string file, string contents)
+        {
+            return this.CreateResource(container, file, false, contents, true);
+        }
+
         [Route("dashboard/config/file-manager/create/file")]
         [RestrictAnonymous]
         [HttpPut]
@@ -109,7 +117,7 @@ namespace Frapid.Config.Controllers
             return this.Ok();
         }
 
-        [Route("dashboard/config/file-manager/upload")]
+        [Route("dashboard/config/file-manager/resources/upload")]
         [RestrictAnonymous]
         [HttpPost]
         public ActionResult UploadResource(string container)

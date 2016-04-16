@@ -18,10 +18,13 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using Frapid.NPoco.Expressions;
+using Frapid.NPoco.FluentMappings;
 using Frapid.NPoco.Linq;
 
 namespace Frapid.NPoco
@@ -87,7 +90,7 @@ namespace Frapid.NPoco
         { }
 
         public Database(string connectionString, DatabaseType dbType, IsolationLevel? isolationLevel)
-            : this(connectionString, dbType, isolationLevel,  DefaultEnableAutoSelect)
+            : this(connectionString, dbType, isolationLevel, DefaultEnableAutoSelect)
         { }
 
         public Database(string connectionString, DatabaseType dbType, IsolationLevel? isolationLevel, bool enableAutoSelect)
@@ -125,7 +128,7 @@ namespace Frapid.NPoco
             : this(connectionStringName, DefaultEnableAutoSelect)
         { }
 
-        public Database(string connectionStringName,  bool enableAutoSelect)
+        public Database(string connectionStringName, bool enableAutoSelect)
         {
             EnableAutoSelect = enableAutoSelect;
             KeepConnectionAlive = false;
@@ -164,7 +167,7 @@ namespace Frapid.NPoco
         // Automatically close connection
         public void Dispose()
         {
-            if (KeepConnectionAlive) return; 
+            if (KeepConnectionAlive) return;
             CloseSharedConnection();
         }
 
@@ -186,7 +189,7 @@ namespace Frapid.NPoco
 
         private void OpenSharedConnectionImp(bool isInternal)
         {
-            if (_sharedConnection != null && _sharedConnection.State != ConnectionState.Broken && _sharedConnection.State != ConnectionState.Closed) 
+            if (_sharedConnection != null && _sharedConnection.State != ConnectionState.Broken && _sharedConnection.State != ConnectionState.Closed)
                 return;
 
             ShouldCloseConnectionAutomatically = isInternal;
@@ -371,7 +374,7 @@ namespace Frapid.NPoco
         // Complete the transaction
         public void CompleteTransaction()
         {
-            if (_transaction == null) 
+            if (_transaction == null)
                 return;
 
             TransactionCount--;
@@ -389,7 +392,7 @@ namespace Frapid.NPoco
 
             if (_transaction != null)
                 _transaction.Dispose();
-            
+
             _transaction = null;
 
             OnCompleteTransaction();
@@ -645,10 +648,10 @@ namespace Frapid.NPoco
                     if (val == null || val == DBNull.Value)
                         return default(T);
 
-                    Type t = typeof (T);
+                    Type t = typeof(T);
                     Type u = Nullable.GetUnderlyingType(t);
 
-                    return (T) Convert.ChangeType(val, u ?? t);
+                    return (T)Convert.ChangeType(val, u ?? t);
                 }
             }
             catch (Exception x)
@@ -966,7 +969,7 @@ namespace Frapid.NPoco
                         }
                         if (bNeedTerminator)
                         {
-                            var poco = (TRet) cb.DynamicInvoke(new object[types.Length]);
+                            var poco = (TRet)cb.DynamicInvoke(new object[types.Length]);
                             if (poco != null)
                             {
                                 yield return poco;
@@ -1009,8 +1012,8 @@ namespace Frapid.NPoco
             OneTimeCommandTimeout = saveTimeout;
 
             // Get the records
-            result.Items = types.Length > 1 
-                ? Query<T>(types, cb, new Sql(sqlPage, args)).ToList() 
+            result.Items = types.Length > 1
+                ? Query<T>(types, cb, new Sql(sqlPage, args)).ToList()
                 : Query<T>(new Sql(sqlPage, args)).ToList();
 
             // Done
@@ -1080,16 +1083,16 @@ namespace Frapid.NPoco
                                     switch (typeIndex)
                                     {
                                         case 1:
-                                            list1.Add(((Func<IDataReader, T1, T1>) factory)(r, default(T1)));
+                                            list1.Add(((Func<IDataReader, T1, T1>)factory)(r, default(T1)));
                                             break;
                                         case 2:
-                                            list2.Add(((Func<IDataReader, T2, T2>) factory)(r, default(T2)));
+                                            list2.Add(((Func<IDataReader, T2, T2>)factory)(r, default(T2)));
                                             break;
                                         case 3:
-                                            list3.Add(((Func<IDataReader, T3, T3>) factory)(r, default(T3)));
+                                            list3.Add(((Func<IDataReader, T3, T3>)factory)(r, default(T3)));
                                             break;
                                         case 4:
-                                            list4.Add(((Func<IDataReader, T4, T4>) factory)(r, default(T4)));
+                                            list4.Add(((Func<IDataReader, T4, T4>)factory)(r, default(T4)));
                                             break;
                                     }
                                 }
@@ -1106,11 +1109,11 @@ namespace Frapid.NPoco
                         switch (types.Length)
                         {
                             case 2:
-                                return ((Func<List<T1>, List<T2>, TRet>) cb)(list1, list2);
+                                return ((Func<List<T1>, List<T2>, TRet>)cb)(list1, list2);
                             case 3:
-                                return ((Func<List<T1>, List<T2>, List<T3>, TRet>) cb)(list1, list2, list3);
+                                return ((Func<List<T1>, List<T2>, List<T3>, TRet>)cb)(list1, list2, list3);
                             case 4:
-                                return ((Func<List<T1>, List<T2>, List<T3>, List<T4>, TRet>) cb)(list1, list2, list3, list4);
+                                return ((Func<List<T1>, List<T2>, List<T3>, List<T4>, TRet>)cb)(list1, list2, list3, list4);
                         }
 
                         return default(TRet);
@@ -1126,14 +1129,14 @@ namespace Frapid.NPoco
         public bool Exists<T>(object primaryKey)
         {
             var index = 0;
-            var pd = PocoDataFactory.ForType(typeof (T));;
+            var pd = PocoDataFactory.ForType(typeof(T)); ;
             var primaryKeyValuePairs = ProcessMapper(pd, GetPrimaryKeyValues(pd.TableInfo.PrimaryKey, primaryKey));
             return ExecuteScalar<int>(string.Format(DatabaseType.GetExistsSql(), DatabaseType.EscapeTableName(pd.TableInfo.TableName), BuildPrimaryKeySql(primaryKeyValuePairs, ref index)), primaryKeyValuePairs.Select(x => x.Value).ToArray()) > 0;
         }
         public T SingleById<T>(object primaryKey)
         {
             var index = 0;
-            var pd = PocoDataFactory.ForType(typeof (T));
+            var pd = PocoDataFactory.ForType(typeof(T));
             var primaryKeyValuePairs = ProcessMapper(pd, GetPrimaryKeyValues(pd.TableInfo.PrimaryKey, primaryKey));
             return Single<T>(string.Format("WHERE {0}", BuildPrimaryKeySql(primaryKeyValuePairs, ref index)), primaryKeyValuePairs.Select(x => x.Value).ToArray());
         }
@@ -1141,7 +1144,7 @@ namespace Frapid.NPoco
         public T SingleOrDefaultById<T>(object primaryKey)
         {
             var index = 0;
-            var pd = PocoDataFactory.ForType(typeof (T));
+            var pd = PocoDataFactory.ForType(typeof(T));
             var primaryKeyValuePairs = ProcessMapper(pd, GetPrimaryKeyValues(pd.TableInfo.PrimaryKey, primaryKey));
             return SingleOrDefault<T>(string.Format("WHERE {0}", BuildPrimaryKeySql(primaryKeyValuePairs, ref index)), primaryKeyValuePairs.Select(x => x.Value).ToArray());
         }
@@ -1244,8 +1247,8 @@ namespace Frapid.NPoco
                 foreach (var i in pd.Columns)
                 {
                     // Don't insert result columns
-                    if (i.Value.ResultColumn 
-                        || i.Value.ComputedColumn 
+                    if (i.Value.ResultColumn
+                        || i.Value.ComputedColumn
                         || (i.Value.VersionColumn && i.Value.VersionColumnType == VersionColumnType.RowVersion))
                     {
                         continue;
@@ -1426,6 +1429,8 @@ namespace Frapid.NPoco
                     sb.Append(", ");
                 sb.AppendFormat("{0} = @{1}", _dbType.EscapeSqlIdentifier(i.Key), index++);
 
+
+
                 rawvalues.Add(value);
             }
 
@@ -1529,8 +1534,8 @@ namespace Frapid.NPoco
         {
             var expression = DatabaseType.ExpressionVisitor<T>(this);
             expression = expression.Select(fields);
-            var columnNames = ((ISqlExpression) expression).SelectMembers.Select(x => x.PocoColumn.ColumnName);
-            var otherNames = ((ISqlExpression) expression).GeneralMembers.Select(x => x.PocoColumn.ColumnName);
+            var columnNames = ((ISqlExpression)expression).SelectMembers.Select(x => x.PocoColumn.ColumnName);
+            var otherNames = ((ISqlExpression)expression).GeneralMembers.Select(x => x.PocoColumn.ColumnName);
             return Update(poco, columnNames.Union(otherNames));
         }
 
@@ -1575,7 +1580,7 @@ namespace Frapid.NPoco
         public virtual int Delete(string tableName, string primaryKeyName, object poco, object primaryKeyValue)
         {
             if (!OnDeleting(new DeleteContext(poco, tableName, primaryKeyName, primaryKeyValue))) return 0;
-            
+
             var primaryKeyValuePairs = GetPrimaryKeyValues(primaryKeyName, primaryKeyValue);
             // If primary key value not specified, pick it up from the object
             if (primaryKeyValue == null)
@@ -1817,6 +1822,12 @@ namespace Frapid.NPoco
         internal object ProcessMapper(PocoColumn pc, object value)
         {
             if (Mapper == null) return value;
+
+            if (pc is ExpandoColumn)
+            {
+                return value;
+            }
+
             var converter = Mapper.GetToDbConverter(pc.ColumnType, pc.MemberInfo);
             return converter != null ? converter(value) : value;
         }

@@ -101,8 +101,9 @@
     };
 
     if (column.DbDataType === "bool") {
-        value = value ? "yes" : "no";
+        value = value === true ? "yes" : "no";
     };
+
 
     if (column.DbDataType === "bit") {
         value = value === "1" ? "yes" : "no";

@@ -12,5 +12,6 @@
         string DefaultSchemaQualify(string input);
         string AddLimit(string limit);
         string AddOffset(string offset);
+        string AddReturnInsertedKey(string primaryKeyName);
     }
 }

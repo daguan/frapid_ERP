@@ -43,7 +43,7 @@ BEGIN
         AND menu_name = ANY(_menu_names);
     END IF;
     
-    PERFORM auth.save_group_menu_policy(_role_id, _office_id, _menu_ids, _app_name);    
+    PERFORM auth.save_group_menu_policy(_role_id, _office_id, array_to_string(_menu_ids, ','), _app_name);    
 END
 $$
 LANGUAGE plpgsql;

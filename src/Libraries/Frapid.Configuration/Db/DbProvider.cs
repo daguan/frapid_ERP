@@ -43,8 +43,9 @@ namespace Frapid.Configuration.Db
 
                 Config = fluentConfig;
             }
-            catch (ReflectionTypeLoadException)
+            catch (ReflectionTypeLoadException ex)
             {
+                Log.Error("Error in fluent configuration. {ex}", ex);
                 //Swallow
             }
         }

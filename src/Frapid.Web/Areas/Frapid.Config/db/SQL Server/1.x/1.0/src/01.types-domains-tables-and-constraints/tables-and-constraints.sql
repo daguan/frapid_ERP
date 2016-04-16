@@ -78,6 +78,7 @@ CREATE TABLE config.filters
     is_default_admin                            bit NOT NULL DEFAULT(0),
     filter_statement                            national character varying(12) NOT NULL DEFAULT('WHERE'),
     column_name                                 national character varying(500) NOT NULL,
+	data_type									national character varying(500) NOT NULL DEFAULT(''),
     filter_condition                            integer NOT NULL,
     filter_value                                national character varying(500),
     filter_and_value                            national character varying(500),

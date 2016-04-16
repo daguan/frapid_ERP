@@ -6,6 +6,7 @@ var cancelButton = $("#CancelButton");
 var scrudForm = $(".form.factory");
 var scrudView = $(".view.factory");
 var editData;
+var editing = false;
 var dropdownsLoaded = false;
 var defaultValuesLoaded = false;
 var formReady = false;

@@ -39,15 +39,14 @@ namespace Frapid.Authorization.DAL
 
         public static void SaveGroupPolicy(string tenant, int officeId, int roleId, int[] menuIds)
         {
-            string sql = FrapidDbServer.GetProcedureCommand(tenant, "auth.save_group_menu_policy", new[] {"@0", "@1", "@2"});
-            Factory.NonQuery(tenant, sql, roleId, officeId, "{" + string.Join(",", menuIds ?? new int[0]) + "}");
+            string sql = FrapidDbServer.GetProcedureCommand(tenant, "auth.save_group_menu_policy", new[] {"@0", "@1", "@2", "@3"});
+            Factory.NonQuery(tenant, sql, roleId, officeId, string.Join(",", menuIds ?? new int[0]), string.Empty);
         }
 
         public static void SavePolicy(string tenant, int officeId, int userId, int[] allowed, int[] disallowed)
         {
             string sql = FrapidDbServer.GetProcedureCommand(tenant, "auth.save_user_menu_policy", new[] {"@0", "@1", "@2", "@3"});
-            Factory.NonQuery(tenant, sql, userId, officeId, "{" + string.Join(",", allowed ?? new int[0]) + "}",
-                "{" + string.Join(",", disallowed ?? new int[0]) + "}");
+            Factory.NonQuery(tenant, sql, userId, officeId, string.Join(",", allowed ?? new int[0]), string.Join(",", disallowed ?? new int[0]));
         }
     }
 }

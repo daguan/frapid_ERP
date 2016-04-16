@@ -81,8 +81,12 @@ function editScrudFormElement(targetEl, value) {
         if (targetEl.is("select")) {
             var type = targetEl.attr("data-type");
 
-            if (["bool", "bit"].indexOf(type) > -1) {
+            if (type === "bool") {
                 value = value ? "yes" : "no";
+            };
+
+            if (type === "bit") {
+                value = value === "1" ? "yes" : "no";
             };
 
             targetEl.dropdown("set selected", value.toString());
