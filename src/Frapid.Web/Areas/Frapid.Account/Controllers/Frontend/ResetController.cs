@@ -18,6 +18,11 @@ namespace Frapid.Account.Controllers.Frontend
         [AllowAnonymous]
         public ActionResult Index()
         {
+            if (RemoteUser.IsListedInSpamDatabase())
+            {
+                return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
+            }
+
             return this.View(this.GetRazorView<AreaRegistration>("Reset/Index.cshtml"), new Reset());
         }
 
@@ -74,6 +79,11 @@ namespace Frapid.Account.Controllers.Frontend
         [AllowAnonymous]
         public ActionResult ResetEmailSent()
         {
+            if (RemoteUser.IsListedInSpamDatabase())
+            {
+                return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
+            }
+
             return this.View(this.GetRazorView<AreaRegistration>("Reset/ResetEmailSent.cshtml"));
         }
 
@@ -81,6 +91,11 @@ namespace Frapid.Account.Controllers.Frontend
         [AllowAnonymous]
         public ActionResult Do(string token)
         {
+            if (RemoteUser.IsListedInSpamDatabase())
+            {
+                return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
+            }
+
             if (string.IsNullOrWhiteSpace(token))
             {
                 return this.Redirect("/site/404");

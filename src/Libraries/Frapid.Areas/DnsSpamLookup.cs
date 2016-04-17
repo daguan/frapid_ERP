@@ -36,8 +36,17 @@ namespace Frapid.Areas
 
         private static bool Query(string address)
         {
-            var result = Dns.GetHostEntry(address);
-            return result.AddressList.Any();
+            try
+            {
+                var result = Dns.GetHostEntry(address);
+                return result.AddressList.Any();
+            }
+            catch (Exception)
+            {
+                //Swallow
+            }
+
+            return false;
         }
 
         private static string ReverseIp(string ipAddress)

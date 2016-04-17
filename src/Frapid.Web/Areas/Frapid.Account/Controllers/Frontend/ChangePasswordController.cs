@@ -16,6 +16,11 @@ namespace Frapid.Account.Controllers.Frontend
         [RestrictAnonymous]
         public ActionResult Index()
         {
+            if (RemoteUser.IsListedInSpamDatabase())
+            {
+                return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
+            }
+
             return this.View(this.GetRazorView<AreaRegistration>("ChangePassword/Index.cshtml"));
         }
 
@@ -37,6 +42,11 @@ namespace Frapid.Account.Controllers.Frontend
         [RestrictAnonymous]
         public ActionResult Success()
         {
+            if (RemoteUser.IsListedInSpamDatabase())
+            {
+                return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
+            }
+
             return this.View(this.GetRazorView<AreaRegistration>("ChangePassword/Success.cshtml"));
         }
     }

@@ -20,6 +20,11 @@ namespace Frapid.Account.Controllers.Frontend
         [AllowAnonymous]
         public ActionResult Index()
         {
+            if (RemoteUser.IsListedInSpamDatabase())
+            {
+                return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
+            }
+
             string tenant = AppUsers.GetTenant();
             var profile = ConfigurationProfiles.GetActiveProfile(tenant);
 
@@ -35,6 +40,11 @@ namespace Frapid.Account.Controllers.Frontend
         [AllowAnonymous]
         public ActionResult EmailSent()
         {
+            if (RemoteUser.IsListedInSpamDatabase())
+            {
+                return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
+            }
+
             return this.View(this.GetRazorView<AreaRegistration>("SignUp/EmailSent.cshtml"));
         }
 
@@ -42,6 +52,11 @@ namespace Frapid.Account.Controllers.Frontend
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmAsync(string token)
         {
+            if (RemoteUser.IsListedInSpamDatabase())
+            {
+                return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
+            }
+
             var id = token.To<Guid>();
             string tenant = AppUsers.GetTenant();
 

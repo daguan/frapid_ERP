@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Frapid.Account.DTO;
 using Frapid.Account.InputModels;
 using Frapid.Configuration;
@@ -10,9 +11,8 @@ namespace Frapid.Account.DAL
     {
         public static Reset GetIfActive(string tenant, string token)
         {
-            const string sql =
-                "SELECT * FROM account.reset_requests WHERE request_id=@0::uuid AND expires_on >= NOW() AND NOT confirmed;";
-            return Factory.Get<Reset>(tenant, sql, token).FirstOrDefault();
+            const string sql = "SELECT * FROM account.reset_requests WHERE request_id=@0 AND expires_on >= @1 AND confirmed=@2;";
+            return Factory.Get<Reset>(tenant, sql, token, DateTimeOffset.UtcNow, false).FirstOrDefault();
         }
 
         public static void CompleteReset(string tenant, string requestId, string password)
@@ -31,7 +31,7 @@ namespace Frapid.Account.DAL
 
         public static bool HasActiveResetRequest(string tenant, string email)
         {
-            const string sql = "SELECT account.has_active_reset_request(@0::text);";
+            const string sql = "SELECT account.has_active_reset_request(@0);";
             return Factory.Scalar<bool>(tenant, sql, email);
         }
     }

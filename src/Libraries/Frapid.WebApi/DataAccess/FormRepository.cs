@@ -811,7 +811,7 @@ namespace Frapid.WebApi.DataAccess
             foreach (var field in customFields)
             {
                 sql = $"INSERT INTO config.custom_fields(custom_field_setup_id, resource_id, value) " +
-                      "SELECT config.get_custom_field_setup_id_by_table_name('{this.FullyQualifiedObjectName}', @0::character varying(100)), " +
+                      "SELECT config.get_custom_field_setup_id_by_table_name('{this.FullyQualifiedObjectName}', @0), " +
                       "@1, @2;";
 
                 Factory.NonQuery(this.Database, sql, field.FieldName, primaryKeyValue, field.Value);

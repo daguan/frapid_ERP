@@ -19,13 +19,14 @@ namespace Frapid.Areas
         public static bool IsListedInSpamDatabase()
         {
             var user = Get();
+            string ip = user.IpAddress;
 
-            if (string.IsNullOrWhiteSpace(user.IpAddress))
+            if (string.IsNullOrWhiteSpace(ip))
             {
                 return false;
             }
 
-            var result = DnsSpamLookup.IsListedInSpamDatabase(user.IpAddress);
+            var result = DnsSpamLookup.IsListedInSpamDatabase(ip);
             return result.IsListed;
         }
 

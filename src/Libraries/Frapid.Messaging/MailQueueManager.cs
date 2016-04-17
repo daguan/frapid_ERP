@@ -63,6 +63,10 @@ namespace Frapid.Messaging
 
         private bool IsValidEmail(string emailAddress)
         {
+            if(string.IsNullOrWhiteSpace(emailAddress)){
+                return false;
+            }
+
             bool valid = false;
             var emails = emailAddress.Split(',').Select(x => x.Trim()).ToArray();
 

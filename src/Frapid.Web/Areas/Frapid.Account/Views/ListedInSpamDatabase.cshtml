@@ -1,0 +1,24 @@
+﻿@using Frapid.i18n
+@{
+    ViewBag.Title = "Sign Up";
+    Layout = ViewBag.LayoutPath + ViewBag.Layout;
+    ViewBag.Description = "Create your account on our site.";
+}
+@if (CultureManager.IsRtl())
+{
+    <link rel="Stylesheet" href="@Href("~/bundles/master-page-rtl.css")" />
+}
+else
+{
+    <link rel="Stylesheet" href="@Href("~/bundles/master-page.css")" />
+}
+
+<div class="ui very relaxed tall container">
+    <div class="ui red huge header">Registration Closed</div>
+    <div class="ui divider"></div>
+    <div>
+        <p>We are sorry but we are not accepting new registration this time.</p>
+
+        <p>Sorry for the inconvenience. Please check back again later.</p>
+    </div>
+</div>

@@ -4,6 +4,7 @@ using Frapid.Account.DTO;
 using Frapid.Areas;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
+using Frapid.NPoco;
 
 namespace Frapid.Account.DAL
 {
@@ -21,21 +22,15 @@ namespace Frapid.Account.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                var user = db.FetchBy<User>(sql => sql.Where(u => u.UserId == userId)).FirstOrDefault();
+                var sql = new Sql("UPDATE account.users SET");
+                sql.Append("password=@0,", newPassword);
+                sql.Append("audit_user_id=@0,", userId);
+                sql.Append("audit_ts=@0,", DateTimeOffset.UtcNow);
+                sql.Append("last_ip=@0,", remoteUser.IpAddress);
+                sql.Append("last_seen_on=@0", DateTimeOffset.UtcNow);
+                sql.Where("user_id=@0", userId);
 
-                if (user == null)
-                {
-                    return;
-                }
-
-                user.Password = newPassword;
-                user.AuditUserId = userId;
-                user.AuditTs = DateTimeOffset.UtcNow;
-                user.LastBrowser = remoteUser.Browser;
-                user.LastIp = remoteUser.IpAddress;
-                user.LastSeenOn = DateTimeOffset.UtcNow;
-
-                db.Update("account.users", "user_id", user, userId);
+                db.Execute(sql);
             }
         }
     }

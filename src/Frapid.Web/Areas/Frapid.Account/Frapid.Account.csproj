@@ -255,6 +255,7 @@
     <Content Include="Views\ChangePassword\Success.cshtml" />
     <None Include="Views\EmailTemplate\Index.cshtml" />
     <Content Include="Views\EmailTemplate\Shared\Editor.cshtml" />
+    <Content Include="Views\ListedInSpamDatabase.cshtml" />
     <None Include="Views\Reset\Do.cshtml" />
     <None Include="Views\Reset\Index.cshtml" />
     <Content Include="web.config" />

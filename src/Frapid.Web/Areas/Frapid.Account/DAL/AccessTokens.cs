@@ -1,5 +1,5 @@
-﻿using Frapid.Account.DTO;
-using Frapid.ApplicationState.Cache;
+﻿using System;
+using Frapid.Account.DTO;
 using Frapid.DataAccess;
 using Frapid.TokenManager;
 using Newtonsoft.Json;
@@ -15,9 +15,8 @@ namespace Frapid.Account.DAL
                 return;
             }
 
-            const string sql =
-                "UPDATE account.access_tokens SET revoked=true, revoked_on = NOW() WHERE client_token=@0;";
-            Factory.NonQuery(tenant, sql, clientToken);
+            const string sql = "UPDATE account.access_tokens SET revoked=@0, revoked_on = @1 WHERE client_token=@2;";
+            Factory.NonQuery(tenant, sql, true, DateTimeOffset.UtcNow, clientToken);
         }
 
         public static void Save(string tenant, Token token, string ipAddress, string userAgent)
