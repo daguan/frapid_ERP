@@ -27,10 +27,10 @@ namespace Frapid.Messaging.DAL
         public static void SetSuccess(string database, long queueId)
         {
             var sql = new Sql("UPDATE config.email_queue SET");
-            sql.Append("queue_id=@0, ", queueId);
+
             sql.Append("delivered=@0, ", true);
-            sql.Append("delivered_on=@0, ", DateTimeOffset.UtcNow);
-            sql.Where("queue_id=@0, ", queueId);
+            sql.Append("delivered_on=@0 ", DateTimeOffset.UtcNow);
+            sql.Where("queue_id=@0", queueId);
 
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database), database).GetDatabase())
             {
