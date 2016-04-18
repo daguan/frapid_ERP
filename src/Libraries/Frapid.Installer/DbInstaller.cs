@@ -1,6 +1,6 @@
 ﻿using Frapid.Configuration.Db;
 using Frapid.Installer.DAL;
-using Serilog;
+using Frapid.Installer.Helpers;
 
 namespace Frapid.Installer
 {
@@ -22,18 +22,18 @@ namespace Frapid.Installer
 
             if (hasDb)
             {
-                Log.Verbose($"No need to create database \"{this.Tenant}\" because it already exists.");
+                InstallerLog.Verbose($"No need to create database \"{this.Tenant}\" because it already exists.");
             }
 
             if (!canInstall)
             {
-                Log.Verbose(
+                InstallerLog.Verbose(
                     $"Cannot create a database under the name \"{this.Tenant}\" because the name is not a well-known tenant name.");
             }
 
             if (!hasDb && canInstall)
             {
-                Log.Information($"Creating database \"{this.Tenant}\".");
+                InstallerLog.Information($"Creating database \"{this.Tenant}\".");
                 this.CreateDb();
                 return true;
             }

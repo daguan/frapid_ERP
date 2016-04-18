@@ -73,6 +73,7 @@
     <Compile Include="DomainSerializer.cs" />
     <Compile Include="DbServer\IDbServer.cs" />
     <Compile Include="DbServer\PostgreSQL.cs" />
+    <Compile Include="PathMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Db\DbProvider.cs" />
     <Compile Include="RedisConfig.cs" />

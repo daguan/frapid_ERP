@@ -2,14 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Web.Hosting;
 using Newtonsoft.Json;
 
 namespace Frapid.Configuration
 {
     public class DomainSerializer
     {
-        public string FileName { get; set; }
         private const string Path = "~/Resources/Configs/";
 
         public DomainSerializer(string fileName)
@@ -17,11 +15,13 @@ namespace Frapid.Configuration
             this.FileName = fileName;
         }
 
+        public string FileName { get; set; }
+
         public List<ApprovedDomain> Get()
         {
             var domains = new List<ApprovedDomain>();
 
-            string path = HostingEnvironment.MapPath(Path + this.FileName);
+            string path = PathMapper.MapPath(Path + this.FileName);
 
             if (path == null)
             {
@@ -57,7 +57,20 @@ namespace Frapid.Configuration
         public void Add(ApprovedDomain domain)
         {
             var domains = this.Get();
-            domains.Add(domain);
+            bool found = domains.Any(x => x.DomainName.ToUpperInvariant().Equals(domain.DomainName.ToUpperInvariant()));
+
+            if (!found)
+            {
+                domains.Add(domain);
+                this.Save(domains);
+            }
+        }
+
+        public void Remove(string domain)
+        {
+            var domains = this.Get();
+            var candidate = domains.FirstOrDefault(x => x.DomainName.Equals(domain));
+            domains.Remove(candidate);
 
             this.Save(domains);
         }
@@ -65,7 +78,7 @@ namespace Frapid.Configuration
         public void Save(List<ApprovedDomain> urls)
         {
             string contents = JsonConvert.SerializeObject(urls, Formatting.Indented);
-            string path = HostingEnvironment.MapPath(Path + this.FileName);
+            string path = PathMapper.MapPath(Path + this.FileName);
 
             if (path == null)
             {

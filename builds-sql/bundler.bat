@@ -11,5 +11,3 @@ if exist %path% (
 	echo Warning: %path% was not found
 	echo.
 )
-
-

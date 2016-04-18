@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Frapid.Configuration;
-using Serilog;
+using Frapid.Installer.Helpers;
 
 namespace Frapid.Installer.DAL
 {
@@ -14,7 +14,7 @@ namespace Frapid.Installer.DAL
 
             try
             {
-                var iType = typeof(IStore);
+                var iType = typeof (IStore);
                 var members = AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(x => x.GetTypes())
                     .Where(x => iType.IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
@@ -27,7 +27,7 @@ namespace Frapid.Installer.DAL
             }
             catch (Exception ex)
             {
-                Log.Error("{Exception}", ex);
+                InstallerLog.Error("{Exception}", ex);
                 throw;
             }
 
@@ -52,6 +52,11 @@ namespace Frapid.Installer.DAL
         public static void RunSql(string tenant, string database, string fromFile)
         {
             GetDbServer(tenant).RunSql(tenant, database, fromFile);
+        }
+
+        public static void CleanupDb(string tenant, string database)
+        {
+            GetDbServer(tenant).CleanupDb(tenant, database);
         }
     }
 }

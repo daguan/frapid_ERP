@@ -87,6 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppInstaller.cs" />
+    <Compile Include="Tenant\Uninstaller.cs" />
+    <Compile Include="Helpers\ConsolePathMapper.cs" />
+    <Compile Include="Commands\CreateSite.cs" />
     <Compile Include="DAL\SqlServer.cs" />
     <Compile Include="DbInspector.cs" />
     <Compile Include="DbInstalledDomains.cs" />
@@ -94,13 +97,20 @@
     <Compile Include="DbInstallException.cs" />
     <Compile Include="DAL\Store.cs" />
     <Compile Include="DAL\IStore.cs" />
+    <Compile Include="Tenant\Installer.cs" />
+    <Compile Include="Helpers\InstallerLog.cs" />
     <Compile Include="InstallationFactory.cs" />
     <Compile Include="InstallJob.cs" />
     <Compile Include="Models\Installable.cs" />
     <Compile Include="DAL\PostgreSQL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tenant\UninstallException.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Frapid.CommandLine\frapid.csproj">
+      <Project>{CD47926F-7148-49A1-AD08-A96B74A3A5F6}</Project>
+      <Name>frapid</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Frapid.Configuration\Frapid.Configuration.csproj">
       <Project>{ca3c3d39-6775-4234-b343-38f0724adcf8}</Project>
       <Name>Frapid.Configuration</Name>

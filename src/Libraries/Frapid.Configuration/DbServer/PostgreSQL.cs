@@ -1,5 +1,4 @@
-﻿using System.Web.Hosting;
-using Frapid.Configuration.Db;
+﻿using Frapid.Configuration.Db;
 using Frapid.Framework.Extensions;
 using Npgsql;
 
@@ -9,7 +8,7 @@ namespace Frapid.Configuration.DbServer
     {
         public PostgreSQL()
         {
-            this.ConfigFile = HostingEnvironment.MapPath("/Resources/Configs/PostgreSQL.config");
+            this.ConfigFile = PathMapper.MapPath("/Resources/Configs/PostgreSQL.config");
         }
 
         public string ConfigFile { get; set; }
@@ -80,7 +79,8 @@ namespace Frapid.Configuration.DbServer
             return this.GetConnectionString(tenant, database);
         }
 
-        public string GetConnectionString(string tenant, string host, string database, string username, string password, int port,
+        public string GetConnectionString(string tenant, string host, string database, string username, string password,
+            int port,
             bool enablePooling = true, int minPoolSize = 0, int maxPoolSize = 100)
         {
             return new NpgsqlConnectionStringBuilder
@@ -123,6 +123,11 @@ namespace Frapid.Configuration.DbServer
         public string AddReturnInsertedKey(string primaryKeyName)
         {
             return $"RETURNING {Sanitizer.SanitizeIdentifierName(primaryKeyName)}";
+        }
+
+        public string GetDbTimestampFunction()
+        {
+            return "NOW()";
         }
     }
 }

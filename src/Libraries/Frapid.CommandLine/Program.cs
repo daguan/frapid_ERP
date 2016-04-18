@@ -6,15 +6,27 @@ namespace frapid
 {
     internal class Program
     {
-        private static void Main()
+        private static void Main(string[] args)
         {
+            var loader = new AssemblyLoader();
+            loader.PreLoad();
+
             bool exit = false;
+
+            string command;
+
+            if (args != null && args.Any())
+            {
+                command = string.Join(" ", args);
+                CommandProcessor.Process(command);
+                exit = true;
+            }
 
             while (!exit)
             {
-                string command = FrapidConsole.ReadLine();
+                command = FrapidConsole.ReadLine();
                 exit = GotQuitSignalFrom(command);
-                CheckClearSignal(command);
+                command = CheckClearSignal(command);
 
                 if (!exit)
                 {
@@ -23,7 +35,7 @@ namespace frapid
             }
         }
 
-        private static void CheckClearSignal(string command)
+        private static string CheckClearSignal(string command)
         {
             var candidates = new[] {"cls", "clear"};
             bool clear = candidates.Contains(command.ToLower());
@@ -31,7 +43,11 @@ namespace frapid
             if (clear)
             {
                 Console.Clear();
+                return string.Empty;
             }
+
+            //Pass
+            return command;
         }
 
         private static bool GotQuitSignalFrom(string command)

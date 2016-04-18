@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using System.Web.Hosting;
 using Serilog;
 
 namespace Frapid.Configuration
@@ -25,7 +24,7 @@ namespace Frapid.Configuration
             string fileName = System.Configuration.ConfigurationManager.AppSettings[configFileName];
             Log.Verbose($"Configuration file for \"{configFileName}\" is {fileName}.");
 
-            string path = HostingEnvironment.MapPath(fileName);
+            string path = PathMapper.MapPath(fileName);
 
             return ReadConfigurationValue(path, key);
         }

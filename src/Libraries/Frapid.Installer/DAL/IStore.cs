@@ -7,5 +7,6 @@
         bool HasDb(string tenant, string database);
         bool HasSchema(string tenant, string database, string schema);
         void RunSql(string tenant, string database, string fromFile);
+        void CleanupDb(string tenant, string database);
     }
 }

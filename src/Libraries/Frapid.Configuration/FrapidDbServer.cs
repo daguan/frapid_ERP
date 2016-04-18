@@ -102,5 +102,10 @@ namespace Frapid.Configuration
         {
             return GetServer(tenant).AddReturnInsertedKey(primaryKeyName);
         }
+
+        public static string GetDbTimestampFunction(string tenant)
+        {
+            return GetServer(tenant).GetDbTimestampFunction();
+        }
     }
 }

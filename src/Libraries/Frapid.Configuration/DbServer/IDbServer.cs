@@ -13,5 +13,6 @@
         string AddLimit(string limit);
         string AddOffset(string offset);
         string AddReturnInsertedKey(string primaryKeyName);
+        string GetDbTimestampFunction();
     }
 }

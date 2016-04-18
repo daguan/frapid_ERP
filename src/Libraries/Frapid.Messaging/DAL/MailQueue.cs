@@ -19,8 +19,13 @@ namespace Frapid.Messaging.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database), database).GetDatabase())
             {
-                return db.FetchBy<EmailQueue>(sql => sql
-                    .Where(u => !u.IsTest && !u.Delivered && !u.Canceled && u.SendOn <= DateTimeOffset.UtcNow));
+                var sql = new Sql("SELECT * FROM config.email_queue");
+                sql.Where("is_test=@0", false);
+                sql.Append("AND delivered=@0", false);
+                sql.Append("AND canceled=@0", false);
+                sql.Append("AND send_on<=" + FrapidDbServer.GetDbTimestampFunction(database));
+
+                return db.Fetch<EmailQueue>(sql);
             }
         }
 
@@ -29,7 +34,7 @@ namespace Frapid.Messaging.DAL
             var sql = new Sql("UPDATE config.email_queue SET");
 
             sql.Append("delivered=@0, ", true);
-            sql.Append("delivered_on=@0 ", DateTimeOffset.UtcNow);
+            sql.Append("delivered_on=" + FrapidDbServer.GetDbTimestampFunction(database));
             sql.Where("queue_id=@0", queueId);
 
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database), database).GetDatabase())

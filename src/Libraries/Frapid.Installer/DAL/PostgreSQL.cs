@@ -1,10 +1,10 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
 using Frapid.DataAccess;
-using Serilog;
 
 namespace Frapid.Installer.DAL
 {
@@ -38,7 +38,9 @@ namespace Frapid.Installer.DAL
         {
             const string sql = "SELECT COUNT(*) FROM pg_catalog.pg_namespace WHERE nspname=@0;";
 
-            using (var db = DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(tenant, database), tenant).GetDatabase())
+            using (
+                var db =
+                    DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(tenant, database), tenant).GetDatabase())
             {
                 return db.ExecuteScalar<int>(sql, schema).Equals(1);
             }
@@ -58,7 +60,37 @@ namespace Frapid.Installer.DAL
             //ORM: Remove this behavior if you change the ORM.
             sql = sql.Replace("@", "@@");
 
-            Log.Verbose($"Running SQL {sql}");
+
+            string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
+            Factory.Execute(connectionString, database, sql);
+        }
+
+        public void CleanupDb(string tenant, string database)
+        {
+            string sql = @"DO
+                            $$
+                                DECLARE _schemas            text[];
+                                DECLARE _schema             text;
+                                DECLARE _sql                text;
+                            BEGIN
+                                SELECT 
+                                    array_agg(nspname::text)
+                                INTO _schemas
+                                FROM pg_namespace
+                                WHERE nspname NOT LIKE 'pg_%'
+                                AND nspname NOT IN('information_schema', 'public');
+
+                                IF(_schemas IS NOT NULL) THEN
+                                    FOREACH _schema IN ARRAY _schemas
+                                    LOOP
+                                        _sql := 'DROP SCHEMA IF EXISTS ' || _schema || ' CASCADE;';
+
+                                        EXECUTE _sql;
+                                    END LOOP;
+                                END IF;
+                            END
+                            $$
+                            LANGUAGE plpgsql;";
 
             string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
             Factory.Execute(connectionString, database, sql);

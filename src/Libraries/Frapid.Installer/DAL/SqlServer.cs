@@ -5,15 +5,16 @@ using System.Text;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
 using Frapid.DataAccess;
+using Frapid.Installer.Helpers;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
-using Serilog;
 
 namespace Frapid.Installer.DAL
 {
     public sealed class SqlServer : IStore
     {
         public string ProviderName { get; } = "System.Data.SqlClient";
+
 
         public void CreateDb(string tenant)
         {
@@ -41,7 +42,9 @@ namespace Frapid.Installer.DAL
         {
             const string sql = "SELECT COUNT(*) FROM sys.schemas WHERE name=@0;";
 
-            using (var db = DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(tenant, database), tenant).GetDatabase())
+            using (
+                var db =
+                    DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(tenant, database), tenant).GetDatabase())
             {
                 return db.ExecuteScalar<int>(sql, schema).Equals(1);
             }
@@ -58,7 +61,48 @@ namespace Frapid.Installer.DAL
             string sql = File.ReadAllText(fromFile, Encoding.UTF8);
 
 
-            Log.Verbose($"Running SQL {sql}");
+            InstallerLog.Verbose($"Running file {fromFile}");
+
+            string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
+
+            using (var sqlConnection = new SqlConnection(connectionString))
+            {
+                var svrConnection = new ServerConnection(sqlConnection);
+                var server = new Server(svrConnection);
+                server.ConnectionContext.ExecuteNonQuery(sql);
+            }
+        }
+
+        public void CleanupDb(string tenant, string database)
+        {
+            string sql = @"DECLARE @sql nvarchar(MAX);
+                            DECLARE @queries TABLE(id int identity, query nvarchar(500), done bit DEFAULT(0));
+                            DECLARE @id int;
+                            DECLARE @query nvarchar(500);
+
+
+                            INSERT INTO @queries(query)
+                            SELECT 
+	                            'EXECUTE dbo.drop_schema ''' + sys.schemas.name + ''''+ CHAR(13) AS query
+                            FROM sys.schemas
+                            WHERE principal_id = 1
+                            AND name != 'dbo'
+                            ORDER BY schema_id;
+
+
+
+                            WHILE(SELECT COUNT(*) FROM @queries WHERE done = 0) > 0
+                            BEGIN
+                                SELECT TOP 1 
+		                            @id = id,
+		                            @query = query
+	                            FROM @queries 
+	                            WHERE done = 0
+	
+	                            EXECUTE(@query);
+
+                                UPDATE @queries SET done = 1 WHERE id=@id;
+                            END;";
 
             string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
 

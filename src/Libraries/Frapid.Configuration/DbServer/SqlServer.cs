@@ -1,17 +1,16 @@
 ﻿using System.Data.SqlClient;
-using System.Web.Hosting;
 using Frapid.Framework.Extensions;
 
 namespace Frapid.Configuration.DbServer
 {
     public class SqlServer : IDbServer
     {
-        public string ConfigFile { get; set; }
-
         public SqlServer()
         {
-            this.ConfigFile = HostingEnvironment.MapPath("/Resources/Configs/SQLServer.config");
+            this.ConfigFile = PathMapper.MapPath("/Resources/Configs/SQLServer.config");
         }
+
+        public string ConfigFile { get; set; }
 
         public string GetConnectionString(string tenant, string database = "", string userId = "", string password = "")
         {
@@ -82,7 +81,8 @@ namespace Frapid.Configuration.DbServer
             return this.GetConnectionString(tenant, database);
         }
 
-        public string GetConnectionString(string tenant, string host, string database, string username, string password, int port,
+        public string GetConnectionString(string tenant, string host, string database, string username, string password,
+            int port,
             bool enablePooling = true, int minPoolSize = 0, int maxPoolSize = 100)
         {
             string dataSource = host;
@@ -129,6 +129,11 @@ namespace Frapid.Configuration.DbServer
         public string AddReturnInsertedKey(string primaryKeyName)
         {
             return "; SELECT SCOPE_IDENTITY();";
+        }
+
+        public string GetDbTimestampFunction()
+        {
+            return "getutcdate()";
         }
     }
 }

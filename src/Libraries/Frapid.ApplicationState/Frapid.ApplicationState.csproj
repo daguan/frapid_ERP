@@ -57,6 +57,7 @@
     <Compile Include="CacheFactory\RedisCacheFactory.cs" />
     <Compile Include="Cache\AppUsers.cs" />
     <Compile Include="Cache\MetaLoginHelper.cs" />
+    <Compile Include="DAL\AppUsers.cs" />
     <Compile Include="ICacheFactory.cs" />
     <Compile Include="Models\LoginView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

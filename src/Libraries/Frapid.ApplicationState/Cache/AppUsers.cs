@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Web;
 using Frapid.ApplicationState.CacheFactory;
 using Frapid.ApplicationState.Models;
 using Frapid.Configuration;
-using Frapid.Configuration.Db;
-using Frapid.DataAccess;
 using Frapid.Framework.Extensions;
-using Frapid.NPoco;
 
 namespace Frapid.ApplicationState.Cache
 {
@@ -88,25 +84,12 @@ namespace Frapid.ApplicationState.Cache
 
         private static void UpdateActivity(int userId, string ip, string browser)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(GetTenant()), GetTenant()).GetDatabase())
-            {
-                var sql = new Sql("UPDATE account.users SET ");
-                sql.Append("last_seen_on = @0", DateTimeOffset.UtcNow);
-                sql.Append(",");
-                sql.Append("last_ip = @0", ip);
-                sql.Append(",");
-                sql.Append("last_browser = @0", browser);
-                sql.Where("user_id=@0", userId);
-
-                db.Execute(sql);
-            }
+            DAL.AppUsers.UpdateActivity(GetTenant(), userId, ip, browser);
         }
 
         public static LoginView GetMetaLogin(string database, long loginId)
         {
-            const string sql = "SELECT * FROM account.sign_in_view WHERE login_id=@0;";
-            var view = Factory.Get<LoginView>(database, sql, loginId).FirstOrDefault();
-            return view;
+            return DAL.AppUsers.GetMetaLogin(database, loginId);
         }
 
         private static Dictionary<string, object> GetDictionary(string database, LoginView metaLogin)

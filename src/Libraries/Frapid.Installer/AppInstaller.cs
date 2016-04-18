@@ -1,11 +1,11 @@
 ﻿using System.Globalization;
 using System.IO;
-using System.Web.Hosting;
+using Frapid.Configuration;
 using Frapid.DataAccess;
 using Frapid.Installer.DAL;
+using Frapid.Installer.Helpers;
 using Frapid.Installer.Models;
 using Microsoft.VisualBasic.FileIO;
-using Serilog;
 
 namespace Frapid.Installer
 {
@@ -31,7 +31,7 @@ namespace Frapid.Installer
         {
             foreach (var dependency in this.Installable.Dependencies)
             {
-                Log.Verbose(
+                InstallerLog.Verbose(
                     $"Installing module {dependency.ApplicationName} because the module {this.Installable.ApplicationName} depends on it.");
                 new AppInstaller(this.Tenant, this.Database, dependency).Install();
             }
@@ -55,7 +55,7 @@ namespace Frapid.Installer
             }
 
             string db = this.Installable.My;
-            string path = HostingEnvironment.MapPath(db);
+            string path = PathMapper.MapPath(db);
             this.RunSql(database, database, path);
         }
 
@@ -65,7 +65,7 @@ namespace Frapid.Installer
 
             if (this.Installable.IsMeta)
             {
-                Log.Verbose(
+                InstallerLog.Verbose(
                     $"Creating database of {this.Installable.ApplicationName} under meta database {Factory.GetMetaDatabase(this.Database)}.");
                 database = Factory.GetMetaDatabase(this.Database);
             }
@@ -77,22 +77,23 @@ namespace Frapid.Installer
 
             if (this.HasSchema(database))
             {
-                Log.Verbose($"Skipped {this.Installable.ApplicationName} schema creation because it already exists.");
+                InstallerLog.Verbose(
+                    $"Skipped {this.Installable.ApplicationName} schema creation because it already exists.");
                 return;
             }
 
-            Log.Verbose($"Creating schema {this.Installable.DbSchema}");
+            InstallerLog.Verbose($"Creating schema {this.Installable.DbSchema}");
 
 
             string db = this.Installable.BlankDbPath;
-            string path = HostingEnvironment.MapPath(db);
+            string path = PathMapper.MapPath(db);
             this.RunSql(database, database, path);
 
             if (this.Installable.InstallSample && !string.IsNullOrWhiteSpace(this.Installable.SampleDbPath))
             {
-                Log.Verbose($"Creating sample data of {this.Installable.ApplicationName}.");
+                InstallerLog.Verbose($"Creating sample data of {this.Installable.ApplicationName}.");
                 db = this.Installable.SampleDbPath;
-                path = HostingEnvironment.MapPath(db);
+                path = PathMapper.MapPath(db);
                 this.RunSql(database, database, path);
             }
         }
@@ -111,10 +112,10 @@ namespace Frapid.Installer
                 return;
             }
 
-            string source = HostingEnvironment.MapPath(this.Installable.OverrideTemplatePath);
+            string source = PathMapper.MapPath(this.Installable.OverrideTemplatePath);
             string destination = string.Format(CultureInfo.InvariantCulture, this.Installable.OverrideDestination,
                 this.Database);
-            destination = HostingEnvironment.MapPath(destination);
+            destination = PathMapper.MapPath(destination);
 
 
             if (string.IsNullOrWhiteSpace(source) || string.IsNullOrWhiteSpace(destination))
@@ -127,7 +128,7 @@ namespace Frapid.Installer
                 return;
             }
 
-            Log.Verbose($"Creating overide. Source: {source}, desitation: {destination}.");
+            InstallerLog.Verbose($"Creating overide. Source: {source}, desitation: {destination}.");
             FileSystem.CopyDirectory(source, destination, true);
         }
     }

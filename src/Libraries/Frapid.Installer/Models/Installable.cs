@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Web.Hosting;
+using Frapid.Configuration;
 using Newtonsoft.Json;
 
 namespace Frapid.Installer.Models
@@ -18,7 +18,7 @@ namespace Frapid.Installer.Models
         public string DocumentationUrl { get; set; }
         public string AssemblyName { get; set; }
         public string Version { get; set; }
-        public DateTimeOffset? RealeasedOn { get; set; }
+        public DateTime? RealeasedOn { get; set; }
         public string Description { get; set; }
         public string Category { get; set; }
         public string Bundle { get; set; }
@@ -51,7 +51,7 @@ namespace Frapid.Installer.Models
                 return installables;
             }
 
-            string root = HostingEnvironment.MapPath("~/");
+            string root = PathMapper.MapPath("~/");
             var files = new List<string>();
 
             if (root != null)
@@ -59,10 +59,10 @@ namespace Frapid.Installer.Models
                 files = Directory.GetFiles(root, "AppInfo.json", SearchOption.AllDirectories).ToList();
             }
 
-            foreach (var installable in files
+            foreach (var installable in Enumerable.Where(files
                 .Select(file => File.ReadAllText(file, Encoding.UTF8))
-                .Select(JsonConvert.DeserializeObject<Installable>)
-                .Where(installable => this.DependsOn.Contains(installable.ApplicationName)))
+                .Select(JsonConvert.DeserializeObject<Installable>),
+                installable => this.DependsOn.Contains(installable.ApplicationName)))
             {
                 installable.SetDependencies();
                 installables.Add(installable);

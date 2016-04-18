@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyLoader.cs" />
     <Compile Include="Commands\CommandProcessor.cs" />
     <Compile Include="Commands\Create\CreateCommand.cs" />
     <Compile Include="Commands\Create\CreateTemplate.cs" />

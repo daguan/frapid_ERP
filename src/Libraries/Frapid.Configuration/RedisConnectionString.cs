@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Text;
-using System.Web.Hosting;
 using Newtonsoft.Json;
 
 namespace Frapid.Configuration
@@ -9,7 +8,7 @@ namespace Frapid.Configuration
     {
         public static string GetConnectionString()
         {
-            string path = HostingEnvironment.MapPath("/Resources/Configs/RedisConfig.json");
+            string path = PathMapper.MapPath("/Resources/Configs/RedisConfig.json");
             if (File.Exists(path))
             {
                 string contents = File.ReadAllText(path, Encoding.UTF8);

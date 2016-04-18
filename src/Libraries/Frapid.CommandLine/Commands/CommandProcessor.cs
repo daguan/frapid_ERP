@@ -7,6 +7,11 @@ namespace frapid.Commands
     {
         public static void Process(string line)
         {
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                return;
+            }
+
             string commandName = line.Split(' ')[0];
             var command = Get(commandName, line);
 
@@ -21,12 +26,13 @@ namespace frapid.Commands
                 .Where(x => iType.IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
                 .Select(Activator.CreateInstance);
 
-            var command = members.Cast<ICommand>().FirstOrDefault(member => member.CommandName == commandName);
-
-            if (command != null)
+            foreach (ICommand member in members)
             {
-                command.Line = line;
-                return command;
+                if (member.CommandName == commandName)
+                {
+                    member.Line = line;
+                    return member;
+                }
             }
 
             return null;

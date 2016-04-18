@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Web.Hosting;
 using Frapid.NPoco;
 using Frapid.NPoco.FluentMappings;
 using Serilog;
@@ -34,7 +33,7 @@ namespace Frapid.Configuration.Db
                                 Inflector.AddUnderscores(Inflector.MakePlural(t.Name)).ToLower());
 
                         s.Columns.Named(m => Inflector.AddUnderscores(m.Name).ToLower());
-                        s.Columns.IgnoreWhere(x=> x.GetCustomAttributes<IgnoreAttribute>().Any());
+                        s.Columns.IgnoreWhere(x => x.GetCustomAttributes<IgnoreAttribute>().Any());
                         s.PrimaryKeysNamed(t => Inflector.AddUnderscores(t.Name).ToLower() + "_id");
                         s.PrimaryKeysAutoIncremented(t => true);
                     }
@@ -90,7 +89,7 @@ namespace Frapid.Configuration.Db
                 meta = "master";
             }
 
-            path = HostingEnvironment.MapPath(path);
+            path = PathMapper.MapPath(path);
 
             if (File.Exists(path))
             {
@@ -98,12 +97,12 @@ namespace Frapid.Configuration.Db
             }
             else
             {
-                Log.Warning($"The meta database for provider '{provider}' could not be determined because the configuration file '{ path }' does not exist. Returned value '{meta}' by convention.");
+                Log.Warning(
+                    $"The meta database for provider '{provider}' could not be determined because the configuration file '{path}' does not exist. Returned value '{meta}' by convention.");
             }
 
             return meta;
         }
-
 
 
         public static DatabaseFactory Get(string connectionString, string tenant)
