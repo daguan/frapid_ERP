@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Web;
 using Serilog;
 
 namespace Frapid.Installer.Helpers

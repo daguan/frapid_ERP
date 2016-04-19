@@ -1,5 +1,5 @@
 using System.IO;
-using System.Web;
+using System.Web.Hosting;
 using Frapid.Configuration;
 using Frapid.Installer.DAL;
 
@@ -18,9 +18,7 @@ namespace Frapid.Installer.Tenant
 
         public void UnInstall()
         {
-            var context = HttpContext.Current;
-
-            if (context != null)
+            if (HostingEnvironment.IsHosted)
             {
                 throw new UninstallException("Access is denied. Deleting a website is not allowed.");
             }

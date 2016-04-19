@@ -1,5 +1,5 @@
 using System.IO;
-using System.Web;
+using System.Web.Hosting;
 
 namespace Frapid.Configuration
 {
@@ -9,11 +9,14 @@ namespace Frapid.Configuration
 
         public static string MapPath(string path)
         {
-            var context = HttpContext.Current;
-
-            if (context != null)
+            if (string.IsNullOrWhiteSpace(PathToRootDirectory))
             {
-                return context.Server.MapPath(path);
+                PathToRootDirectory = HostingEnvironment.MapPath("~/");
+            }
+
+            if (string.IsNullOrWhiteSpace(PathToRootDirectory))
+            {
+                return path;
             }
 
             if (path.StartsWith("~/"))
