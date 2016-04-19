@@ -1,5 +1,7 @@
 ﻿using System.Net.Mail;
 using System.Security;
+using System.Text;
+using System.Web.Security;
 using Frapid.Messaging.DTO;
 
 namespace Frapid.Messaging.Smtp
@@ -72,6 +74,21 @@ namespace Frapid.Messaging.Smtp
 
         private SecureString GetSmtpUserPassword(string password)
         {
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                return new SecureString();
+            }
+
+            var data = Encoding.UTF8.GetBytes(password);
+            var unsecure = MachineKey.Unprotect(data, "ScrudFactory");
+
+            if (unsecure == null)
+            {
+                return new SecureString();
+            }
+
+            password = Encoding.UTF8.GetString(unsecure);
+
             var secureString = new SecureString();
             foreach (char c in password)
             {

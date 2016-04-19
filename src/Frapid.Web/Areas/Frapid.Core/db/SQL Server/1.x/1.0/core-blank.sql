@@ -18,7 +18,7 @@ IF NOT EXISTS
 )
 BEGIN
     CREATE USER report_user FOR LOGIN report_user;
-    EXEC sp_addrolemember 'db_datareader', 'frapid_db_user';
+    EXEC sp_addrolemember 'db_datareader', 'report_user';
 END;
 GO
 
@@ -709,6 +709,26 @@ CREATE TABLE core.marital_statuses
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
 INSERT INTO core.offices(office_code, office_name)
 SELECT 'DEF', 'Default';
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/05.scrud-views/core.office_scrud_view.sql --<--<--
+IF OBJECT_ID('core.office_scrud_view') IS NOT NULL
+DROP VIEW core.office_scrud_view;
+
+GO
+
+CREATE VIEW core.office_scrud_view
+AS
+SELECT
+	core.offices.office_id,
+	core.offices.office_code,
+	core.offices.office_name,
+	core.offices.currency_code,
+	parent_office.office_code + ' (' + parent_office.office_name + ')' AS parent_office
+FROM core.offices
+LEFT JOIN core.offices AS parent_office
+ON parent_office.office_id = core.offices.parent_office_id;
+
+GO
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.create_app.sql --<--<--
 IF OBJECT_ID('core.create_app') IS NOT NULL

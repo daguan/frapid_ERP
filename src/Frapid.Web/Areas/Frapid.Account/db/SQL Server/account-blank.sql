@@ -1189,6 +1189,52 @@ SELECT 9999,   'Admin',                 1;
 INSERT INTO account.configuration_profiles(profile_name, is_active, allow_registration, registration_role_id, registration_office_id)
 SELECT 'Default', 1, 1, 2000, 1;
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/05.scrud-views/account.configuration_profile_scrud_view.sql --<--<--
+IF OBJECT_ID('account.configuration_profile_scrud_view') IS NOT NULL
+DROP VIEW account.configuration_profile_scrud_view;
+
+GO
+
+CREATE VIEW account.configuration_profile_scrud_view
+AS
+SELECT
+	account.configuration_profiles.configuration_profile_id,
+	account.configuration_profiles.profile_name,
+	account.configuration_profiles.is_active,
+	account.configuration_profiles.allow_registration,
+	account.roles.role_name AS defult_role,
+	core.offices.office_code + ' (' + core.offices.office_name + ')' AS default_office
+FROM account.configuration_profiles
+LEFT JOIN account.roles
+ON account.roles.role_id = account.configuration_profiles.registration_role_id
+LEFT JOIN core.offices
+ON core.offices.office_id = account.configuration_profiles.registration_office_id;
+
+GO
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/05.scrud-views/account.user_scrud_view.sql --<--<--
+IF OBJECT_ID('account.user_scrud_view') IS NOT NULL
+DROP VIEW account.user_scrud_view;
+
+GO
+
+CREATE VIEW account.user_scrud_view
+AS
+SELECT
+	account.users.user_id,
+	account.users.email,
+	account.users.name,
+	account.users.phone,
+	core.offices.office_code + ' (' + core.offices.office_name + ')' AS office,
+	account.roles.role_name
+FROM account.users
+INNER JOIN account.roles
+ON account.roles.role_id = account.users.role_id
+INNER JOIN core.offices
+ON core.offices.office_id = account.users.office_id;
+
+GO
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/05.views/account.sign_in_view.sql --<--<--
 IF OBJECT_ID('account.sign_in_view') IS NOT NULL
 DROP VIEW account.sign_in_view;

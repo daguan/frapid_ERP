@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Web.Security;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
@@ -183,9 +185,6 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-
-            //$"SELECT * FROM {this.FullyQualifiedObjectName} WHERE {this.PrimaryKey} < @0 
-            //ORDER BY {this.PrimaryKey} DESC LIMIT 1;";
 
             var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName}");
             sql.Where($"{this.PrimaryKey} < @0", primaryKey);
@@ -397,6 +396,8 @@ namespace Frapid.WebApi.DataAccess
                 {
                     using (var transaction = db.GetTransaction())
                     {
+                        items = this.Crypt(items);
+
                         foreach (var item in items)
                         {
                             line++;
@@ -434,6 +435,7 @@ namespace Frapid.WebApi.DataAccess
                                 string columns = string.Join(",",
                                     item.Where(x => !x.Key.Equals(this.PrimaryKey))
                                         .Select(x => Sanitizer.SanitizeIdentifierName(x.Key)));
+
                                 string parameters = string.Join(",",
                                     Enumerable.Range(0, item.Count - 1).Select(x => "@" + x));
                                 var arguments =
@@ -481,6 +483,8 @@ namespace Frapid.WebApi.DataAccess
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
+
+            item = this.Crypt(item);
 
             item["audit_user_id"] = this.UserId;
             item["audit_ts"] = DateTimeOffset.UtcNow;
@@ -763,6 +767,8 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
+            item = this.Crypt(item);
+
             item["audit_user_id"] = this.UserId;
             item["audit_ts"] = DateTimeOffset.UtcNow;
 
@@ -791,6 +797,33 @@ namespace Frapid.WebApi.DataAccess
                 this.AddCustomFields(primaryKeyValue, customFields);
                 return primaryKeyValue;
             }
+        }
+
+        private List<Dictionary<string, object>> Crypt(List<Dictionary<string, object>> items)
+        {
+            for (int index = 0; index < items.Count; index++)
+            {
+                items[index] = this.Crypt(items[index]);
+            }
+
+            return items;
+        }
+
+        private Dictionary<string, object> Crypt(Dictionary<string, object> item)
+        {
+            for (int index = 0; index < item.Count; index++)
+            {
+                var candidate = item.ElementAt(index);
+
+                if (candidate.Key.ToUpperInvariant().Contains("PASSWORD") ||
+                    candidate.Key.ToUpperInvariant().Contains("SECRET"))
+                {
+                    var bytes = Encoding.UTF8.GetBytes(candidate.Value.ToString());
+                    item[candidate.Key] = Encoding.UTF8.GetString(MachineKey.Protect(bytes, "ScrudFactory"));
+                }
+            }
+
+            return item;
         }
 
         public void AddCustomFields(object primaryKeyValue, List<CustomField> customFields)

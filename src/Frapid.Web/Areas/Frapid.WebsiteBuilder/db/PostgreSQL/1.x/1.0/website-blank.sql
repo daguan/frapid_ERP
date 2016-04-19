@@ -291,6 +291,54 @@ SELECT * FROM auth.create_app_menu_policy
 );
 
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.scrud-views/website.contact_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS website.contact_scrud_view;
+
+CREATE VIEW website.contact_scrud_view
+AS
+SELECT
+	website.contacts.contact_id,
+	website.contacts.title,
+	website.contacts.name,
+	website.contacts.position,
+	website.contacts.email,
+	website.contacts.display_contact_form,
+	website.contacts.display_email
+FROM website.contacts;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.scrud-views/website.content_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS website.content_scrud_view;
+
+CREATE VIEW website.content_scrud_view
+AS
+SELECT
+	website.contents.content_id,
+	website.contents.title,
+	website.categories.category_name,
+	website.categories.is_blog,
+	website.contents.alias,
+	website.contents.is_draft,
+	website.contents.publish_on
+FROM website.contents
+INNER JOIN website.categories
+ON website.categories.category_id = website.contents.category_id;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.scrud-views/website.email_subscription_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS website.email_subscription_scrud_view;
+
+CREATE VIEW website.email_subscription_scrud_view
+AS
+SELECT
+    website.email_subscriptions.email_subscription_id,
+    website.email_subscriptions.first_name,
+    website.email_subscriptions.last_name,
+    website.email_subscriptions.email,
+    website.email_subscriptions.confirmed,
+    website.email_subscriptions.confirmed_on,
+    website.email_subscriptions.unsubscribed,
+    website.email_subscriptions.unsubscribed_on
+FROM website.email_subscriptions;
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.triggers/website.email_subscription_confirmation_trigger.sql --<--<--
 DROP FUNCTION IF EXISTS website.email_subscription_confirmation_trigger() CASCADE;
 

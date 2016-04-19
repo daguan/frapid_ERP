@@ -1,16 +1,16 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Configuration Profile";
+    ViewBag.Title = "Configuration Profiles";
     Layout = ViewBag.Layout;
 }
 <script>
     var scrudFactory = new Object();
 
-    scrudFactory.title = "Configuration Profile";
+    scrudFactory.title = "Configuration Profiles";
 
-    scrudFactory.viewAPI = "/api/forms/account/configuration-profiles";
-    scrudFactory.viewTableName = "account.configuration_profiles";
+    scrudFactory.viewAPI = "/api/views/account/configuration-profile-scrud-view";
+    scrudFactory.viewTableName = "account.configuration_profile_scrud_view";
 
     scrudFactory.formAPI = "/api/forms/account/configuration-profiles";
     scrudFactory.formTableName = "account.configuration_profiles";

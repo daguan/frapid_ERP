@@ -17,6 +17,6 @@ IF NOT EXISTS
 )
 BEGIN
     CREATE USER report_user FOR LOGIN report_user;
-    EXEC sp_addrolemember 'db_datareader', 'frapid_db_user';
+    EXEC sp_addrolemember 'db_datareader', 'report_user';
 END;
 GO

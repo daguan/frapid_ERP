@@ -13,7 +13,8 @@
         };
 
         if (window.editing) {
-            type = "edit";
+            var primaryKey = $("[data-primarykey]").val();
+            type = "edit/" + primaryKey;
         };
 
         return type;
@@ -30,7 +31,8 @@
 
         var data = JSON.stringify(form);
 
-        return getAjaxRequest(url, "POST", data);
+        var verb = type.substring(0, 4) === "edit" ? "PUT" : "POST";
+        return getAjaxRequest(url, verb, data);
     };
 
     var isValid = validate();

@@ -677,6 +677,21 @@ CREATE TABLE core.marital_statuses
 INSERT INTO core.offices(office_code, office_name)
 SELECT 'DEF', 'Default';
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/05.scrud-views/core.office_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS core.office_scrud_view;
+
+CREATE VIEW core.office_scrud_view
+AS
+SELECT
+	core.offices.office_id,
+	core.offices.office_code,
+	core.offices.office_name,
+	core.offices.currency_code,
+	parent_office.office_code || ' (' || parent_office.office_name || ')' AS parent_office
+FROM core.offices
+LEFT JOIN core.offices AS parent_office
+ON parent_office.office_id = core.offices.parent_office_id;
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/core.create_app.sql --<--<--
 DROP FUNCTION IF EXISTS core.create_app
 (
