@@ -31,8 +31,7 @@ namespace Frapid.Installer
         {
             foreach (var dependency in this.Installable.Dependencies)
             {
-                InstallerLog.Verbose(
-                    $"Installing module {dependency.ApplicationName} because the module {this.Installable.ApplicationName} depends on it.");
+                InstallerLog.Verbose($"Installing module {dependency.ApplicationName} because the module {this.Installable.ApplicationName} depends on it.");
                 new AppInstaller(this.Tenant, this.Database, dependency).Install();
             }
 
@@ -87,7 +86,7 @@ namespace Frapid.Installer
 
             string db = this.Installable.BlankDbPath;
             string path = PathMapper.MapPath(db);
-            this.RunSql(database, database, path);
+            this.RunSql(this.Tenant, database, path);
 
             if (this.Installable.InstallSample && !string.IsNullOrWhiteSpace(this.Installable.SampleDbPath))
             {

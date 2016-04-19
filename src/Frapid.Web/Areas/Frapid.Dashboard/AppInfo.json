@@ -20,5 +20,5 @@
 	"My": null,
 	"OverrideTemplatePath": "~/Areas/Frapid.Dashboard/Override",
     "OverrideDestination":"~/Tenants/{0}/Areas",
-	"DependsOn": null
+	"DependsOn": ["Frapid"]
 }

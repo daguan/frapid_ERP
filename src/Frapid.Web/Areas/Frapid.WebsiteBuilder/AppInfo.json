@@ -20,5 +20,5 @@
 	"My": null,
 	"OverrideTemplatePath": "~/Areas/Frapid.WebsiteBuilder/Override",
     "OverrideDestination":"~/Tenants/{0}/Areas",
-	"DependsOn": ["Frapid.Config"]
+	"DependsOn": ["Frapid", "Frapid.Config"]
 }

@@ -20,5 +20,5 @@
 	"My": null,
     "OverrideTemplatePath":null,
     "OverrideDestination":null,
-	"DependsOn": null
+	"DependsOn": ["Frapid"]
 }

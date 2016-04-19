@@ -20,5 +20,5 @@
 	"My": "~/Areas/Frapid.Config/.my/db.sql",
 	"OverrideTemplatePath": null,
     "OverrideDestination":"~/Tenants/{0}/Areas/Frapid.Config",
-	"DependsOn": ["Frapid.Account"]
+	"DependsOn": ["Frapid", "Frapid.Account"]
 }
