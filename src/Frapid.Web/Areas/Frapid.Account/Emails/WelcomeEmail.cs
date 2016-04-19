@@ -52,12 +52,14 @@ namespace Frapid.Account.Emails
             return parsed;
         }
 
-        private EmailQueue GetEmail(IUserInfo model, string subject, string message)
+        private EmailQueue GetEmail(IEmailProcessor processor, IUserInfo model, string subject, string message)
         {
             return new EmailQueue
             {
                 AddedOn = DateTimeOffset.UtcNow,
-                FromName = model.Name,
+                FromName = processor.Config.FromName,
+                ReplyTo = processor.Config.FromEmail,
+                ReplyToName = processor.Config.FromName,
                 Subject = subject,
                 Message = message,
                 SendTo = model.Email,
@@ -71,14 +73,9 @@ namespace Frapid.Account.Emails
             string parsed = this.ParseTemplate(template);
             string subject = "Welcome to " + HttpContext.Current.Request.Url.Authority;
             string tenant = AppUsers.GetTenant();
-            var email = this.GetEmail(this._user, subject, parsed);
 
             var processor = EmailProcessor.GetDefault(tenant);
-
-            if (string.IsNullOrWhiteSpace(email.ReplyTo))
-            {
-                email.ReplyTo = processor.Config.FromEmail;
-            }
+            var email = this.GetEmail(processor, this._user, subject, parsed);
 
             var queue = new MailQueueManager(tenant, email);
             queue.Add();

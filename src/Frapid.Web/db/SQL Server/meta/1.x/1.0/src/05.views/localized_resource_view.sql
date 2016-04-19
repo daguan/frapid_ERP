@@ -1,9 +1,9 @@
-IF OBJECT_ID('i18n.localized@resource_view') IS NOT NULL
-DROP VIEW i18n.localized@resource_view;
+IF OBJECT_ID('i18n.localized_resource_view') IS NOT NULL
+DROP VIEW i18n.localized_resource_view;
 
 GO
 
-CREATE VIEW i18n.localized@resource_view
+CREATE VIEW i18n.localized_resource_view
 AS
 SELECT
     resource_class + 

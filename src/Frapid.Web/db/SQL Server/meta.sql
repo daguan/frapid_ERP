@@ -90,12 +90,12 @@ GO
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/05.views/localized_resource_view.sql --<--<--
-IF OBJECT_ID('i18n.localized@resource_view') IS NOT NULL
-DROP VIEW i18n.localized@resource_view;
+IF OBJECT_ID('i18n.localized_resource_view') IS NOT NULL
+DROP VIEW i18n.localized_resource_view;
 
 GO
 
-CREATE VIEW i18n.localized@resource_view
+CREATE VIEW i18n.localized_resource_view
 AS
 SELECT
     resource_class + 
