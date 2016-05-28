@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using Frapid.DataAccess;
 
 namespace Frapid.Backups.SqlServer
 {
-    public class Agent : IDbAgent
+    public sealed class Agent: IDbAgent
     {
         public string Tenant { get; set; }
         public event Progressing Progress;
@@ -14,7 +15,7 @@ namespace Frapid.Backups.SqlServer
         public DbServer Server { get; set; }
         public string BackupFileLocation { get; set; }
 
-        public bool Backup(Action<string> successCallback, Action<string> failCallback)
+        public async Task<bool> BackupAsync(Action<string> successCallback, Action<string> failCallback)
         {
             string destination = Path.Combine(this.BackupFileLocation, this.FileName);
 
@@ -22,9 +23,9 @@ namespace Frapid.Backups.SqlServer
 
             try
             {
-                Factory.NonQuery(this.Tenant, sql, destination);
+                await Factory.NonQueryAsync(this.Tenant, sql, destination);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 string message = "Could not create backup." + ex.Message;
                 this.OnOnBackupFail(new ProgressInfo(message));

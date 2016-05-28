@@ -13,8 +13,10 @@ namespace Frapid.Areas.Caching
     {
         public string CacheProfile { get; set; }
         public int Duration { get; set; }
+
         [JsonConverter(typeof(StringEnumConverter))]
         public OutputCacheLocation Location { get; set; }
+
         public bool NoStore { get; set; }
         public string SqlDependency { get; set; }
         public string VaryByContentEncoding { get; set; }
@@ -25,12 +27,12 @@ namespace Frapid.Areas.Caching
         public static CacheConfig Get(string tenant, string profile)
         {
             string path = HostingEnvironment.MapPath($"~/Tenants/{tenant}/Configs/OutputCache.json");
-            if (path == null)
+            if(path == null)
             {
                 return null;
             }
 
-            if (!File.Exists(path))
+            if(!File.Exists(path))
             {
                 return null;
             }

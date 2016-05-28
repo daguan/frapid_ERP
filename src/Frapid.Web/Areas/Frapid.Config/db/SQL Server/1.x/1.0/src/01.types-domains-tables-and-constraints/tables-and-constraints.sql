@@ -93,17 +93,14 @@ ON config.filters(object_name);
 CREATE TABLE config.custom_field_data_types
 (
     data_type                                   national character varying(50) NOT NULL PRIMARY KEY,
-    is_number                                   bit DEFAULT(0),
-    is_date                                     bit DEFAULT(0),
-    is_bit										bit DEFAULT(0),
-    is_long_text								bit DEFAULT(0)
+	underlying_type								national character varying(500) NOT NULL
 );
 
 CREATE TABLE config.custom_field_forms
 (
     form_name                                   national character varying(100) NOT NULL PRIMARY KEY,
-    table_name                                  national character varying(100) NOT NULL UNIQUE,
-    key_name                                    national character varying(100) NOT NULL        
+    table_name                                  national character varying(500) NOT NULL UNIQUE,
+    key_name                                    national character varying(500) NOT NULL        
 );
 
 
@@ -112,9 +109,11 @@ CREATE TABLE config.custom_field_setup
     custom_field_setup_id                       integer IDENTITY NOT NULL PRIMARY KEY,
     form_name                                   national character varying(100) NOT NULL
                                                 REFERENCES config.custom_field_forms,
+	before_field								national character varying(500),
     field_order                                 integer NOT NULL DEFAULT(0),
+	after_field									national character varying(500),
     field_name                                  national character varying(100) NOT NULL,
-    field_label                                 national character varying(100) NOT NULL,                   
+    field_label                                 national character varying(200) NOT NULL,                   
     data_type                                   national character varying(50)
                                                 REFERENCES config.custom_field_data_types,
     description                                 national character varying(500) NOT NULL
@@ -126,7 +125,7 @@ CREATE TABLE config.custom_fields
     custom_field_id                             bigint IDENTITY NOT NULL PRIMARY KEY,
     custom_field_setup_id                       integer NOT NULL REFERENCES config.custom_field_setup,
     resource_id                                 national character varying(500) NOT NULL,
-    value                                       national character varying(500)
+    value                                       national character varying(MAX)
 );
 
 

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace Frapid.NPoco
@@ -11,61 +9,65 @@ namespace Frapid.NPoco
         readonly Dictionary<Type, Dictionary<string, object>> _stringsToEnums = new Dictionary<Type, Dictionary<string, object>>();
         readonly Dictionary<Type, Dictionary<int, string>> _enumNumbersToStrings = new Dictionary<Type, Dictionary<int, string>>();
         readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
-
+        
         public object EnumFromString(Type type, string value)
         {
-            PopulateIfNotPresent(type);
-            return _stringsToEnums[type][value];
+            this.PopulateIfNotPresent(type);
+            if (!this._stringsToEnums[type].ContainsKey(value))
+            {
+                throw new Exception(string.Format("The value '{0}' could not be found for Enum '{1}'", value, type));
+            }
+            return this._stringsToEnums[type][value];
         }
 
         public string StringFromEnum(object theEnum)
         {
             Type typeOfEnum = theEnum.GetType();
-            PopulateIfNotPresent(typeOfEnum);
-            return _enumNumbersToStrings[typeOfEnum][(int)theEnum];
+            this.PopulateIfNotPresent(typeOfEnum);
+            return this._enumNumbersToStrings[typeOfEnum][(int)theEnum];
         }
 
         void PopulateIfNotPresent(Type type)
         {
-            _lock.EnterUpgradeableReadLock();
+            this._lock.EnterUpgradeableReadLock();
             try
             {
-                if (!_stringsToEnums.ContainsKey(type))
+                if (!this._stringsToEnums.ContainsKey(type))
                 {
-                    _lock.EnterWriteLock();
+                    this._lock.EnterWriteLock();
                     try
                     {
-                        Populate(type);
+                        this.Populate(type);
                     }
                     finally
                     {
-                        _lock.ExitWriteLock();
+                        this._lock.ExitWriteLock();
                     }
                 }
             }
             finally
             {
-                _lock.ExitUpgradeableReadLock();
+                this._lock.ExitUpgradeableReadLock();
             }
         }
 
         void Populate(Type type)
         {
             Array values = Enum.GetValues(type);
-            _stringsToEnums[type] = new Dictionary<string, object>(values.Length);
-            _enumNumbersToStrings[type] = new Dictionary<int, string>(values.Length);
+            this._stringsToEnums[type] = new Dictionary<string, object>(values.Length);
+            this._enumNumbersToStrings[type] = new Dictionary<int, string>(values.Length);
 
             for (int i = 0; i < values.Length; i++)
             {
                 object value = values.GetValue(i);
-                _stringsToEnums[type].Add(value.ToString(), value);
-                _enumNumbersToStrings[type].Add((int)value, value.ToString());
+                this._stringsToEnums[type].Add(value.ToString(), value);
+                this._enumNumbersToStrings[type].Add((int)value, value.ToString());
             }
         }
 
         public void Dispose()
         {
-            _lock.Dispose();
+            this._lock.Dispose();
         }
     }
 }

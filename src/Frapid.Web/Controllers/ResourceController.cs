@@ -10,7 +10,7 @@ using Frapid.i18n.DAL;
 
 namespace Frapid.Web.Controllers
 {
-    public class ResourceController : FrapidController
+    public class ResourceController: FrapidController
     {
         [Route("i18n/resources.js")]
         [OutputCache(Duration = 31536000, VaryByParam = "none", Location = OutputCacheLocation.Client)]
@@ -29,18 +29,15 @@ namespace Frapid.Web.Controllers
 
             var resources = DbResources.GetLocalizationTable(tenant, culture);
 
-            var resourceClassGroup = resources
-                .GroupBy(r => r.ResourceClass)
-                .Select(group => group.ToList())
-                .ToList();
+            var resourceClassGroup = resources.GroupBy(r => r.ResourceClass).Select(group => group.ToList()).ToList();
 
-            foreach (var resourceClass in resourceClassGroup)
+            foreach(var resourceClass in resourceClassGroup)
             {
                 int i = 0;
 
-                foreach (var resource in resourceClass)
+                foreach(var resource in resourceClass)
                 {
-                    if (i == 0)
+                    if(i == 0)
                     {
                         script.Append(resource.ResourceClass + ": {");
                     }
@@ -48,7 +45,7 @@ namespace Frapid.Web.Controllers
                     script.Append(resource.Key + ": function(){ return \"");
                     string localized = resource.Translated;
 
-                    if (string.IsNullOrWhiteSpace(localized))
+                    if(string.IsNullOrWhiteSpace(localized))
                     {
                         localized = resource.Original;
                     }

@@ -1,10 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Web.Hosting;
 using Microsoft.VisualBasic.FileIO;
-using SearchOption = System.IO.SearchOption;
 
 namespace Frapid.Backups
 {
@@ -28,7 +26,7 @@ namespace Frapid.Backups
             string destination = Path.Combine(this.BackupPath, this.FileName);
             this.BackupDirectory = destination;
 
-            if (source != null)
+            if(source != null)
             {
                 FileSystem.CopyDirectory(source, destination);
             }

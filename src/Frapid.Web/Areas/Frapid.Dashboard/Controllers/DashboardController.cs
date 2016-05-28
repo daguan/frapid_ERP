@@ -51,7 +51,7 @@ namespace Frapid.Dashboard.Controllers
 
         protected string GetRazorView(string areaName, string path)
         {
-            string tenant = DbConvention.GetTenant();
+            string tenant = TenantConvention.GetTenant();
             string theme = Configuration.GetDefaultTheme();
 
 

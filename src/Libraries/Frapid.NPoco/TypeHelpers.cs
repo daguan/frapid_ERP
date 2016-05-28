@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Reflection;
 
 namespace Frapid.NPoco
 {
@@ -32,5 +30,17 @@ namespace Frapid.NPoco
 
             return null;
         }
+        
+        public static bool IsAClass(this Type type)
+        {
+            return type != typeof(Type) && !type.GetTypeInfo().IsValueType && (type.GetTypeInfo().IsClass || type.GetTypeInfo().IsInterface) && type != typeof (string) && type != typeof(object) && !type.IsArray;
+        }
+
+#if NET40 || NET35
+        public static Type GetTypeInfo(this Type type)
+        {
+            return type;
+        }
+#endif
     }
 }

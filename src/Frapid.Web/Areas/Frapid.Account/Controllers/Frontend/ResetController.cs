@@ -46,12 +46,12 @@ namespace Frapid.Account.Controllers.Frontend
             model.IpAddress = this.RemoteUser.IpAddress;
             string tenant = AppUsers.GetTenant();
 
-            if (DAL.ResetRequests.HasActiveResetRequest(tenant, model.Email))
+            if (await DAL.ResetRequests.HasActiveResetRequestAsync(tenant, model.Email))
             {
                 return this.Json(true);
             }
 
-            var result = DAL.ResetRequests.Request(tenant, model);
+            var result = await DAL.ResetRequests.RequestAsync(tenant, model);
 
             if (result.UserId <= 0)
             {
@@ -67,12 +67,12 @@ namespace Frapid.Account.Controllers.Frontend
         [Route("account/reset/validate-email")]
         [HttpPost]
         [AllowAnonymous]       
-        public ActionResult ValidateEmail(string email)
+        public async Task<ActionResult> ValidateEmailAsync(string email)
         {
-            Thread.Sleep(1000);
+            await Task.Delay(1000);
             string tenant = AppUsers.GetTenant();
 
-            return string.IsNullOrWhiteSpace(email) ? this.Json(true) : this.Json(!Registrations.HasAccount(tenant, email));
+            return string.IsNullOrWhiteSpace(email) ? this.Json(true) : this.Json(!await Registrations.HasAccountAsync(tenant, email));
         }
 
         [Route("account/reset/email-sent")]
@@ -89,7 +89,7 @@ namespace Frapid.Account.Controllers.Frontend
 
         [Route("account/reset/confirm")]
         [AllowAnonymous]
-        public ActionResult Do(string token)
+        public async Task<ActionResult> DoAsync(string token)
         {
             if (RemoteUser.IsListedInSpamDatabase())
             {
@@ -103,7 +103,7 @@ namespace Frapid.Account.Controllers.Frontend
 
             string tenant = AppUsers.GetTenant();
 
-            var reset = DAL.ResetRequests.GetIfActive(tenant, token);
+            var reset = await DAL.ResetRequests.GetIfActiveAsync(tenant, token);
 
             if (reset == null)
             {
@@ -116,7 +116,7 @@ namespace Frapid.Account.Controllers.Frontend
         [Route("account/reset/confirm")]
         [HttpPost]
         [AllowAnonymous]        
-        public ActionResult Do()
+        public async Task<ActionResult> DoAsync()
         {
             string token = this.Request.QueryString["token"];
             string password = this.Request.QueryString["password"];
@@ -128,10 +128,10 @@ namespace Frapid.Account.Controllers.Frontend
 
             string tenant = AppUsers.GetTenant();
 
-            var reset = DAL.ResetRequests.GetIfActive(tenant, token);
+            var reset = await DAL.ResetRequests.GetIfActiveAsync(tenant, token);
             if (reset != null)
             {
-                DAL.ResetRequests.CompleteReset(tenant, token, password);
+                await DAL.ResetRequests.CompleteResetAsync(tenant, token, password);
                 return this.Json(true);
             }
 

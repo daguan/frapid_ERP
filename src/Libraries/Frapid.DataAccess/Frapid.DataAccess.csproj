@@ -35,7 +35,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Npgsql, Version=2.2.6.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
@@ -54,6 +54,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -88,10 +89,6 @@
       <Project>{a4dee358-3203-425c-80e9-8eba0a01b73f}</Project>
       <Name>Frapid.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Frapid.NPoco\Frapid.NPoco.csproj">
-      <Project>{58F77141-FFE7-45F6-B726-80100204E69D}</Project>
-      <Name>Frapid.NPoco</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Frapid.Configuration\Frapid.Configuration.csproj">
       <Project>{ca3c3d39-6775-4234-b343-38f0724adcf8}</Project>
       <Name>Frapid.Configuration</Name>
@@ -99,6 +96,10 @@
     <ProjectReference Include="..\Frapid.i18n\Frapid.i18n.csproj">
       <Project>{88DFDF57-A52B-4D71-A0C4-BEF1A3839506}</Project>
       <Name>Frapid.i18n</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Frapid.NPoco\Frapid.NPoco.csproj">
+      <Project>{02196a31-8f0b-4d7b-bfaf-15bfc418cdbd}</Project>
+      <Name>Frapid.NPoco</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

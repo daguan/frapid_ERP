@@ -1,39 +1,40 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
-using Frapid.Framework;
 using Frapid.WebApi.DataAccess;
 using Newtonsoft.Json.Linq;
 
 namespace Frapid.WebApi.Service
 {
-    public class ViewApiController : FrapidApiController
+    public class ViewApiController: FrapidApiController
     {
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/views/{schemaName}/{tableName}/count")]
         [RestAuthorize]
-        public long Count(string schemaName, string tableName)
+        public async Task<long> CountAsync(string schemaName, string tableName)
         {
             try
             {
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
-                    this.MetaUser.UserId);
-                return repository.Count();
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
+                return await repository.CountAsync();
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -47,25 +48,26 @@ namespace Frapid.WebApi.Service
         [Route("~/api/views/{schemaName}/{tableName}/all")]
         [Route("~/api/views/{schemaName}/{tableName}/export")]
         [RestAuthorize]
-        public IEnumerable<dynamic> GetAll(string schemaName, string tableName)
+        public async Task<IEnumerable<dynamic>> GetAllAsync(string schemaName, string tableName)
         {
             try
             {
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
-                    this.MetaUser.UserId);
-                return repository.Get();
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
+                return await repository.GetAsync();
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -78,25 +80,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/views/{schemaName}/{tableName}")]
         [RestAuthorize]
-        public IEnumerable<dynamic> GetPaginatedResult(string schemaName, string tableName)
+        public async Task<IEnumerable<dynamic>> GetPaginatedResultAsync(string schemaName, string tableName)
         {
             try
             {
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
-                    this.MetaUser.UserId);
-                return repository.GetPaginatedResult();
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
+                return await repository.GetPaginatedResultAsync();
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -109,25 +112,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/views/{schemaName}/{tableName}/page/{pageNumber}")]
         [RestAuthorize]
-        public IEnumerable<dynamic> GetPaginatedResult(string schemaName, string tableName, long pageNumber)
+        public async Task<IEnumerable<dynamic>> GetPaginatedResultAsync(string schemaName, string tableName, long pageNumber)
         {
             try
             {
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
-                    this.MetaUser.UserId);
-                return repository.GetPaginatedResult(pageNumber);
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
+                return await repository.GetPaginatedResultAsync(pageNumber);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -140,26 +144,27 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("POST")]
         [Route("~/api/views/{schemaName}/{tableName}/count-where")]
         [RestAuthorize]
-        public long CountWhere(string schemaName, string tableName, [FromBody] JArray filters)
+        public async Task<long> CountWhereAsync(string schemaName, string tableName, [FromBody] JArray filters)
         {
             try
             {
                 var f = Filter.FromJArray(filters);
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
-                    this.MetaUser.UserId);
-                return repository.CountWhere(f);
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
+                return await repository.CountWhereAsync(f);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -172,27 +177,27 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("POST")]
         [Route("~/api/views/{schemaName}/{tableName}/get-where/{pageNumber}")]
         [RestAuthorize]
-        public IEnumerable<dynamic> GetWhere(string schemaName, string tableName, long pageNumber,
-            [FromBody] JArray filters)
+        public async Task<IEnumerable<dynamic>> GetWhereAsync(string schemaName, string tableName, long pageNumber, [FromBody] JArray filters)
         {
             try
             {
                 var f = Filter.FromJArray(filters);
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
-                    this.MetaUser.UserId);
-                return repository.GetWhere(pageNumber, f);
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
+                return await repository.GetWhereAsync(pageNumber, f);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -205,25 +210,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/views/{schemaName}/{tableName}/count-filtered/{filterName}")]
         [RestAuthorize]
-        public long CountFiltered(string schemaName, string tableName, string filterName)
+        public async Task<long> CountFilteredAsync(string schemaName, string tableName, string filterName)
         {
             try
             {
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
-                    this.MetaUser.UserId);
-                return repository.CountFiltered(filterName);
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
+                return await repository.CountFilteredAsync(filterName);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -236,25 +242,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/views/{schemaName}/{tableName}/get-filtered/{pageNumber}/{filterName}")]
         [RestAuthorize]
-        public IEnumerable<dynamic> GetFiltered(string schemaName, string tableName, long pageNumber, string filterName)
+        public async Task<IEnumerable<dynamic>> GetFilteredAsync(string schemaName, string tableName, long pageNumber, string filterName)
         {
             try
             {
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
-                    this.MetaUser.UserId);
-                return repository.GetFiltered(pageNumber, filterName);
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
+                return await repository.GetFilteredAsync(pageNumber, filterName);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -267,25 +274,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/views/{schemaName}/{tableName}/display-fields")]
         [RestAuthorize]
-        public IEnumerable<DisplayField> GetDisplayFields(string schemaName, string tableName)
+        public async Task<IEnumerable<DisplayField>> GetDisplayFieldsAsync(string schemaName, string tableName)
         {
             try
             {
-                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId,
-                    this.MetaUser.UserId);
-                return repository.GetDisplayFields();
+                var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
+                return await repository.GetDisplayFieldsAsync();
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch

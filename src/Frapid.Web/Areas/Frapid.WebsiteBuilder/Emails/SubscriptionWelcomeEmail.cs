@@ -7,16 +7,13 @@ using System.Web;
 using System.Web.Hosting;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;
-using Frapid.Messaging.Helpers;
-using Frapid.Messaging.Smtp;
 using Frapid.WebsiteBuilder.ViewModels;
 
 namespace Frapid.WebsiteBuilder.Emails
 {
     public class SubscriptionWelcomeEmail
     {
-        private const string TemplatePath =
-            "~/Tenants/{0}/Areas/Frapid.WebsiteBuilder/EmailTemplates/email-subscription-welcome.html";
+        private const string TemplatePath = "~/Tenants/{0}/Areas/Frapid.WebsiteBuilder/EmailTemplates/email-subscription-welcome.html";
 
         private string GetMessage(string tenant, Subscribe model)
         {
@@ -25,7 +22,8 @@ namespace Frapid.WebsiteBuilder.Emails
 
             string file = HostingEnvironment.MapPath(string.Format(CultureInfo.InvariantCulture, TemplatePath, tenant));
 
-            if (file == null || !File.Exists(file))
+            if(file == null ||
+               !File.Exists(file))
             {
                 return string.Empty;
             }
@@ -46,14 +44,14 @@ namespace Frapid.WebsiteBuilder.Emails
             string subject = string.Format(CultureInfo.InvariantCulture, "Thank you for subscribing to {0}", domain);
 
             return new EmailQueue
-            {
-                AddedOn = DateTimeOffset.UtcNow,
-                FromName = config.FromName,
-                ReplyTo = config.FromEmail,
-                Subject = subject,
-                Message = this.GetMessage(tenant, model),
-                SendTo = model.EmailAddress
-            };
+                   {
+                       AddedOn = DateTimeOffset.UtcNow,
+                       FromName = config.FromName,
+                       ReplyTo = config.FromEmail,
+                       Subject = subject,
+                       Message = this.GetMessage(tenant, model),
+                       SendTo = model.EmailAddress
+                   };
         }
 
         public async Task SendAsync(string tenant, Subscribe model)
@@ -62,11 +60,11 @@ namespace Frapid.WebsiteBuilder.Emails
             {
                 var email = this.GetEmail(tenant, model);
                 var manager = new MailQueueManager(tenant, email);
-                manager.Add();
+                await manager.AddAsync();
 
                 var processor = EmailProcessor.GetDefault(tenant);
 
-                if (string.IsNullOrWhiteSpace(email.ReplyTo))
+                if(string.IsNullOrWhiteSpace(email.ReplyTo))
                 {
                     email.ReplyTo = processor.Config.FromEmail;
                 }

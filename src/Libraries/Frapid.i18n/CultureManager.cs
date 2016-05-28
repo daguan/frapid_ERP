@@ -20,7 +20,7 @@ namespace Frapid.i18n
         {
             var culture = GetCurrent();
 
-            if (culture == null)
+            if(culture == null)
             {
                 return false;
             }
@@ -33,7 +33,9 @@ namespace Frapid.i18n
             var culture = CultureInfo.DefaultThreadCurrentUICulture ?? CultureInfo.CurrentUICulture;
             string cultureString = culture.ToString();
 
-            if (cultureString.Equals("fr") || cultureString.Equals("ru") || cultureString.Equals("fr-FR"))
+            if(cultureString.Equals("fr") ||
+               cultureString.Equals("ru") ||
+               cultureString.Equals("fr-FR"))
             {
                 culture.NumberFormat.CurrencyGroupSeparator = "\x0020";
                 culture.NumberFormat.NumberGroupSeparator = "\x0020";

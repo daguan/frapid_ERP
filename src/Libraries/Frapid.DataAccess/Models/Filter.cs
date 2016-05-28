@@ -9,28 +9,27 @@ namespace Frapid.DataAccess.Models
 {
     [TableName("config.filters")]
     [PrimaryKey("filter_id", AutoIncrement = true)]
-    public sealed class Filter : IPoco
+    public sealed class Filter: IPoco
     {
-        private static readonly Dictionary<Type, string> Aliases =
-            new Dictionary<Type, string>
-            {
-                {typeof (byte), "byte"},
-                {typeof (sbyte), "sbyte"},
-                {typeof (short), "short"},
-                {typeof (ushort), "ushort"},
-                {typeof (int), "int"},
-                {typeof (uint), "uint"},
-                {typeof (long), "long"},
-                {typeof (ulong), "ulong"},
-                {typeof (float), "float"},
-                {typeof (double), "double"},
-                {typeof (decimal), "decimal"},
-                {typeof (object), "object"},
-                {typeof (bool), "bool"},
-                {typeof (char), "char"},
-                {typeof (string), "string"},
-                {typeof (void), "void"}
-            };
+        private static readonly Dictionary<Type, string> Aliases = new Dictionary<Type, string>
+                                                                   {
+                                                                       {typeof(byte), "byte"},
+                                                                       {typeof(sbyte), "sbyte"},
+                                                                       {typeof(short), "short"},
+                                                                       {typeof(ushort), "ushort"},
+                                                                       {typeof(int), "int"},
+                                                                       {typeof(uint), "uint"},
+                                                                       {typeof(long), "long"},
+                                                                       {typeof(ulong), "ulong"},
+                                                                       {typeof(float), "float"},
+                                                                       {typeof(double), "double"},
+                                                                       {typeof(decimal), "decimal"},
+                                                                       {typeof(object), "object"},
+                                                                       {typeof(bool), "bool"},
+                                                                       {typeof(char), "char"},
+                                                                       {typeof(string), "string"},
+                                                                       {typeof(void), "void"}
+                                                                   };
 
         private string _dataType;
         public long FilterId { get; set; }
@@ -53,31 +52,35 @@ namespace Frapid.DataAccess.Models
         {
             var filters = new List<Filter>();
 
-            if (array == null)
+            if(array == null)
             {
                 return filters;
             }
 
-            if (!array.Any())
+            if(!array.Any())
             {
                 return filters;
             }
 
-            filters.AddRange(array.Children<JObject>().Select(element => new Filter
-            {
-                FilterId = element.TryGetPropertyValue<long>("filter_id"),
-                ObjectName = element.TryGetPropertyValue<string>("object_name"),
-                FilterName = element.TryGetPropertyValue<string>("filter_name"),
-                IsDefault = element.TryGetPropertyValue<bool>("is_default"),
-                IsDefaultAdmin = element.TryGetPropertyValue<bool>("is_default_admin"),
-                FilterStatement = element.TryGetPropertyValue<string>("filter_statement"),
-                ColumnName = element.TryGetPropertyValue<string>("column_name"),
-                DataType = element.TryGetPropertyValue<string>("data_type"),
-                PropertyName = element.TryGetPropertyValue<string>("property_name"),
-                FilterCondition = element.TryGetPropertyValue<int>("filter_condition"),
-                FilterValue = element.TryGetPropertyValue<string>("filter_value"),
-                FilterAndValue = element.TryGetPropertyValue<string>("filter_and_value")
-            }));
+            filters.AddRange
+                (
+                 array.Children<JObject>().Select
+                     (
+                      element => new Filter
+                                 {
+                                     FilterId = element.TryGetPropertyValue<long>("filter_id"),
+                                     ObjectName = element.TryGetPropertyValue<string>("object_name"),
+                                     FilterName = element.TryGetPropertyValue<string>("filter_name"),
+                                     IsDefault = element.TryGetPropertyValue<bool>("is_default"),
+                                     IsDefaultAdmin = element.TryGetPropertyValue<bool>("is_default_admin"),
+                                     FilterStatement = element.TryGetPropertyValue<string>("filter_statement"),
+                                     ColumnName = element.TryGetPropertyValue<string>("column_name"),
+                                     DataType = element.TryGetPropertyValue<string>("data_type"),
+                                     PropertyName = element.TryGetPropertyValue<string>("property_name"),
+                                     FilterCondition = element.TryGetPropertyValue<int>("filter_condition"),
+                                     FilterValue = element.TryGetPropertyValue<string>("filter_value"),
+                                     FilterAndValue = element.TryGetPropertyValue<string>("filter_and_value")
+                                 }));
 
             return filters;
         }
@@ -86,10 +89,13 @@ namespace Frapid.DataAccess.Models
 
         public string DataType
         {
-            get { return this._dataType; }
+            get
+            {
+                return this._dataType;
+            }
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
+                if(string.IsNullOrWhiteSpace(value))
                 {
                     return;
                 }

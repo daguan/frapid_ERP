@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Frapid.WebsiteBuilder.ViewModels;
 
 namespace Frapid.WebsiteBuilder.Contracts
 {
     public interface IContentSearch
     {
-        List<SearchResultContent> Search(string query);
+        Task<IEnumerable<SearchResultContent>> SearchAsync(string query);
     }
 }

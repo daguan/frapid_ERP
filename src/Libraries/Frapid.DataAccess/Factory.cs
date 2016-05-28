@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Frapid.Configuration;
+using System.Threading.Tasks;
 using Frapid.Configuration.Db;
 using Frapid.NPoco;
 
@@ -17,103 +17,96 @@ namespace Frapid.DataAccess
             return DbProvider.GetMetaDatabase(tenant);
         }
 
-        public static T Single<T>(string database, string sql, params object[] args)
+        public static async Task<IEnumerable<T>> GetAsync<T>(string database, string sql, params object[] args)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database), database).GetDatabase())
+            using(var db = DbProvider.GetDatabase(database))
             {
-                return db.Single<T>(sql, args);
+                return await db.FetchAsync<T>(sql, args);
             }
         }
 
-        public static IEnumerable<T> Get<T>(string database, string sql, params object[] args)
+        public static async Task<IEnumerable<T>> GetAsync<T>(string database, string sql)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database), database).GetDatabase())
+            using(var db = DbProvider.GetDatabase(database))
             {
-                return db.Query<T>(sql, args);
+                return await db.FetchAsync<T>(sql);
             }
         }
 
-        public static IEnumerable<T> Get<T>(string database, string sql)
+        public static async Task<IEnumerable<T>> GetAsync<T>(string database, Sql sql)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database), database).GetDatabase())
+            using(var db = DbProvider.GetDatabase(database))
             {
-                return db.Query<T>(sql);
+                return await db.FetchAsync<T>(sql);
             }
         }
 
-        public static IEnumerable<T> Get<T>(string database, Sql sql)
+        public static async Task<object> InsertAsync(string database, object poco, string tableName = "", string primaryKeyName = "", bool autoIncrement = true)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database), database).GetDatabase())
+            using(var db = DbProvider.GetDatabase(database))
             {
-                var retVal = db.Query<T>(sql);
-                return retVal;
-            }
-        }
-
-        public static object Insert(string database, object poco, string tableName = "", string primaryKeyName = "", bool autoIncrement = true)
-        {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database), database).GetDatabase())
-            {
-                if (!string.IsNullOrWhiteSpace(tableName) && !string.IsNullOrWhiteSpace(primaryKeyName))
+                if(!string.IsNullOrWhiteSpace(tableName) &&
+                   !string.IsNullOrWhiteSpace(primaryKeyName))
                 {
-                    return db.Insert(tableName, primaryKeyName, autoIncrement, poco);
+                    return await db.InsertAsync(tableName, primaryKeyName, autoIncrement, poco);
                 }
 
-                return db.Insert(poco);
+                return await db.InsertAsync(poco);
             }
         }
 
-        public static object Update(string database, object poco, object primaryKeyValue, string tableName = "",
-            string primaryKeyName = "")
+        public static async Task<object> UpdateAsync(string database, object poco, object primaryKeyValue, string tableName = "", string primaryKeyName = "")
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database), database).GetDatabase())
+            using(var db = DbProvider.GetDatabase(database))
             {
-                if (!string.IsNullOrWhiteSpace(tableName) && !string.IsNullOrWhiteSpace(primaryKeyName))
+                if(!string.IsNullOrWhiteSpace(tableName) &&
+                   !string.IsNullOrWhiteSpace(primaryKeyName))
                 {
-                    return db.Update(tableName, primaryKeyName, poco, primaryKeyValue);
+                    return await db.UpdateAsync(tableName, primaryKeyName, poco, primaryKeyValue, null);
                 }
 
-                return db.Update(poco, primaryKeyValue);
+                return await db.UpdateAsync(poco, primaryKeyValue, null);
             }
         }
 
-        public static T Scalar<T>(string database, string sql, params object[] args)
+
+        public static async Task<T> ScalarAsync<T>(string database, string sql, params object[] args)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database), database).GetDatabase())
+            using(var db = DbProvider.GetDatabase(database))
             {
-                return db.ExecuteScalar<T>(sql, args);
+                return await db.ExecuteScalarAsync<T>(sql, args);
             }
         }
 
-        public static T Scalar<T>(string database, Sql sql)
+        public static async Task<T> ScalarAsync<T>(string database, Sql sql)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database), database).GetDatabase())
+            using(var db = DbProvider.GetDatabase(database))
             {
-                return db.ExecuteScalar<T>(sql);
+                return await db.ExecuteScalarAsync<T>(sql);
             }
         }
 
-        public static void NonQuery(string database, string sql, params object[] args)
+        public static async Task NonQueryAsync(string database, string sql, params object[] args)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(database), database).GetDatabase())
+            using(var db = DbProvider.GetDatabase(database))
             {
-                db.Execute(sql, args);
+                await db.ExecuteAsync(sql, args);
             }
         }
 
-        public static void Execute(string connectionString, string tenant, string sql, params object[] args)
+        public static async Task ExecuteAsync(string connectionString, string tenant, string sql, params object[] args)
         {
-            using (var db = DbProvider.Get(connectionString, tenant).GetDatabase())
+            using(var db = DbProvider.GetDatabase(tenant))
             {
-                db.Execute(sql, args);
+                await db.ExecuteAsync(sql, args);
             }
         }
 
-        public static T ExecuteScalar<T>(string connectionString, string tenant, Sql sql)
+        public static async Task<T> ExecuteScalarAsync<T>(string connectionString, string tenant, Sql sql)
         {
-            using (var db = DbProvider.Get(connectionString, tenant).GetDatabase())
+            using(var db = DbProvider.GetDatabase(tenant))
             {
-                return db.ExecuteScalar<T>(sql);
+                return await db.ExecuteScalarAsync<T>(sql);
             }
         }
     }

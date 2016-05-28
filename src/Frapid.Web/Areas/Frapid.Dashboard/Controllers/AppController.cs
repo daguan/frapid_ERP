@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
 using Frapid.Areas.Authorization;
@@ -7,18 +8,18 @@ using Frapid.i18n;
 
 namespace Frapid.Dashboard.Controllers
 {
-    public class AppController : FrapidController
+    public class AppController: FrapidController
     {
         [Route("dashboard/my/apps")]
         [RestrictAnonymous]
-        public ActionResult GetApps()
+        public async Task<ActionResult> GetAppsAsync()
         {
-            int userId = AppUsers.GetCurrent().UserId;
-            int officeId = AppUsers.GetCurrent().OfficeId;
+            int userId = (await AppUsers.GetCurrentAsync()).UserId;
+            int officeId = (await AppUsers.GetCurrentAsync()).OfficeId;
             string culture = CultureManager.GetCurrent().TwoLetterISOLanguageName;
             string tenant = AppUsers.GetTenant();
 
-            return this.Ok(App.Get(tenant, userId, officeId, culture));
+            return this.Ok(App.GetAsync(tenant, userId, officeId, culture));
         }
     }
 }

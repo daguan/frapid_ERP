@@ -7,8 +7,8 @@ namespace Frapid.NPoco.FluentMappings
     {
         public TypeDefinition(Type type)
         {
-            Type = type;
-            ColumnConfiguration = new Dictionary<string, ColumnDefinition>();
+            this.Type = type;
+            this.ColumnConfiguration = new Dictionary<string, ColumnDefinition>();
         }
 
         public Type Type { get; set; }
@@ -18,5 +18,6 @@ namespace Frapid.NPoco.FluentMappings
         public bool? AutoIncrement { get; set; }
         public bool? ExplicitColumns { get; set; }
         public Dictionary<string, ColumnDefinition> ColumnConfiguration { get; set; }
+        public bool? UseOutputClause { get; set; }
     }
 }

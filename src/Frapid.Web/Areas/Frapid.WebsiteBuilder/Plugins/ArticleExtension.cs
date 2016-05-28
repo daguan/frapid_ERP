@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Frapid.WebsiteBuilder.Contracts;
 using Frapid.WebsiteBuilder.Models;
 using HtmlAgilityPack;
@@ -6,7 +7,7 @@ namespace Frapid.WebsiteBuilder.Plugins
 {
     public class ArticleExtension : IContentExtension
     {
-        public string ParseHtml(string tenant, string html)
+        public async Task<string> ParseHtmlAsync(string tenant, string html)
         {
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
@@ -22,7 +23,7 @@ namespace Frapid.WebsiteBuilder.Plugins
                 string alias = node.Attributes["article-alias"].Value;
                 string categoryAlias = node.Attributes["category-alias"].Value;
 
-                var model = ContentModel.GetContent(tenant, categoryAlias, alias);
+                var model =  await ContentModel.GetContentAsync(tenant, categoryAlias, alias);
                 if (model != null)
                 {
                     string contents = model.Contents;

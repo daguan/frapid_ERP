@@ -2,12 +2,13 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
 using Frapid.DataAccess;
 using Frapid.Installer.Helpers;
-using Microsoft.SqlServer.Management.Common;
-using Microsoft.SqlServer.Management.Smo;
+using Frapid.NPoco;
 
 namespace Frapid.Installer.DAL
 {
@@ -15,30 +16,30 @@ namespace Frapid.Installer.DAL
     {
         public string ProviderName { get; } = "System.Data.SqlClient";
 
-
-        public void CreateDb(string tenant)
+        public async Task CreateDbAsync(string tenant)
         {
-            string sql = "CREATE DATABASE [{0}];";
+            var sql = "CREATE DATABASE [{0}];";
             sql = string.Format(CultureInfo.InvariantCulture, sql, Sanitizer.SanitizeIdentifierName(tenant.ToLower()));
 
-            string database = Factory.GetMetaDatabase(tenant);
-            string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
-            Factory.Execute(connectionString, tenant, sql);
+            var database = Factory.GetMetaDatabase(tenant);
+            var connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
+            await Factory.ExecuteAsync(connectionString, tenant, sql);
         }
 
-        public bool HasDb(string tenant, string database)
+        public async Task<bool> HasDbAsync(string tenant, string database)
         {
             const string sql = "SELECT COUNT(*) FROM master.dbo.sysdatabases WHERE name=@0;";
 
-            string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
+            var connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
 
             using (var db = DbProvider.Get(connectionString, tenant).GetDatabase())
             {
-                return db.ExecuteScalar<int>(sql, tenant).Equals(1);
+                var awaiter = await db.ExecuteScalarAsync<int>(sql, new object[] { tenant });
+                return awaiter.Equals(1);
             }
         }
 
-        public bool HasSchema(string tenant, string database, string schema)
+        public async Task<bool> HasSchemaAsync(string tenant, string database, string schema)
         {
             const string sql = "SELECT COUNT(*) FROM sys.schemas WHERE name=@0;";
 
@@ -46,11 +47,12 @@ namespace Frapid.Installer.DAL
                 var db =
                     DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(tenant, database), tenant).GetDatabase())
             {
-                return db.ExecuteScalar<int>(sql, schema).Equals(1);
+                var awaiter = await db.ExecuteScalarAsync<int>(sql, new object[] { schema });
+                return awaiter.Equals(1);
             }
         }
 
-        public void RunSql(string tenant, string database, string fromFile)
+        public async Task RunSqlAsync(string tenant, string database, string fromFile)
         {
             fromFile = fromFile.Replace("{DbServer}", "SQL Server");
             if (string.IsNullOrWhiteSpace(fromFile) || File.Exists(fromFile).Equals(false))
@@ -58,24 +60,22 @@ namespace Frapid.Installer.DAL
                 return;
             }
 
-            string sql = File.ReadAllText(fromFile, Encoding.UTF8);
+            var sql = File.ReadAllText(fromFile, Encoding.UTF8);
 
 
             InstallerLog.Verbose($"Running file {fromFile}");
 
-            string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
+            var connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
 
-            using (var sqlConnection = new SqlConnection(connectionString))
+            using (var connection = new SqlConnection(connectionString))
             {
-                var svrConnection = new ServerConnection(sqlConnection);
-                var server = new Server(svrConnection);
-                server.ConnectionContext.ExecuteNonQuery(sql);
+                await this.RunScriptAsync(connection, sql);
             }
         }
 
-        public void CleanupDb(string tenant, string database)
+        public async Task CleanupDbAsync(string tenant, string database)
         {
-            string sql = @"DECLARE @sql nvarchar(MAX);
+            var sql = @"DECLARE @sql nvarchar(MAX);
                             DECLARE @queries TABLE(id int identity, query nvarchar(500), done bit DEFAULT(0));
                             DECLARE @id int;
                             DECLARE @query nvarchar(500);
@@ -104,13 +104,32 @@ namespace Frapid.Installer.DAL
                                 UPDATE @queries SET done = 1 WHERE id=@id;
                             END;";
 
-            string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
+            var connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
 
-            using (var sqlConnection = new SqlConnection(connectionString))
+            using (var connection = new SqlConnection(connectionString))
             {
-                var svrConnection = new ServerConnection(sqlConnection);
-                var server = new Server(svrConnection);
-                server.ConnectionContext.ExecuteNonQuery(sql);
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    connection.Open();
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
+
+        private async Task RunScriptAsync(SqlConnection connection, string sql)
+        {
+            var regex = new Regex(@"\r{0,1}\nGO\r{0,1}\n");
+            var commands = regex.Split(sql);
+
+            foreach (var item in commands)
+            {
+                if (item != string.Empty)
+                {
+                    using (var command = new SqlCommand(item, connection))
+                    {
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
             }
         }
     }

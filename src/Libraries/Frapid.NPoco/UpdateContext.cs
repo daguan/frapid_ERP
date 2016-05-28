@@ -6,11 +6,11 @@ namespace Frapid.NPoco
     {
         public UpdateContext(object poco, string tableName, string primaryKeyName, object primaryKeyValue, IEnumerable<string> columnsToUpdate)
         {
-            Poco = poco;
-            TableName = tableName;
-            PrimaryKeyName = primaryKeyName;
-            PrimaryKeyValue = primaryKeyValue;
-            ColumnsToUpdate = columnsToUpdate;
+            this.Poco = poco;
+            this.TableName = tableName;
+            this.PrimaryKeyName = primaryKeyName;
+            this.PrimaryKeyValue = primaryKeyValue;
+            this.ColumnsToUpdate = columnsToUpdate;
         }
 
         public object Poco { get; private set; }

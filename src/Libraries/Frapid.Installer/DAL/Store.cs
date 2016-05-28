@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Frapid.Configuration;
+using Frapid.Framework.Extensions;
 using Frapid.Installer.Helpers;
 
 namespace Frapid.Installer.DAL
@@ -9,18 +12,15 @@ namespace Frapid.Installer.DAL
     {
         private static IStore GetDbServer(string tenant)
         {
-            var site = DbConvention.GetSite(tenant);
-            string providerName = site.DbProvider;
+            var site = TenantConvention.GetSite(tenant);
+            var providerName = site.DbProvider;
 
             try
             {
-                var iType = typeof (IStore);
-                var members = AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(x => x.GetTypes())
-                    .Where(x => iType.IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
-                    .Select(Activator.CreateInstance);
+                var iType = typeof(IStore);
+                var members = iType.GetTypeMembers<IStore>();
 
-                foreach (var member in members.Cast<IStore>().Where(member => member.ProviderName.Equals(providerName)))
+                foreach (var member in members.Where(member => member.ProviderName.Equals(providerName)))
                 {
                     return member;
                 }
@@ -34,29 +34,29 @@ namespace Frapid.Installer.DAL
             return new PostgreSQL();
         }
 
-        public static void CreateDb(string tenant)
+        public static async Task CreateDbAsync(string tenant)
         {
-            GetDbServer(tenant).CreateDb(tenant);
+            await GetDbServer(tenant).CreateDbAsync(tenant);
         }
 
-        public static bool HasDb(string tenant, string dbName)
+        public static async Task<bool> HasDbAsync(string tenant, string dbName)
         {
-            return GetDbServer(tenant).HasDb(tenant, dbName);
+            return await GetDbServer(tenant).HasDbAsync(tenant, dbName);
         }
 
-        public static bool HasSchema(string tenant, string database, string schema)
+        public static async Task<bool> HasSchemaAsync(string tenant, string database, string schema)
         {
-            return GetDbServer(tenant).HasSchema(tenant, database, schema);
+            return await GetDbServer(tenant).HasSchemaAsync(tenant, database, schema);
         }
 
-        public static void RunSql(string tenant, string database, string fromFile)
+        public static async Task RunSqlAsync(string tenant, string database, string fromFile)
         {
-            GetDbServer(tenant).RunSql(tenant, database, fromFile);
+            await GetDbServer(tenant).RunSqlAsync(tenant, database, fromFile);
         }
 
-        public static void CleanupDb(string tenant, string database)
+        public static async Task CleanupDbAsync(string tenant, string database)
         {
-            GetDbServer(tenant).CleanupDb(tenant, database);
+            await GetDbServer(tenant).CleanupDbAsync(tenant, database);
         }
     }
 }

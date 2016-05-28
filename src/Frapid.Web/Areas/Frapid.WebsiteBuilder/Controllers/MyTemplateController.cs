@@ -18,7 +18,7 @@ namespace Frapid.WebsiteBuilder.Controllers
                 return HttpNotFound();
             }
 
-            var allowed = FrapidConfig.GetMyAllowedResources(DbConvention.GetTenant());
+            var allowed = FrapidConfig.GetMyAllowedResources(TenantConvention.GetTenant());
 
             if (string.IsNullOrWhiteSpace(resource) || allowed.Count().Equals(0))
             {

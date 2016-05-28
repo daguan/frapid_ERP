@@ -28,7 +28,7 @@ namespace Frapid.Config.Controllers
         [RestrictAnonymous]
         public ActionResult GetResources()
         {
-            string tenant = DbConvention.GetTenant();
+            string tenant = TenantConvention.GetTenant();
             string path = $"~/Tenants/{tenant}/";
             path = HostingEnvironment.MapPath(path);
 
@@ -155,7 +155,7 @@ namespace Frapid.Config.Controllers
                 return this.HttpNotFound();
             }
 
-            string tenant = DbConvention.GetTenant();
+            string tenant = TenantConvention.GetTenant();
             string path = HostingEnvironment.MapPath($"/Tenants/{tenant}/{file}");
 
             if (!System.IO.File.Exists(path))
@@ -177,7 +177,7 @@ namespace Frapid.Config.Controllers
                 return this.HttpNotFound();
             }
 
-            string tenant = DbConvention.GetTenant();
+            string tenant = TenantConvention.GetTenant();
 
             var allowed = FrapidConfig.GetMyAllowedResources(tenant);
 

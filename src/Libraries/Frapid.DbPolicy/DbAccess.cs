@@ -3,7 +3,7 @@ using Frapid.DataAccess.Models;
 
 namespace Frapid.DbPolicy
 {
-    public abstract class DbAccess : IDbAccess
+    public abstract class DbAccess: IDbAccess
     {
         // ReSharper disable once InconsistentNaming
         public abstract string _ObjectNamespace { get; }
@@ -26,13 +26,13 @@ namespace Frapid.DbPolicy
         public void Validate(AccessTypeEnum type, long loginId, string database, bool noException)
         {
             var policy = new PolicyValidator
-            {
-                ObjectNamespace = this._ObjectNamespace,
-                ObjectName = this._ObjectName,
-                LoginId = loginId,
-                Database = database,
-                AccessType = type
-            };
+                         {
+                             ObjectNamespace = this._ObjectNamespace,
+                             ObjectName = this._ObjectName,
+                             LoginId = loginId,
+                             Database = database,
+                             AccessType = type
+                         };
 
             policy.Validate();
             this.HasAccess = policy.HasAccess;
@@ -40,12 +40,12 @@ namespace Frapid.DbPolicy
             this.Validated = true;
 
 
-            if (this.HasAccess)
+            if(this.HasAccess)
             {
                 return;
             }
 
-            if (!noException)
+            if(!noException)
             {
                 throw new UnauthorizedException("Access is denied.");
             }

@@ -7,13 +7,13 @@ using Newtonsoft.Json;
 
 namespace Frapid.Mailgun
 {
-    public class Config : IEmailConfig
+    public class Config: IEmailConfig
     {
-        public string FromName { get; set; }
-        public string FromEmail { get; set; }
         public string DomainName { get; set; }
         public string ApiKey { get; set; }
         public string SecretKey { get; set; }
+        public string FromName { get; set; }
+        public string FromEmail { get; set; }
         public bool Enabled { get; set; }
 
         public static Config Get(string tenant)
@@ -22,7 +22,8 @@ namespace Frapid.Mailgun
             path = string.Format(CultureInfo.InvariantCulture, path, tenant);
             path = HostingEnvironment.MapPath(path);
 
-            if (path == null || !File.Exists(path))
+            if(path == null ||
+               !File.Exists(path))
             {
                 return new Config();
             }

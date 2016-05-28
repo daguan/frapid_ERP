@@ -21,7 +21,7 @@ namespace Frapid.Account.RemoteAuthentication
         public GoogleAuthentication()
         {
             string tenant = AppUsers.GetTenant();
-            var profile = ConfigurationProfiles.GetActiveProfile(tenant);
+            var profile = ConfigurationProfiles.GetActiveProfileAsync(tenant).Result;
             ClientId = profile.GoogleSigninClientId;
         }
 
@@ -77,12 +77,12 @@ namespace Frapid.Account.RemoteAuthentication
 
             string tenant = AppUsers.GetTenant();
 
-            var result = GoogleSignIn.SignIn(tenant, account.Email, account.OfficeId, account.Name, account.Token, user.Browser,
+            var result = await GoogleSignIn.SignInAsync(tenant, account.Email, account.OfficeId, account.Name, account.Token, user.Browser,
                 user.IpAddress, account.Culture);
 
             if (result.Status)
             {
-                if (!Registrations.HasAccount(tenant, account.Email))
+                if (!await Registrations.HasAccountAsync(tenant, account.Email))
                 {
                     string template = "~/Tenants/{tenant}/Areas/Frapid.Account/EmailTemplates/welcome-email-other.html";
                     var welcomeEmail = new WelcomeEmail(gUser, template, ProviderName);

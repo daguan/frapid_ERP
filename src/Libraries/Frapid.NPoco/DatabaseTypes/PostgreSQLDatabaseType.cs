@@ -1,4 +1,5 @@
-using System.Data;
+using System.Data.Common;
+using System.Threading.Tasks;
 
 namespace Frapid.NPoco.DatabaseTypes
 {
@@ -12,16 +13,31 @@ namespace Frapid.NPoco.DatabaseTypes
             return base.MapParameterValue(value);
         }
 
-        public override string EscapeSqlIdentifier(string str)
-        {
-            return string.Format("\"{0}\"", str);
-        }
-
-        public override object ExecuteInsert<T>(Database db, IDbCommand cmd, string primaryKeyName, T poco, object[] args)
+        //Todo:The following changes were done to NPoco
+        #region "Changes"
+        public override async Task<object> ExecuteInsertAsync<T>(Database db, DbCommand cmd, string primaryKeyName, bool useOutputClause, T poco, object[] args)
         {
             if (primaryKeyName != null)
             {
-                cmd.CommandText += string.Format(" returning {0} as NewID", EscapeSqlIdentifier(primaryKeyName));
+                cmd.CommandText += $" returning {this.EscapeSqlIdentifier(primaryKeyName)} as NewID";
+                return await db.ExecuteScalarHelperAsync(cmd);
+            }
+
+            await db.ExecuteNonQueryHelperAsync(cmd);
+            return -1;
+        }
+        #endregion
+
+        public override string EscapeSqlIdentifier(string str)
+        {
+            return $"\"{str}\"";
+        }
+
+        public override object ExecuteInsert<T>(Database db, DbCommand cmd, string primaryKeyName, bool useOutputClause, T poco, object[] args)
+        {
+            if (primaryKeyName != null)
+            {
+                cmd.CommandText += $" returning {this.EscapeSqlIdentifier(primaryKeyName)} as NewID";
                 return db.ExecuteScalarHelper(cmd);
             }
 

@@ -10,7 +10,7 @@ namespace Frapid.TokenManager
 {
     public class Provider
     {
-        public Provider(string database) : this(database, null, long.MinValue)
+        public Provider(string database): this(database, null, long.MinValue)
         {
         }
 
@@ -54,7 +54,7 @@ namespace Frapid.TokenManager
 
         public Token GetToken(string clientToken)
         {
-            if (string.IsNullOrWhiteSpace(clientToken))
+            if(string.IsNullOrWhiteSpace(clientToken))
             {
                 return null;
             }
@@ -75,9 +75,9 @@ namespace Frapid.TokenManager
             var dto = JsonConvert.DeserializeObject<List<Claim>>(decoded);
             token.ClientToken = clientToken;
 
-            foreach (var c in dto)
+            foreach(var c in dto)
             {
-                switch (c.Type)
+                switch(c.Type)
                 {
                     case "aud":
                         token.Audience = c.Value;

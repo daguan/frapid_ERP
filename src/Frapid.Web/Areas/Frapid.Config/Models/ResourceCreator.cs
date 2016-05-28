@@ -15,7 +15,7 @@ namespace Frapid.Config.Models
 
         public void Create()
         {
-            string tenant = DbConvention.GetTenant();
+            string tenant = TenantConvention.GetTenant();
             string path = $"~/Tenants/{tenant}";
             path = HostingEnvironment.MapPath(path);
 

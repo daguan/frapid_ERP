@@ -4,10 +4,10 @@ namespace Frapid.NPoco
     {
         public DeleteContext(object poco, string tableName, string primaryKeyName, object primaryKeyValue)
         {
-            Poco = poco;
-            TableName = tableName;
-            PrimaryKeyName = primaryKeyName;
-            PrimaryKeyValue = primaryKeyValue;
+            this.Poco = poco;
+            this.TableName = tableName;
+            this.PrimaryKeyName = primaryKeyName;
+            this.PrimaryKeyValue = primaryKeyValue;
         }
 
         public object Poco { get; private set; }

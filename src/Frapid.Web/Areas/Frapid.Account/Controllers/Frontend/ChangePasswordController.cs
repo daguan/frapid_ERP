@@ -27,14 +27,14 @@ namespace Frapid.Account.Controllers.Frontend
         [Route("account/change-password")]
         [RestrictAnonymous]
         [HttpPost]
-        public async Task<ActionResult> Post(ChangePassword model)
+        public async Task<ActionResult> PostAsync(ChangePassword model)
         {
             if (!ModelState.IsValid)
             {
                 return this.InvalidModelState();
             }
 
-            bool result = await ChangePasswordModel.ChangePassword(model, this.RemoteUser);
+            bool result = await ChangePasswordModel.ChangePasswordAsync(model, this.RemoteUser);
             return this.Ok(result);
         }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Frapid.ApplicationState.Cache;
 using Frapid.WebsiteBuilder.DAL;
 using Frapid.WebsiteBuilder.ViewModels;
@@ -9,36 +10,37 @@ namespace Frapid.WebsiteBuilder.Models
 {
     public static class ContentModel
     {
-        public static List<Content> GetBlogContents(int pageNumber)
+        public static async Task<IEnumerable<Content>> GetBlogContentsAsync(int pageNumber)
         {
             int pageSize = 10;
-            int offset = (pageNumber - 1)*pageSize;
+            int offset = (pageNumber - 1) * pageSize;
             string tenant = AppUsers.GetTenant();
 
-            var contents = Contents.GetBlogContents(tenant, pageSize, offset).ToList();
+            var awaiter = await Contents.GetBlogContentsAsync(tenant, pageSize, offset);
+            var contents = awaiter.ToList();
 
             if (!contents.Any())
             {
                 return null;
             }
 
-            var model = contents.Adapt<List<Content>>();
+            var model = contents.Adapt<IEnumerable<Content>>();
             return model;
         }
 
 
-        public static Content GetContent(string tenant, string categoryAlias = "", string alias = "",
+        public static async Task<Content> GetContentAsync(string tenant, string categoryAlias = "", string alias = "",
             bool isBlog = false)
         {
-            var content = Contents.GetPublished(tenant, categoryAlias, alias, isBlog);
+            var content = await Contents.GetPublishedAsync(tenant, categoryAlias, alias, isBlog);
 
             var model = content?.Adapt<Content>();
             return model;
         }
 
-        internal static void AddHit(string database, string categoryAlias, string alias)
+        internal static async Task AddHitAsync(string database, string categoryAlias, string alias)
         {
-            Contents.AddHit(database, categoryAlias, alias);
+            await Contents.AddHitAsync(database, categoryAlias, alias);
         }
     }
 }

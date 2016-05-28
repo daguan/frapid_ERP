@@ -18,23 +18,23 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [Route("hit")]
         [Route("site/{categoryAlias}/{alias}/hit")]
         [HttpPost]
-        public ActionResult Counter(string categoryAlias = "", string alias = "")
+        public async Task<ActionResult> CounterAsync(string categoryAlias = "", string alias = "")
         {
-            ContentModel.AddHit(AppUsers.GetTenant(), categoryAlias, alias);
+            await ContentModel.AddHitAsync(AppUsers.GetTenant(), categoryAlias, alias);
             return this.Ok();
         }
 
         [Route("")]
         [Route("site/{categoryAlias}/{alias}")]
         [FrapidOutputCache(ProfileName = "Content")]
-        public async Task<ActionResult> Index(string categoryAlias = "", string alias = "", bool isPost = false,
+        public async Task<ActionResult> IndexAsync(string categoryAlias = "", string alias = "", bool isPost = false,
             FormCollection form = null)
         {
             try
             {
                 Log.Verbose($"Prepping \"{this.CurrentPageUrl}\".");
 
-                var model = this.GetContents(categoryAlias, alias, isPost, form);
+                var model = await this.GetContentsAsync(categoryAlias, alias, isPost, form);
 
                 if (model == null)
                 {
@@ -43,10 +43,10 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
                 }
 
                 Log.Verbose($"Parsing custom content extensions for \"{this.CurrentPageUrl}\".");
-                model.Contents = ContentExtensions.ParseHtml(this.Tenant, model.Contents);
+                model.Contents = await ContentExtensions.ParseHtmlAsync(this.Tenant, model.Contents);
 
                 Log.Verbose($"Parsing custom form extensions for \"{this.CurrentPageUrl}\".");
-                model.Contents = await FormsExtension.ParseHtml(model.Contents, isPost, form);
+                model.Contents = await FormsExtension.ParseHtmlAsync(model.Contents, isPost, form);
 
                 model.Contents = HitHelper.Add(model.Contents);
 
@@ -62,10 +62,10 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         }
 
 
-        private Content GetContents(string categoryAlias, string alias, bool isPost = false, FormCollection form = null)
+        private async Task<Content> GetContentsAsync(string categoryAlias, string alias, bool isPost = false, FormCollection form = null)
         {
-            string tenant = DbConvention.GetTenant(this.CurrentDomain);
-            var model = ContentModel.GetContent(tenant, categoryAlias, alias);
+            string tenant = TenantConvention.GetTenant(this.CurrentDomain);
+            var model = await ContentModel.GetContentAsync(tenant, categoryAlias, alias);
 
             if (model == null)
             {
@@ -88,7 +88,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         public Task<ActionResult> PostAsync(string categoryAlias, string alias, FormCollection form)
         {
             Log.Verbose($"Got a post request on \"{this.CurrentPageUrl}\". Post Data:\n\n {form}");
-            return this.Index(categoryAlias, alias, true, form);
+            return this.IndexAsync(categoryAlias, alias, true, form);
         }
 
         [Route("")]

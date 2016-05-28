@@ -8,7 +8,7 @@ namespace Frapid.NPoco
         public Type Type { get; set; }
         public ColumnTypeAttribute(Type type)
         {
-            Type = type;
+            this.Type = type;
         }
     }
 }

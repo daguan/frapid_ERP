@@ -9,21 +9,21 @@ namespace Frapid.NPoco
 
         public Transaction(IDatabase db, IsolationLevel isolationLevel)
         {
-            _db = db;
-            _db.BeginTransaction(isolationLevel);
+            this._db = db;
+            this._db.BeginTransaction(isolationLevel);
         }
 
         public virtual void Complete()
         {
-            _db.CompleteTransaction();
-            _db = null;
+            this._db.CompleteTransaction();
+            this._db = null;
         }
 
         public void Dispose()
         {
-            if (_db != null)
+            if (this._db != null)
             {
-                _db.AbortTransaction();
+                this._db.AbortTransaction();
             }
         }
     }

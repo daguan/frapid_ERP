@@ -2,34 +2,37 @@
 using System.Dynamic;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Frapid.DataAccess;
 using Frapid.WebApi.DataAccess;
 
 namespace Frapid.WebApi.Service
 {
-    public class FilterApiController : FrapidApiController
+    public class FilterApiController: FrapidApiController
     {
         [AcceptVerbs("PUT")]
         [Route("~/api/filters/make-default/{objectName}/{filterName}")]
-        public void MakeDefault(string objectName, string filterName)
+        public async Task MakeDefaultAsync(string objectName, string filterName)
         {
             try
             {
                 var repository = new FilterRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                repository.MakeDefault(objectName, filterName);
+                await repository.MakeDefaultAsync(objectName, filterName);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -41,24 +44,26 @@ namespace Frapid.WebApi.Service
 
         [AcceptVerbs("DELETE")]
         [Route("~/api/filters/remove-default/{objectName}")]
-        public void RemoveDefault(string objectName)
+        public async Task RemoveDefaultAsync(string objectName)
         {
             try
             {
                 var repository = new FilterRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                repository.RemoveDefault(objectName);
+                await repository.RemoveDefaultAsync(objectName);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -70,24 +75,26 @@ namespace Frapid.WebApi.Service
 
         [AcceptVerbs("DELETE")]
         [Route("~/api/filters/delete/by-name/{filterName}")]
-        public void Delete(string filterName)
+        public async Task DeleteAsync(string filterName)
         {
             try
             {
                 var repository = new FilterRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                repository.Delete(filterName);
+                await repository.DeleteAsync(filterName);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -99,24 +106,26 @@ namespace Frapid.WebApi.Service
 
         [AcceptVerbs("PUT")]
         [Route("~/api/filters/recreate/{objectName}/{filterName}")]
-        public void RecreateFilters(string objectName, string filterName, [FromBody] List<ExpandoObject> collection)
+        public async Task RecreateFiltersAsync(string objectName, string filterName, [FromBody] List<ExpandoObject> collection)
         {
             try
             {
                 var repository = new FilterRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                repository.RecreateFilters(objectName, filterName, collection);
+                await repository.RecreateFiltersAsync(objectName, filterName, collection);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch

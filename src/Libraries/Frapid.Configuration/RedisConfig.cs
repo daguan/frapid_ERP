@@ -2,6 +2,6 @@
 {
     public class RedisConfig
     {
-        public string ConnectionMultiplexerConnection { get; set; }
+        public string ConfigString { get; set; }
     }
 }

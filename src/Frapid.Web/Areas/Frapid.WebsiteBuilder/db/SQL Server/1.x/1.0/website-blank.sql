@@ -436,6 +436,8 @@ ON website.email_subscription_insert_view
 INSTEAD OF INSERT
 AS
 BEGIN
+	SET NOCOUNT ON;
+	
 	INSERT INTO website.email_subscriptions
 	(
 		email, 

@@ -13,25 +13,35 @@ namespace Frapid.Areas
     {
         private static string[] GetRblServers()
         {
-            string tenant = DbConvention.GetTenant();
+            string tenant = TenantConvention.GetTenant();
 
             //Check RBL server list in tenant directory.
             string path = HostingEnvironment.MapPath($"/Tenants/{tenant}/Configs/RblServers.config");
 
-            if (!File.Exists(path))
+            if(!File.Exists(path))
             {
                 //Fallback to shared RBL server list.
                 path = HostingEnvironment.MapPath($"/Resources/Configs/RblServers.config");
             }
 
-            if (path == null || !File.Exists(path))
+            if(path == null ||
+               !File.Exists(path))
             {
-                return new[] { "" };
+                return new[]
+                       {
+                           ""
+                       };
             }
 
             string contents = File.ReadAllText(path, Encoding.UTF8);
 
-            return contents.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            return contents.Split
+                (
+                 new[]
+                 {
+                     Environment.NewLine
+                 },
+                 StringSplitOptions.RemoveEmptyEntries);
         }
 
         private static bool Query(string address)
@@ -41,7 +51,7 @@ namespace Frapid.Areas
                 var result = Dns.GetHostEntry(address);
                 return result.AddressList.Any();
             }
-            catch (Exception)
+            catch(Exception)
             {
                 //Swallow
             }
@@ -59,7 +69,7 @@ namespace Frapid.Areas
         {
             bool isLoopBack = IPAddress.IsLoopback(IPAddress.Parse(ipAddress));
 
-            if (isLoopBack)
+            if(isLoopBack)
             {
                 return new DnsSpamLookupResult();
             }
@@ -69,7 +79,7 @@ namespace Frapid.Areas
 
             var isListed = factory.Get<DnsSpamLookupResult>(key);
 
-            if (isListed == null)
+            if(isListed == null)
             {
                 isListed = FromStore(ipAddress);
                 factory.Add(key, isListed, DateTimeOffset.UtcNow.AddHours(2));
@@ -83,19 +93,19 @@ namespace Frapid.Areas
             string prefix = ReverseIp(ipAddress);
             var lookupServers = GetRblServers();
 
-            foreach (string server in lookupServers)
+            foreach(string server in lookupServers)
             {
                 string address = prefix + "." + server;
                 bool result = Query(address);
 
-                if (result)
+                if(result)
                 {
                     return new DnsSpamLookupResult
-                    {
-                        IpAddress = ipAddress,
-                        RblServer = server,
-                        IsListed = true
-                    };
+                           {
+                               IpAddress = ipAddress,
+                               RblServer = server,
+                               IsListed = true
+                           };
                 }
             }
 

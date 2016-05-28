@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
@@ -13,12 +14,11 @@ namespace Frapid.WebsiteBuilder
 {
     public class ContentSearch : IContentSearch
     {
-        public List<SearchResultContent> Search(string query)
+        public async Task<IEnumerable<SearchResultContent>> SearchAsync(string query)
         {
             string tenant = AppUsers.GetTenant();
-            var context = new HttpContextWrapper(HttpContext.Current);
-            var result = Contents.Search(tenant, query);
-            string domain = DbConvention.GetBaseDomain(context, true);
+            var result = await Contents.SearchAsync(tenant, query);
+            string domain = TenantConvention.GetBaseDomain(new HttpContextWrapper(FrapidHttpContext.GetCurrent()), true);
 
             return result.Select(item => new SearchResultContent
             {

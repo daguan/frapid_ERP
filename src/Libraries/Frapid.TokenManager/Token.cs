@@ -24,7 +24,7 @@ namespace Frapid.TokenManager
 
         public void AddHeader(string key, object value)
         {
-            if (string.IsNullOrWhiteSpace(key))
+            if(string.IsNullOrWhiteSpace(key))
             {
                 return;
             }
@@ -34,7 +34,7 @@ namespace Frapid.TokenManager
 
         public void AddClaim(string key, object value)
         {
-            if (string.IsNullOrWhiteSpace(key))
+            if(string.IsNullOrWhiteSpace(key))
             {
                 return;
             }
@@ -57,7 +57,10 @@ namespace Frapid.TokenManager
 
         public DateTimeOffset CreatedOn
         {
-            get { return this._createdOn; }
+            get
+            {
+                return this._createdOn;
+            }
             set
             {
                 this._createdOn = value;
@@ -67,7 +70,10 @@ namespace Frapid.TokenManager
 
         public DateTimeOffset ExpiresOn
         {
-            get { return this._expiresOn; }
+            get
+            {
+                return this._expiresOn;
+            }
             set
             {
                 this._expiresOn = value;
@@ -77,7 +83,10 @@ namespace Frapid.TokenManager
 
         public string Audience
         {
-            get { return this._audience; }
+            get
+            {
+                return this._audience;
+            }
             set
             {
                 this._audience = value;
@@ -87,7 +96,10 @@ namespace Frapid.TokenManager
 
         public string Subject
         {
-            get { return this._subject; }
+            get
+            {
+                return this._subject;
+            }
             set
             {
                 this._subject = value;
@@ -97,7 +109,10 @@ namespace Frapid.TokenManager
 
         public string IssuedBy
         {
-            get { return this._issuedBy; }
+            get
+            {
+                return this._issuedBy;
+            }
             set
             {
                 this._issuedBy = value;
@@ -107,7 +122,10 @@ namespace Frapid.TokenManager
 
         public string TokenId
         {
-            get { return this._tokenId; }
+            get
+            {
+                return this._tokenId;
+            }
             set
             {
                 this._tokenId = value;
@@ -117,7 +135,10 @@ namespace Frapid.TokenManager
 
         public long LoginId
         {
-            get { return this._loginId; }
+            get
+            {
+                return this._loginId;
+            }
             set
             {
                 this._loginId = value;
@@ -129,7 +150,10 @@ namespace Frapid.TokenManager
 
         public int UserId
         {
-            get { return this._userId; }
+            get
+            {
+                return this._userId;
+            }
             set
             {
                 this._userId = value;
@@ -139,7 +163,10 @@ namespace Frapid.TokenManager
 
         public int OfficeId
         {
-            get { return this._officeId; }
+            get
+            {
+                return this._officeId;
+            }
             set
             {
                 this._officeId = value;

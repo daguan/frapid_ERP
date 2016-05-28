@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Frapid.Messaging
+namespace Frapid.Messaging.Templating
 {
     public class MessageTemplateProcessor
     {
@@ -20,13 +20,13 @@ namespace Frapid.Messaging
             var parameters = this.GetParameters(this.Template);
             string template = this.Template;
 
-            foreach (var item in this.Dictionary)
+            foreach(var item in this.Dictionary)
             {
-                foreach (string parameter in parameters)
+                foreach(string parameter in parameters)
                 {
                     string value = GetPropertyValue(item, parameter);
 
-                    if (!string.IsNullOrWhiteSpace(value))
+                    if(!string.IsNullOrWhiteSpace(value))
                     {
                         template = template.Replace("{" + parameter + "}", value);
                     }
@@ -36,8 +36,7 @@ namespace Frapid.Messaging
             //Remove null parameters
             parameters = this.GetParameters(this.Template);
 
-            return parameters.Aggregate(template,
-                (current, parameter) => current.Replace("{" + parameter + "}", string.Empty));
+            return parameters.Aggregate(template, (current, parameter) => current.Replace("{" + parameter + "}", string.Empty));
         }
 
         private List<string> GetParameters(string template)

@@ -8,6 +8,8 @@ ON account.access_tokens
 INSTEAD OF INSERT
 AS
 BEGIN
+	SET NOCOUNT ON;
+	
 	DECLARE @ip_address national character varying(100);
 	DECLARE @user_agent national character varying(500);
 	

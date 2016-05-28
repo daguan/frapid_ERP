@@ -11,7 +11,7 @@ namespace frapid
             var loader = new AssemblyLoader();
             loader.PreLoad();
 
-            bool exit = false;
+            var exit = false;
 
             string command;
 
@@ -38,7 +38,7 @@ namespace frapid
         private static string CheckClearSignal(string command)
         {
             var candidates = new[] {"cls", "clear"};
-            bool clear = candidates.Contains(command.ToLower());
+            var clear = candidates.Contains(command.ToLower());
 
             if (clear)
             {

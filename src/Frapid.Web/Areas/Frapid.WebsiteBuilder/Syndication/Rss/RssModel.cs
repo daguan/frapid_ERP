@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
@@ -12,13 +13,13 @@ namespace Frapid.WebsiteBuilder.Syndication.Rss
 {
     public static class RssModel
     {
-        public static RssChannel GetRssChannel(HttpContextBase context, string categoryAlias, int pageNumber)
+        public static async Task<RssChannel> GetRssChannelAsync(HttpContext context, string categoryAlias, int pageNumber)
         {
             string title = Configuration.Get("BlogTitle");
             string copyright = Configuration.Get("RssCopyrightText");
             int ttl = Configuration.Get("RssTtl").To<int>();
             int limit = Configuration.Get("RssPageSize").To<int>();
-            int offset = (pageNumber - 1)*limit;
+            int offset = (pageNumber - 1) * limit;
 
             List<PublishedContentView> contents;
             string category = string.Empty;
@@ -26,16 +27,16 @@ namespace Frapid.WebsiteBuilder.Syndication.Rss
 
             if (!string.IsNullOrWhiteSpace(categoryAlias))
             {
-                contents = Contents.GetBlogContents(tenant, categoryAlias, limit, offset).ToList();
+                contents = (await Contents.GetBlogContentsAsync(tenant, categoryAlias, limit, offset)).ToList();
                 category = contents.Select(x => x.CategoryName).FirstOrDefault();
             }
             else
             {
-                contents = Contents.GetBlogContents(tenant, limit, offset).ToList();
+                contents = (await Contents.GetBlogContentsAsync(tenant, limit, offset)).ToList();
             }
 
 
-            string domain = DbConvention.GetBaseDomain(context, true);
+            string domain = TenantConvention.GetBaseDomain(new HttpContextWrapper(context), true);
 
             var items = contents.Select(view => new RssItem
             {

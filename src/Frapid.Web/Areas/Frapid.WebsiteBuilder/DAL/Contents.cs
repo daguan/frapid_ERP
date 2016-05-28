@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
 using Frapid.DataAccess;
@@ -9,117 +9,117 @@ namespace Frapid.WebsiteBuilder.DAL
 {
     public static class Contents
     {
-        public static IEnumerable<Content> GetContents(string tenant)
+        public static async Task<IEnumerable<Content>> GetContentsAsync(string tenant)
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return db.FetchBy<Content>(sql => sql.Where(c => c.IsHomepage));
+                return await db.Query<Content>().Where(c => c.IsHomepage).ToListAsync();
             }
         }
 
-        public static IEnumerable<PublishedContentView> GetAllPublishedContents(string tenant)
+        public static async Task<IEnumerable<PublishedContentView>> GetAllPublishedContentsAsync(string tenant)
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return db.FetchBy<PublishedContentView>(sql => sql);
+                return await db.Query<PublishedContentView>().ToListAsync();
             }
         }
 
-        public static Content Get(string tenant, int contentId)
+        public static async Task<Content> GetAsync(string tenant, int contentId)
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return db.FetchBy<Content>(sql => sql
-                    .Where(c => c.ContentId == contentId))
-                    .FirstOrDefault();
+                return await db.Query<Content>().Where(c => c.ContentId == contentId)
+                    .FirstOrDefaultAsync();
             }
         }
 
-        public static PublishedContentView GetPublished(string tenant, string categoryAlias, string alias, bool isBlog)
+        public static async Task<PublishedContentView> GetPublishedAsync(string tenant, string categoryAlias, string alias,
+            bool isBlog)
         {
             if (string.IsNullOrWhiteSpace(alias))
             {
-                return GetDefault(tenant);
+                return await GetDefaultAsync(tenant);
             }
 
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return db.FetchBy<PublishedContentView>(sql => sql
-                    .Where(c => c.Alias.ToLower().Equals(alias.ToLower())
-                                && c.CategoryAlias.ToLower().Equals(categoryAlias.ToLower())
-                                && c.IsBlog == isBlog
-                    ))
-                    .FirstOrDefault();
+                return await db.Query<PublishedContentView>().Where(c => c.Alias.ToLower().Equals(alias.ToLower())
+                                                                         &&
+                                                                         c.CategoryAlias.ToLower()
+                                                                             .Equals(categoryAlias.ToLower())
+                                                                         && c.IsBlog == isBlog
+                    )
+                    .FirstOrDefaultAsync();
             }
         }
 
 
-        public static IEnumerable<PublishedContentView> GetBlogContents(string tenant, string categoryAlias, int limit,
+        public static async Task<IEnumerable<PublishedContentView>> GetBlogContentsAsync(string tenant, string categoryAlias,
+            int limit,
             int offset)
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return
-                    db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog && x.CategoryAlias == categoryAlias))
-                        .Skip(offset)
-                        .Take(limit);
+                return await
+                    db.Query<PublishedContentView>().Where(x => x.IsBlog && x.CategoryAlias == categoryAlias)
+                        .Limit(offset, limit).ToListAsync();
             }
         }
 
-        public static int CountBlogContents(string tenant, string categoryAlias)
+        public static async Task<int> CountBlogContentsAsync(string tenant, string categoryAlias)
+        {
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
+            {
+                return await
+                    db.Query<PublishedContentView>().Where(x => x.IsBlog && x.CategoryAlias == categoryAlias)
+                        .CountAsync();
+            }
+        }
+
+        public static async Task<int> CountBlogContentsAsync(string tenant)
+        {
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
+            {
+                return await db.Query<PublishedContentView>().Where(x => x.IsBlog).CountAsync();
+            }
+        }
+
+        public static async Task<IEnumerable<PublishedContentView>> GetBlogContentsAsync(string tenant, int limit, int offset)
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 return
-                    db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog && x.CategoryAlias == categoryAlias))
-                        .Count;
+                    await db.Query<PublishedContentView>().Where(x => x.IsBlog).Limit(offset, limit).ToListAsync();
             }
         }
 
-        public static int CountBlogContents(string tenant)
+        public static async Task<PublishedContentView> GetDefaultAsync(string tenant)
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog)).Count;
+                return await
+                    db.Query<PublishedContentView>().Where(c => c.IsHomepage).Limit(1)
+                        .FirstOrDefaultAsync();
             }
         }
 
-        public static IEnumerable<PublishedContentView> GetBlogContents(string tenant, int limit, int offset)
-        {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
-            {
-                return db.FetchBy<PublishedContentView>(sql => sql.Where(x => x.IsBlog)).Skip(offset).Take(limit);
-            }
-        }
-
-        public static PublishedContentView GetDefault(string tenant)
-        {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
-            {
-                return
-                    db.FetchBy<PublishedContentView>(sql => sql.Where(c => c.IsHomepage).Limit(1))
-                        .FirstOrDefault();
-            }
-        }
-
-        internal static void AddHit(string tenant, string categoryAlias, string alias)
+        internal static async Task AddHitAsync(string tenant, string categoryAlias, string alias)
         {
             string sql = FrapidDbServer.GetProcedureCommand(tenant, "website.add_hit", new[] {"@0", "@1"});
-            Factory.NonQuery(tenant, sql, categoryAlias, alias);
+            await Factory.NonQueryAsync(tenant, sql, categoryAlias, alias);
         }
 
-        public static List<PublishedContentView> Search(string tenant, string query)
+        public static async Task<IEnumerable<PublishedContentView>> SearchAsync(string tenant, string query)
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return
-                    db.FetchBy<PublishedContentView>(
-                        sql =>
-                            sql.Where(
-                                c =>
-                                    c.Title.ToLower().Contains(query.ToLower()) ||
-                                    c.Alias.ToLower().Contains(query.ToLower()) ||
-                                    c.Contents.ToLower().Contains(query.ToLower()))).ToList();
+                return await
+                    db.Query<PublishedContentView>().Where(
+                        c =>
+                            c.Title.ToLower().Contains(query.ToLower()) ||
+                            c.Alias.ToLower().Contains(query.ToLower()) ||
+                            c.Contents.ToLower().Contains(query.ToLower())).ToListAsync();
             }
         }
     }

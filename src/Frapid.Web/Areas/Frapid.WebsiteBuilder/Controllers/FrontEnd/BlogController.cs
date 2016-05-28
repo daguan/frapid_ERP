@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
 using Frapid.Areas.Caching;
@@ -14,17 +15,17 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
     {
         [Route("blog/{categoryAlias}/{alias}/hit")]
         [HttpPost]
-        public ActionResult Counter(string categoryAlias = "", string alias = "")
+        public async Task<ActionResult> CounterAsync(string categoryAlias = "", string alias = "")
         {
-            ContentModel.AddHit(AppUsers.GetTenant(), categoryAlias, alias);
+            await ContentModel.AddHitAsync(AppUsers.GetTenant(), categoryAlias, alias);
             return this.Ok();
         }
 
         [Route("blog/{categoryAlias}/{alias}")]
         [FrapidOutputCache(ProfileName = "BlogContent")]
-        public ActionResult Post(string categoryAlias, string alias)
+        public async Task<ActionResult> PostAsync(string categoryAlias, string alias)
         {
-            var model = ContentModel.GetContent(this.Tenant, categoryAlias, alias, true);
+            var model = await ContentModel.GetContentAsync(this.Tenant, categoryAlias, alias, true);
 
             if (model == null)
             {
@@ -37,7 +38,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
             model.LayoutPath = path;
             model.Layout = layout;
-            model.Contents = ContentExtensions.ParseHtml(this.Tenant, model.Contents);
+            model.Contents = await ContentExtensions.ParseHtmlAsync(this.Tenant, model.Contents);
 
             return this.View(this.GetRazorView<AreaRegistration>("Blog/Post.cshtml"), model);
         }
@@ -45,7 +46,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [FrapidOutputCache(ProfileName = "BlogHome")]
         [Route("blog")]
         [Route("blog/{pageNumber}")]
-        public ActionResult Home(int pageNumber = 1)
+        public async Task<ActionResult> HomeAsync(int pageNumber = 1)
         {
             try
             {
@@ -54,23 +55,23 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
                     pageNumber = 1;
                 }
 
-                var contents = ContentModel.GetBlogContents(pageNumber);
+                var contents = (await ContentModel.GetBlogContentsAsync(pageNumber)).ToList();
 
-                if (contents == null || !contents.Any())
+                if (!contents.Any())
                 {
                     return this.View(GetLayoutPath() + "404.cshtml");
                 }
 
                 foreach (var content in contents)
                 {
-                    content.Contents = ContentExtensions.ParseHtml(this.Tenant, content.Contents);
+                    content.Contents = await ContentExtensions.ParseHtmlAsync(this.Tenant, content.Contents);
                 }
 
                 string theme = this.GetTheme();
                 string layout = ThemeConfiguration.GetBlogLayout(theme);
                 string tenant = AppUsers.GetTenant();
 
-                var configuration = Configurations.GetDefaultConfiguration(tenant);
+                var configuration = await Configurations.GetDefaultConfigurationAsync(tenant);
 
                 var model = new Blog
                 {

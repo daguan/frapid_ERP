@@ -3,7 +3,7 @@ using Frapid.Configuration;
 
 namespace Frapid.ApplicationState.CacheFactory
 {
-    public class DefaultCacheFactory : ICacheFactory
+    public class DefaultCacheFactory: ICacheFactory
     {
         public DefaultCacheFactory()
         {
@@ -26,7 +26,7 @@ namespace Frapid.ApplicationState.CacheFactory
         {
             string type = CacheConfig.GetDefaultCacheType();
 
-            switch (type)
+            switch(type)
             {
                 case "Redis":
                     return new RedisCacheFactory();

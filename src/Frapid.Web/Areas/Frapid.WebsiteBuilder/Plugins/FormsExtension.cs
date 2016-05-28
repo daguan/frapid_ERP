@@ -32,7 +32,7 @@ namespace Frapid.WebsiteBuilder.Plugins
             return form.GetForm();
         }
 
-        public static async Task<string> PostForm(string identifier, string path, FormCollection model)
+        public static async Task<string> PostFormAsync(string identifier, string path, FormCollection model)
         {
             var form = GetForm(identifier);
 
@@ -47,7 +47,7 @@ namespace Frapid.WebsiteBuilder.Plugins
             return await form.PostFormAsync(model);
         }
 
-        public static async Task<string> ParseHtml(string html, bool isPost = false, FormCollection form = null)
+        public static async Task<string> ParseHtmlAsync(string html, bool isPost = false, FormCollection form = null)
         {
             if (string.IsNullOrWhiteSpace(html))
             {
@@ -75,7 +75,7 @@ namespace Frapid.WebsiteBuilder.Plugins
                 {
                     identifier = form["IFormExtensionIdentifier"];
                     path = form["IFormExtensionPath"];
-                    contents = await PostForm(identifier, path, form);
+                    contents = await PostFormAsync(identifier, path, form);
                 }
                 else
                 {

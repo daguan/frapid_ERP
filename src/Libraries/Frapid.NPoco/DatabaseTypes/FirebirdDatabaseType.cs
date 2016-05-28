@@ -1,6 +1,6 @@
-
 using System;
 using System.Data;
+using System.Data.Common;
 using System.Text;
 using Frapid.NPoco.Expressions;
 
@@ -13,7 +13,7 @@ namespace Frapid.NPoco.DatabaseTypes
             return "@";
         }
 
-        public override void PreExecute(IDbCommand cmd)
+        public override void PreExecute(DbCommand cmd)
         {
             cmd.CommandText = cmd.CommandText.Replace("/*poco_dual*/", "from RDB$DATABASE");
         }
@@ -43,17 +43,17 @@ namespace Frapid.NPoco.DatabaseTypes
         }
 
 
-        public override string GetDefaultInsertSql(string tableName, string[] names, string[] parameters)
+        public override string GetDefaultInsertSql(string tableName, string primaryKeyName, bool useOutputClause, string[] names, string[] parameters)
         {
-            return string.Format("INSERT INTO {0} ({1}) VALUES ({2})", EscapeTableName(tableName), string.Join(",", names), string.Join(",", parameters));
+            return string.Format("INSERT INTO {0} ({1}) VALUES ({2})", this.EscapeTableName(tableName), string.Join(",", names), string.Join(",", parameters));
         }
 
-        public override object ExecuteInsert<T>(Database db, IDbCommand cmd, string primaryKeyName, T poco, object[] args)
+        public override object ExecuteInsert<T>(Database db, DbCommand cmd, string primaryKeyName, bool useOutputClause, T poco, object[] args)
         {
             if (primaryKeyName != null)
             {
-                cmd.CommandText += string.Format(" returning {0}", EscapeSqlIdentifier(primaryKeyName));
-                var param = cmd.CreateParameter();
+                cmd.CommandText += string.Format(" returning {0}", this.EscapeSqlIdentifier(primaryKeyName));
+                DbParameter param = cmd.CreateParameter();
                 param.ParameterName = primaryKeyName;
                 param.Value = DBNull.Value;
                 param.Direction = ParameterDirection.ReturnValue;
@@ -67,9 +67,9 @@ namespace Frapid.NPoco.DatabaseTypes
             return -1;
         }
 
-        public override SqlExpression<T> ExpressionVisitor<T>(IDatabase db, bool prefixTableName)
+        public override SqlExpression<T> ExpressionVisitor<T>(IDatabase db, PocoData pocoData, bool prefixTableName)
         {
-            return new FirebirdSqlExpression<T>(db, prefixTableName);
+            return new FirebirdSqlExpression<T>(db, pocoData, prefixTableName);
         }
 
         public override string GetProviderName()

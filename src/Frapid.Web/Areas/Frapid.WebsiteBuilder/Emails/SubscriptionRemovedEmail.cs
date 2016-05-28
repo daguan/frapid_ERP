@@ -60,7 +60,7 @@ namespace Frapid.WebsiteBuilder.Emails
             {
                 var email = this.GetEmail(tenant, model);
                 var manager = new MailQueueManager(tenant, email);
-                manager.Add();
+                await manager.AddAsync();
 
                 var processor = EmailProcessor.GetDefault(tenant);
 

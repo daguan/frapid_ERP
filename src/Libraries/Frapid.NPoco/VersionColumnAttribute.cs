@@ -10,11 +10,11 @@ namespace Frapid.NPoco
         public VersionColumnAttribute() : this(VersionColumnType.Number) {}
         public VersionColumnAttribute(VersionColumnType versionColumnType)
         {
-            VersionColumnType = versionColumnType;
+            this.VersionColumnType = versionColumnType;
         }
         public VersionColumnAttribute(string name, VersionColumnType versionColumnType) : base(name)
         {
-            VersionColumnType = versionColumnType;
+            this.VersionColumnType = versionColumnType;
         }
     }
 

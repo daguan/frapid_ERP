@@ -9,7 +9,7 @@ using Serilog;
 
 namespace Frapid.SendGridMail
 {
-    public class Processor : IEmailProcessor
+    public class Processor: IEmailProcessor
     {
         public IEmailConfig Config { get; set; }
         public bool IsEnabled { get; set; }
@@ -21,12 +21,13 @@ namespace Frapid.SendGridMail
 
             this.IsEnabled = this.Config.Enabled;
 
-            if (!this.IsEnabled)
+            if(!this.IsEnabled)
             {
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(config.ApiKey) || string.IsNullOrWhiteSpace(config.ApiUser))
+            if(string.IsNullOrWhiteSpace(config.ApiKey) ||
+               string.IsNullOrWhiteSpace(config.ApiUser))
             {
                 this.IsEnabled = false;
             }
@@ -41,7 +42,7 @@ namespace Frapid.SendGridMail
         {
             var config = this.Config as Config;
 
-            if (config == null)
+            if(config == null)
             {
                 email.Status = Status.Cancelled;
                 return false;
@@ -52,20 +53,23 @@ namespace Frapid.SendGridMail
                 email.Status = Status.Executing;
 
                 var message = new SendGridMessage
-                {
-                    From = new MailAddress(email.FromEmail, email.FromName),
-                    Subject = email.Subject
-                };
+                              {
+                                  From = new MailAddress(email.FromEmail, email.FromName),
+                                  Subject = email.Subject
+                              };
 
-                if (!string.IsNullOrWhiteSpace(email.ReplyToEmail))
+                if(!string.IsNullOrWhiteSpace(email.ReplyToEmail))
                 {
-                    message.ReplyTo = new[] {new MailAddress(email.ReplyToEmail, email.ReplyToName)};
+                    message.ReplyTo = new[]
+                                      {
+                                          new MailAddress(email.ReplyToEmail, email.ReplyToName)
+                                      };
                 }
 
 
-                message.AddTo(email.SentTo.Split(',').Select(x=>x.Trim()).ToList());
+                message.AddTo(email.SentTo.Split(',').Select(x => x.Trim()).ToList());
 
-                if (email.IsBodyHtml)
+                if(email.IsBodyHtml)
                 {
                     message.Html = email.Message;
                 }
@@ -81,15 +85,15 @@ namespace Frapid.SendGridMail
                 email.Status = Status.Completed;
                 return true;
             }
-            // ReSharper disable once CatchAllClause
-            catch (Exception ex)
+                // ReSharper disable once CatchAllClause
+            catch(Exception ex)
             {
                 email.Status = Status.Failed;
                 Log.Warning(@"Could not send email to {To} using SendGrid API. {Ex}. ", email.SentTo, ex);
             }
             finally
             {
-                if (deleteAttachmentes)
+                if(deleteAttachmentes)
                 {
                     FileHelper.DeleteFiles(attachments);
                 }

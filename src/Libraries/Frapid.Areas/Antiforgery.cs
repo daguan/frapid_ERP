@@ -7,7 +7,7 @@ namespace Frapid.Areas
     {
         public static MvcHtmlString GetAntiForgeryToken(this HtmlHelper helper)
         {
-            if (DbConvention.IsStaticDomain())
+            if(TenantConvention.IsStaticDomain())
             {
                 return new MvcHtmlString(string.Empty);
             }

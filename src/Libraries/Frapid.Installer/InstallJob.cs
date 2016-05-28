@@ -8,7 +8,7 @@ namespace Frapid.Installer
 {
     public class InstallJob : IJob
     {
-        public void Execute(IJobExecutionContext context)
+        public async void Execute(IJobExecutionContext context)
         {
             string url = context.JobDetail.Key.Name;
             InstallerLog.Verbose($"Installing frapid on domain {url}.");
@@ -16,7 +16,7 @@ namespace Frapid.Installer
             try
             {
                 var installer = new Tenant.Installer(url);
-                installer.Install();
+                await installer.InstallAsync();
 
                 var site =
                     new DomainSerializer("DomainsApproved.json").Get().FirstOrDefault(x => x.DomainName.Equals(url));

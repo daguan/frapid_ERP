@@ -8,8 +8,8 @@ namespace Frapid.Installer.Helpers
     {
         public static void SetPathToRoot()
         {
-            string root = string.Empty;
-            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var root = string.Empty;
+            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             if (path != null)
             {

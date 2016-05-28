@@ -14,7 +14,7 @@ namespace Frapid.WebsiteBuilder.Helpers
                 url = HttpContext.Current.Request.Url.PathAndQuery;
             }
 
-            string domain = DbConvention.GetDomain();
+            string domain = TenantConvention.GetDomain();
             var approved = new DomainSerializer("DomainsApproved.json");
             var tenant = approved.Get().FirstOrDefault(x => x.GetSubtenants().Contains(domain.ToLowerInvariant()));
 

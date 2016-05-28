@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using SendGrid;
 
 namespace Frapid.SendGridMail
@@ -8,15 +7,15 @@ namespace Frapid.SendGridMail
     {
         internal static SendGridMessage AddAttachments(SendGridMessage message, string[] attachments)
         {
-            if (attachments != null)
+            if(attachments != null)
             {
-                foreach (string file in attachments)
+                foreach(string file in attachments)
                 {
-                    if (!String.IsNullOrWhiteSpace(file))
+                    if(!string.IsNullOrWhiteSpace(file))
                     {
-                        if (File.Exists(file))
+                        if(File.Exists(file))
                         {
-                            using (var stream = new FileStream(file, FileMode.Open))
+                            using(var stream = new FileStream(file, FileMode.Open))
                             {
                                 message.AddAttachment(stream, Path.GetFileName(file));
                             }

@@ -196,16 +196,16 @@ namespace Frapid.NPoco.FluentMappings
 
             public InflectorRule(string regexPattern, string replacementText)
             {
-                regex = new Regex(regexPattern, RegexOptions.IgnoreCase);
-                replacement = replacementText;
+                this.regex = new Regex(regexPattern, RegexOptions.IgnoreCase);
+                this.replacement = replacementText;
             }
 
             public string Apply(string word)
             {
-                if (!regex.IsMatch(word))
+                if (!this.regex.IsMatch(word))
                     return null;
 
-                string replace = regex.Replace(word, replacement);
+                string replace = this.regex.Replace(word, this.replacement);
                 if (word == word.ToUpper())
                     replace = replace.ToUpper();
 

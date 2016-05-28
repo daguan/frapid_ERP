@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using System.Web.Security;
 using Frapid.Account.DAL;
 using Frapid.ApplicationState.Cache;
@@ -12,13 +13,13 @@ namespace Frapid.Account.Controllers
         [Route("account/sign-out")]
         [Route("account/log-out")]
         [RestrictAnonymous]
-        public ActionResult SignOut()
+        public async Task<ActionResult> SignOutAsync()
         {
             string tenant = AppUsers.GetTenant();
 
             if (this.MetaUser != null)
             {
-                AccessTokens.Revoke(tenant, this.MetaUser.ClientToken);
+                await AccessTokens.RevokeAsync(tenant, this.MetaUser.ClientToken);
             }
 
             FormsAuthentication.SignOut();
@@ -32,7 +33,7 @@ namespace Frapid.Account.Controllers
             if (referrer != null)
             {
                 string domain = referrer.DnsSafeHost;
-                bool wellKnown = DbConvention.IsValidDomain(domain);
+                bool wellKnown = TenantConvention.IsValidDomain(domain);
 
                 if (wellKnown)
                 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Frapid.ApplicationState.Cache;
 using Frapid.Authorization.DAL;
 
@@ -11,24 +11,34 @@ namespace Frapid.Authorization.ViewModels
         public string Name { get; set; }
         public string ObjectId { get; set; }
 
-        public static IEnumerable<Entity> GetEntities()
+        public static async Task<IEnumerable<Entity>> GetEntitiesAsync()
         {
             string tenant = AppUsers.GetTenant();
-            var data = Entities.Get(tenant);
-            var english = new CultureInfo("en-US", false).TextInfo;
+            var data = await Entities.GetAsync(tenant);
 
-            var entities = data.Select(item => new Entity
-            {
-                ObjectId = item.ObjectName, Name = english.ToTitleCase(item.ObjectName.Replace(".", ": ").Replace("_", " "))
-            }).OrderBy(x=>x.ObjectId).ToList();
+            var entities = data.Select
+                (
+                 item => new Entity
+                         {
+                             ObjectId = item.ObjectName,
+                             Name = ToTitleCase(item.ObjectName.Replace(".", ": ").Replace("_", " "))
+                         }).OrderBy(x => x.ObjectId).ToList();
 
-            entities.Insert(0, new Entity
-            {
-                ObjectId = "",
-                Name = "All Objects"
-            });
+            entities.Insert
+                (
+                 0,
+                 new Entity
+                 {
+                     ObjectId = "",
+                     Name = "All Objects"
+                 });
 
             return entities;
+        }
+
+        private static string ToTitleCase(string s)
+        {
+            return string.Join(" ", s.Split(' ').Select(i => i.Substring(0, 1).ToUpper() + i.Substring(1).ToLower()).ToArray());
         }
     }
 }

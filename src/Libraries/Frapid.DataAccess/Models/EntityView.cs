@@ -1,20 +1,21 @@
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using Frapid.Configuration;
+using Frapid.Configuration.DbServer;
 
 namespace Frapid.DataAccess.Models
 {
-    public class EntityView
+    public sealed class EntityView
     {
         public string PrimaryKey { get; set; }
-        public List<EntityColumn> Columns { get; set; }
+        public IEnumerable<EntityColumn> Columns { get; set; }
         public object PrimaryKeyValue { get; set; }
 
-        public static EntityView Get(string database, string primaryKey, string schemaName, string tableName)
+        public static async Task<EntityView> GetAsync(string database, string primaryKey, string schemaName, string tableName)
         {
             var db = FrapidDbServer.GetServer(database);
 
-            string sql = @"SELECT 
+            var sql = @"SELECT 
                     column_name, 
                     nullable,
                     udt_name as db_data_type,
@@ -26,11 +27,11 @@ namespace Frapid.DataAccess.Models
 
             if (!db.ProviderName.ToUpperInvariant().Equals("NPGSQL"))
             {
-                string procedure = FrapidDbServer.DefaultSchemaQualify(database, "poco_get_table_function_definition");
-                sql = db.GetProcedureCommand(procedure, new[] {"@0", "@1"});
+                var procedure = FrapidDbServer.DefaultSchemaQualify(database, "poco_get_table_function_definition");
+                sql = db.GetProcedureCommand(procedure, new[] { "@0", "@1" });
             }
 
-            var columns = Factory.Get<EntityColumn>(database, sql, schemaName, tableName).ToList();
+            var columns = await Factory.GetAsync<EntityColumn>(database, sql, schemaName, tableName);
 
             var meta = new EntityView
             {

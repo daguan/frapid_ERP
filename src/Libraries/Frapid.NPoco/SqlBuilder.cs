@@ -32,18 +32,18 @@ namespace Frapid.NPoco
 
             public string ResolveClauses(List<object> finalParams)
             {
-                foreach (var item in this)
+                foreach (Clause item in this)
                 {
                     item.ResolvedSql = ParameterHelper.ProcessParams(item.Sql, item.Parameters.ToArray(), finalParams);
                 }
-                return prefix + string.Join(joiner, this.Select(c => c.ResolvedSql).ToArray()) + postfix;
+                return this.prefix + string.Join(this.joiner, this.Select(c => c.ResolvedSql).ToArray()) + this.postfix;
             }
         }
 
         public class Template
         {
             public bool TokenReplacementRequired { get; set; }
-            
+
             readonly string sql;
             readonly SqlBuilder builder;
             private List<object> finalParams = new List<object>();
@@ -51,63 +51,105 @@ namespace Frapid.NPoco
 
             public Template(SqlBuilder builder, string sql, params object[] parameters)
             {
-                this.sql = ParameterHelper.ProcessParams(sql, parameters, finalParams);
+                this.sql = ParameterHelper.ProcessParams(sql, parameters, this.finalParams);
                 this.builder = builder;
             }
 
-            static Regex regex = new Regex(@"\/\*\*.+\*\*\/", RegexOptions.Compiled | RegexOptions.Multiline);
+            static Regex regex = new Regex(@"(\/\*\*.+\*\*\/)", RegexOptions.Compiled | RegexOptions.Multiline);
 
             void ResolveSql()
             {
-                if (dataSeq != builder.seq)
+                if (this.dataSeq != this.builder.seq)
                 {
-                    rawSql = sql;
-                    foreach (var pair in builder.data)
+                    this.rawSql = this.sql;
+                    foreach (KeyValuePair<string, Clauses> pair in this.builder.data)
                     {
-                        rawSql = rawSql.Replace("/**" + pair.Key + "**/", pair.Value.ResolveClauses(finalParams));
+                        this.rawSql = this.rawSql.Replace("/**" + pair.Key + "**/", pair.Value.ResolveClauses(this.finalParams));
                     }
 
-                    ReplaceDefaults();
+                    this.ReplaceDefaults();
 
-                    dataSeq = builder.seq;
+                    this.dataSeq = this.builder.seq;
                 }
 
-                if (builder.seq == 0)
+                if (this.builder.seq == 0)
                 {
-                    rawSql = sql;
-                    ReplaceDefaults();
+                    this.rawSql = this.sql;
+                    this.ReplaceDefaults();
                 }
             }
 
             private void ReplaceDefaults()
             {
-                foreach (var pair in builder.defaultsIfEmpty)
+                if (this.TokenReplacementRequired)
                 {
-                    var fullToken = @"/\*\*" + pair.Key + @"\*\*/";
-                    if (TokenReplacementRequired)
+                    foreach (KeyValuePair<string, string> pair in this.builder.defaultsIfEmpty)
                     {
-                        if (Regex.IsMatch(rawSql, fullToken))
+                        string fullToken = GetFullTokenRegexPattern(pair.Key);
+                        if (Regex.IsMatch(this.rawSql, fullToken))
                         {
-                            throw new Exception(string.Format("Token '{0}' not used. All tokens must be replaced if TokenReplacementRequired switched on.", fullToken));
+                            throw new Exception(string.Format("Token '{0}' not used. All tokens must be replaced if TokenReplacementRequired switched on.",fullToken));
+                        }
+                    }
+                }
+
+                this.rawSql = regex.Replace(this.rawSql, x =>
+                {
+                    string token = x.Groups[1].Value;
+                    bool found = false;
+
+                    foreach (KeyValuePair<string, string> pair in this.builder.defaultsIfEmpty)
+                    {
+                        string fullToken = GetFullTokenRegexPattern(pair.Key);
+                        if (Regex.IsMatch(token, fullToken))
+                        {
+                            if (pair.Value != null)
+                            {
+                                token = Regex.Replace(token, fullToken, " " + pair.Value + " ");
+                            }
+                            found = true;
+                            break;
                         }
                     }
 
-                    rawSql = Regex.Replace(rawSql, fullToken, " " + pair.Value + " ");
-                }
+                    if (!found)
+                    {
+                        token = string.Empty;
+                    }
 
-                // replace all that is left with empty
-                rawSql = regex.Replace(rawSql, "");
+                    return token;
+                });
+            }
+
+            private static string GetFullTokenRegexPattern(string key)
+            {
+                return @"/\*\*" + key + @"\*\*/";
             }
 
             string rawSql;
 
-            public string RawSql { get { ResolveSql(); return rawSql; } }
-            public object[] Parameters { get { ResolveSql(); return finalParams.ToArray(); } }
+            public string RawSql { get { this.ResolveSql(); return this.rawSql; } }
+            public object[] Parameters { get { this.ResolveSql(); return this.finalParams.ToArray(); } }
         }
 
-
+        /// <summary>
+        /// Initialises the SqlBuilder
+        /// </summary>
         public SqlBuilder()
         {
+        }
+
+        /// <summary>
+        /// Initialises the SqlBuilder with default replacement overrides
+        /// </summary>
+        /// <param name="defaultOverrides">A dictionary of token overrides. A value null means the token will not be replaced.</param>
+        /// <example>
+        /// { "where", "1=1" }
+        /// { "where(name)", "1!=1" }
+        /// </example>
+        public SqlBuilder(Dictionary<string, string> defaultOverrides)
+        {
+            this.defaultsIfEmpty.InsertRange(0, defaultOverrides.Select(x => new KeyValuePair<string, string>(Regex.Escape(x.Key), x.Value)));
         }
 
         public Template AddTemplate(string sql, params object[] parameters)
@@ -118,28 +160,28 @@ namespace Frapid.NPoco
         void AddClause(string name, string sql, object[] parameters, string joiner, string prefix, string postfix)
         {
             Clauses clauses;
-            if (!data.TryGetValue(name, out clauses))
+            if (!this.data.TryGetValue(name, out clauses))
             {
                 clauses = new Clauses(joiner, prefix, postfix);
-                data[name] = clauses;
+                this.data[name] = clauses;
             }
             clauses.Add(new Clause { Sql = sql, Parameters = new List<object>(parameters) });
-            seq++;
+            this.seq++;
         }
 
-        readonly Dictionary<string, string> defaultsIfEmpty = new Dictionary<string, string>
+        readonly List<KeyValuePair<string, string>> defaultsIfEmpty = new List<KeyValuePair<string, string>>()
         {
-            { @"where\([\w]+\)", "1=1" },
-            { "where", "1=1"},
-            { "select", "1" }
+            new KeyValuePair<string, string>(@"where\([\w]+\)", "1=1"),
+            new KeyValuePair<string, string>("where", "1=1"),
+            new KeyValuePair<string, string>("select", "1")
         };
-
+        
         /// <summary>
         /// Replaces the Select columns. Uses /**select**/
         /// </summary>
         public SqlBuilder Select(params string[] columns)
         {
-            AddClause("select", string.Join(", ", columns), new object[] { }, ", ", "", "");
+            this.AddClause("select", string.Join(", ", columns), new object[] { }, ", ", "", "");
             return this;
         }
 
@@ -148,7 +190,7 @@ namespace Frapid.NPoco
         /// </summary>
         public SqlBuilder Join(string sql, params object[] parameters)
         {
-            AddClause("join", sql, parameters, "\nINNER JOIN ", "\nINNER JOIN ", "\n");
+            this.AddClause("join", sql, parameters, "\nINNER JOIN ", "\nINNER JOIN ", "\n");
             return this;
         }
 
@@ -157,7 +199,7 @@ namespace Frapid.NPoco
         /// </summary>
         public SqlBuilder LeftJoin(string sql, params object[] parameters)
         {
-            AddClause("leftjoin", sql, parameters, "\nLEFT JOIN ", "\nLEFT JOIN ", "\n");
+            this.AddClause("leftjoin", sql, parameters, "\nLEFT JOIN ", "\nLEFT JOIN ", "\n");
             return this;
         }
 
@@ -166,7 +208,7 @@ namespace Frapid.NPoco
         /// </summary>
         public SqlBuilder Where(string sql, params object[] parameters)
         {
-            AddClause("where", sql, parameters, " AND ", " ( ", " )\n");
+            this.AddClause("where", "( " + sql + " )", parameters, " AND ", "", "\n");
             return this;
         }
 
@@ -175,7 +217,7 @@ namespace Frapid.NPoco
         /// </summary>
         public SqlBuilder WhereNamed(string name, string sql, params object[] parameters)
         {
-            AddClause("where(" + name + ")", sql, parameters, " AND ", " ( ", " )\n");
+            this.AddClause("where(" + name + ")", "( " + sql + " )", parameters, " AND ", "", "\n");
             return this;
         }
 
@@ -184,7 +226,7 @@ namespace Frapid.NPoco
         /// </summary>
         public SqlBuilder OrderBy(string sql, params object[] parameters)
         {
-            AddClause("orderby", sql, parameters, ", ", "ORDER BY ", "\n");
+            this.AddClause("orderby", sql, parameters, ", ", "ORDER BY ", "\n");
             return this;
         }
 
@@ -193,7 +235,7 @@ namespace Frapid.NPoco
         /// </summary>
         public SqlBuilder OrderByCols(params string[] columns)
         {
-            AddClause("orderbycols", string.Join(", ", columns), new object[] { }, ", ", ", ", "");
+            this.AddClause("orderbycols", string.Join(", ", columns), new object[] { }, ", ", ", ", "");
             return this;
         }
 
@@ -202,7 +244,7 @@ namespace Frapid.NPoco
         /// </summary>
         public SqlBuilder GroupBy(string sql, params object[] parameters)
         {
-            AddClause("groupby", sql, parameters, " , ", "\nGROUP BY ", "\n");
+            this.AddClause("groupby", sql, parameters, " , ", "\nGROUP BY ", "\n");
             return this;
         }
 
@@ -211,7 +253,7 @@ namespace Frapid.NPoco
         /// </summary>
         public SqlBuilder Having(string sql, params object[] parameters)
         {
-            AddClause("having", sql, parameters, "\nAND ", "HAVING ", "\n");
+            this.AddClause("having", sql, parameters, "\nAND ", "HAVING ", "\n");
             return this;
         }
     }

@@ -9,18 +9,18 @@ namespace Frapid.NPoco.FluentMappings
 
         public Map<T> For<T>()
         {
-            var definition = Config.ContainsKey(typeof(T)) ? Config[typeof(T)] : new TypeDefinition(typeof(T));
-            var petaPocoMap = new Map<T>(definition);
-            Config[typeof (T)] = definition;
+            TypeDefinition definition = this.Config.ContainsKey(typeof(T)) ? this.Config[typeof(T)] : new TypeDefinition(typeof(T));
+            Map<T> petaPocoMap = new Map<T>(definition);
+            this.Config[typeof (T)] = definition;
             return petaPocoMap;
         }
 
         public static Mappings BuildMappingsFromMaps(params IMap[] petaPocoMaps)
         {
-            var petaPocoConfig = new Mappings();
-            foreach (var petaPocoMap in petaPocoMaps)
+            Mappings petaPocoConfig = new Mappings();
+            foreach (IMap petaPocoMap in petaPocoMaps)
             {
-                var type = petaPocoMap.TypeDefinition.Type;
+                Type type = petaPocoMap.TypeDefinition.Type;
                 petaPocoConfig.Config[type] = petaPocoMap.TypeDefinition;
             }
             return petaPocoConfig;

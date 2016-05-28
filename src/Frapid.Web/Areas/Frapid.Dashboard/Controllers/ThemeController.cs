@@ -16,7 +16,7 @@ namespace Frapid.Dashboard.Controllers
         [RestrictAnonymous]
         public ActionResult GetThemes()
         {
-            string tenant = DbConvention.GetTenant();
+            string tenant = TenantConvention.GetTenant();
             string path = $"~/Tenants/{tenant}/Areas/Frapid.Dashboard/Themes";
             path = HostingEnvironment.MapPath(path);
 
@@ -41,7 +41,7 @@ namespace Frapid.Dashboard.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            string tenant = DbConvention.GetTenant();
+            string tenant = TenantConvention.GetTenant();
             string path = $"~/Tenants/{tenant}/Areas/Frapid.Dashboard/Themes/{themeName}";
             path = HostingEnvironment.MapPath(path);
 

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Caching;
 using System.Threading;
+
+#if DNX451 || NET45 || NET40
+using System.Runtime.Caching;
+#endif
 
 namespace Frapid.NPoco
 {
@@ -13,15 +16,19 @@ namespace Frapid.NPoco
     /// Better to have one memory cache instance than many so it's memory management can be handled more effectively
     /// http://stackoverflow.com/questions/8463962/using-multiple-instances-of-memorycache
     /// </remarks>
+
     internal class ManagedCache
     {
-#if !POCO_NO_DYNAMIC
-        public System.Runtime.Caching.ObjectCache GetCache()
+#if !NET35 
+        public MemoryCache GetCache()
         {
             return ObjectCache;
         }
-
-        static readonly System.Runtime.Caching.ObjectCache ObjectCache = new System.Runtime.Caching.MemoryCache("NPoco");
+    #if DNXCORE50
+        static readonly MemoryCache ObjectCache = new MemoryCache(new MemoryCacheOptions());
+    #else
+        static readonly MemoryCache ObjectCache = new MemoryCache("NPoco");
+    #endif
 #endif
     }
 
@@ -31,7 +38,7 @@ namespace Frapid.NPoco
 
         private Cache(bool useManaged)
         {
-            _useManaged = useManaged;
+            this._useManaged = useManaged;
         }
 
         /// <summary>
@@ -52,24 +59,19 @@ namespace Frapid.NPoco
         readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
         readonly ManagedCache _managedCache = new ManagedCache();
         
-        public int Count
-        {
-            get
-            {
-                return _map.Count;
-            }
-        }
+        public int Count => this._map.Count;
 
         public TValue Get(TKey key, Func<TValue> factory)
         {
-#if !POCO_NO_DYNAMIC
-            if (_useManaged)
+#if !NET35 && !DNXCORE50 
+            if (this._useManaged)
             {
-                var objectCache = _managedCache.GetCache();
+                MemoryCache objectCache = this._managedCache.GetCache();
                 //lazy usage of AddOrGetExisting ref: http://stackoverflow.com/questions/10559279/how-to-deal-with-costly-building-operations-using-memorycache/15894928#15894928
-                var newValue = new Lazy<TValue>(factory);
+                Lazy<TValue> newValue = new Lazy<TValue>(factory);
                 // the line belows returns existing item or adds the new value if it doesn't exist
-                var value = (Lazy<TValue>)objectCache.AddOrGetExisting(key.ToString(), newValue, new System.Runtime.Caching.CacheItemPolicy
+                
+                Lazy<TValue> value = (Lazy<TValue>)objectCache.AddOrGetExisting(key.ToString(), newValue, new System.Runtime.Caching.CacheItemPolicy
                 {
                     //sliding expiration of 1 hr, if the same key isn't used in this 
                     // timeframe it will be removed from the cache
@@ -80,79 +82,78 @@ namespace Frapid.NPoco
 #endif
 
             // Check cache
-            _lock.EnterReadLock();
+            this._lock.EnterReadLock();
             TValue val;
             try
             {
-                if (_map.TryGetValue(key, out val))
+                if (this._map.TryGetValue(key, out val))
                     return val;
             }
             finally
             {
-                _lock.ExitReadLock();
+                this._lock.ExitReadLock();
             }
 
-
             // Cache it
-            _lock.EnterWriteLock();
+            this._lock.EnterWriteLock();
             try
             {
                 // Check again
-                if (_map.TryGetValue(key, out val))
+                if (this._map.TryGetValue(key, out val))
                     return val;
 
                 // Create it
                 val = factory();
 
                 // Store it
-                _map.Add(key, val);
+                this._map.Add(key, val);
 
                 // Done
                 return val;
             }
             finally
             {
-                _lock.ExitWriteLock();
+                this._lock.ExitWriteLock();
             }
         }
 
         public bool AddIfNotExists(TKey key, TValue value)
         {
             // Cache it
-            _lock.EnterWriteLock();
+            this._lock.EnterWriteLock();
             try
             {
                 // Check again
                 TValue val;
-                if (_map.TryGetValue(key, out val))
+                if (this._map.TryGetValue(key, out val))
                     return true;
 
                 // Create it
                 val = value;
 
                 // Store it
-                _map.Add(key, val);
+                this._map.Add(key, val);
 
                 // Done
                 return false;
             }
             finally
             {
-                _lock.ExitWriteLock();
+                this._lock.ExitWriteLock();
             }
         }
 
         public void Flush()
         {
             // Cache it
-            _lock.EnterWriteLock();
+            this._lock.EnterWriteLock();
             try
             {
-                _map.Clear();
+                this._map.Clear();
             }
             finally
             {
-                _lock.ExitWriteLock();
+                this._lock.ExitWriteLock();
             }
 
         }

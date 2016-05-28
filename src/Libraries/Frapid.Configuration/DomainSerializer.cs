@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Frapid.Configuration
 {
-    public class DomainSerializer
+    public class DomainSerializer : IDomainSerializer
     {
         private const string Path = "~/Resources/Configs/";
 
@@ -23,12 +23,12 @@ namespace Frapid.Configuration
 
             string path = PathMapper.MapPath(Path + this.FileName);
 
-            if (path == null)
+            if(path == null)
             {
                 return domains;
             }
 
-            if (!File.Exists(path))
+            if(!File.Exists(path))
             {
                 return domains;
             }
@@ -39,12 +39,12 @@ namespace Frapid.Configuration
             return domains ?? new List<ApprovedDomain>();
         }
 
-        public List<string> GetTenantMembers()
+        public List<string> GetMemberSites()
         {
             var domains = new List<string>();
             var approved = this.Get();
 
-            foreach (var domain in approved)
+            foreach(var domain in approved)
             {
                 domains.Add(domain.DomainName);
                 domains.AddRange(domain.Synonyms);
@@ -59,7 +59,7 @@ namespace Frapid.Configuration
             var domains = this.Get();
             bool found = domains.Any(x => x.DomainName.ToUpperInvariant().Equals(domain.DomainName.ToUpperInvariant()));
 
-            if (!found)
+            if(!found)
             {
                 domains.Add(domain);
                 this.Save(domains);
@@ -75,12 +75,12 @@ namespace Frapid.Configuration
             this.Save(domains);
         }
 
-        public void Save(List<ApprovedDomain> urls)
+        public void Save(List<ApprovedDomain> domains)
         {
-            string contents = JsonConvert.SerializeObject(urls, Formatting.Indented);
+            string contents = JsonConvert.SerializeObject(domains, Formatting.Indented);
             string path = PathMapper.MapPath(Path + this.FileName);
 
-            if (path == null)
+            if(path == null)
             {
                 return;
             }

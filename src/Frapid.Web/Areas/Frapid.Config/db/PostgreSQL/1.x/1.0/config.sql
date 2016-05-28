@@ -91,17 +91,14 @@ ON config.filters(object_name);
 CREATE TABLE config.custom_field_data_types
 (
     data_type                                   national character varying(50) NOT NULL PRIMARY KEY,
-    is_number                                   boolean DEFAULT(false),
-    is_date                                     boolean DEFAULT(false),
-    is_boolean                                  boolean DEFAULT(false),
-    is_long_text                                boolean DEFAULT(false)
+	underlying_type								national character varying(500) NOT NULL
 );
 
 CREATE TABLE config.custom_field_forms
 (
     form_name                                   national character varying(100) NOT NULL PRIMARY KEY,
-    table_name                                  national character varying(100) NOT NULL UNIQUE,
-    key_name                                    national character varying(100) NOT NULL        
+    table_name                                  national character varying(500) NOT NULL UNIQUE,
+    key_name                                    national character varying(500) NOT NULL
 );
 
 
@@ -110,23 +107,15 @@ CREATE TABLE config.custom_field_setup
     custom_field_setup_id                       SERIAL NOT NULL PRIMARY KEY,
     form_name                                   national character varying(100) NOT NULL
                                                 REFERENCES config.custom_field_forms,
+	before_field								national character varying(500),
     field_order                                 integer NOT NULL DEFAULT(0),
+	after_field									national character varying(500),
     field_name                                  national character varying(100) NOT NULL,
-    field_label                                 national character varying(100) NOT NULL,                   
+    field_label                                 national character varying(200) NOT NULL,                   
     data_type                                   national character varying(50)
                                                 REFERENCES config.custom_field_data_types,
     description                                 text NOT NULL
 );
-
-
-CREATE TABLE config.custom_fields
-(
-    custom_field_id                             BIGSERIAL NOT NULL PRIMARY KEY,
-    custom_field_setup_id                       integer NOT NULL REFERENCES config.custom_field_setup,
-    resource_id                                 text NOT NULL,
-    value                                       text
-);
-
 
 CREATE TABLE config.flag_types
 (
@@ -160,30 +149,57 @@ ON config.flags(user_id, UPPER(resource), UPPER(resource_key), UPPER(resource_id
 DO
 $$
 BEGIN
-    IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Text') THEN
-        INSERT INTO config.custom_field_data_types(data_type, is_number)
-        SELECT 'Text', false;
-    END IF;
+	DELETE FROM config.custom_field_data_types;
+	
+	IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='text') THEN
+		INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+		SELECT 'Text', 'national character varying(500)';
+	END IF;
 
-    IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Number') THEN
-        INSERT INTO config.custom_field_data_types(data_type, is_number)
-        SELECT 'Number', true;
-    END IF;
+	IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Number') THEN
+		INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+		SELECT 'Number', 'integer';
+	END IF;
 
-    IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Date') THEN
-        INSERT INTO config.custom_field_data_types(data_type, is_date)
-        SELECT 'Date', true;
-    END IF;
+	IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Positive Number') THEN
+		INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+		SELECT 'Positive Number', 'dbo.integer_strict';
+	END IF;
 
-    IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='True/False') THEN
-        INSERT INTO config.custom_field_data_types(data_type, is_boolean)
-        SELECT 'True/False', true;
-    END IF;
+	IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Money') THEN
+		INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+		SELECT 'Money', 'decimal(24, 4)';
+	END IF;
 
-    IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Long Text') THEN
-        INSERT INTO config.custom_field_data_types(data_type, is_long_text)
-        SELECT 'Long Text', true;
-    END IF;
+	IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Money (Positive Value Only)') THEN
+		INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+		SELECT 'Money (Positive Value Only)', 'dbo.money_strict';
+	END IF;
+
+	IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Date') THEN
+		INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+		SELECT 'Date', 'date';
+	END IF;
+
+	IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Date & Time') THEN
+		INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+		SELECT 'Date & Time', 'datetimeoffset';
+	END IF;
+
+	IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Time') THEN
+		INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+		SELECT 'Time', 'time';
+	END IF;
+
+	IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='True/False') THEN
+		INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+		SELECT 'True/False', 'bit';
+	END IF;
+
+	IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Long Text') THEN
+		INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+		SELECT 'Long Text', 'national character varying(MAX)';
+	END IF;
 END
 $$
 LANGUAGE plpgsql;
@@ -218,10 +234,7 @@ SELECT
     config.custom_field_setup.field_label,
     config.custom_field_setup.description,
     config.custom_field_data_types.data_type,
-    config.custom_field_data_types.is_number,
-    config.custom_field_data_types.is_date,
-    config.custom_field_data_types.is_boolean,
-    config.custom_field_data_types.is_long_text,
+    config.custom_field_data_types.underlying_type,
     ''::text AS resource_id,
     ''::text AS value
 FROM config.custom_field_setup

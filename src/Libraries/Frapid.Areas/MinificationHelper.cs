@@ -9,7 +9,7 @@ namespace Frapid.Areas
             var htmlMinifier = new HtmlMinifier();
             var result = htmlMinifier.Minify(html, false);
 
-            if (result.Errors.Count == 0)
+            if(result.Errors.Count == 0)
             {
                 return result.MinifiedContent;
             }

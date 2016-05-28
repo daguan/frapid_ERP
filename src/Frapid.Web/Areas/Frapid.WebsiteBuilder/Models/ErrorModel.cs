@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Frapid.ApplicationState.CacheFactory;
 using Frapid.Framework.Extensions;
 using Frapid.WebsiteBuilder.Contracts;
@@ -29,24 +30,24 @@ namespace Frapid.WebsiteBuilder.Models
             return query;
         }
 
-        public static SearchResult GetResult(string query)
+        public static async Task<SearchResult> GetResultAsync(string query)
         {
             query = Sanitize(query);
             string key = "/search-contents/" + query;
             var factory = new DefaultCacheFactory();
 
-            var result = factory.Get<SearchResult>(key);
+            var result = factory.Get<Task<SearchResult>>(key);
 
             if (result == null)
             {
-                result = FromStore(query);
+                result = FromStoreAsync(query);
                 factory.Add(key, result, DateTimeOffset.UtcNow.AddMinutes(15));
             }
 
-            return result;
+            return await result;
         }
 
-        public static SearchResult FromStore(string query)
+        public static async Task<SearchResult> FromStoreAsync(string query)
         {
             var contents = new List<SearchResultContent>();
 
@@ -54,7 +55,7 @@ namespace Frapid.WebsiteBuilder.Models
 
             foreach (var candidate in candidates)
             {
-                var items = candidate.Search(query);
+                var items = await candidate.SearchAsync(query);
                 contents.AddRange(items);
             }
 

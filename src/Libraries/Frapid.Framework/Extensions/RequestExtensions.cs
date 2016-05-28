@@ -11,13 +11,25 @@ namespace Frapid.Framework.Extensions
 {
     public static class RequestExtensions
     {
+        public static readonly string[] IpAddressHeaders = {
+                                                               "CF-Connecting-IP",
+                                                               "HTTP_X_FORWARDED_FOR",
+                                                               "REMOTE_ADDR"
+                                                           };
+
         public static string GetClientIpAddress(this HttpContextBase context)
         {
-            string ip = context?.Request?.UserHostAddress != null ? IPAddress.Parse(context.Request.UserHostAddress).ToString() : null;
-
-            if (!string.IsNullOrWhiteSpace(ip))
+            foreach(string ip in IpAddressHeaders.Select(header => context.Request.Headers[header]).Where(ip => !string.IsNullOrWhiteSpace(ip)))
             {
                 return ip;
+            }
+
+
+            string ipAddress = context?.Request?.UserHostAddress != null ? IPAddress.Parse(context.Request.UserHostAddress).ToString() : null;
+
+            if(!string.IsNullOrWhiteSpace(ipAddress))
+            {
+                return ipAddress;
             }
 
             return string.Empty;
@@ -25,35 +37,48 @@ namespace Frapid.Framework.Extensions
 
         public static string GetClientIpAddress(this IRequest request)
         {
+            foreach(string ip in IpAddressHeaders.Select(header => request.Headers[header]).Where(ip => !string.IsNullOrWhiteSpace(ip)))
+            {
+                return ip;
+            }
+
             object ipAddress;
-            if (request.Environment.TryGetValue("server.RemoteIpAddress", out ipAddress))
+            if(request.Environment.TryGetValue("server.RemoteIpAddress", out ipAddress))
             {
                 return ipAddress as string;
             }
+
             return null;
         }
 
         public static string GetClientIpAddress(this HttpRequestMessage request)
         {
             var context = request.Properties["MS_HttpContext"] as HttpContextBase;
-            string ip = context?.Request?.UserHostAddress != null ? IPAddress.Parse(context.Request.UserHostAddress).ToString() : null;
+            string ipAddress = GetClientIpAddress(context);
 
-            if (!string.IsNullOrWhiteSpace(ip))
+            if(!string.IsNullOrWhiteSpace(ipAddress))
+            {
+                return ipAddress;
+            }
+
+            var owinContext = request.Properties["MS_OwinContext"] as OwinContext;
+
+            foreach(string ip in IpAddressHeaders.Select(header => owinContext?.Request.Headers[header]).Where(ip => !string.IsNullOrWhiteSpace(ip)))
             {
                 return ip;
             }
 
-            var owinContext = request.Properties["MS_OwinContext"] as OwinContext;
+
             return owinContext?.Request?.RemoteIpAddress != null ? IPAddress.Parse(owinContext.Request.RemoteIpAddress).ToString() : null;
         }
 
         public static string GetUserAgent(this HttpContextBase context)
         {
-            string ip = context?.Request?.UserAgent;
+            string ua = context?.Request?.UserAgent;
 
-            if (!string.IsNullOrWhiteSpace(ip))
+            if(!string.IsNullOrWhiteSpace(ua))
             {
-                return ip;
+                return ua;
             }
 
             return string.Empty;
@@ -62,15 +87,20 @@ namespace Frapid.Framework.Extensions
         public static string GetUserAgent(this HttpRequestMessage request)
         {
             var context = request.Properties["MS_HttpContext"] as HttpContextBase;
-            string ip = context?.Request?.UserAgent;
+            string ua = context?.Request?.UserAgent;
 
-            if (!string.IsNullOrWhiteSpace(ip))
+            if(!string.IsNullOrWhiteSpace(ua))
             {
-                return ip;
+                return ua;
             }
 
             var owinContext = request.Properties["MS_OwinContext"] as OwinContext;
             return owinContext?.Request?.Headers.Get("User-Agent");
+        }
+
+        public static string GetCountry(this HttpRequestBase request)
+        {
+            return request.ServerVariables["HTTP_CF_IPCOUNTRY"].Or("Country Data Not Available");
         }
 
         public static T ReadClaim<T>(this HttpRequestContext request, string type)
@@ -99,7 +129,7 @@ namespace Frapid.Framework.Extensions
         //ASP.net MVC
         public static string GetClientToken(this HttpRequestBase request)
         {
-            if (!request.Cookies.AllKeys.Contains("access_token"))
+            if(!request.Cookies.AllKeys.Contains("access_token"))
             {
                 return string.Empty;
             }
@@ -110,7 +140,7 @@ namespace Frapid.Framework.Extensions
 
         public static string GetClientToken(this IRequest request)
         {
-            if (!request.Cookies.ContainsKey("access_token"))
+            if(!request.Cookies.ContainsKey("access_token"))
             {
                 return string.Empty;
             }

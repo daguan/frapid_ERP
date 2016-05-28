@@ -16,10 +16,10 @@ namespace Frapid.WebsiteBuilder.Controllers
             {
                 this.CurrentDomain = this.Request.Url.DnsSafeHost;
                 this.CurrentPageUrl = this.Request.Url.AbsoluteUri;
-                this.Tenant = DbConvention.GetTenant(this.CurrentDomain);
+                this.Tenant = TenantConvention.GetTenant(this.CurrentDomain);
             }
 
-            bool isStatic = DbConvention.IsStaticDomain(this.CurrentDomain);
+            bool isStatic = TenantConvention.IsStaticDomain(this.CurrentDomain);
 
             if (isStatic)
             {
@@ -92,7 +92,7 @@ namespace Frapid.WebsiteBuilder.Controllers
         {
             Log.Verbose($"Prepping Razor view for area \"{areaName}\" and view \"{path}\".");
 
-            string tenant = DbConvention.GetTenant();
+            string tenant = TenantConvention.GetTenant();
             string theme = Configuration.GetDefaultTheme();
 
             Log.Verbose($"Resolved tenant \"{tenant}\" and theme \"{theme}\".");

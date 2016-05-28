@@ -1,12 +1,14 @@
-﻿namespace Frapid.Installer.DAL
+﻿using System.Threading.Tasks;
+
+namespace Frapid.Installer.DAL
 {
     public interface IStore
     {
         string ProviderName { get; }
-        void CreateDb(string tenant);
-        bool HasDb(string tenant, string database);
-        bool HasSchema(string tenant, string database, string schema);
-        void RunSql(string tenant, string database, string fromFile);
-        void CleanupDb(string tenant, string database);
+        Task CreateDbAsync(string tenant);
+        Task<bool> HasDbAsync(string tenant, string database);
+        Task<bool> HasSchemaAsync(string tenant, string database, string schema);
+        Task RunSqlAsync(string tenant, string database, string fromFile);
+        Task CleanupDbAsync(string tenant, string database);
     }
 }

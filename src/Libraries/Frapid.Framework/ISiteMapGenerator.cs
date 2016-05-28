@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Frapid.Framework
 {
     public interface ISiteMapGenerator
     {
-        List<SiteMapUrl> Generate();
+        Task<List<SiteMapUrl>> GenerateAsync();
     }
 }

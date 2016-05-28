@@ -1,13 +1,19 @@
 using System;
 using System.Linq.Expressions;
 using Frapid.NPoco.Expressions;
+#if NET45
+using System.Threading.Tasks;
+#endif
 
 namespace Frapid.NPoco.Linq
 {
     public interface IDeleteQueryProvider<T>
     {
-        int Execute();
         IDeleteQueryProvider<T> Where(Expression<Func<T, bool>> whereExpression);
+        int Execute();
+#if NET45
+        Task<int> ExecuteAsync();
+#endif
     }
 
     public class DeleteQueryProvider<T> : IDeleteQueryProvider<T>
@@ -17,19 +23,26 @@ namespace Frapid.NPoco.Linq
 
         public DeleteQueryProvider(IDatabase database)
         {
-            _database = database;
-            _sqlExpression = database.DatabaseType.ExpressionVisitor<T>(database, false);
+            this._database = database;
+            this._sqlExpression = database.DatabaseType.ExpressionVisitor<T>(database, database.PocoDataFactory.ForType(typeof(T)), false);
         }
 
         public IDeleteQueryProvider<T> Where(Expression<Func<T, bool>> whereExpression)
         {
-            _sqlExpression = _sqlExpression.Where(whereExpression);
+            this._sqlExpression = this._sqlExpression.Where(whereExpression);
             return this;
         }
 
         public int Execute()
         {
-            return _database.Execute(_sqlExpression.Context.ToDeleteStatement(), _sqlExpression.Context.Params);
+            return this._database.Execute(this._sqlExpression.Context.ToDeleteStatement(), this._sqlExpression.Context.Params);
         }
+
+#if NET45
+        public Task<int> ExecuteAsync()
+        {
+            return _database.ExecuteAsync(_sqlExpression.Context.ToDeleteStatement(), _sqlExpression.Context.Params);
+        }
+#endif
     }
 }

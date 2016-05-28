@@ -7,12 +7,13 @@ namespace Frapid.NPoco
     {
         public PrimaryKeyAttribute(string primaryKey)
         {
-            Value = primaryKey;
-            AutoIncrement = true;
+            this.Value = primaryKey;
+            this.AutoIncrement = true;
         }
 
         public string Value { get; private set; }
         public string SequenceName { get; set; }
         public bool AutoIncrement { get; set; }
+        public bool UseOutputClause { get; set; }
     }
 }

@@ -38,7 +38,7 @@ namespace frapid.Modules
         private void CreateArea()
         {
             Console.WriteLine("Creating Area");
-            string destination = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "Areas", this.ProjectName);
+            var destination = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "Areas", this.ProjectName);
             Directory.CreateDirectory(destination);
 
             FileHelper.CopyDirectory(this.TempDirectory, destination);
@@ -50,7 +50,7 @@ namespace frapid.Modules
 
         private void CopyProject()
         {
-            string source = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "Templates", "WebAPIProject");
+            var source = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "Templates", "WebAPIProject");
             FileHelper.CopyDirectory(source, this.TempDirectory);
 
             Console.WriteLine("Copying project files");
@@ -79,8 +79,8 @@ namespace frapid.Modules
 
         private void RenameFile(string original, string renamed)
         {
-            string originalFile = Path.Combine(this.TempDirectory, original);
-            string renamedFile = Path.Combine(this.TempDirectory, renamed);
+            var originalFile = Path.Combine(this.TempDirectory, original);
+            var renamedFile = Path.Combine(this.TempDirectory, renamed);
 
             if (File.Exists(originalFile))
             {
@@ -90,8 +90,8 @@ namespace frapid.Modules
 
         private void ReplaceContent(string fileName)
         {
-            string file = Path.Combine(this.TempDirectory, fileName);
-            string contents = File.ReadAllText(file, Encoding.UTF8);
+            var file = Path.Combine(this.TempDirectory, fileName);
+            var contents = File.ReadAllText(file, Encoding.UTF8);
 
             contents = contents.Replace("WebAPIProject", this.ProjectName);
 

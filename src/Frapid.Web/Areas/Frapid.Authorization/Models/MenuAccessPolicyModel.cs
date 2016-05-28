@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Frapid.ApplicationState.Cache;
 using Frapid.Authorization.DAL;
 using Frapid.Authorization.DTO;
@@ -8,17 +9,18 @@ namespace Frapid.Authorization.Models
 {
     public static class MenuAccessPolicyModel
     {
-        public static UserMenuPolicy Get()
+        public static async Task<UserMenuPolicy> GetAsync()
         {
-            if (!AppUsers.GetCurrent().IsAdministrator)
+            if (!(await AppUsers.GetCurrentAsync()).IsAdministrator)
             {
                 return new UserMenuPolicy();
             }
 
             string tenant = AppUsers.GetTenant();
-            var offices = Offices.GetOffices(tenant);
-            var users = Users.GetUsers(tenant);
-            var menus = Menus.GetMenus(tenant);
+            var offices = await Offices.GetOfficesAsync(tenant);
+            var users = await Users.GetUsersAsync(tenant);
+            var menus = await Menus.GetMenusAsync(tenant);
+
             return new UserMenuPolicy
             {
                 Menus = menus,
@@ -27,22 +29,21 @@ namespace Frapid.Authorization.Models
             };
         }
 
-        public static void Save(UserMenuPolicyInfo model)
+        public static async Task SaveAsync(UserMenuPolicyInfo model)
         {
             string tenant = AppUsers.GetTenant();
-            Menus.SavePolicy(tenant, model.OfficeId, model.UserId, model.Allowed, model.Disallowed);
+            await Menus.SavePolicyAsync(tenant, model.OfficeId, model.UserId, model.Allowed, model.Disallowed);
         }
 
-
-        internal static IEnumerable<MenuAccessPolicy> Get(int officeId, int userId)
+        internal static async Task<IEnumerable<MenuAccessPolicy>> GetAsync(int officeId, int userId)
         {
-            if (!AppUsers.GetCurrent().IsAdministrator)
+            if (!(await AppUsers.GetCurrentAsync()).IsAdministrator)
             {
                 return new List<MenuAccessPolicy>();
             }
 
             string tenant = AppUsers.GetTenant();
-            return Menus.GetPolicy(tenant, officeId, userId);
+            return await Menus.GetPolicyAsync(tenant, officeId, userId);
         }
     }
 }

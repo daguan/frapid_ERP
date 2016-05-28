@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Xml.Serialization;
 
 namespace Frapid.NPoco
 {
-    // Implementation from @SamSaffron
-    // http://code.google.com/p/stack-exchange-data-explorer/source/browse/App/StackExchange.DataExplorer/Dapper/Snapshotter.cs
     public static class Snapshotter
     {
         public static Snapshot<T> StartSnapshot<T>(this IDatabase d, T obj)
@@ -25,17 +19,34 @@ namespace Frapid.NPoco
 
     public class Snapshot<T>
     {
-        static Func<T, T> cloner;
-        static Func<T, T, List<Change>> differ;
-        T memberWiseClone;
-        T trackedObject;
-        PocoData pocoData;
+        private readonly PocoData _pocoData;
+        private T _trackedObject;
+        private readonly Dictionary<PocoColumn, object> _originalValues = new Dictionary<PocoColumn, object>();
 
-        public Snapshot(PocoData data, T original)
+        public Snapshot(PocoData pocoData, T trackedObject)
         {
-            pocoData = data;
-            memberWiseClone = Clone(original, pocoData);
-            trackedObject = original;
+            this._pocoData = pocoData;
+            this._trackedObject = trackedObject;
+            this.PopulateValues(trackedObject);
+        }
+
+        private void PopulateValues(T original)
+        {
+            T clone = original.Copy();
+            foreach (PocoColumn pocoColumn in this._pocoData.Columns.Values)
+            {
+                this._originalValues[pocoColumn] = pocoColumn.GetColumnValue(this._pocoData, clone);
+            }
+        }
+
+        public void OverrideTrackedObject(T obj)
+        {
+            this._trackedObject = obj;
+        }
+
+        public List<string> UpdatedColumns()
+        {
+            return this.Changes().Select(x => x.ColumnName).ToList();
         }
 
         public class Change
@@ -46,255 +57,39 @@ namespace Frapid.NPoco
             public object NewValue { get; set; }
         }
 
-        public void OverrideTrackedObject(T obj)
-        {
-            trackedObject = obj;
-        }
-
         public List<Change> Changes()
         {
-            var changes = Diff(memberWiseClone, trackedObject, pocoData);
-            foreach (var c in changes)
+            List<Change> list = new List<Change>();
+            foreach (KeyValuePair<PocoColumn, object> pocoColumn in this._originalValues)
             {
-                var typeData = pocoData.Columns.Values.SingleOrDefault(x => x.MemberInfo.Name == c.Name);
-                c.ColumnName = typeData != null ? typeData.ColumnName : c.Name;
+                object newValue = pocoColumn.Key.GetColumnValue(this._pocoData, this._trackedObject);
+                if (!AreEqual(pocoColumn.Value, newValue))
+                {
+                    list.Add(new Change()
+                    {
+                        Name = pocoColumn.Key.MemberInfoData.Name,
+                        ColumnName = pocoColumn.Key.ColumnName,
+                        NewValue = newValue,
+                        OldValue = pocoColumn.Value
+                    });
+                }
             }
-
-            return changes;
+            return list;
         }
 
-        public List<string> UpdatedColumns()
-        {
-            return Changes().Select(x => x.ColumnName).ToList();
-        }
-
-        private static T Clone(T myObject, PocoData data)
-        {
-            cloner = cloner ?? GenerateCloner(data);
-            return cloner(myObject);
-        }
-
-        private static List<Change> Diff(T original, T current, PocoData pocoData)
-        {
-            differ = differ ?? GenerateDiffer(pocoData);
-            return differ(original, current);
-        }
-
-        static List<PropertyInfo> RelevantProperties(PocoData pocoData)
-        {
-            return pocoData.Columns.Values.Where(x => !x.MemberInfo.IsField()).Select(x => ((PropertyInfo)x.MemberInfo)).ToList();
-        }
-
-        private static bool CompareArrays(byte[] a, byte[] b)
-        {
-            if (a.Length != b.Length)
-                return false;
-
-            for (int i = 0; i < a.Length; i++)
-            {
-                if (a[i] != b[i])
-                    return false;
-            }
-            return true;
-        }
-
-        private static bool AreEqual<U>(U first, U second)
+        private static bool AreEqual(object first, object second)
         {
             if (first == null && second == null) return true;
-            if (first == null && second != null) return false;
-            if (first != null && second == null) return false;
+            if (first == null) return false;
+            if (second == null) return false;
 
-            var type = typeof (U);
-            if (type.IsClass && type != typeof (string))
+            Type type = first.GetType();
+            if (type.IsAClass() || type.IsArray)
             {
-                return CompareObjects(first, second);
+                return DatabaseFactory.ColumnSerializer.Serialize(first) == DatabaseFactory.ColumnSerializer.Serialize(second);
             }
 
             return first.Equals(second);
-        }
-
-        private static bool CompareObjects(object first, object second)
-        {
-            return CompareArrays(GenerateBytes(first), GenerateBytes(second));
-        }
-
-        private static byte[] GenerateBytes(object o)
-        {
-            using (var ms = new MemoryStream())
-            {
-                XmlSerializer xs = new XmlSerializer(o.GetTheType());
-                xs.Serialize(ms, o);
-                return ms.ToArray();
-            }
-        }
-
-        private static U GenerateObject<U>(byte[] bytes)
-        {
-            using (var ms = new MemoryStream(bytes))
-            {
-                XmlSerializer xs = new XmlSerializer(typeof(U));
-                return (U)xs.Deserialize(ms);
-            }
-        }
-
-        private static Func<T, T, List<Change>> GenerateDiffer(PocoData pocoData)
-        {
-            var dm = new DynamicMethod("DoDiff", typeof(List<Change>), new Type[] { typeof(T), typeof(T) }, true);
-
-            var il = dm.GetILGenerator();
-            // change list
-            il.DeclareLocal(typeof(List<Change>));
-            il.DeclareLocal(typeof(Change));
-            il.DeclareLocal(typeof(object)); // boxed change
-            il.DeclareLocal(typeof(object)); // orig val
-
-            il.Emit(OpCodes.Newobj, typeof(List<Change>).GetConstructor(Type.EmptyTypes));
-            // [list]
-            il.Emit(OpCodes.Stloc_0);
-
-            foreach (var prop in RelevantProperties(pocoData))
-            {
-                // []
-                il.Emit(OpCodes.Ldarg_0);
-                // [original]
-                il.Emit(OpCodes.Callvirt, prop.GetGetMethod());
-                // [original prop val]
-
-                il.Emit(OpCodes.Dup);
-                // [original prop val, original prop val]
-
-                if (prop.PropertyType != typeof(string))
-                {
-                    il.Emit(OpCodes.Box, prop.PropertyType);
-                    // [original prop val, original prop val boxed]
-                }
-
-                il.Emit(OpCodes.Stloc_3);
-                // [original prop val]
-
-                il.Emit(OpCodes.Ldarg_1);
-                // [original prop val, current]
-
-                il.Emit(OpCodes.Callvirt, prop.GetGetMethod());
-                // [original prop val, current prop val]
-
-                il.Emit(OpCodes.Dup);
-                // [original prop val, current prop val, current prop val]
-
-                if (prop.PropertyType != typeof(string))
-                {
-                    il.Emit(OpCodes.Box, prop.PropertyType);
-                    // [original prop val, current prop val, current prop val boxed]
-                }
-
-                il.Emit(OpCodes.Stloc_2);
-                // [original prop val, current prop val]
-
-                il.EmitCall(OpCodes.Call, typeof(Snapshot<T>).GetMethod("AreEqual", BindingFlags.NonPublic | BindingFlags.Static).MakeGenericMethod(new Type[] { prop.PropertyType }), null);
-                // [result] 
-
-                Label skip = il.DefineLabel();
-                il.Emit(OpCodes.Brtrue_S, skip);
-                // []
-
-                il.Emit(OpCodes.Newobj, typeof(Change).GetConstructor(Type.EmptyTypes));
-                // [change]
-                il.Emit(OpCodes.Dup);
-                // [change,change]
-
-                il.Emit(OpCodes.Stloc_1);
-                // [change]
-
-                il.Emit(OpCodes.Ldstr, prop.Name);
-                // [change, name]
-                il.Emit(OpCodes.Callvirt, typeof(Change).GetMethod("set_Name"));
-                // []
-
-                il.Emit(OpCodes.Ldloc_1);
-                // [change]
-
-                il.Emit(OpCodes.Ldloc_3);
-                // [change, original prop val boxed]
-
-                il.Emit(OpCodes.Callvirt, typeof(Change).GetMethod("set_OldValue"));
-                // []
-
-                il.Emit(OpCodes.Ldloc_1);
-                // [change]
-
-                il.Emit(OpCodes.Ldloc_2);
-                // [change, boxed]
-
-                il.Emit(OpCodes.Callvirt, typeof(Change).GetMethod("set_NewValue"));
-                // []
-
-                il.Emit(OpCodes.Ldloc_0);
-                // [change list]
-                il.Emit(OpCodes.Ldloc_1);
-                // [change list, change]
-                il.Emit(OpCodes.Callvirt, typeof(List<Change>).GetMethod("Add"));
-                // []
-
-                il.MarkLabel(skip);
-            }
-
-            il.Emit(OpCodes.Ldloc_0);
-            // [change list]
-            il.Emit(OpCodes.Ret);
-
-            return (Func<T, T, List<Change>>)dm.CreateDelegate(typeof(Func<T, T, List<Change>>));
-        }
-
-
-        // adapted from http://stackoverflow.com/a/966466/17174
-        private static Func<T, T> GenerateCloner(PocoData pocoData)
-        {
-            Delegate myExec = null;
-            var dm = new DynamicMethod("DoClone", typeof(T), new Type[] { typeof(T) }, true);
-            var ctor = typeof(T).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[0], null);;
-
-            var il = dm.GetILGenerator();
-
-            il.DeclareLocal(typeof(T));
-
-            il.Emit(OpCodes.Newobj, ctor);
-            il.Emit(OpCodes.Stloc_0);
-
-            foreach (var prop in RelevantProperties(pocoData))
-            {
-                il.Emit(OpCodes.Ldloc_0);
-                // [clone]
-                il.Emit(OpCodes.Ldarg_0);
-                // [clone, source]
-                il.Emit(OpCodes.Callvirt, prop.GetGetMethod());
-                // [clone, source val]
-
-                if (prop.PropertyType.IsClass && prop.PropertyType != typeof (string))
-                {
-                    il.EmitCall(OpCodes.Call, typeof(Snapshot<T>).GetMethod("DupObj", BindingFlags.NonPublic | BindingFlags.Static).MakeGenericMethod(new Type[] { prop.PropertyType }), null);
-                }
-                // [clone, source val deep cloned]
-
-                il.Emit(OpCodes.Callvirt, prop.GetSetMethodOnDeclaringType()); //prop.GetSetMethod());
-                // []
-            }
-
-            // Load new constructed obj on eval stack -> 1 item on stack
-            il.Emit(OpCodes.Ldloc_0);
-            // Return constructed object.   --> 0 items on stack
-            il.Emit(OpCodes.Ret);
-
-            myExec = dm.CreateDelegate(typeof(Func<T, T>));
-
-            return (Func<T, T>)myExec;
-        }
-
-        private static U DupObj<U>(U obj)
-        {
-            if (obj == null)
-                return default(U);
-            var generateObject = GenerateObject<U>(GenerateBytes(obj));
-            return (U)generateObject;
         }
     }
 }

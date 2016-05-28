@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
@@ -52,12 +53,12 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         [Route("dashboard/my/website/themes/delete")]
         [RestrictAnonymous]
         [HttpDelete]
-        public ActionResult Delete(string themeName)
+        public async Task<ActionResult> DeleteAsync(string themeName)
         {
             try
             {
                 var remover = new ThemeRemover(themeName);
-                remover.Remove();
+                await remover.RemoveAsync();
             }
             catch (ThemeRemoveException ex)
             {
@@ -76,7 +77,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
                 return this.Failed("Invalid theme name", HttpStatusCode.BadRequest);
             }
 
-            string tenant = DbConvention.GetTenant();
+            string tenant = TenantConvention.GetTenant();
             string path = $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{themeName}/";
             path = HostingEnvironment.MapPath(path);
 

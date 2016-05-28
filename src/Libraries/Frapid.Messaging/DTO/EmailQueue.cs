@@ -5,7 +5,7 @@ using Frapid.NPoco;
 namespace Frapid.Messaging.DTO
 {
     [TableName("config.email_queue")]
-    public sealed class EmailQueue : IPoco
+    public sealed class EmailQueue: IPoco
     {
         public long QueueId { get; set; }
         public string FromName { get; set; }

@@ -1,6 +1,8 @@
 using System.IO;
-using System.Web.Hosting;
+using System.Threading.Tasks;
+using System.Web;
 using Frapid.Configuration;
+using Frapid.Framework;
 using Frapid.Installer.DAL;
 
 namespace Frapid.Installer.Tenant
@@ -10,27 +12,29 @@ namespace Frapid.Installer.Tenant
         public Uninstaller(string url)
         {
             this.Url = url;
-            this.Tenant = DbConvention.GetTenant(this.Url);
+            this.Tenant = TenantConvention.GetTenant(this.Url);
         }
 
         public string Url { get; set; }
         public string Tenant { get; set; }
 
-        public void UnInstall()
+        public async Task UnInstallAsync()
         {
-            if (HostingEnvironment.IsHosted)
+            var context = FrapidHttpContext.GetCurrent();
+
+            if (context != null)
             {
                 throw new UninstallException("Access is denied. Deleting a website is not allowed.");
             }
 
-            this.CleanupDb();
+            await this.CleanupDbAsync();
             this.CleanupTenantDirectory();
-            new DomainSerializer("DomainsApproved.json").Remove(this.Url);
+            new DomainSerializer("domains_approved.json").Remove(this.Url);
         }
 
         private void CleanupTenantDirectory()
         {
-            string pathToTenant = PathMapper.MapPath($"/Tenants/{this.Tenant}");
+            var pathToTenant = PathMapper.MapPath($"/Tenants/{this.Tenant}");
 
             if (Directory.Exists(pathToTenant))
             {
@@ -38,9 +42,9 @@ namespace Frapid.Installer.Tenant
             }
         }
 
-        private void CleanupDb()
+        private async Task CleanupDbAsync()
         {
-            Store.CleanupDb(this.Tenant, this.Tenant);
+            await Store.CleanupDbAsync(this.Tenant, this.Tenant);
         }
     }
 }

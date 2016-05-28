@@ -151,7 +151,7 @@ namespace System.Linq
             foreach (var item in source)
             {
                 yield return new KeyValuePair<T, int>(item, depth);
-                foreach (var subitem in selector(item).DepthFirstSearch(selector, depth + 1))
+                foreach (KeyValuePair<T, int> subitem in selector(item).DepthFirstSearch(selector, depth + 1))
                 {
                     yield return subitem;
                 }
@@ -188,7 +188,7 @@ namespace System.Linq
                 var subsource = item as IEnumerable;
                 if (subsource != null)
                 {
-                    foreach (var subitem in subsource.Flatten<T>())
+                    foreach (T subitem in subsource.Flatten<T>())
                     {
                         yield return subitem;
                     }

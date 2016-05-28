@@ -7,6 +7,8 @@ namespace Frapid.Backups.Postgres
 {
     internal class BatchFile
     {
+        public string Tenant;
+
         public BatchFile(string fileName)
         {
             this.FileName = fileName;
@@ -20,7 +22,6 @@ namespace Frapid.Backups.Postgres
             this.Tenant = tenant;
         }
 
-        public string Tenant;
         public DbServer Server { get; }
         public string PgDumpPath { get; }
         public string FileName { get; }
@@ -36,8 +37,7 @@ namespace Frapid.Backups.Postgres
 
             string command = @"""{0}"" --host ""{1}"" --port {2} --username ""{3}"" --format custom --blobs --verbose --file ""{4}"" ""{5}""";
 
-            command = string.Format(CultureInfo.InvariantCulture, command, this.PgDumpPath, this.Server.HostName,
-                this.Server.PortNumber, this.Server.UserId, this.FileName, this.Tenant);
+            command = string.Format(CultureInfo.InvariantCulture, command, this.PgDumpPath, this.Server.HostName, this.Server.PortNumber, this.Server.UserId, this.FileName, this.Tenant);
             commands.Append(command);
             commands.Append(Environment.NewLine);
             commands.Append("exit");
@@ -51,7 +51,7 @@ namespace Frapid.Backups.Postgres
 
         public void Delete()
         {
-            if (File.Exists(this.FileName))
+            if(File.Exists(this.FileName))
             {
                 File.Delete(this.FileName);
             }

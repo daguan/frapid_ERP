@@ -1,4 +1,5 @@
-﻿using frapid;
+﻿using System.Threading.Tasks;
+using frapid;
 using frapid.Commands;
 using frapid.Commands.Create;
 using Frapid.Configuration;
@@ -20,14 +21,14 @@ namespace Frapid.Installer.Commands
         {
             this.DomainName = this.Line.GetTokenOn(2);
 
-            string type = this.Line.GetTokenOn(3);
+            var type = this.Line.GetTokenOn(3);
 
             if (type.ToLower().Equals("provider"))
             {
                 this.ProviderName = this.Line.GetTokenOn(4);
             }
 
-            var cleanupCommand = new[] {this.Line.GetTokenOn(5), this.Line.GetTokenOn(6), this.Line.GetTokenOn(7)};
+            var cleanupCommand = new[] { this.Line.GetTokenOn(5), this.Line.GetTokenOn(6), this.Line.GetTokenOn(7) };
 
             if (string.Join(" ", cleanupCommand).ToUpperInvariant().Equals("CLEANUP WHEN DONE"))
             {
@@ -51,7 +52,7 @@ namespace Frapid.Installer.Commands
                 return;
             }
 
-            string type = this.Line.GetTokenOn(1);
+            var type = this.Line.GetTokenOn(1);
             if (!type.ToUpperInvariant().Equals("SITE"))
             {
                 CommandProcessor.DisplayError(this.Syntax, "{0} is not a well-known terminology. Expecting: \"site\".",
@@ -59,7 +60,7 @@ namespace Frapid.Installer.Commands
                 return;
             }
 
-            string provider = this.Line.GetTokenOn(3);
+            var provider = this.Line.GetTokenOn(3);
 
             if (!provider.ToUpperInvariant().Equals("PROVIDER"))
             {
@@ -89,7 +90,7 @@ namespace Frapid.Installer.Commands
         }
 
 
-        public override void ExecuteCommand()
+        public override async Task ExecuteCommandAsync()
         {
             if (!this.IsValid)
             {
@@ -100,7 +101,7 @@ namespace Frapid.Installer.Commands
 
             try
             {
-                new DomainSerializer("DomainsApproved.json").Add(
+                new DomainSerializer("domains_approved.json").Add(
                     new ApprovedDomain
                     {
                         DomainName = this.DomainName,
@@ -115,14 +116,14 @@ namespace Frapid.Installer.Commands
 
 
                 var installer = new Tenant.Installer(this.DomainName);
-                installer.Install();
+                await installer.InstallAsync();
             }
             finally
             {
                 if (this.CleanupWhenDone)
                 {
                     var uninstaller = new Uninstaller(this.DomainName);
-                    uninstaller.UnInstall();
+                    await uninstaller.UnInstallAsync();
                 }
             }
         }

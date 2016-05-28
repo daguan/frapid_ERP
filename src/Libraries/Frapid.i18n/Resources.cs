@@ -17,7 +17,7 @@ namespace Frapid.i18n.Resources
 		{
 		    if (string.IsNullOrWhiteSpace(tenant))
 		    {
-		        tenant = DbConvention.GetTenant();
+		        tenant = TenantConvention.GetTenant();
 		    }
 
 			return ResourceManager.GetString(tenant, "DbErrors", key);
@@ -40,7 +40,7 @@ namespace Frapid.i18n.Resources
 		{
 		    if (string.IsNullOrWhiteSpace(tenant))
 		    {
-		        tenant = DbConvention.GetTenant();
+		        tenant = TenantConvention.GetTenant();
 		    }
 
 			return ResourceManager.GetString(tenant, "Labels", key);
@@ -217,7 +217,7 @@ namespace Frapid.i18n.Resources
 		{
 		    if (string.IsNullOrWhiteSpace(tenant))
 		    {
-		        tenant = DbConvention.GetTenant();
+		        tenant = TenantConvention.GetTenant();
 		    }
 
 			return ResourceManager.GetString(tenant, "Questions", key);
@@ -262,7 +262,7 @@ namespace Frapid.i18n.Resources
 		{
 		    if (string.IsNullOrWhiteSpace(tenant))
 		    {
-		        tenant = DbConvention.GetTenant();
+		        tenant = TenantConvention.GetTenant();
 		    }
 
 			return ResourceManager.GetString(tenant, "Titles", key);
@@ -1033,7 +1033,7 @@ namespace Frapid.i18n.Resources
 		{
 		    if (string.IsNullOrWhiteSpace(tenant))
 		    {
-		        tenant = DbConvention.GetTenant();
+		        tenant = TenantConvention.GetTenant();
 		    }
 
 			return ResourceManager.GetString(tenant, "Warnings", key);

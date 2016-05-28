@@ -1,7 +1,9 @@
-﻿namespace Frapid.WebsiteBuilder.Contracts
+﻿using System.Threading.Tasks;
+
+namespace Frapid.WebsiteBuilder.Contracts
 {
     public interface IContentExtension
     {
-        string ParseHtml(string tenant, string html);
+      Task<string> ParseHtmlAsync(string tenant, string html);
     }
 }

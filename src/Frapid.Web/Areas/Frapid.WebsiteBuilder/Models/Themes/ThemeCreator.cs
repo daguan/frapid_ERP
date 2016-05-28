@@ -19,7 +19,7 @@ namespace Frapid.WebsiteBuilder.Models.Themes
 
         private void CreateDirectory()
         {
-            string tenant = DbConvention.GetTenant();
+            string tenant = TenantConvention.GetTenant();
             string directory = $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{this.Info.ThemeName}";
             directory = HostingEnvironment.MapPath(directory);
 

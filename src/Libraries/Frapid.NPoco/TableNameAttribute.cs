@@ -7,7 +7,7 @@ namespace Frapid.NPoco
     {
         public TableNameAttribute(string tableName)
         {
-            Value = tableName;
+            this.Value = tableName;
         }
         public string Value { get; private set; }
     }

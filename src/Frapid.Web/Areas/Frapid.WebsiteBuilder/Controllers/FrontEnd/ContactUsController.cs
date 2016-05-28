@@ -14,12 +14,12 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
     {
         [Route("contact-us")]
         [AllowAnonymous]
-        public ActionResult Index()
+        public async Task<ActionResult> IndexAsync()
         {
             string tenant = AppUsers.GetTenant();
             var model = new ContactUs();
 
-            var contacts = Contacts.GetContacts(tenant);
+            var contacts = await Contacts.GetContactsAsync(tenant);
             model.Contacts = contacts;
             return this.View(this.GetRazorView<AreaRegistration>("ContactUs/Index.cshtml"), model);
         }
@@ -32,7 +32,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
             model.Subject = "Contact Form : " + model.Subject;
             string tenant = AppUsers.GetTenant();
             await new ContactUsEmail().SendAsync(tenant, model);
-            Thread.Sleep(1000);
+            await Task.Delay(1000);
             return this.Json("OK");
         }
     }

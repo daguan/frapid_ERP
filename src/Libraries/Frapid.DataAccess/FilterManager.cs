@@ -16,13 +16,11 @@ namespace Frapid.DataAccess
         {
             var type = poco.GetType();
 
-            var a = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .FirstOrDefault(p => p.Name.Equals(propertyName));
+            var a = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).FirstOrDefault(p => p.Name.Equals(propertyName));
 
-            var attr = a?.GetCustomAttributes(typeof (ColumnAttribute), false)
-                .Cast<ColumnAttribute>().FirstOrDefault();
+            var attr = a?.GetCustomAttributes(typeof(ColumnAttribute), false).Cast<ColumnAttribute>().FirstOrDefault();
 
-            if (attr != null)
+            if(attr != null)
             {
                 return attr.Name;
             }
@@ -32,70 +30,62 @@ namespace Frapid.DataAccess
 
         public static void AddFilters(ref Sql sql, List<Filter> filters)
         {
-            if (filters == null || filters.Count().Equals(0))
+            if(filters == null ||
+               filters.Count().Equals(0))
             {
                 return;
             }
 
-            foreach (var filter in filters)
+            foreach(var filter in filters)
             {
                 string column = Sanitizer.SanitizeIdentifierName(filter.ColumnName);
 
-                if (string.IsNullOrWhiteSpace(column))
+                if(string.IsNullOrWhiteSpace(column))
                 {
                     continue;
                 }
 
                 string statement = filter.FilterStatement;
 
-                if (statement == null || statement.ToUpperInvariant() != "OR")
+                if(statement == null ||
+                   statement.ToUpperInvariant() != "OR")
                 {
                     statement = "AND";
                 }
 
                 statement += " ";
 
-                switch ((FilterCondition) filter.FilterCondition)
+                switch((FilterCondition)filter.FilterCondition)
                 {
                     case FilterCondition.IsEqualTo:
-                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " = @0",
-                            GetValue(filter.Type, filter.FilterValue));
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " = @0", GetValue(filter.Type, filter.FilterValue));
                         break;
                     case FilterCondition.IsNotEqualTo:
-                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " != @0",
-                            GetValue(filter.Type, filter.FilterValue));
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " != @0", GetValue(filter.Type, filter.FilterValue));
                         break;
                     case FilterCondition.IsLessThan:
-                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " < @0",
-                            GetValue(filter.Type, filter.FilterValue));
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " < @0", GetValue(filter.Type, filter.FilterValue));
                         break;
                     case FilterCondition.IsLessThanEqualTo:
-                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " <= @0",
-                            GetValue(filter.Type, filter.FilterValue));
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " <= @0", GetValue(filter.Type, filter.FilterValue));
                         break;
                     case FilterCondition.IsGreaterThan:
-                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " > @0",
-                            GetValue(filter.Type, filter.FilterValue));
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " > @0", GetValue(filter.Type, filter.FilterValue));
                         break;
                     case FilterCondition.IsGreaterThanEqualTo:
-                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " >= @0",
-                            GetValue(filter.Type, filter.FilterValue));
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " >= @0", GetValue(filter.Type, filter.FilterValue));
                         break;
                     case FilterCondition.IsBetween:
-                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " BETWEEN @0 AND @1",
-                            GetValue(filter.Type, filter.FilterValue), GetValue(filter.Type, filter.FilterValue));
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " BETWEEN @0 AND @1", GetValue(filter.Type, filter.FilterValue), GetValue(filter.Type, filter.FilterValue));
                         break;
                     case FilterCondition.IsNotBetween:
-                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " NOT BETWEEN @0 AND @1",
-                            GetValue(filter.Type, filter.FilterValue), GetValue(filter.Type, filter.FilterValue));
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " NOT BETWEEN @0 AND @1", GetValue(filter.Type, filter.FilterValue), GetValue(filter.Type, filter.FilterValue));
                         break;
                     case FilterCondition.IsLike:
-                        sql.Append(statement + " lower(" + Sanitizer.SanitizeIdentifierName(column) + ") LIKE @0",
-                            "%" + filter.FilterValue.ToLower(CultureManager.GetCurrent()) + "%");
+                        sql.Append(statement + " lower(" + Sanitizer.SanitizeIdentifierName(column) + ") LIKE @0", "%" + filter.FilterValue.ToLower(CultureManager.GetCurrent()) + "%");
                         break;
                     case FilterCondition.IsNotLike:
-                        sql.Append(statement + " lower(" + Sanitizer.SanitizeIdentifierName(column) + ") NOT LIKE @0",
-                            "%" + filter.FilterValue.ToLower(CultureManager.GetCurrent()) + "%");
+                        sql.Append(statement + " lower(" + Sanitizer.SanitizeIdentifierName(column) + ") NOT LIKE @0", "%" + filter.FilterValue.ToLower(CultureManager.GetCurrent()) + "%");
                         break;
                 }
             }
@@ -103,19 +93,24 @@ namespace Frapid.DataAccess
 
         private static object GetValue(Type type, string value)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if(string.IsNullOrWhiteSpace(value))
             {
                 return null;
             }
 
             string typeName = type.FullName;
 
-            if (typeName == "System.Boolean")
+            if(typeName == "System.Boolean")
             {
-                return new[] {"TRUE", "YES", "T"}.Contains(value.ToUpperInvariant());
+                return new[]
+                       {
+                           "TRUE",
+                           "YES",
+                           "T"
+                       }.Contains(value.ToUpperInvariant());
             }
 
-            if (typeName == "System.String")
+            if(typeName == "System.String")
             {
                 return value;
             }
@@ -126,16 +121,17 @@ namespace Frapid.DataAccess
 
         public static void AddFilters<T>(ref Sql sql, T poco, List<Filter> filters)
         {
-            if (filters == null || filters.Count().Equals(0))
+            if(filters == null ||
+               filters.Count().Equals(0))
             {
                 return;
             }
 
-            foreach (var filter in filters)
+            foreach(var filter in filters)
             {
-                if (string.IsNullOrWhiteSpace(filter.ColumnName))
+                if(string.IsNullOrWhiteSpace(filter.ColumnName))
                 {
-                    if (!string.IsNullOrWhiteSpace(filter.PropertyName))
+                    if(!string.IsNullOrWhiteSpace(filter.PropertyName))
                     {
                         filter.ColumnName = GetColumnName(poco, filter.PropertyName);
                     }
@@ -143,21 +139,22 @@ namespace Frapid.DataAccess
 
                 string column = Sanitizer.SanitizeIdentifierName(filter.ColumnName);
 
-                if (string.IsNullOrWhiteSpace(column))
+                if(string.IsNullOrWhiteSpace(column))
                 {
                     continue;
                 }
 
                 string statement = filter.FilterStatement;
 
-                if (statement == null || statement.ToUpperInvariant() != "OR")
+                if(statement == null ||
+                   statement.ToUpperInvariant() != "OR")
                 {
                     statement = "AND";
                 }
 
                 statement += " ";
 
-                switch ((FilterCondition) filter.FilterCondition)
+                switch((FilterCondition)filter.FilterCondition)
                 {
                     case FilterCondition.IsEqualTo:
                         sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " = @0", filter.FilterValue);
@@ -178,20 +175,16 @@ namespace Frapid.DataAccess
                         sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " >= @0", filter.FilterValue);
                         break;
                     case FilterCondition.IsBetween:
-                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " BETWEEN @0 AND @1",
-                            filter.FilterValue, filter.FilterAndValue);
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " BETWEEN @0 AND @1", filter.FilterValue, filter.FilterAndValue);
                         break;
                     case FilterCondition.IsNotBetween:
-                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " NOT BETWEEN @0 AND @1",
-                            filter.FilterValue, filter.FilterAndValue);
+                        sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " NOT BETWEEN @0 AND @1", filter.FilterValue, filter.FilterAndValue);
                         break;
                     case FilterCondition.IsLike:
-                        sql.Append(statement + " lower(" + Sanitizer.SanitizeIdentifierName(column) + ") LIKE @0",
-                            "%" + filter.FilterValue.ToLower(CultureManager.GetCurrent()) + "%");
+                        sql.Append(statement + " lower(" + Sanitizer.SanitizeIdentifierName(column) + ") LIKE @0", "%" + filter.FilterValue.ToLower(CultureManager.GetCurrent()) + "%");
                         break;
                     case FilterCondition.IsNotLike:
-                        sql.Append(statement + " lower(" + Sanitizer.SanitizeIdentifierName(column) + ") NOT LIKE @0",
-                            "%" + filter.FilterValue.ToLower(CultureManager.GetCurrent()) + "%");
+                        sql.Append(statement + " lower(" + Sanitizer.SanitizeIdentifierName(column) + ") NOT LIKE @0", "%" + filter.FilterValue.ToLower(CultureManager.GetCurrent()) + "%");
                         break;
                 }
             }

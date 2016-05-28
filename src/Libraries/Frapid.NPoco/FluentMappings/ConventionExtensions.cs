@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 
 namespace Frapid.NPoco.FluentMappings
 {
@@ -6,7 +7,7 @@ namespace Frapid.NPoco.FluentMappings
     {
         public static IColumnsBuilderConventions IgnoreComplex(this IColumnsBuilderConventions conventions)
         {
-            return conventions.IgnoreWhere(y => !(y.GetMemberInfoType().IsValueType || y.GetMemberInfoType() == typeof(string) || y.GetMemberInfoType() == typeof(byte[])));
+            return conventions.IgnoreWhere(y => !(y.GetMemberInfoType().GetTypeInfo().IsValueType || y.GetMemberInfoType() == typeof(string) || y.GetMemberInfoType() == typeof(byte[])));
         }
 
         public static void WithSmartConventions(this IConventionScanner scanner)
@@ -19,7 +20,6 @@ namespace Frapid.NPoco.FluentMappings
             scanner.PrimaryKeysNamed(y => ToLowerIf(y.Name + "Id", lowercase));
             scanner.TablesNamed(y => ToLowerIf(Inflector.MakePlural(y.Name), lowercase));
             scanner.Columns.Named(x => ToLowerIf(x.Name, lowercase));
-            scanner.Columns.IgnoreComplex();
             scanner.Columns.ForceDateTimesToUtcWhere(x => x.GetMemberInfoType() == typeof(DateTime) || x.GetMemberInfoType() == typeof(DateTime?));
         }
 

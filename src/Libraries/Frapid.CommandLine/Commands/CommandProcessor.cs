@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace frapid.Commands
@@ -12,7 +13,7 @@ namespace frapid.Commands
                 return;
             }
 
-            string commandName = line.Split(' ')[0];
+            var commandName = line.Split(' ')[0];
             var command = Get(commandName, line);
 
             command?.Execute();

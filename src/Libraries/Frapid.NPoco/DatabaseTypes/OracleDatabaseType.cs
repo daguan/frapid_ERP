@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 
 namespace Frapid.NPoco.DatabaseTypes
 {
@@ -10,7 +11,7 @@ namespace Frapid.NPoco.DatabaseTypes
             return ":";
         }
 
-        public override void PreExecute(IDbCommand cmd)
+        public override void PreExecute(DbCommand cmd)
         {
             cmd.GetType().GetProperty("BindByName").SetValue(cmd, true, null);
             cmd.CommandText = cmd.CommandText.Replace("/*poco_dual*/", "from dual");
@@ -38,12 +39,12 @@ namespace Frapid.NPoco.DatabaseTypes
             return null;
         }
 
-        public override object ExecuteInsert<T>(Database db, IDbCommand cmd, string primaryKeyName, T poco, object[] args)
+        public override object ExecuteInsert<T>(Database db, DbCommand cmd, string primaryKeyName, bool useOutputClause, T poco, object[] args)
         {
             if (primaryKeyName != null)
             {
-                cmd.CommandText += string.Format(" returning {0} into :newid", EscapeSqlIdentifier(primaryKeyName));
-                var param = cmd.CreateParameter();
+                cmd.CommandText += string.Format(" returning {0} into :newid", this.EscapeSqlIdentifier(primaryKeyName));
+                DbParameter param = cmd.CreateParameter();
                 param.ParameterName = ":newid";
                 param.Value = DBNull.Value;
                 param.Direction = ParameterDirection.ReturnValue;

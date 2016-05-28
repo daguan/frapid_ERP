@@ -47,12 +47,12 @@ namespace Frapid.Account.RemoteAuthentication
 
             string tenant = AppUsers.GetTenant();
 
-            var result = FacebookSignIn.SignIn(tenant, account.FacebookUserId, account.Email, account.OfficeId, facebookUser.Name, account.Token, user.Browser,
+            var result = await FacebookSignIn.SignInAsync(tenant, account.FacebookUserId, account.Email, account.OfficeId, facebookUser.Name, account.Token, user.Browser,
                 user.IpAddress, account.Culture);
 
             if (result.Status)
             {
-                if (!Registrations.HasAccount(tenant, account.Email))
+                if (!await Registrations.HasAccountAsync(tenant, account.Email))
                 {
                     string template = "~/Tenants/{tenant}/Areas/Frapid.Account/EmailTemplates/welcome-email-other.html";
                     var welcomeEmail = new WelcomeEmail(facebookUser, template, ProviderName);

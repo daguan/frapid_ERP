@@ -12,7 +12,7 @@ using Owin;
 namespace Frapid.Web
 {
     public static class AccountConfig
-    {        
+    {
         public static void Register(IAppBuilder app)
         {
             var config = new HttpConfiguration();
@@ -27,16 +27,20 @@ namespace Frapid.Web
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
 
-            app.UseJwtBearerAuthentication(
-                new JwtBearerAuthenticationOptions
-                {
-                    AuthenticationMode = AuthenticationMode.Active,
-                    AllowedAudiences = new[] { audience },
-                    IssuerSecurityTokenProviders = new IIssuerSecurityTokenProvider[]
-                    {
-                        new SymmetricKeyIssuerSecurityTokenProvider(issuer, secret)
-                    }
-                });
+            app.UseJwtBearerAuthentication
+                (
+                 new JwtBearerAuthenticationOptions
+                 {
+                     AuthenticationMode = AuthenticationMode.Active,
+                     AllowedAudiences = new[]
+                                        {
+                                            audience
+                                        },
+                     IssuerSecurityTokenProviders = new IIssuerSecurityTokenProvider[]
+                                                    {
+                                                        new SymmetricKeyIssuerSecurityTokenProvider(issuer, secret)
+                                                    }
+                 });
         }
     }
 }

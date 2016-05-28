@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Threading.Tasks;
 using Frapid.Account.DTO;
 using Frapid.Areas;
 using Frapid.Configuration;
@@ -10,15 +10,15 @@ namespace Frapid.Account.DAL
 {
     public static class Users
     {
-        public static User Get(string tenant, string email)
+        public static async Task<User> GetAsync(string tenant, string email)
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return db.FetchBy<User>(sql => sql.Where(u => u.Email == email)).FirstOrDefault();
+                return await db.Query<User>().Where(u => u.Email == email).FirstOrDefaultAsync();
             }
         }
 
-        public static void ChangePassword(string tenant, int userId, string newPassword, RemoteUser remoteUser)
+        public static async Task ChangePasswordAsync(string tenant, int userId, string newPassword, RemoteUser remoteUser)
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
@@ -30,7 +30,7 @@ namespace Frapid.Account.DAL
                 sql.Append("last_seen_on=@0", DateTimeOffset.UtcNow);
                 sql.Where("user_id=@0", userId);
 
-                db.Execute(sql);
+                await db.ExecuteAsync(sql);
             }
         }
     }

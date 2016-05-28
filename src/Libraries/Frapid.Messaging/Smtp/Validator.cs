@@ -18,7 +18,7 @@ namespace Frapid.Messaging.Smtp
         {
             this.IsValid = false;
 
-            if (string.IsNullOrWhiteSpace(this.EmailAddress))
+            if(string.IsNullOrWhiteSpace(this.EmailAddress))
             {
                 return;
             }
@@ -28,10 +28,11 @@ namespace Frapid.Messaging.Smtp
             emailAddress = Regex.Replace(emailAddress, @"(@)(.+)$", this.DomainMapper);
 
             // Return true if address is in valid e-mail format.
-            this.IsValid = Regex.IsMatch(emailAddress,
-                @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-                @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$",
-                RegexOptions.IgnoreCase);
+            this.IsValid = Regex.IsMatch
+                (
+                 emailAddress,
+                 @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" + @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$",
+                 RegexOptions.IgnoreCase);
         }
 
         private string DomainMapper(Match match)
@@ -44,7 +45,7 @@ namespace Frapid.Messaging.Smtp
             {
                 domainName = idn.GetAscii(domainName);
             }
-            catch (ArgumentException)
+            catch(ArgumentException)
             {
                 this.IsValid = true;
             }

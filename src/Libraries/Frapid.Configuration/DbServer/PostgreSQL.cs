@@ -4,7 +4,7 @@ using Npgsql;
 
 namespace Frapid.Configuration.DbServer
 {
-    public class PostgreSQL : IDbServer
+    public class PostgreSQL: IDbServer
     {
         public PostgreSQL()
         {
@@ -18,36 +18,32 @@ namespace Frapid.Configuration.DbServer
         {
             string host = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "Server");
 
-            if (string.IsNullOrWhiteSpace(database))
+            if(string.IsNullOrWhiteSpace(database))
             {
                 database = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "Database");
             }
 
-            if (string.IsNullOrWhiteSpace(userId))
+            if(string.IsNullOrWhiteSpace(userId))
             {
                 userId = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "UserId");
             }
 
-            if (string.IsNullOrWhiteSpace(password))
+            if(string.IsNullOrWhiteSpace(password))
             {
                 password = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "Password");
             }
 
-            bool enablePooling =
-                ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "EnablePooling")
-                    .ToUpperInvariant()
-                    .Equals("TRUE");
+            bool enablePooling = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "EnablePooling").ToUpperInvariant().Equals("TRUE");
             int port = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "Port").To<int>();
             int minPoolSize = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "MinPoolSize").To<int>();
             int maxPoolSize = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "MaxPoolSize").To<int>();
 
-            return this.GetConnectionString(tenant, host, database, userId, password, port, enablePooling, minPoolSize,
-                maxPoolSize);
+            return this.GetConnectionString(tenant, host, database, userId, password, port, enablePooling, minPoolSize, maxPoolSize);
         }
 
         public string GetReportUserConnectionString(string tenant, string database = "")
         {
-            if (string.IsNullOrWhiteSpace(database))
+            if(string.IsNullOrWhiteSpace(database))
             {
                 database = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "Database");
             }
@@ -62,7 +58,7 @@ namespace Frapid.Configuration.DbServer
 
         public string GetSuperUserConnectionString(string tenant, string database = "")
         {
-            if (string.IsNullOrWhiteSpace(database))
+            if(string.IsNullOrWhiteSpace(database))
             {
                 database = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "Database");
             }
@@ -79,24 +75,22 @@ namespace Frapid.Configuration.DbServer
             return this.GetConnectionString(tenant, database);
         }
 
-        public string GetConnectionString(string tenant, string host, string database, string username, string password,
-            int port,
-            bool enablePooling = true, int minPoolSize = 0, int maxPoolSize = 100)
+        public string GetConnectionString(string tenant, string host, string database, string username, string password, int port, bool enablePooling = true, int minPoolSize = 0, int maxPoolSize = 100)
         {
             return new NpgsqlConnectionStringBuilder
-            {
-                Host = host,
-                Database = database,
-                UserName = username,
-                Password = password,
-                Port = port,
-                Pooling = enablePooling,
-                SSL = true,
-                SslMode = SslMode.Prefer,
-                MinPoolSize = minPoolSize,
-                MaxPoolSize = maxPoolSize,
-                ApplicationName = "Frapid"
-            }.ConnectionString;
+                   {
+                       Host = host,
+                       Database = database,
+                       UserName = username,
+                       Password = password,
+                       Port = port,
+                       Pooling = enablePooling,
+                       SSL = true,
+                       SslMode = SslMode.Prefer,
+                       MinPoolSize = minPoolSize,
+                       MaxPoolSize = maxPoolSize,
+                       ApplicationName = "Frapid"
+                   }.ConnectionString;
         }
 
         public string GetProcedureCommand(string procedureName, string[] parameters)

@@ -3,23 +3,23 @@ using System.Runtime.Caching;
 
 namespace Frapid.ApplicationState.CacheFactory
 {
-    public class MemoryCacheFactory:ICacheFactory
+    public class MemoryCacheFactory: ICacheFactory
     {
         public bool Add<T>(string key, T value, DateTimeOffset expiresAt)
         {
-            if (string.IsNullOrWhiteSpace(key))
+            if(string.IsNullOrWhiteSpace(key))
             {
                 return false;
             }
 
-            if (value == null)
+            if(value == null)
             {
                 return false;
             }
 
             var cacheItem = new CacheItem(key, value);
 
-            if (MemoryCache.Default[key] == null)
+            if(MemoryCache.Default[key] == null)
             {
                 MemoryCache.Default.Add(cacheItem, new CacheItemPolicy());
             }
@@ -33,7 +33,7 @@ namespace Frapid.ApplicationState.CacheFactory
 
         public T Get<T>(string key) where T : class
         {
-            if (string.IsNullOrWhiteSpace(key))
+            if(string.IsNullOrWhiteSpace(key))
             {
                 return null;
             }

@@ -1,4 +1,5 @@
-﻿using Frapid.Configuration.Db;
+﻿using System.Threading.Tasks;
+using Frapid.Configuration.Db;
 using Frapid.Installer.DAL;
 using Frapid.Installer.Helpers;
 
@@ -13,12 +14,12 @@ namespace Frapid.Installer
 
         public string Tenant { get; }
 
-        public bool Install()
+        public async Task<bool> InstallAsync()
         {
-            string meta = DbProvider.GetMetaDatabase(this.Tenant);
+            var meta = DbProvider.GetMetaDatabase(this.Tenant);
             var inspector = new DbInspector(this.Tenant, meta);
-            bool hasDb = inspector.HasDb();
-            bool canInstall = inspector.IsWellKnownDb();
+            var hasDb = await inspector.HasDbAsync();
+            var canInstall = inspector.IsWellKnownDb();
 
             if (hasDb)
             {
@@ -34,16 +35,16 @@ namespace Frapid.Installer
             if (!hasDb && canInstall)
             {
                 InstallerLog.Information($"Creating database \"{this.Tenant}\".");
-                this.CreateDb();
+                await this.CreateDbAsync();
                 return true;
             }
 
             return false;
         }
 
-        private void CreateDb()
+        private async Task CreateDbAsync()
         {
-            Store.CreateDb(this.Tenant);
+            await Store.CreateDbAsync(this.Tenant);
         }
     }
 }

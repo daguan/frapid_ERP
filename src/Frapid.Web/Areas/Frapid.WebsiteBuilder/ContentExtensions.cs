@@ -1,12 +1,13 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Frapid.WebsiteBuilder.Contracts;
 
 namespace Frapid.WebsiteBuilder
 {
     public static class ContentExtensions
     {
-        public static string ParseHtml(string tenant, string html)
+        public static async Task<string> ParseHtmlAsync(string tenant, string html)
         {
             var iType = typeof(IContentExtension);
             var members = AppDomain.CurrentDomain.GetAssemblies()
@@ -14,7 +15,12 @@ namespace Frapid.WebsiteBuilder
                 .Where(x => iType.IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
                 .Select(Activator.CreateInstance);
 
-            return members.Cast<IContentExtension>().Aggregate(html, (current, member) => member.ParseHtml(tenant, current));
+            foreach(IContentExtension member in members)
+            {
+                html = await member.ParseHtmlAsync(tenant, html);
+            }
+
+            return html;
         }
     }
 }

@@ -1,7 +1,35 @@
-IF EXISTS (SELECT *
-       FROM   sys.objects
-       WHERE  type = 'P'
-              AND NAME = 'drop_schema')
+IF OBJECT_ID('dbo.drop_column') IS NOT NULL
+DROP PROCEDURE dbo.drop_column;
+
+GO 
+
+CREATE PROCEDURE dbo.drop_column(@schema_name NVARCHAR(256), @table_name NVARCHAR(256), @column_name NVARCHAR(256))
+AS
+BEGIN
+	SET NOCOUNT ON;
+	DECLARE @sql  NVARCHAR(1000)
+
+	SELECT @sql = COALESCE(@sql + CHAR(13), '') + 'ALTER TABLE [' + @schema_name + '].[' + @table_name + '] DROP CONSTRAINT [' + d.name + '];' + CHAR(13)
+	FROM sys.tables t   
+	JOIN sys.default_constraints d       
+	ON d.parent_object_id = t.object_id  
+	JOIN sys.schemas s
+	ON s.schema_id = t.schema_id
+	JOIN    sys.columns c      
+	ON c.object_id = t.object_id      
+	AND c.column_id = d.parent_column_id
+	WHERE t.name = @table_name
+	AND s.name = @schema_name 
+	AND c.name = @column_name
+
+	SET @sql = @sql + ' ALTER TABLE [' + @schema_name + '].[' + @table_name + '] DROP COLUMN [' + @column_name + '];' 
+
+	EXECUTE (@sql)
+END;
+
+GO
+
+IF OBJECT_ID('dbo.drop_schema') IS NOT NULL
 DROP PROCEDURE dbo.drop_schema;
 
 GO

@@ -3,7 +3,7 @@ using Frapid.Configuration;
 
 namespace Frapid.Areas.Caching
 {
-    public sealed class FrapidOutputCache : OutputCacheAttribute
+    public sealed class FrapidOutputCache: OutputCacheAttribute
     {
         public FrapidOutputCache()
         {
@@ -16,15 +16,15 @@ namespace Frapid.Areas.Caching
         {
             string profile = this.ProfileName;
 
-            if (!string.IsNullOrWhiteSpace(profile))
+            if(!string.IsNullOrWhiteSpace(profile))
             {
                 this.CacheProfile = string.Empty;
 
-                string tenant = DbConvention.GetTenant();
+                string tenant = TenantConvention.GetTenant();
 
                 var config = CacheConfig.Get(tenant, profile);
 
-                if (config != null)
+                if(config != null)
                 {
                     this.Duration = config.Duration;
                     this.Location = config.Location;

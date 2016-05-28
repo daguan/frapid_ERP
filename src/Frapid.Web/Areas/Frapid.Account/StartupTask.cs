@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Frapid.Configuration;
 using Frapid.DataAccess;
 using Frapid.Framework;
@@ -6,12 +7,13 @@ using Serilog;
 
 namespace Frapid.Account
 {
+    [Obsolete]
     public static class InstalledDomains
     {
-        public static void Add(string database, string domainName, string adminEmail)
+        public static async Task AddAsync(string database, string domainName, string adminEmail)
         {
             string sql = FrapidDbServer.GetProcedureCommand(database, "account.add_installed_domain", new[] {"@0", "@1"});
-            Factory.NonQuery(database, sql, domainName, adminEmail);
+            await Factory.NonQueryAsync(database, sql, domainName, adminEmail);
         }
     }
 
@@ -19,7 +21,7 @@ namespace Frapid.Account
     {
         public string Description { get; set; } = "Upserting installed domains to the DB.";
 
-        public void Register()
+        public async Task RegisterAsync()
         {
             try
             {
@@ -27,8 +29,8 @@ namespace Frapid.Account
 
                 foreach (var domain in installed.Get())
                 {
-                    string database = DbConvention.GetDbNameByConvention(domain.DomainName);
-                    InstalledDomains.Add(database, domain.DomainName, domain.AdminEmail);
+                    string database = TenantConvention.GetDbNameByConvention(domain.DomainName);
+                    await InstalledDomains.AddAsync(database, domain.DomainName, domain.AdminEmail);
                 }
             }
             catch (Exception ex)

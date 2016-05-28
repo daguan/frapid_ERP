@@ -21,7 +21,7 @@ namespace Frapid.Config.Models
 
         public void Upload()
         {
-            string tenant = DbConvention.GetTenant();
+            string tenant = TenantConvention.GetTenant();
             string path = $"~/Tenants/{tenant}";
             path = HostingEnvironment.MapPath(path);
 
@@ -49,7 +49,7 @@ namespace Frapid.Config.Models
                     "Could not upload resource because the posted file name is null or invalid.");
             }
 
-            var allowed = FrapidConfig.GetAllowedUploadExtensions(DbConvention.GetTenant());
+            var allowed = FrapidConfig.GetAllowedUploadExtensions(TenantConvention.GetTenant());
             string extension = Path.GetExtension(fileName);
 
             if (!allowed.Contains(extension))

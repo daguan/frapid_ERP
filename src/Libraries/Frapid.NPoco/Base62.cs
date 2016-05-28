@@ -29,20 +29,11 @@ namespace Frapid.NPoco
             this.Source = source;
         }
 
-        public override bool CanRead
-        {
-            get { return true; }
-        }
+        public override bool CanRead => true;
 
-        public override bool CanSeek
-        {
-            get { return true; }
-        }
+        public override bool CanSeek => true;
 
-        public override bool CanWrite
-        {
-            get { return true; }
-        }
+        public override bool CanWrite => true;
 
         public override void Flush()
         {
@@ -52,10 +43,7 @@ namespace Frapid.NPoco
         /// <summary>
         /// Bit length of the stream
         /// </summary>
-        public override long Length
-        {
-            get { return Source.Length * 8; }
-        }
+        public override long Length => this.Source.Length * 8;
 
         /// <summary>
         /// Bit position of the stream

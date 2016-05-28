@@ -9,58 +9,60 @@ namespace Frapid.NPoco.FluentMappings
 
         public ConventionScanner(ConventionScannerSettings scannerSettings)
         {
-            _scannerSettings = scannerSettings;
+            this._scannerSettings = scannerSettings;
         }
 
         public void OverrideMappingsWith(Mappings mappings)
         {
-            _scannerSettings.MappingOverrides = mappings;
+            this._scannerSettings.MappingOverrides.Add(mappings);
         }
 
         public void OverrideMappingsWith(params IMap[] maps)
         {
-            var mappings = Mappings.BuildMappingsFromMaps(maps);
-            _scannerSettings.MappingOverrides = mappings;
+            Mappings mappings = Mappings.BuildMappingsFromMaps(maps);
+            this._scannerSettings.MappingOverrides.Add(mappings);
         }
 
         public void Assembly(Assembly assembly)
         {
-            _scannerSettings.Assemblies.Add(assembly);
+            this._scannerSettings.Assemblies.Add(assembly);
         }
 
+#if !DNXCORE50
         public void TheCallingAssembly()
         {
-            _scannerSettings.TheCallingAssembly = true;
+            this._scannerSettings.TheCallingAssembly = true;
         }
+#endif
 
         public void IncludeTypes(Func<Type, bool> typeIncludes)
         {
-            _scannerSettings.IncludeTypes.Add(typeIncludes);
+            this._scannerSettings.IncludeTypes.Add(typeIncludes);
         }
 
         public void TablesNamed(Func<Type, string> tableFunc)
         {
-            _scannerSettings.TablesNamed = tableFunc;
+            this._scannerSettings.TablesNamed = tableFunc;
         }
 
         public void PrimaryKeysNamed(Func<Type, string> primaryKeyFunc)
         {
-            _scannerSettings.PrimaryKeysNamed = primaryKeyFunc;
+            this._scannerSettings.PrimaryKeysNamed = primaryKeyFunc;
         }
 
         public void SequencesNamed(Func<Type, string> sequencesFunc)
         {
-            _scannerSettings.SequencesNamed = sequencesFunc;
+            this._scannerSettings.SequencesNamed = sequencesFunc;
         }
 
         public void LazyLoadMappings()
         {
-            _scannerSettings.Lazy = true;
+            this._scannerSettings.Lazy = true;
         }
 
         public void PrimaryKeysAutoIncremented(Func<Type, bool> primaryKeyAutoIncrementFunc)
         {
-            _scannerSettings.PrimaryKeysAutoIncremented = primaryKeyAutoIncrementFunc;
+            this._scannerSettings.PrimaryKeysAutoIncremented = primaryKeyAutoIncrementFunc;
         }
 
         //public void OverrideWithAttributes()
@@ -68,9 +70,6 @@ namespace Frapid.NPoco.FluentMappings
         //    _scannerSettings.OverrideWithAttributes = true;
         //}
 
-        public IColumnsBuilderConventions Columns
-        {
-            get { return new PropertyBuilderConventions(_scannerSettings); }
-        }
+        public IColumnsBuilderConventions Columns => new PropertyBuilderConventions(this._scannerSettings);
     }
 }

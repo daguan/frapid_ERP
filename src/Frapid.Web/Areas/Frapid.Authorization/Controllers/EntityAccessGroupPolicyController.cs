@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.Areas;
 using Frapid.Areas.Authorization;
@@ -15,31 +16,31 @@ namespace Frapid.Authorization.Controllers
         [RestrictAnonymous]
         [Route("dashboard/authorization/entity-access/group-policy")]
         [MenuPolicy]
-        public ActionResult GroupPolicy()
+        public async Task<ActionResult> GroupPolicyAsync()
         {
-            var model = GroupEntityAccessPolicyModel.Get();
+            var model = await GroupEntityAccessPolicyModel.GetAsync();
             return this.FrapidView(this.GetRazorView<AreaRegistration>("AccessPolicy/GroupPolicy.cshtml"), model);
         }
 
         [RestrictAnonymous]
         [Route("dashboard/authorization/entity-access/group-policy/{officeId}/{roleId}")]
-        public ActionResult GetGroupPolicy(int officeId, int roleId)
+        public async Task<ActionResult> GetGroupPolicyAsync(int officeId, int roleId)
         {
-            var model = GroupEntityAccessPolicyModel.Get(officeId, roleId);
+            var model = await GroupEntityAccessPolicyModel.GetAsync(officeId, roleId);
             return this.Ok(model);
         }
 
         [RestrictAnonymous]
         [Route("dashboard/authorization/entity-access/group-policy/{officeId}/{roleId}")]
         [HttpPost]
-        public ActionResult SaveGroupPolicy(int officeId, int roleId, List<AccessPolicyInfo> model)
+        public async Task<ActionResult> SaveGroupPolicyAsync(int officeId, int roleId, List<AccessPolicyInfo> model)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.InvalidModelState();
             }
 
-            GroupEntityAccessPolicyModel.Save(officeId, roleId, model);
+            await GroupEntityAccessPolicyModel.SaveAsync(officeId, roleId, model);
             return this.Ok();
         }
     }

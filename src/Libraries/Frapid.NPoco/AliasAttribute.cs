@@ -8,7 +8,7 @@ namespace Frapid.NPoco
 
         public AliasAttribute(string alias)
         {
-            Alias = alias;
+            this.Alias = alias;
         }
     }
 }

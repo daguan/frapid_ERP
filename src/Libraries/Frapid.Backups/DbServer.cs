@@ -43,25 +43,25 @@ namespace Frapid.Backups
         {
             this.IsValid = true;
 
-            if (string.IsNullOrWhiteSpace(this.HostName))
+            if(string.IsNullOrWhiteSpace(this.HostName))
             {
                 this.IsValid = false;
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(this.UserId))
+            if(string.IsNullOrWhiteSpace(this.UserId))
             {
                 this.IsValid = false;
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(this.Password))
+            if(string.IsNullOrWhiteSpace(this.Password))
             {
                 this.IsValid = false;
                 return;
             }
 
-            if (this.PortNumber <= 0)
+            if(this.PortNumber <= 0)
             {
                 this.IsValid = false;
             }

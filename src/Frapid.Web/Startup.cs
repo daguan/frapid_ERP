@@ -9,27 +9,29 @@ using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Owin;
 
-[assembly: OwinStartup(typeof (Startup))]
-
+[assembly: OwinStartup(typeof(Startup))]
 namespace Frapid.Web
 {
     public class Startup
     {
-        public void Configuration(IAppBuilder app)
+        public async void Configuration(IAppBuilder app)
         {
-            app.Map("/signalr", map =>
-            {
-                map.UseCors(CorsOptions.AllowAll);
+            app.Map
+                (
+                 "/signalr",
+                 map =>
+                 {
+                     map.UseCors(CorsOptions.AllowAll);
 
-                var configuration = new HubConfiguration
-                {
-                    EnableJavaScriptProxies = true
-                };
+                     var configuration = new HubConfiguration
+                                         {
+                                             EnableJavaScriptProxies = true
+                                         };
 
-                map.RunSignalR(configuration);
-                var module = new AuthorizeModule(null, null);
-                GlobalHost.HubPipeline.AddModule(module);
-            });
+                     map.RunSignalR(configuration);
+                     var module = new AuthorizeModule(null, null);
+                     GlobalHost.HubPipeline.AddModule(module);
+                 });
 
             LogManager.InternalizeLogger();
             AreaRegistration.RegisterAllAreas();
@@ -38,7 +40,7 @@ namespace Frapid.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             NPocoConfig.Register();
-            StartupRegistration.Register();
+            await StartupRegistration.RegisterAsync();
             BackupRegistration.Register();
             EodTaskRegistration.Register();
             AccountConfig.Register(app);

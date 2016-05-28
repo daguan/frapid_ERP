@@ -25,10 +25,10 @@ namespace Frapid.Messaging
         public string Database { get; set; }
         public IEmailProcessor Processor { get; set; }
 
-        public void Add()
+        public async Task AddAsync()
         {
             this.Processor = EmailProcessor.GetDefault(this.Database);
-            if (!this.IsEnabled())
+            if(!this.IsEnabled())
             {
                 return;
             }
@@ -38,41 +38,43 @@ namespace Frapid.Messaging
             this.Email.ReplyTo = this.Email.ReplyTo.Or("");
             this.Email.ReplyToName = this.Email.ReplyToName.Or("");
 
-            if (string.IsNullOrWhiteSpace(this.Email.FromName))
+            if(string.IsNullOrWhiteSpace(this.Email.FromName))
             {
                 this.Email.FromName = config.FromName;
             }
 
-            if (string.IsNullOrWhiteSpace(this.Email.FromEmail))
+            if(string.IsNullOrWhiteSpace(this.Email.FromEmail))
             {
                 this.Email.FromEmail = config.FromEmail;
             }
 
             var sysConfig = MessagingConfig.Get(this.Database);
 
-            if (sysConfig.TestMode)
+            if(sysConfig.TestMode)
             {
                 this.Email.IsTest = true;
             }
 
-            if (this.IsValidEmail(this.Email.FromEmail) && this.IsValidEmail(this.Email.SendTo))
+            if(this.IsValidEmail(this.Email.FromEmail) &&
+               this.IsValidEmail(this.Email.SendTo))
             {
-                MailQueue.AddToQueue(this.Database, this.Email);
+                await MailQueue.AddToQueueAsync(this.Database, this.Email);
             }
         }
 
         private bool IsValidEmail(string emailAddress)
         {
-            if(string.IsNullOrWhiteSpace(emailAddress)){
+            if(string.IsNullOrWhiteSpace(emailAddress))
+            {
                 return false;
             }
 
             bool valid = false;
             var emails = emailAddress.Split(',').Select(x => x.Trim()).ToArray();
 
-            if (emails.Any())
+            if(emails.Any())
             {
-                foreach (string email in emails)
+                foreach(string email in emails)
                 {
                     valid = new EmailAddressAttribute().IsValid(email);
                 }
@@ -82,7 +84,7 @@ namespace Frapid.Messaging
                 valid = new EmailAddressAttribute().IsValid(emailAddress);
             }
 
-            if (valid)
+            if(valid)
             {
                 //Do not send email to dispoable email address
                 valid = !DisposableEmailValidator.IsDisposableEmail(this.Database, emailAddress);
@@ -98,19 +100,19 @@ namespace Frapid.Messaging
 
         public async Task ProcessMailQueueAsync(IEmailProcessor processor)
         {
-            var queue = MailQueue.GetMailInQueue(this.Database).ToList();
+            var queue = await MailQueue.GetMailInQueueAsync(this.Database);
             var config = new Config(this.Database, this.Processor);
 
-            if (this.IsEnabled())
+            if(this.IsEnabled())
             {
-                foreach (var mail in queue)
+                foreach(var mail in queue)
                 {
                     var message = EmailHelper.GetMessage(config, mail);
                     var attachments = mail.Attachments?.Split(',').ToArray();
 
                     bool success = await processor.SendAsync(message, false, attachments);
 
-                    if (!success)
+                    if(!success)
                     {
                         continue;
                     }
@@ -119,7 +121,7 @@ namespace Frapid.Messaging
                     mail.DeliveredOn = DateTimeOffset.UtcNow;
 
 
-                    MailQueue.SetSuccess(this.Database, mail.QueueId);
+                    await MailQueue.SetSuccessAsync(this.Database, mail.QueueId);
                 }
             }
         }

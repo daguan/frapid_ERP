@@ -123,7 +123,7 @@
       </violation>
     </violations>
   </sourcecode>
-  <sourcecode name="DbConvention.cs" parser="StyleCop.CSharp.CsParser">
+  <sourcecode name="TenantConvention.cs" parser="StyleCop.CSharp.CsParser">
     <timestamps>
       <styleCop>2015/12/15 17:03:48.570</styleCop>
       <settingsFile>2015/12/15 17:03:48.550</settingsFile>

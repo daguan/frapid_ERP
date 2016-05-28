@@ -3,7 +3,9 @@
 namespace Frapid.Backups
 {
     public delegate void Complete(object sender, EventArgs args);
+
     public delegate void Fail(ProgressInfo progressInfo);
+
     public delegate void Progressing(ProgressInfo progressInfo);
 
     public sealed class ProgressInfo

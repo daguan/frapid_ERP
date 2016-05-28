@@ -8,15 +8,8 @@ namespace Frapid.Framework
     {
         public static T TryGetPropertyValue<T>(this JObject element, string key)
         {
-            JToken value;
-            element.TryGetValue(key, out value);
-
-            if (value == null)
-            {
-                return default(T);
-            }
-
-            return value.ToObject<T>();
+            var parser = new JsonPropertyParser();
+            return parser.TryGetPropertyValue<T>(element, key);
         }
 
         public static JsonSerializerSettings GetJsonSerializerSettings()

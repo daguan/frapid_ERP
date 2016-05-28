@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Frapid.Backups
 {
     public interface IDbAgent
     {
-        event Progressing Progress;
-        event Complete Complete;
-        event Fail Fail;
         string FileName { get; set; }
         DbServer Server { get; set; }
         string BackupFileLocation { get; set; }
-        bool Backup(Action<string> success, Action<string> fail);
+        event Progressing Progress;
+        event Complete Complete;
+        event Fail Fail;
+        Task<bool> BackupAsync(Action<string> success, Action<string> fail);
     }
 }

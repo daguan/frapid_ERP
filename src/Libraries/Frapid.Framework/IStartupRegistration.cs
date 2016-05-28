@@ -1,8 +1,10 @@
-﻿namespace Frapid.Framework
+﻿using System.Threading.Tasks;
+
+namespace Frapid.Framework
 {
     public interface IStartupRegistration
     {
         string Description { get; set; }
-        void Register();
+        Task RegisterAsync();
     }
 }

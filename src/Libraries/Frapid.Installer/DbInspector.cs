@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Frapid.Configuration;
 using Frapid.Installer.DAL;
 
@@ -15,16 +17,16 @@ namespace Frapid.Installer
         public string Tenant { get; }
         public string Database { get; }
 
-        public bool HasDb()
+        public async Task<bool> HasDbAsync()
         {
-            return Store.HasDb(this.Tenant, this.Database);
+            return await Store.HasDbAsync(this.Tenant, this.Database);
         }
 
         public bool IsWellKnownDb()
         {
-            var serializer = new DomainSerializer("DomainsApproved.json");
+            var serializer = new DomainSerializer("domains_approved.json");
             var domains = serializer.Get();
-            return domains.Any(domain => DbConvention.GetTenant(domain.DomainName) == this.Tenant);
+            return domains.Any(domain => TenantConvention.GetTenant(domain.DomainName) == this.Tenant);
         }
     }
 }

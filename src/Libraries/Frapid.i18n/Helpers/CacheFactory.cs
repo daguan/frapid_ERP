@@ -6,19 +6,19 @@ namespace Frapid.i18n.Helpers
     {
         internal static void AddToDefaultCache(string key, object value)
         {
-            if (string.IsNullOrWhiteSpace(key))
+            if(string.IsNullOrWhiteSpace(key))
             {
                 return;
             }
 
-            if (value == null)
+            if(value == null)
             {
                 return;
             }
 
             var cacheItem = new CacheItem(key, value);
 
-            if (MemoryCache.Default[key] == null)
+            if(MemoryCache.Default[key] == null)
             {
                 MemoryCache.Default.Add(cacheItem, new CacheItemPolicy());
             }

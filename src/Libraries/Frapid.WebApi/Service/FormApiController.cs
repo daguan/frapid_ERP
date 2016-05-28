@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Dynamic;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
@@ -12,29 +12,31 @@ using Newtonsoft.Json.Linq;
 
 namespace Frapid.WebApi.Service
 {
-    public class FormApiController : FrapidApiController
+    public class FormApiController: FrapidApiController
     {
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}/meta")]
         [RestAuthorize]
-        public EntityView GetEntityView(string schemaName, string tableName)
+        public async Task<EntityView> GetEntityViewAsync(string schemaName, string tableName)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.GetMeta();
+                return await repository.GetMetaAsync();
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -47,24 +49,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}/count")]
         [RestAuthorize]
-        public long Count(string schemaName, string tableName)
+        public async Task<long> CountAsync(string schemaName, string tableName)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.Count();
+                return await repository.CountAsync();
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -78,24 +82,26 @@ namespace Frapid.WebApi.Service
         [Route("~/api/forms/{schemaName}/{tableName}/all")]
         [Route("~/api/forms/{schemaName}/{tableName}/export")]
         [RestAuthorize]
-        public IEnumerable<dynamic> GetAll(string schemaName, string tableName)
+        public async Task<IEnumerable<dynamic>> GetAllAsync(string schemaName, string tableName)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.GetAll();
+                return await repository.GetAllAsync();
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -108,24 +114,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}/{primaryKey}")]
         [RestAuthorize]
-        public dynamic Get(string schemaName, string tableName, string primaryKey)
+        public async Task<dynamic> GetAsync(string schemaName, string tableName, string primaryKey)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.Get(primaryKey);
+                return await repository.GetAsync(primaryKey);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -138,24 +146,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}/get")]
         [RestAuthorize]
-        public IEnumerable<dynamic> Get(string schemaName, string tableName, [FromUri] object[] primaryKeys)
+        public async Task<IEnumerable<dynamic>> GetAsync(string schemaName, string tableName, [FromUri] object[] primaryKeys)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.Get(primaryKeys);
+                return await repository.GetAsync(primaryKeys);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -168,24 +178,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}/first")]
         [RestAuthorize]
-        public dynamic GetFirst(string schemaName, string tableName)
+        public async Task<dynamic> GetFirstAsync(string schemaName, string tableName)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.GetFirst();
+                return await repository.GetFirstAsync();
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -198,24 +210,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}/previous/{primaryKey}")]
         [RestAuthorize]
-        public dynamic GetPrevious(string schemaName, string tableName, string primaryKey)
+        public async Task<dynamic> GetPreviousAsync(string schemaName, string tableName, string primaryKey)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.GetPrevious(primaryKey);
+                return await repository.GetPreviousAsync(primaryKey);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -228,24 +242,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}/next/{primaryKey}")]
         [RestAuthorize]
-        public dynamic GetNext(string schemaName, string tableName, string primaryKey)
+        public async Task<dynamic> GetNextAsync(string schemaName, string tableName, string primaryKey)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.GetNext(primaryKey);
+                return await repository.GetNextAsync(primaryKey);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -258,24 +274,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}/last")]
         [RestAuthorize]
-        public dynamic GetLast(string schemaName, string tableName)
+        public async Task<dynamic> GetLastAsync(string schemaName, string tableName)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.GetLast();
+                return await repository.GetLastAsync();
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -288,24 +306,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}")]
         [RestAuthorize]
-        public IEnumerable<dynamic> GetPaginatedResult(string schemaName, string tableName)
+        public async Task<IEnumerable<dynamic>> GetPaginatedResultAsync(string schemaName, string tableName)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.GetPaginatedResult();
+                return await repository.GetPaginatedResultAsync();
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -318,24 +338,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}/page/{pageNumber}")]
         [RestAuthorize]
-        public IEnumerable<dynamic> GetPaginatedResult(string schemaName, string tableName, long pageNumber)
+        public async Task<IEnumerable<dynamic>> GetPaginatedResultAsync(string schemaName, string tableName, long pageNumber)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.GetPaginatedResult(pageNumber);
+                return await repository.GetPaginatedResultAsync(pageNumber);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -348,25 +370,27 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("POST")]
         [Route("~/api/forms/{schemaName}/{tableName}/count-where")]
         [RestAuthorize]
-        public long CountWhere(string schemaName, string tableName, [FromBody] JArray filters)
+        public async Task<long> CountWhereAsync(string schemaName, string tableName, [FromBody] JArray filters)
         {
             try
             {
                 var f = Filter.FromJArray(filters);
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.CountWhere(f);
+                return await repository.CountWhereAsync(f);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -380,25 +404,27 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("POST")]
         [Route("~/api/forms/{schemaName}/{tableName}/get-where/{pageNumber}")]
         [RestAuthorize]
-        public IEnumerable<dynamic> GetWhere(string schemaName, string tableName, long pageNumber, [FromBody] JArray filters)
+        public async Task<IEnumerable<dynamic>> GetWhereAsync(string schemaName, string tableName, long pageNumber, [FromBody] JArray filters)
         {
             try
             {
                 var f = Filter.FromJArray(filters);
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.GetWhere(pageNumber, f);
+                return await repository.GetWhereAsync(pageNumber, f);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -411,24 +437,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}/count-filtered/{filterName}")]
         [RestAuthorize]
-        public long CountFiltered(string schemaName, string tableName, string filterName)
+        public async Task<long> CountFilteredAsync(string schemaName, string tableName, string filterName)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.CountFiltered(filterName);
+                return await repository.CountFilteredAsync(filterName);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -441,24 +469,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}/get-filtered/{pageNumber}/{filterName}")]
         [RestAuthorize]
-        public IEnumerable<dynamic> GetFiltered(string schemaName, string tableName, long pageNumber, string filterName)
+        public async Task<IEnumerable<dynamic>> GetFilteredAsync(string schemaName, string tableName, long pageNumber, string filterName)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.GetFiltered(pageNumber, filterName);
+                return await repository.GetFilteredAsync(pageNumber, filterName);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -471,24 +501,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}/display-fields")]
         [RestAuthorize]
-        public IEnumerable<DisplayField> GetDisplayFields(string schemaName, string tableName)
+        public async Task<IEnumerable<DisplayField>> GetDisplayFieldsAsync(string schemaName, string tableName)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.GetDisplayFields();
+                return await repository.GetDisplayFieldsAsync();
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -501,24 +533,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}/custom-fields")]
         [RestAuthorize]
-        public IEnumerable<CustomField> GetCustomFields(string schemaName, string tableName)
+        public async Task<IEnumerable<CustomField>> GetCustomFieldsAsync(string schemaName, string tableName)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.GetCustomFields(null);
+                return await repository.GetCustomFieldsAsync(null);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -531,24 +565,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}/custom-fields/{resourceId}")]
         [RestAuthorize]
-        public IEnumerable<CustomField> GetCustomFields(string schemaName, string tableName, string resourceId)
+        public async Task<IEnumerable<CustomField>> GetCustomFieldsAsync(string schemaName, string tableName, string resourceId)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.GetCustomFields(resourceId);
+                return await repository.GetCustomFieldsAsync(resourceId);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -561,12 +597,12 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("POST")]
         [Route("~/api/forms/{schemaName}/{tableName}/add-or-edit")]
         [RestAuthorize]
-        public object AddOrEdit(string schemaName, string tableName, [FromBody] JArray form)
+        public async Task<object> AddOrEditAsync(string schemaName, string tableName, [FromBody] JArray form)
         {
             var item = form[0].ToObject<Dictionary<string, object>>();
             var customFields = form[1].ToObject<List<CustomField>>(JsonHelper.GetJsonSerializer());
 
-            if (item == null)
+            if(item == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
             }
@@ -574,19 +610,21 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.AddOrEdit(item, customFields);
+                return await repository.AddOrEditAsync(item, customFields);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -600,12 +638,12 @@ namespace Frapid.WebApi.Service
         [Route("~/api/forms/{schemaName}/{tableName}/add")]
         [Route("~/api/forms/{schemaName}/{tableName}/add/{skipPrimaryKey:bool}")]
         [RestAuthorize]
-        public void Add(string schemaName, string tableName, [FromBody] JArray form, bool skipPrimaryKey = true)
+        public async Task AddAsync(string schemaName, string tableName, [FromBody] JArray form, bool skipPrimaryKey = true)
         {
             var item = form[0].ToObject<Dictionary<string, object>>();
             var customFields = form[1].ToObject<List<CustomField>>(JsonHelper.GetJsonSerializer());
 
-            if (item == null)
+            if(item == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
             }
@@ -613,19 +651,21 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                repository.Add(item, customFields, skipPrimaryKey);
+                await repository.AddAsync(item, customFields, skipPrimaryKey);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -638,12 +678,12 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("PUT")]
         [Route("~/api/forms/{schemaName}/{tableName}/edit/{primaryKey}")]
         [RestAuthorize]
-        public void Edit(string schemaName, string tableName, string primaryKey, [FromBody] JArray form)
+        public async Task EditAsync(string schemaName, string tableName, string primaryKey, [FromBody] JArray form)
         {
             var item = form[0].ToObject<Dictionary<string, object>>();
             var customFields = form[1].ToObject<List<CustomField>>(JsonHelper.GetJsonSerializer());
 
-            if (item == null)
+            if(item == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
             }
@@ -651,19 +691,21 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                repository.Update(item, primaryKey, customFields);
+                await repository.UpdateAsync(item, primaryKey, customFields);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -675,18 +717,18 @@ namespace Frapid.WebApi.Service
 
         private List<Dictionary<string, object>> ParseCollection(JArray collection)
         {
-            return JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(collection.ToString(),
-                JsonHelper.GetJsonSerializerSettings());
+            return JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(collection.ToString(), JsonHelper.GetJsonSerializerSettings());
         }
 
         [AcceptVerbs("POST")]
         [Route("~/api/forms/{schemaName}/{tableName}/bulk-import")]
         [RestAuthorize]
-        public List<object> BulkImport(string schemaName, string tableName, [FromBody] JArray collection)
+        public async Task<List<object>> BulkImportAsync(string schemaName, string tableName, [FromBody] JArray collection)
         {
             var items = this.ParseCollection(collection);
 
-            if (items == null || items.Count.Equals(0))
+            if(items == null ||
+               items.Count.Equals(0))
             {
                 return null;
             }
@@ -694,19 +736,21 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.BulkImport(items);
+                return await repository.BulkImportAsync(items);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch
@@ -719,24 +763,26 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("DELETE")]
         [Route("~/api/forms/{schemaName}/{tableName}/delete/{primaryKey}")]
         [RestAuthorize]
-        public void Delete(string schemaName, string tableName, string primaryKey)
+        public async Task DeleteAsync(string schemaName, string tableName, string primaryKey)
         {
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                repository.Delete(primaryKey);
+                await repository.DeleteAsync(primaryKey);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch

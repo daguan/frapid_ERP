@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using Frapid.Authorization.DTO;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
@@ -8,11 +8,11 @@ namespace Frapid.Authorization.DAL
 {
     public static class Offices
     {
-        public static IEnumerable<Office> GetOffices(string tenant)
+        public static async Task<IEnumerable<Office>> GetOfficesAsync(string tenant)
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return db.FetchBy<Office>(sql => sql).OrderBy(x => x.OfficeId);
+                return await db.Query<Office>().OrderBy(x => x.OfficeId).ToListAsync();
             }
         }
     }

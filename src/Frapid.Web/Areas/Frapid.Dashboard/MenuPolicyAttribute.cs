@@ -14,12 +14,13 @@ namespace Frapid.Dashboard
         {
             string path = this.OverridePath.Or(filterContext.HttpContext.Request.FilePath);
 
-            int userId = AppUsers.GetCurrent().UserId;
-            int officeId = AppUsers.GetCurrent().OfficeId;
-            string culture = AppUsers.GetCurrent().Culture;
+            var my = AppUsers.GetCurrentAsync().Result;
+            int userId = my.UserId;
+            int officeId = my.OfficeId;
+            string culture = my.Culture;
             string tenant = AppUsers.GetTenant();
 
-            var policy = Menu.Get(tenant, userId, officeId, culture);
+            var policy = Menu.GetAsync(tenant, userId, officeId, culture).Result;
 
             if (!policy.Any(x => x.Url.Equals(path)))
             {

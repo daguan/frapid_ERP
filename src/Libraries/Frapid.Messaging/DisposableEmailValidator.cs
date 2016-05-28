@@ -9,7 +9,7 @@ namespace Frapid.Messaging
     public static class DisposableEmailValidator
     {
         /// <summary>
-        /// Checks if an email address belongs to a disposable email domain
+        ///     Checks if an email address belongs to a disposable email domain
         /// </summary>
         public static bool IsDisposableEmail(string tenant, string email)
         {
@@ -21,7 +21,7 @@ namespace Frapid.Messaging
             string rootConfigFile = HostingEnvironment.MapPath("/Resources/Configs/DisposableEmailDomains.config");
 
 
-            if (File.Exists(tenantConfigFile))
+            if(File.Exists(tenantConfigFile))
             {
                 configPath = tenantConfigFile;
             }
@@ -30,14 +30,21 @@ namespace Frapid.Messaging
                 configPath = File.Exists(rootConfigFile) ? rootConfigFile : string.Empty;
             }
 
-            if (string.IsNullOrWhiteSpace(configPath))
+            if(string.IsNullOrWhiteSpace(configPath))
             {
                 //Cannot determine if the email address is disposable because no configuration file was found.
                 return false;
             }
 
             string contents = File.ReadAllText(configPath, Encoding.UTF8);
-            var domains = contents.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None).Select(x=>x.ToUpperInvariant().Trim());
+            var domains = contents.Split
+                (
+                 new[]
+                 {
+                     "\r\n",
+                     "\n"
+                 },
+                 StringSplitOptions.None).Select(x => x.ToUpperInvariant().Trim());
             return domains.Any(domain => email.ToUpperInvariant().EndsWith(domain));
         }
     }

@@ -4,12 +4,10 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Hosting;
+using Frapid.Configuration;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;
-using Frapid.Messaging.Helpers;
-using Frapid.Messaging.Smtp;
+using Frapid.WebsiteBuilder.DAL;
 using Frapid.WebsiteBuilder.ViewModels;
 
 namespace Frapid.WebsiteBuilder.Emails
@@ -27,7 +25,7 @@ namespace Frapid.WebsiteBuilder.Emails
         {
             string fallback = model.Email + " wrote : <br/><br/>" + this.ConvertLines(model.Message);
 
-            string file = HostingEnvironment.MapPath(string.Format(CultureInfo.InvariantCulture, TemplatePath, tenant));
+            string file = PathMapper.MapPath(string.Format(CultureInfo.InvariantCulture, TemplatePath, tenant));
 
             if (file == null || !File.Exists(file))
             {
@@ -48,10 +46,10 @@ namespace Frapid.WebsiteBuilder.Emails
             return message;
         }
 
-        private string GetEmails(string tenant, int contactId)
+        private async Task<string> GetEmailsAsync(string tenant, int contactId)
         {
             var config = EmailProcessor.GetDefaultConfig(tenant);
-            var contact = DAL.Contacts.GetContact(tenant, contactId);
+            var contact = await Contacts.GetContactAsync(tenant, contactId);
 
             if (contact == null)
             {
@@ -61,7 +59,7 @@ namespace Frapid.WebsiteBuilder.Emails
             return !string.IsNullOrWhiteSpace(contact.Recipients) ? contact.Recipients : contact.Email;
         }
 
-        private EmailQueue GetEmail(string tenant, ContactForm model)
+        private async Task<EmailQueue> GetEmailAsync(string tenant, ContactForm model)
         {
             return new EmailQueue
             {
@@ -70,31 +68,24 @@ namespace Frapid.WebsiteBuilder.Emails
                 ReplyTo = model.Email,
                 Subject = model.Subject,
                 Message = this.GetMessage(tenant, model),
-                SendTo = this.GetEmails(tenant, model.ContactId)
+                SendTo = await this.GetEmailsAsync(tenant, model.ContactId)
             };
         }
 
         public async Task SendAsync(string tenant, ContactForm model)
         {
-            try
+            var email = await this.GetEmailAsync(tenant, model);
+            var manager = new MailQueueManager(tenant, email);
+            await manager.AddAsync();
+
+            var processor = EmailProcessor.GetDefault(tenant);
+
+            if (string.IsNullOrWhiteSpace(email.ReplyTo))
             {
-                var email = this.GetEmail(tenant, model);
-                var manager = new MailQueueManager(tenant, email);
-                manager.Add();
-
-                var processor = EmailProcessor.GetDefault(tenant);
-
-                if (string.IsNullOrWhiteSpace(email.ReplyTo))
-                {
-                    email.ReplyTo = processor.Config.FromEmail;
-                }
-
-                await manager.ProcessMailQueueAsync(processor);
+                email.ReplyTo = processor.Config.FromEmail;
             }
-            catch
-            {
-                throw new HttpException(500, "Internal Server Error");
-            }
+
+            await manager.ProcessMailQueueAsync(processor);
         }
     }
 }

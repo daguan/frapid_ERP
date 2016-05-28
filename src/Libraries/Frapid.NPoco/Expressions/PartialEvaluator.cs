@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
+using System.Reflection;
 
 namespace Frapid.NPoco.Expressions
 {
@@ -74,7 +73,7 @@ namespace Frapid.NPoco.Expressions
                     return e;
                 }
                 Type type = e.Type;
-                if (type.IsValueType)
+                if (type.GetTypeInfo().IsValueType)
                 {
                     e = Expression.Convert(e, typeof(object));
                 }

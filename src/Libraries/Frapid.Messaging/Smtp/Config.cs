@@ -1,16 +1,16 @@
-﻿using System.Net.Mail;
-using System.Security;
+﻿using System.Security;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Security;
 using Frapid.Messaging.DTO;
 
 namespace Frapid.Messaging.Smtp
 {
-    public class Config : IEmailConfig
+    public class Config: IEmailConfig
     {
         public Config(string tenant, IEmailProcessor processor)
         {
-            if (processor != null)
+            if(processor != null)
             {
                 this.Tenant = tenant;
                 this.Enabled = processor.IsEnabled;
@@ -24,9 +24,9 @@ namespace Frapid.Messaging.Smtp
             //Fall back to SMTP configuration
 
 
-            var smtp = GetSmtpConfig(tenant);
+            var smtp = GetSmtpConfigAsync(tenant).Result;
 
-            if (smtp == null)
+            if(smtp == null)
             {
                 return;
             }
@@ -34,32 +34,30 @@ namespace Frapid.Messaging.Smtp
             this.Tenant = tenant;
             this.Enabled = smtp.Enabled;
             this.FromName = smtp.FromDisplayName;
-            this.FromEmail = smtp.FromEmailAddress;            
+            this.FromEmail = smtp.FromEmailAddress;
             this.SmtpHost = smtp.SmtpHost;
             this.EnableSsl = smtp.SmtpEnableSsl;
             this.SmtpPort = smtp.SmtpPort;
             this.SmtpUsername = smtp.SmtpUsername;
             this.SmtpUserPassword = this.GetSmtpUserPassword(smtp.SmtpPassword);
-            this.DeliveryMethod = SmtpDeliveryMethod.Network;
         }
 
         public string Tenant { get; set; }
-        public bool Enabled { get; set; }
         public bool EnableSsl { get; set; }
-        public string FromName { get; set; }
-        public string FromEmail { get; set; }
-        public SmtpDeliveryMethod DeliveryMethod { get; set; }
         public string SmtpHost { get; set; }
         public int SmtpPort { get; set; }
         public string SmtpUsername { get; set; }
         public SecureString SmtpUserPassword { get; set; }
         public string PickupDirectory { get; set; }
+        public bool Enabled { get; set; }
+        public string FromName { get; set; }
+        public string FromEmail { get; set; }
 
-        public static bool IsEnabled(string database)
+        public static async Task<bool> IsEnabledAsync(string database)
         {
-            var smtp = GetSmtpConfig(database);
+            var smtp = await GetSmtpConfigAsync(database);
 
-            if (smtp == null)
+            if(smtp == null)
             {
                 return false;
             }
@@ -67,14 +65,14 @@ namespace Frapid.Messaging.Smtp
             return smtp.Enabled;
         }
 
-        private static SmtpConfig GetSmtpConfig(string database)
+        private static async Task<SmtpConfig> GetSmtpConfigAsync(string database)
         {
-            return DAL.Smtp.GetConfig(database);
+            return await DAL.Smtp.GetConfigAsync(database);
         }
 
         private SecureString GetSmtpUserPassword(string password)
         {
-            if (string.IsNullOrWhiteSpace(password))
+            if(string.IsNullOrWhiteSpace(password))
             {
                 return new SecureString();
             }
@@ -82,7 +80,7 @@ namespace Frapid.Messaging.Smtp
             var data = Encoding.UTF8.GetBytes(password);
             var unsecure = MachineKey.Unprotect(data, "ScrudFactory");
 
-            if (unsecure == null)
+            if(unsecure == null)
             {
                 return new SecureString();
             }
@@ -90,7 +88,7 @@ namespace Frapid.Messaging.Smtp
             password = Encoding.UTF8.GetString(unsecure);
 
             var secureString = new SecureString();
-            foreach (char c in password)
+            foreach(char c in password)
             {
                 secureString.AppendChar(c);
             }

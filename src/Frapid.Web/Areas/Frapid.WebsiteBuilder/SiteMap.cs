@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Frapid.ApplicationState.Cache;
 using Frapid.Framework;
 using Frapid.WebsiteBuilder.DAL;
@@ -8,11 +9,11 @@ namespace Frapid.WebsiteBuilder
 {
     public sealed class SiteMap : ISiteMapGenerator
     {
-        public List<SiteMapUrl> Generate()
+        public async Task<List<SiteMapUrl>> GenerateAsync()
         {
             string tenant = AppUsers.GetTenant();
-            var all = Contents.GetAllPublishedContents(tenant).ToList();
-            var contents = all.Where(x=>!x.IsBlog).ToList();
+            var all = (await Contents.GetAllPublishedContentsAsync(tenant)).ToList();
+            var contents = all.Where(x => !x.IsBlog).ToList();
             var blogs = all.Where(x => x.IsBlog).ToList();
             var home = all.FirstOrDefault(x => x.IsHomepage);
             var lastBlogPost = blogs.Max(x => x.PublishOn);

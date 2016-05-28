@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Frapid.Configuration;
 using static System.String;
 
@@ -19,7 +20,7 @@ namespace frapid.Commands.Create
         {
             this.TemplateName = this.Line.GetTokenOn(2);
 
-            string type = this.Line.GetTokenOn(4);
+            var type = this.Line.GetTokenOn(4);
 
             if (type.ToLower().Equals("instance"))
             {
@@ -34,13 +35,13 @@ namespace frapid.Commands.Create
                 return;
             }
 
-            this.InstanceName = DbConvention.GetDbNameByConvention(this.DomainName);
+            this.InstanceName = TenantConvention.GetDbNameByConvention(this.DomainName);
         }
 
         private bool CheckInstance()
         {
-            string path = @"{0}\Tenants\{1}";
-            string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..");
+            var path = @"{0}\Tenants\{1}";
+            var directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..");
 
             path = Format(path, directory, this.InstanceName);
 
@@ -84,15 +85,18 @@ namespace frapid.Commands.Create
             this.IsValid = this.CheckInstance();
         }
 
-        public override void ExecuteCommand()
+        public override async Task ExecuteCommandAsync()
         {
+            await Task.Delay(1);
+
             if (!this.IsValid)
             {
                 return;
             }
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("Todo: create a template named \"{0}\" on \"{1}\" instance.", this.TemplateName, this.InstanceName);
+            Console.WriteLine("Todo: create a template named \"{0}\" on \"{1}\" instance.", this.TemplateName,
+                this.InstanceName);
             Console.WriteLine("Template was not created.");
             Console.ForegroundColor = ConsoleColor.White;
         }

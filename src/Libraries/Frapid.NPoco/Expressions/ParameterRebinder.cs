@@ -21,7 +21,7 @@ namespace Frapid.NPoco.Expressions
         protected override Expression VisitParameter(ParameterExpression p)
         {
             ParameterExpression replacement;
-            if (map.TryGetValue(p, out replacement))
+            if (this.map.TryGetValue(p, out replacement))
             {
                 p = replacement;
             }

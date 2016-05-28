@@ -4,10 +4,10 @@ namespace Frapid.NPoco
     {
         public InsertContext(object poco, string tableName, bool autoIncrement, string primaryKeyName)
         {
-            Poco = poco;
-            TableName = tableName;
-            AutoIncrement = autoIncrement;
-            PrimaryKeyName = primaryKeyName;
+            this.Poco = poco;
+            this.TableName = tableName;
+            this.AutoIncrement = autoIncrement;
+            this.PrimaryKeyName = primaryKeyName;
         }
 
         public object Poco { get; private set; }

@@ -11,7 +11,7 @@ namespace Frapid.Account.Models
 {
     public static class SignUpModel
     {
-        public static async Task<bool> SignUp(Registration model, RemoteUser user)
+        public static async Task<bool> SignUpAsync(Registration model, RemoteUser user)
         {
             if (model.Password != model.ConfirmPassword)
             {
@@ -30,7 +30,7 @@ namespace Frapid.Account.Models
             registration.Password = PasswordManager.GetHashedPassword(model.Password);
             string tenant = AppUsers.GetTenant();
 
-            string registrationId = Registrations.Register(tenant, registration).ToString();
+            string registrationId = (await Registrations.RegisterAsync(tenant, registration)).ToString();
 
             if (string.IsNullOrWhiteSpace(registrationId))
             {

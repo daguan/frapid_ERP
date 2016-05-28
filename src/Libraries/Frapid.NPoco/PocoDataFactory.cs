@@ -3,62 +3,107 @@ using System.Collections.Generic;
 
 namespace Frapid.NPoco
 {
-    public class PocoDataFactory
+    public interface IPocoDataFactory
     {
-        private readonly IMapper _mapper;
-        private readonly Cache<Type, PocoData> _pocoDatas = Cache<Type, PocoData>.CreateStaticCache();
-        private readonly Cache<string, Type> _aliasToType = Cache<string, Type>.CreateStaticCache();
+        PocoData ForType(Type type);
+        TableInfo TableInfoForType(Type type);
+        PocoData ForObject(object o, string primaryKeyName, bool autoIncrement);
+    }
 
-        public PocoDataFactory(IMapper mapper)
+    public class FluentPocoDataFactory : IPocoDataFactory
+    {
+        private readonly Cache<Type, PocoDataBuilder> _pocoDatas = Cache<Type, PocoDataBuilder>.CreateStaticCache();
+        public Func<Type, IPocoDataFactory, PocoDataBuilder> Resolver { get; private set; }
+
+        public FluentPocoDataFactory(Func<Type, IPocoDataFactory, PocoDataBuilder> resolver)
         {
-            _mapper = mapper;
+            this.Resolver = resolver;
         }
-
-        public PocoDataFactory(Func<Type, Cache<string, Type>,  PocoData> resolver)
-        {
-            Resolver = resolver;
-        }
-
-        public Func<Type, Cache<string, Type>, PocoData> Resolver { get; set; }
+        
         public PocoData ForType(Type type)
         {
-            return ForType(type, false);
+            PocoDataFactory.Guard(type);
+            PocoDataBuilder pocoDataBuilder = this._pocoDatas.Get(type, () => this.Resolver(type, this));
+            return pocoDataBuilder.Build();
         }
-        public PocoData ForType(Type type, bool emptyNestedObjectNull)
+
+        public TableInfo TableInfoForType(Type type)
         {
-#if !POCO_NO_DYNAMIC
-            if (type == typeof(System.Dynamic.ExpandoObject) || type == typeof(PocoExpando))
-                throw new InvalidOperationException("Can't use dynamic types with this method");
-#endif
-            Func<PocoData> pocoDataFunc = (Resolver == null 
-                ? new Func<PocoData>(() => new PocoData(type, _mapper, _aliasToType)) 
-                : new Func<PocoData>(() => Resolver(type, _aliasToType)));
-            var pocoData = _pocoDatas.Get(type, pocoDataFunc);
-            pocoData.EmptyNestedObjectNull = emptyNestedObjectNull;
-            return pocoData;
+            PocoDataFactory.Guard(type);
+            PocoDataBuilder pocoDataBuilder = this._pocoDatas.Get(type, () => this.Resolver(type, this));
+            return pocoDataBuilder.BuildTableInfo();
         }
-        public PocoData ForObject(object o, string primaryKeyName)
+
+        public PocoData ForObject(object o, string primaryKeyName, bool autoIncrement)
         {
-            var t = o.GetType();
-#if !POCO_NO_DYNAMIC
-            if (t == typeof(System.Dynamic.ExpandoObject) || t == typeof(PocoExpando))
+            return PocoDataFactory.ForObjectStatic(o, primaryKeyName, autoIncrement, this.ForType);
+        }
+    }
+
+    public class PocoDataFactory : IPocoDataFactory
+    {
+        private readonly static Cache<Type, PocoDataBuilder> _pocoDatas = Cache<Type, PocoDataBuilder>.CreateStaticCache();
+        private readonly MapperCollection _mapper;
+
+        public PocoDataFactory(MapperCollection mapper)
+        {
+            this._mapper = mapper;
+        }
+
+        public PocoData ForType(Type type)
+        {
+            Guard(type);
+            PocoDataBuilder pocoDataBuilder = _pocoDatas.Get(type, () => new PocoDataBuilder(type, this._mapper).Init());
+            return pocoDataBuilder.Build();
+        }
+
+        public TableInfo TableInfoForType(Type type)
+        {
+            Guard(type);
+            PocoDataBuilder pocoDataBuilder = _pocoDatas.Get(type, () => new PocoDataBuilder(type, this._mapper).Init());
+            return pocoDataBuilder.BuildTableInfo();
+        }
+
+        public PocoData ForObject(object o, string primaryKeyName, bool autoIncrement)
+        {
+            return ForObjectStatic(o, primaryKeyName, autoIncrement, this.ForType);
+        }
+
+        public static PocoData ForObjectStatic(object o, string primaryKeyName, bool autoIncrement, Func<Type, PocoData> fallback)
+        {
+            Type t = o.GetType();
+#if !NET35
+            if (t == typeof (System.Dynamic.ExpandoObject) || t == typeof (PocoExpando))
             {
-                var pd = new PocoData();
+                PocoData pd = new PocoData();
                 pd.TableInfo = new TableInfo();
                 pd.Columns = new Dictionary<string, PocoColumn>(StringComparer.OrdinalIgnoreCase);
                 pd.Columns.Add(primaryKeyName, new ExpandoColumn() {ColumnName = primaryKeyName});
                 pd.TableInfo.PrimaryKey = primaryKeyName;
-                pd.TableInfo.AutoIncrement = true;
-                foreach (var col in ((IDictionary<string, object>) o).Keys)
+                pd.TableInfo.AutoIncrement = autoIncrement;
+                foreach (KeyValuePair<string, object> col in ((IDictionary<string, object>) o))
                 {
-                    if (col != primaryKeyName)
-                        pd.Columns.Add(col, new ExpandoColumn() {ColumnName = col});
+                    if (col.Key != primaryKeyName)
+                        pd.Columns.Add(col.Key, new ExpandoColumn()
+                        {
+                            ColumnName = col.Key,
+                            MemberInfoData = new MemberInfoData(col.Key, col.Value.GetTheType() ?? typeof (object), typeof (object)),
+                        });
                 }
                 return pd;
             }
             else
 #endif
-                return ForType(t);
+                return fallback(t);
         }
+
+        public static void Guard(Type type)
+        {
+#if !NET35
+            if (type == typeof(System.Dynamic.ExpandoObject) || type == typeof(PocoExpando))
+                throw new InvalidOperationException("Can't use dynamic types with this method");
+#endif
+        }
+
     }
 }

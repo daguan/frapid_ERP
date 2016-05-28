@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
-  <Import Project="..\packages\Microsoft.Net.Compilers.1.1.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.1.1\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -125,12 +125,12 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Web.RedisOutputCacheProvider, Version=1.6.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.RedisOutputCacheProvider.1.6.6\lib\net40\Microsoft.Web.RedisOutputCacheProvider.dll</HintPath>
+    <Reference Include="Microsoft.Web.RedisOutputCacheProvider, Version=1.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.RedisOutputCacheProvider.1.7.0\lib\net40\Microsoft.Web.RedisOutputCacheProvider.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
@@ -149,8 +149,8 @@
       <HintPath>..\packages\Serilog.1.5.14\lib\net45\Serilog.FullNetFx.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="StackExchange.Redis.StrongName, Version=1.0.316.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
-      <HintPath>..\packages\StackExchange.Redis.StrongName.1.0.488\lib\net45\StackExchange.Redis.StrongName.dll</HintPath>
+    <Reference Include="StackExchange.Redis.StrongName, Version=1.1.0.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.StrongName.1.1.603\lib\net46\StackExchange.Redis.StrongName.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -388,10 +388,10 @@
     <Content Include="Scripts\frapid\utilities\form.js" />
     <Content Include="Scripts\frapid\utilities\validator.js" />
     <Content Include="Scripts\inflection-js\inflection.js" />
-    <Content Include="Scripts\inflection-js\test\inflection_test.html" />
     <Content Include="Scripts\jquery-1.9.1.js" />
-    <Content Include="Scripts\jquery-2.2.1.js" />
-    <Content Include="Scripts\jquery-2.2.1.min.js" />
+    <None Include="Scripts\jquery-2.2.3.intellisense.js" />
+    <Content Include="Scripts\jquery-2.2.3.js" />
+    <Content Include="Scripts\jquery-2.2.3.min.js" />
     <Content Include="Scripts\jquery-timepicker\.gitignore" />
     <Content Include="Scripts\jquery-timepicker\GruntFile.js" />
     <Content Include="Scripts\jquery-timepicker\index.html" />
@@ -515,7 +515,7 @@
     <Content Include="Scripts\linq.js\bindings\linq.jquery.js" />
     <Content Include="Scripts\linq.js\bindings\linq.rx.js" />
     <Content Include="Scripts\knockout.validation.min.js.map" />
-    <Content Include="Scripts\jquery-2.2.1.min.map" />
+    <Content Include="Scripts\jquery-2.2.3.min.map" />
     <None Include="Scripts\linq.js\jquery.linq-vsdoc.js" />
     <Content Include="Scripts\linq.js\jquery.linq.js" />
     <Content Include="Scripts\linq.js\jquery.linq.min.js" />
@@ -526,27 +526,6 @@
     <Content Include="Scripts\linq.js\reference.htm" />
     <Content Include="Scripts\linq.js\sample\script.wsf" />
     <Content Include="Scripts\linq.js\sample\tutorial.htm" />
-    <Content Include="Scripts\linq.js\test\action.js" />
-    <Content Include="Scripts\linq.js\test\aggregate.js" />
-    <Content Include="Scripts\linq.js\test\arrayEnumerable.js" />
-    <Content Include="Scripts\linq.js\test\convert.js" />
-    <Content Include="Scripts\linq.js\test\dictionary.js" />
-    <Content Include="Scripts\linq.js\test\enumerable.js" />
-    <Content Include="Scripts\linq.js\test\errorHandling.js" />
-    <Content Include="Scripts\linq.js\test\functional.js" />
-    <Content Include="Scripts\linq.js\test\grouping.js" />
-    <Content Include="Scripts\linq.js\test\join.js" />
-    <Content Include="Scripts\linq.js\test\jquery-1.4.1.min.js" />
-    <Content Include="Scripts\linq.js\test\ordering.js" />
-    <Content Include="Scripts\linq.js\test\paging.js" />
-    <Content Include="Scripts\linq.js\test\projection.js" />
-    <Content Include="Scripts\linq.js\test\qunit.css" />
-    <Content Include="Scripts\linq.js\test\qunit.js" />
-    <Content Include="Scripts\linq.js\test\set.js" />
-    <Content Include="Scripts\linq.js\test\testrunner.htm" />
-    <Content Include="Scripts\linq.js\test\testrunner.jquery.htm" />
-    <Content Include="Scripts\linq.js\test\testrunner.jquery.min.htm" />
-    <Content Include="Scripts\linq.js\test\testrunner.min.htm" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\Modules\ScrudFactory\form\ajax-request-initialize.js" />
     <Content Include="Scripts\Modules\ScrudFactory\form\block-begin.js" />
@@ -873,17 +852,6 @@
     <Content Include="Scripts\underscore\index.html" />
     <Content Include="Scripts\underscore\karma.conf-sauce.js" />
     <Content Include="Scripts\underscore\karma.conf.js" />
-    <Content Include="Scripts\underscore\test\arrays.js" />
-    <Content Include="Scripts\underscore\test\chaining.js" />
-    <Content Include="Scripts\underscore\test\collections.js" />
-    <Content Include="Scripts\underscore\test\cross-document.js" />
-    <Content Include="Scripts\underscore\test\functions.js" />
-    <Content Include="Scripts\underscore\test\index.html" />
-    <Content Include="Scripts\underscore\test\objects.js" />
-    <Content Include="Scripts\underscore\test\utility.js" />
-    <Content Include="Scripts\underscore\test\vendor\qunit-extras.js" />
-    <Content Include="Scripts\underscore\test\vendor\qunit.css" />
-    <Content Include="Scripts\underscore\test\vendor\qunit.js" />
     <Content Include="Scripts\underscore\underscore-min.js" />
     <Content Include="Scripts\underscore\underscore.js" />
     <Content Include="Scripts\vakata-jstree\dist\jstree.js" />
@@ -968,7 +936,6 @@
     <Content Include="Scripts\underscore\LICENSE" />
     <Content Include="Scripts\underscore\package.json" />
     <Content Include="Scripts\underscore\README.md" />
-    <Content Include="Scripts\underscore\test\.eslintrc" />
     <Content Include="Scripts\underscore\underscore-min.map" />
     <Content Include="Scripts\vakata-jstree\dist\jstree.min.js.map" />
     <Content Include="Scripts\vakata-jstree\LICENSE-MIT" />
@@ -1050,8 +1017,8 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.1.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.1.1\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

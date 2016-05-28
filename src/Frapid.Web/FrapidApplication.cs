@@ -3,11 +3,12 @@ using System.Linq;
 using System.Web;
 using Frapid.Areas;
 using Frapid.Configuration;
+using Frapid.Framework;
 using Serilog;
 
 namespace Frapid.Web
 {
-    public sealed class FrapidApplication : IHttpModule
+    public sealed class FrapidApplication: IHttpModule
     {
         public void Init(HttpApplication app)
         {
@@ -18,28 +19,28 @@ namespace Frapid.Web
             app.Error += this.App_Error;
         }
 
-        private void App_PostAuthenticateRequest(object sender, EventArgs eventArgs)
-        {
-            string file = TenantStaticContentHelper.GetFile(HttpContext.Current);
-
-            if (!string.IsNullOrWhiteSpace(file))
-            {
-                //We found the requested file on the tenant's "wwwroot" directory.
-                HttpContext.Current.RewritePath(file);
-            }
-        }
-
 
         public void Dispose()
         {
         }
 
+        private void App_PostAuthenticateRequest(object sender, EventArgs eventArgs)
+        {
+            string file = TenantStaticContentHelper.GetFile(FrapidHttpContext.GetCurrent());
+
+            if(!string.IsNullOrWhiteSpace(file))
+            {
+                //We found the requested file on the tenant's "wwwroot" directory.
+                FrapidHttpContext.GetCurrent().RewritePath(file);
+            }
+        }
+
         private void App_Error(object sender, EventArgs e)
         {
-            var context = HttpContext.Current;
+            var context = FrapidHttpContext.GetCurrent();
             var exception = context.Server.GetLastError();
 
-            if (exception != null)
+            if(exception != null)
             {
                 Log.Error("Exception. {exception}", exception);
             }
@@ -47,10 +48,10 @@ namespace Frapid.Web
 
         private void Handle404Error()
         {
-            var context = HttpContext.Current;
+            var context = FrapidHttpContext.GetCurrent();
             int statusCode = context.Response.StatusCode;
 
-            if (statusCode != 404)
+            if(statusCode != 404)
             {
                 return;
             }
@@ -59,9 +60,14 @@ namespace Frapid.Web
             context.Response.TrySkipIisCustomErrors = true;
             string path = context.Request.Url.AbsolutePath;
 
-            var ignoredPaths = new[] { "/api", "/dashboard", "/content-not-found" };
+            var ignoredPaths = new[]
+                               {
+                                   "/api",
+                                   "/dashboard",
+                                   "/content-not-found"
+                               };
 
-            if (!ignoredPaths.Any(x => path.StartsWith(x)))
+            if(!ignoredPaths.Any(x => path.StartsWith(x)))
             {
                 context.Server.TransferRequest("/content-not-found?path=" + path, true);
             }
@@ -74,32 +80,31 @@ namespace Frapid.Web
 
         public void App_BeginRequest(object sender, EventArgs e)
         {
-            var context = HttpContext.Current;
+            var context = FrapidHttpContext.GetCurrent();
 
-            if (context == null)
+            if(context == null)
             {
                 return;
             }
 
-            string domain = DbConvention.GetDomain();
+            string domain = TenantConvention.GetDomain();
             Log.Verbose($"Got a {context.Request.HttpMethod} request {context.Request.AppRelativeCurrentExecutionFilePath} on domain {domain}.");
 
-            bool enforceSsl = DbConvention.EnforceSsl(domain);
+            bool enforceSsl = TenantConvention.EnforceSsl(domain);
 
-            if (!enforceSsl)
+            if(!enforceSsl)
             {
                 Log.Verbose($"SSL was not enforced on domain {domain}.");
                 return;
             }
 
-            if (context.Request.Url.Scheme == "https")
+            if(context.Request.Url.Scheme == "https")
             {
                 context.Response.AddHeader("Strict-Transport-Security", "max-age=31536000");
             }
-            else if (context.Request.Url.Scheme == "http")
+            else if(context.Request.Url.Scheme == "http")
             {
-                string path = "https://" + context.Request.Url.Host +
-                              context.Request.Url.PathAndQuery;
+                string path = "https://" + context.Request.Url.Host + context.Request.Url.PathAndQuery;
                 context.Response.Status = "301 Moved Permanently";
                 context.Response.AddHeader("Location", path);
             }

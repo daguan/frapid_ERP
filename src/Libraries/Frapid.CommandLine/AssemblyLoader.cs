@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -14,10 +15,10 @@ namespace frapid
 
         void AssembliesFromApplicationBaseDirectory()
         {
-            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
             this.AssembliesFromPath(baseDirectory);
 
-            string privateBinPath = AppDomain.CurrentDomain.SetupInformation.PrivateBinPath;
+            var privateBinPath = AppDomain.CurrentDomain.SetupInformation.PrivateBinPath;
             if (Directory.Exists(privateBinPath))
                 this.AssembliesFromPath(privateBinPath);
         }
@@ -27,11 +28,11 @@ namespace frapid
             var assemblyFiles = Directory.GetFiles(path)
                 .Where(file =>
                 {
-                    string extension = Path.GetExtension(file);
+                    var extension = Path.GetExtension(file);
                     return extension != null && extension.Equals(".dll", StringComparison.OrdinalIgnoreCase);
                 });
 
-            foreach (string assemblyFile in assemblyFiles)
+            foreach (var assemblyFile in assemblyFiles)
             {
                 Assembly.LoadFrom(assemblyFile);
             }

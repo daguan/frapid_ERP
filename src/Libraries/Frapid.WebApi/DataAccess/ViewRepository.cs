@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
@@ -12,20 +13,23 @@ using Serilog;
 
 namespace Frapid.WebApi.DataAccess
 {
-    public class ViewRepository : DbAccess, IViewRepository
+    public class ViewRepository: DbAccess, IViewRepository
     {
         public ViewRepository(string schemaName, string tableName, string database, long loginId, int userId)
         {
+            var appUser = AppUsers.GetCurrentAsync().Result;
+
             this._ObjectNamespace = Sanitizer.SanitizeIdentifierName(schemaName);
             this._ObjectName = Sanitizer.SanitizeIdentifierName(tableName.Replace("-", "_"));
-            this.LoginId = AppUsers.GetCurrent().LoginId;
-            this.OfficeId = AppUsers.GetCurrent().OfficeId;
-            this.UserId = AppUsers.GetCurrent().UserId;
+            this.LoginId = appUser.LoginId;
+            this.OfficeId = appUser.OfficeId;
+            this.UserId = appUser.UserId;
             this.Database = database;
             this.LoginId = loginId;
             this.UserId = userId;
 
-            if (!string.IsNullOrWhiteSpace(this._ObjectNamespace) && !string.IsNullOrWhiteSpace(this._ObjectName))
+            if(!string.IsNullOrWhiteSpace(this._ObjectNamespace) &&
+               !string.IsNullOrWhiteSpace(this._ObjectName))
             {
                 this.FullyQualifiedObjectName = this._ObjectNamespace + "." + this._ObjectName;
                 this.PrimaryKey = this.GetCandidateKeyByConvention();
@@ -45,100 +49,94 @@ namespace Frapid.WebApi.DataAccess
         public long LoginId { get; set; }
         public int OfficeId { get; set; }
 
-        public long Count()
+        public async Task<long> CountAsync()
         {
-            if (string.IsNullOrWhiteSpace(this.Database))
+            if(string.IsNullOrWhiteSpace(this.Database))
             {
                 return 0;
             }
 
-            if (!this.SkipValidation)
+            if(!this.SkipValidation)
             {
-                if (!this.Validated)
+                if(!this.Validated)
                 {
                     this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
-                if (!this.HasAccess)
+                if(!this.HasAccess)
                 {
-                    Log.Information(
-                        $"Access to count entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}");
+                    Log.Information($"Access to count entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}");
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             string sql = $"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName};";
-            return Factory.Scalar<long>(this.Database, sql);
+            return await Factory.ScalarAsync<long>(this.Database, sql);
         }
 
-        public IEnumerable<dynamic> Get()
+        public async Task<IEnumerable<dynamic>> GetAsync()
         {
-            if (string.IsNullOrWhiteSpace(this.Database))
+            if(string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
 
-            if (!this.SkipValidation)
+            if(!this.SkipValidation)
             {
-                if (!this.Validated)
+                if(!this.Validated)
                 {
                     this.Validate(AccessTypeEnum.ExportData, this.LoginId, this.Database, false);
                 }
-                if (!this.HasAccess)
+                if(!this.HasAccess)
                 {
-                    Log.Information(
-                        $"Access to the export entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}");
+                    Log.Information($"Access to the export entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}");
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
             string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} ORDER BY {this.PrimaryKey}";
-            return Factory.Get<dynamic>(this.Database, sql);
+            return await Factory.GetAsync<dynamic>(this.Database, sql);
         }
 
-        public IEnumerable<DisplayField> GetDisplayFields()
+        public async Task<IEnumerable<DisplayField>> GetDisplayFieldsAsync()
         {
-            if (string.IsNullOrWhiteSpace(this.Database))
+            if(string.IsNullOrWhiteSpace(this.Database))
             {
                 return new List<DisplayField>();
             }
 
-            if (!this.SkipValidation)
+            if(!this.SkipValidation)
             {
-                if (!this.Validated)
+                if(!this.Validated)
                 {
                     this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
-                if (!this.HasAccess)
+                if(!this.HasAccess)
                 {
-                    Log.Information(
-                        $"Access to get display field for entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}",
-                        this.LoginId);
+                    Log.Information($"Access to get display field for entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}", this.LoginId);
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            string sql =
-                $"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName};";
-            return Factory.Get<DisplayField>(this.Database, sql);
+            string sql = $"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName};";
+            return await Factory.GetAsync<DisplayField>(this.Database, sql);
         }
 
-        public IEnumerable<dynamic> GetPaginatedResult()
+        public async Task<IEnumerable<dynamic>> GetPaginatedResultAsync()
         {
-            if (string.IsNullOrWhiteSpace(this.Database))
+            if(string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
 
-            if (!this.SkipValidation)
+            if(!this.SkipValidation)
             {
-                if (!this.Validated)
+                if(!this.Validated)
                 {
                     this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
-                if (!this.HasAccess)
+                if(!this.HasAccess)
                 {
-                    Log.Information(
-                        $"Access to the first page of the entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}.");
+                    Log.Information($"Access to the first page of the entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}.");
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -151,31 +149,30 @@ namespace Frapid.WebApi.DataAccess
             sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
             sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
 
-            return Factory.Get<dynamic>(this.Database, sql);
+            return await Factory.GetAsync<dynamic>(this.Database, sql);
         }
 
-        public IEnumerable<dynamic> GetPaginatedResult(long pageNumber)
+        public async Task<IEnumerable<dynamic>> GetPaginatedResultAsync(long pageNumber)
         {
-            if (string.IsNullOrWhiteSpace(this.Database))
+            if(string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
 
-            if (!this.SkipValidation)
+            if(!this.SkipValidation)
             {
-                if (!this.Validated)
+                if(!this.Validated)
                 {
                     this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
-                if (!this.HasAccess)
+                if(!this.HasAccess)
                 {
-                    Log.Information(
-                        $"Access to Page #{pageNumber} of the entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}.");
+                    Log.Information($"Access to Page #{pageNumber} of the entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}.");
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            long offset = (pageNumber - 1)*50;
+            long offset = (pageNumber - 1) * 50;
 
             //"SELECT * FROM {this.FullyQualifiedObjectName} 
             //ORDER BY {this.PrimaryKey} LIMIT 50 OFFSET @0;";
@@ -185,33 +182,31 @@ namespace Frapid.WebApi.DataAccess
             sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), offset);
             sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
 
-            return Factory.Get<dynamic>(this.Database, sql);
+            return await Factory.GetAsync<dynamic>(this.Database, sql);
         }
 
-        public List<Filter> GetFilters(string database, string filterName)
+        public async Task<IEnumerable<Filter>> GetFiltersAsync(string database, string filterName)
         {
-            string sql =
-                $"SELECT * FROM config.filters WHERE object_name='{this.FullyQualifiedObjectName}' AND lower(filter_name)=lower(@0);";
-            return Factory.Get<Filter>(database, sql, filterName).ToList();
+            string sql = $"SELECT * FROM config.filters WHERE object_name='{this.FullyQualifiedObjectName}' AND lower(filter_name)=lower(@0);";
+            return await Factory.GetAsync<Filter>(database, sql, filterName);
         }
 
-        public long CountWhere(List<Filter> filters)
+        public async Task<long> CountWhereAsync(List<Filter> filters)
         {
-            if (string.IsNullOrWhiteSpace(this.Database))
+            if(string.IsNullOrWhiteSpace(this.Database))
             {
                 return 0;
             }
 
-            if (!this.SkipValidation)
+            if(!this.SkipValidation)
             {
-                if (!this.Validated)
+                if(!this.Validated)
                 {
                     this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
-                if (!this.HasAccess)
+                if(!this.HasAccess)
                 {
-                    Log.Information(
-                        $"Access to count entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}. Filters: {filters}.");
+                    Log.Information($"Access to count entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}. Filters: {filters}.");
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
@@ -219,111 +214,108 @@ namespace Frapid.WebApi.DataAccess
             var sql = Sql.Builder.Append($"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
             FilterManager.AddFilters(ref sql, filters);
 
-            return Factory.Scalar<long>(this.Database, sql);
+            return await Factory.ScalarAsync<long>(this.Database, sql);
         }
 
-        public IEnumerable<dynamic> GetWhere(long pageNumber, List<Filter> filters)
+        public async Task<IEnumerable<dynamic>> GetWhereAsync(long pageNumber, List<Filter> filters)
         {
-            if (string.IsNullOrWhiteSpace(this.Database))
+            if(string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
 
-            if (!this.SkipValidation)
+            if(!this.SkipValidation)
             {
-                if (!this.Validated)
+                if(!this.Validated)
                 {
                     this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
-                if (!this.HasAccess)
+                if(!this.HasAccess)
                 {
-                    Log.Information(
-                        $"Access to Page #{pageNumber} of the filtered entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}. Filters: {filters}.");
+                    Log.Information($"Access to Page #{pageNumber} of the filtered entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}. Filters: {filters}.");
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            long offset = (pageNumber - 1)*50;
+            long offset = (pageNumber - 1) * 50;
             var sql = Sql.Builder.Append($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
 
             FilterManager.AddFilters(ref sql, filters);
 
             sql.OrderBy("1");
 
-            if (pageNumber > 0)
+            if(pageNumber > 0)
             {
                 sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), offset);
                 sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
             }
 
-            return Factory.Get<dynamic>(this.Database, sql);
+            return await Factory.GetAsync<dynamic>(this.Database, sql);
         }
 
-        public long CountFiltered(string filterName)
+        public async Task<long> CountFilteredAsync(string filterName)
         {
-            if (string.IsNullOrWhiteSpace(this.Database))
+            if(string.IsNullOrWhiteSpace(this.Database))
             {
                 return 0;
             }
 
-            if (!this.SkipValidation)
+            if(!this.SkipValidation)
             {
-                if (!this.Validated)
+                if(!this.Validated)
                 {
                     this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
-                if (!this.HasAccess)
+                if(!this.HasAccess)
                 {
-                    Log.Information(
-                        $"Access to count entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}. Filter: {filterName}.");
+                    Log.Information($"Access to count entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}. Filter: {filterName}.");
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            var filters = this.GetFilters(this.Database, filterName);
+            var filters = await this.GetFiltersAsync(this.Database, filterName);
             var sql = Sql.Builder.Append($"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
-            FilterManager.AddFilters(ref sql, filters);
+            FilterManager.AddFilters(ref sql, filters.ToList());
 
-            return Factory.Scalar<long>(this.Database, sql);
+            return await Factory.ScalarAsync<long>(this.Database, sql);
         }
 
-        public IEnumerable<dynamic> GetFiltered(long pageNumber, string filterName)
+        public async Task<IEnumerable<dynamic>> GetFilteredAsync(long pageNumber, string filterName)
         {
-            if (string.IsNullOrWhiteSpace(this.Database))
+            if(string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
 
-            if (!this.SkipValidation)
+            if(!this.SkipValidation)
             {
-                if (!this.Validated)
+                if(!this.Validated)
                 {
                     this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
                 }
-                if (!this.HasAccess)
+                if(!this.HasAccess)
                 {
-                    Log.Information(
-                        $"Access to Page #{pageNumber} of the filtered entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}. Filter: {filterName}.");
+                    Log.Information($"Access to Page #{pageNumber} of the filtered entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}. Filter: {filterName}.");
                     throw new UnauthorizedException("Access is denied.");
                 }
             }
 
-            var filters = this.GetFilters(this.Database, filterName);
+            var filters = await this.GetFiltersAsync(this.Database, filterName);
 
-            long offset = (pageNumber - 1)*50;
+            long offset = (pageNumber - 1) * 50;
             var sql = Sql.Builder.Append($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
 
-            FilterManager.AddFilters(ref sql, filters);
+            FilterManager.AddFilters(ref sql, filters.ToList());
 
             sql.OrderBy("1");
 
-            if (pageNumber > 0)
+            if(pageNumber > 0)
             {
                 sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), offset);
                 sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
             }
 
-            return Factory.Get<dynamic>(this.Database, sql);
+            return await Factory.GetAsync<dynamic>(this.Database, sql);
         }
 
         #region View to Table Convention
@@ -342,12 +334,12 @@ namespace Frapid.WebApi.DataAccess
         {
             string candidateKey = Inflector.MakeSingular(this.GetTableByConvention());
 
-            if (!string.IsNullOrWhiteSpace(candidateKey))
+            if(!string.IsNullOrWhiteSpace(candidateKey))
             {
                 candidateKey += "_id";
             }
 
-            candidateKey  = candidateKey ?? "";
+            candidateKey = candidateKey ?? "";
 
             return Sanitizer.SanitizeIdentifierName(candidateKey);
         }
@@ -356,7 +348,7 @@ namespace Frapid.WebApi.DataAccess
         {
             string nameKey = Inflector.MakeSingular(this.GetTableByConvention());
 
-            if (!string.IsNullOrWhiteSpace(nameKey))
+            if(!string.IsNullOrWhiteSpace(nameKey))
             {
                 nameKey += "_name";
             }

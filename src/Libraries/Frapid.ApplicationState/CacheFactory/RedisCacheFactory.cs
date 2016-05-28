@@ -5,20 +5,9 @@ using StackExchange.Redis;
 
 namespace Frapid.ApplicationState.CacheFactory
 {
-    public class RedisCacheFactory : ICacheFactory
+    public class RedisCacheFactory: ICacheFactory
     {
         public static ConnectionMultiplexer Redis { get; private set; }
-
-        public static IDatabase GetDb()
-        {
-            if (Redis == null)
-            {
-                string cs = RedisConnectionString.GetConnectionString();
-                Redis = ConnectionMultiplexer.Connect(cs);
-            }
-
-            return Redis.GetDatabase();
-        }
 
         public bool Add<T>(string key, T value, DateTimeOffset expiresAt)
         {
@@ -32,12 +21,23 @@ namespace Frapid.ApplicationState.CacheFactory
         {
             var db = GetDb();
             var serializedObject = db.StringGet(key);
-            if (serializedObject.IsNull)
+            if(serializedObject.IsNull)
             {
                 return null;
             }
 
             return JsonConvert.DeserializeObject<T>(serializedObject);
+        }
+
+        public static IDatabase GetDb()
+        {
+            if(Redis == null)
+            {
+                string cs = RedisConnectionString.GetConnectionString();
+                Redis = ConnectionMultiplexer.Connect(cs);
+            }
+
+            return Redis.GetDatabase();
         }
     }
 }

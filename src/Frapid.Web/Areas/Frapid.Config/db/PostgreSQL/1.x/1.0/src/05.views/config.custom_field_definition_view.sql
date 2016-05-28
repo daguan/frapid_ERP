@@ -12,10 +12,7 @@ SELECT
     config.custom_field_setup.field_label,
     config.custom_field_setup.description,
     config.custom_field_data_types.data_type,
-    config.custom_field_data_types.is_number,
-    config.custom_field_data_types.is_date,
-    config.custom_field_data_types.is_boolean,
-    config.custom_field_data_types.is_long_text,
+    config.custom_field_data_types.underlying_type,
     ''::text AS resource_id,
     ''::text AS value
 FROM config.custom_field_setup

@@ -18,7 +18,7 @@ namespace Frapid.Account.Controllers.Frontend
     {
         [Route("account/sign-up")]
         [AllowAnonymous]
-        public ActionResult Index()
+        public async Task<ActionResult> IndexAsync()
         {
             if (RemoteUser.IsListedInSpamDatabase())
             {
@@ -26,7 +26,7 @@ namespace Frapid.Account.Controllers.Frontend
             }
 
             string tenant = AppUsers.GetTenant();
-            var profile = ConfigurationProfiles.GetActiveProfile(tenant);
+            var profile = await ConfigurationProfiles.GetActiveProfileAsync(tenant);
 
             if (!profile.AllowRegistration || this.User.Identity.IsAuthenticated)
             {
@@ -60,12 +60,12 @@ namespace Frapid.Account.Controllers.Frontend
             var id = token.To<Guid>();
             string tenant = AppUsers.GetTenant();
 
-            if (!Registrations.ConfirmRegistration(tenant, id))
+            if (!await Registrations.ConfirmRegistrationAsync(tenant, id))
             {
                 return this.View(this.GetRazorView<AreaRegistration>("SignUp/InvalidToken.cshtml"));
             }
 
-            var registration = Registrations.Get(tenant, id);
+            var registration = await Registrations.GetAsync(tenant, id);
             var email = new WelcomeEmail(registration);
             await email.SendAsync();
 
@@ -75,12 +75,12 @@ namespace Frapid.Account.Controllers.Frontend
         [Route("account/sign-up/validate-email")]
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult ValidateEmail(string email)
+        public async Task<ActionResult> ValidateEmailAsync(string email)
         {
-            Thread.Sleep(1000);
+            await Task.Delay(1000);
             string tenant = AppUsers.GetTenant();
 
-            return string.IsNullOrWhiteSpace(email) ? this.Json(true) : this.Json(!Registrations.EmailExists(tenant, email));
+            return string.IsNullOrWhiteSpace(email) ? this.Json(true) : this.Json(!await Registrations.EmailExistsAsync(tenant, email));
         }
 
         [Route("account/sign-up")]
@@ -88,7 +88,7 @@ namespace Frapid.Account.Controllers.Frontend
         [AllowAnonymous]
         public async Task<ActionResult> PostAsync(Registration model)
         {
-            bool result = await SignUpModel.SignUp(model, this.RemoteUser);
+            bool result = await SignUpModel.SignUpAsync(model, this.RemoteUser);
             return this.Ok(result);
         }
     }

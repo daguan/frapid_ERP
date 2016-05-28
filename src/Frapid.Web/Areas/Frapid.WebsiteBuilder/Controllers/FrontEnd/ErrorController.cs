@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.WebsiteBuilder.Models;
 
@@ -6,10 +7,10 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
     public class ErrorController : WebsiteBuilderController
     {
         [Route("content-not-found")]
-        public ActionResult Http404()
+        public async Task<ActionResult> Http404Async()
         {
             string query = this.Request.Url?.PathAndQuery;
-            var model = ErrorModel.GetResult(query);
+            var model = await ErrorModel.GetResultAsync(query);
 
             string path = GetLayoutPath();
             string layout = this.GetLayout();

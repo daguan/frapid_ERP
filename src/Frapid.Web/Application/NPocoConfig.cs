@@ -1,5 +1,4 @@
-﻿using Frapid.Configuration;
-using Frapid.Configuration.Db;
+﻿using Frapid.Configuration.Db;
 using Frapid.DataAccess;
 
 namespace Frapid.Web

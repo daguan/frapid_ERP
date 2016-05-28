@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -8,6 +10,8 @@ namespace Frapid.NPoco.DatabaseTypes
 {
     public class SqlServerDatabaseType : DatabaseType
     {
+        public bool UseOutputClause { get; set; }
+
         private static readonly Regex OrderByAlias = new Regex(@"[\""\[\]\w]+\.([\[\]\""\w]+)", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
         public override bool UseColumnAliases()
@@ -18,31 +22,60 @@ namespace Frapid.NPoco.DatabaseTypes
         public override string BuildPageQuery(long skip, long take, PagingHelper.SQLParts parts, ref object[] args)
         {
             parts.sqlOrderBy = string.IsNullOrEmpty(parts.sqlOrderBy) ? null : OrderByAlias.Replace(parts.sqlOrderBy, "$1");
-            var sqlPage = string.Format("SELECT {4} FROM (SELECT ROW_NUMBER() OVER ({0}) poco_rn, poco_base.* \nFROM ( \n{1}) poco_base ) poco_paged \nWHERE poco_rn > {2} AND poco_rn <= {3} \nORDER BY poco_rn",
-                                                                    parts.sqlOrderBy ?? "ORDER BY (SELECT NULL /*poco_dual*/)", parts.sqlUnordered, skip, skip + take, parts.sqlColumns);
+            string sqlPage = string.Format("SELECT {4} FROM (SELECT poco_base.*, ROW_NUMBER() OVER ({0}) poco_rn \nFROM ( \n{1}) poco_base ) poco_paged \nWHERE poco_rn > @{2} AND poco_rn <= @{3} \nORDER BY poco_rn",
+                parts.sqlOrderBy ?? "ORDER BY (SELECT NULL /*poco_dual*/)", parts.sqlUnordered, args.Length, args.Length + 1, parts.sqlColumns);
             args = args.Concat(new object[] { skip, skip + take }).ToArray();
 
             return sqlPage;
         }
-
-        public override object ExecuteInsert<T>(Database db, IDbCommand cmd, string primaryKeyName, T poco, object[] args)
+        
+        private void AdjustSqlInsertCommandText(DbCommand cmd, bool useOutputClause)
         {
-            //var pocodata = PocoData.ForType(typeof(T), db.PocoDataFactory);
-            //var sql = string.Format("SELECT * FROM {0} WHERE {1} = SCOPE_IDENTITY()", EscapeTableName(pocodata.TableInfo.TableName), EscapeSqlIdentifier(primaryKeyName));
-            //return db.SingleInto(poco, ";" + cmd.CommandText + ";" + sql, args);
-            cmd.CommandText += ";SELECT SCOPE_IDENTITY();";
+            if (!this.UseOutputClause && !useOutputClause)
+            {
+                cmd.CommandText += ";SELECT SCOPE_IDENTITY();";
+            }
+        }
+        
+        public override string GetInsertOutputClause(string primaryKeyName, bool useOutputClause)
+        {
+            if (this.UseOutputClause || useOutputClause)
+            {
+                return string.Format(" OUTPUT INSERTED.{0}", this.EscapeSqlIdentifier(primaryKeyName));
+            }
+            return base.GetInsertOutputClause(primaryKeyName, useOutputClause);
+        }
+
+        public override string GetDefaultInsertSql(string tableName, string primaryKeyName, bool useOutputClause, string[] names, string[] parameters)
+        {
+            return string.Format("INSERT INTO {0}{1} DEFAULT VALUES", this.EscapeTableName(tableName), this.GetInsertOutputClause(primaryKeyName, useOutputClause));
+        }
+
+        public override object ExecuteInsert<T>(Database db, DbCommand cmd, string primaryKeyName, bool useOutputClause, T poco, object[] args)
+        {
+            this.AdjustSqlInsertCommandText(cmd, useOutputClause);
             return db.ExecuteScalarHelper(cmd);
         }
+
+#if !NET35 && !NET40
+        public override System.Threading.Tasks.Task<object> ExecuteInsertAsync<T>(Database db, DbCommand cmd, string primaryKeyName, bool useOutputClause, T poco, object[] args)
+        {
+            this.AdjustSqlInsertCommandText(cmd, useOutputClause);
+            return this.ExecuteScalarAsync(db, cmd);
+        }
+#endif
 
         public override string GetExistsSql()
         {
             return "IF EXISTS (SELECT 1 FROM {0} WHERE {1}) SELECT 1 ELSE SELECT 0";
         }
 
+#if !DNXCORE50
         public override void InsertBulk<T>(IDatabase db, IEnumerable<T> pocos)
         {
             SqlBulkCopyHelper.BulkInsert(db, pocos);
         }
+#endif
 
         public override IsolationLevel GetDefaultTransactionIsolationLevel()
         {
@@ -51,15 +84,24 @@ namespace Frapid.NPoco.DatabaseTypes
 
         public override DbType? LookupDbType(Type type, string name)
         {
-            if (type == typeof (TimeSpan) || type == typeof(TimeSpan?))
+            if (type == typeof(TimeSpan) || type == typeof(TimeSpan?))
                 return null;
-            
+
             return base.LookupDbType(type, name);
         }
 
         public override string GetProviderName()
         {
             return "System.Data.SqlClient";
+        }
+
+        public override object ProcessDefaultMappings(PocoColumn pocoColumn, object value)
+        {
+            if (pocoColumn.MemberInfoData.MemberType == typeof (byte[]) && value == null)
+            {
+                return new SqlParameter("__bytes", SqlDbType.VarBinary, -1) { Value = DBNull.Value };
+            }
+            return base.ProcessDefaultMappings(pocoColumn, value);
         }
     }
 }

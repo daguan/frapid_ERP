@@ -61,7 +61,7 @@ namespace Frapid.WebsiteBuilder.Models.Themes
 
         private string GetUploadDirectory()
         {
-            string tenant = DbConvention.GetTenant();
+            string tenant = TenantConvention.GetTenant();
             string uploadDirectory = HostingEnvironment.MapPath($"~/Tenants/{tenant}/Temp/");
 
             if (uploadDirectory == null || !Directory.Exists(uploadDirectory))
@@ -132,7 +132,7 @@ namespace Frapid.WebsiteBuilder.Models.Themes
         public void CopyTheme()
         {
             string source = this.ExtractedDirectory;
-            string tenant = DbConvention.GetTenant();
+            string tenant = TenantConvention.GetTenant();
             string destination =
                 HostingEnvironment.MapPath(
                     $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{this.ThemeInfo.ThemeName}");

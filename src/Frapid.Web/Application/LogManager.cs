@@ -12,15 +12,14 @@ namespace Frapid.Web
     {
         private static string GetLogDirectory()
         {
-            string path = ConfigurationManager.GetConfigurationValue("ParameterConfigFileLocation",
-                "ApplicationLogDirectory");
+            string path = ConfigurationManager.GetConfigurationValue("ParameterConfigFileLocation", "ApplicationLogDirectory");
 
-            if (string.IsNullOrWhiteSpace(path))
+            if(string.IsNullOrWhiteSpace(path))
             {
                 return HostingEnvironment.MapPath("~/Resource/Temp");
             }
 
-            if (!Directory.Exists(path))
+            if(!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
@@ -31,15 +30,13 @@ namespace Frapid.Web
         private static string GetLogFileName()
         {
             string applicationLogDirectory = GetLogDirectory();
-            string filePath = Path.Combine(applicationLogDirectory,
-                DateTimeOffset.UtcNow.Date.ToShortDateString().Replace(@"/", "-"), "log.txt");
+            string filePath = Path.Combine(applicationLogDirectory, DateTimeOffset.UtcNow.Date.ToShortDateString().Replace(@"/", "-"), "log.txt");
             return filePath;
         }
 
         private static LoggerConfiguration GetConfiguration()
         {
-            string minimumLogLevel = ConfigurationManager.GetConfigurationValue("ParameterConfigFileLocation",
-                "MinimumLogLevel");
+            string minimumLogLevel = ConfigurationManager.GetConfigurationValue("ParameterConfigFileLocation", "MinimumLogLevel");
 
             var levelSwitch = new LoggingLevelSwitch();
 
@@ -48,9 +45,7 @@ namespace Frapid.Web
 
             levelSwitch.MinimumLevel = logLevel;
 
-            return
-                new LoggerConfiguration().MinimumLevel.ControlledBy(levelSwitch)
-                    .WriteTo.RollingFile(GetLogFileName());
+            return new LoggerConfiguration().MinimumLevel.ControlledBy(levelSwitch).WriteTo.RollingFile(GetLogFileName());
         }
 
         internal static void InternalizeLogger()

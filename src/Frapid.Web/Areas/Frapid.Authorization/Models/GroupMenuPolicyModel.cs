@@ -1,4 +1,5 @@
-﻿using Frapid.ApplicationState.Cache;
+﻿using System.Threading.Tasks;
+using Frapid.ApplicationState.Cache;
 using Frapid.Authorization.DAL;
 using Frapid.Authorization.ViewModels;
 
@@ -6,18 +7,18 @@ namespace Frapid.Authorization.Models
 {
     public static class GroupMenuPolicyModel
     {
-        public static GroupMenuPolicy Get()
+        public static async Task<GroupMenuPolicy> GetAsync()
         {
-            if (!AppUsers.GetCurrent().IsAdministrator)
+            if (!(await AppUsers.GetCurrentAsync()).IsAdministrator)
             {
                 return new GroupMenuPolicy();
             }
 
             string tenant = AppUsers.GetTenant();
 
-            var offices = Offices.GetOffices(tenant);
-            var roles = Roles.GetRoles(tenant);
-            var menus = Menus.GetMenus(tenant);
+            var offices = await Offices.GetOfficesAsync(tenant);
+            var roles = await Roles.GetRolesAsync(tenant);
+            var menus = await Menus.GetMenusAsync(tenant);
 
             return new GroupMenuPolicy
             {
@@ -27,15 +28,16 @@ namespace Frapid.Authorization.Models
             };
         }
 
-        internal static GroupMenuPolicyInfo Get(int officeId, int roleId)
+        internal static async Task<GroupMenuPolicyInfo> GetAsync(int officeId, int roleId)
         {
-            if (!AppUsers.GetCurrent().IsAdministrator)
+            if (!(await AppUsers.GetCurrentAsync()).IsAdministrator)
             {
                 return new GroupMenuPolicyInfo();
             }
 
             string tenant = AppUsers.GetTenant();
-            var menuIds = Menus.GetGroupPolicy(tenant, officeId, roleId);
+            var menuIds = await Menus.GetGroupPolicyAsync(tenant, officeId, roleId);
+
             return new GroupMenuPolicyInfo
             {
                 RoleId = roleId,
@@ -44,15 +46,15 @@ namespace Frapid.Authorization.Models
             };
         }
 
-        public static void Save(GroupMenuPolicyInfo model)
+        public static async Task SaveAsync(GroupMenuPolicyInfo model)
         {
-            if (!AppUsers.GetCurrent().IsAdministrator)
+            if (!(await AppUsers.GetCurrentAsync()).IsAdministrator)
             {
                 return;
             }
 
             string tenant = AppUsers.GetTenant();
-            Menus.SaveGroupPolicy(tenant, model.OfficeId, model.RoleId, model.MenuIds);
+            await Menus.SaveGroupPolicyAsync(tenant, model.OfficeId, model.RoleId, model.MenuIds);
         }
     }
 }

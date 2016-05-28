@@ -16,7 +16,7 @@ namespace Frapid.WebsiteBuilder.Models.Themes
 
         public string Locate()
         {
-            string tenant = DbConvention.GetTenant();
+            string tenant = TenantConvention.GetTenant();
             string path = $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{this.ThemeName}/{this.File}";
             path = HostingEnvironment.MapPath(path);
 

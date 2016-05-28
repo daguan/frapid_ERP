@@ -6,22 +6,22 @@ using Frapid.Installer;
 
 namespace Frapid.Web.Controllers
 {
-    public class InstallController : FrapidController
+    public class InstallController: FrapidController
     {
         [Route("install")]
         public ActionResult Index()
         {
-            string domain = DbConvention.GetDomain();
+            string domain = TenantConvention.GetDomain();
 
             var approved = new DomainSerializer("DomainsApproved.json");
             var installed = new DomainSerializer("DomainsInstalled.json");
 
-            if (!approved.GetTenantMembers().Any(x => x.Equals(domain)))
+            if(!approved.GetMemberSites().Any(x => x.Equals(domain)))
             {
                 return this.HttpNotFound();
             }
 
-            if (installed.GetTenantMembers().Any(x => x.Equals(domain)))
+            if(installed.GetMemberSites().Any(x => x.Equals(domain)))
             {
                 return this.Redirect("/");
             }

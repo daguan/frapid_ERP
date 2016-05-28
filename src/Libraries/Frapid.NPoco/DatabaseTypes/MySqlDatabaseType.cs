@@ -1,4 +1,5 @@
 using System.Data;
+using System.Data.Common;
 
 namespace Frapid.NPoco.DatabaseTypes
 {
@@ -12,7 +13,7 @@ namespace Frapid.NPoco.DatabaseTypes
             return "@";
         }
 
-        public override void PreExecute(IDbCommand cmd)
+        public override void PreExecute(DbCommand cmd)
         {
             cmd.CommandText = cmd.CommandText.Replace("/*poco_dual*/", "from dual");
         }
@@ -27,9 +28,9 @@ namespace Frapid.NPoco.DatabaseTypes
             return "SELECT EXISTS (SELECT 1 FROM {0} WHERE {1})";
         }
 
-        public override string GetDefaultInsertSql(string tableName, string[] names, string[] parameters)
+        public override string GetDefaultInsertSql(string tableName, string primaryKeyName, bool useOutputClause, string[] names, string[] parameters)
         {
-            return string.Format("INSERT INTO {0} ({1}) VALUES ({2})", EscapeTableName(tableName), string.Join(",", names), string.Join(",", parameters));
+            return string.Format("INSERT INTO {0} ({1}) VALUES ({2})", this.EscapeTableName(tableName), string.Join(",", names), string.Join(",", parameters));
         }
 
         public override string GetProviderName()

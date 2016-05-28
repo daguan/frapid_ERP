@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Frapid.Account.DAL;
@@ -16,18 +17,18 @@ namespace Frapid.Account.Controllers
 {
     public class BaseAuthenticationController : WebsiteBuilderController
     {
-        protected bool CheckPassword(string tenant, string email, string plainPassword)
+        protected async Task<bool> CheckPasswordAsync(string tenant, string email, string plainPassword)
         {
-            var user = Users.Get(tenant, email);
+            var user = await Users.GetAsync(tenant, email);
 
             return user != null && PasswordManager.ValidateBcrypt(plainPassword, user.Password);
         }
 
-        protected ActionResult OnAuthenticated(LoginResult result, SignInInfo model = null)
+        protected async Task<ActionResult> OnAuthenticatedAsync(LoginResult result, SignInInfo model = null)
         {
             if (!result.Status)
             {
-                Thread.Sleep(new Random().Next(1, 5)*1000);
+                await Task.Delay(new Random().Next(1, 5)*1000);
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden, JsonConvert.SerializeObject(result));
             }
 
@@ -40,10 +41,10 @@ namespace Frapid.Account.Controllers
 
             var manager = new Provider(AppUsers.GetTenant(), applicationId, result.LoginId);
             var token = manager.GetToken();
-            string domain = DbConvention.GetDomain();
+            string domain = TenantConvention.GetDomain();
             string tenant = AppUsers.GetTenant();
 
-            AccessTokens.Save(tenant, token, this.RemoteUser.IpAddress, this.RemoteUser.UserAgent);
+            await AccessTokens.SaveAsync(tenant, token, this.RemoteUser.IpAddress, this.RemoteUser.UserAgent);
 
             var cookie = new HttpCookie("access_token")
             {

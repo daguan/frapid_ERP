@@ -10,8 +10,7 @@ namespace Frapid.i18n
 {
     public class ResourceManager
     {
-        private static readonly bool SuppressException =
-            ConfigurationManager.AppSettings["SuppressMissingResourceException"].ToUpperInvariant().Equals("TRUE");
+        private static readonly bool SuppressException = ConfigurationManager.AppSettings["SuppressMissingResourceException"].ToUpperInvariant().Equals("TRUE");
 
         /// <summary>
         ///     Gets the localized resource.
@@ -27,32 +26,31 @@ namespace Frapid.i18n
         /// <exception cref="MissingManifestResourceException">Thrown when the resource key is not found on the specified class.</exception>
         public static string GetString(string tenant, string resourceClass, string resourceKey, string cultureCode = null)
         {
-            if (string.IsNullOrWhiteSpace(resourceClass))
+            if(string.IsNullOrWhiteSpace(resourceClass))
             {
                 return resourceKey;
             }
 
             string result = TryGetResourceFromCache(tenant, resourceClass, resourceKey, cultureCode);
 
-            if (result != null)
+            if(result != null)
             {
                 return result;
             }
 
-            if (SuppressException)
+            if(SuppressException)
             {
                 return resourceKey;
             }
 
-            throw new MissingManifestResourceException("Resource " + resourceClass + "." + resourceKey +
-                                                       " was not found.");
+            throw new MissingManifestResourceException("Resource " + resourceClass + "." + resourceKey + " was not found.");
         }
 
         private static CultureInfo GetCulture(string cultureCode)
         {
             var culture = CultureManager.GetCurrent();
 
-            if (!string.IsNullOrWhiteSpace(cultureCode))
+            if(!string.IsNullOrWhiteSpace(cultureCode))
             {
                 culture = new CultureInfo(cultureCode);
             }
@@ -66,7 +64,7 @@ namespace Frapid.i18n
             var cacheItem = MemoryCache.Default.Get("Resources");
 
             // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
-            if (cacheItem is CacheItem)
+            if(cacheItem is CacheItem)
             {
                 var item = (CacheItem)cacheItem;
                 cache = (IDictionary<string, string>)item.Value;
@@ -77,7 +75,8 @@ namespace Frapid.i18n
             }
 
 
-            if (cache != null && cache.Count > 0)
+            if(cache != null &&
+               cache.Count > 0)
             {
                 return cache;
             }
@@ -99,29 +98,29 @@ namespace Frapid.i18n
         /// <returns></returns>
         public static string TryGetResourceFromCache(string tenant, string resourceClass, string resourceKey, string cultureCode = null)
         {
-            while (true)
+            while(true)
             {
-                var culture = GetCulture(cultureCode);                
+                var culture = GetCulture(cultureCode);
                 var cache = GetCache(tenant);
 
                 string cacheKey = resourceClass + "." + culture.Name + "." + resourceKey;
                 string result;
                 cache.TryGetValue(cacheKey, out result);
 
-                if (result != null)
+                if(result != null)
                 {
                     return result;
                 }
 
                 //Fall back to parent culture
-                while (true)
+                while(true)
                 {
-                    if (!string.IsNullOrWhiteSpace(culture.Parent.Name))
+                    if(!string.IsNullOrWhiteSpace(culture.Parent.Name))
                     {
                         cacheKey = resourceClass + "." + culture.Parent.Name + "." + resourceKey;
                         cache.TryGetValue(cacheKey, out result);
 
-                        if (result != null)
+                        if(result != null)
                         {
                             return result;
                         }

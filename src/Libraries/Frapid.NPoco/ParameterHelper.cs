@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -33,16 +33,16 @@ namespace Frapid.NPoco
                     // Look for a property on one of the arguments with this name
                     bool found = false;
                     arg_val = null;
-                    foreach (var o in args_src)
+                    foreach (object o in args_src)
                     {
-                        var dict = o as IDictionary;
+                        IDictionary dict = o as IDictionary;
                         if (dict != null)
                         {
                             Type[] arguments = dict.GetType().GetGenericArguments();
 
                             if (arguments[0] == typeof(string))
                             {
-                                var val = dict[param];
+                                object val = dict[param];
                                 if (val != null)
                                 {
                                     found = true;
@@ -52,7 +52,7 @@ namespace Frapid.NPoco
                             }
                         }
 
-                        var pi = o.GetType().GetProperty(param);
+                        PropertyInfo pi = o.GetType().GetProperty(param);
                         if (pi != null)
                         {
                             arg_val = pi.GetValue(o, null);
@@ -70,10 +70,10 @@ namespace Frapid.NPoco
                     (arg_val as string) == null &&
                     (arg_val as byte[]) == null)
                 {
-                    var sb = new StringBuilder();
-                    foreach (var i in arg_val as System.Collections.IEnumerable)
+                    StringBuilder sb = new StringBuilder();
+                    foreach (object i in arg_val as System.Collections.IEnumerable)
                     {
-                        var indexOfExistingValue = args_dest.IndexOf(i);
+                        int indexOfExistingValue = args_dest.IndexOf(i);
                         if (indexOfExistingValue >= 0)
                         {
                             sb.Append((sb.Length == 0 ? "@" : ",@") + indexOfExistingValue);
@@ -92,7 +92,7 @@ namespace Frapid.NPoco
                 }
                 else
                 {
-                    var indexOfExistingValue = args_dest.IndexOf(arg_val);
+                    int indexOfExistingValue = args_dest.IndexOf(arg_val);
                     if (indexOfExistingValue >= 0)
                         return "@" + indexOfExistingValue;
 

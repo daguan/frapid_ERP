@@ -51,7 +51,7 @@ namespace Frapid.Installer.Models
                 return installables;
             }
 
-            string root = PathMapper.MapPath("~/");
+            var root = PathMapper.MapPath("~/");
             var files = new List<string>();
 
             if (root != null)

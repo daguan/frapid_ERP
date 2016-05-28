@@ -74,7 +74,7 @@ namespace Frapid.Account.Emails
             var email = this.GetEmail(processor, this._resetDetails, subject, parsed);
 
             var queue = new MailQueueManager(tenant, email);
-            queue.Add();
+            await queue.AddAsync();
 
             await queue.ProcessMailQueueAsync(processor);
         }

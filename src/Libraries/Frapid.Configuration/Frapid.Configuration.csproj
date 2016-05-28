@@ -35,7 +35,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Npgsql, Version=2.2.6.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
@@ -53,6 +53,8 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -63,35 +65,53 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApprovedDomain.cs" />
+    <Compile Include="IDomainSerializer.cs" />
+    <Compile Include="TenantServices\DomainValidator.cs" />
+    <Compile Include="TenantServices\Contracts\ISslDomainCheck.cs" />
+    <Compile Include="TenantServices\SslDomainCheck.cs" />
+    <Compile Include="TenantServices\Contracts\IStaticDomainCheck.cs" />
+    <Compile Include="TenantServices\StaticDomainCheck.cs" />
+    <Compile Include="TenantServices\DomainFinder.cs" />
+    <Compile Include="TenantServices\Contracts\IDomainFinder.cs" />
+    <Compile Include="TenantServices\Contracts\ITenantLocator.cs" />
+    <Compile Include="TenantServices\TenantLocator.cs" />
+    <Compile Include="TenantServices\Contracts\ITenantValidator.cs" />
+    <Compile Include="TenantServices\BaseDomainLocator.cs" />
     <Compile Include="CacheConfig.cs" />
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="Db\HStore.cs" />
     <Compile Include="Db\Mapper.cs" />
     <Compile Include="Db\Sanitizer.cs" />
+    <Compile Include="TenantServices\DomainNameExtractor.cs" />
     <Compile Include="FrapidDbServer.cs" />
-    <Compile Include="DbConvention.cs" />
+    <Compile Include="TenantConvention.cs" />
     <Compile Include="DomainSerializer.cs" />
     <Compile Include="DbServer\IDbServer.cs" />
     <Compile Include="DbServer\PostgreSQL.cs" />
+    <Compile Include="TenantServices\Contracts\IBaseDomainLocator.cs" />
+    <Compile Include="TenantServices\Contracts\IDomainNameExtractor.cs" />
+    <Compile Include="TenantServices\ByConvention.cs" />
     <Compile Include="PathMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Db\DbProvider.cs" />
     <Compile Include="RedisConfig.cs" />
     <Compile Include="RedisConnectionString.cs" />
     <Compile Include="DbServer\SqlServer.cs" />
+    <Compile Include="TenantServices\Contracts\IByConvention.cs" />
+    <Compile Include="TenantServices\TenantValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Frapid.NPoco\Frapid.NPoco.csproj">
-      <Project>{58F77141-FFE7-45F6-B726-80100204E69D}</Project>
-      <Name>Frapid.NPoco</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Frapid.Framework\Frapid.Framework.csproj">
       <Project>{A4DEE358-3203-425C-80E9-8EBA0A01B73F}</Project>
       <Name>Frapid.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Frapid.NPoco\Frapid.NPoco.csproj">
+      <Project>{02196a31-8f0b-4d7b-bfaf-15bfc418cdbd}</Project>
+      <Name>Frapid.NPoco</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

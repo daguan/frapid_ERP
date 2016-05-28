@@ -23,7 +23,7 @@ namespace Frapid.i18n.Resources
 		{
 		    if (string.IsNullOrWhiteSpace(tenant))
 		    {
-		        tenant = DbConvention.GetTenant();
+		        tenant = TenantConvention.GetTenant();
 		    }
 
 			return ResourceManager.GetString(tenant, "<#=g.Key #>", key);

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Frapid.Configuration;
 using Frapid.Framework.Extensions;
 using Frapid.Installer.Helpers;
@@ -19,12 +20,12 @@ namespace Frapid.Installer.Tenant
 
         public string Url { get; set; }
 
-        public void Install()
+        public async Task InstallAsync()
         {
-            string tenant = DbConvention.GetTenant(this.Url);
+            var tenant = TenantConvention.GetTenant(this.Url);
             InstallerLog.Verbose($"Creating database {tenant}.");
             var db = new DbInstaller(tenant);
-            db.Install();
+            await db.InstallAsync();
 
             InstallerLog.Verbose("Getting installables.");
             var installables = GetInstallables(tenant);
@@ -33,13 +34,13 @@ namespace Frapid.Installer.Tenant
             foreach (var installable in installables)
             {
                 InstallerLog.Verbose($"Installing module {installable.ApplicationName}.");
-                new AppInstaller(tenant, tenant, installable).Install();
+                await new AppInstaller(tenant, tenant, installable).InstallAsync();
             }
         }
 
         private static List<string> GetDefaultInstallableNames(string tenant)
         {
-            string path = PathMapper.MapPath("~/Override/Configs/Applications.config");
+            var path = PathMapper.MapPath("~/Override/Configs/applications.json");
             var apps =
                 ConfigurationManager.ReadConfigurationValue(path, "InstalledApplications")
                     .Or("")
@@ -53,7 +54,7 @@ namespace Frapid.Installer.Tenant
         private static IEnumerable<Installable> GetInstallables(string tenant)
         {
             var defaultApps = GetDefaultInstallableNames(tenant);
-            string root = PathMapper.MapPath("~/");
+            var root = PathMapper.MapPath("~/");
             var installables = new List<Installable>();
 
             if (root == null)
@@ -61,7 +62,7 @@ namespace Frapid.Installer.Tenant
                 return installables;
             }
 
-            var files = Directory.GetFiles(root, "AppInfo.json", SearchOption.AllDirectories).ToList();
+            var files = Directory.GetFiles(root, "app_info.json", SearchOption.AllDirectories).ToList();
 
             foreach (var app in files
                 .Select(file => File.ReadAllText(file, Encoding.UTF8))

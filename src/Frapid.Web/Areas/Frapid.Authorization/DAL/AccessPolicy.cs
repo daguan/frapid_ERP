@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Dynamic;
+using System.Threading.Tasks;
 using Frapid.Authorization.DTO;
 using Frapid.Authorization.ViewModels;
 using Frapid.Configuration;
@@ -11,19 +11,17 @@ namespace Frapid.Authorization.DAL
 {
     public static class AccessPolicy
     {
-        public static IEnumerable<GroupEntityAccessPolicy> GetGroupPolicy(string tenant, int officeId, int roleId)
+        public static async Task<IEnumerable<GroupEntityAccessPolicy>> GetGroupPolicyAsync(string tenant, int officeId, int roleId)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
+            using(var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return
-                    db.FetchBy<GroupEntityAccessPolicy>(
-                        sql => sql.Where(x => x.OfficeId.Equals(officeId) && x.RoleId.Equals(roleId)));
+                return await db.Query<GroupEntityAccessPolicy>().Where(x => x.OfficeId.Equals(officeId) && x.RoleId.Equals(roleId)).ToListAsync();
             }
         }
 
-        public static void SaveGroupPolicy(string tenant, int officeId, int roleId, List<AccessPolicyInfo> policies)
+        public static async Task SaveGroupPolicyAsync(string tenant, int officeId, int roleId, List<AccessPolicyInfo> policies)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
+            using(var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 db.BeginTransaction();
 
@@ -32,41 +30,39 @@ namespace Frapid.Authorization.DAL
                 sql.Append("WHERE office_id = @0", officeId);
                 sql.Append("AND role_id = @0", roleId);
 
-                db.Execute(sql);
+                await db.ExecuteAsync(sql);
 
 
-                foreach (var policy in policies)
+                foreach(var policy in policies)
                 {
                     var poco = new GroupEntityAccessPolicy
-                    {
-                        EntityName = policy.EntityName,
-                        OfficeId = officeId,
-                        RoleId = roleId,
-                        AccessTypeId = policy.AccessTypeId,
-                        AllowAccess = policy.AllowAccess
-                    };
+                               {
+                                   EntityName = policy.EntityName,
+                                   OfficeId = officeId,
+                                   RoleId = roleId,
+                                   AccessTypeId = policy.AccessTypeId,
+                                   AllowAccess = policy.AllowAccess
+                               };
 
 
-                    db.Insert("auth.group_entity_access_policy", "group_entity_access_policy_id", true, poco);
+                    await db.InsertAsync("auth.group_entity_access_policy", "group_entity_access_policy_id", true, poco);
                 }
 
                 db.CompleteTransaction();
             }
         }
 
-        public static object GetPolicy(string tenant, int officeId, int userId)
+        public static async Task<IEnumerable<EntityAccessPolicy>> GetPolicyAsync(string tenant, int officeId, int userId)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
+            using(var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return
-                    db.FetchBy<EntityAccessPolicy>(
-                        sql => sql.Where(x => x.OfficeId.Equals(officeId) && x.UserId.Equals(userId)));
+                return await db.Query<EntityAccessPolicy>().Where(x => x.OfficeId.Equals(officeId) && x.UserId.Equals(userId)).ToListAsync();
             }
         }
 
-        public static void SavePolicy(string tenant, int officeId, int userId, List<AccessPolicyInfo> policies)
+        public static async Task SavePolicyAsync(string tenant, int officeId, int userId, List<AccessPolicyInfo> policies)
         {
-            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
+            using(var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 db.BeginTransaction();
 
@@ -75,22 +71,22 @@ namespace Frapid.Authorization.DAL
                 sql.Append("WHERE office_id = @0", officeId);
                 sql.Append("AND user_id = @0", userId);
 
-                db.Execute(sql);
+                await db.ExecuteAsync(sql);
 
 
-                foreach (var policy in policies)
+                foreach(var policy in policies)
                 {
                     var poco = new EntityAccessPolicy
-                    {
-                        EntityName = policy.EntityName,
-                        OfficeId = officeId,
-                        UserId = userId,
-                        AccessTypeId = policy.AccessTypeId,
-                        AllowAccess = policy.AllowAccess
-                    };
+                               {
+                                   EntityName = policy.EntityName,
+                                   OfficeId = officeId,
+                                   UserId = userId,
+                                   AccessTypeId = policy.AccessTypeId,
+                                   AllowAccess = policy.AllowAccess
+                               };
 
 
-                    db.Insert("auth.entity_access_policy", "entity_access_policy_id", true, poco);
+                    await db.InsertAsync("auth.entity_access_policy", "entity_access_policy_id", true, poco);
                 }
 
                 db.CompleteTransaction();

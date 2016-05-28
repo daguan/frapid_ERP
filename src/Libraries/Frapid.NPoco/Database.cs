@@ -1,62 +1,70 @@
-/* NPoco 2.0 - PetaPoco v4.0.3.12 - A Tiny ORMish thing for your POCO's.
- * Copyright 2011-2012.  All Rights Reserved.
- * 
+/* NPoco 3.0 - A Tiny ORMish thing for your POCO's.
+ * Copyright 2011-2015. All Rights Reserved.
+ *
  * Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Originally created by Brad Robinson (@toptensoftware)
- * 
- * Special thanks to Rob Conery (@robconery) for original inspiration (ie:Massive) and for 
- * use of Subsonic's T4 templates, Rob Sullivan (@DataChomp) for hard core DBA advice 
+ *
+ * Special thanks to Rob Conery (@robconery) for original inspiration (ie:Massive) and for
+ * use of Subsonic's T4 templates, Rob Sullivan (@DataChomp) for hard core DBA advice
  * and Adam Schroder (@schotime) for lots of suggestions, improvements and Oracle support
- * 
- * #define POCO_NO_DYNAMIC in your project settings on .NET 3.5
- * 
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
-using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using Frapid.NPoco.Expressions;
-using Frapid.NPoco.FluentMappings;
 using Frapid.NPoco.Linq;
+#if !DNXCORE50
+
+#endif
 
 namespace Frapid.NPoco
 {
-    public class Database : IDatabase
+    public partial class Database : IDatabase
     {
         public const bool DefaultEnableAutoSelect = true;
 
-        public Database(IDbConnection connection)
-            : this(connection, DatabaseType.Resolve(connection.GetType().Name, null))
+        public Database(DbConnection connection)
+            : this(connection, null, null, null, DefaultEnableAutoSelect)
         { }
 
-        public Database(IDbConnection connection, DatabaseType dbType)
-            : this(connection, dbType, null, DefaultEnableAutoSelect)
+        public Database(DbConnection connection, DatabaseType dbType)
+            : this(connection, dbType, null, null, DefaultEnableAutoSelect)
         { }
 
-        public Database(IDbConnection connection, DatabaseType dbType, IsolationLevel? isolationLevel)
-            : this(connection, dbType, isolationLevel, DefaultEnableAutoSelect)
+        public Database(DbConnection connection, DatabaseType dbType, IsolationLevel? isolationLevel)
+            : this(connection, dbType, null, isolationLevel, DefaultEnableAutoSelect)
         { }
 
-        public Database(IDbConnection connection, DatabaseType dbType, IsolationLevel? isolationLevel, bool enableAutoSelect)
+        public Database(DbConnection connection, DatabaseType dbType, DbProviderFactory dbProviderFactory)
+            : this(connection, dbType, dbProviderFactory, null, DefaultEnableAutoSelect)
+        { }
+
+        public Database(DbConnection connection, DatabaseType dbType, DbProviderFactory dbProviderFactory, IsolationLevel? isolationLevel)
+            : this(connection, dbType, dbProviderFactory, isolationLevel, DefaultEnableAutoSelect)
+        { }
+
+        public Database(DbConnection connection, DatabaseType dbType, DbProviderFactory dbProviderFactory, IsolationLevel? isolationLevel, bool enableAutoSelect)
         {
-            EnableAutoSelect = enableAutoSelect;
-            KeepConnectionAlive = true;
+            this.EnableAutoSelect = enableAutoSelect;
+            this.KeepConnectionAlive = true;
 
-            _sharedConnection = connection;
-            _connectionString = connection.ConnectionString;
-            _dbType = dbType;
-            _providerName = _dbType.GetProviderName();
-            _factory = DbProviderFactories.GetFactory(_providerName);
-            _isolationLevel = isolationLevel.HasValue ? isolationLevel.Value : _dbType.GetDefaultTransactionIsolationLevel();
-            _paramPrefix = _dbType.GetParameterPrefix(_connectionString);
+            this._sharedConnection = connection;
+            this._connectionString = connection.ConnectionString;
+            this._factory = dbProviderFactory;
+            string dbTypeName = (this._factory == null ? this._sharedConnection.GetType() : this._factory.GetType()).Name;
+            this._dbType = dbType ?? DatabaseType.Resolve(dbTypeName, null);
+            this._providerName = this._dbType.GetProviderName();
+            this._isolationLevel = isolationLevel.HasValue ? isolationLevel.Value : this._dbType.GetDefaultTransactionIsolationLevel();
+            this._paramPrefix = this._dbType.GetParameterPrefix(this._connectionString);
 
             // Cause it is an external connection ensure that the isolation level matches ours
             //using (var cmd = _sharedConnection.CreateCommand())
@@ -67,22 +75,31 @@ namespace Frapid.NPoco
             //}
         }
 
+#if !DNXCORE50
         public Database(string connectionString, string providerName)
             : this(connectionString, providerName, DefaultEnableAutoSelect)
         { }
 
-        public Database(string connectionString, string providerName, bool enableAutoSelect)
-        {
-            EnableAutoSelect = enableAutoSelect;
-            KeepConnectionAlive = false;
+        public Database(string connectionString, string providerName, IsolationLevel isolationLevel)
+            : this(connectionString, providerName, isolationLevel, DefaultEnableAutoSelect)
+        { }
 
-            _connectionString = connectionString;
-            _factory = DbProviderFactories.GetFactory(providerName);
-            var dbTypeName = (_factory == null ? _sharedConnection.GetType() : _factory.GetType()).Name;
-            _dbType = DatabaseType.Resolve(dbTypeName, providerName);
-            _providerName = providerName;
-            _isolationLevel = _dbType.GetDefaultTransactionIsolationLevel();
-            _paramPrefix = _dbType.GetParameterPrefix(_connectionString);
+        public Database(string connectionString, string providerName, bool enableAutoSelect)
+            : this(connectionString, providerName, null, enableAutoSelect)
+        { }
+
+        public Database(string connectionString, string providerName, IsolationLevel? isolationLevel, bool enableAutoSelect)
+        {
+            this.EnableAutoSelect = enableAutoSelect;
+            this.KeepConnectionAlive = false;
+
+            this._connectionString = connectionString;
+            this._factory = DbProviderFactories.GetFactory(providerName);
+            string dbTypeName = (this._factory == null ? this._sharedConnection.GetType() : this._factory.GetType()).Name;
+            this._dbType = DatabaseType.Resolve(dbTypeName, providerName);
+            this._providerName = providerName;
+            this._isolationLevel = isolationLevel.HasValue ? isolationLevel.Value : this._dbType.GetDefaultTransactionIsolationLevel();
+            this._paramPrefix = this._dbType.GetParameterPrefix(this._connectionString);
         }
 
         public Database(string connectionString, DatabaseType dbType)
@@ -90,54 +107,63 @@ namespace Frapid.NPoco
         { }
 
         public Database(string connectionString, DatabaseType dbType, IsolationLevel? isolationLevel)
-            : this(connectionString, dbType, isolationLevel, DefaultEnableAutoSelect)
+            : this(connectionString, dbType, isolationLevel,  DefaultEnableAutoSelect)
         { }
 
         public Database(string connectionString, DatabaseType dbType, IsolationLevel? isolationLevel, bool enableAutoSelect)
         {
-            EnableAutoSelect = enableAutoSelect;
-            KeepConnectionAlive = false;
+            this.EnableAutoSelect = enableAutoSelect;
+            this.KeepConnectionAlive = false;
 
-            _connectionString = connectionString;
-            _dbType = dbType;
-            _providerName = _dbType.GetProviderName();
-            _factory = DbProviderFactories.GetFactory(_dbType.GetProviderName());
-            _isolationLevel = isolationLevel.HasValue ? isolationLevel.Value : _dbType.GetDefaultTransactionIsolationLevel();
-            _paramPrefix = _dbType.GetParameterPrefix(_connectionString);
+            this._connectionString = connectionString;
+            this._dbType = dbType;
+            this._providerName = this._dbType.GetProviderName();
+            this._factory = DbProviderFactories.GetFactory(this._dbType.GetProviderName());
+            this._isolationLevel = isolationLevel.HasValue ? isolationLevel.Value : this._dbType.GetDefaultTransactionIsolationLevel();
+            this._paramPrefix = this._dbType.GetParameterPrefix(this._connectionString);
         }
+#endif
 
-        public Database(string connectionString, DbProviderFactory provider)
-            : this(connectionString, provider, DefaultEnableAutoSelect)
+        public Database(string connectionString, DatabaseType databaseType, DbProviderFactory provider)
+            : this(connectionString, databaseType, provider, null, DefaultEnableAutoSelect)
         { }
 
-        public Database(string connectionString, DbProviderFactory provider, bool enableAutoSelect)
+        public Database(string connectionString, DatabaseType databaseType, DbProviderFactory provider, IsolationLevel? isolationLevel = null, bool enableAutoSelect = DefaultEnableAutoSelect)
         {
-            EnableAutoSelect = enableAutoSelect;
-            KeepConnectionAlive = false;
+            this.EnableAutoSelect = enableAutoSelect;
+            this.KeepConnectionAlive = false;
 
-            _connectionString = connectionString;
-            _factory = provider;
-            var dbTypeName = (_factory == null ? _sharedConnection.GetType() : _factory.GetType()).Name;
-            _dbType = DatabaseType.Resolve(dbTypeName, null);
-            _providerName = _dbType.GetProviderName();
-            _isolationLevel = _dbType.GetDefaultTransactionIsolationLevel();
-            _paramPrefix = _dbType.GetParameterPrefix(_connectionString);
+            this._connectionString = connectionString;
+            this._factory = provider;
+            this._dbType = databaseType ?? DatabaseType.Resolve(this._factory.GetType().Name, null);
+            this._providerName = this._dbType.GetProviderName();
+            this._isolationLevel = isolationLevel.HasValue ? isolationLevel.Value : this._dbType.GetDefaultTransactionIsolationLevel();
+            this._paramPrefix = this._dbType.GetParameterPrefix(this._connectionString);
         }
 
+#if !DNXCORE50
         public Database(string connectionStringName)
             : this(connectionStringName, DefaultEnableAutoSelect)
         { }
 
+        public Database(string connectionStringName, IsolationLevel isolationLevel)
+            : this(connectionStringName, isolationLevel, DefaultEnableAutoSelect)
+        { }
+
         public Database(string connectionStringName, bool enableAutoSelect)
+            : this(connectionStringName, (IsolationLevel?) null, enableAutoSelect)
+        { }
+
+        public Database(string connectionStringName, IsolationLevel? isolationLevel,  bool enableAutoSelect)
         {
-            EnableAutoSelect = enableAutoSelect;
-            KeepConnectionAlive = false;
+            this.EnableAutoSelect = enableAutoSelect;
+            this.KeepConnectionAlive = false;
 
             // Use first?
             if (connectionStringName == "") connectionStringName = ConfigurationManager.ConnectionStrings[0].Name;
 
             // Work out connection string and provider name
-            var providerName = "System.Data.SqlClient";
+            string providerName = "System.Data.SqlClient";
             if (ConfigurationManager.ConnectionStrings[connectionStringName] != null)
             {
                 if (!string.IsNullOrEmpty(ConfigurationManager.ConnectionStrings[connectionStringName].ProviderName))
@@ -151,24 +177,28 @@ namespace Frapid.NPoco
             }
 
             // Store factory and connection string
-            _connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
-            _providerName = providerName;
-            _factory = DbProviderFactories.GetFactory(_providerName);
-            var dbTypeName = (_factory == null ? _sharedConnection.GetType() : _factory.GetType()).Name;
-            _dbType = DatabaseType.Resolve(dbTypeName, _providerName);
-            _isolationLevel = _dbType.GetDefaultTransactionIsolationLevel();
-            _paramPrefix = _dbType.GetParameterPrefix(_connectionString);
+            this._connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+            this._providerName = providerName;
+
+            this._factory = DbProviderFactories.GetFactory(this._providerName);
+            this._dbType = DatabaseType.Resolve(this._factory.GetType().Name, this._providerName);
+            this._isolationLevel = isolationLevel.HasValue ? isolationLevel.Value : this._dbType.GetDefaultTransactionIsolationLevel();
+            this._paramPrefix = this._dbType.GetParameterPrefix(this._connectionString);
         }
+#endif
 
         private readonly DatabaseType _dbType;
-        public DatabaseType DatabaseType { get { return _dbType; } }
-        public IsolationLevel IsolationLevel { get { return _isolationLevel; } }
+        public DatabaseType DatabaseType => this._dbType;
+        public IsolationLevel IsolationLevel => this._isolationLevel;
+
+        private IDictionary<string, object> _data;
+        public IDictionary<string, object> Data => this._data ?? (this._data = new Dictionary<string, object>());
 
         // Automatically close connection
         public void Dispose()
         {
-            if (KeepConnectionAlive) return;
-            CloseSharedConnection();
+            if (this.KeepConnectionAlive) return;
+            this.CloseSharedConnection();
         }
 
         // Set to true to keep the first opened connection alive until this object is disposed
@@ -177,36 +207,38 @@ namespace Frapid.NPoco
         private bool ShouldCloseConnectionAutomatically { get; set; }
 
         // Open a connection (can be nested)
-        public void OpenSharedConnection()
+        public IDatabase OpenSharedConnection()
         {
-            OpenSharedConnectionImp(false);
+            this.OpenSharedConnectionImp(false);
+            return this;
         }
 
         private void OpenSharedConnectionInternal()
         {
-            OpenSharedConnectionImp(true);
+            this.OpenSharedConnectionImp(true);
         }
 
         private void OpenSharedConnectionImp(bool isInternal)
         {
-            if (_sharedConnection != null && _sharedConnection.State != ConnectionState.Broken && _sharedConnection.State != ConnectionState.Closed)
+            if (this._sharedConnection != null && this._sharedConnection.State != ConnectionState.Broken && this._sharedConnection.State != ConnectionState.Closed)
                 return;
 
-            ShouldCloseConnectionAutomatically = isInternal;
+            this.ShouldCloseConnectionAutomatically = isInternal;
 
-            _sharedConnection = _factory.CreateConnection();
-            if (_sharedConnection == null) throw new Exception("SQL Connection failed to configure.");
+            this._sharedConnection = this._factory.CreateConnection();
+            if (this._sharedConnection == null) throw new Exception("SQL Connection failed to configure.");
 
-            _sharedConnection.ConnectionString = _connectionString;
+            this._sharedConnection.ConnectionString = this._connectionString;
 
-            if (_sharedConnection.State == ConnectionState.Broken)
+            if (this._sharedConnection.State == ConnectionState.Broken)
             {
-                _sharedConnection.Close();
+                this._sharedConnection.Close();
             }
 
-            if (_sharedConnection.State == ConnectionState.Closed)
+            if (this._sharedConnection.State == ConnectionState.Closed)
             {
-                _sharedConnection.Open();
+                this._sharedConnection.Open();
+                this._sharedConnection = this.OnConnectionOpenedInternal(this._sharedConnection);
 
                 //using (var cmd = _sharedConnection.CreateCommand())
                 //{
@@ -215,52 +247,51 @@ namespace Frapid.NPoco
                 //    cmd.ExecuteNonQuery();
                 //}
             }
-
-            _sharedConnection = OnConnectionOpened(_sharedConnection);
         }
 
         private void CloseSharedConnectionInternal()
         {
-            if (ShouldCloseConnectionAutomatically && _transaction == null)
-                CloseSharedConnection();
+            if (this.ShouldCloseConnectionAutomatically && this._transaction == null)
+                this.CloseSharedConnection();
         }
 
         // Close a previously opened connection
         public void CloseSharedConnection()
         {
-            if (KeepConnectionAlive) return;
-            if (_sharedConnection == null) return;
+            if (this.KeepConnectionAlive) return;
 
-            OnConnectionClosing(_sharedConnection);
+            if (this._transaction != null)
+            {
+                this._transaction.Dispose();
+                this._transaction = null;
+            }
 
-            _sharedConnection.Close();
-            _sharedConnection.Dispose();
-            _sharedConnection = null;
+            if (this._sharedConnection == null) return;
+
+            this.OnConnectionClosingInternal(this._sharedConnection);
+
+            this._sharedConnection.Close();
+            this._sharedConnection.Dispose();
+            this._sharedConnection = null;
         }
 
         public VersionExceptionHandling VersionException
         {
-            get { return _versionException; }
-            set { _versionException = value; }
+            get { return this._versionException; }
+            set { this._versionException = value; }
         }
 
         // Access to our shared connection
-        public IDbConnection Connection
-        {
-            get { return _sharedConnection; }
-        }
+        public DbConnection Connection => this._sharedConnection;
 
-        public IDbTransaction Transaction
-        {
-            get { return _transaction; }
-        }
+        public DbTransaction Transaction => this._transaction;
 
-        public IDataParameter CreateParameter()
+        public DbParameter CreateParameter()
         {
-            using (var conn = _sharedConnection ?? _factory.CreateConnection())
+            using (DbConnection conn = this._sharedConnection ?? this._factory.CreateConnection())
             {
                 if (conn == null) throw new Exception("DB Connection no longer active and failed to reset.");
-                using (var comm = conn.CreateCommand())
+                using (DbCommand comm = conn.CreateCommand())
                 {
                     return comm.CreateParameter();
                 }
@@ -270,7 +301,7 @@ namespace Frapid.NPoco
         // Helper to create a transaction scope
         public ITransaction GetTransaction()
         {
-            return GetTransaction(_isolationLevel);
+            return this.GetTransaction(this._isolationLevel);
         }
 
         public ITransaction GetTransaction(IsolationLevel isolationLevel)
@@ -278,36 +309,62 @@ namespace Frapid.NPoco
             return new Transaction(this, isolationLevel);
         }
 
-        public void SetTransaction(IDbTransaction tran)
+        public void SetTransaction(DbTransaction tran)
         {
-            _transaction = tran;
+            this._transaction = tran;
         }
 
-        // Use by derived repo generated by T4 templates
-        protected virtual void OnBeginTransaction()
+        private void OnBeginTransactionInternal()
         {
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine("Created new transaction using isolation level of " + _transaction.IsolationLevel + ".");
+            System.Diagnostics.Debug.WriteLine("Created new transaction using isolation level of " + this._transaction.IsolationLevel + ".");
 #endif
+            this.OnBeginTransaction();
+            foreach (ITransactionInterceptor interceptor in this.Interceptors.OfType<ITransactionInterceptor>())
+            {
+                interceptor.OnBeginTransaction(this);
+            }
         }
 
-        protected virtual void OnAbortTransaction()
+        protected virtual void OnBeginTransaction()
+        {
+        }
+
+        private void OnAbortTransactionInternal()
         {
 #if DEBUG
             System.Diagnostics.Debug.WriteLine("Rolled back a transaction");
 #endif
+            this.OnAbortTransaction();
+            foreach (ITransactionInterceptor interceptor in this.Interceptors.OfType<ITransactionInterceptor>())
+            {
+                interceptor.OnAbortTransaction(this);
+            }
         }
 
-        protected virtual void OnCompleteTransaction()
+        protected virtual void OnAbortTransaction()
+        {
+        }
+
+        private void OnCompleteTransactionInternal()
         {
 #if DEBUG
             System.Diagnostics.Debug.WriteLine("Committed the transaction");
 #endif
+            this.OnCompleteTransaction();
+            foreach (ITransactionInterceptor interceptor in this.Interceptors.OfType<ITransactionInterceptor>())
+            {
+                interceptor.OnCompleteTransaction(this);
+            }
+        }
+
+        protected virtual void OnCompleteTransaction()
+        {
         }
 
         public void BeginTransaction()
         {
-            BeginTransaction(_isolationLevel);
+            this.BeginTransaction(this._isolationLevel);
         }
 
         // Start a new transaction, can be nested, every call must be
@@ -315,88 +372,91 @@ namespace Frapid.NPoco
         // Use `using (var scope=db.Transaction) { scope.Complete(); }` to ensure correct semantics
         public void BeginTransaction(IsolationLevel isolationLevel)
         {
-            if (_transaction == null)
+            if (this._transaction == null)
             {
-                TransactionCount = 0;
-                OpenSharedConnectionInternal();
-                _transaction = _sharedConnection.BeginTransaction(isolationLevel);
-                OnBeginTransaction();
+                this.TransactionCount = 0;
+                this.OpenSharedConnectionInternal();
+                this._transaction = this._sharedConnection.BeginTransaction(isolationLevel);
+                this.OnBeginTransactionInternal();
             }
 
-            if (_transaction != null)
+            if (this._transaction != null)
             {
-                TransactionCount++;
+                this.TransactionCount++;
             }
         }
 
         // Abort the entire outer most transaction scope
         public void AbortTransaction()
         {
-            TransactionIsAborted = true;
-            AbortTransaction(false);
+            this.TransactionIsAborted = true;
+            this.AbortTransaction(false);
         }
 
         public void AbortTransaction(bool fromComplete)
         {
-            if (_transaction == null)
+            if (this._transaction == null)
+            {
+                this.TransactionIsAborted = false;
                 return;
+            }
 
             if (fromComplete == false)
             {
-                TransactionCount--;
-                if (TransactionCount >= 1)
+                this.TransactionCount--;
+                if (this.TransactionCount >= 1)
                 {
-                    TransactionIsAborted = true;
+                    this.TransactionIsAborted = true;
                     return;
                 }
             }
 
-            if (TransactionIsOk())
-                _transaction.Rollback();
+            if (this.TransactionIsOk())
+                this._transaction.Rollback();
 
-            if (_transaction != null)
-                _transaction.Dispose();
+            if (this._transaction != null)
+                this._transaction.Dispose();
 
-            _transaction = null;
-            TransactionIsAborted = false;
+            this._transaction = null;
+            this.TransactionIsAborted = false;
 
             // You cannot continue to use a connection after a transaction has been rolled back
-            if (_sharedConnection != null)
+            if (this._sharedConnection != null)
             {
-                _sharedConnection.Close();
-                _sharedConnection.Open();
+                this._sharedConnection.Close();
+                this._sharedConnection.Open();
             }
 
-            OnAbortTransaction();
-            CloseSharedConnectionInternal();
+            this.OnAbortTransactionInternal();
+            this.CloseSharedConnectionInternal();
         }
 
         // Complete the transaction
         public void CompleteTransaction()
         {
-            if (_transaction == null)
+            if (this._transaction == null)
                 return;
 
-            TransactionCount--;
-            if (TransactionCount >= 1)
+            this.TransactionCount--;
+            if (this.TransactionCount >= 1)
                 return;
 
-            if (TransactionIsAborted)
+            if (this.TransactionIsAborted)
             {
-                AbortTransaction(true);
+                this.AbortTransaction(true);
                 return;
             }
 
-            if (TransactionIsOk())
-                _transaction.Commit();
+            if (this.TransactionIsOk())
+                this._transaction.Commit();
 
-            if (_transaction != null)
-                _transaction.Dispose();
+            if (this._transaction != null)
+                this._transaction.Dispose();
 
-            _transaction = null;
+            this._transaction = null;
 
-            OnCompleteTransaction();
-            CloseSharedConnectionInternal();
+            this.OnCompleteTransactionInternal();
+            this.CloseSharedConnectionInternal();
         }
 
         internal bool TransactionIsAborted { get; set; }
@@ -404,35 +464,34 @@ namespace Frapid.NPoco
 
         private bool TransactionIsOk()
         {
-            return _sharedConnection != null
-                && _transaction != null
-                && _transaction.Connection != null
-                && _transaction.Connection.State == ConnectionState.Open;
+            return this._sharedConnection != null
+                && this._transaction != null
+                && this._transaction.Connection != null
+                && this._transaction.Connection.State == ConnectionState.Open;
         }
 
         // Add a parameter to a DB command
-        public virtual void AddParameter(IDbCommand cmd, object value)
+        public virtual void AddParameter(DbCommand cmd, object value)
         {
             // Convert value to from poco type to db type
-            if (Mapper != null && value != null)
+            if (this.Mappers != null && value != null)
             {
-                var fn = Mapper.GetParameterConverter(value.GetType());
-                if (fn != null)
-                    value = fn(value);
+                value = this.Mappers.FindAndExecute(x => x.GetParameterConverter(cmd, value.GetType()), value);
             }
 
             // Support passed in parameters
-            var idbParam = value as IDbDataParameter;
+            DbParameter idbParam = value as DbParameter;
             if (idbParam != null)
             {
-                idbParam.ParameterName = string.Format("{0}{1}", _paramPrefix, cmd.Parameters.Count);
+                idbParam.ParameterName = string.Format("{0}{1}", this._paramPrefix, cmd.Parameters.Count);
                 cmd.Parameters.Add(idbParam);
                 return;
             }
-            var p = cmd.CreateParameter();
-            p.ParameterName = string.Format("{0}{1}", _paramPrefix, cmd.Parameters.Count);
 
-            var dbtypeSet = false;
+            DbParameter p = cmd.CreateParameter();
+            p.ParameterName = string.Format("{0}{1}", this._paramPrefix, cmd.Parameters.Count);
+
+            bool dbtypeSet = false;
 
             if (value == null)
             {
@@ -441,11 +500,11 @@ namespace Frapid.NPoco
             else
             {
                 // Give the database type first crack at converting to DB required type
-                value = _dbType.MapParameterValue(value);
+                value = this._dbType.MapParameterValue(value);
 
-                var t = value.GetType();
-                var underlyingT = Nullable.GetUnderlyingType(t);
-                if (t.IsEnum || (underlyingT != null && underlyingT.IsEnum))		// PostgreSQL .NET driver wont cast enum to int
+                Type t = value.GetType();
+                Type underlyingT = Nullable.GetUnderlyingType(t);
+                if (t.GetTypeInfo().IsEnum || (underlyingT != null && underlyingT.GetTypeInfo().IsEnum))		// PostgreSQL .NET driver wont cast enum to int
                 {
                     p.Value = (int)value;
                 }
@@ -458,7 +517,7 @@ namespace Frapid.NPoco
                 }
                 else if (t == typeof(string))
                 {
-                    var strValue = value as string;
+                    string strValue = value as string;
                     if (strValue == null)
                     {
                         p.Size = 0;
@@ -478,7 +537,7 @@ namespace Frapid.NPoco
                 }
                 else if (t == typeof(AnsiString))
                 {
-                    var ansistrValue = value as AnsiString;
+                    AnsiString ansistrValue = value as AnsiString;
                     if (ansistrValue == null)
                     {
                         p.Size = 0;
@@ -512,7 +571,7 @@ namespace Frapid.NPoco
 
                 if (!dbtypeSet)
                 {
-                    var dbType = _dbType.LookupDbType(p.Value.GetTheType(), p.ParameterName);
+                    DbType? dbType = this._dbType.LookupDbType(p.Value.GetTheType(), p.ParameterName);
                     if (dbType.HasValue)
                     {
                         p.DbType = dbType.Value;
@@ -524,59 +583,120 @@ namespace Frapid.NPoco
         }
 
         // Create a command
-        public virtual IDbCommand CreateCommand(IDbConnection connection, string sql, params object[] args)
+        public virtual DbCommand CreateCommand(DbConnection connection, string sql, params object[] args)
         {
             // Perform parameter prefix replacements
-            if (_paramPrefix != "@")
-                sql = ParameterHelper.rxParamsPrefix.Replace(sql, m => _paramPrefix + m.Value.Substring(1));
+            if (this._paramPrefix != "@")
+                sql = ParameterHelper.rxParamsPrefix.Replace(sql, m => this._paramPrefix + m.Value.Substring(1));
             sql = sql.Replace("@@", "@");		   // <- double @@ escapes a single @
 
             // Create the command and add parameters
-            IDbCommand cmd = connection.CreateCommand();
+            DbCommand cmd = connection.CreateCommand();
             cmd.Connection = connection;
             cmd.CommandText = sql;
-            cmd.Transaction = _transaction;
+            cmd.Transaction = this._transaction;
 
-            foreach (var item in args)
+            foreach (object item in args)
             {
-                AddParameter(cmd, item);
+                this.AddParameter(cmd, item);
             }
 
             // Notify the DB type
-            _dbType.PreExecute(cmd);
+            this._dbType.PreExecute(cmd);
 
             return cmd;
         }
 
-        // Override this to log/capture exceptions
-        protected virtual void OnException(Exception x)
+        protected virtual void OnException(Exception exception)
         {
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine("***** EXCEPTION *****" + Environment.NewLine + Environment.NewLine + x.Message + Environment.NewLine + x.StackTrace);
-            System.Diagnostics.Debug.WriteLine("***** LAST COMMAND *****" + Environment.NewLine + Environment.NewLine + LastCommand);
-            System.Diagnostics.Debug.WriteLine("***** CONN INFO *****" + Environment.NewLine + Environment.NewLine + "Provider: " + _providerName + Environment.NewLine + "Connection String: " + _connectionString + Environment.NewLine + "DB Type: " + _dbType);
-#endif
         }
 
-        // Override this to log commands, or modify command before execution
-        protected virtual IDbConnection OnConnectionOpened(IDbConnection conn)
+        // Override this to log/capture exceptions
+        private void OnExceptionInternal(Exception exception)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("***** EXCEPTION *****" + Environment.NewLine + Environment.NewLine + exception.Message + Environment.NewLine + exception.StackTrace);
+            System.Diagnostics.Debug.WriteLine("***** LAST COMMAND *****" + Environment.NewLine + Environment.NewLine + this.LastCommand);
+            System.Diagnostics.Debug.WriteLine("***** CONN INFO *****" + Environment.NewLine + Environment.NewLine + "Provider: " + this._providerName + Environment.NewLine + "Connection String: " + this._connectionString + Environment.NewLine + "DB Type: " + this._dbType);
+#endif
+            this.OnException(exception);
+            foreach (IExceptionInterceptor interceptor in this.Interceptors.OfType<IExceptionInterceptor>())
+            {
+                interceptor.OnException(this, exception);
+            }
+        }
+
+        protected virtual DbConnection OnConnectionOpened(DbConnection conn)
         {
             return conn;
         }
 
-        protected virtual void OnConnectionClosing(IDbConnection conn)
+        private DbConnection OnConnectionOpenedInternal(DbConnection conn)
+        {
+            DbConnection newConnection = this.OnConnectionOpened(conn);
+            foreach (IConnectionInterceptor interceptor in this.Interceptors.OfType<IConnectionInterceptor>())
+            {
+                newConnection = interceptor.OnConnectionOpened(this, newConnection);
+            }
+            return newConnection;
+        }
+
+        protected virtual void OnConnectionClosing(DbConnection conn)
+        {
+        }
+
+        private void OnConnectionClosingInternal(DbConnection conn)
+        {
+            this.OnConnectionClosing(conn);
+            foreach (IConnectionInterceptor interceptor in this.Interceptors.OfType<IConnectionInterceptor>())
+            {
+                interceptor.OnConnectionClosing(this, conn);
+            }
+        }
+
+        protected virtual void OnExecutingCommand(DbCommand cmd)
         {
 
         }
 
-        protected virtual void OnExecutingCommand(IDbCommand cmd)
+        private void OnExecutingCommandInternal(DbCommand cmd)
+        {
+            this.OnExecutingCommand(cmd);
+            foreach (IExecutingInterceptor interceptor in this.Interceptors.OfType<IExecutingInterceptor>())
+            {
+                interceptor.OnExecutingCommand(this, cmd);
+            }
+        }
+
+        protected virtual void OnExecutedCommand(DbCommand cmd)
         {
 
         }
+
+        private void OnExecutedCommandInternal(DbCommand cmd)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(this.LastCommand);
+#endif
+            this.OnExecutedCommand(cmd);
+            foreach (IExecutingInterceptor interceptor in this.Interceptors.OfType<IExecutingInterceptor>())
+            {
+                interceptor.OnExecutedCommand(this, cmd);
+            }
+        }
+
+        private List<IInterceptor> _interceptors = new List<IInterceptor>();
+        public List<IInterceptor> Interceptors => this._interceptors;
 
         protected virtual bool OnInserting(InsertContext insertContext)
         {
             return true;
+        }
+
+        private bool OnInsertingInternal(InsertContext insertContext)
+        {
+            bool result = this.OnInserting(insertContext);
+            return result && this.Interceptors.OfType<IDataInterceptor>().All(x => x.OnInserting(this, insertContext));
         }
 
         protected virtual bool OnUpdating(UpdateContext updateContext)
@@ -584,84 +704,89 @@ namespace Frapid.NPoco
             return true;
         }
 
+        private bool OnUpdatingInternal(UpdateContext updateContext)
+        {
+            bool result = this.OnUpdating(updateContext);
+            return result && this.Interceptors.OfType<IDataInterceptor>().All(x => x.OnUpdating(this, updateContext));
+        }
+
         protected virtual bool OnDeleting(DeleteContext deleteContext)
         {
             return true;
         }
 
-        protected virtual void OnExecutedCommand(IDbCommand cmd)
+        private bool OnDeletingInternal(DeleteContext deleteContext)
         {
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine(LastCommand);
-#endif
+            bool result = this.OnDeleting(deleteContext);
+            return result && this.Interceptors.OfType<IDataInterceptor>().All(x => x.OnDeleting(this, deleteContext));
         }
 
         // Execute a non-query command
         public int Execute(string sql, params object[] args)
         {
-            return Execute(new Sql(sql, args));
+            return this.Execute(new Sql(sql, args));
         }
 
         public int Execute(Sql Sql)
         {
-            var sql = Sql.SQL;
-            var args = Sql.Arguments;
+            string sql = Sql.SQL;
+            object[] args = Sql.Arguments;
 
             try
             {
-                OpenSharedConnectionInternal();
-                using (var cmd = CreateCommand(_sharedConnection, sql, args))
+                this.OpenSharedConnectionInternal();
+                using (DbCommand cmd = this.CreateCommand(this._sharedConnection, sql, args))
                 {
-                    var result = ExecuteNonQueryHelper(cmd);
+                    int result = this.ExecuteNonQueryHelper(cmd);
                     return result;
                 }
             }
             catch (Exception x)
             {
-                OnException(x);
+                this.OnExceptionInternal(x);
                 throw;
             }
             finally
             {
-                CloseSharedConnectionInternal();
+                this.CloseSharedConnectionInternal();
             }
         }
 
         // Execute and cast a scalar property
         public T ExecuteScalar<T>(string sql, params object[] args)
         {
-            return ExecuteScalar<T>(new Sql(sql, args));
+            return this.ExecuteScalar<T>(new Sql(sql, args));
         }
 
         public T ExecuteScalar<T>(Sql Sql)
         {
-            var sql = Sql.SQL;
-            var args = Sql.Arguments;
+            string sql = Sql.SQL;
+            object[] args = Sql.Arguments;
 
             try
             {
-                OpenSharedConnectionInternal();
-                using (var cmd = CreateCommand(_sharedConnection, sql, args))
+                this.OpenSharedConnectionInternal();
+                using (DbCommand cmd = this.CreateCommand(this._sharedConnection, sql, args))
                 {
-                    object val = ExecuteScalarHelper(cmd);
+                    object val = this.ExecuteScalarHelper(cmd);
 
                     if (val == null || val == DBNull.Value)
                         return default(T);
 
-                    Type t = typeof(T);
+                    Type t = typeof (T);
                     Type u = Nullable.GetUnderlyingType(t);
 
-                    return (T)Convert.ChangeType(val, u ?? t);
+                    return (T) Convert.ChangeType(val, u ?? t);
                 }
             }
             catch (Exception x)
             {
-                OnException(x);
+                this.OnExceptionInternal(x);
                 throw;
             }
             finally
             {
-                CloseSharedConnectionInternal();
+                this.CloseSharedConnectionInternal();
             }
         }
 
@@ -670,110 +795,89 @@ namespace Frapid.NPoco
         // Return a typed list of pocos
         public List<T> Fetch<T>(string sql, params object[] args)
         {
-            return Fetch<T>(new Sql(sql, args));
+            return this.Fetch<T>(new Sql(sql, args));
         }
 
         public List<T> Fetch<T>(Sql sql)
         {
-            return Query<T>(sql).ToList();
+            return this.Query<T>(sql).ToList();
         }
 
         public List<T> Fetch<T>()
         {
-            return Fetch<T>("");
-        }
-
-        public List<T> FetchWhere<T>(Expression<Func<T, bool>> expression)
-        {
-            var ev = _dbType.ExpressionVisitor<T>(this, true);
-            var query = ev.Where(expression);
-            var sql = query.Context.ToSelectStatement();
-            return Fetch<T>(sql, query.Context.Params.ToArray());
-        }
-
-        public List<T> FetchBy<T>(Func<SqlExpression<T>, SqlExpression<T>> expression)
-        {
-            var ev = _dbType.ExpressionVisitor<T>(this, true);
-            var query = expression(ev);
-            var sql = query.Context.ToSelectStatement();
-            return Fetch<T>(sql, query.Context.Params.ToArray());
+            return this.Fetch<T>("");
         }
 
         public void BuildPageQueries<T>(long skip, long take, string sql, ref object[] args, out string sqlCount, out string sqlPage)
         {
             // Add auto select clause
-            if (EnableAutoSelect)
-                sql = AutoSelectHelper.AddSelectClause<T>(this, sql);
+            if (this.EnableAutoSelect)
+                sql = AutoSelectHelper.AddSelectClause(this, typeof(T), sql);
 
             // Split the SQL
             PagingHelper.SQLParts parts;
             if (!PagingHelper.SplitSQL(sql, out parts)) throw new Exception("Unable to parse SQL statement for paged query");
 
-            sqlPage = _dbType.BuildPageQuery(skip, take, parts, ref args);
+            sqlPage = this._dbType.BuildPageQuery(skip, take, parts, ref args);
             sqlCount = parts.sqlCount;
         }
 
-        // Fetch a page	
-        public Page<T> Page<T>(long page, long itemsPerPage, string sql, params object[] args)
-        {
-            return Page<T>(new[] { typeof(T) }, null, page, itemsPerPage, sql, args);
-        }
-
+        // Fetch a page
         public Page<T> Page<T>(long page, long itemsPerPage, Sql sql)
         {
-            return Page<T>(page, itemsPerPage, sql.SQL, sql.Arguments);
+            return this.Page<T>(page, itemsPerPage, sql.SQL, sql.Arguments);
         }
 
         public List<T> Fetch<T>(long page, long itemsPerPage, string sql, params object[] args)
         {
-            return SkipTake<T>((page - 1) * itemsPerPage, itemsPerPage, sql, args);
+            return this.SkipTake<T>((page - 1) * itemsPerPage, itemsPerPage, sql, args);
         }
 
         public List<T> Fetch<T>(long page, long itemsPerPage, Sql sql)
         {
-            return SkipTake<T>((page - 1) * itemsPerPage, itemsPerPage, sql.SQL, sql.Arguments);
+            return this.SkipTake<T>((page - 1) * itemsPerPage, itemsPerPage, sql.SQL, sql.Arguments);
         }
 
         public List<T> SkipTake<T>(long skip, long take, string sql, params object[] args)
         {
             string sqlCount, sqlPage;
-            BuildPageQueries<T>(skip, take, sql, ref args, out sqlCount, out sqlPage);
-            return Fetch<T>(sqlPage, args);
+            this.BuildPageQueries<T>(skip, take, sql, ref args, out sqlCount, out sqlPage);
+            return this.Fetch<T>(sqlPage, args);
         }
 
         public List<T> SkipTake<T>(long skip, long take, Sql sql)
         {
-            return SkipTake<T>(skip, take, sql.SQL, sql.Arguments);
+            return this.SkipTake<T>(skip, take, sql.SQL, sql.Arguments);
         }
 
         public Dictionary<TKey, TValue> Dictionary<TKey, TValue>(Sql Sql)
         {
-            return Dictionary<TKey, TValue>(Sql.SQL, Sql.Arguments);
+            return this.Dictionary<TKey, TValue>(Sql.SQL, Sql.Arguments);
         }
 
         public Dictionary<TKey, TValue> Dictionary<TKey, TValue>(string sql, params object[] args)
         {
-            var newDict = new Dictionary<TKey, TValue>();
+            Dictionary<TKey, TValue> newDict = new Dictionary<TKey, TValue>();
             bool isConverterSet = false;
             Func<object, object> converter1 = x => x, converter2 = x => x;
 
-            foreach (var line in Query<Dictionary<string, object>>(sql, args))
+            foreach (Dictionary<string, object> line in this.Query<Dictionary<string, object>>(sql, args))
             {
                 object key = line.ElementAt(0).Value;
                 object value = line.ElementAt(1).Value;
 
                 if (isConverterSet == false)
                 {
-                    converter1 = MappingFactory.GetConverter(Mapper, null, typeof(TKey), key.GetType()) ?? (x => x);
-                    converter2 = MappingFactory.GetConverter(Mapper, null, typeof(TValue), value.GetType()) ?? (x => x);
+                    converter1 = MappingHelper.GetConverter(this.Mappers, null, typeof(TKey), key.GetType()) ?? (x => x);
+                    converter2 = (value != null ? MappingHelper.GetConverter(this.Mappers, null, typeof(TValue), value.GetType()) : null) ?? (x => x);
                     isConverterSet = true;
                 }
 
-                var keyConverted = (TKey)Convert.ChangeType(converter1(key), typeof(TKey));
+                TKey keyConverted = (TKey)Convert.ChangeType(converter1(key), typeof(TKey));
 
-                var valueType = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
-                var valConv = converter2(value);
-                var valConverted = valConv != null ? (TValue)Convert.ChangeType(valConv, valueType) : default(TValue);
+                Type valueType = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
+                object valConv = converter2(value);
+                TValue valConverted = valConv != null ? (TValue)Convert.ChangeType(valConv, valueType) : default(TValue);
 
                 if (keyConverted != null)
                 {
@@ -786,12 +890,111 @@ namespace Frapid.NPoco
         // Return an enumerable collection of pocos
         public IEnumerable<T> Query<T>(string sql, params object[] args)
         {
-            return Query<T>(new Sql(sql, args));
+            return this.Query<T>(new Sql(sql, args));
         }
 
         public IEnumerable<T> Query<T>(Sql Sql)
         {
-            return Query(default(T), Sql);
+            return this.Query(default(T), Sql);
+        }
+
+        private IEnumerable<T> Read<T>(Type type, object instance, DbDataReader r)
+        {
+            try
+            {
+                using (r)
+                {
+                    PocoData pd = this.PocoDataFactory.ForType(type);
+                    MappingFactory factory = new MappingFactory(pd, r);
+                    while (true)
+                    {
+                        T poco;
+                        try
+                        {
+                            if (!r.Read()) yield break;
+                            poco = (T)factory.Map(r, instance);
+                        }
+                        catch (Exception x)
+                        {
+                            this.OnExceptionInternal(x);
+                            throw;
+                        }
+
+                        yield return poco;
+                    }
+                }
+            }
+            finally
+            {
+                this.CloseSharedConnectionInternal();
+            }
+        }
+
+        private IEnumerable<T> ReadOneToMany<T>(T instance, DbDataReader r, Expression<Func<T, IList>> listExpression, Func<T, object[]> idFunc)
+        {
+            Func<T, IList> listFunc = null;
+            PocoMember pocoMember = null;
+            PocoMember foreignMember = null;
+
+            try
+            {
+                using (r)
+                {
+                    PocoData pocoData = this.PocoDataFactory.ForType(typeof (T));
+                    if (listExpression != null)
+                    {
+                        idFunc = idFunc ?? (x => pocoData.GetPrimaryKeyValues(x));
+                        listFunc = listExpression.Compile();
+                        string key = PocoColumn.GenerateKey(MemberChainHelper.GetMembers(listExpression));
+                        pocoMember = pocoData.Members.FirstOrDefault(x => x.Name == key);
+                        foreignMember = pocoMember != null ? pocoMember.PocoMemberChildren.FirstOrDefault(x => x.Name == pocoMember.ReferenceMemberName && x.ReferenceType == ReferenceType.Foreign) : null;
+                    }
+
+                    MappingFactory factory = new MappingFactory(pocoData, r);
+                    object prevPoco = null;
+
+                    while (true)
+                    {
+                        T poco;
+                        try
+                        {
+                            if (!r.Read()) break;
+                            poco = (T) factory.Map(r, instance);
+                        }
+                        catch (Exception x)
+                        {
+                            this.OnExceptionInternal(x);
+                            throw;
+                        }
+
+                        if (prevPoco != null)
+                        {
+                            if (listFunc != null
+                                && pocoMember != null
+                                && idFunc(poco).SequenceEqual(idFunc((T) prevPoco)))
+                            {
+                                OneToManyHelper.SetListValue(listFunc, pocoMember, prevPoco, poco);
+                                continue;
+                            }
+
+                            OneToManyHelper.SetForeignList(listFunc, foreignMember, prevPoco);
+                            yield return (T)prevPoco;
+                        }
+
+                        prevPoco = poco;
+                    }
+
+                    if (prevPoco != null)
+                    {
+                        OneToManyHelper.SetForeignList(listFunc, foreignMember, prevPoco);
+                        yield return (T)prevPoco;
+                    }
+                }
+            }
+            finally
+            {
+                this.CloseSharedConnectionInternal();
+            }
         }
 
         public IQueryProviderWithIncludes<T> Query<T>()
@@ -801,277 +1004,189 @@ namespace Frapid.NPoco
 
         private IEnumerable<T> Query<T>(T instance, Sql Sql)
         {
-            var sql = Sql.SQL;
-            var args = Sql.Arguments;
+            return this.QueryImp(instance, null, null, Sql);
+        }
 
-            if (EnableAutoSelect) sql = AutoSelectHelper.AddSelectClause<T>(this, sql);
+        public List<object> Fetch(Type type, string sql, params object[] args)
+        {
+            return this.Fetch(type, new Sql(sql, args));
+        }
+
+        public List<object> Fetch(Type type, Sql Sql)
+        {
+            return this.Query(type, Sql).ToList();
+        }
+
+        public IEnumerable<object> Query(Type type, string sql, params object[] args)
+        {
+            return this.Query(type, new Sql(sql, args));
+        }
+
+        public IEnumerable<object> Query(Type type, Sql Sql)
+        {
+            string sql = Sql.SQL;
+            object[] args = Sql.Arguments;
+
+            if (this.EnableAutoSelect) sql = AutoSelectHelper.AddSelectClause(this, type, sql);
 
             try
             {
-                OpenSharedConnectionInternal();
-                using (var cmd = CreateCommand(_sharedConnection, sql, args))
+                this.OpenSharedConnectionInternal();
+                using (DbCommand cmd = this.CreateCommand(this._sharedConnection, sql, args))
                 {
-                    IDataReader r;
-                    var pd = PocoDataFactory.ForType(typeof(T));
-                    try
+                    DbDataReader r = this.ExecuteDataReader(cmd);
+                    IEnumerable<object> read = this.Read<object>(type, null, r);
+                    foreach (object item in read)
                     {
-                        r = ExecuteReaderHelper(cmd);
-                    }
-                    catch (Exception x)
-                    {
-                        OnException(x);
-                        throw;
-                    }
-
-                    using (r)
-                    {
-                        var factory = pd.MappingFactory.GetFactory(0, r.FieldCount, r, instance) as Func<IDataReader, T, T>;
-                        while (true)
-                        {
-                            T poco;
-                            try
-                            {
-                                if (!r.Read()) yield break;
-                                poco = factory(r, instance);
-                            }
-                            catch (Exception x)
-                            {
-                                OnException(x);
-                                throw;
-                            }
-
-                            yield return poco;
-                        }
+                        yield return item;
                     }
                 }
             }
             finally
             {
-                CloseSharedConnectionInternal();
+                this.CloseSharedConnectionInternal();
             }
         }
 
-        // Multi Fetch
-        public List<TRet> Fetch<T1, T2, TRet>(Func<T1, T2, TRet> cb, string sql, params object[] args) { return Query(cb, sql, args).ToList(); }
-        public List<TRet> Fetch<T1, T2, T3, TRet>(Func<T1, T2, T3, TRet> cb, string sql, params object[] args) { return Query(cb, sql, args).ToList(); }
-        public List<TRet> Fetch<T1, T2, T3, T4, TRet>(Func<T1, T2, T3, T4, TRet> cb, string sql, params object[] args) { return Query(cb, sql, args).ToList(); }
-
-        // Multi Query
-        public IEnumerable<TRet> Query<T1, T2, TRet>(Func<T1, T2, TRet> cb, string sql, params object[] args) { return Query<TRet>(new[] { typeof(T1), typeof(T2) }, cb, new Sql(sql, args)); }
-        public IEnumerable<TRet> Query<T1, T2, T3, TRet>(Func<T1, T2, T3, TRet> cb, string sql, params object[] args) { return Query<TRet>(new[] { typeof(T1), typeof(T2), typeof(T3) }, cb, new Sql(sql, args)); }
-        public IEnumerable<TRet> Query<T1, T2, T3, T4, TRet>(Func<T1, T2, T3, T4, TRet> cb, string sql, params object[] args) { return Query<TRet>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, cb, new Sql(sql, args)); }
-
-        // Multi Page
-        public Page<TRet> Page<T1, T2, TRet>(Func<T1, T2, TRet> cb, long page, long itemsPerPage, string sql, params object[] args) { return Page<TRet>(new[] { typeof(T1), typeof(T2) }, cb, page, itemsPerPage, sql, args); }
-        public Page<TRet> Page<T1, T2, T3, TRet>(Func<T1, T2, T3, TRet> cb, long page, long itemsPerPage, string sql, params object[] args) { return Page<TRet>(new[] { typeof(T1), typeof(T2), typeof(T3) }, cb, page, itemsPerPage, sql, args); }
-        public Page<TRet> Page<T1, T2, T3, T4, TRet>(Func<T1, T2, T3, T4, TRet> cb, long page, long itemsPerPage, string sql, params object[] args) { return Page<TRet>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, cb, page, itemsPerPage, sql, args); }
-
-        // Multi Fetch (SQL builder)
-        public List<TRet> Fetch<T1, T2, TRet>(Func<T1, T2, TRet> cb, Sql sql) { return Query(cb, sql).ToList(); }
-        public List<TRet> Fetch<T1, T2, T3, TRet>(Func<T1, T2, T3, TRet> cb, Sql sql) { return Query(cb, sql).ToList(); }
-        public List<TRet> Fetch<T1, T2, T3, T4, TRet>(Func<T1, T2, T3, T4, TRet> cb, Sql sql) { return Query(cb, sql).ToList(); }
-
-        // Multi Query (SQL builder)
-        public IEnumerable<TRet> Query<T1, T2, TRet>(Func<T1, T2, TRet> cb, Sql sql) { return Query<TRet>(new[] { typeof(T1), typeof(T2) }, cb, sql); }
-        public IEnumerable<TRet> Query<T1, T2, T3, TRet>(Func<T1, T2, T3, TRet> cb, Sql sql) { return Query<TRet>(new[] { typeof(T1), typeof(T2), typeof(T3) }, cb, sql); }
-        public IEnumerable<TRet> Query<T1, T2, T3, T4, TRet>(Func<T1, T2, T3, T4, TRet> cb, Sql sql) { return Query<TRet>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, cb, sql); }
-
-        // Multi Page (SQL builder)
-        public Page<TRet> Page<T1, T2, TRet>(Func<T1, T2, TRet> cb, long page, long itemsPerPage, Sql sql) { return Page<TRet>(new[] { typeof(T1), typeof(T2) }, cb, page, itemsPerPage, sql.SQL, sql.Arguments); }
-        public Page<TRet> Page<T1, T2, T3, TRet>(Func<T1, T2, T3, TRet> cb, long page, long itemsPerPage, Sql sql) { return Page<TRet>(new[] { typeof(T1), typeof(T2), typeof(T3) }, cb, page, itemsPerPage, sql.SQL, sql.Arguments); }
-        public Page<TRet> Page<T1, T2, T3, T4, TRet>(Func<T1, T2, T3, T4, TRet> cb, long page, long itemsPerPage, Sql sql) { return Page<TRet>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, cb, page, itemsPerPage, sql.SQL, sql.Arguments); }
-
-        // Multi Fetch (Simple)
-        public List<T1> Fetch<T1, T2>(string sql, params object[] args) { return Query<T1, T2>(sql, args).ToList(); }
-        public List<T1> Fetch<T1, T2, T3>(string sql, params object[] args) { return Query<T1, T2, T3>(sql, args).ToList(); }
-        public List<T1> Fetch<T1, T2, T3, T4>(string sql, params object[] args) { return Query<T1, T2, T3, T4>(sql, args).ToList(); }
-
-        // Multi Query (Simple)
-        public IEnumerable<T1> Query<T1, T2>(string sql, params object[] args) { return Query<T1>(new[] { typeof(T1), typeof(T2) }, null, new Sql(sql, args)); }
-        public IEnumerable<T1> Query<T1, T2, T3>(string sql, params object[] args) { return Query<T1>(new[] { typeof(T1), typeof(T2), typeof(T3) }, null, new Sql(sql, args)); }
-        public IEnumerable<T1> Query<T1, T2, T3, T4>(string sql, params object[] args) { return Query<T1>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, null, new Sql(sql, args)); }
-
-        // Multi Page (Simple)
-        public Page<T1> Page<T1, T2>(long page, long itemsPerPage, string sql, params object[] args) { return Page<T1>(new[] { typeof(T1), typeof(T2) }, null, page, itemsPerPage, sql, args); }
-        public Page<T1> Page<T1, T2, T3>(long page, long itemsPerPage, string sql, params object[] args) { return Page<T1>(new[] { typeof(T1), typeof(T2), typeof(T3) }, null, page, itemsPerPage, sql, args); }
-        public Page<T1> Page<T1, T2, T3, T4>(long page, long itemsPerPage, string sql, params object[] args) { return Page<T1>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, null, page, itemsPerPage, sql, args); }
-
-        // Multi Fetch (Simple) (SQL builder)
-        public List<T1> Fetch<T1, T2>(Sql sql) { return Query<T1, T2>(sql).ToList(); }
-        public List<T1> Fetch<T1, T2, T3>(Sql sql) { return Query<T1, T2, T3>(sql).ToList(); }
-        public List<T1> Fetch<T1, T2, T3, T4>(Sql sql) { return Query<T1, T2, T3, T4>(sql).ToList(); }
-
-        // Multi Query (Simple) (SQL builder)
-        public IEnumerable<T1> Query<T1, T2>(Sql sql) { return Query<T1>(new[] { typeof(T1), typeof(T2) }, null, sql); }
-        public IEnumerable<T1> Query<T1, T2, T3>(Sql sql) { return Query<T1>(new[] { typeof(T1), typeof(T2), typeof(T3) }, null, sql); }
-        public IEnumerable<T1> Query<T1, T2, T3, T4>(Sql sql) { return Query<T1>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, null, sql); }
-
-        // Multi Page (Simple) (SQL Builder)
-        public Page<T1> Page<T1, T2>(long page, long itemsPerpage, Sql sql) { return Page<T1>(new[] { typeof(T1), typeof(T2) }, null, page, itemsPerpage, sql.SQL, sql.Arguments); }
-        public Page<T1> Page<T1, T2, T3>(long page, long itemsPerpage, Sql sql) { return Page<T1>(new[] { typeof(T1), typeof(T2), typeof(T3) }, null, page, itemsPerpage, sql.SQL, sql.Arguments); }
-        public Page<T1> Page<T1, T2, T3, T4>(long page, long itemsPerpage, Sql sql) { return Page<T1>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, null, page, itemsPerpage, sql.SQL, sql.Arguments); }
-
-        // Actual implementation of the multi-poco query
-        public IEnumerable<TRet> Query<TRet>(Type[] types, Delegate cb, Sql sql)
+        internal IEnumerable<T> QueryImp<T>(T instance, Expression<Func<T, IList>> listExpression, Func<T, object[]> idFunc, Sql Sql)
         {
-            if (types.Length == 1)
-            {
-                foreach (var item in Query<TRet>(sql))
-                {
-                    yield return item;
-                }
+            string sql = Sql.SQL;
+            object[] args = Sql.Arguments;
 
-                yield break;
-            }
+            if (this.EnableAutoSelect) sql = AutoSelectHelper.AddSelectClause(this, typeof (T), sql);
 
             try
             {
-                OpenSharedConnectionInternal();
-                using (var cmd = CreateCommand(_sharedConnection, sql.SQL, sql.Arguments))
+                this.OpenSharedConnectionInternal();
+                using (DbCommand cmd = this.CreateCommand(this._sharedConnection, sql, args))
                 {
-                    IDataReader r;
-                    try
+                    DbDataReader r = this.ExecuteDataReader(cmd);
+                    IEnumerable<T> read = listExpression != null ? this.ReadOneToMany(instance, r, listExpression, idFunc) : this.Read<T>(typeof(T), instance, r);
+                    foreach (T item in read)
                     {
-                        r = ExecuteReaderHelper(cmd);
-                    }
-                    catch (Exception x)
-                    {
-                        OnException(x);
-                        throw;
-                    }
-                    var factory = MultiPocoFactory.GetMultiPocoFactory<TRet>(this, types, r);
-                    if (cb == null) cb = MultiPocoFactory.GetAutoMapper(types.ToArray());
-                    var bNeedTerminator = false;
-                    using (r)
-                    {
-                        while (true)
-                        {
-                            TRet poco;
-                            try
-                            {
-                                if (!r.Read()) break;
-                                poco = factory(r, cb);
-                            }
-                            catch (Exception x)
-                            {
-                                OnException(x);
-                                throw;
-                            }
-
-                            if (poco != null)
-                            {
-                                yield return poco;
-                            }
-                            else
-                            {
-                                bNeedTerminator = true;
-                            }
-                        }
-                        if (bNeedTerminator)
-                        {
-                            var poco = (TRet)cb.DynamicInvoke(new object[types.Length]);
-                            if (poco != null)
-                            {
-                                yield return poco;
-                            }
-                            else
-                            {
-                                yield break;
-                            }
-                        }
+                        yield return item;
                     }
                 }
             }
             finally
             {
-                CloseSharedConnectionInternal();
+                this.CloseSharedConnectionInternal();
             }
+        }
+
+        private DbDataReader ExecuteDataReader(DbCommand cmd)
+        {
+            DbDataReader r;
+            try
+            {
+                r = this.ExecuteReaderHelper(cmd);
+            }
+            catch (Exception x)
+            {
+                this.OnExceptionInternal(x);
+                throw;
+            }
+            return r;
+        }
+
+        public List<T> FetchOneToMany<T>(Expression<Func<T, IList>> many, Sql sql)
+        {
+            return this.QueryImp(default(T), many, null, sql).ToList();
+        }
+
+        public List<T> FetchOneToMany<T>(Expression<Func<T, IList>> many, string sql, params object[] args)
+        {
+            return this.FetchOneToMany(many, new Sql(sql, args));
+        }
+
+        public List<T> FetchOneToMany<T>(Expression<Func<T, IList>> many, Func<T, object> idFunc, Sql sql)
+        {
+            return this.QueryImp(default(T), many, x => new[] { idFunc(x) }, sql).ToList();
+        }
+
+        public List<T> FetchOneToMany<T>(Expression<Func<T, IList>> many, Func<T, object> idFunc, string sql, params object[] args)
+        {
+            return this.FetchOneToMany(many, idFunc, new Sql(sql, args));
+        }
+
+        public Page<T> Page<T>(long page, long itemsPerPage, string sql, params object[] args)
+        {
+            return this.PageImp<T, Page<T>>(page, itemsPerPage, sql, args, (paged, thesql) =>
+            {
+                paged.Items =  this.Query<T>(thesql).ToList();
+                return paged;
+            });
         }
 
         // Actual implementation of the multi-poco paging
-        public Page<T> Page<T>(Type[] types, Delegate cb, long page, long itemsPerPage, string sql, params object[] args)
+        protected TRet PageImp<T, TRet>(long page, long itemsPerPage, string sql, object[] args, Func<Page<T>, Sql, TRet> executeQueryFunc)
         {
             string sqlCount, sqlPage;
 
             long offset = (page - 1) * itemsPerPage;
 
-            BuildPageQueries<T>(offset, itemsPerPage, sql, ref args, out sqlCount, out sqlPage);
+            this.BuildPageQueries<T>(offset, itemsPerPage, sql, ref args, out sqlCount, out sqlPage);
 
             // Save the one-time command time out and use it for both queries
-            int saveTimeout = OneTimeCommandTimeout;
+            int saveTimeout = this.OneTimeCommandTimeout;
 
             // Setup the paged result
-            var result = new Page<T>();
+            Page<T> result = new Page<T>();
             result.CurrentPage = page;
             result.ItemsPerPage = itemsPerPage;
-            result.TotalItems = ExecuteScalar<long>(sqlCount, args);
+            result.TotalItems = this.ExecuteScalar<long>(sqlCount, args);
             result.TotalPages = result.TotalItems / itemsPerPage;
             if ((result.TotalItems % itemsPerPage) != 0)
                 result.TotalPages++;
 
-            OneTimeCommandTimeout = saveTimeout;
+            this.OneTimeCommandTimeout = saveTimeout;
 
             // Get the records
-            result.Items = types.Length > 1
-                ? Query<T>(types, cb, new Sql(sqlPage, args)).ToList()
-                : Query<T>(new Sql(sqlPage, args)).ToList();
-
-            // Done
-            return result;
+            return executeQueryFunc(result, new Sql(sqlPage, args));
         }
 
-        public TRet FetchMultiple<T1, T2, TRet>(Func<List<T1>, List<T2>, TRet> cb, string sql, params object[] args) { return FetchMultiple<T1, T2, DontMap, DontMap, TRet>(new[] { typeof(T1), typeof(T2) }, cb, new Sql(sql, args)); }
-        public TRet FetchMultiple<T1, T2, T3, TRet>(Func<List<T1>, List<T2>, List<T3>, TRet> cb, string sql, params object[] args) { return FetchMultiple<T1, T2, T3, DontMap, TRet>(new[] { typeof(T1), typeof(T2), typeof(T3) }, cb, new Sql(sql, args)); }
-        public TRet FetchMultiple<T1, T2, T3, T4, TRet>(Func<List<T1>, List<T2>, List<T3>, List<T4>, TRet> cb, string sql, params object[] args) { return FetchMultiple<T1, T2, T3, T4, TRet>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, cb, new Sql(sql, args)); }
-        public TRet FetchMultiple<T1, T2, TRet>(Func<List<T1>, List<T2>, TRet> cb, Sql sql) { return FetchMultiple<T1, T2, DontMap, DontMap, TRet>(new[] { typeof(T1), typeof(T2) }, cb, sql); }
-        public TRet FetchMultiple<T1, T2, T3, TRet>(Func<List<T1>, List<T2>, List<T3>, TRet> cb, Sql sql) { return FetchMultiple<T1, T2, T3, DontMap, TRet>(new[] { typeof(T1), typeof(T2), typeof(T3) }, cb, sql); }
-        public TRet FetchMultiple<T1, T2, T3, T4, TRet>(Func<List<T1>, List<T2>, List<T3>, List<T4>, TRet> cb, Sql sql) { return FetchMultiple<T1, T2, T3, T4, TRet>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, cb, sql); }
+        public TRet FetchMultiple<T1, T2, TRet>(Func<List<T1>, List<T2>, TRet> cb, string sql, params object[] args) { return this.FetchMultiple<T1, T2, DontMap, DontMap, TRet>(new[] { typeof(T1), typeof(T2) }, cb, new Sql(sql, args)); }
+        public TRet FetchMultiple<T1, T2, T3, TRet>(Func<List<T1>, List<T2>, List<T3>, TRet> cb, string sql, params object[] args) { return this.FetchMultiple<T1, T2, T3, DontMap, TRet>(new[] { typeof(T1), typeof(T2), typeof(T3) }, cb, new Sql(sql, args)); }
+        public TRet FetchMultiple<T1, T2, T3, T4, TRet>(Func<List<T1>, List<T2>, List<T3>, List<T4>, TRet> cb, string sql, params object[] args) { return this.FetchMultiple<T1, T2, T3, T4, TRet>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, cb, new Sql(sql, args)); }
+        public TRet FetchMultiple<T1, T2, TRet>(Func<List<T1>, List<T2>, TRet> cb, Sql sql) { return this.FetchMultiple<T1, T2, DontMap, DontMap, TRet>(new[] { typeof(T1), typeof(T2) }, cb, sql); }
+        public TRet FetchMultiple<T1, T2, T3, TRet>(Func<List<T1>, List<T2>, List<T3>, TRet> cb, Sql sql) { return this.FetchMultiple<T1, T2, T3, DontMap, TRet>(new[] { typeof(T1), typeof(T2), typeof(T3) }, cb, sql); }
+        public TRet FetchMultiple<T1, T2, T3, T4, TRet>(Func<List<T1>, List<T2>, List<T3>, List<T4>, TRet> cb, Sql sql) { return this.FetchMultiple<T1, T2, T3, T4, TRet>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, cb, sql); }
 
-        public Tuple<List<T1>, List<T2>> FetchMultiple<T1, T2>(string sql, params object[] args) { return FetchMultiple<T1, T2, DontMap, DontMap, Tuple<List<T1>, List<T2>>>(new[] { typeof(T1), typeof(T2) }, new Func<List<T1>, List<T2>, Tuple<List<T1>, List<T2>>>((y, z) => new Tuple<List<T1>, List<T2>>(y, z)), new Sql(sql, args)); }
-        public Tuple<List<T1>, List<T2>, List<T3>> FetchMultiple<T1, T2, T3>(string sql, params object[] args) { return FetchMultiple<T1, T2, T3, DontMap, Tuple<List<T1>, List<T2>, List<T3>>>(new[] { typeof(T1), typeof(T2), typeof(T3) }, new Func<List<T1>, List<T2>, List<T3>, Tuple<List<T1>, List<T2>, List<T3>>>((x, y, z) => new Tuple<List<T1>, List<T2>, List<T3>>(x, y, z)), new Sql(sql, args)); }
-        public Tuple<List<T1>, List<T2>, List<T3>, List<T4>> FetchMultiple<T1, T2, T3, T4>(string sql, params object[] args) { return FetchMultiple<T1, T2, T3, T4, Tuple<List<T1>, List<T2>, List<T3>, List<T4>>>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, new Func<List<T1>, List<T2>, List<T3>, List<T4>, Tuple<List<T1>, List<T2>, List<T3>, List<T4>>>((w, x, y, z) => new Tuple<List<T1>, List<T2>, List<T3>, List<T4>>(w, x, y, z)), new Sql(sql, args)); }
-        public Tuple<List<T1>, List<T2>> FetchMultiple<T1, T2>(Sql sql) { return FetchMultiple<T1, T2, DontMap, DontMap, Tuple<List<T1>, List<T2>>>(new[] { typeof(T1), typeof(T2) }, new Func<List<T1>, List<T2>, Tuple<List<T1>, List<T2>>>((y, z) => new Tuple<List<T1>, List<T2>>(y, z)), sql); }
-        public Tuple<List<T1>, List<T2>, List<T3>> FetchMultiple<T1, T2, T3>(Sql sql) { return FetchMultiple<T1, T2, T3, DontMap, Tuple<List<T1>, List<T2>, List<T3>>>(new[] { typeof(T1), typeof(T2), typeof(T3) }, new Func<List<T1>, List<T2>, List<T3>, Tuple<List<T1>, List<T2>, List<T3>>>((x, y, z) => new Tuple<List<T1>, List<T2>, List<T3>>(x, y, z)), sql); }
-        public Tuple<List<T1>, List<T2>, List<T3>, List<T4>> FetchMultiple<T1, T2, T3, T4>(Sql sql) { return FetchMultiple<T1, T2, T3, T4, Tuple<List<T1>, List<T2>, List<T3>, List<T4>>>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, new Func<List<T1>, List<T2>, List<T3>, List<T4>, Tuple<List<T1>, List<T2>, List<T3>, List<T4>>>((w, x, y, z) => new Tuple<List<T1>, List<T2>, List<T3>, List<T4>>(w, x, y, z)), sql); }
+        public Tuple<List<T1>, List<T2>> FetchMultiple<T1, T2>(string sql, params object[] args) { return this.FetchMultiple<T1, T2, DontMap, DontMap, Tuple<List<T1>, List<T2>>>(new[] { typeof(T1), typeof(T2) }, new Func<List<T1>, List<T2>, Tuple<List<T1>, List<T2>>>((y, z) => new Tuple<List<T1>, List<T2>>(y, z)), new Sql(sql, args)); }
+        public Tuple<List<T1>, List<T2>, List<T3>> FetchMultiple<T1, T2, T3>(string sql, params object[] args) { return this.FetchMultiple<T1, T2, T3, DontMap, Tuple<List<T1>, List<T2>, List<T3>>>(new[] { typeof(T1), typeof(T2), typeof(T3) }, new Func<List<T1>, List<T2>, List<T3>, Tuple<List<T1>, List<T2>, List<T3>>>((x, y, z) => new Tuple<List<T1>, List<T2>, List<T3>>(x, y, z)), new Sql(sql, args)); }
+        public Tuple<List<T1>, List<T2>, List<T3>, List<T4>> FetchMultiple<T1, T2, T3, T4>(string sql, params object[] args) { return this.FetchMultiple<T1, T2, T3, T4, Tuple<List<T1>, List<T2>, List<T3>, List<T4>>>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, new Func<List<T1>, List<T2>, List<T3>, List<T4>, Tuple<List<T1>, List<T2>, List<T3>, List<T4>>>((w, x, y, z) => new Tuple<List<T1>, List<T2>, List<T3>, List<T4>>(w, x, y, z)), new Sql(sql, args)); }
+        public Tuple<List<T1>, List<T2>> FetchMultiple<T1, T2>(Sql sql) { return this.FetchMultiple<T1, T2, DontMap, DontMap, Tuple<List<T1>, List<T2>>>(new[] { typeof(T1), typeof(T2) }, new Func<List<T1>, List<T2>, Tuple<List<T1>, List<T2>>>((y, z) => new Tuple<List<T1>, List<T2>>(y, z)), sql); }
+        public Tuple<List<T1>, List<T2>, List<T3>> FetchMultiple<T1, T2, T3>(Sql sql) { return this.FetchMultiple<T1, T2, T3, DontMap, Tuple<List<T1>, List<T2>, List<T3>>>(new[] { typeof(T1), typeof(T2), typeof(T3) }, new Func<List<T1>, List<T2>, List<T3>, Tuple<List<T1>, List<T2>, List<T3>>>((x, y, z) => new Tuple<List<T1>, List<T2>, List<T3>>(x, y, z)), sql); }
+        public Tuple<List<T1>, List<T2>, List<T3>, List<T4>> FetchMultiple<T1, T2, T3, T4>(Sql sql) { return this.FetchMultiple<T1, T2, T3, T4, Tuple<List<T1>, List<T2>, List<T3>, List<T4>>>(new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, new Func<List<T1>, List<T2>, List<T3>, List<T4>, Tuple<List<T1>, List<T2>, List<T3>, List<T4>>>((w, x, y, z) => new Tuple<List<T1>, List<T2>, List<T3>, List<T4>>(w, x, y, z)), sql); }
 
         public class DontMap { }
 
         // Actual implementation of the multi query
         private TRet FetchMultiple<T1, T2, T3, T4, TRet>(Type[] types, object cb, Sql Sql)
         {
-            var sql = Sql.SQL;
-            var args = Sql.Arguments;
+            string sql = Sql.SQL;
+            object[] args = Sql.Arguments;
 
             try
             {
-                OpenSharedConnectionInternal();
-                using (var cmd = CreateCommand(_sharedConnection, sql, args))
+                this.OpenSharedConnectionInternal();
+                using (DbCommand cmd = this.CreateCommand(this._sharedConnection, sql, args))
                 {
-                    IDataReader r;
-                    try
-                    {
-                        r = ExecuteReaderHelper(cmd);
-                    }
-                    catch (Exception x)
-                    {
-                        OnException(x);
-                        throw;
-                    }
-
+                    DbDataReader r = this.ExecuteDataReader(cmd);
                     using (r)
                     {
-                        var typeIndex = 1;
-                        var list1 = new List<T1>();
-                        var list2 = new List<T2>();
-                        var list3 = new List<T3>();
-                        var list4 = new List<T4>();
+                        int typeIndex = 1;
+                        List<T1> list1 = new List<T1>();
+                        List<T2> list2 = types.Length > 1 ? new List<T2>() : null;
+                        List<T3> list3 = types.Length > 2 ? new List<T3>() : null;
+                        List<T4> list4 = types.Length > 3 ? new List<T4>() : null;
                         do
                         {
                             if (typeIndex > types.Length)
                                 break;
 
-                            var pd = PocoDataFactory.ForType(types[typeIndex - 1]);
-                            var factory = pd.MappingFactory.GetFactory(0, r.FieldCount, r, null);
+                            PocoData pd = this.PocoDataFactory.ForType(types[typeIndex - 1]);
+                            MappingFactory factory = new MappingFactory(pd, r);
 
                             while (true)
                             {
@@ -1083,22 +1198,22 @@ namespace Frapid.NPoco
                                     switch (typeIndex)
                                     {
                                         case 1:
-                                            list1.Add(((Func<IDataReader, T1, T1>)factory)(r, default(T1)));
+                                            list1.Add((T1) factory.Map(r, default(T1)));
                                             break;
                                         case 2:
-                                            list2.Add(((Func<IDataReader, T2, T2>)factory)(r, default(T2)));
+                                            list2.Add((T2) factory.Map(r, default(T2)));
                                             break;
                                         case 3:
-                                            list3.Add(((Func<IDataReader, T3, T3>)factory)(r, default(T3)));
+                                            list3.Add((T3) factory.Map(r, default(T3)));
                                             break;
                                         case 4:
-                                            list4.Add(((Func<IDataReader, T4, T4>)factory)(r, default(T4)));
+                                            list4.Add((T4) factory.Map(r, default(T4)));
                                             break;
                                     }
                                 }
                                 catch (Exception x)
                                 {
-                                    OnException(x);
+                                    this.OnExceptionInternal(x);
                                     throw;
                                 }
                             }
@@ -1109,11 +1224,11 @@ namespace Frapid.NPoco
                         switch (types.Length)
                         {
                             case 2:
-                                return ((Func<List<T1>, List<T2>, TRet>)cb)(list1, list2);
+                                return ((Func<List<T1>, List<T2>, TRet>) cb)(list1, list2);
                             case 3:
-                                return ((Func<List<T1>, List<T2>, List<T3>, TRet>)cb)(list1, list2, list3);
+                                return ((Func<List<T1>, List<T2>, List<T3>, TRet>) cb)(list1, list2, list3);
                             case 4:
-                                return ((Func<List<T1>, List<T2>, List<T3>, List<T4>, TRet>)cb)(list1, list2, list3, list4);
+                                return ((Func<List<T1>, List<T2>, List<T3>, List<T4>, TRet>) cb)(list1, list2, list3, list4);
                         }
 
                         return default(TRet);
@@ -1122,218 +1237,160 @@ namespace Frapid.NPoco
             }
             finally
             {
-                CloseSharedConnectionInternal();
+                this.CloseSharedConnectionInternal();
             }
+        }
+
+        private bool PocoExists<T>(T poco)
+        {
+            int index = 0;
+            PocoData pd = this.PocoDataFactory.ForType(typeof(T));
+            Dictionary<string, object> primaryKeyValuePairs = this.GetPrimaryKeyValues(pd, pd.TableInfo.PrimaryKey, poco, true);
+            return this.ExecuteScalar<int>(string.Format(this.DatabaseType.GetExistsSql(), this.DatabaseType.EscapeTableName(pd.TableInfo.TableName), this.BuildPrimaryKeySql(primaryKeyValuePairs, ref index)), primaryKeyValuePairs.Select(x => x.Value).ToArray()) > 0;
         }
 
         public bool Exists<T>(object primaryKey)
         {
-            var index = 0;
-            var pd = PocoDataFactory.ForType(typeof(T)); ;
-            var primaryKeyValuePairs = ProcessMapper(pd, GetPrimaryKeyValues(pd.TableInfo.PrimaryKey, primaryKey));
-            return ExecuteScalar<int>(string.Format(DatabaseType.GetExistsSql(), DatabaseType.EscapeTableName(pd.TableInfo.TableName), BuildPrimaryKeySql(primaryKeyValuePairs, ref index)), primaryKeyValuePairs.Select(x => x.Value).ToArray()) > 0;
+            int index = 0;
+            PocoData pd = this.PocoDataFactory.ForType(typeof (T));
+            Dictionary<string, object> primaryKeyValuePairs = this.GetPrimaryKeyValues(pd, pd.TableInfo.PrimaryKey, primaryKey, false);
+            return this.ExecuteScalar<int>(string.Format(this.DatabaseType.GetExistsSql(), this.DatabaseType.EscapeTableName(pd.TableInfo.TableName), this.BuildPrimaryKeySql(primaryKeyValuePairs, ref index)), primaryKeyValuePairs.Select(x => x.Value).ToArray()) > 0;
         }
+
         public T SingleById<T>(object primaryKey)
         {
-            var index = 0;
-            var pd = PocoDataFactory.ForType(typeof(T));
-            var primaryKeyValuePairs = ProcessMapper(pd, GetPrimaryKeyValues(pd.TableInfo.PrimaryKey, primaryKey));
-            return Single<T>(string.Format("WHERE {0}", BuildPrimaryKeySql(primaryKeyValuePairs, ref index)), primaryKeyValuePairs.Select(x => x.Value).ToArray());
+            Sql sql = this.GenerateSingleByIdSql<T>(primaryKey);
+            return this.Single<T>(sql);
         }
 
         public T SingleOrDefaultById<T>(object primaryKey)
         {
-            var index = 0;
-            var pd = PocoDataFactory.ForType(typeof(T));
-            var primaryKeyValuePairs = ProcessMapper(pd, GetPrimaryKeyValues(pd.TableInfo.PrimaryKey, primaryKey));
-            return SingleOrDefault<T>(string.Format("WHERE {0}", BuildPrimaryKeySql(primaryKeyValuePairs, ref index)), primaryKeyValuePairs.Select(x => x.Value).ToArray());
+            Sql sql = this.GenerateSingleByIdSql<T>(primaryKey);
+            return this.SingleOrDefault<T>(sql);
+        }
+
+        private Sql GenerateSingleByIdSql<T>(object primaryKey)
+        {
+            int index = 0;
+            PocoData pd = this.PocoDataFactory.ForType(typeof (T));
+            Dictionary<string, object> primaryKeyValuePairs = this.GetPrimaryKeyValues(pd, pd.TableInfo.PrimaryKey, primaryKey, false);
+            string sql = AutoSelectHelper.AddSelectClause(this, typeof(T), string.Format("WHERE {0}", this.BuildPrimaryKeySql(primaryKeyValuePairs, ref index)));
+            object[] args = primaryKeyValuePairs.Select(x => x.Value).ToArray();
+            return new Sql(true, sql, args);
         }
 
         public T Single<T>(string sql, params object[] args)
         {
-            return Query<T>(sql, args).Single();
+            return this.Query<T>(sql, args).Single();
         }
         public T SingleInto<T>(T instance, string sql, params object[] args)
         {
-            return Query(instance, new Sql(sql, args)).Single();
+            return this.Query(instance, new Sql(sql, args)).Single();
         }
         public T SingleOrDefault<T>(string sql, params object[] args)
         {
-            return Query<T>(sql, args).SingleOrDefault();
+            return this.Query<T>(sql, args).SingleOrDefault();
         }
         public T SingleOrDefaultInto<T>(T instance, string sql, params object[] args)
         {
-            return Query(instance, new Sql(sql, args)).SingleOrDefault();
+            return this.Query(instance, new Sql(sql, args)).SingleOrDefault();
         }
         public T First<T>(string sql, params object[] args)
         {
-            return Query<T>(sql, args).First();
+            return this.Query<T>(sql, args).First();
         }
         public T FirstInto<T>(T instance, string sql, params object[] args)
         {
-            return Query(instance, new Sql(sql, args)).First();
+            return this.Query(instance, new Sql(sql, args)).First();
         }
         public T FirstOrDefault<T>(string sql, params object[] args)
         {
-            return Query<T>(sql, args).FirstOrDefault();
+            return this.Query<T>(sql, args).FirstOrDefault();
         }
         public T FirstOrDefaultInto<T>(T instance, string sql, params object[] args)
         {
-            return Query(instance, new Sql(sql, args)).FirstOrDefault();
+            return this.Query(instance, new Sql(sql, args)).FirstOrDefault();
         }
         public T Single<T>(Sql sql)
         {
-            return Query<T>(sql).Single();
+            return this.Query<T>(sql).Single();
         }
         public T SingleInto<T>(T instance, Sql sql)
         {
-            return Query(instance, sql).Single();
+            return this.Query(instance, sql).Single();
         }
         public T SingleOrDefault<T>(Sql sql)
         {
-            return Query<T>(sql).SingleOrDefault();
+            return this.Query<T>(sql).SingleOrDefault();
         }
         public T SingleOrDefaultInto<T>(T instance, Sql sql)
         {
-            return Query(instance, sql).SingleOrDefault();
+            return this.Query(instance, sql).SingleOrDefault();
         }
         public T First<T>(Sql sql)
         {
-            return Query<T>(sql).First();
+            return this.Query<T>(sql).First();
         }
         public T FirstInto<T>(T instance, Sql sql)
         {
-            return Query(instance, sql).First();
+            return this.Query(instance, sql).First();
         }
         public T FirstOrDefault<T>(Sql sql)
         {
-            return Query<T>(sql).FirstOrDefault();
+            return this.Query<T>(sql).FirstOrDefault();
         }
         public T FirstOrDefaultInto<T>(T instance, Sql sql)
         {
-            return Query(instance, sql).FirstOrDefault();
+            return this.Query(instance, sql).FirstOrDefault();
         }
 
         // Insert an annotated poco object
         public object Insert<T>(T poco)
         {
-            var pd = PocoDataFactory.ForType(poco.GetType());
-            return Insert(pd.TableInfo.TableName, pd.TableInfo.PrimaryKey, pd.TableInfo.AutoIncrement, poco);
+            TableInfo tableInfo = this.PocoDataFactory.TableInfoForType(poco.GetType());
+            return this.Insert(tableInfo.TableName, tableInfo.PrimaryKey, tableInfo.AutoIncrement, poco);
         }
 
         public object Insert<T>(string tableName, string primaryKeyName, T poco)
         {
-            return Insert(tableName, primaryKeyName, true, poco);
+            return this.Insert(tableName, primaryKeyName, true, poco);
         }
 
-        // Insert a poco into a table.  If the poco has a property with the same name 
+        // Insert a poco into a table.  If the poco has a property with the same name
         // as the primary key the id of the new record is assigned to it.  Either way,
         // the new id is returned.
         public virtual object Insert<T>(string tableName, string primaryKeyName, bool autoIncrement, T poco)
         {
-            if (!OnInserting(new InsertContext(poco, tableName, autoIncrement, primaryKeyName))) return 0;
+            PocoData pd = this.PocoDataFactory.ForObject(poco, primaryKeyName, autoIncrement);
+            return this.InsertImp(pd, tableName, primaryKeyName, autoIncrement, poco);
+        }
+
+        private object InsertImp<T>(PocoData pocoData, string tableName, string primaryKeyName, bool autoIncrement, T poco)
+        {
+            if (!this.OnInsertingInternal(new InsertContext(poco, tableName, autoIncrement, primaryKeyName)))
+                return 0;
 
             try
             {
-                OpenSharedConnectionInternal();
+                this.OpenSharedConnectionInternal();
 
-                var pd = PocoDataFactory.ForObject(poco, primaryKeyName);
-                var names = new List<string>();
-                var values = new List<string>();
-                var rawvalues = new List<object>();
-                var index = 0;
-                var versionName = "";
+                InsertStatements.PreparedInsertSql preparedInsert = InsertStatements.PrepareInsertSql(this, pocoData, tableName, primaryKeyName, autoIncrement, poco);
 
-                foreach (var i in pd.Columns)
-                {
-                    // Don't insert result columns
-                    if (i.Value.ResultColumn
-                        || i.Value.ComputedColumn
-                        || (i.Value.VersionColumn && i.Value.VersionColumnType == VersionColumnType.RowVersion))
-                    {
-                        continue;
-                    }
-
-                    // Don't insert the primary key (except under oracle where we need bring in the next sequence value)
-                    if (autoIncrement && primaryKeyName != null && string.Compare(i.Key, primaryKeyName, true) == 0)
-                    {
-                        // Setup auto increment expression
-                        string autoIncExpression = _dbType.GetAutoIncrementExpression(pd.TableInfo);
-                        if (autoIncExpression != null)
-                        {
-                            names.Add(i.Key);
-                            values.Add(autoIncExpression);
-                        }
-                        continue;
-                    }
-
-                    names.Add(_dbType.EscapeSqlIdentifier(i.Key));
-                    values.Add(string.Format("{0}{1}", _paramPrefix, index++));
-
-                    object val = ProcessMapper(i.Value, i.Value.GetValue(poco));
-
-                    if (i.Value.VersionColumn && i.Value.VersionColumnType == VersionColumnType.Number)
-                    {
-                        val = Convert.ToInt64(val) > 0 ? val : 1;
-                        versionName = i.Key;
-                    }
-
-                    rawvalues.Add(val);
-                }
-
-                var sql = string.Empty;
-                var outputClause = String.Empty;
-                if (autoIncrement)
-                {
-                    outputClause = _dbType.GetInsertOutputClause(primaryKeyName);
-                }
-
-                if (names.Count != 0)
-                {
-                    sql = string.Format("INSERT INTO {0} ({1}){2} VALUES ({3})",
-                                        _dbType.EscapeTableName(tableName),
-                                        string.Join(",", names.ToArray()),
-                                        outputClause,
-                                        string.Join(",", values.ToArray()));
-                }
-                else
-                {
-                    sql = _dbType.GetDefaultInsertSql(tableName, names.ToArray(), values.ToArray());
-                }
-
-                using (var cmd = CreateCommand(_sharedConnection, sql, rawvalues.ToArray()))
+                using (DbCommand cmd = this.CreateCommand(this._sharedConnection, preparedInsert.Sql, preparedInsert.Rawvalues.ToArray()))
                 {
                     // Assign the Version column
-                    if (!string.IsNullOrEmpty(versionName))
-                    {
-                        PocoColumn pc;
-                        if (pd.Columns.TryGetValue(versionName, out pc))
-                        {
-                            pc.SetValue(poco, pc.ChangeType(1));
-                        }
-                    }
+                    InsertStatements.AssignVersion(poco, preparedInsert);
 
+                    object id;
                     if (!autoIncrement)
                     {
-                        ExecuteNonQueryHelper(cmd);
-
-                        PocoColumn pkColumn;
-                        if (primaryKeyName != null && pd.Columns.TryGetValue(primaryKeyName, out pkColumn))
-                            return pkColumn.GetValue(poco);
-                        else
-                            return null;
+                        this.ExecuteNonQueryHelper(cmd);
+                        id = InsertStatements.AssignNonIncrementPrimaryKey(primaryKeyName, poco, preparedInsert);
                     }
-
-                    object id = _dbType.ExecuteInsert(this, cmd, primaryKeyName, poco, rawvalues.ToArray());
-
-                    // Assign the ID back to the primary key property
-                    if (primaryKeyName != null && id != null && id.GetType().IsValueType)
+                    else
                     {
-                        PocoColumn pc;
-                        if (pd.Columns.TryGetValue(primaryKeyName, out pc))
-                        {
-                            pc.SetValue(poco, pc.ChangeType(id));
-                        }
+                        id = this._dbType.ExecuteInsert(this, cmd, primaryKeyName, preparedInsert.PocoData.TableInfo.UseOutputClause, poco, preparedInsert.Rawvalues.ToArray());
+                        InsertStatements.AssignPrimaryKey(primaryKeyName, poco, id, preparedInsert);
                     }
 
                     return id;
@@ -1341,12 +1398,49 @@ namespace Frapid.NPoco
             }
             catch (Exception x)
             {
-                OnException(x);
+                this.OnExceptionInternal(x);
                 throw;
             }
             finally
             {
-                CloseSharedConnectionInternal();
+                this.CloseSharedConnectionInternal();
+            }
+        }
+
+        public void InsertBatch<T>(IEnumerable<T> pocos, BatchOptions options = null)
+        {
+            options = options ?? new BatchOptions();
+
+            try
+            {
+                this.OpenSharedConnectionInternal();
+
+                PocoData pd = this.PocoDataFactory.ForType(typeof(T));
+
+                foreach (T[] batchedPocos in pocos.Chunkify(options.BatchSize))
+                {
+                    InsertStatements.PreparedInsertSql[] preparedInserts = batchedPocos.Select(x => InsertStatements.PrepareInsertSql(this, pd, pd.TableInfo.TableName, pd.TableInfo.PrimaryKey,pd.TableInfo.AutoIncrement, x)).ToArray();
+
+                    Sql sql = new Sql();
+                    foreach (InsertStatements.PreparedInsertSql preparedInsertSql in preparedInserts)
+                    {
+                        sql.Append(preparedInsertSql.Sql + options.StatementSeperator, preparedInsertSql.Rawvalues.ToArray());
+                    }
+
+                    using (DbCommand cmd = this.CreateCommand(this._sharedConnection, sql.SQL, sql.Arguments))
+                    {
+                        this.ExecuteNonQueryHelper(cmd);
+                    }
+                }
+            }
+            catch (Exception x)
+            {
+                this.OnExceptionInternal(x);
+                throw;
+            }
+            finally
+            {
+                this.CloseSharedConnectionInternal();
             }
         }
 
@@ -1354,70 +1448,80 @@ namespace Frapid.NPoco
         {
             try
             {
-                OpenSharedConnectionInternal();
-                _dbType.InsertBulk(this, pocos);
+                this.OpenSharedConnectionInternal();
+                this._dbType.InsertBulk(this, pocos);
             }
             catch (Exception x)
             {
-                OnException(x);
+                this.OnExceptionInternal(x);
                 throw;
             }
             finally
             {
-                CloseSharedConnectionInternal();
+                this.CloseSharedConnectionInternal();
             }
         }
 
         public int Update(string tableName, string primaryKeyName, object poco, object primaryKeyValue)
         {
-            return Update(tableName, primaryKeyName, poco, primaryKeyValue, null);
+            return this.Update(tableName, primaryKeyName, poco, primaryKeyValue, null);
+        }
+
+        public virtual int Update(string tableName, string primaryKeyName, object poco, object primaryKeyValue, IEnumerable<string> columns)
+        {
+            return this.UpdateImp(tableName, primaryKeyName, poco, primaryKeyValue, columns, (sql, args, next) => next(this.Execute(sql, args)), 0);
         }
 
         // Update a record with values from a poco.  primary key value can be either supplied or read from the poco
-        public virtual int Update(string tableName, string primaryKeyName, object poco, object primaryKeyValue, IEnumerable<string> columns)
+        private TRet UpdateImp<TRet>(string tableName, string primaryKeyName, object poco, object primaryKeyValue, IEnumerable<string> columns, Func<string, object[], Func<int, int>, TRet> executeFunc, TRet defaultId)
         {
-            if (!OnUpdating(new UpdateContext(poco, tableName, primaryKeyName, primaryKeyValue, columns))) return 0;
+            if (!this.OnUpdatingInternal(new UpdateContext(poco, tableName, primaryKeyName, primaryKeyValue, columns)))
+                return defaultId;
 
-            if (columns != null && !columns.Any()) return 0;
+            if (columns != null && !columns.Any())
+                return defaultId;
 
-            var sb = new StringBuilder();
-            var index = 0;
-            var rawvalues = new List<object>();
-            var pd = PocoDataFactory.ForObject(poco, primaryKeyName);
+            StringBuilder sb = new StringBuilder();
+            int index = 0;
+            List<object> rawvalues = new List<object>();
+            PocoData pd = this.PocoDataFactory.ForObject(poco, primaryKeyName, true);
             string versionName = null;
             object versionValue = null;
             VersionColumnType versionColumnType = VersionColumnType.Number;
 
-            var primaryKeyValuePairs = GetPrimaryKeyValues(primaryKeyName, primaryKeyValue);
+            Dictionary<string, object> primaryKeyValuePairs = this.GetPrimaryKeyValues(pd, primaryKeyName, primaryKeyValue ?? poco, primaryKeyValue == null);
 
-            foreach (var i in pd.Columns)
+            foreach (PocoColumn pocoColumn in pd.Columns.Values)
             {
                 // Don't update the primary key, but grab the value if we don't have it
-                if (primaryKeyValue == null && primaryKeyValuePairs.ContainsKey(i.Key))
+                if (primaryKeyValue == null && primaryKeyValuePairs.ContainsKey(pocoColumn.ColumnName))
                 {
-                    primaryKeyValuePairs[i.Key] = ProcessMapper(i.Value, i.Value.GetValue(poco));
+                    primaryKeyValuePairs[pocoColumn.ColumnName] = this.ProcessMapper(pocoColumn, pocoColumn.GetValue(poco));
                     continue;
                 }
 
                 // Dont update result only columns
-                if (i.Value.ResultColumn || i.Value.ComputedColumn)
-                    continue;
-
-                if (!i.Value.VersionColumn && columns != null && !columns.Contains(i.Value.ColumnName, StringComparer.OrdinalIgnoreCase))
-                    continue;
-
-                object value = ProcessMapper(i.Value, i.Value.GetValue(poco));
-
-                if (i.Value.VersionColumn)
+                if (pocoColumn.ResultColumn
+                    || (pocoColumn.ComputedColumn && (pocoColumn.ComputedColumnType == ComputedColumnType.Always || pocoColumn.ComputedColumnType == ComputedColumnType.ComputedOnUpdate)))
                 {
-                    versionName = i.Key;
+                    continue;
+                }
+
+                if (!pocoColumn.VersionColumn && columns != null && !columns.Contains(pocoColumn.ColumnName, StringComparer.OrdinalIgnoreCase))
+                    continue;
+
+                object value = pocoColumn.GetColumnValue(pd, poco, this.ProcessMapper);
+
+                if (pocoColumn.VersionColumn)
+                {
+                    versionName = pocoColumn.ColumnName;
                     versionValue = value;
-                    if (i.Value.VersionColumnType == VersionColumnType.Number)
+                    if (pocoColumn.VersionColumnType == VersionColumnType.Number)
                     {
                         versionColumnType = VersionColumnType.Number;
                         value = Convert.ToInt64(value) + 1;
                     }
-                    else if (i.Value.VersionColumnType == VersionColumnType.RowVersion)
+                    else if (pocoColumn.VersionColumnType == VersionColumnType.RowVersion)
                     {
                         versionColumnType = VersionColumnType.RowVersion;
                         continue;
@@ -1427,9 +1531,7 @@ namespace Frapid.NPoco
                 // Build the sql
                 if (index > 0)
                     sb.Append(", ");
-                sb.AppendFormat("{0} = @{1}", _dbType.EscapeSqlIdentifier(i.Key), index++);
-
-
+                sb.AppendFormat("{0} = @{1}", this._dbType.EscapeSqlIdentifier(pocoColumn.ColumnName), index++);
 
                 rawvalues.Add(value);
             }
@@ -1437,63 +1539,70 @@ namespace Frapid.NPoco
             if (columns != null && columns.Any() && sb.Length == 0)
                 throw new ArgumentException("There were no columns in the columns list that matched your table", "columns");
 
-            var sql = string.Format("UPDATE {0} SET {1} WHERE {2}", _dbType.EscapeTableName(tableName), sb, BuildPrimaryKeySql(primaryKeyValuePairs, ref index));
+            string sql = string.Format("UPDATE {0} SET {1} WHERE {2}", this._dbType.EscapeTableName(tableName), sb, this.BuildPrimaryKeySql(primaryKeyValuePairs, ref index));
 
             rawvalues.AddRange(primaryKeyValuePairs.Select(keyValue => keyValue.Value));
 
             if (!string.IsNullOrEmpty(versionName))
             {
-                sql += string.Format(" AND {0} = @{1}", _dbType.EscapeSqlIdentifier(versionName), index++);
+                sql += string.Format(" AND {0} = @{1}", this._dbType.EscapeSqlIdentifier(versionName), index++);
                 rawvalues.Add(versionValue);
             }
 
-            var result = Execute(sql, rawvalues.ToArray());
-
-            if (result == 0 && !string.IsNullOrEmpty(versionName) && VersionException == VersionExceptionHandling.Exception)
+            TRet result = executeFunc(sql, rawvalues.ToArray(), (id) =>
             {
-                throw new DBConcurrencyException(string.Format("A Concurrency update occurred in table '{0}' for primary key value(s) = '{1}' and version = '{2}'", tableName, string.Join(",", primaryKeyValuePairs.Values.Select(x => x.ToString()).ToArray()), versionValue));
-            }
-
-            // Set Version
-            if (!string.IsNullOrEmpty(versionName) && versionColumnType == VersionColumnType.Number)
-            {
-                PocoColumn pc;
-                if (pd.Columns.TryGetValue(versionName, out pc))
+                if (id == 0 && !string.IsNullOrEmpty(versionName) && this.VersionException == VersionExceptionHandling.Exception)
                 {
-                    pc.SetValue(poco, Convert.ChangeType(Convert.ToInt64(versionValue) + 1, pc.MemberInfo.GetMemberInfoType()));
+#if DNXCORE50
+                    throw new Exception(string.Format("A Concurrency update occurred in table '{0}' for primary key value(s) = '{1}' and version = '{2}'", tableName, string.Join(",", primaryKeyValuePairs.Values.Select(x => x.ToString()).ToArray()), versionValue));
+#else
+                    throw new DBConcurrencyException(string.Format("A Concurrency update occurred in table '{0}' for primary key value(s) = '{1}' and version = '{2}'", tableName, string.Join(",", primaryKeyValuePairs.Values.Select(x => x.ToString()).ToArray()), versionValue));
+#endif
                 }
-            }
+
+                // Set Version
+                if (!string.IsNullOrEmpty(versionName) && versionColumnType == VersionColumnType.Number)
+                {
+                    PocoColumn pc;
+                    if (pd.Columns.TryGetValue(versionName, out pc))
+                    {
+                        pc.SetValue(poco, Convert.ChangeType(Convert.ToInt64(versionValue) + 1, pc.MemberInfoData.MemberType));
+                    }
+                }
+
+                return id;
+            });
 
             return result;
         }
 
         private string BuildPrimaryKeySql(Dictionary<string, object> primaryKeyValuePair, ref int index)
         {
-            var tempIndex = index;
+            int tempIndex = index;
             index += primaryKeyValuePair.Count;
-            return string.Join(" AND ", primaryKeyValuePair.Select((x, i) => x.Value == null || x.Value == DBNull.Value ? string.Format("{0} IS NULL", _dbType.EscapeSqlIdentifier(x.Key)) : string.Format("{0} = @{1}", _dbType.EscapeSqlIdentifier(x.Key), tempIndex + i)).ToArray());
+            return string.Join(" AND ", primaryKeyValuePair.Select((x, i) => x.Value == null || x.Value == DBNull.Value ? string.Format("{0} IS NULL", this._dbType.EscapeSqlIdentifier(x.Key)) : string.Format("{0} = @{1}", this._dbType.EscapeSqlIdentifier(x.Key), tempIndex + i)).ToArray());
         }
 
-        private Dictionary<string, object> GetPrimaryKeyValues(string primaryKeyName, object primaryKeyValue)
+        private Dictionary<string, object> GetPrimaryKeyValues(PocoData pocoData, string primaryKeyName, object primaryKeyValueOrPoco, bool isPoco)
         {
             Dictionary<string, object> primaryKeyValues;
 
-            var multiplePrimaryKeysNames = primaryKeyName.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToArray();
-            if (primaryKeyValue != null)
+            string[] multiplePrimaryKeysNames = primaryKeyName.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToArray();
+            if (isPoco == false)
             {
                 if (multiplePrimaryKeysNames.Length == 1)
                 {
-                    primaryKeyValues = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase) { { primaryKeyName, primaryKeyValue } };
+                    primaryKeyValues = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase) { { primaryKeyName, primaryKeyValueOrPoco } };
                 }
                 else
                 {
-                    var dict = primaryKeyValue as Dictionary<string, object>;
-                    primaryKeyValues = dict ?? multiplePrimaryKeysNames.ToDictionary(x => x, x => primaryKeyValue.GetType().GetProperties().Single(y => string.Equals(x, y.Name, StringComparison.OrdinalIgnoreCase)).GetValue(primaryKeyValue, null), StringComparer.OrdinalIgnoreCase);
+                    Dictionary<string, object> dict = primaryKeyValueOrPoco as Dictionary<string, object>;
+                    primaryKeyValues = dict ?? multiplePrimaryKeysNames.ToDictionary(x => x, x => primaryKeyValueOrPoco.GetType().GetProperties().Single(y => string.Equals(x, y.Name, StringComparison.OrdinalIgnoreCase)).GetValue(primaryKeyValueOrPoco, null), StringComparer.OrdinalIgnoreCase);
                 }
             }
             else
             {
-                primaryKeyValues = multiplePrimaryKeysNames.ToDictionary(x => x, x => (object)null, StringComparer.OrdinalIgnoreCase);
+                primaryKeyValues = this.ProcessMapper(pocoData, multiplePrimaryKeysNames.ToDictionary(x => x, x => pocoData.Columns[x].GetValue(primaryKeyValueOrPoco), StringComparer.OrdinalIgnoreCase));
             }
 
             return primaryKeyValues;
@@ -1501,11 +1610,11 @@ namespace Frapid.NPoco
 
         private Dictionary<string, object> ProcessMapper(PocoData pd, Dictionary<string, object> primaryKeyValuePairs)
         {
-            var keys = primaryKeyValuePairs.Keys.ToArray();
-            foreach (var primaryKeyValuePair in keys)
+            string[] keys = primaryKeyValuePairs.Keys.ToArray();
+            foreach (string primaryKeyValuePair in keys)
             {
-                var col = pd.Columns[primaryKeyValuePair];
-                primaryKeyValuePairs[primaryKeyValuePair] = ProcessMapper(col, primaryKeyValuePairs[primaryKeyValuePair]);
+                PocoColumn col = pd.Columns[primaryKeyValuePair];
+                primaryKeyValuePairs[primaryKeyValuePair] = this.ProcessMapper(col, primaryKeyValuePairs[primaryKeyValuePair]);
             }
             return primaryKeyValuePairs;
         }
@@ -1517,54 +1626,54 @@ namespace Frapid.NPoco
 
         public int Update(string tableName, string primaryKeyName, object poco)
         {
-            return Update(tableName, primaryKeyName, poco, null);
+            return this.Update(tableName, primaryKeyName, poco, null);
         }
 
         public int Update(string tableName, string primaryKeyName, object poco, IEnumerable<string> columns)
         {
-            return Update(tableName, primaryKeyName, poco, null, columns);
+            return this.Update(tableName, primaryKeyName, poco, null, columns);
         }
 
         public int Update(object poco, IEnumerable<string> columns)
         {
-            return Update(poco, null, columns);
+            return this.Update(poco, null, columns);
         }
 
         public int Update<T>(T poco, Expression<Func<T, object>> fields)
         {
-            var expression = DatabaseType.ExpressionVisitor<T>(this);
+            SqlExpression<T> expression = this.DatabaseType.ExpressionVisitor<T>(this, this.PocoDataFactory.ForType(typeof(T)));
             expression = expression.Select(fields);
-            var columnNames = ((ISqlExpression)expression).SelectMembers.Select(x => x.PocoColumn.ColumnName);
-            var otherNames = ((ISqlExpression)expression).GeneralMembers.Select(x => x.PocoColumn.ColumnName);
-            return Update(poco, columnNames.Union(otherNames));
+            IEnumerable<string> columnNames = ((ISqlExpression) expression).SelectMembers.Select(x => x.PocoColumn.ColumnName);
+            IEnumerable<string> otherNames = ((ISqlExpression) expression).GeneralMembers.Select(x => x.PocoColumn.ColumnName);
+            return this.Update(poco, columnNames.Union(otherNames));
         }
 
         public int Update(object poco)
         {
-            return Update(poco, null, null);
+            return this.Update(poco, null, null);
         }
 
         public int Update(object poco, object primaryKeyValue)
         {
-            return Update(poco, primaryKeyValue, null);
+            return this.Update(poco, primaryKeyValue, null);
         }
 
         public int Update(object poco, object primaryKeyValue, IEnumerable<string> columns)
         {
-            var pd = PocoDataFactory.ForType(poco.GetType());
-            return Update(pd.TableInfo.TableName, pd.TableInfo.PrimaryKey, poco, primaryKeyValue, columns);
+            TableInfo tableInfo = this.PocoDataFactory.TableInfoForType(poco.GetType());
+            return this.Update(tableInfo.TableName, tableInfo.PrimaryKey, poco, primaryKeyValue, columns);
         }
 
         public int Update<T>(string sql, params object[] args)
         {
-            var pd = PocoDataFactory.ForType(typeof(T));
-            return Execute(string.Format("UPDATE {0} {1}", _dbType.EscapeTableName(pd.TableInfo.TableName), sql), args);
+            TableInfo tableInfo = this.PocoDataFactory.TableInfoForType(typeof(T));
+            return this.Execute(string.Format("UPDATE {0} {1}", this._dbType.EscapeTableName(tableInfo.TableName), sql), args);
         }
 
         public int Update<T>(Sql sql)
         {
-            var pd = PocoDataFactory.ForType(typeof(T));
-            return Execute(new Sql(string.Format("UPDATE {0}", _dbType.EscapeTableName(pd.TableInfo.TableName))).Append(sql));
+            TableInfo tableInfo = this.PocoDataFactory.TableInfoForType(typeof(T));
+            return this.Execute(new Sql(string.Format("UPDATE {0}", this._dbType.EscapeTableName(tableInfo.TableName))).Append(sql));
         }
 
         public IDeleteQueryProvider<T> DeleteMany<T>()
@@ -1574,69 +1683,64 @@ namespace Frapid.NPoco
 
         public int Delete(string tableName, string primaryKeyName, object poco)
         {
-            return Delete(tableName, primaryKeyName, poco, null);
+            return this.Delete(tableName, primaryKeyName, poco, null);
         }
 
         public virtual int Delete(string tableName, string primaryKeyName, object poco, object primaryKeyValue)
         {
-            if (!OnDeleting(new DeleteContext(poco, tableName, primaryKeyName, primaryKeyValue))) return 0;
+            return this.DeleteImp(tableName, primaryKeyName, poco, primaryKeyValue, this.Execute, 0);
+        }
 
-            var primaryKeyValuePairs = GetPrimaryKeyValues(primaryKeyName, primaryKeyValue);
-            // If primary key value not specified, pick it up from the object
-            if (primaryKeyValue == null)
-            {
-                var pd = PocoDataFactory.ForObject(poco, primaryKeyName);
-                foreach (var i in pd.Columns)
-                {
-                    if (primaryKeyValuePairs.ContainsKey(i.Key))
-                    {
-                        primaryKeyValuePairs[i.Key] = ProcessMapper(i.Value, i.Value.GetValue(poco));
-                    }
-                }
-            }
+        private TRet DeleteImp<TRet>(string tableName, string primaryKeyName, object poco, object primaryKeyValue, Func<string, object[], TRet> executeFunc, TRet defaultRet)
+        {
+            if (!this.OnDeletingInternal(new DeleteContext(poco, tableName, primaryKeyName, primaryKeyValue)))
+                return defaultRet;
+
+            PocoData pd = poco != null ? this.PocoDataFactory.ForObject(poco, primaryKeyName, true) : null;
+            Dictionary<string, object> primaryKeyValuePairs = this.GetPrimaryKeyValues(pd, primaryKeyName, primaryKeyValue ?? poco, primaryKeyValue == null);
 
             // Do it
-            var index = 0;
-            var sql = string.Format("DELETE FROM {0} WHERE {1}", _dbType.EscapeTableName(tableName), BuildPrimaryKeySql(primaryKeyValuePairs, ref index));
-            return Execute(sql, primaryKeyValuePairs.Select(x => x.Value).ToArray());
+            int index = 0;
+            string sql = string.Format("DELETE FROM {0} WHERE {1}", this._dbType.EscapeTableName(tableName), this.BuildPrimaryKeySql(primaryKeyValuePairs, ref index));
+            return executeFunc(sql, primaryKeyValuePairs.Select(x => x.Value).ToArray());
         }
 
         public int Delete(object poco)
         {
-            var pd = PocoDataFactory.ForType(poco.GetType());
-            return Delete(pd.TableInfo.TableName, pd.TableInfo.PrimaryKey, poco);
+            TableInfo tableInfo = this.PocoDataFactory.TableInfoForType(poco.GetType());
+            return this.Delete(tableInfo.TableName, tableInfo.PrimaryKey, poco);
         }
 
         public int Delete<T>(object pocoOrPrimaryKey)
         {
             if (pocoOrPrimaryKey.GetType() == typeof(T))
-                return Delete(pocoOrPrimaryKey);
-            var pd = PocoDataFactory.ForType(typeof(T));
-            return Delete(pd.TableInfo.TableName, pd.TableInfo.PrimaryKey, null, pocoOrPrimaryKey);
+                return this.Delete(pocoOrPrimaryKey);
+            TableInfo tableInfo = this.PocoDataFactory.TableInfoForType(typeof(T));
+            return this.Delete(tableInfo.TableName, tableInfo.PrimaryKey, null, pocoOrPrimaryKey);
         }
 
         public int Delete<T>(string sql, params object[] args)
         {
-            var pd = PocoDataFactory.ForType(typeof(T));
-            return Execute(string.Format("DELETE FROM {0} {1}", _dbType.EscapeTableName(pd.TableInfo.TableName), sql), args);
+            TableInfo tableInfo = this.PocoDataFactory.TableInfoForType(typeof(T));
+            return this.Execute(string.Format("DELETE FROM {0} {1}", this._dbType.EscapeTableName(tableInfo.TableName), sql), args);
         }
 
         public int Delete<T>(Sql sql)
         {
-            var pd = PocoDataFactory.ForType(typeof(T));
-            return Execute(new Sql(string.Format("DELETE FROM {0}", _dbType.EscapeTableName(pd.TableInfo.TableName))).Append(sql));
+            TableInfo tableInfo = this.PocoDataFactory.TableInfoForType(typeof(T));
+            return this.Execute(new Sql(string.Format("DELETE FROM {0}", this._dbType.EscapeTableName(tableInfo.TableName))).Append(sql));
         }
 
         /// <summary>Checks if a poco represents a new record.</summary>
-        public bool IsNew<T>(object poco)
+        public bool IsNew<T>(T poco)
         {
-#if !POCO_NO_DYNAMIC
+#if !NET35
             if (poco is System.Dynamic.ExpandoObject || poco is PocoExpando)
             {
                 return true;
             }
 #endif
-            var pd = PocoDataFactory.ForType(poco.GetType());
+            PocoData pd = this.PocoDataFactory.ForType(poco.GetType());
             object pk;
             PocoColumn pc;
 
@@ -1646,28 +1750,24 @@ namespace Frapid.NPoco
             }
             else if (pd.TableInfo.PrimaryKey.Contains(","))
             {
-                foreach (var compositeKey in pd.TableInfo.PrimaryKey.Split(','))
-                {
-                    var keyName = compositeKey.Trim();
-                    var pi = poco.GetType().GetProperty(keyName);
-                    if (pi == null) throw new ArgumentException(string.Format("The object doesn't have a property matching the composite primary key column name '{0}'", compositeKey));
-                }
-
-                return !Exists<T>(poco);
+                return !this.PocoExists(poco);
             }
             else
             {
-                var pi = poco.GetType().GetProperty(pd.TableInfo.PrimaryKey);
+                PropertyInfo pi = poco.GetType().GetProperty(pd.TableInfo.PrimaryKey);
                 if (pi == null) throw new ArgumentException(string.Format("The object doesn't have a property matching the primary key column name '{0}'", pd.TableInfo.PrimaryKey));
                 pk = pi.GetValue(poco, null);
             }
 
-            if (pk == null) return true;
-            if (!pd.TableInfo.AutoIncrement) return !Exists<T>(pk);
+            if (pk == null)
+                return true;
 
-            var type = pk.GetType();
+            if (!pd.TableInfo.AutoIncrement)
+                return !this.Exists<T>(pk);
 
-            if (type.IsValueType)
+            Type type = pk.GetType();
+
+            if (type.GetTypeInfo().IsValueType)
             {
                 // Common primary key types
                 if (type == typeof(long)) return (long)pk == default(long);
@@ -1684,71 +1784,68 @@ namespace Frapid.NPoco
         }
 
         // Insert new record or Update existing record
-        public void Save<T>(object poco)
+        public void Save<T>(T poco)
         {
-            var pd = PocoDataFactory.ForType(poco.GetType());
-            if (IsNew<T>(poco))
+            TableInfo tableInfo = this.PocoDataFactory.TableInfoForType(poco.GetType());
+            if (this.IsNew(poco))
             {
-                Insert(pd.TableInfo.TableName, pd.TableInfo.PrimaryKey, pd.TableInfo.AutoIncrement, poco);
+                this.Insert(tableInfo.TableName, tableInfo.PrimaryKey, tableInfo.AutoIncrement, poco);
             }
             else
             {
-                Update(pd.TableInfo.TableName, pd.TableInfo.PrimaryKey, poco);
+                this.Update(tableInfo.TableName, tableInfo.PrimaryKey, poco);
             }
         }
 
         public int CommandTimeout { get; set; }
         public int OneTimeCommandTimeout { get; set; }
 
-        void DoPreExecute(IDbCommand cmd)
+        void DoPreExecute(DbCommand cmd)
         {
             // Setup command timeout
-            if (OneTimeCommandTimeout != 0)
+            if (this.OneTimeCommandTimeout != 0)
             {
-                cmd.CommandTimeout = OneTimeCommandTimeout;
-                OneTimeCommandTimeout = 0;
+                cmd.CommandTimeout = this.OneTimeCommandTimeout;
+                this.OneTimeCommandTimeout = 0;
             }
-            else if (CommandTimeout != 0)
+            else if (this.CommandTimeout != 0)
             {
-                cmd.CommandTimeout = CommandTimeout;
+                cmd.CommandTimeout = this.CommandTimeout;
             }
 
             // Call hook
-            OnExecutingCommand(cmd);
+            this.OnExecutingCommandInternal(cmd);
 
             // Save it
-            _lastSql = cmd.CommandText;
-            _lastArgs = (from IDataParameter parameter in cmd.Parameters select parameter.Value).ToArray();
+            this._lastSql = cmd.CommandText;
+            this._lastArgs = (from DbParameter parameter in cmd.Parameters select parameter.Value).ToArray();
         }
 
-        public string LastSQL { get { return _lastSql; } }
-        public object[] LastArgs { get { return _lastArgs; } }
-        public string LastCommand
-        {
-            get { return FormatCommand(_lastSql, _lastArgs); }
-        }
+        public string LastSQL => this._lastSql;
+        public object[] LastArgs => this._lastArgs;
+        public string LastCommand => this.FormatCommand(this._lastSql, this._lastArgs);
 
         private class FormattedParameter
         {
             public Type Type { get; set; }
             public object Value { get; set; }
-            public IDataParameter Parameter { get; set; }
+            public DbParameter Parameter { get; set; }
         }
 
-        public string FormatCommand(IDbCommand cmd)
+        public string FormatCommand(DbCommand cmd)
         {
-            var parameters = cmd.Parameters.Cast<IDataParameter>().Select(parameter => new FormattedParameter()
+            IEnumerable<FormattedParameter> parameters = cmd.Parameters.Cast<DbParameter>().Select(parameter => new FormattedParameter()
             {
                 Type = parameter.Value.GetTheType(),
                 Value = parameter.Value,
                 Parameter = parameter
             });
-            return FormatCommand(cmd.CommandText, parameters.Cast<object>().ToArray());
+            return this.FormatCommand(cmd.CommandText, parameters.Cast<object>().ToArray());
         }
 
         public string FormatCommand(string sql, object[] args)
         {
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             if (sql == null)
                 return "";
             sb.Append(sql);
@@ -1757,79 +1854,93 @@ namespace Frapid.NPoco
                 sb.Append("\n");
                 for (int i = 0; i < args.Length; i++)
                 {
-                    var type = args[i] != null ? args[i].GetType().Name : string.Empty;
-                    var value = args[i];
-                    var formatted = args[i] as FormattedParameter;
+                    string type = args[i] != null ? args[i].GetType().Name : string.Empty;
+                    object value = args[i];
+                    FormattedParameter formatted = args[i] as FormattedParameter;
                     if (formatted != null)
                     {
                         type = formatted.Type != null ? formatted.Type.Name : string.Format("{0}, {1}", formatted.Parameter.GetType().Name, formatted.Parameter.DbType);
                         value = formatted.Value;
                     }
-                    sb.AppendFormat("\t -> {0}{1} [{2}] = \"{3}\"\n", _paramPrefix, i, type, value);
+                    sb.AppendFormat("\t -> {0}{1} [{2}] = \"{3}\"\n", this._paramPrefix, i, type, value);
                 }
                 sb.Remove(sb.Length - 1, 1);
             }
             return sb.ToString();
         }
 
-        public IMapper Mapper { get; set; }
+        private MapperCollection _mappers = new MapperCollection();
+        public MapperCollection Mappers => this._mappers;
 
-        private PocoDataFactory _pocoDataFactory;
-        public PocoDataFactory PocoDataFactory
+        private IPocoDataFactory _pocoDataFactory;
+        public IPocoDataFactory PocoDataFactory
         {
-            get { return _pocoDataFactory ?? new PocoDataFactory(Mapper); }
-            set { _pocoDataFactory = value; }
+            get { return this._pocoDataFactory ?? (this._pocoDataFactory = new PocoDataFactory(this.Mappers)); }
+            set { this._pocoDataFactory = value; }
         }
 
-        public string ConnectionString { get { return _connectionString; } }
+        public string ConnectionString => this._connectionString;
 
         // Member variables
         private readonly string _connectionString;
         private readonly string _providerName;
         private DbProviderFactory _factory;
-        private IDbConnection _sharedConnection;
-        private IDbTransaction _transaction;
+        private DbConnection _sharedConnection;
+        private DbTransaction _transaction;
         private IsolationLevel _isolationLevel;
         private string _lastSql;
         private object[] _lastArgs;
         private string _paramPrefix = "@";
         private VersionExceptionHandling _versionException = VersionExceptionHandling.Exception;
 
-        internal int ExecuteNonQueryHelper(IDbCommand cmd)
+        internal int ExecuteNonQueryHelper(DbCommand cmd)
         {
-            DoPreExecute(cmd);
-            var result = cmd.ExecuteNonQuery();
-            OnExecutedCommand(cmd);
+            this.DoPreExecute(cmd);
+            int result = cmd.ExecuteNonQuery();
+            this.OnExecutedCommandInternal(cmd);
             return result;
         }
 
-        internal object ExecuteScalarHelper(IDbCommand cmd)
+        internal object ExecuteScalarHelper(DbCommand cmd)
         {
-            DoPreExecute(cmd);
+            this.DoPreExecute(cmd);
             object r = cmd.ExecuteScalar();
-            OnExecutedCommand(cmd);
+            this.OnExecutedCommandInternal(cmd);
             return r;
         }
 
-        internal IDataReader ExecuteReaderHelper(IDbCommand cmd)
+        internal DbDataReader ExecuteReaderHelper(DbCommand cmd)
         {
-            DoPreExecute(cmd);
-            IDataReader r = cmd.ExecuteReader();
-            OnExecutedCommand(cmd);
+            this.DoPreExecute(cmd);
+            DbDataReader r = cmd.ExecuteReader();
+            this.OnExecutedCommandInternal(cmd);
             return r;
         }
 
         internal object ProcessMapper(PocoColumn pc, object value)
         {
-            if (Mapper == null) return value;
+            Func<object, object> converter = this.Mappers.Find(x => x.GetToDbConverter(pc.ColumnType, pc.MemberInfoData.MemberInfo));
+            return converter != null ? converter(value) : this.ProcessDefaultMappings(pc, value);
+        }
 
-            if (pc is ExpandoColumn)
+        internal static bool IsEnum(MemberInfoData memberInfo)
+        {
+            Type underlyingType = Nullable.GetUnderlyingType(memberInfo.MemberType);
+            return memberInfo.MemberType.GetTypeInfo().IsEnum || (underlyingType != null && underlyingType.GetTypeInfo().IsEnum);
+        }
+
+        private object ProcessDefaultMappings(PocoColumn pocoColumn, object value)
+        {
+            if (pocoColumn.SerializedColumn)
             {
-                return value;
+                return DatabaseFactory.ColumnSerializer.Serialize(value);
+            }
+            if (pocoColumn.ColumnType == typeof (string) && IsEnum(pocoColumn.MemberInfoData) && value != null)
+            {
+                return value.ToString();
             }
 
-            var converter = Mapper.GetToDbConverter(pc.ColumnType, pc.MemberInfo);
-            return converter != null ? converter(value) : value;
+            return this._dbType.ProcessDefaultMappings(pocoColumn, value);
         }
     }
 }

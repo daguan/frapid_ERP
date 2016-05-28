@@ -4,7 +4,7 @@ namespace Frapid.NPoco
     {
         public AnsiString(string str)
         {
-            Value = str;
+            this.Value = str;
         }
         public string Value { get; private set; }
     }

@@ -1,34 +1,37 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Frapid.DataAccess;
 using Frapid.WebApi.DataAccess;
 
 namespace Frapid.WebApi.Service
 {
-    public class KanbanApiController : FrapidApiController
+    public class KanbanApiController: FrapidApiController
     {
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/kanbans/get-by-resources")]
-        public IEnumerable<dynamic> Get([FromUri] long[] kanbanIds, [FromUri] object[] resourceIds)
+        public async Task<IEnumerable<dynamic>> GetAsync([FromUri] long[] kanbanIds, [FromUri] object[] resourceIds)
         {
             try
             {
                 var repository = new KanbanRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return repository.Get(kanbanIds, resourceIds);
+                return await repository.GetAsync(kanbanIds, resourceIds);
             }
-            catch (UnauthorizedException)
+            catch(UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch (DataAccessException ex)
+            catch(DataAccessException ex)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    Content = new StringContent(ex.Message),
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
             }
 #if !DEBUG
             catch

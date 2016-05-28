@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using Frapid.Areas;
 using Frapid.Areas.Authorization;
 using Frapid.Authorization.Models;
@@ -9,22 +10,22 @@ using Frapid.Dashboard.Controllers;
 namespace Frapid.Authorization.Controllers
 {
     [AntiForgery]
-    public class MenuAccessPolicyController : DashboardController
+    public class MenuAccessPolicyController: DashboardController
     {
         [RestrictAnonymous]
         [Route("dashboard/authorization/menu-access/user-policy")]
         [MenuPolicy]
-        public ActionResult UserPolicy()
+        public async Task<ActionResult> UserPolicyAsync()
         {
-            var model = MenuAccessPolicyModel.Get();
+            var model = await MenuAccessPolicyModel.GetAsync();
             return this.FrapidView(this.GetRazorView<AreaRegistration>("MenuPolicy/Policy.cshtml"), model);
         }
 
         [RestrictAnonymous]
         [Route("dashboard/authorization/menu-access/user-policy/{officeId}/{userId}")]
-        public ActionResult GetPolicy(int officeId, int userId)
+        public async Task<ActionResult> GetPolicyAsync(int officeId, int userId)
         {
-            var model = MenuAccessPolicyModel.Get(officeId, userId);
+            var model = await MenuAccessPolicyModel.GetAsync(officeId, userId);
             return this.Ok(model);
         }
 
@@ -32,14 +33,14 @@ namespace Frapid.Authorization.Controllers
         [RestrictAnonymous]
         [HttpPut]
         [Route("dashboard/authorization/menu-access/user-policy")]
-        public ActionResult SavePolicy(UserMenuPolicyInfo model)
+        public async Task<ActionResult> SavePolicyAsync(UserMenuPolicyInfo model)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 return this.InvalidModelState();
             }
 
-            MenuAccessPolicyModel.Save(model);
+            await MenuAccessPolicyModel.SaveAsync(model);
             return this.Ok("OK");
         }
     }

@@ -94,17 +94,14 @@ ON config.filters(object_name);
 CREATE TABLE config.custom_field_data_types
 (
     data_type                                   national character varying(50) NOT NULL PRIMARY KEY,
-    is_number                                   bit DEFAULT(0),
-    is_date                                     bit DEFAULT(0),
-    is_bit										bit DEFAULT(0),
-    is_long_text								bit DEFAULT(0)
+	underlying_type								national character varying(500) NOT NULL
 );
 
 CREATE TABLE config.custom_field_forms
 (
     form_name                                   national character varying(100) NOT NULL PRIMARY KEY,
-    table_name                                  national character varying(100) NOT NULL UNIQUE,
-    key_name                                    national character varying(100) NOT NULL        
+    table_name                                  national character varying(500) NOT NULL UNIQUE,
+    key_name                                    national character varying(500) NOT NULL        
 );
 
 
@@ -113,9 +110,11 @@ CREATE TABLE config.custom_field_setup
     custom_field_setup_id                       integer IDENTITY NOT NULL PRIMARY KEY,
     form_name                                   national character varying(100) NOT NULL
                                                 REFERENCES config.custom_field_forms,
+	before_field								national character varying(500),
     field_order                                 integer NOT NULL DEFAULT(0),
+	after_field									national character varying(500),
     field_name                                  national character varying(100) NOT NULL,
-    field_label                                 national character varying(100) NOT NULL,                   
+    field_label                                 national character varying(200) NOT NULL,                   
     data_type                                   national character varying(50)
                                                 REFERENCES config.custom_field_data_types,
     description                                 national character varying(500) NOT NULL
@@ -127,7 +126,7 @@ CREATE TABLE config.custom_fields
     custom_field_id                             bigint IDENTITY NOT NULL PRIMARY KEY,
     custom_field_setup_id                       integer NOT NULL REFERENCES config.custom_field_setup,
     resource_id                                 national character varying(500) NOT NULL,
-    value                                       national character varying(500)
+    value                                       national character varying(MAX)
 );
 
 
@@ -167,32 +166,56 @@ GO
 
 IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='text')
 BEGIN
-    INSERT INTO config.custom_field_data_types(data_type, is_number)
-    SELECT 'text', 0;
+    INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+    SELECT 'Text', 'national character varying(500)';
 END;
 
 IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Number')
 BEGIN
-    INSERT INTO config.custom_field_data_types(data_type, is_number)
-    SELECT 'Number', 1;
+    INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+    SELECT 'Number', 'integer';
+END;
+
+IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Number')
+BEGIN
+    INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+    SELECT 'Positive Number', 'dbo.integer_strict';
+END;
+
+IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Number')
+BEGIN
+    INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+    SELECT 'Money', 'decimal(24, 4)';
+END;
+
+IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Number')
+BEGIN
+    INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+    SELECT 'Money (Positive Value Only)', 'dbo.money_strict';
 END;
 
 IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Date')
 BEGIN
-    INSERT INTO config.custom_field_data_types(data_type, is_date)
-    SELECT 'Date', 1;
+    INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+    SELECT 'Date', 'date';
+END;
+
+IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Date')
+BEGIN
+    INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+    SELECT 'Date & Time', 'datetimeoffset';
 END;
 
 IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='True/False')
 BEGIN
-    INSERT INTO config.custom_field_data_types(data_type, is_bit)
-    SELECT 'True/False', 1;
+    INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+    SELECT 'True/False', 'bit';
 END;
 
 IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='Long Text')
 BEGIN
-    INSERT INTO config.custom_field_data_types(data_type, is_long_text)
-    SELECT 'Long Text', 1;
+    INSERT INTO config.custom_field_data_types(data_type, underlying_type)
+    SELECT 'Long Text', 'national character varying(MAX)';
 END;
 
 
@@ -409,7 +432,7 @@ BEGIN
 		data_type               national character varying(50),
 		is_number               bit,
 		is_date                 bit,
-		is_bit              bit,
+		is_bit              	bit,
 		is_long_text            bit,
 		resource_id             national character varying(500),
 		value                   national character varying(500)

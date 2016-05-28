@@ -27,13 +27,13 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
             string tenant = AppUsers.GetTenant();
 
-            if (EmailSubscriptions.Add(tenant, model.EmailAddress))
+            if (await EmailSubscriptions.AddAsync(tenant, model.EmailAddress))
             {
                 var email = new SubscriptionWelcomeEmail();
                 await email.SendAsync(tenant, model);
             }
 
-            Thread.Sleep(1000);
+            await Task.Delay(1000);
             return this.Ok();
         }
 
@@ -57,13 +57,13 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
             string tenant = AppUsers.GetTenant();
 
-            if (EmailSubscriptions.Remove(tenant, model.EmailAddress))
+            if (await EmailSubscriptions.RemoveAsync(tenant, model.EmailAddress))
             {
                 var email = new SubscriptionRemovedEmail();
                 await email.SendAsync(tenant, model);
             }
 
-            Thread.Sleep(1000);
+            await Task.Delay(1000);
             return this.Ok();
         }
     }

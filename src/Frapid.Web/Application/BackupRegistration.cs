@@ -22,17 +22,13 @@ namespace Frapid.Web
             int hour = 0;
             int minute = 0;
 
-            if (scheduleData.Length.Equals(2))
+            if(scheduleData.Length.Equals(2))
             {
                 hour = scheduleData[0].To<int>();
                 minute = scheduleData[1].To<int>();
             }
 
-            var trigger = TriggerBuilder.Create()
-                .WithIdentity("Backup", "PerformBackup")
-                .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(hour, minute)
-                    .InTimeZone(TimeZoneInfo.Utc))
-                .Build();
+            var trigger = TriggerBuilder.Create().WithIdentity("Backup", "PerformBackup").WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(hour, minute).InTimeZone(TimeZoneInfo.Utc)).Build();
 
             scheduler.ScheduleJob(job, trigger);
         }

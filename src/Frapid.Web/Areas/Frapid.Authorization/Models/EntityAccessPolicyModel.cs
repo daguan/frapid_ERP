@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Frapid.ApplicationState.Cache;
 using Frapid.Authorization.DAL;
 using Frapid.Authorization.ViewModels;
@@ -8,16 +9,16 @@ namespace Frapid.Authorization.Models
 {
     public static class EntityAccessPolicyModel
     {
-        public static UserEntityAccessPolicy Get()
+        public static async Task<UserEntityAccessPolicy> GetAsync()
         {
-            if (!AppUsers.GetCurrent().IsAdministrator)
+            if (!(await AppUsers.GetCurrentAsync()).IsAdministrator)
             {
                 return new UserEntityAccessPolicy();
             }
 
             string tenant = AppUsers.GetTenant();
-            var offices = Offices.GetOffices(tenant);
-            var users = Users.GetUsers(tenant);
+            var offices = await Offices.GetOfficesAsync(tenant);
+            var users = await Users.GetUsersAsync(tenant);
 
 
             return new UserEntityAccessPolicy
@@ -25,31 +26,31 @@ namespace Frapid.Authorization.Models
                 Offices = offices,
                 Users = users,
                 AccessTypes = AccessType.GetAccessTypes(),
-                Entities = Entity.GetEntities()
+                Entities = await Entity.GetEntitiesAsync()
             };
         }
 
-        internal static List<AccessPolicyInfo> Get(int officeId, int userId)
+        internal static async Task<List<AccessPolicyInfo>> GetAsync(int officeId, int userId)
         {
-            if (!AppUsers.GetCurrent().IsAdministrator)
+            if (!(await AppUsers.GetCurrentAsync()).IsAdministrator)
             {
                 return new List<AccessPolicyInfo>();
             }
 
             string tenant = AppUsers.GetTenant();
-            var data = AccessPolicy.GetPolicy(tenant, officeId, userId);
+            var data = await AccessPolicy.GetPolicyAsync(tenant, officeId, userId);
             return data.Adapt<List<AccessPolicyInfo>>();
         }
 
-        public static void Save(int officeId, int userId, List<AccessPolicyInfo> model)
+        public static async Task SaveAsync(int officeId, int userId, List<AccessPolicyInfo> model)
         {
-            if (!AppUsers.GetCurrent().IsAdministrator)
+            if (!(await AppUsers.GetCurrentAsync()).IsAdministrator)
             {
                 return;
             }
 
             string tenant = AppUsers.GetTenant();
-            AccessPolicy.SavePolicy(tenant, officeId, userId, model);
+            await AccessPolicy.SavePolicyAsync(tenant, officeId, userId, model);
         }
     }
 }

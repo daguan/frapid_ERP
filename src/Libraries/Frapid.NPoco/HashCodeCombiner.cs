@@ -21,40 +21,40 @@ namespace Frapid.NPoco
 
         public HashCodeCombiner(string seed)
         {
-            AddCaseInsensitiveString(seed);
+            this.AddCaseInsensitiveString(seed);
         }
 
         private long _combinedHash = 5381L;
 
         internal HashCodeCombiner AddInt(int i)
         {
-            _combinedHash = ((_combinedHash << 5) + _combinedHash) ^ i;
+            this._combinedHash = ((this._combinedHash << 5) + this._combinedHash) ^ i;
             return this;
         }
 
         internal HashCodeCombiner AddBool(bool b)
         {
-            AddInt(b.GetHashCode());
+            this.AddInt(b.GetHashCode());
             return this;
         }
 
         internal HashCodeCombiner AddType(Type t)
         {
             if (t !=  null)
-                AddInt((t.AssemblyQualifiedName ?? t.ToString()).GetHashCode());
+                this.AddInt((t.AssemblyQualifiedName ?? t.ToString()).GetHashCode());
             return this;
         }
 
         internal HashCodeCombiner AddCaseInsensitiveString(string s)
         {
             if (s != null)
-                AddInt((StringComparer.InvariantCultureIgnoreCase).GetHashCode(s));
+                this.AddInt((StringComparer.OrdinalIgnoreCase).GetHashCode(s));
             return this;
         }
 
         internal HashCodeCombiner Each<T>(IEnumerable<T> list, Action<HashCodeCombiner, T> action)
         {
-            foreach (var item in list)
+            foreach (T item in list)
             {
                 action(this, item);
             }
@@ -68,7 +68,7 @@ namespace Frapid.NPoco
         /// <returns></returns>
         internal string GetCombinedHashCode()
         {
-            return _combinedHash.ToString("x", CultureInfo.InvariantCulture);
+            return this._combinedHash.ToString("x", CultureInfo.InvariantCulture);
         }
 
     }

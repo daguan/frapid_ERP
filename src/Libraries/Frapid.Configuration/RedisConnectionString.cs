@@ -9,12 +9,12 @@ namespace Frapid.Configuration
         public static string GetConnectionString()
         {
             string path = PathMapper.MapPath("/Resources/Configs/RedisConfig.json");
-            if (File.Exists(path))
+            if(File.Exists(path))
             {
                 string contents = File.ReadAllText(path, Encoding.UTF8);
                 var config = JsonConvert.DeserializeObject<RedisConfig>(contents);
 
-                return config.ConnectionMultiplexerConnection;
+                return config.ConfigString;
             }
 
             return string.Empty;

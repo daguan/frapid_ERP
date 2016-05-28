@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.Account.DAL;
 using Frapid.Account.InputModels;
@@ -23,7 +24,7 @@ namespace Frapid.Account.Controllers
         [Route("account/log-in")]
         [Route("account/log-in/social")]
         [AllowAnonymous]
-        public ActionResult Index()
+        public async Task<ActionResult> IndexAsync()
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -31,7 +32,7 @@ namespace Frapid.Account.Controllers
             }
 
             string tenant = AppUsers.GetTenant();
-            var profile = ConfigurationProfiles.GetActiveProfile(tenant);
+            var profile = await ConfigurationProfiles.GetActiveProfileAsync(tenant);
 
 
             var model = profile.Adapt<SignIn>() ?? new SignIn();
@@ -42,7 +43,7 @@ namespace Frapid.Account.Controllers
         [Route("account/log-in")]
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult Do(SignInInfo model)
+        public async Task<ActionResult> DoAsync(SignInInfo model)
         {
             if (!ModelState.IsValid)
             {
@@ -52,16 +53,16 @@ namespace Frapid.Account.Controllers
             try
             {
                 string tenant = AppUsers.GetTenant();
-                bool isValid = this.CheckPassword(tenant, model.Email, model.Password);
+                bool isValid = await this.CheckPasswordAsync(tenant, model.Email, model.Password);
 
                 if (!isValid)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                 }
 
-                var result = DAL.SignIn.Do(tenant, model.Email, model.OfficeId, this.RemoteUser.Browser,
+                var result = await DAL.SignIn.DoAsync(tenant, model.Email, model.OfficeId, this.RemoteUser.Browser,
                     this.RemoteUser.IpAddress, model.Culture.Or("en-US"));
-                return this.OnAuthenticated(result, model);
+                return await this.OnAuthenticatedAsync(result, model);
             }
             catch (NpgsqlException)
             {
@@ -72,10 +73,10 @@ namespace Frapid.Account.Controllers
         [Route("account/sign-in/offices")]
         [Route("account/log-in/offices")]
         [AllowAnonymous]
-        public ActionResult GetOffices()
+        public async Task<ActionResult> GetOfficesAsync()
         {
             string tenant = AppUsers.GetTenant();
-            return this.Ok(Offices.GetOffices(tenant));
+            return this.Ok(await Offices.GetOfficesAsync(tenant));
         }
 
         [Route("account/sign-in/languages")]
