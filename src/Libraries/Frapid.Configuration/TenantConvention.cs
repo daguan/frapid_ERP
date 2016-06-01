@@ -34,6 +34,11 @@ namespace Frapid.Configuration
 
         public static string GetDomain()
         {
+            if(FrapidHttpContext.GetCurrent() == null)
+            {
+                return string.Empty;
+            }
+
             string url = FrapidHttpContext.GetCurrent().Request.Url.Authority;
             var extractor = new DomainNameExtractor(Log.Logger);
             return extractor.GetDomain(url);
@@ -41,7 +46,7 @@ namespace Frapid.Configuration
 
         public static bool IsStaticDomain(string domain = "")
         {
-            if (string.IsNullOrWhiteSpace(domain))
+            if(string.IsNullOrWhiteSpace(domain))
             {
                 domain = GetDomain();
             }
@@ -56,7 +61,7 @@ namespace Frapid.Configuration
 
         public static bool EnforceSsl(string domain = "")
         {
-            if (string.IsNullOrWhiteSpace(domain))
+            if(string.IsNullOrWhiteSpace(domain))
             {
                 domain = GetDomain();
             }
@@ -87,7 +92,7 @@ namespace Frapid.Configuration
 
         public static bool IsValidDomain(string domain = "")
         {
-            if (string.IsNullOrWhiteSpace(domain))
+            if(string.IsNullOrWhiteSpace(domain))
             {
                 domain = GetDomain();
                 Log.Verbose($"The empty domain was automatically resolved to \"{domain}\".");
@@ -115,13 +120,20 @@ namespace Frapid.Configuration
         public static ApprovedDomain GetSite(string tenant)
         {
             var serializer = GetSerializer();
-            var site = serializer.Get().FirstOrDefault(domain => GetDbNameByConvention(domain.DomainName) == tenant);
+            var members = serializer.Get();
+
+            var site = members.FirstOrDefault(domain => GetDbNameByConvention(domain.DomainName) == tenant);
             return site;
         }
 
 
         public static string GetTenant(string url = "")
         {
+            if(string.IsNullOrWhiteSpace(url))
+            {
+                url = FrapidHttpContext.GetCurrent().Request.Url.Authority;
+            }
+
             var locator = GetTenantLocator();
             string defaultTenant = GetDefaultTenantName();
 

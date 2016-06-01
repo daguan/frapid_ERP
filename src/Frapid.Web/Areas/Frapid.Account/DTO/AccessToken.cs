@@ -5,7 +5,7 @@ using Frapid.NPoco;
 namespace Frapid.Account.DTO
 {
     [TableName("account.access_tokens")]
-    [PrimaryKey("access_token_id", AutoIncrement = false)]
+    [PrimaryKey("access_token_id", AutoIncrement = true)]
     public sealed class AccessToken : IPoco
     {
         public Guid AccessTokenId { get; set; }

@@ -1,24 +1,24 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.Account.DAL;
 using Frapid.Account.Emails;
 using Frapid.Account.InputModels;
+using Frapid.Account.ViewModels;
 using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
+using Frapid.Areas.CSRF;
 using Frapid.WebsiteBuilder.Controllers;
-using Reset = Frapid.Account.ViewModels.Reset;
 
 namespace Frapid.Account.Controllers.Frontend
 {
     [AntiForgery]
-    public class ResetController : WebsiteBuilderController
+    public class ResetController: WebsiteBuilderController
     {
         [Route("account/reset")]
         [AllowAnonymous]
         public ActionResult Index()
         {
-            if (RemoteUser.IsListedInSpamDatabase())
+            if(RemoteUser.IsListedInSpamDatabase())
             {
                 return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
             }
@@ -32,12 +32,12 @@ namespace Frapid.Account.Controllers.Frontend
         public async Task<ActionResult> IndexAsync(ResetInfo model)
         {
             var token = this.Session["Token"];
-            if (token == null)
+            if(token == null)
             {
                 return this.Redirect("/");
             }
 
-            if (model.Token != token.ToString())
+            if(model.Token != token.ToString())
             {
                 return this.Redirect("/");
             }
@@ -46,14 +46,14 @@ namespace Frapid.Account.Controllers.Frontend
             model.IpAddress = this.RemoteUser.IpAddress;
             string tenant = AppUsers.GetTenant();
 
-            if (await DAL.ResetRequests.HasActiveResetRequestAsync(tenant, model.Email))
+            if(await ResetRequests.HasActiveResetRequestAsync(tenant, model.Email))
             {
                 return this.Json(true);
             }
 
-            var result = await DAL.ResetRequests.RequestAsync(tenant, model);
+            var result = await ResetRequests.RequestAsync(tenant, model);
 
-            if (result.UserId <= 0)
+            if(result.UserId <= 0)
             {
                 return this.Redirect("/");
             }
@@ -66,7 +66,7 @@ namespace Frapid.Account.Controllers.Frontend
 
         [Route("account/reset/validate-email")]
         [HttpPost]
-        [AllowAnonymous]       
+        [AllowAnonymous]
         public async Task<ActionResult> ValidateEmailAsync(string email)
         {
             await Task.Delay(1000);
@@ -79,7 +79,7 @@ namespace Frapid.Account.Controllers.Frontend
         [AllowAnonymous]
         public ActionResult ResetEmailSent()
         {
-            if (RemoteUser.IsListedInSpamDatabase())
+            if(RemoteUser.IsListedInSpamDatabase())
             {
                 return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
             }
@@ -91,21 +91,21 @@ namespace Frapid.Account.Controllers.Frontend
         [AllowAnonymous]
         public async Task<ActionResult> DoAsync(string token)
         {
-            if (RemoteUser.IsListedInSpamDatabase())
+            if(RemoteUser.IsListedInSpamDatabase())
             {
                 return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
             }
 
-            if (string.IsNullOrWhiteSpace(token))
+            if(string.IsNullOrWhiteSpace(token))
             {
                 return this.Redirect("/site/404");
             }
 
             string tenant = AppUsers.GetTenant();
 
-            var reset = await DAL.ResetRequests.GetIfActiveAsync(tenant, token);
+            var reset = await ResetRequests.GetIfActiveAsync(tenant, token);
 
-            if (reset == null)
+            if(reset == null)
             {
                 return this.Redirect("/site/404");
             }
@@ -115,23 +115,24 @@ namespace Frapid.Account.Controllers.Frontend
 
         [Route("account/reset/confirm")]
         [HttpPost]
-        [AllowAnonymous]        
+        [AllowAnonymous]
         public async Task<ActionResult> DoAsync()
         {
             string token = this.Request.QueryString["token"];
             string password = this.Request.QueryString["password"];
 
-            if (string.IsNullOrWhiteSpace(token) || string.IsNullOrWhiteSpace(password))
+            if(string.IsNullOrWhiteSpace(token) ||
+               string.IsNullOrWhiteSpace(password))
             {
                 return this.Json(false);
             }
 
             string tenant = AppUsers.GetTenant();
 
-            var reset = await DAL.ResetRequests.GetIfActiveAsync(tenant, token);
-            if (reset != null)
+            var reset = await ResetRequests.GetIfActiveAsync(tenant, token);
+            if(reset != null)
             {
-                await DAL.ResetRequests.CompleteResetAsync(tenant, token, password);
+                await ResetRequests.CompleteResetAsync(tenant, token, password);
                 return this.Json(true);
             }
 

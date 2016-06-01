@@ -7,7 +7,7 @@ using static System.String;
 
 namespace frapid.Commands.Create
 {
-    public class CreateTemplate : CreateCommand
+    public class CreateTemplate: CreateCommand
     {
         public override string Syntax { get; } = "create template <TemplateName> on instance <Instance>\r\ncreate template <TemplateName> on domain <Domain>";
         public override string Name { get; } = "template";
@@ -15,14 +15,14 @@ namespace frapid.Commands.Create
         public string TemplateName { get; private set; }
         public string InstanceName { get; private set; }
         public string DomainName { get; private set; }
-        
+
         public override void Initialize()
         {
             this.TemplateName = this.Line.GetTokenOn(2);
 
-            var type = this.Line.GetTokenOn(4);
+            string type = this.Line.GetTokenOn(4);
 
-            if (type.ToLower().Equals("instance"))
+            if(type.ToLower().Equals("instance"))
             {
                 this.InstanceName = this.Line.GetTokenOn(5);
                 return;
@@ -30,7 +30,7 @@ namespace frapid.Commands.Create
 
             this.DomainName = this.Line.GetTokenOn(5);
 
-            if (IsNullOrWhiteSpace(this.DomainName))
+            if(IsNullOrWhiteSpace(this.DomainName))
             {
                 return;
             }
@@ -40,12 +40,12 @@ namespace frapid.Commands.Create
 
         private bool CheckInstance()
         {
-            var path = @"{0}\Tenants\{1}";
-            var directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..");
+            string path = @"{0}\Tenants\{1}";
+            string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..");
 
             path = Format(path, directory, this.InstanceName);
 
-            if (!Directory.Exists(path))
+            if(!Directory.Exists(path))
             {
                 CommandProcessor.DisplayError(Empty, "The instance {0} was not found.", this.InstanceName);
                 return false;
@@ -58,26 +58,33 @@ namespace frapid.Commands.Create
         {
             this.IsValid = false;
 
-            if (this.Line.CountTokens() > 3 && !this.Line.GetTokenOn(3).ToLower().Equals("on"))
+            if(this.Line.CountTokens() > 3 &&
+               !this.Line.GetTokenOn(3).ToLower().Equals("on"))
             {
                 CommandProcessor.DisplayError(this.Syntax, "Invalid token {0}", this.Line.GetTokenOn(3));
                 return;
             }
 
-            var types = new[] { "instance", "domain" };            
-            if (this.Line.CountTokens() > 4 && ! types.Contains(this.Line.GetTokenOn(4).ToLower()))
+            var types = new[]
+                        {
+                            "instance",
+                            "domain"
+                        };
+            if(this.Line.CountTokens() > 4 &&
+               !types.Contains(this.Line.GetTokenOn(4).ToLower()))
             {
                 CommandProcessor.DisplayError(Empty, "Invalid token {0}", this.Line.GetTokenOn(4));
                 return;
             }
 
-            if (IsNullOrWhiteSpace(this.TemplateName))
+            if(IsNullOrWhiteSpace(this.TemplateName))
             {
                 CommandProcessor.DisplayError(Empty, "Template was not mentioned.");
                 return;
             }
 
-            if (IsNullOrWhiteSpace(this.InstanceName) && IsNullOrWhiteSpace(this.DomainName))
+            if(IsNullOrWhiteSpace(this.InstanceName) &&
+               IsNullOrWhiteSpace(this.DomainName))
             {
                 CommandProcessor.DisplayError(Empty, "Instance or domain is empty.");
             }
@@ -89,14 +96,13 @@ namespace frapid.Commands.Create
         {
             await Task.Delay(1);
 
-            if (!this.IsValid)
+            if(!this.IsValid)
             {
                 return;
             }
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("Todo: create a template named \"{0}\" on \"{1}\" instance.", this.TemplateName,
-                this.InstanceName);
+            Console.WriteLine("Todo: create a template named \"{0}\" on \"{1}\" instance.", this.TemplateName, this.InstanceName);
             Console.WriteLine("Template was not created.");
             Console.ForegroundColor = ConsoleColor.White;
         }

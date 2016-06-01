@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
-using Frapid.Areas;
 using Frapid.Areas.Caching;
+using Frapid.Areas.CSRF;
 using Frapid.Configuration;
 using Frapid.WebsiteBuilder.Models;
 using Frapid.WebsiteBuilder.Plugins;
@@ -13,7 +13,7 @@ using Serilog;
 namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 {
     [AntiForgery]
-    public class IndexController : WebsiteBuilderController
+    public class IndexController: WebsiteBuilderController
     {
         [Route("hit")]
         [Route("site/{categoryAlias}/{alias}/hit")]
@@ -27,16 +27,16 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [Route("")]
         [Route("site/{categoryAlias}/{alias}")]
         [FrapidOutputCache(ProfileName = "Content")]
-        public async Task<ActionResult> IndexAsync(string categoryAlias = "", string alias = "", bool isPost = false,
-            FormCollection form = null)
+        public async Task<ActionResult> IndexAsync(string categoryAlias = "", string alias = "", bool isPost = false, FormCollection form = null)
         {
             try
             {
                 Log.Verbose($"Prepping \"{this.CurrentPageUrl}\".");
 
+
                 var model = await this.GetContentsAsync(categoryAlias, alias, isPost, form);
 
-                if (model == null)
+                if(model == null)
                 {
                     Log.Error($"Could not serve the url \"{this.CurrentPageUrl}\" because the model was null.");
                     return this.View(GetLayoutPath() + "404.cshtml");
@@ -52,11 +52,16 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
                 return this.View(this.GetRazorView<AreaRegistration>("Index/Index.cshtml"), model);
             }
-            catch (NpgsqlException ex)
+            catch(NpgsqlException ex)
             {
-                Log.Error(
-                    "An exception was encountered while trying to get content. More info:\nCategory alias: {categoryAlias}, alias: {alias}, is post: {isPost}, form: {form}. Exception\n{ex}.",
-                    categoryAlias, alias, isPost, form, ex);
+                Log.Error
+                    (
+                     "An exception was encountered while trying to get content. More info:\nCategory alias: {categoryAlias}, alias: {alias}, is post: {isPost}, form: {form}. Exception\n{ex}.",
+                     categoryAlias,
+                     alias,
+                     isPost,
+                     form,
+                     ex);
                 return new HttpNotFoundResult();
             }
         }
@@ -67,7 +72,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
             string tenant = TenantConvention.GetTenant(this.CurrentDomain);
             var model = await ContentModel.GetContentAsync(tenant, categoryAlias, alias);
 
-            if (model == null)
+            if(model == null)
             {
                 return null;
             }
@@ -80,6 +85,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
             model.LayoutPath = path;
             model.Layout = layout;
+
             return model;
         }
 

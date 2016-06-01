@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using Frapid.Configuration;
@@ -30,10 +31,9 @@ namespace Frapid.Installer
 
         public async Task InstallAsync()
         {
-            foreach (var dependency in this.Installable.Dependencies)
+            foreach(var dependency in this.Installable.Dependencies)
             {
-                InstallerLog.Verbose(
-                    $"Installing module {dependency.ApplicationName} because the module {this.Installable.ApplicationName} depends on it.");
+                InstallerLog.Verbose($"Installing module {dependency.ApplicationName} because the module {this.Installable.ApplicationName} depends on it.");
                 await new AppInstaller(this.Tenant, this.Database, dependency).InstallAsync();
             }
 
@@ -44,53 +44,52 @@ namespace Frapid.Installer
 
         protected async Task CreateMyAsync()
         {
-            if (string.IsNullOrWhiteSpace(this.Installable.My))
+            if(string.IsNullOrWhiteSpace(this.Installable.My))
             {
                 return;
             }
 
-            var database = this.Database;
-            if (this.Installable.IsMeta)
+            string database = this.Database;
+            if(this.Installable.IsMeta)
             {
                 database = Factory.GetMetaDatabase(database);
             }
 
-            var db = this.Installable.My;
-            var path = PathMapper.MapPath(db);
+            string db = this.Installable.My;
+            string path = PathMapper.MapPath(db);
             await this.RunSqlAsync(database, database, path);
         }
 
         protected async Task CreateSchemaAsync()
         {
-            var database = this.Database;
+            string database = this.Database;
 
-            if (this.Installable.IsMeta)
+            if(this.Installable.IsMeta)
             {
-                InstallerLog.Verbose(
-                    $"Creating database of {this.Installable.ApplicationName} under meta database {Factory.GetMetaDatabase(this.Database)}.");
+                InstallerLog.Verbose($"Creating database of {this.Installable.ApplicationName} under meta database {Factory.GetMetaDatabase(this.Database)}.");
                 database = Factory.GetMetaDatabase(this.Database);
             }
 
-            if (string.IsNullOrWhiteSpace(this.Installable.DbSchema))
+            if(string.IsNullOrWhiteSpace(this.Installable.DbSchema))
             {
                 return;
             }
 
-            if (await this.HasSchemaAsync(database))
+            if(await this.HasSchemaAsync(database))
             {
-                InstallerLog.Verbose(
-                    $"Skipped {this.Installable.ApplicationName} schema creation because it already exists.");
+                InstallerLog.Verbose($"Skipped {this.Installable.ApplicationName} schema creation because it already exists.");
                 return;
             }
 
             InstallerLog.Verbose($"Creating schema {this.Installable.DbSchema}");
 
 
-            var db = this.Installable.BlankDbPath;
-            var path = PathMapper.MapPath(db);
+            string db = this.Installable.BlankDbPath;
+            string path = PathMapper.MapPath(db);
             await this.RunSqlAsync(this.Tenant, database, path);
 
-            if (this.Installable.InstallSample && !string.IsNullOrWhiteSpace(this.Installable.SampleDbPath))
+            if(this.Installable.InstallSample &&
+               !string.IsNullOrWhiteSpace(this.Installable.SampleDbPath))
             {
                 InstallerLog.Verbose($"Creating sample data of {this.Installable.ApplicationName}.");
                 db = this.Installable.SampleDbPath;
@@ -101,30 +100,38 @@ namespace Frapid.Installer
 
         private async Task RunSqlAsync(string tenant, string database, string fromFile)
         {
-            await Store.RunSqlAsync(tenant, database, fromFile);
+            try
+            {
+                await Store.RunSqlAsync(tenant, database, fromFile);
+            }
+            catch (Exception ex)
+            {
+                InstallerLog.Verbose($"{ex.Message}");
+                throw;
+            }
         }
 
 
         protected void CreateOverride()
         {
-            if (string.IsNullOrWhiteSpace(this.Installable.OverrideTemplatePath) ||
-                string.IsNullOrWhiteSpace(this.Installable.OverrideDestination))
+            if(string.IsNullOrWhiteSpace(this.Installable.OverrideTemplatePath) ||
+               string.IsNullOrWhiteSpace(this.Installable.OverrideDestination))
             {
                 return;
             }
 
-            var source = PathMapper.MapPath(this.Installable.OverrideTemplatePath);
-            var destination = string.Format(CultureInfo.InvariantCulture, this.Installable.OverrideDestination,
-                this.Database);
+            string source = PathMapper.MapPath(this.Installable.OverrideTemplatePath);
+            string destination = string.Format(CultureInfo.InvariantCulture, this.Installable.OverrideDestination, this.Database);
             destination = PathMapper.MapPath(destination);
 
 
-            if (string.IsNullOrWhiteSpace(source) || string.IsNullOrWhiteSpace(destination))
+            if(string.IsNullOrWhiteSpace(source) ||
+               string.IsNullOrWhiteSpace(destination))
             {
                 return;
             }
 
-            if (!Directory.Exists(source))
+            if(!Directory.Exists(source))
             {
                 return;
             }

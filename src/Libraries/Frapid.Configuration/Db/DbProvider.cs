@@ -126,12 +126,16 @@ namespace Frapid.Configuration.Db
         }
 
 
-        public static Database GetDatabase(string tenant)
+        public static Database GetDatabase(string tenant, string connectionString = "")
         {
             string providerName = GetProviderName(tenant);
             var type = GetDbType(providerName);
             var provider = GetFactory(providerName);
-            string connectionString = FrapidDbServer.GetConnectionString(tenant);
+
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                connectionString = FrapidDbServer.GetConnectionString(tenant);
+            }
 
             return new Database(connectionString, type, provider);
         }

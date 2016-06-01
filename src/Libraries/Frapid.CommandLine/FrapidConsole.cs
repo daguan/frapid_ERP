@@ -11,7 +11,5 @@ namespace frapid
             Console.Write(FrapidPrompt);
             return Console.ReadLine();
         }
-
-
     }
 }

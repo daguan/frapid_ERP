@@ -8,7 +8,7 @@ using Frapid.Installer.Tenant;
 
 namespace Frapid.Installer.Commands
 {
-    public class CreateSite : CreateCommand
+    public class CreateSite: CreateCommand
     {
         public override string Syntax { get; } = "create site <DomainName> provider <ProviderName> [cleanup when done]";
         public override string Name { get; } = "site";
@@ -21,16 +21,21 @@ namespace Frapid.Installer.Commands
         {
             this.DomainName = this.Line.GetTokenOn(2);
 
-            var type = this.Line.GetTokenOn(3);
+            string type = this.Line.GetTokenOn(3);
 
-            if (type.ToLower().Equals("provider"))
+            if(type.ToLower().Equals("provider"))
             {
                 this.ProviderName = this.Line.GetTokenOn(4);
             }
 
-            var cleanupCommand = new[] { this.Line.GetTokenOn(5), this.Line.GetTokenOn(6), this.Line.GetTokenOn(7) };
+            var cleanupCommand = new[]
+                                 {
+                                     this.Line.GetTokenOn(5),
+                                     this.Line.GetTokenOn(6),
+                                     this.Line.GetTokenOn(7)
+                                 };
 
-            if (string.Join(" ", cleanupCommand).ToUpperInvariant().Equals("CLEANUP WHEN DONE"))
+            if(string.Join(" ", cleanupCommand).ToUpperInvariant().Equals("CLEANUP WHEN DONE"))
             {
                 this.CleanupWhenDone = true;
             }
@@ -40,49 +45,44 @@ namespace Frapid.Installer.Commands
         {
             this.IsValid = false;
 
-            if (this.Line.CountTokens() > 5 && !this.CleanupWhenDone)
+            if(this.Line.CountTokens() > 5 &&
+               !this.CleanupWhenDone)
             {
                 CommandProcessor.DisplayError(this.Syntax, "Invalid token {0}", this.Line.GetTokenOn(5));
                 return;
             }
 
-            if (this.Line.CountTokens() > 8 && this.CleanupWhenDone)
+            if(this.Line.CountTokens() > 8 &&
+               this.CleanupWhenDone)
             {
                 CommandProcessor.DisplayError(this.Syntax, "Invalid token {0}", this.Line.GetTokenOn(8));
                 return;
             }
 
-            var type = this.Line.GetTokenOn(1);
-            if (!type.ToUpperInvariant().Equals("SITE"))
+            string type = this.Line.GetTokenOn(1);
+            if(!type.ToUpperInvariant().Equals("SITE"))
             {
-                CommandProcessor.DisplayError(this.Syntax, "{0} is not a well-known terminology. Expecting: \"site\".",
-                    type);
+                CommandProcessor.DisplayError(this.Syntax, "{0} is not a well-known terminology. Expecting: \"site\".", type);
                 return;
             }
 
-            var provider = this.Line.GetTokenOn(3);
+            string provider = this.Line.GetTokenOn(3);
 
-            if (!provider.ToUpperInvariant().Equals("PROVIDER"))
+            if(!provider.ToUpperInvariant().Equals("PROVIDER"))
             {
-                CommandProcessor.DisplayError(this.Syntax,
-                    "{0} is not a well-known terminology. Expecting: \"provider\".",
-                    provider);
+                CommandProcessor.DisplayError(this.Syntax, "{0} is not a well-known terminology. Expecting: \"provider\".", provider);
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(this.DomainName))
+            if(string.IsNullOrWhiteSpace(this.DomainName))
             {
-                CommandProcessor.DisplayError(this.Syntax,
-                    "Invalid domain name {0}.",
-                    this.DomainName);
+                CommandProcessor.DisplayError(this.Syntax, "Invalid domain name {0}.", this.DomainName);
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(this.ProviderName))
+            if(string.IsNullOrWhiteSpace(this.ProviderName))
             {
-                CommandProcessor.DisplayError(this.Syntax,
-                    "Invalid provider name {0}.",
-                    this.ProviderName);
+                CommandProcessor.DisplayError(this.Syntax, "Invalid provider name {0}.", this.ProviderName);
                 return;
             }
 
@@ -92,7 +92,7 @@ namespace Frapid.Installer.Commands
 
         public override async Task ExecuteCommandAsync()
         {
-            if (!this.IsValid)
+            if(!this.IsValid)
             {
                 return;
             }
@@ -101,18 +101,19 @@ namespace Frapid.Installer.Commands
 
             try
             {
-                new DomainSerializer("domains_approved.json").Add(
-                    new ApprovedDomain
-                    {
-                        DomainName = this.DomainName,
-                        DbProvider = this.ProviderName,
-                        Synonyms = new string[0],
-                        BackupDirectory = string.Empty,
-                        AdminEmail = string.Empty,
-                        EnforceSsl = false,
-                        BackupDirectoryIsFixedPath = false,
-                        CdnDomain = string.Empty
-                    });
+                new DomainSerializer("DomainsApproved.json").Add
+                    (
+                     new ApprovedDomain
+                     {
+                         DomainName = this.DomainName,
+                         DbProvider = this.ProviderName,
+                         Synonyms = new string[0],
+                         BackupDirectory = string.Empty,
+                         AdminEmail = string.Empty,
+                         EnforceSsl = false,
+                         BackupDirectoryIsFixedPath = false,
+                         CdnDomain = string.Empty
+                     });
 
 
                 var installer = new Tenant.Installer(this.DomainName);
@@ -120,7 +121,7 @@ namespace Frapid.Installer.Commands
             }
             finally
             {
-                if (this.CleanupWhenDone)
+                if(this.CleanupWhenDone)
                 {
                     var uninstaller = new Uninstaller(this.DomainName);
                     await uninstaller.UnInstallAsync();

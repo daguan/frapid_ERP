@@ -4,6 +4,7 @@ using System.Web.Hosting;
 using System.Web.Mvc;
 using Frapid.Areas;
 using Frapid.Configuration;
+using Frapid.Framework;
 using Serilog;
 
 namespace Frapid.WebsiteBuilder.Controllers

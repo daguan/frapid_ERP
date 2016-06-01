@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Frapid.Configuration.DbServer;
+using Frapid.Framework.Extensions;
 using Serilog;
 
 namespace Frapid.Configuration
@@ -15,9 +16,9 @@ namespace Frapid.Configuration
             try
             {
                 var iType = typeof(IDbServer);
-                var members = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).Where(x => iType.IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract).Select(Activator.CreateInstance);
+                var members = iType.GetTypeMembersNotAbstract<IDbServer>();
 
-                foreach(var member in members.Cast<IDbServer>().Where(member => member.ProviderName.Equals(providerName)))
+                foreach(var member in members.Where(member => member.ProviderName.Equals(providerName)))
                 {
                     return member;
                 }

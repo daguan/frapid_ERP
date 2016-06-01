@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Frapid.Configuration;
@@ -13,19 +12,19 @@ namespace Frapid.Installer.DAL
         private static IStore GetDbServer(string tenant)
         {
             var site = TenantConvention.GetSite(tenant);
-            var providerName = site.DbProvider;
+            string providerName = site.DbProvider;
 
             try
             {
                 var iType = typeof(IStore);
                 var members = iType.GetTypeMembers<IStore>();
 
-                foreach (var member in members.Where(member => member.ProviderName.Equals(providerName)))
+                foreach(var member in members.Where(member => member.ProviderName.Equals(providerName)))
                 {
                     return member;
                 }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 InstallerLog.Error("{Exception}", ex);
                 throw;

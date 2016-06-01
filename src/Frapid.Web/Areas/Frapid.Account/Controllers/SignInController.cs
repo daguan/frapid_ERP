@@ -7,7 +7,7 @@ using Frapid.Account.DAL;
 using Frapid.Account.InputModels;
 using Frapid.Account.ViewModels;
 using Frapid.ApplicationState.Cache;
-using Frapid.Areas;
+using Frapid.Areas.CSRF;
 using Frapid.Configuration;
 using Frapid.Framework.Extensions;
 using Mapster;
@@ -17,7 +17,7 @@ using SignIn = Frapid.Account.ViewModels.SignIn;
 namespace Frapid.Account.Controllers
 {
     [AntiForgery]
-    public class SignInController : BaseAuthenticationController
+    public class SignInController: BaseAuthenticationController
     {
         [Route("account/sign-in")]
         [Route("account/sign-in/social")]
@@ -26,7 +26,7 @@ namespace Frapid.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> IndexAsync()
         {
-            if (User.Identity.IsAuthenticated)
+            if(User.Identity.IsAuthenticated)
             {
                 return Redirect("/dashboard");
             }
@@ -45,7 +45,7 @@ namespace Frapid.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> DoAsync(SignInInfo model)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
@@ -55,16 +55,15 @@ namespace Frapid.Account.Controllers
                 string tenant = AppUsers.GetTenant();
                 bool isValid = await this.CheckPasswordAsync(tenant, model.Email, model.Password);
 
-                if (!isValid)
+                if(!isValid)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                 }
 
-                var result = await DAL.SignIn.DoAsync(tenant, model.Email, model.OfficeId, this.RemoteUser.Browser,
-                    this.RemoteUser.IpAddress, model.Culture.Or("en-US"));
+                var result = await DAL.SignIn.DoAsync(tenant, model.Email, model.OfficeId, this.RemoteUser.Browser, this.RemoteUser.IpAddress, model.Culture.Or("en-US"));
                 return await this.OnAuthenticatedAsync(result, model);
             }
-            catch (NpgsqlException)
+            catch(NpgsqlException)
             {
                 return this.AccessDenied();
             }
@@ -84,19 +83,16 @@ namespace Frapid.Account.Controllers
         [AllowAnonymous]
         public ActionResult GetLanguages()
         {
-            var cultures =
-                ConfigurationManager.GetConfigurationValue("ParameterConfigFileLocation", "Cultures").Split(',');
+            var cultures = ConfigurationManager.GetConfigurationValue("ParameterConfigFileLocation", "Cultures").Split(',');
             var languages = (from culture in cultures
-                select culture.Trim()
-                into cultureName
-                from info in
-                    CultureInfo.GetCultures(CultureTypes.AllCultures)
-                        .Where(x => x.TwoLetterISOLanguageName.Equals(cultureName))
-                select new Language
-                {
-                    CultureCode = info.Name,
-                    NativeName = info.NativeName
-                }).ToList();
+                             select culture.Trim()
+                             into cultureName
+                             from info in CultureInfo.GetCultures(CultureTypes.AllCultures).Where(x => x.TwoLetterISOLanguageName.Equals(cultureName))
+                             select new Language
+                                    {
+                                        CultureCode = info.Name,
+                                        NativeName = info.NativeName
+                                    }).ToList();
 
             return this.Ok(languages);
         }

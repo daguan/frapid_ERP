@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
-using Frapid.Areas;
 using Frapid.Areas.Authorization;
+using Frapid.Areas.CSRF;
 using Frapid.Authorization.Models;
 using Frapid.Authorization.ViewModels;
 using Frapid.Dashboard;

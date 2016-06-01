@@ -46,23 +46,23 @@ namespace Frapid.Installer.Models
         {
             var installables = new List<Installable>();
 
-            if (this.DependsOn == null || this.DependsOn.Count().Equals(0))
+            if(this.DependsOn == null ||
+               this.DependsOn.Count().Equals(0))
             {
                 return installables;
             }
 
-            var root = PathMapper.MapPath("~/");
+            string root = PathMapper.MapPath("~/");
             var files = new List<string>();
 
-            if (root != null)
+            if(root != null)
             {
                 files = Directory.GetFiles(root, "AppInfo.json", SearchOption.AllDirectories).ToList();
             }
 
-            foreach (var installable in Enumerable.Where(files
-                .Select(file => File.ReadAllText(file, Encoding.UTF8))
-                .Select(JsonConvert.DeserializeObject<Installable>),
-                installable => this.DependsOn.Contains(installable.ApplicationName)))
+            foreach(
+                var installable in
+                    files.Select(file => File.ReadAllText(file, Encoding.UTF8)).Select(JsonConvert.DeserializeObject<Installable>).Where(installable => this.DependsOn.Contains(installable.ApplicationName)))
             {
                 installable.SetDependencies();
                 installables.Add(installable);

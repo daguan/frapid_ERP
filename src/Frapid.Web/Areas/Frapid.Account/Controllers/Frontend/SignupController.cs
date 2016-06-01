@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.Account.DAL;
@@ -8,19 +7,20 @@ using Frapid.Account.Models;
 using Frapid.Account.ViewModels;
 using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
+using Frapid.Areas.CSRF;
 using Frapid.Framework.Extensions;
 using Frapid.WebsiteBuilder.Controllers;
 
 namespace Frapid.Account.Controllers.Frontend
 {
     [AntiForgery]
-    public class SignUpController : WebsiteBuilderController
+    public class SignUpController: WebsiteBuilderController
     {
         [Route("account/sign-up")]
         [AllowAnonymous]
         public async Task<ActionResult> IndexAsync()
         {
-            if (RemoteUser.IsListedInSpamDatabase())
+            if(RemoteUser.IsListedInSpamDatabase())
             {
                 return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
             }
@@ -28,7 +28,8 @@ namespace Frapid.Account.Controllers.Frontend
             string tenant = AppUsers.GetTenant();
             var profile = await ConfigurationProfiles.GetActiveProfileAsync(tenant);
 
-            if (!profile.AllowRegistration || this.User.Identity.IsAuthenticated)
+            if(!profile.AllowRegistration ||
+               this.User.Identity.IsAuthenticated)
             {
                 return this.Redirect("/dashboard");
             }
@@ -40,7 +41,7 @@ namespace Frapid.Account.Controllers.Frontend
         [AllowAnonymous]
         public ActionResult EmailSent()
         {
-            if (RemoteUser.IsListedInSpamDatabase())
+            if(RemoteUser.IsListedInSpamDatabase())
             {
                 return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
             }
@@ -52,7 +53,7 @@ namespace Frapid.Account.Controllers.Frontend
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmAsync(string token)
         {
-            if (RemoteUser.IsListedInSpamDatabase())
+            if(RemoteUser.IsListedInSpamDatabase())
             {
                 return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
             }
@@ -60,7 +61,7 @@ namespace Frapid.Account.Controllers.Frontend
             var id = token.To<Guid>();
             string tenant = AppUsers.GetTenant();
 
-            if (!await Registrations.ConfirmRegistrationAsync(tenant, id))
+            if(!await Registrations.ConfirmRegistrationAsync(tenant, id))
             {
                 return this.View(this.GetRazorView<AreaRegistration>("SignUp/InvalidToken.cshtml"));
             }

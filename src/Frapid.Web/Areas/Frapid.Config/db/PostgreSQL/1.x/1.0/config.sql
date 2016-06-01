@@ -117,6 +117,7 @@ CREATE TABLE config.custom_field_setup
     description                                 text NOT NULL
 );
 
+
 CREATE TABLE config.flag_types
 (
     flag_type_id                                SERIAL PRIMARY KEY,
@@ -244,36 +245,6 @@ INNER JOIN config.custom_field_forms
 ON config.custom_field_forms.form_name = config.custom_field_setup.form_name
 ORDER BY field_order;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/05.views/config.custom_field_view.sql --<--<--
-DROP VIEW IF EXISTS config.custom_field_view;
-
-CREATE VIEW config.custom_field_view
-AS
-SELECT
-    config.custom_field_forms.table_name,
-    config.custom_field_forms.key_name,
-    config.custom_field_setup.custom_field_setup_id,
-    config.custom_field_setup.form_name,
-    config.custom_field_setup.field_order,
-    config.custom_field_setup.field_name,
-    config.custom_field_setup.field_label,
-    config.custom_field_setup.description,
-    config.custom_field_data_types.data_type,
-    config.custom_field_data_types.is_number,
-    config.custom_field_data_types.is_date,
-    config.custom_field_data_types.is_boolean,
-    config.custom_field_data_types.is_long_text,
-    config.custom_fields.resource_id,
-    config.custom_fields.value
-FROM config.custom_field_setup
-INNER JOIN config.custom_field_data_types
-ON config.custom_field_data_types.data_type = config.custom_field_setup.data_type
-INNER JOIN config.custom_field_forms
-ON config.custom_field_forms.form_name = config.custom_field_setup.form_name
-INNER JOIN config.custom_fields
-ON config.custom_fields.custom_field_setup_id = config.custom_field_setup.custom_field_setup_id
-ORDER BY field_order;
-
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/05.views/config.filter_name_view.sql --<--<--
 DROP VIEW IF EXISTS config.filter_name_view;
 
@@ -305,6 +276,107 @@ SELECT
 FROM config.flags
 INNER JOIN config.flag_types
 ON config.flags.flag_type_id = config.flag_types.flag_type_id;
+
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/config.create_custom_field.sql --<--<--
+DROP FUNCTION IF EXISTS config.create_custom_field
+(
+    _form_name                  national character varying(100),
+    _before_field               national character varying(500),
+    _field_order                integer,
+    _after_field                national character varying(500),
+    _field_name                 national character varying(100),
+    _field_label                national character varying(200),
+    _data_type                  national character varying(50),
+    _description                national character varying(500)
+);
+
+CREATE FUNCTION config.create_custom_field
+(
+    _form_name                  national character varying(100),
+    _before_field               national character varying(500),
+    _field_order                integer,
+    _after_field                national character varying(500),
+    _field_name                 national character varying(100),
+    _field_label                national character varying(200),
+    _data_type                  national character varying(50),
+    _description                national character varying(500)
+)
+RETURNS void
+AS
+$$
+    DECLARE _table_name         national character varying(500);
+    DECLARE _key_name           national character varying(500);
+    DECLARE _sql                text;
+    DECLARE _key_data_type      national character varying(500);
+    DECLARE _cf_data_type       national character varying(500);
+BEGIN
+    SELECT
+        config.custom_field_forms.table_name,
+        config.custom_field_forms.key_name
+    INTO
+        _table_name,
+        _key_name
+    FROM config.custom_field_forms
+    WHERE config.custom_field_forms.form_name = _form_name;
+
+    SELECT 
+        format_type(a.atttypid, a.atttypmod)
+    INTO
+        _key_data_type
+    FROM   pg_index i
+    JOIN   pg_attribute a ON a.attrelid = i.indrelid
+                         AND a.attnum = ANY(i.indkey)
+    WHERE  i.indrelid = _table_name::regclass
+    AND    i.indisprimary;
+
+    SELECT
+        underlying_type
+    INTO
+        _cf_data_type
+    FROM config.custom_field_data_types
+    WHERE data_type = _data_type;
+
+    
+    _sql := 'CREATE TABLE IF NOT EXISTS %s_cf
+            (
+                %s %s PRIMARY KEY REFERENCES %1$s
+            );';
+
+    EXECUTE format(_sql, _table_name, _key_name, _key_data_type);
+
+    _sql := 'DO
+            $ALTER$
+            BEGIN
+                IF NOT EXISTS
+                (
+                    SELECT 1
+                    FROM   pg_attribute 
+                    WHERE  attrelid = ''%s_cf''::regclass
+                    AND    attname = ''%s''
+                    AND    NOT attisdropped
+                ) THEN
+                    ALTER TABLE %1$s_cf
+                    ADD COLUMN %2$s	%s;
+                END IF;
+            END
+            $ALTER$
+            LANGUAGE plpgsql;';
+                
+   EXECUTE format(_sql, _table_name, lower(_field_name), _cf_data_type);
+
+   IF NOT EXISTS
+   (
+        SELECT 1
+        FROM config.custom_field_setup
+        WHERE form_name = _form_name
+        AND field_name = _field_name
+   ) THEN
+       INSERT INTO config.custom_field_setup(form_name, before_field, field_order, after_field, field_name, field_label, data_type, description)
+       SELECT _form_name, _before_field, _field_order, _after_field, _field_name, _field_label, _data_type, _description;
+   END IF;
+END
+$$
+LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/config.create_flag.sql --<--<--
 DROP FUNCTION IF EXISTS config.create_flag
@@ -350,79 +422,6 @@ $$
 LANGUAGE plpgsql;
 
 
-
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_definition.sql --<--<--
-DROP FUNCTION IF EXISTS config.get_custom_field_definition
-(
-    _table_name             text,
-    _resource_id            text
-);
-
-CREATE FUNCTION config.get_custom_field_definition
-(
-    _table_name             text,
-    _resource_id            text
-)
-RETURNS TABLE
-(
-    table_name              national character varying(100),
-    key_name                national character varying(100),
-    custom_field_setup_id   integer,
-    form_name               national character varying(100),
-    field_order             integer,
-    field_name              national character varying(100),
-    field_label             national character varying(100),
-    description             text,
-    data_type               national character varying(50),
-    is_number               boolean,
-    is_date                 boolean,
-    is_boolean              boolean,
-    is_long_text            boolean,
-    resource_id             text,
-    value                   text
-)
-AS
-$$
-BEGIN
-    DROP TABLE IF EXISTS definition_temp;
-    CREATE TEMPORARY TABLE definition_temp
-    (
-        table_name              national character varying(100),
-        key_name                national character varying(100),
-        custom_field_setup_id   integer,
-        form_name               national character varying(100),
-        field_order             integer,
-        field_name              national character varying(100),
-        field_label             national character varying(100),
-        description             text,
-        data_type               national character varying(50),
-        is_number               boolean,
-        is_date                 boolean,
-        is_boolean              boolean,
-        is_long_text            boolean,
-        resource_id             text,
-        value                   text
-    ) ON COMMIT DROP;
-    
-    INSERT INTO definition_temp
-    SELECT * FROM config.custom_field_definition_view
-    WHERE config.custom_field_definition_view.table_name = _table_name
-    ORDER BY field_order;
-
-    UPDATE definition_temp
-    SET resource_id = _resource_id;
-
-    UPDATE definition_temp
-    SET value = config.custom_fields.value
-    FROM config.custom_fields
-    WHERE definition_temp.custom_field_setup_id = config.custom_fields.custom_field_setup_id
-    AND config.custom_fields.resource_id = _resource_id;
-    
-    RETURN QUERY
-    SELECT * FROM definition_temp;
-END
-$$
-LANGUAGE plpgsql;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_form_name.sql --<--<--
 DROP FUNCTION IF EXISTS config.get_custom_field_form_name

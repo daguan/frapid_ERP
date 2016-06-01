@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Frapid.Framework.Extensions;
 
 namespace frapid.Commands.Create
 {
-    public abstract class CreateCommand : ICommand
+    public abstract class CreateCommand: ICommand
     {
         public abstract string Name { get; }
         public abstract bool IsValid { get; set; }
@@ -16,15 +14,15 @@ namespace frapid.Commands.Create
 
         public void Execute()
         {
-            var resourceType = this.Line.Split(' ')[1];
+            string resourceType = this.Line.Split(' ')[1];
 
             var iType = typeof(CreateCommand);
 
-            var members = iType.GetTypeMembers<CreateCommand>();
+            var members = iType.GetTypeMembersNotAbstract<CreateCommand>();
 
             var member = members.FirstOrDefault(m => m.Name == resourceType);
 
-            if (member != null)
+            if(member != null)
             {
                 member.Line = this.Line;
                 member.Initialize();

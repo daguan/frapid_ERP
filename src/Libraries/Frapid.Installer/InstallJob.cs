@@ -6,7 +6,7 @@ using Quartz;
 
 namespace Frapid.Installer
 {
-    public class InstallJob : IJob
+    public class InstallJob: IJob
     {
         public async void Execute(IJobExecutionContext context)
         {
@@ -18,12 +18,11 @@ namespace Frapid.Installer
                 var installer = new Tenant.Installer(url);
                 await installer.InstallAsync();
 
-                var site =
-                    new DomainSerializer("DomainsApproved.json").Get().FirstOrDefault(x => x.DomainName.Equals(url));
+                var site = new DomainSerializer("DomainsApproved.json").Get().FirstOrDefault(x => x.DomainName.Equals(url));
                 DbInstalledDomains.Add(site);
                 new DomainSerializer("DomainsInstalled.json").Add(site);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 InstallerLog.Error("Could not install frapid on {url} due to errors. Exception: {Exception}", url, ex);
                 throw;

@@ -28,7 +28,7 @@ namespace Frapid.Areas
                 return false;
             }
 
-            var result = DnsSpamLookup.IsListedInSpamDatabase(ip);
+            var result = DnsSpamLookupHelper.IsListedInSpamDatabase(ip);
             return result.IsListed;
         }
 

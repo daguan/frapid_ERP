@@ -2,9 +2,9 @@
 
 namespace Frapid.Installer
 {
-    public class DbInstallException : Exception
+    public class DbInstallException: Exception
     {
-        public DbInstallException(string message) : base(message)
+        public DbInstallException(string message): base(message)
         {
         }
     }

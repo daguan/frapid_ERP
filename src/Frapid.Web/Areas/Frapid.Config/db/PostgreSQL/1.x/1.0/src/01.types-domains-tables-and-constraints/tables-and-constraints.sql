@@ -116,6 +116,7 @@ CREATE TABLE config.custom_field_setup
     description                                 text NOT NULL
 );
 
+
 CREATE TABLE config.flag_types
 (
     flag_type_id                                SERIAL PRIMARY KEY,

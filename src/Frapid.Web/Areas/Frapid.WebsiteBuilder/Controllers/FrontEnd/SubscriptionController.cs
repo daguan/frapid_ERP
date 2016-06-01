@@ -1,10 +1,9 @@
 ﻿using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
-using Frapid.Areas;
 using Frapid.Areas.Caching;
+using Frapid.Areas.CSRF;
 using Frapid.WebsiteBuilder.DAL;
 using Frapid.WebsiteBuilder.Emails;
 using Frapid.WebsiteBuilder.ViewModels;
@@ -12,7 +11,7 @@ using Frapid.WebsiteBuilder.ViewModels;
 namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 {
     [AntiForgery]
-    public class SubscriptionController : WebsiteBuilderController
+    public class SubscriptionController: WebsiteBuilderController
     {
         [Route("subscription/add")]
         [AllowAnonymous]
@@ -20,14 +19,14 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         public async Task<ActionResult> AddAsync(Subscribe model)
         {
             //ConfirmEmailAddress is a honeypot field
-            if (!string.IsNullOrWhiteSpace(model.ConfirmEmailAddress))
+            if(!string.IsNullOrWhiteSpace(model.ConfirmEmailAddress))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             string tenant = AppUsers.GetTenant();
 
-            if (await EmailSubscriptions.AddAsync(tenant, model.EmailAddress))
+            if(await EmailSubscriptions.AddAsync(tenant, model.EmailAddress))
             {
                 var email = new SubscriptionWelcomeEmail();
                 await email.SendAsync(tenant, model);
@@ -50,14 +49,14 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [HttpPost]
         public async Task<ActionResult> RemoveAsync(Subscribe model)
         {
-            if (!string.IsNullOrWhiteSpace(model.ConfirmEmailAddress))
+            if(!string.IsNullOrWhiteSpace(model.ConfirmEmailAddress))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             string tenant = AppUsers.GetTenant();
 
-            if (await EmailSubscriptions.RemoveAsync(tenant, model.EmailAddress))
+            if(await EmailSubscriptions.RemoveAsync(tenant, model.EmailAddress))
             {
                 var email = new SubscriptionRemovedEmail();
                 await email.SendAsync(tenant, model);

@@ -28,8 +28,8 @@ namespace frapid.Commands.Create
                 return;
             }
 
-            var path = @"{0}\Areas\{1}";
-            var directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..");
+            string path = @"{0}\Areas\{1}";
+            string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..");
 
             path = string.Format(path, directory, this.AppName);
 
@@ -53,7 +53,7 @@ namespace frapid.Commands.Create
 
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("Create WebAPI project? Y/N");
-            var result = Console.ReadLine();
+            string result = Console.ReadLine();
 
             if(result != null &&
                result.ToLower().Equals("y"))

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Frapid.Configuration;
 using Frapid.Installer.DAL;
@@ -24,7 +23,7 @@ namespace Frapid.Installer
 
         public bool IsWellKnownDb()
         {
-            var serializer = new DomainSerializer("domains_approved.json");
+            var serializer = new DomainSerializer("DomainsApproved.json");
             var domains = serializer.Get();
             return domains.Any(domain => TenantConvention.GetTenant(domain.DomainName) == this.Tenant);
         }

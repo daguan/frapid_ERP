@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Hosting;
 using System.Web.UI;
+using DevTrends.MvcDonutCaching;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -21,8 +22,8 @@ namespace Frapid.Areas.Caching
         public string SqlDependency { get; set; }
         public string VaryByContentEncoding { get; set; }
         public string VaryByCustom { get; set; }
-        public string VaryByHeader { get; set; }
         public string VaryByParam { get; set; }
+        public OutputCacheOptions Options { get; set; }
 
         public static CacheConfig Get(string tenant, string profile)
         {
@@ -39,6 +40,7 @@ namespace Frapid.Areas.Caching
 
             string contents = File.ReadAllText(path, Encoding.UTF8);
             var profiles = JsonConvert.DeserializeObject<List<CacheConfig>>(contents);
+
             return profiles.FirstOrDefault(item => item.CacheProfile.ToUpperInvariant().Equals(profile.ToUpperInvariant()));
         }
     }

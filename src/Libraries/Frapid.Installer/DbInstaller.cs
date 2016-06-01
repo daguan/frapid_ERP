@@ -16,23 +16,22 @@ namespace Frapid.Installer
 
         public async Task<bool> InstallAsync()
         {
-            var meta = DbProvider.GetMetaDatabase(this.Tenant);
+            string meta = DbProvider.GetMetaDatabase(this.Tenant);
             var inspector = new DbInspector(this.Tenant, meta);
-            var hasDb = await inspector.HasDbAsync();
-            var canInstall = inspector.IsWellKnownDb();
+            bool hasDb = await inspector.HasDbAsync();
+            bool canInstall = inspector.IsWellKnownDb();
 
-            if (hasDb)
+            if(hasDb)
             {
                 InstallerLog.Verbose($"No need to create database \"{this.Tenant}\" because it already exists.");
             }
 
-            if (!canInstall)
+            if(!canInstall)
             {
-                InstallerLog.Verbose(
-                    $"Cannot create a database under the name \"{this.Tenant}\" because the name is not a well-known tenant name.");
+                InstallerLog.Verbose($"Cannot create a database under the name \"{this.Tenant}\" because the name is not a well-known tenant name.");
             }
 
-            if (!hasDb && canInstall)
+            if(!hasDb && canInstall)
             {
                 InstallerLog.Information($"Creating database \"{this.Tenant}\".");
                 await this.CreateDbAsync();

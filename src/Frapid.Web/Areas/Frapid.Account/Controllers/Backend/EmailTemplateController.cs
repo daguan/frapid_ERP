@@ -2,15 +2,15 @@ using System.IO;
 using System.Text;
 using System.Web.Mvc;
 using Frapid.Account.ViewModels;
-using Frapid.Areas;
 using Frapid.Areas.Authorization;
+using Frapid.Areas.CSRF;
 using Frapid.Dashboard;
 using Frapid.Dashboard.Controllers;
 
 namespace Frapid.Account.Controllers.Backend
 {
     [AntiForgery]
-    public class EmailTemplateController : DashboardController
+    public class EmailTemplateController: DashboardController
     {
         [Route("dashboard/account/email-templates/{file}")]
         [RestrictAnonymous]
@@ -19,12 +19,16 @@ namespace Frapid.Account.Controllers.Backend
         {
             string contents = this.GetContents(file);
 
-            if (string.IsNullOrWhiteSpace(contents))
+            if(string.IsNullOrWhiteSpace(contents))
             {
                 throw new FileNotFoundException();
             }
 
-            var model = new Template { Contents = contents, Title = file + ".html" };
+            var model = new Template
+                        {
+                            Contents = contents,
+                            Title = file + ".html"
+                        };
             return this.FrapidView(this.GetRazorView<AreaRegistration>("EmailTemplate/Index.cshtml"), model);
         }
 
@@ -46,7 +50,7 @@ namespace Frapid.Account.Controllers.Backend
         private void SetContents(string file, string contents)
         {
             string path = Configuration.GetOverridePath() + "/EmailTemplates/" + file;
-            if (System.IO.File.Exists(path))
+            if(System.IO.File.Exists(path))
             {
                 System.IO.File.WriteAllText(path, contents, Encoding.UTF8);
             }

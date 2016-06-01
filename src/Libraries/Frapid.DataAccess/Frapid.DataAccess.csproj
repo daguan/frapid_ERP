@@ -78,6 +78,10 @@
     <Compile Include="IPolicy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyManager.cs" />
+    <Compile Include="Subtext\ScriptReader.cs" />
+    <Compile Include="Subtext\ScriptSplitter.cs" />
+    <Compile Include="Subtext\SeparatorLineReader.cs" />
+    <Compile Include="Subtext\SqlParseException.cs" />
     <Compile Include="UnauthorizedException.cs" />
   </ItemGroup>
   <ItemGroup>

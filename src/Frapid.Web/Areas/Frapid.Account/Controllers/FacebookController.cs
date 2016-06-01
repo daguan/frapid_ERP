@@ -2,13 +2,13 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.Account.InputModels;
 using Frapid.Account.RemoteAuthentication;
-using Frapid.Areas;
+using Frapid.Areas.CSRF;
 using Npgsql;
 
 namespace Frapid.Account.Controllers
 {
     [AntiForgery]
-    public class FacebookController : BaseAuthenticationController
+    public class FacebookController: BaseAuthenticationController
     {
         [Route("account/facebook/sign-in")]
         [HttpPost]
@@ -18,11 +18,10 @@ namespace Frapid.Account.Controllers
             var auth = new FacebookAuthentication();
             try
             {
-                var result =
-                    await auth.AuthenticateAsync(account, this.RemoteUser);
+                var result = await auth.AuthenticateAsync(account, this.RemoteUser);
                 return await this.OnAuthenticatedAsync(result);
             }
-            catch (NpgsqlException)
+            catch(NpgsqlException)
             {
                 return this.Json("Access is denied.");
             }

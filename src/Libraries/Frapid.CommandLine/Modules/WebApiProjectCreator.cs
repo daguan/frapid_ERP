@@ -7,16 +7,19 @@ namespace frapid.Modules
 {
     internal sealed class WebApiProjectCreator
     {
-        private int GetRandomNumber()
-        {
-            var rnd = new Random();
-            return rnd.Next(52);
-        }
-
         internal WebApiProjectCreator(string projectName)
         {
             this.ProjectName = projectName;
             this.TempDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Temp", this.ProjectName + "-" + this.GetRandomNumber());
+        }
+
+        internal string TempDirectory { get; }
+        internal string ProjectName { get; }
+
+        private int GetRandomNumber()
+        {
+            var rnd = new Random();
+            return rnd.Next(52);
         }
 
         internal void Create()
@@ -38,7 +41,7 @@ namespace frapid.Modules
         private void CreateArea()
         {
             Console.WriteLine("Creating Area");
-            var destination = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "Areas", this.ProjectName);
+            string destination = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "Areas", this.ProjectName);
             Directory.CreateDirectory(destination);
 
             FileHelper.CopyDirectory(this.TempDirectory, destination);
@@ -50,7 +53,7 @@ namespace frapid.Modules
 
         private void CopyProject()
         {
-            var source = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "Templates", "WebAPIProject");
+            string source = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "Templates", "WebAPIProject");
             FileHelper.CopyDirectory(source, this.TempDirectory);
 
             Console.WriteLine("Copying project files");
@@ -79,10 +82,10 @@ namespace frapid.Modules
 
         private void RenameFile(string original, string renamed)
         {
-            var originalFile = Path.Combine(this.TempDirectory, original);
-            var renamedFile = Path.Combine(this.TempDirectory, renamed);
+            string originalFile = Path.Combine(this.TempDirectory, original);
+            string renamedFile = Path.Combine(this.TempDirectory, renamed);
 
-            if (File.Exists(originalFile))
+            if(File.Exists(originalFile))
             {
                 File.Move(originalFile, renamedFile);
             }
@@ -90,8 +93,8 @@ namespace frapid.Modules
 
         private void ReplaceContent(string fileName)
         {
-            var file = Path.Combine(this.TempDirectory, fileName);
-            var contents = File.ReadAllText(file, Encoding.UTF8);
+            string file = Path.Combine(this.TempDirectory, fileName);
+            string contents = File.ReadAllText(file, Encoding.UTF8);
 
             contents = contents.Replace("WebAPIProject", this.ProjectName);
 
@@ -117,8 +120,5 @@ namespace frapid.Modules
             Console.WriteLine("Creating temp directory {0}.", this.TempDirectory);
             Directory.CreateDirectory(this.TempDirectory);
         }
-
-        internal string TempDirectory { get; }
-        internal string ProjectName { get; private set; }        
     }
 }

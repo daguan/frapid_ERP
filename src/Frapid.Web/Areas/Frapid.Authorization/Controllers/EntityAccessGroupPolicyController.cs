@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Frapid.Areas;
 using Frapid.Areas.Authorization;
+using Frapid.Areas.CSRF;
 using Frapid.Authorization.Models;
 using Frapid.Authorization.ViewModels;
 using Frapid.Dashboard;
@@ -11,7 +11,7 @@ using Frapid.Dashboard.Controllers;
 namespace Frapid.Authorization.Controllers
 {
     [AntiForgery]
-    public class EntityAccessGroupPolicyController : DashboardController
+    public class EntityAccessGroupPolicyController: DashboardController
     {
         [RestrictAnonymous]
         [Route("dashboard/authorization/entity-access/group-policy")]
@@ -35,7 +35,7 @@ namespace Frapid.Authorization.Controllers
         [HttpPost]
         public async Task<ActionResult> SaveGroupPolicyAsync(int officeId, int roleId, List<AccessPolicyInfo> model)
         {
-            if (!this.ModelState.IsValid)
+            if(!this.ModelState.IsValid)
             {
                 return this.InvalidModelState();
             }

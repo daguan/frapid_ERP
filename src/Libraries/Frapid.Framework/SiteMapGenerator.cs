@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Serilog;
 
 namespace Frapid.Framework
 {
@@ -75,7 +76,16 @@ namespace Frapid.Framework
 
             foreach(ISiteMapGenerator member in members)
             {
-                urls.AddRange(await member.GenerateAsync());
+                try
+                {
+                    urls.AddRange(await member.GenerateAsync());
+                }
+                catch (Exception ex)
+                {
+                    //Swallow error
+                    Log.Error("Exception occured during sitemap generation.");
+                    Log.Error(ex.Message);
+                }
             }
 
             return urls;

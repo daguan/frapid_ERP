@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Frapid.ApplicationState.Cache;
 using Frapid.WebsiteBuilder.DAL;
-using Frapid.WebsiteBuilder.ViewModels;
 using Mapster;
+using Content = Frapid.WebsiteBuilder.ViewModels.Content;
 
 namespace Frapid.WebsiteBuilder.Models
 {

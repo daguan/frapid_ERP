@@ -96,7 +96,7 @@ namespace Frapid.DataAccess
 
         public static async Task ExecuteAsync(string connectionString, string tenant, string sql, params object[] args)
         {
-            using(var db = DbProvider.GetDatabase(tenant))
+            using(var db = DbProvider.GetDatabase(tenant, connectionString))
             {
                 await db.ExecuteAsync(sql, args);
             }
@@ -104,7 +104,7 @@ namespace Frapid.DataAccess
 
         public static async Task<T> ExecuteScalarAsync<T>(string connectionString, string tenant, Sql sql)
         {
-            using(var db = DbProvider.GetDatabase(tenant))
+            using(var db = DbProvider.GetDatabase(tenant, connectionString))
             {
                 return await db.ExecuteScalarAsync<T>(sql);
             }

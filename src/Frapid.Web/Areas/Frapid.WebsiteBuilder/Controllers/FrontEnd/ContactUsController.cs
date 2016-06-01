@@ -1,8 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
-using Frapid.Areas;
+using Frapid.Areas.CSRF;
 using Frapid.WebsiteBuilder.DAL;
 using Frapid.WebsiteBuilder.Emails;
 using Frapid.WebsiteBuilder.ViewModels;
@@ -10,7 +9,7 @@ using Frapid.WebsiteBuilder.ViewModels;
 namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 {
     [AntiForgery]
-    public class ContactUsController : WebsiteBuilderController
+    public class ContactUsController: WebsiteBuilderController
     {
         [Route("contact-us")]
         [AllowAnonymous]

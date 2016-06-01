@@ -11,24 +11,25 @@ namespace frapid
             var loader = new AssemblyLoader();
             loader.PreLoad();
 
-            var exit = false;
+            bool exit = false;
 
             string command;
 
-            if (args != null && args.Any())
+            if(args != null &&
+               args.Any())
             {
                 command = string.Join(" ", args);
                 CommandProcessor.Process(command);
                 exit = true;
             }
 
-            while (!exit)
+            while(!exit)
             {
                 command = FrapidConsole.ReadLine();
                 exit = GotQuitSignalFrom(command);
                 command = CheckClearSignal(command);
 
-                if (!exit)
+                if(!exit)
                 {
                     CommandProcessor.Process(command);
                 }
@@ -37,10 +38,14 @@ namespace frapid
 
         private static string CheckClearSignal(string command)
         {
-            var candidates = new[] {"cls", "clear"};
-            var clear = candidates.Contains(command.ToLower());
+            var candidates = new[]
+                             {
+                                 "cls",
+                                 "clear"
+                             };
+            bool clear = candidates.Contains(command.ToLower());
 
-            if (clear)
+            if(clear)
             {
                 Console.Clear();
                 return string.Empty;

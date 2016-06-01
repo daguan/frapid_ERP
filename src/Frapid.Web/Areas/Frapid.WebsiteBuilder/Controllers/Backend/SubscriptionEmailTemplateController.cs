@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Web.Mvc;
-using Frapid.Areas;
 using Frapid.Areas.Authorization;
+using Frapid.Areas.CSRF;
 using Frapid.Dashboard;
 using Frapid.Dashboard.Controllers;
 using Frapid.WebsiteBuilder.ViewModels;
@@ -9,7 +9,7 @@ using Frapid.WebsiteBuilder.ViewModels;
 namespace Frapid.WebsiteBuilder.Controllers.Backend
 {
     [AntiForgery]
-    public class SubscriptionEmailTemplateController : DashboardController
+    public class SubscriptionEmailTemplateController: DashboardController
     {
         [Route("dashboard/website/subscription/welcome")]
         [RestrictAnonymous]
@@ -18,8 +18,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         {
             string path = this.GetWelcomeTemplatePath();
             var model = this.GetModel(path);
-            return this.FrapidView(this.GetRazorView<AreaRegistration>("SubscriptionEmailTemplate/Welcome.cshtml"),
-                model);
+            return this.FrapidView(this.GetRazorView<AreaRegistration>("SubscriptionEmailTemplate/Welcome.cshtml"), model);
         }
 
         [Route("dashboard/website/subscription/removed")]
@@ -29,9 +28,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         {
             string path = this.GetSubscriptionRemovedTemplatePath();
             var model = this.GetModel(path);
-            return
-                this.FrapidView(
-                    this.GetRazorView<AreaRegistration>("SubscriptionEmailTemplate/SubscriptionRemoved.cshtml"), model);
+            return this.FrapidView(this.GetRazorView<AreaRegistration>("SubscriptionEmailTemplate/SubscriptionRemoved.cshtml"), model);
         }
 
         [Route("dashboard/website/subscription/welcome/save")]
@@ -66,7 +63,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
 
         private Template GetModel(string path)
         {
-            if (!System.IO.File.Exists(path))
+            if(!System.IO.File.Exists(path))
             {
                 return new Template();
             }
@@ -74,9 +71,9 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
             string contents = System.IO.File.ReadAllText(path, Encoding.UTF8);
 
             return new Template
-            {
-                Contents = contents
-            };
+                   {
+                       Contents = contents
+                   };
         }
     }
 }

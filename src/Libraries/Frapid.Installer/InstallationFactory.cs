@@ -14,10 +14,7 @@ namespace Frapid.Installer
             scheduler.Start();
 
             var job = JobBuilder.Create<InstallJob>().WithIdentity(domain.DomainName, "install").Build();
-            var trigger = TriggerBuilder.Create()
-                .WithIdentity(domain.DomainName, "install-trigger")
-                .StartAt(DateTimeOffset.UtcNow.AddSeconds(5))
-                .Build();
+            var trigger = TriggerBuilder.Create().WithIdentity(domain.DomainName, "install-trigger").StartAt(DateTimeOffset.UtcNow.AddSeconds(5)).Build();
 
             scheduler.ScheduleJob(job, trigger);
         }

@@ -4,7 +4,6 @@ using Serilog;
 
 namespace Frapid.Configuration
 {
-    [Obsolete("Replace this with something more testable. Probably XMLReader.")]
     public static class ConfigurationManager
     {
         /// <summary>

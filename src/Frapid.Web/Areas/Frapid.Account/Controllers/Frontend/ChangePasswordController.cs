@@ -1,22 +1,22 @@
-﻿using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.Account.InputModels;
 using Frapid.Account.Models;
 using Frapid.Areas;
 using Frapid.Areas.Authorization;
+using Frapid.Areas.CSRF;
 using Frapid.WebsiteBuilder.Controllers;
 
 namespace Frapid.Account.Controllers.Frontend
 {
     [AntiForgery]
-    public class ChangePasswordController : WebsiteBuilderController
+    public class ChangePasswordController: WebsiteBuilderController
     {
         [Route("account/change-password")]
         [RestrictAnonymous]
         public ActionResult Index()
         {
-            if (RemoteUser.IsListedInSpamDatabase())
+            if(RemoteUser.IsListedInSpamDatabase())
             {
                 return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
             }
@@ -29,7 +29,7 @@ namespace Frapid.Account.Controllers.Frontend
         [HttpPost]
         public async Task<ActionResult> PostAsync(ChangePassword model)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 return this.InvalidModelState();
             }
@@ -42,7 +42,7 @@ namespace Frapid.Account.Controllers.Frontend
         [RestrictAnonymous]
         public ActionResult Success()
         {
-            if (RemoteUser.IsListedInSpamDatabase())
+            if(RemoteUser.IsListedInSpamDatabase())
             {
                 return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml"));
             }

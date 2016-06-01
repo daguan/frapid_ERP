@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace frapid.Commands
@@ -8,12 +7,12 @@ namespace frapid.Commands
     {
         public static void Process(string line)
         {
-            if (string.IsNullOrWhiteSpace(line))
+            if(string.IsNullOrWhiteSpace(line))
             {
                 return;
             }
 
-            var commandName = line.Split(' ')[0];
+            string commandName = line.Split(' ')[0];
             var command = Get(commandName, line);
 
             command?.Execute();
@@ -22,14 +21,11 @@ namespace frapid.Commands
         private static ICommand Get(string commandName, string line)
         {
             var iType = typeof(ICommand);
-            var members = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(x => x.GetTypes())
-                .Where(x => iType.IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
-                .Select(Activator.CreateInstance);
+            var members = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).Where(x => iType.IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract).Select(Activator.CreateInstance);
 
-            foreach (ICommand member in members)
+            foreach(ICommand member in members)
             {
-                if (member.CommandName == commandName)
+                if(member.CommandName == commandName)
                 {
                     member.Line = line;
                     return member;
@@ -46,7 +42,7 @@ namespace frapid.Commands
 
             Console.ForegroundColor = ConsoleColor.White;
 
-            if (!string.IsNullOrWhiteSpace(syntax))
+            if(!string.IsNullOrWhiteSpace(syntax))
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("\r\nSyntax(es) : \r\n" + syntax);

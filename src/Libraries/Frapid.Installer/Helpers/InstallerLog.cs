@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Web;
 using Serilog;
 
 namespace Frapid.Installer.Helpers
@@ -11,7 +10,8 @@ namespace Frapid.Installer.Helpers
         {
             Log.Verbose(messageTemplate, propertyValues);
 
-            if (propertyValues != null && propertyValues.Any())
+            if(propertyValues != null &&
+               propertyValues.Any())
             {
                 Console.WriteLine(messageTemplate, propertyValues);
             }
@@ -25,7 +25,8 @@ namespace Frapid.Installer.Helpers
 
             Console.ForegroundColor = ConsoleColor.Yellow;
 
-            if (propertyValues != null && propertyValues.Any())
+            if(propertyValues != null &&
+               propertyValues.Any())
             {
                 Console.WriteLine(messageTemplate, propertyValues);
             }
@@ -41,7 +42,8 @@ namespace Frapid.Installer.Helpers
 
             Console.ForegroundColor = ConsoleColor.Red;
 
-            if (propertyValues != null && propertyValues.Any())
+            if(propertyValues != null &&
+               propertyValues.Any())
             {
                 Console.WriteLine(messageTemplate, propertyValues);
             }

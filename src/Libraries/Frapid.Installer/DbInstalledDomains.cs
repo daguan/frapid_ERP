@@ -8,7 +8,7 @@ namespace Frapid.Installer
     {
         public static void Add(ApprovedDomain tenant)
         {
-            var database = TenantConvention.GetDbNameByConvention(tenant.DomainName);
+            string database = TenantConvention.GetDbNameByConvention(tenant.DomainName);
 
             using(var db = DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(database, database), database).GetDatabase())
             {

@@ -23,12 +23,12 @@ namespace Frapid.Framework
             CopyFilesRecursively(new DirectoryInfo(source), new DirectoryInfo(target));
         }
 
-        public static void CopyFilesRecursively(DirectoryInfo source, DirectoryInfo target)
+        public static void CopyFilesRecursively(DirectoryInfo source, DirectoryInfo target, bool overwrite = true)
         {
             foreach (var dir in source.GetDirectories())
-                CopyFilesRecursively(dir, target.CreateSubdirectory(dir.Name));
+                CopyFilesRecursively(dir, target.CreateSubdirectory(dir.Name), overwrite);
             foreach (var file in source.GetFiles())
-                file.CopyTo(Path.Combine(target.FullName, file.Name));
+                file.CopyTo(Path.Combine(target.FullName, file.Name), overwrite);
         }
 
         public static void CopyDirectory(string source, string target)

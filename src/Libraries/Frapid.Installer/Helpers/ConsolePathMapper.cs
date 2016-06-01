@@ -8,20 +8,20 @@ namespace Frapid.Installer.Helpers
     {
         public static void SetPathToRoot()
         {
-            var root = string.Empty;
-            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string root = string.Empty;
+            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-            if (path != null)
+            if(path != null)
             {
                 var directory = new DirectoryInfo(path);
 
-                if (directory.Parent != null)
+                if(directory.Parent != null)
                 {
                     root = directory.Parent.FullName;
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(root))
+            if(string.IsNullOrWhiteSpace(root))
             {
                 throw new DirectoryNotFoundException("Cannot determine application root directory.");
             }

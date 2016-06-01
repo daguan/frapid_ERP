@@ -32,6 +32,10 @@
     <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevTrends.MvcDonutCaching, Version=1.3.0.0, Culture=neutral, PublicKeyToken=73c58d802958a09f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvcDonutCaching.1.3.0\lib\net40\DevTrends.MvcDonutCaching.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.9.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
@@ -109,18 +113,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Antiforgery.cs" />
-    <Compile Include="AntiForgeryAttribute.cs" />
+    <Compile Include="AntiforgeryHelper.cs" />
+    <Compile Include="Caching\CacheLocation.cs" />
+    <Compile Include="Caching\FrapidOutputCahce.cs" />
+    <Compile Include="CSRF\AntiForgeryAttribute.cs" />
+    <Compile Include="CSRF\AntiforgeryTokenGenerator.cs" />
+    <Compile Include="CSRF\AntiforgeryTokenizer.cs" />
     <Compile Include="Authorization\Helpers\AuthorizationManager.cs" />
     <Compile Include="Authorization\BearerAuthorizeAttribute.cs" />
     <Compile Include="Caching\CacheConfig.cs" />
     <Compile Include="CdnHelper.cs" />
-    <Compile Include="DnsSpamLookup.cs" />
-    <Compile Include="DnsSpamLookupResult.cs" />
+    <Compile Include="CSRF\IAntiforgeryTokenGenerator.cs" />
+    <Compile Include="CSRF\IAntiforgeryTokenizer.cs" />
+    <Compile Include="SpamTrap\DnsQuerable.cs" />
+    <Compile Include="SpamTrap\DnsSpamLookup.cs" />
+    <Compile Include="DnsSpamLookupHelper.cs" />
+    <Compile Include="SpamTrap\DnsSpamLookupResult.cs" />
     <Compile Include="FrapidAreaRegistration.cs" />
     <Compile Include="FrapidController.cs" />
     <Compile Include="Authorization\Helpers\HubAuthorizationManger.cs" />
-    <Compile Include="Caching\FrapidOutputCache.cs" />
+    <Compile Include="SpamTrap\HostEntryResolver.cs" />
+    <Compile Include="SpamTrap\IDnsQuerable.cs" />
+    <Compile Include="SpamTrap\IDnsSpamLookup.cs" />
+    <Compile Include="SpamTrap\IHostEntryResolver.cs" />
+    <Compile Include="SpamTrap\IIpAddressReverser.cs" />
+    <Compile Include="SpamTrap\IpAddressReverser.cs" />
     <Compile Include="MinificationHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteUser.cs" />
@@ -156,6 +173,9 @@
       <Project>{EF3BDE7C-A3D5-493A-8817-BF47DF9CAE47}</Project>
       <Name>Frapid.TokenManager</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DevTrends.MvcDonutCaching.README.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
