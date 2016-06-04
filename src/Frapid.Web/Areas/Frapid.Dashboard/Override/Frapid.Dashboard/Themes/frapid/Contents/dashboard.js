@@ -22,6 +22,10 @@ $.getJSON("/dashboard/meta", function (response) {
     window.datepickerNumberOfMonths = meta.DatepickerNumberOfMonths;
 });
 
+jQuery.ajaxSetup({
+  cache: true
+});
+
 var lastPage;
 var frapidApp = angular.module('FrapidApp', ['ngRoute']);
 
@@ -173,7 +177,7 @@ function buildMenus() {
         var ajax = request();
 
         ajax.success(function (response) {
-            window.appMenus = response;
+            window.appMenus = response.Result;
             buildMenus();
         });
     };

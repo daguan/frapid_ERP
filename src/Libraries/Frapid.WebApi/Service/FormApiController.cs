@@ -508,11 +508,43 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
                 return await repository.GetDisplayFieldsAsync();
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
+            {
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
+            }
+#if !DEBUG
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+#endif
+        }
+
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("~/api/forms/{schemaName}/{tableName}/lookup-fields")]
+        [RestAuthorize]
+        public async Task<IEnumerable<DisplayField>> GetLookupFieldsAsync(string schemaName, string tableName)
+        {
+            try
+            {
+                var repository = new FormRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
+                return await repository.GetLookupFieldsAsync();
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (

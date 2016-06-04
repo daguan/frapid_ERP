@@ -73,6 +73,12 @@ namespace Frapid.Account.Emails
             string tenant = AppUsers.GetTenant();
 
             var processor = EmailProcessor.GetDefault(tenant);
+
+            if(processor == null)
+            {
+                return;
+            }
+
             var email = this.GetEmail(processor, this._registration, subject, parsed);
 
             var queue = new MailQueueManager(tenant, email);

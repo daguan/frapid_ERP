@@ -1,6 +1,15 @@
 DROP SCHEMA IF EXISTS core CASCADE;
 CREATE SCHEMA core;
 
+CREATE TABLE core.countries
+(
+    country_code                            national character varying(12) PRIMARY KEY,
+    country_name                            national character varying(100) NOT NULL,
+    audit_user_id                           integer,
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
+                                            DEFAULT(NOW())
+);
+
 CREATE TABLE core.apps
 (
     app_name                                    national character varying(100) PRIMARY KEY,

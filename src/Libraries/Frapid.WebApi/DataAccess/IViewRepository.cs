@@ -19,10 +19,16 @@ namespace Frapid.WebApi.DataAccess
         Task<IEnumerable<dynamic>> GetAsync();
 
         /// <summary>
-        ///     Displayfields provide a minimal name/value context for data binding IViewRepository.
+        ///     Display fields provide a minimal id/value context for data binding IViewRepository.
         /// </summary>
-        /// <returns>Returns an enumerable name and value collection for IViewRepository.</returns>
+        /// <returns>Returns an enumerable id and value collection for IViewRepository.</returns>
         Task<IEnumerable<DisplayField>> GetDisplayFieldsAsync();
+        
+        /// <summary>
+        ///     Display fields provide a minimal id/value context for data binding IViewRepository.
+        /// </summary>
+        /// <returns>Returns an enumerable id and value collection for IViewRepository.</returns>
+        Task<IEnumerable<DisplayField>> GetLookupFieldsAsync();
 
         /// <summary>
         ///     Produces a paginated result of 50 items from IViewRepository.

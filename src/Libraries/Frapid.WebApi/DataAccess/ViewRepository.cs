@@ -33,6 +33,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 this.FullyQualifiedObjectName = this._ObjectNamespace + "." + this._ObjectName;
                 this.PrimaryKey = this.GetCandidateKeyByConvention();
+                this.LookupField = this.GetLookupFieldByConvention();
                 this.NameColumn = this.GetNameColumnByConvention();
                 this.IsValid = true;
             }
@@ -42,6 +43,7 @@ namespace Frapid.WebApi.DataAccess
         public sealed override string _ObjectName { get; }
         public string FullyQualifiedObjectName { get; set; }
         public string PrimaryKey { get; set; }
+        public string LookupField { get; set; }
         public string NameColumn { get; set; }
         public string Database { get; set; }
         public int UserId { get; set; }
@@ -118,6 +120,30 @@ namespace Frapid.WebApi.DataAccess
             }
 
             string sql = $"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName};";
+            return await Factory.GetAsync<DisplayField>(this.Database, sql);
+        }
+
+        public async Task<IEnumerable<DisplayField>> GetLookupFieldsAsync()
+        {
+            if (string.IsNullOrWhiteSpace(this.Database))
+            {
+                return new List<DisplayField>();
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information($"Access to get display field for entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            string sql = $"SELECT {this.LookupField} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName};";
             return await Factory.GetAsync<DisplayField>(this.Database, sql);
         }
 
@@ -325,6 +351,7 @@ namespace Frapid.WebApi.DataAccess
             string tableName = this._ObjectName;
 
             tableName = tableName.Replace("_scrud_view", "");
+            tableName = tableName.Replace("_selector_view", "");
             tableName = tableName.Replace("_view", "");
 
             return tableName;
@@ -334,9 +361,23 @@ namespace Frapid.WebApi.DataAccess
         {
             string candidateKey = Inflector.MakeSingular(this.GetTableByConvention());
 
-            if(!string.IsNullOrWhiteSpace(candidateKey))
+            if (!string.IsNullOrWhiteSpace(candidateKey))
             {
                 candidateKey += "_id";
+            }
+
+            candidateKey = candidateKey ?? "";
+
+            return Sanitizer.SanitizeIdentifierName(candidateKey);
+        }
+
+        private string GetLookupFieldByConvention()
+        {
+            string candidateKey = Inflector.MakeSingular(this.GetTableByConvention());
+
+            if (!string.IsNullOrWhiteSpace(candidateKey))
+            {
+                candidateKey += "_code";
             }
 
             candidateKey = candidateKey ?? "";

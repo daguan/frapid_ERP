@@ -616,6 +616,14 @@ GO
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/1. tables-and-constraints.sql --<--<--
+CREATE TABLE core.countries
+(
+    country_code                            	national character varying(12) PRIMARY KEY,
+    country_name                            	national character varying(100) NOT NULL,
+    audit_user_id                           	integer,
+	audit_ts									datetimeoffset NULL DEFAULT(getutcdate())
+);
+
 CREATE TABLE core.apps
 (
     app_name                                    national character varying(100) PRIMARY KEY,

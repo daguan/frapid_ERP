@@ -68,10 +68,16 @@ namespace Frapid.WebApi.DataAccess
         Task<IEnumerable<CustomField>> GetCustomFieldsAsync(string resourceId);
 
         /// <summary>
-        ///     Displayfields provide a minimal name/value context for data binding IFormRepository.
+        ///     Display fields provide a minimal id/value context for data binding IFormRepository.
         /// </summary>
-        /// <returns>Returns an enumerable name and value collection for IFormRepository.</returns>
+        /// <returns>Returns an enumerable id and value collection for IFormRepository.</returns>
         Task<IEnumerable<DisplayField>> GetDisplayFieldsAsync();
+
+        /// <summary>
+        ///     Lookup fields provide a minimal code/value context for data binding IFormRepository.
+        /// </summary>
+        /// <returns>Returns an enumerable code and value collection for IFormRepository.</returns>
+        Task<IEnumerable<DisplayField>> GetLookupFieldsAsync();
 
         /// <summary>
         ///     Inserts the instance of dynamic class to IFormRepository.
