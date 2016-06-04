@@ -26,8 +26,8 @@
     var ajax = request();
 
     ajax.success(function (response) {
-        if (response) {
-            $.each(response, function () {
+        if (response && response.Result) {
+            $.each(response.Result, function () {
                 append(this);
             });
 
@@ -107,7 +107,7 @@ var menuBuilder = {
 
 function loadMenus() {
     function request() {
-        var url = "/api/core/menus/all";
+        var url = "/dashboard/my/menus";
         return window.getAjaxRequest(url);
     };
 
@@ -118,7 +118,7 @@ function loadMenus() {
     var ajax = request();
 
     ajax.success(function (response) {
-        window.appMenus = response;
+        window.appMenus = response.Result;
 
         loadApplications();
     });
