@@ -36,6 +36,6 @@ running as a single IIS Website.
 # Who Is Using Frapid?
 
 * [MixERP Website on PostgreSQL](https://mixerp.org)
-* [MixERP Community Forums (Private App)](https://mixerp.org)
+* [MixERP Community Forums (Private App)](https://mixerp.org/forums)
 * [MixERP 2.0](https://github.com/mixerp/mixerp)
 * [Frapid Website on SQL Server](https://frapid.com)
