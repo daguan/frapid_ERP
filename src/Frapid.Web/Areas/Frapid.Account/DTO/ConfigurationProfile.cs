@@ -11,6 +11,7 @@ namespace Frapid.Account.DTO
         public bool IsActive { get; set; }
         public bool AllowRegistration { get; set; }
         public int RegistrationRoleId { get; set; }
+        public int RegistrationOfficeId { get; set; }
         public bool AllowFacebookRegistration { get; set; }
         public bool AllowGoogleRegistration { get; set; }
         public string GoogleSigninClientId { get; set; }

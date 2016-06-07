@@ -7,11 +7,12 @@ using System.Web.UI;
 using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
 using Frapid.Areas.Authorization;
+using Frapid.Areas.Caching;
 
 namespace Frapid.Dashboard.Controllers
 {
     [RestrictAnonymous]
-    [OutputCache(Duration = 60 * 60 * 24, Location = OutputCacheLocation.Client)]
+    [FileOutputCache(Duration = 60 * 60 * 24, Location = OutputCacheLocation.Client)]
     public class ResourceController : FrapidController
     {
         [Route("dashboard/resources/{*resource}")]

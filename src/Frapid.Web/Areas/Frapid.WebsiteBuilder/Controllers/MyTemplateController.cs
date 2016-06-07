@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using Frapid.Areas;
+using Frapid.Areas.Caching;
 using Frapid.Configuration;
 
 namespace Frapid.WebsiteBuilder.Controllers
@@ -11,6 +12,7 @@ namespace Frapid.WebsiteBuilder.Controllers
     public class MyTemplateController : FrapidController
     {
         [Route("my/template/{*resource}")]
+        [FileOutputCache(Duration = 60 * 24 * 7, SlidingExpiration = true)]
         public ActionResult Get(string resource = "")
         {
             if (string.IsNullOrWhiteSpace(resource))

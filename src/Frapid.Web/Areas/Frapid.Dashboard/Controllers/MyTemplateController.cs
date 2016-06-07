@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.UI;
+using Frapid.Areas.Caching;
 using Frapid.Configuration;
 
 namespace Frapid.Dashboard.Controllers
@@ -19,7 +20,7 @@ namespace Frapid.Dashboard.Controllers
         /// <param name="resource"></param>
         /// <returns></returns>
         [Route("dashboard/my/template/{*resource}")]
-        [OutputCache(Duration = 2592000, Location = OutputCacheLocation.Client)]
+        [FileOutputCache(Duration = 2592000, Location = OutputCacheLocation.Client)]
         public ActionResult Get(string resource = "")
         {
             string configFile =

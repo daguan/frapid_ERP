@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.UI;
 using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
+using Frapid.Areas.Caching;
 using Frapid.i18n;
 using Frapid.i18n.DAL;
 
@@ -13,7 +14,7 @@ namespace Frapid.Web.Controllers
     public class ResourceController: FrapidController
     {
         [Route("i18n/resources.js")]
-        [OutputCache(Duration = 31536000, VaryByParam = "none", Location = OutputCacheLocation.Client)]
+        [FrapidOutputCache(Duration = 31536000, VaryByParam = "none", Location = OutputCacheLocation.Client)]
         public ActionResult Index()
         {
             string culture = CultureManager.GetCurrent().TwoLetterISOLanguageName;

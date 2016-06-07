@@ -36,15 +36,15 @@ namespace Frapid.WebsiteBuilder.Models
             string key = "/search-contents/" + query;
             var factory = new DefaultCacheFactory();
 
-            var result = factory.Get<Task<SearchResult>>(key);
+            var result = factory.Get<SearchResult>(key);
 
             if (result == null)
             {
-                result = FromStoreAsync(query);
+                result = await FromStoreAsync(query);
                 factory.Add(key, result, DateTimeOffset.UtcNow.AddMinutes(15));
             }
 
-            return await result;
+            return result;
         }
 
         public static async Task<SearchResult> FromStoreAsync(string query)

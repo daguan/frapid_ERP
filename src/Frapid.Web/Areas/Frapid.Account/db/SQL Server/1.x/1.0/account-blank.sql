@@ -1237,6 +1237,19 @@ ON core.offices.office_id = account.users.office_id;
 
 GO
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/05.scrud-views/account.user_selector_view.sql --<--<--
+IF OBJECT_ID('account.user_selector_view') IS NOT NULL
+DROP VIEW account.user_selector_view;
+
+GO
+
+CREATE VIEW account.user_selector_view
+AS
+SELECT
+    account.users.user_id,
+    account.users.name AS user_name
+FROM account.users;
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/05.views/account.sign_in_view.sql --<--<--
 IF OBJECT_ID('account.sign_in_view') IS NOT NULL
 DROP VIEW account.sign_in_view;

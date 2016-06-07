@@ -1107,6 +1107,16 @@ INNER JOIN core.offices
 ON core.offices.office_id = account.users.office_id;
 
 
+-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/05.scrud-views/account.user_selector_view.sql --<--<--
+DROP VIEW IF EXISTS account.user_selector_view;
+
+CREATE VIEW account.user_selector_view
+AS
+SELECT
+    account.users.user_id,
+    account.users.name AS user_name
+FROM account.users;
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/05.views/account.sign_in_view.sql --<--<--
 DROP VIEW IF EXISTS account.sign_in_view;
 

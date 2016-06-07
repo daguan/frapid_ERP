@@ -1,6 +1,5 @@
 ﻿using System.Web.Http;
 using System.Web.Mvc;
-using System.Web.Optimization;
 using System.Web.Routing;
 using Frapid.Web;
 using Microsoft.AspNet.SignalR;
@@ -9,7 +8,8 @@ using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Owin;
 
-[assembly: OwinStartup(typeof(Startup))]
+[assembly: OwinStartup(typeof (Startup))]
+
 namespace Frapid.Web
 {
     public class Startup
@@ -18,27 +18,27 @@ namespace Frapid.Web
         {
             app.Map
                 (
-                 "/signalr",
-                 map =>
-                 {
-                     map.UseCors(CorsOptions.AllowAll);
+                    "/signalr",
+                    map =>
+                    {
+                        map.UseCors(CorsOptions.AllowAll);
 
-                     var configuration = new HubConfiguration
-                                         {
-                                             EnableJavaScriptProxies = true
-                                         };
+                        var configuration = new HubConfiguration
+                        {
+                            EnableJavaScriptProxies = true
+                        };
 
-                     map.RunSignalR(configuration);
-                     var module = new AuthorizeModule(null, null);
-                     GlobalHost.HubPipeline.AddModule(module);
-                 });
+                        map.RunSignalR(configuration);
+                        var module = new AuthorizeModule(null, null);
+                        GlobalHost.HubPipeline.AddModule(module);
+                    });
 
             LogManager.InternalizeLogger();
             AreaRegistration.RegisterAllAreas();
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
+            AssetConfig.Register();
             NPocoConfig.Register();
             await StartupRegistration.RegisterAsync();
             BackupRegistration.Register();

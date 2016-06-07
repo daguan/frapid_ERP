@@ -8,13 +8,14 @@ using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.UI;
 using Frapid.Areas;
+using Frapid.Areas.Caching;
 
 namespace Frapid.Web.Controllers
 {
     public class BundleController: FrapidController
     {
         [Route("bundler/get.{extension}")]
-        [OutputCache(Duration = 31536000, VaryByParam = "*", Location = OutputCacheLocation.Any)]
+        [FrapidOutputCache(Duration = 31536000, VaryByParam = "*", Location = OutputCacheLocation.Any)]
         public ActionResult Index(string extension, string files, string directory = "")
         {
             if(extension.ToLowerInvariant().Equals("css"))
