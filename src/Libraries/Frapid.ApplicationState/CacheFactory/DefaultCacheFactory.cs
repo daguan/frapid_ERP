@@ -17,6 +17,11 @@ namespace Frapid.ApplicationState.CacheFactory
             return this.Factory.Add(key, value, expiresAt);
         }
 
+        public void Remove(string key)
+        {
+            this.Factory.Remove(key);
+        }
+
         public T Get<T>(string key) where T : class
         {
             return this.Factory.Get<T>(key);

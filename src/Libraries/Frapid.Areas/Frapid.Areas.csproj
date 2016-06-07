@@ -114,8 +114,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AntiforgeryHelper.cs" />
+    <Compile Include="Caching\BinaryCacheItem.cs" />
+    <Compile Include="Caching\CacheKeyGenerator.cs" />
     <Compile Include="Caching\CacheLocation.cs" />
+    <Compile Include="Caching\FileOutputCacheAttribute.cs" />
     <Compile Include="Caching\FrapidOutputCahce.cs" />
+    <Compile Include="Caching\ICacheKeyGenerator.cs" />
     <Compile Include="CSRF\AntiForgeryAttribute.cs" />
     <Compile Include="CSRF\AntiforgeryTokenGenerator.cs" />
     <Compile Include="CSRF\AntiforgeryTokenizer.cs" />

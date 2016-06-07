@@ -142,12 +142,12 @@ namespace Frapid.Configuration
 
         #region Locator
 
-        private static DomainSerializer GetSerializer()
+        public static DomainSerializer GetSerializer()
         {
             return new DomainSerializer("DomainsApproved.json");
         }
 
-        private static ITenantLocator GetTenantLocator()
+        public static ITenantLocator GetTenantLocator()
         {
             var logger = Log.Logger;
             var serializer = GetSerializer();
@@ -158,7 +158,7 @@ namespace Frapid.Configuration
             return investigator;
         }
 
-        private static string GetDefaultTenantName()
+        public static string GetDefaultTenantName()
         {
             return System.Configuration.ConfigurationManager.AppSettings["DefaultTenant"];
         }

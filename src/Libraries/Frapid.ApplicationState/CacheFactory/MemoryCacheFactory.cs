@@ -31,6 +31,11 @@ namespace Frapid.ApplicationState.CacheFactory
             return true;
         }
 
+        public void Remove(string key)
+        {
+            MemoryCache.Default.Remove(key);
+        }
+
         public T Get<T>(string key) where T : class
         {
             if(string.IsNullOrWhiteSpace(key))

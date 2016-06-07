@@ -106,6 +106,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StaticContent\Asset.cs" />
+    <Compile Include="StaticContent\AssetType.cs" />
     <Compile Include="AttributeValueInvestigator.cs" />
     <Compile Include="Extensions\AttributeExtensions.cs" />
     <Compile Include="Castable.cs" />
@@ -113,6 +115,7 @@
     <Compile Include="EnumConverter.cs" />
     <Compile Include="IJsonPropertyParser.cs" />
     <Compile Include="IOrString.cs" />
+    <Compile Include="StaticContent\IRegisterableAssets.cs" />
     <Compile Include="JsonPropertyParser.cs" />
     <Compile Include="OrString.cs" />
     <Compile Include="Extensions\RequestExtensions.cs" />
@@ -122,7 +125,7 @@
     <Compile Include="FrapidHttpContext.cs" />
     <Compile Include="IAttributeValueInvestigator.cs" />
     <Compile Include="ICastable.cs" />
-    <Compile Include="IDayEndTask.cs" />
+    <Compile Include="Routines\IDayEndTask.cs" />
     <Compile Include="IEnumConverter.cs" />
     <Compile Include="ISiteMapGenerator.cs" />
     <Compile Include="IStartupRegistration.cs" />
@@ -139,6 +142,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

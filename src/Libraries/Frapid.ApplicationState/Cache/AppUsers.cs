@@ -30,22 +30,22 @@ namespace Frapid.ApplicationState.Cache
 
             var factory = new DefaultCacheFactory();
 
-            var login = factory.Get<Task<LoginView>>(key);
+            var login = factory.Get<LoginView>(key);
+
             if(login != null)
             {
-                return await login;
+                return login;
             }
 
-            login = GetMetaLoginAsync(tenant, loginId);
-            var awaiter = await login;
+            login = await GetMetaLoginAsync(tenant, loginId);
 
-            var dictionary = GetDictionary(tenant, awaiter);
+            var dictionary = GetDictionary(tenant, login);
 
 
             factory.Add(tenant + "/dictionary/" + key, dictionary, DateTimeOffset.UtcNow.AddHours(2));
             factory.Add(key, login, DateTimeOffset.UtcNow.AddHours(2));
 
-            return awaiter;
+            return login;
         }
 
         public static LoginView GetCurrent(string tenant = "")
@@ -82,14 +82,13 @@ namespace Frapid.ApplicationState.Cache
 
             var factory = new DefaultCacheFactory();
 
-            var login = factory.Get<Task<LoginView>>(key);
+            var login = factory.Get<LoginView>(key);
 
-            var view = login ?? SetCurrentLoginAsync(tenant, loginId);
-            var awaiter = await view;
+            var view =  login ?? await SetCurrentLoginAsync(tenant, loginId);
 
-            await UpdateActivityAsync(awaiter.UserId.To<int>(), awaiter.IpAddress, awaiter.Browser);
+            await UpdateActivityAsync(view.UserId.To<int>(), view.IpAddress, view.Browser);
 
-            return await view;
+            return view;
         }
 
         private static async Task UpdateActivityAsync(int userId, string ip, string browser)

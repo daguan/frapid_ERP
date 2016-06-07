@@ -65,7 +65,8 @@ namespace Frapid.Areas
             this.RemoteUser = RemoteUser.Get(this.HttpContext);
         }
 
-        protected override void Initialize(RequestContext context)
+
+        protected  override async void Initialize(RequestContext context)
         {
             string clientToken = context.HttpContext.Request.GetClientToken();
             var provider = new Provider(TenantConvention.GetTenant());
@@ -74,12 +75,12 @@ namespace Frapid.Areas
 
             if(token != null)
             {
-                bool isValid = AccessTokens.IsValidAsync(token.ClientToken, context.HttpContext.GetClientIpAddress(), context.HttpContext.GetUserAgent()).Result;
+                bool isValid = await AccessTokens.IsValidAsync(token.ClientToken, context.HttpContext.GetClientIpAddress(), context.HttpContext.GetUserAgent());
 
                 if(isValid)
                 {
-                    AppUsers.SetCurrentLoginAsync(tenant, token.LoginId).Wait();
-                    var loginView = AppUsers.GetCurrentAsync(tenant, token.LoginId).Result;
+                    await AppUsers.SetCurrentLoginAsync(tenant, token.LoginId);
+                    var loginView = await AppUsers.GetCurrentAsync(tenant, token.LoginId);
 
                     this.MetaUser = new MetaUser
                                     {

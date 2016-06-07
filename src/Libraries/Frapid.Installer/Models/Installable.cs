@@ -47,7 +47,7 @@ namespace Frapid.Installer.Models
             var installables = new List<Installable>();
 
             if(this.DependsOn == null ||
-               this.DependsOn.Count().Equals(0))
+               this.DependsOn.Length.Equals(0))
             {
                 return installables;
             }

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Frapid.Framework
+namespace Frapid.Framework.Routines
 {
     public interface IDayEndTask
     {

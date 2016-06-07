@@ -24,6 +24,7 @@ namespace Frapid.Areas.Caching
         public string VaryByCustom { get; set; }
         public string VaryByParam { get; set; }
         public OutputCacheOptions Options { get; set; }
+        public string VaryByHeader { get; set; }
 
         public static CacheConfig Get(string tenant, string profile)
         {
