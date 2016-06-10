@@ -24,7 +24,7 @@ namespace Frapid.Areas
             string currentDomain = GetDomainName(url);
 
             var generator = new AntiforgeryTokenGenerator(check, tokenizer, currentDomain);
-            return generator.GetAntiForgeryToken(this.Request.Url);
+            return generator.GetAntiForgeryToken();
         }
     }
 }
