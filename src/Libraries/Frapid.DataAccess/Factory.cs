@@ -21,7 +21,7 @@ namespace Frapid.DataAccess
         {
             using(var db = DbProvider.GetDatabase(database))
             {
-                return await db.FetchAsync<T>(sql, args);
+                return await db.FetchAsync<T>(sql, args).ConfigureAwait(false);
             }
         }
 
@@ -29,7 +29,7 @@ namespace Frapid.DataAccess
         {
             using(var db = DbProvider.GetDatabase(database))
             {
-                return await db.FetchAsync<T>(sql);
+                return await db.FetchAsync<T>(sql).ConfigureAwait(false);
             }
         }
 
@@ -37,7 +37,7 @@ namespace Frapid.DataAccess
         {
             using(var db = DbProvider.GetDatabase(database))
             {
-                return await db.FetchAsync<T>(sql);
+                return await db.FetchAsync<T>(sql).ConfigureAwait(false);
             }
         }
 
@@ -48,10 +48,10 @@ namespace Frapid.DataAccess
                 if(!string.IsNullOrWhiteSpace(tableName) &&
                    !string.IsNullOrWhiteSpace(primaryKeyName))
                 {
-                    return await db.InsertAsync(tableName, primaryKeyName, autoIncrement, poco);
+                    return await db.InsertAsync(tableName, primaryKeyName, autoIncrement, poco).ConfigureAwait(false);
                 }
 
-                return await db.InsertAsync(poco);
+                return await db.InsertAsync(poco).ConfigureAwait(false);
             }
         }
 
@@ -62,10 +62,10 @@ namespace Frapid.DataAccess
                 if(!string.IsNullOrWhiteSpace(tableName) &&
                    !string.IsNullOrWhiteSpace(primaryKeyName))
                 {
-                    return await db.UpdateAsync(tableName, primaryKeyName, poco, primaryKeyValue, null);
+                    return await db.UpdateAsync(tableName, primaryKeyName, poco, primaryKeyValue, null).ConfigureAwait(false);
                 }
 
-                return await db.UpdateAsync(poco, primaryKeyValue, null);
+                return await db.UpdateAsync(poco, primaryKeyValue, null).ConfigureAwait(false);
             }
         }
 
@@ -74,7 +74,7 @@ namespace Frapid.DataAccess
         {
             using(var db = DbProvider.GetDatabase(database))
             {
-                return await db.ExecuteScalarAsync<T>(sql, args);
+                return await db.ExecuteScalarAsync<T>(sql, args).ConfigureAwait(false);
             }
         }
 
@@ -82,7 +82,7 @@ namespace Frapid.DataAccess
         {
             using(var db = DbProvider.GetDatabase(database))
             {
-                return await db.ExecuteScalarAsync<T>(sql);
+                return await db.ExecuteScalarAsync<T>(sql).ConfigureAwait(false);
             }
         }
 
@@ -90,7 +90,7 @@ namespace Frapid.DataAccess
         {
             using(var db = DbProvider.GetDatabase(database))
             {
-                await db.ExecuteAsync(sql, args);
+                await db.ExecuteAsync(sql, args).ConfigureAwait(false);
             }
         }
 
@@ -98,7 +98,7 @@ namespace Frapid.DataAccess
         {
             using(var db = DbProvider.GetDatabase(tenant, connectionString))
             {
-                await db.ExecuteAsync(sql, args);
+                await db.ExecuteAsync(sql, args).ConfigureAwait(false);
             }
         }
 
@@ -106,7 +106,7 @@ namespace Frapid.DataAccess
         {
             using(var db = DbProvider.GetDatabase(tenant, connectionString))
             {
-                return await db.ExecuteScalarAsync<T>(sql);
+                return await db.ExecuteScalarAsync<T>(sql).ConfigureAwait(false);
             }
         }
     }

@@ -26,7 +26,7 @@ namespace Frapid.Installer
 
         public async Task<bool> HasSchemaAsync(string database)
         {
-            return await Store.HasSchemaAsync(this.Tenant, database, this.Installable.DbSchema);
+            return await Store.HasSchemaAsync(this.Tenant, database, this.Installable.DbSchema).ConfigureAwait(false);
         }
 
         public async Task InstallAsync()
@@ -34,11 +34,11 @@ namespace Frapid.Installer
             foreach(var dependency in this.Installable.Dependencies)
             {
                 InstallerLog.Verbose($"Installing module {dependency.ApplicationName} because the module {this.Installable.ApplicationName} depends on it.");
-                await new AppInstaller(this.Tenant, this.Database, dependency).InstallAsync();
+                await new AppInstaller(this.Tenant, this.Database, dependency).InstallAsync().ConfigureAwait(false);
             }
 
-            await this.CreateSchemaAsync();
-            await this.CreateMyAsync();
+            await this.CreateSchemaAsync().ConfigureAwait(false);
+            await this.CreateMyAsync().ConfigureAwait(false);
             this.CreateOverride();
         }
 
@@ -57,7 +57,7 @@ namespace Frapid.Installer
 
             string db = this.Installable.My;
             string path = PathMapper.MapPath(db);
-            await this.RunSqlAsync(database, database, path);
+            await this.RunSqlAsync(database, database, path).ConfigureAwait(false);
         }
 
         protected async Task CreateSchemaAsync()
@@ -75,7 +75,7 @@ namespace Frapid.Installer
                 return;
             }
 
-            if(await this.HasSchemaAsync(database))
+            if(await this.HasSchemaAsync(database).ConfigureAwait(false))
             {
                 InstallerLog.Verbose($"Skipped {this.Installable.ApplicationName} schema creation because it already exists.");
                 return;
@@ -86,7 +86,7 @@ namespace Frapid.Installer
 
             string db = this.Installable.BlankDbPath;
             string path = PathMapper.MapPath(db);
-            await this.RunSqlAsync(this.Tenant, database, path);
+            await this.RunSqlAsync(this.Tenant, database, path).ConfigureAwait(false);
 
             if(this.Installable.InstallSample &&
                !string.IsNullOrWhiteSpace(this.Installable.SampleDbPath))
@@ -94,7 +94,7 @@ namespace Frapid.Installer
                 InstallerLog.Verbose($"Creating sample data of {this.Installable.ApplicationName}.");
                 db = this.Installable.SampleDbPath;
                 path = PathMapper.MapPath(db);
-                await this.RunSqlAsync(database, database, path);
+                await this.RunSqlAsync(database, database, path).ConfigureAwait(false);
             }
         }
 
@@ -102,7 +102,7 @@ namespace Frapid.Installer
         {
             try
             {
-                await Store.RunSqlAsync(tenant, database, fromFile);
+                await Store.RunSqlAsync(tenant, database, fromFile).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

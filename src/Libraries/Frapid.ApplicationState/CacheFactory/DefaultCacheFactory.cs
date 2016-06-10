@@ -29,11 +29,11 @@ namespace Frapid.ApplicationState.CacheFactory
 
         private ICacheFactory GetDefault()
         {
-            string type = CacheConfig.GetDefaultCacheType();
+            string type = CacheConfig.GetDefaultCacheType().ToUpperInvariant();
 
             switch(type)
             {
-                case "Redis":
+                case "REDIS":
                     return new RedisCacheFactory();
                 default:
                     return new MemoryCacheFactory();

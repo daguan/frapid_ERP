@@ -17,7 +17,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [HttpPost]
         public async Task<ActionResult> CounterAsync(string categoryAlias = "", string alias = "")
         {
-            await ContentModel.AddHitAsync(AppUsers.GetTenant(), categoryAlias, alias);
+            await ContentModel.AddHitAsync(AppUsers.GetTenant(), categoryAlias, alias).ConfigureAwait(false);
             return this.Ok();
         }
 
@@ -25,22 +25,22 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [FrapidOutputCache(ProfileName = "BlogContent")]
         public async Task<ActionResult> PostAsync(string categoryAlias, string alias)
         {
-            var model = await ContentModel.GetContentAsync(this.Tenant, categoryAlias, alias, true);
+            var model = await ContentModel.GetContentAsync(this.Tenant, categoryAlias, alias, true).ConfigureAwait(false);
 
             if (model == null)
             {
-                return this.View(GetLayoutPath() + "404.cshtml");
+                return this.View(GetLayoutPath(this.Tenant) + "404.cshtml");
             }
 
-            string path = GetLayoutPath();
+            string path = GetLayoutPath(this.Tenant);
             string theme = this.GetTheme();
-            string layout = ThemeConfiguration.GetBlogLayout(theme);
+            string layout = ThemeConfiguration.GetBlogLayout(this.Tenant, theme);
 
             model.LayoutPath = path;
             model.Layout = layout;
-            model.Contents = await ContentExtensions.ParseHtmlAsync(this.Tenant, model.Contents);
+            model.Contents = await ContentExtensions.ParseHtmlAsync(this.Tenant, model.Contents).ConfigureAwait(false);
 
-            return this.View(this.GetRazorView<AreaRegistration>("Blog/Post.cshtml"), model);
+            return this.View(this.GetRazorView<AreaRegistration>("Blog/Post.cshtml", this.Tenant), model);
         }
 
         [FrapidOutputCache(ProfileName = "BlogHome")]
@@ -55,28 +55,28 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
                     pageNumber = 1;
                 }
 
-                var contents = (await ContentModel.GetBlogContentsAsync(pageNumber)).ToList();
+                var contents = (await ContentModel.GetBlogContentsAsync(pageNumber).ConfigureAwait(false)).ToList();
 
                 if (!contents.Any())
                 {
-                    return this.View(GetLayoutPath() + "404.cshtml");
+                    return this.View(GetLayoutPath(this.Tenant) + "404.cshtml");
                 }
 
                 foreach (var content in contents)
                 {
-                    content.Contents = await ContentExtensions.ParseHtmlAsync(this.Tenant, content.Contents);
+                    content.Contents = await ContentExtensions.ParseHtmlAsync(this.Tenant, content.Contents).ConfigureAwait(false);
                 }
 
                 string theme = this.GetTheme();
-                string layout = ThemeConfiguration.GetBlogLayout(theme);
+                string layout = ThemeConfiguration.GetBlogLayout(this.Tenant, theme);
                 string tenant = AppUsers.GetTenant();
 
-                var configuration = await Configurations.GetDefaultConfigurationAsync(tenant);
+                var configuration = await Configurations.GetDefaultConfigurationAsync(tenant).ConfigureAwait(false);
 
                 var model = new Blog
                 {
                     Contents = contents,
-                    LayoutPath = GetLayoutPath(),
+                    LayoutPath = GetLayoutPath(this.Tenant),
                     Layout = layout
                 };
 
@@ -86,7 +86,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
                     model.Description = configuration.BlogDescription;
                 }
 
-                return this.View(this.GetRazorView<AreaRegistration>("Blog/Home.cshtml"), model);
+                return this.View(this.GetRazorView<AreaRegistration>("Blog/Home.cshtml", this.Tenant), model);
             }
             catch (NpgsqlException ex)
             {

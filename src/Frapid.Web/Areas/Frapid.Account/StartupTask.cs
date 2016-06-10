@@ -13,7 +13,7 @@ namespace Frapid.Account
         public static async Task AddAsync(string database, string domainName, string adminEmail)
         {
             string sql = FrapidDbServer.GetProcedureCommand(database, "account.add_installed_domain", new[] {"@0", "@1"});
-            await Factory.NonQueryAsync(database, sql, domainName, adminEmail);
+            await Factory.NonQueryAsync(database, sql, domainName, adminEmail).ConfigureAwait(false);
         }
     }
 
@@ -25,12 +25,12 @@ namespace Frapid.Account
         {
             try
             {
-                var installed = new DomainSerializer("DomainsInstalled.json");
+                var installed = new InstalledDomainSerializer();
 
                 foreach (var domain in installed.Get())
                 {
                     string database = TenantConvention.GetDbNameByConvention(domain.DomainName);
-                    await InstalledDomains.AddAsync(database, domain.DomainName, domain.AdminEmail);
+                    await InstalledDomains.AddAsync(database, domain.DomainName, domain.AdminEmail).ConfigureAwait(false);
                 }
             }
             catch (Exception ex)

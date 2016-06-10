@@ -19,7 +19,8 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
                 pageNumber = 1;
             }
 
-            var channel = await RssModel.GetRssChannelAsync(FrapidHttpContext.GetCurrent(), categoryAlias, pageNumber);
+            var channel = await RssModel.GetRssChannelAsync(this.Tenant,
+                FrapidHttpContext.GetCurrent(), categoryAlias, pageNumber).ConfigureAwait(false);
             string rss = RssWriter.Write(channel);
 
             return this.Content(rss, "text/xml", Encoding.UTF8);

@@ -13,7 +13,7 @@ namespace Frapid.WebsiteBuilder.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<Content>().Where(c => c.IsHomepage).ToListAsync();
+                return await db.Query<Content>().Where(c => c.IsHomepage).ToListAsync().ConfigureAwait(false);
             }
         }
 
@@ -21,7 +21,7 @@ namespace Frapid.WebsiteBuilder.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<PublishedContentView>().ToListAsync();
+                return await db.Query<PublishedContentView>().ToListAsync().ConfigureAwait(false);
             }
         }
 
@@ -30,7 +30,7 @@ namespace Frapid.WebsiteBuilder.DAL
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 return await db.Query<Content>().Where(c => c.ContentId == contentId)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync().ConfigureAwait(false);
             }
         }
 
@@ -39,7 +39,7 @@ namespace Frapid.WebsiteBuilder.DAL
         {
             if (string.IsNullOrWhiteSpace(alias))
             {
-                return await GetDefaultAsync(tenant);
+                return await GetDefaultAsync(tenant).ConfigureAwait(false);
             }
 
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
@@ -50,7 +50,7 @@ namespace Frapid.WebsiteBuilder.DAL
                                                                              .Equals(categoryAlias.ToLower())
                                                                          && c.IsBlog == isBlog
                     )
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync().ConfigureAwait(false);
             }
         }
 
@@ -73,7 +73,7 @@ namespace Frapid.WebsiteBuilder.DAL
             {
                 return await
                     db.Query<PublishedContentView>().Where(x => x.IsBlog && x.CategoryAlias == categoryAlias)
-                        .CountAsync();
+                        .CountAsync().ConfigureAwait(false);
             }
         }
 
@@ -81,7 +81,7 @@ namespace Frapid.WebsiteBuilder.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<PublishedContentView>().Where(x => x.IsBlog).CountAsync();
+                return await db.Query<PublishedContentView>().Where(x => x.IsBlog).CountAsync().ConfigureAwait(false);
             }
         }
 
@@ -90,7 +90,7 @@ namespace Frapid.WebsiteBuilder.DAL
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 return
-                    await db.Query<PublishedContentView>().Where(x => x.IsBlog).Limit(offset, limit).ToListAsync();
+                    await db.Query<PublishedContentView>().Where(x => x.IsBlog).Limit(offset, limit).ToListAsync().ConfigureAwait(false);
             }
         }
 
@@ -100,14 +100,14 @@ namespace Frapid.WebsiteBuilder.DAL
             {
                 return await
                     db.Query<PublishedContentView>().Where(c => c.IsHomepage).Limit(1)
-                        .FirstOrDefaultAsync();
+                        .FirstOrDefaultAsync().ConfigureAwait(false);
             }
         }
 
         internal static async Task AddHitAsync(string tenant, string categoryAlias, string alias)
         {
             string sql = FrapidDbServer.GetProcedureCommand(tenant, "website.add_hit", new[] {"@0", "@1"});
-            await Factory.NonQueryAsync(tenant, sql, categoryAlias, alias);
+            await Factory.NonQueryAsync(tenant, sql, categoryAlias, alias).ConfigureAwait(false);
         }
 
         public static async Task<IEnumerable<PublishedContentView>> SearchAsync(string tenant, string query)
@@ -119,7 +119,7 @@ namespace Frapid.WebsiteBuilder.DAL
                         c =>
                             c.Title.ToLower().Contains(query.ToLower()) ||
                             c.Alias.ToLower().Contains(query.ToLower()) ||
-                            c.Contents.ToLower().Contains(query.ToLower())).ToListAsync();
+                            c.Contents.ToLower().Contains(query.ToLower())).ToListAsync().ConfigureAwait(false);
             }
         }
     }

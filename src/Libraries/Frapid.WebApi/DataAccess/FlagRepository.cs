@@ -49,7 +49,7 @@ namespace Frapid.WebApi.DataAccess
 
             const string sql = "SELECT * FROM config.flag_view WHERE resource=@0 AND user_id=@1 AND resource_id IN (@2);";
 
-            return await Factory.GetAsync<dynamic>(this.Database, sql, resource, userId, resourceIds);
+            return await Factory.GetAsync<dynamic>(this.Database, sql, resource, userId, resourceIds).ConfigureAwait(false);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Web.Hosting;
-using Frapid.Configuration;
 
 namespace Frapid.WebsiteBuilder.Models.Themes
 {
@@ -14,9 +13,8 @@ namespace Frapid.WebsiteBuilder.Models.Themes
         public string ThemeName { get; }
         public string File { get; }
 
-        public string Locate()
+        public string Locate(string tenant)
         {
-            string tenant = TenantConvention.GetTenant();
             string path = $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{this.ThemeName}/{this.File}";
             path = HostingEnvironment.MapPath(path);
 

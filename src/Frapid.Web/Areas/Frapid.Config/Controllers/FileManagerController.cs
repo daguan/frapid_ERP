@@ -21,15 +21,14 @@ namespace Frapid.Config.Controllers
         [MenuPolicy]
         public ActionResult Index()
         {
-            return this.FrapidView(this.GetRazorView<AreaRegistration>("FileManager/Index.cshtml"));
+            return this.FrapidView(this.GetRazorView<AreaRegistration>("FileManager/Index.cshtml", this.Tenant));
         }
 
         [Route("dashboard/config/file-manager/resources")]
         [RestrictAnonymous]
         public ActionResult GetResources()
         {
-            string tenant = TenantConvention.GetTenant();
-            string path = $"~/Tenants/{tenant}/";
+            string path = $"~/Tenants/{this.Tenant}/";
             path = HostingEnvironment.MapPath(path);
 
             if (path == null || !Directory.Exists(path))
@@ -83,7 +82,7 @@ namespace Frapid.Config.Controllers
             try
             {
                 var remover = new ResourceRemover(resource);
-                remover.Delete();
+                remover.Delete(this.Tenant);
             }
             catch (ResourceRemoveException ex)
             {
@@ -107,7 +106,7 @@ namespace Frapid.Config.Controllers
                     Rewrite = rewriteFile
                 };
 
-                resource.Create();
+                resource.Create(this.Tenant);
             }
             catch (ResourceCreateException ex)
             {
@@ -136,7 +135,7 @@ namespace Frapid.Config.Controllers
             try
             {
                 var uploader = new ResourceUploader(file, container);
-                uploader.Upload();
+                uploader.Upload(this.Tenant);
             }
             catch (ResourceUploadException ex)
             {
@@ -155,8 +154,7 @@ namespace Frapid.Config.Controllers
                 return this.HttpNotFound();
             }
 
-            string tenant = TenantConvention.GetTenant();
-            string path = HostingEnvironment.MapPath($"/Tenants/{tenant}/{file}");
+            string path = HostingEnvironment.MapPath($"/Tenants/{this.Tenant}/{file}");
 
             if (!System.IO.File.Exists(path))
             {
@@ -177,16 +175,15 @@ namespace Frapid.Config.Controllers
                 return this.HttpNotFound();
             }
 
-            string tenant = TenantConvention.GetTenant();
 
-            var allowed = FrapidConfig.GetMyAllowedResources(tenant);
+            var allowed = FrapidConfig.GetMyAllowedResources(this.Tenant);
 
             if (string.IsNullOrWhiteSpace(resource) || allowed.Count().Equals(0))
             {
                 return this.HttpNotFound();
             }
 
-            string directory = HostingEnvironment.MapPath($"/Tenants/{tenant}");
+            string directory = HostingEnvironment.MapPath($"/Tenants/{this.Tenant}");
 
             if (directory == null)
             {

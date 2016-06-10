@@ -10,9 +10,9 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         public async Task<ActionResult> Http404Async()
         {
             string query = this.Request.Url?.PathAndQuery;
-            var model = await ErrorModel.GetResultAsync(query);
+            var model = await ErrorModel.GetResultAsync(query).ConfigureAwait(false);
 
-            string path = GetLayoutPath();
+            string path = GetLayoutPath(this.Tenant);
             string layout = this.GetLayout();
 
             model.LayoutPath = path;
@@ -20,7 +20,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
             this.Response.Status = "404 Not Found";
             this.Response.StatusCode = 404;
-            return this.View(this.GetRazorView<AreaRegistration>("ErrorHandlers/404.cshtml"), model);
+            return this.View(this.GetRazorView<AreaRegistration>("ErrorHandlers/404.cshtml", this.Tenant), model);
         }
     }
 }

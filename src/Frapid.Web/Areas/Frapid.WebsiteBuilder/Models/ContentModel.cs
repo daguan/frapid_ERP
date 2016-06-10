@@ -16,7 +16,7 @@ namespace Frapid.WebsiteBuilder.Models
             int offset = (pageNumber - 1) * pageSize;
             string tenant = AppUsers.GetTenant();
 
-            var awaiter = await Contents.GetBlogContentsAsync(tenant, pageSize, offset);
+            var awaiter = await Contents.GetBlogContentsAsync(tenant, pageSize, offset).ConfigureAwait(false);
             var contents = awaiter.ToList();
 
             if (!contents.Any())
@@ -32,7 +32,7 @@ namespace Frapid.WebsiteBuilder.Models
         public static async Task<Content> GetContentAsync(string tenant, string categoryAlias = "", string alias = "",
             bool isBlog = false)
         {
-            var content = await Contents.GetPublishedAsync(tenant, categoryAlias, alias, isBlog);
+            var content = await Contents.GetPublishedAsync(tenant, categoryAlias, alias, isBlog).ConfigureAwait(false);
 
             var model = content?.Adapt<Content>();
             return model;
@@ -40,7 +40,7 @@ namespace Frapid.WebsiteBuilder.Models
 
         internal static async Task AddHitAsync(string database, string categoryAlias, string alias)
         {
-            await Contents.AddHitAsync(database, categoryAlias, alias);
+            await Contents.AddHitAsync(database, categoryAlias, alias).ConfigureAwait(false);
         }
     }
 }

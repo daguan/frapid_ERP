@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Text;
 using System.Web.Hosting;
-using Frapid.Configuration;
 
 namespace Frapid.Config.Models
 {
@@ -13,15 +12,15 @@ namespace Frapid.Config.Models
         public string Contents { get; set; }
         public bool Rewrite { get; set; }
 
-        public void Create()
+        public void Create(string tenant)
         {
-            string tenant = TenantConvention.GetTenant();
             string path = $"~/Tenants/{tenant}";
             path = HostingEnvironment.MapPath(path);
 
             if (path == null || !Directory.Exists(path))
             {
-                throw new ResourceCreateException("Could not create the file or directory because the tenant directory was not found.");
+                throw new ResourceCreateException(
+                    "Could not create the file or directory because the tenant directory was not found.");
             }
 
             path = Path.Combine(path, this.Container);

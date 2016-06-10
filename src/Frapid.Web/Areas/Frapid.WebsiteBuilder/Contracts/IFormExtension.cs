@@ -9,7 +9,7 @@ namespace Frapid.WebsiteBuilder.Contracts
         string Path { get; set; }
         bool IsPost { get; set; }
         FormCollection Form { get; set; }
-        string GetForm();
-        Task<string> PostFormAsync(FormCollection form);
+        string GetForm(string tenant);
+        Task<string> PostFormAsync(string tenant, FormCollection form);
     }
 }

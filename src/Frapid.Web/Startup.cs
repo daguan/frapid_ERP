@@ -40,7 +40,7 @@ namespace Frapid.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             AssetConfig.Register();
             NPocoConfig.Register();
-            await StartupRegistration.RegisterAsync();
+            await StartupRegistration.RegisterAsync().ConfigureAwait(false);
             BackupRegistration.Register();
             EodTaskRegistration.Register();
             AccountConfig.Register(app);

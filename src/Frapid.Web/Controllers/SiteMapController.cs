@@ -21,7 +21,7 @@ namespace Frapid.Web.Controllers
             {
                 return this.Failed("Could not generate sitemap.", HttpStatusCode.InternalServerError);
             }
-            string siteMap = await SiteMapGenerator.GetAsync(domain);
+            string siteMap = await SiteMapGenerator.GetAsync(domain).ConfigureAwait(false);
             return this.Content(siteMap, "text/xml", Encoding.UTF8);
         }
     }

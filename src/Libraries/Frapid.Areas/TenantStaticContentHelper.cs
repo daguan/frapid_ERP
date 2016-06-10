@@ -16,11 +16,11 @@ namespace Frapid.Areas
         /// <summary>
         ///     Returns path to the static content on the tenant directory.
         /// </summary>
+        /// <param name="tenant"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static string GetFile(HttpContext context)
+        public static string GetFile(string tenant, HttpContext context)
         {
-            string tenant = TenantConvention.GetTenant();
             var staticResources = GetConfig(tenant, "StaticResources").Or("").Split(',').Select(x => x.Trim()).ToList();
 
             if(!staticResources.Any())

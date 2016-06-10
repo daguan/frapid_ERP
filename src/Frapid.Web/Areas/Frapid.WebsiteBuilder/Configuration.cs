@@ -13,11 +13,15 @@ namespace Frapid.WebsiteBuilder
         private const string ConfigFile = "WebsiteBuilder.config";
         private const string DefaultThemeKey = "DefaultTheme";
 
-        public static string GetCurrentThemePath()
+        public static string GetCurrentThemePath(string tenant)
         {
-            string tenant = AppUsers.GetTenant();
+            if (string.IsNullOrWhiteSpace(tenant))
+            {
+                tenant = AppUsers.GetTenant();
+            }
+
             string path = Path + "Themes/{1}/";
-            string theme = GetDefaultTheme();
+            string theme = GetDefaultTheme(tenant);
 
             return Format(CultureInfo.InvariantCulture, path, tenant, theme);
         }
@@ -30,22 +34,26 @@ namespace Frapid.WebsiteBuilder
             return Format(CultureInfo.InvariantCulture, path, tenant);
         }
 
-        public static string GetWebsiteBuilderPath()
+        public static string GetWebsiteBuilderPath(string tenant)
         {
-            string tenant = AppUsers.GetTenant();
+            if (string.IsNullOrWhiteSpace(tenant))
+            {
+                tenant = AppUsers.GetTenant();
+            }
+
             string path = HostingEnvironment.MapPath(Format(CultureInfo.InvariantCulture, Path, tenant));
 
             return path != null && !Directory.Exists(path) ? Empty : path;
         }
 
-        public static string GetDefaultTheme()
+        public static string GetDefaultTheme(string tenant)
         {
-            return Get(DefaultThemeKey);
+            return Get(DefaultThemeKey, tenant);
         }
 
-        public static string Get(string key)
+        public static string Get(string key, string tenant)
         {
-            string path = GetWebsiteBuilderPath() + "/" + ConfigFile;
+            string path = GetWebsiteBuilderPath(tenant) + "/" + ConfigFile;
             return ConfigurationManager.ReadConfigurationValue(path, key);
         }
     }

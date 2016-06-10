@@ -21,14 +21,13 @@ namespace Frapid.WebsiteBuilder.Models.Themes
         public string ThemeName { get; }
         public string Container { get; }
 
-        public void Upload()
+        public void Upload(string tenant)
         {
             if (string.IsNullOrWhiteSpace(this.ThemeName))
             {
                 throw new ArgumentNullException(nameof(this.ThemeName));
             }
 
-            string tenant = TenantConvention.GetTenant();
             string path = $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{this.ThemeName}";
             path = HostingEnvironment.MapPath(path);
 
@@ -56,7 +55,7 @@ namespace Frapid.WebsiteBuilder.Models.Themes
                     "Could not upload resource because the posted file name is null or invalid.");
             }
 
-            var allowed = FrapidConfig.GetAllowedUploadExtensions(TenantConvention.GetTenant());
+            var allowed = FrapidConfig.GetAllowedUploadExtensions(tenant);
             string extension = Path.GetExtension(fileName);
 
             if (!allowed.Contains(extension))

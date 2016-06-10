@@ -69,7 +69,7 @@ else
                     <div class="ui header">Please Note</div>
                     <div class="ui divider"></div>
                     We use cookies in our website.
-                    Please read the <a href="/site/legal/terms-of-use">terms of use</a>
+                    Please read the <a href="/site/legal/terms-of-service">terms of service</a>
                     before you create an account.
                 </div>
             </div>
@@ -131,6 +131,9 @@ else
         ajax.success(function (response) {
             if (response) {
                 window.location = "/account/change-password/success";
+            }else{
+                alert("Sorry, we could not change your password. Could you please  check your existing password and try again?")
+                formEl.removeClass("loading");
             };
         });
     });

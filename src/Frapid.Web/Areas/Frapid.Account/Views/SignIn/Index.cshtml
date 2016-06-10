@@ -108,7 +108,7 @@
             </div>
         </div>
     </div>
-    @Html.GetAntiForgeryToken()
+    @Html.GetAntiForgeryToken(this.Request.Url)
     <script>
         var fbAppId = '@Model.FacebookAppId';
         var fbScope = '@Model.FacebookScope';

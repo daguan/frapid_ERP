@@ -23,12 +23,12 @@ namespace Frapid.Configuration
 
             string path = PathMapper.MapPath(Path + this.FileName);
 
-            if(path == null)
+            if (path == null)
             {
                 return domains;
             }
 
-            if(!File.Exists(path))
+            if (!File.Exists(path))
             {
                 return domains;
             }
@@ -44,7 +44,7 @@ namespace Frapid.Configuration
             var domains = new List<string>();
             var approved = this.Get();
 
-            foreach(var domain in approved)
+            foreach (var domain in approved)
             {
                 domains.Add(domain.DomainName);
                 domains.AddRange(domain.Synonyms);
@@ -59,7 +59,7 @@ namespace Frapid.Configuration
             var domains = this.Get();
             bool found = domains.Any(x => x.DomainName.ToUpperInvariant().Equals(domain.DomainName.ToUpperInvariant()));
 
-            if(!found)
+            if (!found)
             {
                 domains.Add(domain);
                 this.Save(domains);
@@ -80,7 +80,7 @@ namespace Frapid.Configuration
             string contents = JsonConvert.SerializeObject(domains, Formatting.Indented);
             string path = PathMapper.MapPath(Path + this.FileName);
 
-            if(path == null)
+            if (path == null)
             {
                 return;
             }

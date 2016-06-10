@@ -40,7 +40,7 @@ namespace Frapid.WebsiteBuilder.Models
 
             if (result == null)
             {
-                result = await FromStoreAsync(query);
+                result = await FromStoreAsync(query).ConfigureAwait(false);
                 factory.Add(key, result, DateTimeOffset.UtcNow.AddMinutes(15));
             }
 
@@ -55,7 +55,7 @@ namespace Frapid.WebsiteBuilder.Models
 
             foreach (var candidate in candidates)
             {
-                var items = await candidate.SearchAsync(query);
+                var items = await candidate.SearchAsync(query).ConfigureAwait(false);
                 contents.AddRange(items);
             }
 

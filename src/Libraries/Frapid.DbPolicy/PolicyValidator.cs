@@ -16,7 +16,7 @@ namespace Frapid.DbPolicy
 
         public async void Validate()
         {
-            this.HasAccess = await ValidateAsync(this);
+            this.HasAccess = await ValidateAsync(this).ConfigureAwait(false);
         }
 
         private static async Task<bool> ValidateAsync(IPolicy policy)
@@ -40,7 +40,7 @@ namespace Frapid.DbPolicy
             string entity = policy.ObjectNamespace + "." + policy.ObjectName;
             int type = (int)policy.AccessType;
 
-            bool result = await Factory.ScalarAsync<bool>(policy.Database, sql, policy.LoginId, entity, type);
+            bool result = await Factory.ScalarAsync<bool>(policy.Database, sql, policy.LoginId, entity, type).ConfigureAwait(false);
             return result;
         }
     }

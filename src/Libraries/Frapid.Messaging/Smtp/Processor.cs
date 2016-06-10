@@ -110,7 +110,7 @@ namespace Frapid.Messaging.Smtp
 
                         mail.ReplyToList.Add(new MailAddress(email.FromEmail, email.FromName));
 
-                        await smtp.SendMailAsync(mail);
+                        await smtp.SendMailAsync(mail).ConfigureAwait(false);
 
                         email.Status = Status.Completed;
                         return true;

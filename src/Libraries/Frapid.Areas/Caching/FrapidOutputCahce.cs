@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 using DevTrends.MvcDonutCaching;
+using Frapid.ApplicationState.CacheFactory;
 using Frapid.Configuration;
+using Mapster;
 using Serilog;
 
 namespace Frapid.Areas.Caching
@@ -15,27 +19,6 @@ namespace Frapid.Areas.Caching
         /// </summary>
         public string ProfileName { get; set; }
 
-        private string GetCacheKey(ControllerContext context)
-        {
-            string tenant = string.Empty;
-            var request = context.RequestContext.HttpContext.Request;
-            if (request?.Url != null)
-            {
-                Log.Verbose("Getting cache key for the current request: {Url}.", request.Url);
-                string url = request.Url.Authority;
-                tenant = TenantConvention.GetTenant(url);
-            }
-
-            string key = this.KeyGenerator.GenerateKey(context, this.CacheSettings);
-
-            if (!string.IsNullOrWhiteSpace(tenant))
-            {
-                key = tenant + "." + key;
-            }
-
-            Log.Verbose("The cache key for the current request is {key}.", key);
-            return key;
-        }
 
         private CacheSettings GetCacheSettings()
         {
@@ -50,6 +33,11 @@ namespace Frapid.Areas.Caching
                 VaryByCustom = this.VaryByCustom,
                 VaryByParam = this.VaryByParam
             };
+
+            if (this.Duration > 0)
+            {
+                settings.IsCachingEnabled = true;
+            }
 
             string profile = this.ProfileName;
 
@@ -74,7 +62,6 @@ namespace Frapid.Areas.Caching
                 return settings;
             }
 
-            settings.IsCachingEnabled = true;
 
             Log.Verbose("The cache duration for tenant \"{tenant}\" and profile \"{profile}\" is {Duration}", tenant, profile, config.Duration);
             settings.Duration = config.Duration;
@@ -94,9 +81,12 @@ namespace Frapid.Areas.Caching
             Log.Verbose("The cache Options value for tenant \"{tenant}\" and profile \"{profile}\" is {Options}", tenant, profile, config.Options);
             settings.Options = config.Options;
 
+            settings.IsCachingEnabled = settings.Duration > 0;
+
             return settings;
         }
 
+        /// <exception cref="NotImplementedException">Always.</exception>
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
             if (this.CacheSettings == null)
@@ -114,8 +104,59 @@ namespace Frapid.Areas.Caching
             if (!filterContext.IsChildAction)
             {
                 Log.Verbose("The current action is not a child action. Setting cache header values.");
-                this.CacheHeadersHelper.SetCacheHeaders(filterContext.HttpContext.Response, this.CacheSettings);
+                this.RegisterHeaders(filterContext.HttpContext.Response);
             }
+        }
+
+        private void RegisterHeaders(HttpResponseBase response)
+        {
+            var cacheability = this.GetHttpCacheability();
+
+            response.Cache.SetCacheability(cacheability);
+
+            if (!string.IsNullOrWhiteSpace(this.CacheSettings.VaryByCustom))
+            {
+                response.Cache.SetVaryByCustom(this.CacheSettings.VaryByCustom);
+            }
+
+
+            if (cacheability != HttpCacheability.NoCache)
+            {
+                if (this.Duration > 0)
+                {
+                    response.Cache.SetLastModified(DateTime.UtcNow);
+
+                    response.Cache.SetExpires(DateTime.Now.AddSeconds(this.CacheSettings.Duration));
+                    response.Cache.SetMaxAge(new TimeSpan(0, 0, this.CacheSettings.Duration));
+                    response.Cache.SetProxyMaxAge(new TimeSpan(0, 0, this.CacheSettings.Duration));
+
+                    response.Cache.SetSlidingExpiration(true);
+                }
+            }
+
+            if (this.CacheSettings.NoStore)
+            {
+                response.Cache.SetNoStore();
+            }
+        }
+
+        private HttpCacheability GetHttpCacheability()
+        {
+            var cacheability = HttpCacheability.NoCache;
+
+            switch (this.CacheSettings.Location)
+            {
+                case OutputCacheLocation.Any:
+                case OutputCacheLocation.Downstream:
+                    cacheability = HttpCacheability.Public;
+                    break;
+                case OutputCacheLocation.Client:
+                case OutputCacheLocation.ServerAndClient:
+                    cacheability = HttpCacheability.Private;
+                    break;
+            }
+
+            return cacheability;
         }
 
         /// <summary>
@@ -125,7 +166,7 @@ namespace Frapid.Areas.Caching
         /// <param name="hasErrors">if set to <c>true</c> [has errors].</param>
         private void ExecuteCallback(ControllerContext context, bool hasErrors)
         {
-            string cacheKey = this.GetCacheKey(context);
+            string cacheKey = this.KeyGenerator.GenerateKey(context, this.CacheSettings);
 
             if (string.IsNullOrEmpty(cacheKey))
             {
@@ -139,10 +180,26 @@ namespace Frapid.Areas.Caching
             callback?.Invoke(hasErrors);
         }
 
+        private CacheItem GetCacheItem(string key)
+        {
+            var provider = new FrapidOutputCacheProvider();
+            var item = provider.Get(key);
+
+            var result = item?.Adapt<CacheItem>();
+            return result;
+        }
+
+        private void SetCacheItem(string key, CacheItem item, DateTime expiresOn)
+        {
+            var provider = new FrapidOutputCacheProvider();
+            provider.Add(key, item, expiresOn);
+        }
+
+        /// <exception cref="NotImplementedException">Always.</exception>
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             this.CacheSettings = this.GetCacheSettings();
-            string cacheKey = this.GetCacheKey(filterContext);
+            string cacheKey = this.KeyGenerator.GenerateKey(filterContext, this.CacheSettings);
 
             // If we are unable to generate a cache key it means we can't do anything
             if (string.IsNullOrEmpty(cacheKey))
@@ -164,7 +221,7 @@ namespace Frapid.Areas.Caching
                     filterContext.HttpContext.Request.HttpMethod != "POST")
                 {
                     Log.Verbose("Fetching cache value from output cache manager.");
-                    cachedItem = this.OutputCacheManager.GetItem(cacheKey);
+                    cachedItem = this.GetCacheItem(cacheKey);
                 }
 
                 // We have a cached version on the server side
@@ -229,8 +286,7 @@ namespace Frapid.Areas.Caching
             if (this.CacheSettings.IsServerCachingEnabled &&
                 filterContext.HttpContext.Response.StatusCode == 200)
             {
-                this.OutputCacheManager.AddItem(cacheKey, cacheItem,
-                    DateTime.UtcNow.AddSeconds(this.CacheSettings.Duration));
+                this.SetCacheItem(cacheKey, cacheItem, DateTime.UtcNow.AddSeconds(this.CacheSettings.Duration));
             }
         }
     }

@@ -13,7 +13,7 @@ namespace Frapid.WebsiteBuilder
         public async Task<List<SiteMapUrl>> GenerateAsync()
         {
             string tenant = AppUsers.GetTenant();
-            var all = (await Contents.GetAllPublishedContentsAsync(tenant)).ToList();
+            var all = (await Contents.GetAllPublishedContentsAsync(tenant).ConfigureAwait(false)).ToList();
             var contents = all.Where(x => !x.IsBlog).ToList();
             var blogs = all.Where(x => x.IsBlog).ToList();
 

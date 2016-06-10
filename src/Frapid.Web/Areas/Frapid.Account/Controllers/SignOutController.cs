@@ -19,7 +19,7 @@ namespace Frapid.Account.Controllers
 
             if (this.MetaUser != null)
             {
-                await AccessTokens.RevokeAsync(tenant, this.MetaUser.ClientToken);
+                await AccessTokens.RevokeAsync(tenant, this.MetaUser.ClientToken).ConfigureAwait(true);
             }
 
             FormsAuthentication.SignOut();

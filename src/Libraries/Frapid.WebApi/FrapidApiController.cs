@@ -16,25 +16,26 @@ namespace Frapid.WebApi
 {
     public class FrapidApiController: ApiController
     {
+        public string Tenant { get; set; }
         public MetaUser MetaUser { get; set; }
 
         protected override async void Initialize(HttpControllerContext context)
         {
-            string database = TenantConvention.GetTenant();
+            this.Tenant = TenantConvention.GetTenant();
 
             string clientToken = context.Request.GetBearerToken();
-            var provider = new Provider(database);
+            var provider = new Provider(this.Tenant);
             var token = provider.GetToken(clientToken);
 
 
             if(token != null)
             {
-                await AppUsers.SetCurrentLoginAsync(database, token.LoginId);
-                var loginView = await AppUsers.GetCurrentAsync(database, token.LoginId);
+                await AppUsers.SetCurrentLoginAsync(this.Tenant, token.LoginId).ConfigureAwait(false);
+                var loginView = await AppUsers.GetCurrentAsync(this.Tenant, token.LoginId).ConfigureAwait(false);
 
                 this.MetaUser = new MetaUser
                                 {
-                                    Tenant = database,
+                                    Tenant = this.Tenant,
                                     ClientToken = token.ClientToken,
                                     LoginId = token.LoginId,
                                     UserId = loginView.UserId.To<int>(),

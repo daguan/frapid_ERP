@@ -13,7 +13,7 @@ namespace Frapid.ApplicationState.DAL
         public static async Task<LoginView> GetMetaLoginAsync(string database, long loginId)
         {
             const string sql = "SELECT * FROM account.sign_in_view WHERE login_id=@0;";
-            var awaiter = await Factory.GetAsync<LoginView>(database, sql, loginId);
+            var awaiter = await Factory.GetAsync<LoginView>(database, sql, loginId).ConfigureAwait(false);
 
             return awaiter.FirstOrDefault();
         }
@@ -30,7 +30,7 @@ namespace Frapid.ApplicationState.DAL
                 sql.Append("last_browser = @0", browser);
                 sql.Where("user_id=@0", userId);
 
-                await db.ExecuteAsync(sql);
+                await db.ExecuteAsync(sql).ConfigureAwait(false);
             }
         }
     }

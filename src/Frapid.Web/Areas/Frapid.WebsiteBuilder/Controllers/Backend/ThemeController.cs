@@ -23,7 +23,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         public ActionResult GetThemes()
         {
             var discoverer = new ThemeDiscoverer();
-            var templates = discoverer.Discover();
+            var templates = discoverer.Discover(this.Tenant);
 
             return this.Ok(templates);
         }
@@ -41,7 +41,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
             try
             {
                 var creator = new ThemeCreator(model);
-                creator.Create();
+                creator.Create(this.Tenant);
             }
             catch(ThemeCreateException ex)
             {
@@ -58,8 +58,8 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         {
             try
             {
-                var remover = new ThemeRemover(themeName);
-                await remover.RemoveAsync();
+                var remover = new ThemeRemover(this.Tenant, themeName);
+                await remover.RemoveAsync().ConfigureAwait(false);
             }
             catch(ThemeRemoveException ex)
             {
@@ -78,8 +78,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
                 return this.Failed("Invalid theme name", HttpStatusCode.BadRequest);
             }
 
-            string tenant = TenantConvention.GetTenant();
-            string path = $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{themeName}/";
+            string path = $"~/Tenants/{this.Tenant}/Areas/Frapid.WebsiteBuilder/Themes/{themeName}/";
             path = HostingEnvironment.MapPath(path);
 
             if(path == null ||
@@ -113,7 +112,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
                 return this.AccessDenied();
             }
 
-            string path = new ThemeFileLocator(themeName, file).Locate();
+            string path = new ThemeFileLocator(themeName, file).Locate(this.Tenant);
 
             string mimeType = this.GetMimeType(path);
             return this.File(path, mimeType);
@@ -162,7 +161,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
                                    Rewrite = rewriteFile
                                };
 
-                resource.Create();
+                resource.Create(this.Tenant);
             }
             catch(ResourceCreateException ex)
             {
@@ -186,7 +185,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
             try
             {
                 var remover = new ResourceRemover(themeName, resource);
-                remover.Delete();
+                remover.Delete(this.Tenant);
             }
             catch(ResourceRemoveException ex)
             {
@@ -215,7 +214,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
             try
             {
                 var uploader = new ResourceUploader(file, themeName, container);
-                uploader.Upload();
+                uploader.Upload(this.Tenant);
             }
             catch(ResourceUploadException ex)
             {
@@ -243,7 +242,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
 
             try
             {
-                var uploader = new ThemeUploader(file);
+                var uploader = new ThemeUploader(this.Tenant, file);
                 return Upload(uploader);
             }
             catch(ThemeUploadException ex)
@@ -280,7 +279,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         {
             try
             {
-                uploader.Install();
+                uploader.Install(this.Tenant);
             }
             catch(ThemeUploadException ex)
             {

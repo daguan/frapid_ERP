@@ -55,7 +55,7 @@ namespace Frapid.Messaging.Smtp
 
         public static async Task<bool> IsEnabledAsync(string database)
         {
-            var smtp = await GetSmtpConfigAsync(database);
+            var smtp = await GetSmtpConfigAsync(database).ConfigureAwait(false);
 
             if(smtp == null)
             {
@@ -67,7 +67,7 @@ namespace Frapid.Messaging.Smtp
 
         private static async Task<SmtpConfig> GetSmtpConfigAsync(string database)
         {
-            return await DAL.Smtp.GetConfigAsync(database);
+            return await DAL.Smtp.GetConfigAsync(database).ConfigureAwait(false);
         }
 
         private SecureString GetSmtpUserPassword(string password)

@@ -12,7 +12,7 @@ namespace Frapid.Messaging.DAL
     {
         public static async Task AddToQueueAsync(string database, EmailQueue queue)
         {
-            await Factory.InsertAsync(database, queue, "config.email_queue", "queue_id");
+            await Factory.InsertAsync(database, queue, "config.email_queue", "queue_id").ConfigureAwait(false);
         }
 
         public static async Task<IEnumerable<EmailQueue>> GetMailInQueueAsync(string database)
@@ -25,7 +25,7 @@ namespace Frapid.Messaging.DAL
                 sql.Append("AND canceled=@0", false);
                 sql.Append("AND send_on<=" + FrapidDbServer.GetDbTimestampFunction(database));
 
-                return await db.FetchAsync<EmailQueue>(sql);
+                return await db.FetchAsync<EmailQueue>(sql).ConfigureAwait(false);
             }
         }
 
@@ -39,7 +39,7 @@ namespace Frapid.Messaging.DAL
 
             using(var db = DbProvider.GetDatabase(database))
             {
-                await db.ExecuteAsync(sql);
+                await db.ExecuteAsync(sql).ConfigureAwait(false);
             }
         }
     }

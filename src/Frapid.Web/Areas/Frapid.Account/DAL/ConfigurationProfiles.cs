@@ -11,7 +11,7 @@ namespace Frapid.Account.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<ConfigurationProfile>().Where(u => u.IsActive).FirstOrDefaultAsync();
+                return await db.Query<ConfigurationProfile>().Where(u => u.IsActive).FirstOrDefaultAsync().ConfigureAwait(false);
             }
         }
     }

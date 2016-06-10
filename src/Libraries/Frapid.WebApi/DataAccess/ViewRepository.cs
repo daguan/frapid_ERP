@@ -72,7 +72,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             string sql = $"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName};";
-            return await Factory.ScalarAsync<long>(this.Database, sql);
+            return await Factory.ScalarAsync<long>(this.Database, sql).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<dynamic>> GetAsync()
@@ -96,7 +96,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} ORDER BY {this.PrimaryKey}";
-            return await Factory.GetAsync<dynamic>(this.Database, sql);
+            return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<DisplayField>> GetDisplayFieldsAsync()
@@ -120,7 +120,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             string sql = $"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName};";
-            return await Factory.GetAsync<DisplayField>(this.Database, sql);
+            return await Factory.GetAsync<DisplayField>(this.Database, sql).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<DisplayField>> GetLookupFieldsAsync()
@@ -144,7 +144,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             string sql = $"SELECT {this.LookupField} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName};";
-            return await Factory.GetAsync<DisplayField>(this.Database, sql);
+            return await Factory.GetAsync<DisplayField>(this.Database, sql).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<dynamic>> GetPaginatedResultAsync()
@@ -175,7 +175,7 @@ namespace Frapid.WebApi.DataAccess
             sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
             sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
 
-            return await Factory.GetAsync<dynamic>(this.Database, sql);
+            return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<dynamic>> GetPaginatedResultAsync(long pageNumber)
@@ -208,13 +208,13 @@ namespace Frapid.WebApi.DataAccess
             sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), offset);
             sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
 
-            return await Factory.GetAsync<dynamic>(this.Database, sql);
+            return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<Filter>> GetFiltersAsync(string database, string filterName)
         {
             string sql = $"SELECT * FROM config.filters WHERE object_name='{this.FullyQualifiedObjectName}' AND lower(filter_name)=lower(@0);";
-            return await Factory.GetAsync<Filter>(database, sql, filterName);
+            return await Factory.GetAsync<Filter>(database, sql, filterName).ConfigureAwait(false);
         }
 
         public async Task<long> CountWhereAsync(List<Filter> filters)
@@ -240,7 +240,7 @@ namespace Frapid.WebApi.DataAccess
             var sql = Sql.Builder.Append($"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
             FilterManager.AddFilters(ref sql, filters);
 
-            return await Factory.ScalarAsync<long>(this.Database, sql);
+            return await Factory.ScalarAsync<long>(this.Database, sql).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<dynamic>> GetWhereAsync(long pageNumber, List<Filter> filters)
@@ -276,7 +276,7 @@ namespace Frapid.WebApi.DataAccess
                 sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
             }
 
-            return await Factory.GetAsync<dynamic>(this.Database, sql);
+            return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
         }
 
         public async Task<long> CountFilteredAsync(string filterName)
@@ -299,11 +299,11 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            var filters = await this.GetFiltersAsync(this.Database, filterName);
+            var filters = await this.GetFiltersAsync(this.Database, filterName).ConfigureAwait(false);
             var sql = Sql.Builder.Append($"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
             FilterManager.AddFilters(ref sql, filters.ToList());
 
-            return await Factory.ScalarAsync<long>(this.Database, sql);
+            return await Factory.ScalarAsync<long>(this.Database, sql).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<dynamic>> GetFilteredAsync(long pageNumber, string filterName)
@@ -326,7 +326,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            var filters = await this.GetFiltersAsync(this.Database, filterName);
+            var filters = await this.GetFiltersAsync(this.Database, filterName).ConfigureAwait(false);
 
             long offset = (pageNumber - 1) * 50;
             var sql = Sql.Builder.Append($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
@@ -341,7 +341,7 @@ namespace Frapid.WebApi.DataAccess
                 sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
             }
 
-            return await Factory.GetAsync<dynamic>(this.Database, sql);
+            return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
         }
 
         #region View to Table Convention
@@ -350,6 +350,7 @@ namespace Frapid.WebApi.DataAccess
         {
             string tableName = this._ObjectName;
 
+            tableName = tableName.Replace("_verification_scrud_view", "");
             tableName = tableName.Replace("_scrud_view", "");
             tableName = tableName.Replace("_selector_view", "");
             tableName = tableName.Replace("_view", "");

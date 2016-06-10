@@ -71,12 +71,15 @@ namespace Frapid.Account.Emails
             string tenant = AppUsers.GetTenant();
             var processor = EmailProcessor.GetDefault(tenant);
 
-            var email = this.GetEmail(processor, this._resetDetails, subject, parsed);
+            if(processor != null)
+            {
+                var email = this.GetEmail(processor, this._resetDetails, subject, parsed);
 
-            var queue = new MailQueueManager(tenant, email);
-            await queue.AddAsync();
+                var queue = new MailQueueManager(tenant, email);
+                await queue.AddAsync().ConfigureAwait(false);
 
-            await queue.ProcessMailQueueAsync(processor);
+                await queue.ProcessMailQueueAsync(processor).ConfigureAwait(false);
+            }
         }
     }
 }

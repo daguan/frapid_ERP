@@ -25,7 +25,7 @@ namespace Frapid.Installer.DAL
 
             string database = Factory.GetMetaDatabase(tenant);
             string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
-            await Factory.ExecuteAsync(connectionString, tenant, sql);
+            await Factory.ExecuteAsync(connectionString, tenant, sql).ConfigureAwait(false);
         }
 
         public async Task<bool> HasDbAsync(string tenant, string database)
@@ -38,11 +38,11 @@ namespace Frapid.Installer.DAL
             {
                 int awaiter = await db.ExecuteScalarAsync<int>
                     (
-                     sql,
-                     new object[]
-                     {
-                         tenant
-                     });
+                        sql,
+                        new object[]
+                        {
+                            tenant
+                        }).ConfigureAwait(false);
                 return awaiter.Equals(1);
             }
         }
@@ -55,11 +55,11 @@ namespace Frapid.Installer.DAL
             {
                 int awaiter = await db.ExecuteScalarAsync<int>
                     (
-                     sql,
-                     new object[]
-                     {
-                         schema
-                     });
+                        sql,
+                        new object[]
+                        {
+                            schema
+                        }).ConfigureAwait(false);
                 return awaiter.Equals(1);
             }
         }
@@ -83,7 +83,7 @@ namespace Frapid.Installer.DAL
             using(var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                await this.RunScriptAsync(connection, sql);
+                await this.RunScriptAsync(connection, sql).ConfigureAwait(false);
             }
         }
 
@@ -125,7 +125,7 @@ namespace Frapid.Installer.DAL
                 using(var command = new SqlCommand(sql, connection))
                 {
                     connection.Open();
-                    await command.ExecuteNonQueryAsync();
+                    await command.ExecuteNonQueryAsync().ConfigureAwait(false);
                 }
             }
         }
@@ -134,7 +134,7 @@ namespace Frapid.Installer.DAL
         {
             if(connection.State == ConnectionState.Closed)
             {
-                await connection.OpenAsync();
+                await connection.OpenAsync().ConfigureAwait(false);
             }
 
             foreach(string item in new ScriptSplitter(sql))
@@ -145,7 +145,7 @@ namespace Frapid.Installer.DAL
                     {
                         try
                         {
-                            await command.ExecuteNonQueryAsync();
+                            await command.ExecuteNonQueryAsync().ConfigureAwait(false);
                         }
                         catch(Exception ex)
                         {

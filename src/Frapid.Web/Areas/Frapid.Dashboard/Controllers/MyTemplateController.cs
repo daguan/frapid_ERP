@@ -24,7 +24,7 @@ namespace Frapid.Dashboard.Controllers
         public ActionResult Get(string resource = "")
         {
             string configFile =
-                HostingEnvironment.MapPath($"~/Tenants/{TenantConvention.GetTenant()}/Configs/Frapid.config");
+                HostingEnvironment.MapPath($"~/Tenants/{this.Tenant}/Configs/Frapid.config");
 
             if (!System.IO.File.Exists(configFile))
             {

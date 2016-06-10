@@ -16,7 +16,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         [MenuPolicy]
         public ActionResult Index()
         {
-            return this.FrapidView(this.GetRazorView<AreaRegistration>("Content/Index.cshtml"));
+            return this.FrapidView(this.GetRazorView<AreaRegistration>("Content/Index.cshtml", this.Tenant));
         }
 
         [Route("dashboard/website/contents/manage")]
@@ -26,8 +26,8 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         public async Task<ActionResult> ManageAsync(int contentId = 0)
         {
             string tenant = AppUsers.GetTenant();
-            var model = await Contents.GetAsync(tenant, contentId) ?? new Content();
-            return this.FrapidView(this.GetRazorView<AreaRegistration>("Content/Manage.cshtml"), model);
+            var model = await Contents.GetAsync(tenant, contentId).ConfigureAwait(false) ?? new Content();
+            return this.FrapidView(this.GetRazorView<AreaRegistration>("Content/Manage.cshtml", this.Tenant), model);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Frapid.Authorization.ViewModels
         public static async Task<IEnumerable<Entity>> GetEntitiesAsync()
         {
             string tenant = AppUsers.GetTenant();
-            var data = await Entities.GetAsync(tenant);
+            var data = await Entities.GetAsync(tenant).ConfigureAwait(false);
 
             var entities = data.Select
                 (

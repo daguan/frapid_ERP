@@ -34,12 +34,12 @@ namespace Frapid.Mailgun
 
         public async Task<bool> SendAsync(EmailMessage email)
         {
-            return await this.SendAsync(email, false, null);
+            return await this.SendAsync(email, false, null).ConfigureAwait(false);
         }
 
         public async Task<bool> SendAsync(EmailMessage email, bool deleteAttachmentes, params string[] attachments)
         {
-            await Task.Delay(1);
+            await Task.Delay(1).ConfigureAwait(false);
 
             var config = this.Config as Config;
 

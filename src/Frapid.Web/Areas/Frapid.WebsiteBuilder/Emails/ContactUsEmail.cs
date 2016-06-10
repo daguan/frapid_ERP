@@ -48,12 +48,16 @@ namespace Frapid.WebsiteBuilder.Emails
 
         private async Task<string> GetEmailsAsync(string tenant, int contactId)
         {
-            var config = EmailProcessor.GetDefaultConfig(tenant);
-            var contact = await Contacts.GetContactAsync(tenant, contactId);
+            var contact = await Contacts.GetContactAsync(tenant, contactId).ConfigureAwait(false);
 
             if (contact == null)
             {
-                return config.FromEmail;
+                var config = EmailProcessor.GetDefaultConfig(tenant);
+
+                if(config != null)
+                {
+                    return config.FromEmail;
+                }
             }
 
             return !string.IsNullOrWhiteSpace(contact.Recipients) ? contact.Recipients : contact.Email;
@@ -68,24 +72,27 @@ namespace Frapid.WebsiteBuilder.Emails
                 ReplyTo = model.Email,
                 Subject = model.Subject,
                 Message = this.GetMessage(tenant, model),
-                SendTo = await this.GetEmailsAsync(tenant, model.ContactId)
+                SendTo = await this.GetEmailsAsync(tenant, model.ContactId).ConfigureAwait(false)
             };
         }
 
         public async Task SendAsync(string tenant, ContactForm model)
         {
-            var email = await this.GetEmailAsync(tenant, model);
+            var email = await this.GetEmailAsync(tenant, model).ConfigureAwait(false);
             var manager = new MailQueueManager(tenant, email);
-            await manager.AddAsync();
+            await manager.AddAsync().ConfigureAwait(false);
 
             var processor = EmailProcessor.GetDefault(tenant);
 
-            if (string.IsNullOrWhiteSpace(email.ReplyTo))
+            if(processor != null)
             {
-                email.ReplyTo = processor.Config.FromEmail;
-            }
+                if (string.IsNullOrWhiteSpace(email.ReplyTo))
+                {
+                    email.ReplyTo = processor.Config.FromEmail;
+                }
 
-            await manager.ProcessMailQueueAsync(processor);
+                await manager.ProcessMailQueueAsync(processor).ConfigureAwait(false);                
+            }
         }
     }
 }

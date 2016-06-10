@@ -26,13 +26,13 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
             string tenant = AppUsers.GetTenant();
 
-            if(await EmailSubscriptions.AddAsync(tenant, model.EmailAddress))
+            if(await EmailSubscriptions.AddAsync(tenant, model.EmailAddress).ConfigureAwait(false))
             {
                 var email = new SubscriptionWelcomeEmail();
-                await email.SendAsync(tenant, model);
+                await email.SendAsync(tenant, model).ConfigureAwait(false);
             }
 
-            await Task.Delay(1000);
+            await Task.Delay(1000).ConfigureAwait(false);
             return this.Ok();
         }
 
@@ -41,7 +41,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [FrapidOutputCache(ProfileName = "RemoveSubscription")]
         public ActionResult Remove()
         {
-            return this.View(this.GetRazorView<AreaRegistration>("Subscription/Remove.cshtml"));
+            return this.View(this.GetRazorView<AreaRegistration>("Subscription/Remove.cshtml", this.Tenant));
         }
 
         [Route("subscription/remove")]
@@ -56,13 +56,13 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
             string tenant = AppUsers.GetTenant();
 
-            if(await EmailSubscriptions.RemoveAsync(tenant, model.EmailAddress))
+            if(await EmailSubscriptions.RemoveAsync(tenant, model.EmailAddress).ConfigureAwait(false))
             {
                 var email = new SubscriptionRemovedEmail();
-                await email.SendAsync(tenant, model);
+                await email.SendAsync(tenant, model).ConfigureAwait(false);
             }
 
-            await Task.Delay(1000);
+            await Task.Delay(1000).ConfigureAwait(false);
             return this.Ok();
         }
     }

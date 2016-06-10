@@ -12,7 +12,7 @@ namespace Frapid.Areas.Authorization.Helpers
     {
         public static async Task<long> GetLoginIdAsync(HubCallerContext context)
         {
-            var token = await GetTokenAsync(context);
+            var token = await GetTokenAsync(context).ConfigureAwait(false);
 
             if(token == null)
             {
@@ -29,7 +29,7 @@ namespace Frapid.Areas.Authorization.Helpers
             var token = provider.GetToken(clientToken);
             if(token != null)
             {
-                bool isValid = await AccessTokens.IsValidAsync(token.ClientToken, context.Request.GetClientIpAddress(), context.Headers["User-Agent"]);
+                bool isValid = await AccessTokens.IsValidAsync(token.ClientToken, context.Request.GetClientIpAddress(), context.Headers["User-Agent"]).ConfigureAwait(false);
 
                 if(isValid)
                 {
@@ -42,14 +42,14 @@ namespace Frapid.Areas.Authorization.Helpers
 
         public static async Task<MetaUser> GetUserAsync(HubCallerContext context)
         {
-            var token = await GetTokenAsync(context);
+            var token = await GetTokenAsync(context).ConfigureAwait(false);
 
             if(token != null)
             {
                 string tenant = TenantConvention.GetTenant();
 
-                await AppUsers.SetCurrentLoginAsync(tenant, token.LoginId);
-                var loginView = await AppUsers.GetCurrentAsync(tenant, token.LoginId);
+                await AppUsers.SetCurrentLoginAsync(tenant, token.LoginId).ConfigureAwait(false);
+                var loginView = await AppUsers.GetCurrentAsync(tenant, token.LoginId).ConfigureAwait(false);
 
                 return new MetaUser
                        {

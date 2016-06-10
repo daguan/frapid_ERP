@@ -19,7 +19,7 @@ namespace Frapid.Installer.DAL
 
             string database = Factory.GetMetaDatabase(tenant);
             string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
-            await Factory.ExecuteAsync(connectionString, tenant, sql);
+            await Factory.ExecuteAsync(connectionString, tenant, sql).ConfigureAwait(false);
         }
 
         public async Task<bool> HasDbAsync(string tenant, string database)
@@ -32,11 +32,11 @@ namespace Frapid.Installer.DAL
             {
                 int awaiter = await db.ExecuteScalarAsync<int>
                     (
-                     sql,
-                     new object[]
-                     {
-                         tenant
-                     });
+                        sql,
+                        new object[]
+                        {
+                            tenant
+                        }).ConfigureAwait(false);
                 return awaiter.Equals(1);
             }
         }
@@ -49,11 +49,11 @@ namespace Frapid.Installer.DAL
             {
                 int awaiter = await db.ExecuteScalarAsync<int>
                     (
-                     sql,
-                     new object[]
-                     {
-                         schema
-                     });
+                        sql,
+                        new object[]
+                        {
+                            schema
+                        }).ConfigureAwait(false);
                 return awaiter.Equals(1);
             }
         }
@@ -75,7 +75,7 @@ namespace Frapid.Installer.DAL
 
 
             string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
-            await Factory.ExecuteAsync(connectionString, database, sql);
+            await Factory.ExecuteAsync(connectionString, database, sql).ConfigureAwait(false);
         }
 
         public async Task CleanupDbAsync(string tenant, string database)
@@ -106,7 +106,7 @@ namespace Frapid.Installer.DAL
                             LANGUAGE plpgsql;";
 
             string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
-            await Factory.ExecuteAsync(connectionString, database, sql);
+            await Factory.ExecuteAsync(connectionString, database, sql).ConfigureAwait(false);
         }
     }
 }

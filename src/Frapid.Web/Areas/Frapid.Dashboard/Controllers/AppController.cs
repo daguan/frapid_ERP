@@ -14,8 +14,9 @@ namespace Frapid.Dashboard.Controllers
         [RestrictAnonymous]
         public async Task<ActionResult> GetAppsAsync()
         {
-            int userId = (await AppUsers.GetCurrentAsync()).UserId;
-            int officeId = (await AppUsers.GetCurrentAsync()).OfficeId;
+            int userId = (await AppUsers.GetCurrentAsync().ConfigureAwait(false)).UserId;
+            int officeId = (await AppUsers.GetCurrentAsync().ConfigureAwait(true)).OfficeId;
+            
             string culture = CultureManager.GetCurrent().TwoLetterISOLanguageName;
             string tenant = AppUsers.GetTenant();
 

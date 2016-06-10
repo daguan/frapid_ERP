@@ -17,7 +17,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new FlagRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return await repository.GetAsync(resource, userId, resourceIds);
+                return await repository.GetAsync(resource, userId, resourceIds).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {

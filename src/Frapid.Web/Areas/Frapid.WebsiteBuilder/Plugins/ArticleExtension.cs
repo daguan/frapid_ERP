@@ -23,7 +23,7 @@ namespace Frapid.WebsiteBuilder.Plugins
                 string alias = node.Attributes["article-alias"].Value;
                 string categoryAlias = node.Attributes["category-alias"].Value;
 
-                var model =  await ContentModel.GetContentAsync(tenant, categoryAlias, alias);
+                var model =  await ContentModel.GetContentAsync(tenant, categoryAlias, alias).ConfigureAwait(false);
                 if (model != null)
                 {
                     string contents = model.Contents;

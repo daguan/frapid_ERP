@@ -17,9 +17,8 @@ namespace Frapid.WebsiteBuilder.Models.Themes
         public string ConfigFileLocation { get; private set; }
         public ThemeInfo Info { get; }
 
-        private void CreateDirectory()
+        private void CreateDirectory(string tenant)
         {
-            string tenant = TenantConvention.GetTenant();
             string directory = $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{this.Info.ThemeName}";
             directory = HostingEnvironment.MapPath(directory);
 
@@ -81,9 +80,9 @@ namespace Frapid.WebsiteBuilder.Models.Themes
             }
         }
 
-        public void Create()
+        public void Create(string tenant)
         {
-            this.CreateDirectory();
+            this.CreateDirectory(tenant);
             this.CreateConfig();
         }
     }

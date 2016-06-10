@@ -13,14 +13,14 @@ namespace Frapid.Dashboard.Controllers
         [RestrictAnonymous]
         public ActionResult Index()
         {
-            return View(GetRazorView<AreaRegistration>("Default/Index.cshtml"));
+            return View(GetRazorView<AreaRegistration>("Default/Index.cshtml", this.Tenant));
         }
 
         [Route("dashboard/meta")]
         [RestrictAnonymous]
         public async Task<ActionResult> GetMetaAsync()
         {
-            var curent = await AppUsers.GetCurrentAsync();
+            var curent = await AppUsers.GetCurrentAsync().ConfigureAwait(false);
 
             return this.Ok
                 (

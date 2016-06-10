@@ -18,8 +18,8 @@ namespace Frapid.Account.Controllers
             var auth = new FacebookAuthentication();
             try
             {
-                var result = await auth.AuthenticateAsync(account, this.RemoteUser);
-                return await this.OnAuthenticatedAsync(result);
+                var result = await auth.AuthenticateAsync(account, this.RemoteUser).ConfigureAwait(false);
+                return await this.OnAuthenticatedAsync(result).ConfigureAwait(true);
             }
             catch(NpgsqlException)
             {

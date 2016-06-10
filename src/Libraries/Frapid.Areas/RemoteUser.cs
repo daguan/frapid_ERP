@@ -18,7 +18,7 @@ namespace Frapid.Areas
         public string Country { get; set; }
 
 
-        public static bool IsListedInSpamDatabase()
+        public static bool IsListedInSpamDatabase(string tenant)
         {
             var user = Get();
             string ip = user.IpAddress;
@@ -28,7 +28,7 @@ namespace Frapid.Areas
                 return false;
             }
 
-            var result = DnsSpamLookupHelper.IsListedInSpamDatabase(ip);
+            var result = DnsSpamLookupHelper.IsListedInSpamDatabase(tenant, ip);
             return result.IsListed;
         }
 

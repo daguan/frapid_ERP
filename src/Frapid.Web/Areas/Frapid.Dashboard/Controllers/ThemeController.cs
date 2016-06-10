@@ -17,8 +17,7 @@ namespace Frapid.Dashboard.Controllers
         [RestrictAnonymous]
         public ActionResult GetThemes()
         {
-            string tenant = TenantConvention.GetTenant();
-            string path = $"~/Tenants/{tenant}/Areas/Frapid.Dashboard/Themes";
+            string path = $"~/Tenants/{this.Tenant}/Areas/Frapid.Dashboard/Themes";
             path = HostingEnvironment.MapPath(path);
 
             if(path == null ||
@@ -43,8 +42,7 @@ namespace Frapid.Dashboard.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            string tenant = TenantConvention.GetTenant();
-            string path = $"~/Tenants/{tenant}/Areas/Frapid.Dashboard/Themes/{themeName}";
+            string path = $"~/Tenants/{this.Tenant}/Areas/Frapid.Dashboard/Themes/{themeName}";
             path = HostingEnvironment.MapPath(path);
 
             if(path == null ||
@@ -53,7 +51,7 @@ namespace Frapid.Dashboard.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            path = $"~/Tenants/{tenant}/Areas/Frapid.Dashboard/Dashboard.config";
+            path = $"~/Tenants/{this.Tenant}/Areas/Frapid.Dashboard/Dashboard.config";
             path = HostingEnvironment.MapPath(path);
 
             if(path == null ||

@@ -15,9 +15,8 @@ namespace Frapid.WebsiteBuilder.Models.Themes
         public string ThemeName { get; }
         public string Resource { get; }
 
-        public void Delete()
+        public void Delete(string tenant)
         {
-            string tenant = TenantConvention.GetTenant();
             string path = $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{this.ThemeName}";
             path = HostingEnvironment.MapPath(path);
 

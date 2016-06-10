@@ -20,7 +20,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [HttpPost]
         public async Task<ActionResult> CounterAsync(string categoryAlias = "", string alias = "")
         {
-            await ContentModel.AddHitAsync(AppUsers.GetTenant(), categoryAlias, alias);
+            await ContentModel.AddHitAsync(AppUsers.GetTenant(), categoryAlias, alias).ConfigureAwait(false);
             return this.Ok();
         }
 
@@ -34,23 +34,23 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
                 Log.Verbose($"Prepping \"{this.CurrentPageUrl}\".");
 
 
-                var model = await this.GetContentsAsync(categoryAlias, alias, isPost, form);
+                var model = await this.GetContentsAsync(categoryAlias, alias, isPost, form).ConfigureAwait(false);
 
                 if(model == null)
                 {
                     Log.Error($"Could not serve the url \"{this.CurrentPageUrl}\" because the model was null.");
-                    return this.View(GetLayoutPath() + "404.cshtml");
+                    return this.View(GetLayoutPath(this.Tenant) + "404.cshtml");
                 }
 
                 Log.Verbose($"Parsing custom content extensions for \"{this.CurrentPageUrl}\".");
-                model.Contents = await ContentExtensions.ParseHtmlAsync(this.Tenant, model.Contents);
+                model.Contents = await ContentExtensions.ParseHtmlAsync(this.Tenant, model.Contents).ConfigureAwait(false);
 
                 Log.Verbose($"Parsing custom form extensions for \"{this.CurrentPageUrl}\".");
-                model.Contents = await FormsExtension.ParseHtmlAsync(model.Contents, isPost, form);
+                model.Contents = await FormsExtension.ParseHtmlAsync(this.Tenant, model.Contents, isPost, form).ConfigureAwait(true);
 
                 model.Contents = HitHelper.Add(model.Contents);
 
-                return this.View(this.GetRazorView<AreaRegistration>("Index/Index.cshtml"), model);
+                return this.View(this.GetRazorView<AreaRegistration>("Index/Index.cshtml", this.Tenant), model);
             }
             catch(NpgsqlException ex)
             {
@@ -69,8 +69,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
         private async Task<Content> GetContentsAsync(string categoryAlias, string alias, bool isPost = false, FormCollection form = null)
         {
-            string tenant = TenantConvention.GetTenant(this.CurrentDomain);
-            var model = await ContentModel.GetContentAsync(tenant, categoryAlias, alias);
+            var model = await ContentModel.GetContentAsync(this.Tenant, categoryAlias, alias).ConfigureAwait(false);
 
             if(model == null)
             {
@@ -79,7 +78,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
             bool isHomepage = string.IsNullOrWhiteSpace(categoryAlias) && string.IsNullOrWhiteSpace(alias);
 
-            string path = GetLayoutPath();
+            string path = GetLayoutPath(this.Tenant);
             string layout = isHomepage ? this.GetHomepageLayout() : this.GetLayout();
 
 

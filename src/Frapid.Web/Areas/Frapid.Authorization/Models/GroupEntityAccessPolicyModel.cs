@@ -11,46 +11,46 @@ namespace Frapid.Authorization.Models
     {
         public static async Task<GroupEntityAccessPolicy> GetAsync()
         {
-            if (!(await AppUsers.GetCurrentAsync()).IsAdministrator)
+            if (!(await AppUsers.GetCurrentAsync().ConfigureAwait(false)).IsAdministrator)
             {
                 return new GroupEntityAccessPolicy();
             }
 
             string tenant = AppUsers.GetTenant();
 
-            var offices = await Offices.GetOfficesAsync(tenant);
-            var roles = await Roles.GetRolesAsync(tenant);
+            var offices = await Offices.GetOfficesAsync(tenant).ConfigureAwait(false);
+            var roles = await Roles.GetRolesAsync(tenant).ConfigureAwait(false);
 
             return new GroupEntityAccessPolicy
             {
                 Offices = offices,
                 Roles = roles,
                 AccessTypes = AccessType.GetAccessTypes(),
-                Entities = await Entity.GetEntitiesAsync()
+                Entities = await Entity.GetEntitiesAsync().ConfigureAwait(false)
             };
         }
 
         internal static async Task<List<AccessPolicyInfo>> GetAsync(int officeId, int roleId)
         {
-            if (!(await AppUsers.GetCurrentAsync()).IsAdministrator)
+            if (!(await AppUsers.GetCurrentAsync().ConfigureAwait(false)).IsAdministrator)
             {
                 return new List<AccessPolicyInfo>();
             }
 
             string tenant = AppUsers.GetTenant();
-            var data = await AccessPolicy.GetGroupPolicyAsync(tenant, officeId, roleId);
+            var data = await AccessPolicy.GetGroupPolicyAsync(tenant, officeId, roleId).ConfigureAwait(false);
             return data.Adapt<List<AccessPolicyInfo>>();
         }
 
         public static async Task SaveAsync(int officeId, int roleId, List<AccessPolicyInfo> model)
         {
-            if (!(await AppUsers.GetCurrentAsync()).IsAdministrator)
+            if (!(await AppUsers.GetCurrentAsync().ConfigureAwait(false)).IsAdministrator)
             {
                 return;
             }
 
             string tenant = AppUsers.GetTenant();
-            await AccessPolicy.SaveGroupPolicyAsync(tenant, officeId, roleId, model);
+            await AccessPolicy.SaveGroupPolicyAsync(tenant, officeId, roleId, model).ConfigureAwait(false);
         }
     }
 }

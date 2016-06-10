@@ -15,7 +15,7 @@ namespace Frapid.Authorization.DAL
         {
             using(var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<GroupEntityAccessPolicy>().Where(x => x.OfficeId.Equals(officeId) && x.RoleId.Equals(roleId)).ToListAsync();
+                return await db.Query<GroupEntityAccessPolicy>().Where(x => x.OfficeId.Equals(officeId) && x.RoleId.Equals(roleId)).ToListAsync().ConfigureAwait(false);
             }
         }
 
@@ -30,7 +30,7 @@ namespace Frapid.Authorization.DAL
                 sql.Append("WHERE office_id = @0", officeId);
                 sql.Append("AND role_id = @0", roleId);
 
-                await db.ExecuteAsync(sql);
+                await db.ExecuteAsync(sql).ConfigureAwait(false);
 
 
                 foreach(var policy in policies)
@@ -45,7 +45,7 @@ namespace Frapid.Authorization.DAL
                                };
 
 
-                    await db.InsertAsync("auth.group_entity_access_policy", "group_entity_access_policy_id", true, poco);
+                    await db.InsertAsync("auth.group_entity_access_policy", "group_entity_access_policy_id", true, poco).ConfigureAwait(false);
                 }
 
                 db.CompleteTransaction();
@@ -56,7 +56,7 @@ namespace Frapid.Authorization.DAL
         {
             using(var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<EntityAccessPolicy>().Where(x => x.OfficeId.Equals(officeId) && x.UserId.Equals(userId)).ToListAsync();
+                return await db.Query<EntityAccessPolicy>().Where(x => x.OfficeId.Equals(officeId) && x.UserId.Equals(userId)).ToListAsync().ConfigureAwait(false);
             }
         }
 
@@ -71,7 +71,7 @@ namespace Frapid.Authorization.DAL
                 sql.Append("WHERE office_id = @0", officeId);
                 sql.Append("AND user_id = @0", userId);
 
-                await db.ExecuteAsync(sql);
+                await db.ExecuteAsync(sql).ConfigureAwait(false);
 
 
                 foreach(var policy in policies)
@@ -86,7 +86,7 @@ namespace Frapid.Authorization.DAL
                                };
 
 
-                    await db.InsertAsync("auth.entity_access_policy", "entity_access_policy_id", true, poco);
+                    await db.InsertAsync("auth.entity_access_policy", "entity_access_policy_id", true, poco).ConfigureAwait(false);
                 }
 
                 db.CompleteTransaction();

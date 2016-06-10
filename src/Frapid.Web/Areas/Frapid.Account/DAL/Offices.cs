@@ -10,7 +10,7 @@ namespace Frapid.Account.DAL
         public static async Task<IEnumerable<Office>> GetOfficesAsync(string tenant)
         {
             const string sql = "SELECT office_id, office_name FROM core.offices;";
-            return await Factory.GetAsync<Office>(tenant, sql);
+            return await Factory.GetAsync<Office>(tenant, sql).ConfigureAwait(false);
         }
     }
 }

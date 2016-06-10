@@ -56,7 +56,7 @@ namespace Frapid.Areas.Authorization.Helpers
             }
 
 
-            bool isValid = await AccessTokens.IsValidAsync(clientToken, ipAddress, userAgent);
+            bool isValid = await AccessTokens.IsValidAsync(clientToken, ipAddress, userAgent).ConfigureAwait(false);
 
             if(expriesOn <= DateTimeOffset.UtcNow)
             {

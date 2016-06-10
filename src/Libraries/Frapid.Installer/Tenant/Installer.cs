@@ -26,7 +26,7 @@ namespace Frapid.Installer.Tenant
             string tenant = TenantConvention.GetTenant(this.Url);
             InstallerLog.Verbose($"Creating database {tenant}.");
             var db = new DbInstaller(tenant);
-            await db.InstallAsync();
+            await db.InstallAsync().ConfigureAwait(false);
 
             InstallerLog.Verbose("Getting installables.");
             var installables = GetInstallables(tenant);
@@ -37,7 +37,7 @@ namespace Frapid.Installer.Tenant
                 try
                 {
                     InstallerLog.Verbose($"Installing module {installable.ApplicationName}.");
-                    await new AppInstaller(tenant, tenant, installable).InstallAsync();
+                    await new AppInstaller(tenant, tenant, installable).InstallAsync().ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {

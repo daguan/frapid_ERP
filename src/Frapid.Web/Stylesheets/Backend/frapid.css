@@ -754,14 +754,6 @@ select optgroup {
         -webkit-transition: all 15s ease-out;
         transition: all 15s ease-out;
     }
-
-        .large.icon:hover {
-            -moz-transform: rotate(360deg) scale(1.5);
-            -ms-transform: rotate(360deg) scale(1.5);
-            -o-transform: rotate(360deg) scale(1.5);
-            -webkit-transform: rotate(360deg) scale(1.5);
-            transform: rotate(360deg) scale(1.5);
-        }
 }
 
 @media only screen and (max-width: 768px) {

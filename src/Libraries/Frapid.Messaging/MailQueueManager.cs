@@ -28,6 +28,7 @@ namespace Frapid.Messaging
         public async Task AddAsync()
         {
             this.Processor = EmailProcessor.GetDefault(this.Database);
+
             if(!this.IsEnabled())
             {
                 return;
@@ -58,7 +59,7 @@ namespace Frapid.Messaging
             if(this.IsValidEmail(this.Email.FromEmail) &&
                this.IsValidEmail(this.Email.SendTo))
             {
-                await MailQueue.AddToQueueAsync(this.Database, this.Email);
+                await MailQueue.AddToQueueAsync(this.Database, this.Email).ConfigureAwait(false);
             }
         }
 
@@ -100,7 +101,7 @@ namespace Frapid.Messaging
 
         public async Task ProcessMailQueueAsync(IEmailProcessor processor)
         {
-            var queue = await MailQueue.GetMailInQueueAsync(this.Database);
+            var queue = await MailQueue.GetMailInQueueAsync(this.Database).ConfigureAwait(false);
             var config = new Config(this.Database, this.Processor);
 
             if(this.IsEnabled())
@@ -110,7 +111,7 @@ namespace Frapid.Messaging
                     var message = EmailHelper.GetMessage(config, mail);
                     var attachments = mail.Attachments?.Split(',').ToArray();
 
-                    bool success = await processor.SendAsync(message, false, attachments);
+                    bool success = await processor.SendAsync(message, false, attachments).ConfigureAwait(false);
 
                     if(!success)
                     {
@@ -121,7 +122,7 @@ namespace Frapid.Messaging
                     mail.DeliveredOn = DateTimeOffset.UtcNow;
 
 
-                    await MailQueue.SetSuccessAsync(this.Database, mail.QueueId);
+                    await MailQueue.SetSuccessAsync(this.Database, mail.QueueId).ConfigureAwait(false);
                 }
             }
         }

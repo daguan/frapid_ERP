@@ -14,7 +14,7 @@ namespace Frapid.Account.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<User>().Where(u => u.Email == email).FirstOrDefaultAsync();
+                return await db.Query<User>().Where(u => u.Email == email).FirstOrDefaultAsync().ConfigureAwait(false);
             }
         }
 
@@ -30,7 +30,7 @@ namespace Frapid.Account.DAL
                 sql.Append("last_seen_on=@0", DateTimeOffset.UtcNow);
                 sql.Where("user_id=@0", userId);
 
-                await db.ExecuteAsync(sql);
+                await db.ExecuteAsync(sql).ConfigureAwait(false);
             }
         }
     }

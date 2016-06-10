@@ -26,7 +26,8 @@ namespace Frapid.Areas.Caching
         {
             if (this.Duration <= 0)
             {
-                Log.Information("The file output cache on url \"{url}\" has an invalid duration: {Duration}.", url, this.Duration);
+                Log.Information("The file output cache on url \"{url}\" has an invalid duration: {Duration}.", url,
+                    this.Duration);
                 return false;
             }
 
@@ -225,7 +226,8 @@ namespace Frapid.Areas.Caching
                 Log.Verbose("Writing the rendered data.");
                 this._currentContext.Response.Write(this._writer.ToString());
 
-                Log.Verbose("Trying to create an instance of BinaryCacheItem item with key {key} to store in the cache.", key);
+                Log.Verbose(
+                    "Trying to create an instance of BinaryCacheItem item with key {key} to store in the cache.", key);
                 var item = this.CreateCacheItem(this._currentContext, filterContext);
 
                 if (item != null)
@@ -235,7 +237,8 @@ namespace Frapid.Areas.Caching
                     return;
                 }
 
-                Log.Verbose("Could not store the BinaryCacheItem because the instance of item with key \"{key}\" was null.", key);
+                Log.Verbose(
+                    "Could not store the BinaryCacheItem because the instance of item with key \"{key}\" was null.", key);
                 this.RegisterHeaders(HttpContext.Current.Response);
             }
         }

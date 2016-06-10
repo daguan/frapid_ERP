@@ -17,15 +17,15 @@ namespace Frapid.Authorization.Controllers
         [MenuPolicy]
         public async Task<ActionResult> GroupPolicyAsync()
         {
-            var model = await GroupMenuPolicyModel.GetAsync();
-            return this.FrapidView(this.GetRazorView<AreaRegistration>("MenuPolicy/GroupPolicy.cshtml"), model);
+            var model = await GroupMenuPolicyModel.GetAsync().ConfigureAwait(true);
+            return this.FrapidView(this.GetRazorView<AreaRegistration>("MenuPolicy/GroupPolicy.cshtml", this.Tenant), model);
         }
 
         [RestrictAnonymous]
         [Route("dashboard/authorization/menu-access/group-policy/{officeId}/{roleId}")]
         public async Task<ActionResult> GetGroupPolicyAsync(int officeId, int roleId)
         {
-            var model = await GroupMenuPolicyModel.GetAsync(officeId, roleId);
+            var model = await GroupMenuPolicyModel.GetAsync(officeId, roleId).ConfigureAwait(true);
             return this.Ok(model);
         }
 
@@ -40,7 +40,7 @@ namespace Frapid.Authorization.Controllers
                 return this.InvalidModelState();
             }
 
-            await GroupMenuPolicyModel.SaveAsync(model);
+            await GroupMenuPolicyModel.SaveAsync(model).ConfigureAwait(true);
             return this.Ok("OK");
         }
     }

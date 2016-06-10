@@ -14,7 +14,7 @@ namespace Frapid.Authorization.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<Menu>().OrderBy(x => x.Sort).ThenBy(x => x.MenuId).ToListAsync();
+                return await db.Query<Menu>().OrderBy(x => x.Sort).ThenBy(x => x.MenuId).ToListAsync().ConfigureAwait(false);
             }
         }
 
@@ -24,7 +24,7 @@ namespace Frapid.Authorization.DAL
             {
                 var awaiter = await db.Query<GroupMenuAccessPolicy>()
                     .Where(x => x.OfficeId.Equals(officeId) && x.RoleId.Equals(roleId))
-                    .ToListAsync();
+                    .ToListAsync().ConfigureAwait(false);
 
                 return awaiter.Select(x => x.MenuId)
                     .ToArray();

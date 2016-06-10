@@ -16,10 +16,11 @@ namespace Frapid.Areas.Authorization
     {
         public override bool AuthorizeHubConnection(HubDescriptor descriptor, IRequest request)
         {
-            string clientToken = request.GetClientToken();
-            var provider = new Provider(TenantConvention.GetTenant());
-            var token = provider.GetToken(clientToken);
             string tenant = TenantConvention.GetTenant();
+
+            string clientToken = request.GetClientToken();
+            var provider = new Provider(tenant);
+            var token = provider.GetToken(clientToken);
 
             if(token != null)
             {

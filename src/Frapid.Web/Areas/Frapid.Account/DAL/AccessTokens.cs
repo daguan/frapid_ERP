@@ -17,7 +17,7 @@ namespace Frapid.Account.DAL
             }
 
             const string sql = "UPDATE account.access_tokens SET revoked=@0, revoked_on = @1 WHERE client_token=@2;";
-            await Factory.NonQueryAsync(tenant, sql, true, DateTimeOffset.UtcNow, clientToken);
+            await Factory.NonQueryAsync(tenant, sql, true, DateTimeOffset.UtcNow, clientToken).ConfigureAwait(false);
         }
 
         public static async Task SaveAsync(string tenant, Token token, string ipAddress, string userAgent)
@@ -37,7 +37,7 @@ namespace Frapid.Account.DAL
                 Subject = token.Subject,
                 TokenId = token.TokenId,
                 UserAgent = userAgent
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

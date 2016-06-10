@@ -12,7 +12,7 @@ namespace Frapid.WebsiteBuilder.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<MenuItemView>().Where(c => c.MenuName == menuName).OrderBy(c => c.Sort).ToListAsync();
+                return await db.Query<MenuItemView>().Where(c => c.MenuName == menuName).OrderBy(c => c.Sort).ToListAsync().ConfigureAwait(false);
             }
         }
     }

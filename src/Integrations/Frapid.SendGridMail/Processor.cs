@@ -35,7 +35,7 @@ namespace Frapid.SendGridMail
 
         public async Task<bool> SendAsync(EmailMessage email)
         {
-            return await this.SendAsync(email, false, null);
+            return await this.SendAsync(email, false, null).ConfigureAwait(false);
         }
 
         public async Task<bool> SendAsync(EmailMessage email, bool deleteAttachmentes, params string[] attachments)
@@ -80,7 +80,7 @@ namespace Frapid.SendGridMail
 
                 message = AttachmentHelper.AddAttachments(message, attachments);
                 var transportWeb = new Web(config.ApiKey);
-                await transportWeb.DeliverAsync(message);
+                await transportWeb.DeliverAsync(message).ConfigureAwait(false);
 
                 email.Status = Status.Completed;
                 return true;

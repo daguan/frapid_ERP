@@ -20,7 +20,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return await repository.CountAsync();
+                return await repository.CountAsync().ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {
@@ -53,7 +53,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return await repository.GetAsync();
+                return await repository.GetAsync().ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {
@@ -85,7 +85,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return await repository.GetPaginatedResultAsync();
+                return await repository.GetPaginatedResultAsync().ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {
@@ -117,7 +117,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return await repository.GetPaginatedResultAsync(pageNumber);
+                return await repository.GetPaginatedResultAsync(pageNumber).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {
@@ -150,7 +150,7 @@ namespace Frapid.WebApi.Service
             {
                 var f = Filter.FromJArray(filters);
                 var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return await repository.CountWhereAsync(f);
+                return await repository.CountWhereAsync(f).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {
@@ -183,7 +183,7 @@ namespace Frapid.WebApi.Service
             {
                 var f = Filter.FromJArray(filters);
                 var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return await repository.GetWhereAsync(pageNumber, f);
+                return await repository.GetWhereAsync(pageNumber, f).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {
@@ -215,7 +215,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return await repository.CountFilteredAsync(filterName);
+                return await repository.CountFilteredAsync(filterName).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {
@@ -247,7 +247,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return await repository.GetFilteredAsync(pageNumber, filterName);
+                return await repository.GetFilteredAsync(pageNumber, filterName).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {
@@ -279,7 +279,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return await repository.GetDisplayFieldsAsync();
+                return await repository.GetDisplayFieldsAsync().ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {
@@ -311,7 +311,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new ViewRepository(schemaName, tableName, this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                return await repository.GetLookupFieldsAsync();
+                return await repository.GetLookupFieldsAsync().ConfigureAwait(false);
             }
             catch (UnauthorizedException)
             {

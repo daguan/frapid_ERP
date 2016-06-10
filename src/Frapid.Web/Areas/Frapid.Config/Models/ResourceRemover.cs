@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Web.Hosting;
-using Frapid.Configuration;
 
 namespace Frapid.Config.Models
 {
@@ -13,9 +12,8 @@ namespace Frapid.Config.Models
 
         public string Resource { get; }
 
-        public void Delete()
+        public void Delete(string tenant)
         {
-            string tenant = TenantConvention.GetTenant();
             string path = $"~/Tenants/{tenant}";
             path = HostingEnvironment.MapPath(path);
 

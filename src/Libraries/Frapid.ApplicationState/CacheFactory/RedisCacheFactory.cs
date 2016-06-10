@@ -28,6 +28,7 @@ namespace Frapid.ApplicationState.CacheFactory
         public void Remove(string key)
         {
             bool result = this.Client.SearchKeys(key).Any();
+
             if(result)
             {
                 this.Client.Remove(key);

@@ -65,7 +65,7 @@ namespace Frapid.WebApi.DataAccess
                 sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
             }
 
-            return await Factory.GetAsync<dynamic>(this.Database, sql);
+            return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
         }
 
         public async Task MakeDefaultAsync(string objectName, string filterName)
@@ -85,7 +85,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             const string sql = "UPDATE config.filters SET is_default=true WHERE object_name=@0 AND filter_name=@1;";
-            await Factory.NonQueryAsync(this.Database, sql, objectName, filterName);
+            await Factory.NonQueryAsync(this.Database, sql, objectName, filterName).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             const string sql = "DELETE FROM config.filters WHERE filter_name=@0;";
-            await Factory.NonQueryAsync(this.Database, sql, filterName);
+            await Factory.NonQueryAsync(this.Database, sql, filterName).ConfigureAwait(false);
         }
 
         public async Task RecreateFiltersAsync(string objectName, string filterName, List<ExpandoObject> filters)
@@ -143,22 +143,22 @@ namespace Frapid.WebApi.DataAccess
                 {
                     var toDelete = await this.GetWhereAsync
                         (
-                         1,
-                         new List<Filter>
-                         {
-                             new Filter
-                             {
-                                 ColumnName = "object_name",
-                                 FilterCondition = (int)FilterCondition.IsEqualTo,
-                                 FilterValue = objectName
-                             },
-                             new Filter
-                             {
-                                 ColumnName = "filter_name",
-                                 FilterCondition = (int)FilterCondition.IsEqualTo,
-                                 FilterValue = filterName
-                             }
-                         });
+                            1,
+                            new List<Filter>
+                            {
+                                new Filter
+                                {
+                                    ColumnName = "object_name",
+                                    FilterCondition = (int)FilterCondition.IsEqualTo,
+                                    FilterValue = objectName
+                                },
+                                new Filter
+                                {
+                                    ColumnName = "filter_name",
+                                    FilterCondition = (int)FilterCondition.IsEqualTo,
+                                    FilterValue = filterName
+                                }
+                            }).ConfigureAwait(false);
 
 
                     foreach(var filter in toDelete)
@@ -196,7 +196,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             const string sql = "UPDATE config.filters SET is_default=false WHERE object_name=@0;";
-            await Factory.NonQueryAsync(this.Database, sql, objectName);
+            await Factory.NonQueryAsync(this.Database, sql, objectName).ConfigureAwait(false);
         }
     }
 }

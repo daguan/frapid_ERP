@@ -16,7 +16,7 @@ namespace Frapid.Backups.Postgres
 
         public async Task<bool> BackupAsync(Action<string> successCallback, Action<string> failCallback)
         {
-            await Task.Delay(1);
+            await Task.Delay(1).ConfigureAwait(false);
 
             if(string.IsNullOrWhiteSpace(this.BackupFileLocation))
             {

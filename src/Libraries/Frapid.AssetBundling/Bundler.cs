@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using Frapid.Configuration;
 using Frapid.Framework.StaticContent;
@@ -39,6 +40,11 @@ namespace Frapid.AssetBundling
         {
             var builder = new StringBuilder();
 
+            if (this.Asset == null)
+            {
+                return string.Empty;
+            }
+
             foreach (string file in this.Asset.Files)
             {
                 string contents = this.GetContent(file);
@@ -53,8 +59,9 @@ namespace Frapid.AssetBundling
                     {
                         string minified = this.Minify(file, contents);
                         builder.Append(minified);
-                        builder.Append(";");
                     }
+
+                    builder.Append(Environment.NewLine);
                 }
             }
 

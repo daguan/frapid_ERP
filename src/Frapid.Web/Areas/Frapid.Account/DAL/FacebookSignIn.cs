@@ -18,7 +18,7 @@ namespace Frapid.Account.DAL
                 new[] {"@0", "@1", "@2", "@3", "@4", "@5", "@6", "@7"});
             return
                 (await Factory.GetAsync<LoginResult>(tenant, sql, facebookUserId, email, officeId, name, token, browser,
-                    ipAddress, culture.Or("en-US"))).FirstOrDefault();
+                    ipAddress, culture.Or("en-US")).ConfigureAwait(false)).FirstOrDefault();
         }
     }
 }

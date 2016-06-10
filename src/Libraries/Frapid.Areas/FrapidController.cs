@@ -24,6 +24,9 @@ namespace Frapid.Areas
     {
         public RemoteUser RemoteUser { get; private set; }
         public MetaUser MetaUser { get; set; }
+        public string CurrentDomain { get; set; }
+        public string Tenant { get; set; }
+        public string CurrentPageUrl { get; set; }
 
         protected new virtual ContentResult View(string viewName, object model = null)
         {
@@ -62,6 +65,13 @@ namespace Frapid.Areas
 
         protected override void OnActionExecuting(ActionExecutingContext context)
         {
+            if (this.Request?.Url != null)
+            {
+                this.CurrentDomain = this.Request.Url.DnsSafeHost;
+                this.CurrentPageUrl = this.Request.Url.AbsoluteUri;
+                this.Tenant = TenantConvention.GetTenant(this.CurrentDomain);
+            }
+
             this.RemoteUser = RemoteUser.Get(this.HttpContext);
         }
 
@@ -75,12 +85,12 @@ namespace Frapid.Areas
 
             if(token != null)
             {
-                bool isValid = await AccessTokens.IsValidAsync(token.ClientToken, context.HttpContext.GetClientIpAddress(), context.HttpContext.GetUserAgent());
+                bool isValid = await AccessTokens.IsValidAsync(token.ClientToken, context.HttpContext.GetClientIpAddress(), context.HttpContext.GetUserAgent()).ConfigureAwait(false);
 
                 if(isValid)
                 {
-                    await AppUsers.SetCurrentLoginAsync(tenant, token.LoginId);
-                    var loginView = await AppUsers.GetCurrentAsync(tenant, token.LoginId);
+                    await AppUsers.SetCurrentLoginAsync(tenant, token.LoginId).ConfigureAwait(false);
+                    var loginView = await AppUsers.GetCurrentAsync(tenant, token.LoginId).ConfigureAwait(false);
 
                     this.MetaUser = new MetaUser
                                     {

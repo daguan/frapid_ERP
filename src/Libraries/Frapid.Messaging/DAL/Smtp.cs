@@ -10,7 +10,7 @@ namespace Frapid.Messaging.DAL
         {
             using(var db = DbProvider.GetDatabase(tenant))
             {
-                return await db.Query<SmtpConfig>().Where(u => u.Enabled && u.IsDefault).FirstOrDefaultAsync();
+                return await db.Query<SmtpConfig>().Where(u => u.Enabled && u.IsDefault).FirstOrDefaultAsync().ConfigureAwait(false);
             }
         }
     }

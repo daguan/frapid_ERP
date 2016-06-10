@@ -101,7 +101,7 @@ namespace Frapid.Installer.Commands
 
             try
             {
-                new DomainSerializer("DomainsApproved.json").Add
+                new ApprovedDomainSerializer().Add
                     (
                      new ApprovedDomain
                      {
@@ -117,14 +117,14 @@ namespace Frapid.Installer.Commands
 
 
                 var installer = new Tenant.Installer(this.DomainName);
-                await installer.InstallAsync();
+                await installer.InstallAsync().ConfigureAwait(false);
             }
             finally
             {
                 if(this.CleanupWhenDone)
                 {
                     var uninstaller = new Uninstaller(this.DomainName);
-                    await uninstaller.UnInstallAsync();
+                    await uninstaller.UnInstallAsync().ConfigureAwait(false);
                 }
             }
         }

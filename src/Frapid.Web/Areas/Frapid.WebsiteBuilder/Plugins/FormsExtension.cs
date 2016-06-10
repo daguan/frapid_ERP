@@ -19,7 +19,7 @@ namespace Frapid.WebsiteBuilder.Plugins
             return members.Cast<IFormExtension>().FirstOrDefault(member => member.Identifier.Equals(identifier));
         }
 
-        public static string GetForm(string identifier, string path)
+        public static string GetForm(string tenant, string identifier, string path)
         {
             var form = GetForm(identifier);
 
@@ -29,10 +29,10 @@ namespace Frapid.WebsiteBuilder.Plugins
             }
 
             form.Path = path;
-            return form.GetForm();
+            return form.GetForm(tenant);
         }
 
-        public static async Task<string> PostFormAsync(string identifier, string path, FormCollection model)
+        public static async Task<string> PostFormAsync(string tenant, string identifier, string path, FormCollection model)
         {
             var form = GetForm(identifier);
 
@@ -44,10 +44,10 @@ namespace Frapid.WebsiteBuilder.Plugins
             form.Path = path;
             form.Form = model;
 
-            return await form.PostFormAsync(model);
+            return await form.PostFormAsync(tenant, model).ConfigureAwait(false);
         }
 
-        public static async Task<string> ParseHtmlAsync(string html, bool isPost = false, FormCollection form = null)
+        public static async Task<string> ParseHtmlAsync(string tenant, string html, bool isPost = false, FormCollection form = null)
         {
             if (string.IsNullOrWhiteSpace(html))
             {
@@ -75,11 +75,11 @@ namespace Frapid.WebsiteBuilder.Plugins
                 {
                     identifier = form["IFormExtensionIdentifier"];
                     path = form["IFormExtensionPath"];
-                    contents = await PostFormAsync(identifier, path, form);
+                    contents = await PostFormAsync(tenant, identifier, path, form).ConfigureAwait(false);
                 }
                 else
                 {
-                    contents = GetForm(identifier, path);
+                    contents = GetForm(tenant, identifier, path);
                 }
 
                 var newNode = HtmlNode.CreateNode("div");

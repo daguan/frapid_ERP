@@ -65,7 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApprovedDomain.cs" />
+    <Compile Include="DefaultDomainSerializer.cs" />
     <Compile Include="IDomainSerializer.cs" />
+    <Compile Include="InstalledDomainSerializer.cs" />
     <Compile Include="TenantServices\DomainValidator.cs" />
     <Compile Include="TenantServices\Contracts\ISslDomainCheck.cs" />
     <Compile Include="TenantServices\SslDomainCheck.cs" />

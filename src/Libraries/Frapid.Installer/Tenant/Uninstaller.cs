@@ -26,9 +26,9 @@ namespace Frapid.Installer.Tenant
                 throw new UninstallException("Access is denied. Deleting a website is not allowed.");
             }
 
-            await this.CleanupDbAsync();
+            await this.CleanupDbAsync().ConfigureAwait(false);
             this.CleanupTenantDirectory();
-            new DomainSerializer("DomainsApproved.json").Remove(this.Url);
+            new ApprovedDomainSerializer().Remove(this.Url);
         }
 
         private void CleanupTenantDirectory()
@@ -43,7 +43,7 @@ namespace Frapid.Installer.Tenant
 
         private async Task CleanupDbAsync()
         {
-            await Store.CleanupDbAsync(this.Tenant, this.Tenant);
+            await Store.CleanupDbAsync(this.Tenant, this.Tenant).ConfigureAwait(false);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Frapid.ApplicationState.Cache
         public static async Task SetCurrentLoginAsync(HttpContext context, string tenant)
         {
             long globalLoginId = context.User.Identity.Name.To<long>();
-            await SetCurrentLoginAsync(tenant, globalLoginId);
+            await SetCurrentLoginAsync(tenant, globalLoginId).ConfigureAwait(false);
         }
 
         public static async Task<LoginView> SetCurrentLoginAsync(string tenant, long loginId)
@@ -37,7 +37,7 @@ namespace Frapid.ApplicationState.Cache
                 return login;
             }
 
-            login = await GetMetaLoginAsync(tenant, loginId);
+            login = await GetMetaLoginAsync(tenant, loginId).ConfigureAwait(false);
 
             var dictionary = GetDictionary(tenant, login);
 
@@ -68,7 +68,7 @@ namespace Frapid.ApplicationState.Cache
                 long.TryParse(context.User.Identity.Name, out loginId);
             }
 
-            return await GetCurrentAsync(tenant, loginId);
+            return await GetCurrentAsync(tenant, loginId).ConfigureAwait(false);
         }
 
         public static async Task<LoginView> GetCurrentAsync(string tenant, long loginId)
@@ -84,21 +84,21 @@ namespace Frapid.ApplicationState.Cache
 
             var login = factory.Get<LoginView>(key);
 
-            var view =  login ?? await SetCurrentLoginAsync(tenant, loginId);
+            var view =  login ?? await SetCurrentLoginAsync(tenant, loginId).ConfigureAwait(false);
 
-            await UpdateActivityAsync(view.UserId.To<int>(), view.IpAddress, view.Browser);
+            await UpdateActivityAsync(view.UserId.To<int>(), view.IpAddress, view.Browser).ConfigureAwait(false);
 
             return view;
         }
 
         private static async Task UpdateActivityAsync(int userId, string ip, string browser)
         {
-            await DAL.AppUsers.UpdateActivityAsync(GetTenant(), userId, ip, browser);
+            await DAL.AppUsers.UpdateActivityAsync(GetTenant(), userId, ip, browser).ConfigureAwait(false);
         }
 
         public static async Task<LoginView> GetMetaLoginAsync(string database, long loginId)
         {
-            return await DAL.AppUsers.GetMetaLoginAsync(database, loginId);
+            return await DAL.AppUsers.GetMetaLoginAsync(database, loginId).ConfigureAwait(false);
         }
 
         private static Dictionary<string, object> GetDictionary(string database, LoginView metaLogin)

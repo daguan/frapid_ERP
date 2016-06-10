@@ -18,12 +18,12 @@ namespace Frapid.Installer
 
         public async Task<bool> HasDbAsync()
         {
-            return await Store.HasDbAsync(this.Tenant, this.Database);
+            return await Store.HasDbAsync(this.Tenant, this.Database).ConfigureAwait(false);
         }
 
         public bool IsWellKnownDb()
         {
-            var serializer = new DomainSerializer("DomainsApproved.json");
+            var serializer = new ApprovedDomainSerializer();
             var domains = serializer.Get();
             return domains.Any(domain => TenantConvention.GetTenant(domain.DomainName) == this.Tenant);
         }

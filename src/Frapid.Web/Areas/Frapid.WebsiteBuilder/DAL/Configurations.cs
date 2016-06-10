@@ -10,7 +10,7 @@ namespace Frapid.WebsiteBuilder.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<DTO.Configuration>().Where(c => c.IsDefault).FirstOrDefaultAsync();
+                return await db.Query<DTO.Configuration>().Where(c => c.IsDefault).FirstOrDefaultAsync().ConfigureAwait(false);
             }
         }
     }

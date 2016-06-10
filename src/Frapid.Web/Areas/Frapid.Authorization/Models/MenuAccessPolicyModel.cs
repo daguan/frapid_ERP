@@ -11,15 +11,15 @@ namespace Frapid.Authorization.Models
     {
         public static async Task<UserMenuPolicy> GetAsync()
         {
-            if (!(await AppUsers.GetCurrentAsync()).IsAdministrator)
+            if (!(await AppUsers.GetCurrentAsync().ConfigureAwait(false)).IsAdministrator)
             {
                 return new UserMenuPolicy();
             }
 
             string tenant = AppUsers.GetTenant();
-            var offices = await Offices.GetOfficesAsync(tenant);
-            var users = await Users.GetUsersAsync(tenant);
-            var menus = await Menus.GetMenusAsync(tenant);
+            var offices = await Offices.GetOfficesAsync(tenant).ConfigureAwait(false);
+            var users = await Users.GetUsersAsync(tenant).ConfigureAwait(false);
+            var menus = await Menus.GetMenusAsync(tenant).ConfigureAwait(false);
 
             return new UserMenuPolicy
             {
@@ -32,18 +32,18 @@ namespace Frapid.Authorization.Models
         public static async Task SaveAsync(UserMenuPolicyInfo model)
         {
             string tenant = AppUsers.GetTenant();
-            await Menus.SavePolicyAsync(tenant, model.OfficeId, model.UserId, model.Allowed, model.Disallowed);
+            await Menus.SavePolicyAsync(tenant, model.OfficeId, model.UserId, model.Allowed, model.Disallowed).ConfigureAwait(false);
         }
 
         internal static async Task<IEnumerable<MenuAccessPolicy>> GetAsync(int officeId, int userId)
         {
-            if (!(await AppUsers.GetCurrentAsync()).IsAdministrator)
+            if (!(await AppUsers.GetCurrentAsync().ConfigureAwait(false)).IsAdministrator)
             {
                 return new List<MenuAccessPolicy>();
             }
 
             string tenant = AppUsers.GetTenant();
-            return await Menus.GetPolicyAsync(tenant, officeId, userId);
+            return await Menus.GetPolicyAsync(tenant, officeId, userId).ConfigureAwait(false);
         }
     }
 }

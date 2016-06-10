@@ -26,7 +26,7 @@ namespace Frapid.Framework
 
             writer.WriteStartElement("urlset", "http://www.sitemaps.org/schemas/sitemap/0.9");
 
-            var urls = await GetUrlsAsync();
+            var urls = await GetUrlsAsync().ConfigureAwait(false);
             foreach(var url in urls)
             {
                 writer.WriteStartElement("url");
@@ -78,7 +78,7 @@ namespace Frapid.Framework
             {
                 try
                 {
-                    urls.AddRange(await member.GenerateAsync());
+                    urls.AddRange(await member.GenerateAsync().ConfigureAwait(false));
                 }
                 catch (Exception ex)
                 {

@@ -34,6 +34,6 @@
     </section>
     
     @Html.Partial(footer)
-    @Html.GetAntiForgeryToken()
+    @Html.GetAntiForgeryToken(this.Request.Url)
 </body>
 </html>

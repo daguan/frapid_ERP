@@ -10,24 +10,24 @@ namespace Frapid.WebsiteBuilder
         private const string HomepageLayout = "HomepageLayout";
         private const string BlogLayout = "BlogLayout";
 
-        public static string GetLayout(string theme)
+        public static string GetLayout(string tenant, string theme)
         {
-            return Get(theme, DefaultLayout);
+            return Get(tenant, theme, DefaultLayout);
         }
 
-        public static string GetHomepageLayout(string theme)
+        public static string GetHomepageLayout(string tenant, string theme)
         {
-            return Get(theme, HomepageLayout);
+            return Get(tenant, theme, HomepageLayout);
         }
 
-        public static string GetBlogLayout(string theme)
+        public static string GetBlogLayout(string tenant, string theme)
         {
-            return Get(theme, BlogLayout);
+            return Get(tenant, theme, BlogLayout);
         }
 
-        public static string Get(string theme, string key)
+        public static string Get(string tenant, string theme, string key)
         {
-            string path = Configuration.GetCurrentThemePath() + "/Theme.config";
+            string path = Configuration.GetCurrentThemePath(tenant) + "/Theme.config";
             path = HostingEnvironment.MapPath(path);
 
             return !File.Exists(path) ? string.Empty : ConfigurationManager.ReadConfigurationValue(path, key);

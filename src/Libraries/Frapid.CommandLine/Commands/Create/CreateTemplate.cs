@@ -94,7 +94,7 @@ namespace frapid.Commands.Create
 
         public override async Task ExecuteCommandAsync()
         {
-            await Task.Delay(1);
+            await Task.Delay(1).ConfigureAwait(false);
 
             if(!this.IsValid)
             {

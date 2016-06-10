@@ -12,7 +12,7 @@ namespace Frapid.Config.Controllers
         [MenuPolicy]
         public ActionResult Index()
         {
-            return this.FrapidView(this.GetRazorView<AreaRegistration>("Smtp/Index.cshtml"));
+            return this.FrapidView(this.GetRazorView<AreaRegistration>("Smtp/Index.cshtml", this.Tenant));
         }
     }
 }

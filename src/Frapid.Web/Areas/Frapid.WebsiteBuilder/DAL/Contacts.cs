@@ -14,7 +14,7 @@ namespace Frapid.WebsiteBuilder.DAL
             {
                 return await db.Query<Contact>().Where(c => c.Status)
                     .OrderBy(c => c.Sort)
-                    .ThenBy(c => c.ContactId).ToListAsync();
+                    .ThenBy(c => c.ContactId).ToListAsync().ConfigureAwait(false);
             }
         }
 
@@ -22,7 +22,7 @@ namespace Frapid.WebsiteBuilder.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<Contact>().Where(c => c.ContactId.Equals(contactId)).FirstOrDefaultAsync();
+                return await db.Query<Contact>().Where(c => c.ContactId.Equals(contactId)).FirstOrDefaultAsync().ConfigureAwait(false);
             }
         }
     }

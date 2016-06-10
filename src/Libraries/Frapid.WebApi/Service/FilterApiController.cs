@@ -18,7 +18,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new FilterRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                await repository.MakeDefaultAsync(objectName, filterName);
+                await repository.MakeDefaultAsync(objectName, filterName).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {
@@ -49,7 +49,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new FilterRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                await repository.RemoveDefaultAsync(objectName);
+                await repository.RemoveDefaultAsync(objectName).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {
@@ -80,7 +80,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new FilterRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                await repository.DeleteAsync(filterName);
+                await repository.DeleteAsync(filterName).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {
@@ -111,7 +111,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new FilterRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
-                await repository.RecreateFiltersAsync(objectName, filterName, collection);
+                await repository.RecreateFiltersAsync(objectName, filterName, collection).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {

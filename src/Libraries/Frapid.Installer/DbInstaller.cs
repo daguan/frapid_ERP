@@ -18,7 +18,7 @@ namespace Frapid.Installer
         {
             string meta = DbProvider.GetMetaDatabase(this.Tenant);
             var inspector = new DbInspector(this.Tenant, meta);
-            bool hasDb = await inspector.HasDbAsync();
+            bool hasDb = await inspector.HasDbAsync().ConfigureAwait(false);
             bool canInstall = inspector.IsWellKnownDb();
 
             if(hasDb)
@@ -34,7 +34,7 @@ namespace Frapid.Installer
             if(!hasDb && canInstall)
             {
                 InstallerLog.Information($"Creating database \"{this.Tenant}\".");
-                await this.CreateDbAsync();
+                await this.CreateDbAsync().ConfigureAwait(false);
                 return true;
             }
 
@@ -43,7 +43,7 @@ namespace Frapid.Installer
 
         private async Task CreateDbAsync()
         {
-            await Store.CreateDbAsync(this.Tenant);
+            await Store.CreateDbAsync(this.Tenant).ConfigureAwait(false);
         }
     }
 }

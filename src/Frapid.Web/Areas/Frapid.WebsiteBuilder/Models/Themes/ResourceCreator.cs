@@ -1,7 +1,6 @@
 using System.IO;
 using System.Text;
 using System.Web.Hosting;
-using Frapid.Configuration;
 
 namespace Frapid.WebsiteBuilder.Models.Themes
 {
@@ -14,14 +13,13 @@ namespace Frapid.WebsiteBuilder.Models.Themes
         public string Contents { get; set; }
         public bool Rewrite { get; set; }
 
-        public void Create()
+        public void Create(string tenant)
         {
             if (string.IsNullOrWhiteSpace(this.ThemeName) || string.IsNullOrWhiteSpace(this.File))
             {
                 throw new ResourceCreateException("Invalid theme or file name.");
             }
 
-            string tenant = TenantConvention.GetTenant();
             string path = $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{this.ThemeName}";
             path = HostingEnvironment.MapPath(path);
 

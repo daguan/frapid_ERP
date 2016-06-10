@@ -17,7 +17,7 @@ namespace Frapid.WebsiteBuilder
 
             foreach(IContentExtension member in members)
             {
-                html = await member.ParseHtmlAsync(tenant, html);
+                html = await member.ParseHtmlAsync(tenant, html).ConfigureAwait(false);
             }
 
             return html;

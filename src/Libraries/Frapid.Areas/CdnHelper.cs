@@ -17,7 +17,7 @@ namespace Frapid.Areas
                 return path;
             }
 
-            var approved = new DomainSerializer("DomainsApproved.json");
+            var approved = new ApprovedDomainSerializer();
             var tenant = approved.Get().FirstOrDefault(x => x.GetSubtenants().Contains(TenantConvention.GetDomain()));
 
             if(tenant == null)

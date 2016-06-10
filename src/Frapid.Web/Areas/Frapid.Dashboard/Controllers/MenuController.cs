@@ -14,7 +14,7 @@ namespace Frapid.Dashboard.Controllers
         [RestrictAnonymous]
         public async Task<ActionResult> GetMenusAsync()
         {
-            var user = await AppUsers.GetCurrentAsync();
+            var user = await AppUsers.GetCurrentAsync().ConfigureAwait(false);
 
             int userId = user.UserId;
             int officeId = user.OfficeId;

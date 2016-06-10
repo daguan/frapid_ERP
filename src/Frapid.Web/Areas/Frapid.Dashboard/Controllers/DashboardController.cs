@@ -3,7 +3,6 @@ using System.IO;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using Frapid.Areas;
-using Frapid.Configuration;
 
 namespace Frapid.Dashboard.Controllers
 {
@@ -49,11 +48,15 @@ namespace Frapid.Dashboard.Controllers
             return this.View(this.HttpContext.Request.IsAjaxRequest() ? path : LandingPage, model);
         }
 
-        protected string GetRazorView(string areaName, string path)
+        protected string GetRazorView(string areaName, string controllerName, string actionName, string tenant)
         {
-            string tenant = TenantConvention.GetTenant();
-            string theme = Configuration.GetDefaultTheme();
+            string path = controllerName.ToLower() + "/" + actionName.ToLower() + ".cshtml";
+            return this.GetRazorView(areaName, path, tenant);
+        }
 
+        protected string GetRazorView(string areaName, string path, string tenant)
+        {
+            string theme = Configuration.GetDefaultTheme();
 
             string overridePath = "~/Tenants/{0}/Areas/Frapid.Dashboard/Themes/{1}/Areas/{2}/Views/" + path;
             overridePath = string.Format(CultureInfo.InvariantCulture, overridePath, tenant, theme, areaName);
@@ -78,24 +81,19 @@ namespace Frapid.Dashboard.Controllers
             return defaultPath;
         }
 
-        protected string GetRazorView(string areaName, string controllerName, string actionName)
-        {
-            string path = controllerName.ToLower() + "/" + actionName.ToLower() + ".cshtml";
-            return this.GetRazorView(areaName, path);
-        }
 
-        protected string GetRazorView<T>(string path) where T : FrapidAreaRegistration, new()
+        protected string GetRazorView<T>(string path, string tenant) where T : FrapidAreaRegistration, new()
         {
             FrapidAreaRegistration registration = new T();
-            return this.GetRazorView(registration.AreaName, path);
+            return this.GetRazorView(registration.AreaName, path, tenant);
         }
 
-        protected string GetRazorView<T>(string controllerName, string actionName)
+        protected string GetRazorView<T>(string controllerName, string actionName, string tenant)
             where T : FrapidAreaRegistration, new()
         {
             FrapidAreaRegistration registration = new T();
             string path = controllerName.ToLower() + "/" + actionName.ToLower() + ".cshtml";
-            return this.GetRazorView(registration.AreaName, path);
+            return this.GetRazorView(registration.AreaName, path, tenant);
         }
     }
 }

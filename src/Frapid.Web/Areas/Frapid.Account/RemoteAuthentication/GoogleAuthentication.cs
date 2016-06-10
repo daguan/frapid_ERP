@@ -41,7 +41,7 @@ namespace Frapid.Account.RemoteAuthentication
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var response = await client.GetAsync("/oauth2/v3/tokeninfo?id_token=" + token);
+                var response = await client.GetAsync("/oauth2/v3/tokeninfo?id_token=" + token).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     var result = JsonConvert.DeserializeObject<JObject>(response.Content.ReadAsStringAsync().Result);
@@ -78,15 +78,15 @@ namespace Frapid.Account.RemoteAuthentication
             string tenant = AppUsers.GetTenant();
 
             var result = await GoogleSignIn.SignInAsync(tenant, account.Email, account.OfficeId, account.Name, account.Token, user.Browser,
-                user.IpAddress, account.Culture);
+                user.IpAddress, account.Culture).ConfigureAwait(false);
 
             if (result.Status)
             {
-                if (!await Registrations.HasAccountAsync(tenant, account.Email))
+                if (!await Registrations.HasAccountAsync(tenant, account.Email).ConfigureAwait(false))
                 {
                     string template = "~/Tenants/{tenant}/Areas/Frapid.Account/EmailTemplates/welcome-email-other.html";
                     var welcomeEmail = new WelcomeEmail(gUser, template, ProviderName);
-                    await welcomeEmail.SendAsync();
+                    await welcomeEmail.SendAsync().ConfigureAwait(false);
                 }
             }
 

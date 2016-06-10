@@ -46,8 +46,8 @@ namespace Frapid.WebsiteBuilder.Emails
             return new EmailQueue
                    {
                        AddedOn = DateTimeOffset.UtcNow,
-                       FromName = config.FromName,
-                       ReplyTo = config.FromEmail,
+                       FromName = config?.FromName,
+                       ReplyTo = config?.FromEmail,
                        Subject = subject,
                        Message = this.GetMessage(tenant, model),
                        SendTo = model.EmailAddress
@@ -60,16 +60,18 @@ namespace Frapid.WebsiteBuilder.Emails
             {
                 var email = this.GetEmail(tenant, model);
                 var manager = new MailQueueManager(tenant, email);
-                await manager.AddAsync();
+                await manager.AddAsync().ConfigureAwait(false);
 
                 var processor = EmailProcessor.GetDefault(tenant);
-
-                if(string.IsNullOrWhiteSpace(email.ReplyTo))
+                if(processor != null)
                 {
-                    email.ReplyTo = processor.Config.FromEmail;
-                }
+                    if(string.IsNullOrWhiteSpace(email.ReplyTo))
+                    {
+                        email.ReplyTo = processor.Config.FromEmail;
+                    }
 
-                await manager.ProcessMailQueueAsync(processor);
+                    await manager.ProcessMailQueueAsync(processor).ConfigureAwait(false);                    
+                }
             }
             catch
             {

@@ -2,13 +2,14 @@ using System;
 using System.Web.Mvc;
 using Frapid.ApplicationState;
 using Frapid.ApplicationState.CacheFactory;
+using Frapid.Areas;
 using Frapid.AssetBundling;
 using Serilog;
 
 namespace Frapid.Web.Controllers
 {
     [Route("assets")]
-    public sealed class AssetsController : Controller
+    public sealed class AssetsController : FrapidController
     {
         public AssetsController()
         {
@@ -31,6 +32,12 @@ namespace Frapid.Web.Controllers
         public ActionResult Js(string name)
         {
             var asset = AssetDiscovery.FindByName(name);
+
+            if (asset == null)
+            {
+                return this.HttpNotFound();
+            }
+
             string key = "assets.scripts." + name;
             string contents = this.GetContents(key);
 

@@ -12,8 +12,9 @@ namespace Frapid.WebsiteBuilder.Models.Themes
 {
     public sealed class ThemeUploader
     {
-        public ThemeUploader(HttpPostedFileBase postedFile)
+        public ThemeUploader(string tenant, HttpPostedFileBase postedFile)
         {
+            this.Tenant = tenant;
             this.PostedFile = postedFile;
             this.ThemeInfo = new ThemeInfo();
             this.SetUploadPaths();
@@ -30,13 +31,14 @@ namespace Frapid.WebsiteBuilder.Models.Themes
         public string FileName { get; private set; }
         public string ArchivePath { get; private set; }
         public string ExtractedDirectory { get; private set; }
+        public string Tenant { get; set; }
         public HttpPostedFileBase PostedFile { get; }
         public ThemeInfo ThemeInfo { get; private set; }
 
         private void SetUploadPaths()
         {
             this.FileName = Guid.NewGuid().ToString();
-            this.ArchivePath = Path.Combine(Path.Combine(this.GetUploadDirectory(), this.FileName + ".zip"));
+            this.ArchivePath = Path.Combine(Path.Combine(this.GetUploadDirectory(this.Tenant), this.FileName + ".zip"));
         }
 
         private void Download()
@@ -59,9 +61,8 @@ namespace Frapid.WebsiteBuilder.Models.Themes
             }
         }
 
-        private string GetUploadDirectory()
+        private string GetUploadDirectory(string tenant)
         {
-            string tenant = TenantConvention.GetTenant();
             string uploadDirectory = HostingEnvironment.MapPath($"~/Tenants/{tenant}/Temp/");
 
             if (uploadDirectory == null || !Directory.Exists(uploadDirectory))
@@ -129,10 +130,9 @@ namespace Frapid.WebsiteBuilder.Models.Themes
             return true;
         }
 
-        public void CopyTheme()
+        public void CopyTheme(string tenant)
         {
             string source = this.ExtractedDirectory;
-            string tenant = TenantConvention.GetTenant();
             string destination =
                 HostingEnvironment.MapPath(
                     $"~/Tenants/{tenant}/Areas/Frapid.WebsiteBuilder/Themes/{this.ThemeInfo.ThemeName}");
@@ -151,7 +151,7 @@ namespace Frapid.WebsiteBuilder.Models.Themes
             FileHelper.CopyDirectory(source, destination);
         }
 
-        public ThemeInfo Install()
+        public ThemeInfo Install(string tenant)
         {
             try
             {
@@ -173,7 +173,7 @@ namespace Frapid.WebsiteBuilder.Models.Themes
                     throw new ThemeInstallException("The uploaded archive is not a valid frapid theme!");
                 }
 
-                this.CopyTheme();
+                this.CopyTheme(tenant);
                 return this.ThemeInfo;
             }
             finally

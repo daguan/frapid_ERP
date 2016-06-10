@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
 using Frapid.Framework;
 using Frapid.Framework.Extensions;
@@ -13,26 +12,29 @@ namespace Frapid.WebsiteBuilder.Syndication.Rss
 {
     public static class RssModel
     {
-        public static async Task<RssChannel> GetRssChannelAsync(HttpContext context, string categoryAlias, int pageNumber)
+        public static async Task<RssChannel> GetRssChannelAsync(string tenant, HttpContext context, string categoryAlias,
+            int pageNumber)
         {
-            string title = Configuration.Get("BlogTitle");
-            string copyright = Configuration.Get("RssCopyrightText");
-            int ttl = Configuration.Get("RssTtl").To<int>();
-            int limit = Configuration.Get("RssPageSize").To<int>();
-            int offset = (pageNumber - 1) * limit;
+            string url = context.Request.Url.DnsSafeHost;
+            string title = Configuration.Get("BlogTitle", tenant);
+            string copyright = Configuration.Get("RssCopyrightText", tenant);
+            int ttl = Configuration.Get("RssTtl", tenant).To<int>();
+            int limit = Configuration.Get("RssPageSize", tenant).To<int>();
+            int offset = (pageNumber - 1)*limit;
 
             List<PublishedContentView> contents;
             string category = string.Empty;
-            string tenant = AppUsers.GetTenant();
 
             if (!string.IsNullOrWhiteSpace(categoryAlias))
             {
-                contents = (await Contents.GetBlogContentsAsync(tenant, categoryAlias, limit, offset)).ToList();
+                contents =
+                    (await Contents.GetBlogContentsAsync(tenant, categoryAlias, limit, offset).ConfigureAwait(false))
+                        .ToList();
                 category = contents.Select(x => x.CategoryName).FirstOrDefault();
             }
             else
             {
-                contents = (await Contents.GetBlogContentsAsync(tenant, limit, offset)).ToList();
+                contents = (await Contents.GetBlogContentsAsync(tenant, limit, offset).ConfigureAwait(false)).ToList();
             }
 
 

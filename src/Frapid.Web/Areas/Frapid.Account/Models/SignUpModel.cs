@@ -30,7 +30,7 @@ namespace Frapid.Account.Models
             registration.Password = PasswordManager.GetHashedPassword(model.Password);
             string tenant = AppUsers.GetTenant();
 
-            string registrationId = (await Registrations.RegisterAsync(tenant, registration)).ToString();
+            string registrationId = (await Registrations.RegisterAsync(tenant, registration).ConfigureAwait(false)).ToString();
 
             if (string.IsNullOrWhiteSpace(registrationId))
             {
@@ -38,7 +38,7 @@ namespace Frapid.Account.Models
             }
 
             var email = new SignUpEmail(registration, registrationId);
-            await email.SendAsync();
+            await email.SendAsync().ConfigureAwait(false);
             return true;
         }
     }

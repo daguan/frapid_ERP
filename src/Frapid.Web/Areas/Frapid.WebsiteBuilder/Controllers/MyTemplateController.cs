@@ -20,14 +20,14 @@ namespace Frapid.WebsiteBuilder.Controllers
                 return HttpNotFound();
             }
 
-            var allowed = FrapidConfig.GetMyAllowedResources(TenantConvention.GetTenant());
+            var allowed = FrapidConfig.GetMyAllowedResources(this.Tenant);
 
             if (string.IsNullOrWhiteSpace(resource) || allowed.Count().Equals(0))
             {
                 return this.HttpNotFound();
             }
 
-            string directory = HostingEnvironment.MapPath(Configuration.GetCurrentThemePath());
+            string directory = HostingEnvironment.MapPath(Configuration.GetCurrentThemePath(this.Tenant));
 
             if (directory == null)
             {

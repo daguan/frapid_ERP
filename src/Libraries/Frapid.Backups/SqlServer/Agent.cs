@@ -23,7 +23,7 @@ namespace Frapid.Backups.SqlServer
 
             try
             {
-                await Factory.NonQueryAsync(this.Tenant, sql, destination);
+                await Factory.NonQueryAsync(this.Tenant, sql, destination).ConfigureAwait(false);
             }
             catch(Exception ex)
             {

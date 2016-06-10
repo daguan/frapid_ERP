@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -19,7 +18,7 @@ namespace Frapid.Account.Controllers
     {
         protected async Task<bool> CheckPasswordAsync(string tenant, string email, string plainPassword)
         {
-            var user = await Users.GetAsync(tenant, email);
+            var user = await Users.GetAsync(tenant, email).ConfigureAwait(false);
 
             return user != null && PasswordManager.ValidateBcrypt(plainPassword, user.Password);
         }
@@ -28,7 +27,7 @@ namespace Frapid.Account.Controllers
         {
             if (!result.Status)
             {
-                await Task.Delay(new Random().Next(1, 5)*1000);
+                await Task.Delay(new Random().Next(1, 5)*1000).ConfigureAwait(false);
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden, JsonConvert.SerializeObject(result));
             }
 
@@ -44,7 +43,9 @@ namespace Frapid.Account.Controllers
             string domain = TenantConvention.GetDomain();
             string tenant = AppUsers.GetTenant();
 
-            await AccessTokens.SaveAsync(tenant, token, this.RemoteUser.IpAddress, this.RemoteUser.UserAgent);
+            await
+                AccessTokens.SaveAsync(tenant, token, this.RemoteUser.IpAddress, this.RemoteUser.UserAgent)
+                    .ConfigureAwait(true);
 
             var cookie = new HttpCookie("access_token")
             {

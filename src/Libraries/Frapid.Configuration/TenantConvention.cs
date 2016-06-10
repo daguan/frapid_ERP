@@ -144,7 +144,7 @@ namespace Frapid.Configuration
 
         public static DomainSerializer GetSerializer()
         {
-            return new DomainSerializer("DomainsApproved.json");
+            return new ApprovedDomainSerializer();
         }
 
         public static ITenantLocator GetTenantLocator()

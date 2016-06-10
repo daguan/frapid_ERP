@@ -4,40 +4,17 @@ using System.Web.Hosting;
 using System.Web.Mvc;
 using Frapid.Areas;
 using Frapid.Configuration;
-using Frapid.Framework;
 using Serilog;
 
 namespace Frapid.WebsiteBuilder.Controllers
 {
     public class WebsiteBuilderController : FrapidController
     {
-        protected override void OnActionExecuting(ActionExecutingContext context)
-        {
-            if (this.Request?.Url != null)
-            {
-                this.CurrentDomain = this.Request.Url.DnsSafeHost;
-                this.CurrentPageUrl = this.Request.Url.AbsoluteUri;
-                this.Tenant = TenantConvention.GetTenant(this.CurrentDomain);
-            }
-
-            bool isStatic = TenantConvention.IsStaticDomain(this.CurrentDomain);
-
-            if (isStatic)
-            {
-                //Static domains are strictly used for content caching only.
-                context.Result = new HttpNotFoundResult("The requested page does not exist.");
-            }
-            else
-            {
-                base.OnActionExecuting(context);
-            }
-        }
-
-        public WebsiteBuilderController()
+        private void SetLayout()
         {
             string theme = this.GetTheme();
 
-            ViewBag.LayoutPath = GetLayoutPath(theme);
+            ViewBag.LayoutPath = GetLayoutPath(this.Tenant);
             ViewBag.Layout = this.GetLayout(theme);
             ViewBag.HomepageLayout = this.GetHomepageLayout(theme);
 
@@ -46,13 +23,25 @@ namespace Frapid.WebsiteBuilder.Controllers
             Log.Verbose($"The homepage layout for \"{this.CurrentPageUrl}\" is \"{ViewBag.HomepageLayout}\".");
         }
 
-        public string CurrentDomain { get; set; }
-        public string Tenant { get; set; }
-        public string CurrentPageUrl { get; set; }
-
-        public static string GetLayoutPath(string theme = "")
+        protected override void OnActionExecuting(ActionExecutingContext context)
         {
-            string layout = Configuration.GetCurrentThemePath();
+            base.OnActionExecuting(context);
+
+            this.SetLayout();
+
+            this.CurrentDomain = this.Request.Url?.DnsSafeHost;
+            bool isStatic = TenantConvention.IsStaticDomain(this.CurrentDomain);
+
+            if (isStatic)
+            {
+                //Static domains are strictly used for content caching only.
+                context.Result = new HttpNotFoundResult("The requested page does not exist.");
+            }
+        }
+
+        public static string GetLayoutPath(string tenant)
+        {
+            string layout = Configuration.GetCurrentThemePath(tenant);
 
             string layoutDirectory = HostingEnvironment.MapPath(layout);
 
@@ -66,7 +55,7 @@ namespace Frapid.WebsiteBuilder.Controllers
 
         protected string GetTheme()
         {
-            return Configuration.GetDefaultTheme();
+            return Configuration.GetDefaultTheme(this.Tenant);
         }
 
         protected string GetLayout(string theme = "")
@@ -76,7 +65,7 @@ namespace Frapid.WebsiteBuilder.Controllers
                 theme = GetTheme();
             }
 
-            return ThemeConfiguration.GetLayout(theme);
+            return ThemeConfiguration.GetLayout(this.Tenant, theme);
         }
 
         protected string GetHomepageLayout(string theme = "")
@@ -86,15 +75,25 @@ namespace Frapid.WebsiteBuilder.Controllers
                 theme = GetTheme();
             }
 
-            return ThemeConfiguration.GetHomepageLayout(theme);
+            return ThemeConfiguration.GetHomepageLayout(this.Tenant, theme);
+        }
+
+        protected string TryGetRazorView(string areaName, string controllerName, string actionName, string tenant)
+        {
+            string path = controllerName.ToLower() + "/" + actionName.ToLower() + ".cshtml";
+            return this.GetRazorView(areaName, path, tenant);
         }
 
         protected string GetRazorView(string areaName, string path)
         {
+            return this.GetRazorView(areaName, path, this.Tenant);
+        }
+
+        protected string GetRazorView(string areaName, string path, string tenant)
+        {
             Log.Verbose($"Prepping Razor view for area \"{areaName}\" and view \"{path}\".");
 
-            string tenant = TenantConvention.GetTenant();
-            string theme = Configuration.GetDefaultTheme();
+            string theme = Configuration.GetDefaultTheme(this.Tenant);
 
             Log.Verbose($"Resolved tenant \"{tenant}\" and theme \"{theme}\".");
 
@@ -128,24 +127,20 @@ namespace Frapid.WebsiteBuilder.Controllers
             return defaultPath;
         }
 
-        protected string GetRazorView(string areaName, string controllerName, string actionName)
-        {
-            string path = controllerName.ToLower() + "/" + actionName.ToLower() + ".cshtml";
-            return this.GetRazorView(areaName, path);
-        }
 
-        protected string GetRazorView<T>(string path) where T : FrapidAreaRegistration, new()
+        protected string GetRazorView<T>(string path, string tenant) where T : FrapidAreaRegistration, new()
         {
             FrapidAreaRegistration registration = new T();
-            return this.GetRazorView(registration.AreaName, path);
+            return this.GetRazorView(registration.AreaName, path, tenant);
         }
 
-        protected string GetRazorView<T>(string controllerName, string actionName)
+
+        protected string GetRazorView<T>(string controllerName, string actionName, string tenant)
             where T : FrapidAreaRegistration, new()
         {
             FrapidAreaRegistration registration = new T();
             string path = controllerName.ToLower() + "/" + actionName.ToLower() + ".cshtml";
-            return this.GetRazorView(registration.AreaName, path);
+            return this.GetRazorView(registration.AreaName, path, tenant);
         }
     }
 }

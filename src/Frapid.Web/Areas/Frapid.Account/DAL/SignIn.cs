@@ -15,7 +15,7 @@ namespace Frapid.Account.DAL
             string sql = FrapidDbServer.GetProcedureCommand(tenant, "account.sign_in",
                 new[] {"@0", "@1", "@2", "@3", "@4"});
             return
-                (await Factory.GetAsync<LoginResult>(tenant, sql, email, officeId, browser, ipAddress, culture))
+                (await Factory.GetAsync<LoginResult>(tenant, sql, email, officeId, browser, ipAddress, culture).ConfigureAwait(false))
                     .FirstOrDefault();
         }
     }

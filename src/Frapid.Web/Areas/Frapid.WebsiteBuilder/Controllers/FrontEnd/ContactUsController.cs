@@ -18,9 +18,9 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
             string tenant = AppUsers.GetTenant();
             var model = new ContactUs();
 
-            var contacts = await Contacts.GetContactsAsync(tenant);
+            var contacts = await Contacts.GetContactsAsync(tenant).ConfigureAwait(false);
             model.Contacts = contacts;
-            return this.View(this.GetRazorView<AreaRegistration>("ContactUs/Index.cshtml"), model);
+            return this.View(this.GetRazorView<AreaRegistration>("ContactUs/Index.cshtml", this.Tenant), model);
         }
 
         [Route("contact-us")]
@@ -30,8 +30,8 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         {
             model.Subject = "Contact Form : " + model.Subject;
             string tenant = AppUsers.GetTenant();
-            await new ContactUsEmail().SendAsync(tenant, model);
-            await Task.Delay(1000);
+            await new ContactUsEmail().SendAsync(tenant, model).ConfigureAwait(false);
+            await Task.Delay(1000).ConfigureAwait(false);
             return this.Json("OK");
         }
     }

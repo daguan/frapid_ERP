@@ -7,15 +7,15 @@ namespace Frapid.WebsiteBuilder.Helpers
 {
     public static class CanonicalHelper
     {
-        public static string ToCanonicalUrl(string url = "")
+        public static string ToCanonicalUrl(string url)
         {
             if (string.IsNullOrWhiteSpace(url))
             {
-                url = HttpContext.Current.Request.Url.PathAndQuery;
+                return null;
             }
 
             string domain = TenantConvention.GetDomain();
-            var approved = new DomainSerializer("DomainsApproved.json");
+            var approved = new ApprovedDomainSerializer();
             var tenant = approved.Get().FirstOrDefault(x => x.GetSubtenants().Contains(domain.ToLowerInvariant()));
 
             if (tenant != null)

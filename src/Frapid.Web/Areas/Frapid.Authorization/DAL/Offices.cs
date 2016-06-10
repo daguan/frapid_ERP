@@ -12,7 +12,7 @@ namespace Frapid.Authorization.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<Office>().OrderBy(x => x.OfficeId).ToListAsync();
+                return await db.Query<Office>().OrderBy(x => x.OfficeId).ToListAsync().ConfigureAwait(false);
             }
         }
     }

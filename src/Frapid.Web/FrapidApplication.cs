@@ -8,14 +8,13 @@ using Serilog;
 
 namespace Frapid.Web
 {
-    public sealed class FrapidApplication: IHttpModule
+    public sealed class FrapidApplication : IHttpModule
     {
         public void Init(HttpApplication app)
         {
             app.BeginRequest += this.App_BeginRequest;
             app.EndRequest += this.App_EndRequest;
             app.PostAuthenticateRequest += this.App_PostAuthenticateRequest;
-
             app.Error += this.App_Error;
         }
 
@@ -26,9 +25,10 @@ namespace Frapid.Web
 
         private void App_PostAuthenticateRequest(object sender, EventArgs eventArgs)
         {
-            string file = TenantStaticContentHelper.GetFile(FrapidHttpContext.GetCurrent());
+            string tenant = TenantConvention.GetTenant();
+            string file = TenantStaticContentHelper.GetFile(tenant, FrapidHttpContext.GetCurrent());
 
-            if(!string.IsNullOrWhiteSpace(file))
+            if (!string.IsNullOrWhiteSpace(file))
             {
                 //We found the requested file on the tenant's "wwwroot" directory.
                 FrapidHttpContext.GetCurrent().RewritePath(file);
@@ -40,7 +40,7 @@ namespace Frapid.Web
             var context = FrapidHttpContext.GetCurrent();
             var exception = context.Server.GetLastError();
 
-            if(exception != null)
+            if (exception != null)
             {
                 Log.Error("Exception. {exception}", exception);
             }
@@ -51,7 +51,7 @@ namespace Frapid.Web
             var context = FrapidHttpContext.GetCurrent();
             int statusCode = context.Response.StatusCode;
 
-            if(statusCode != 404)
+            if (statusCode != 404)
             {
                 return;
             }
@@ -61,13 +61,13 @@ namespace Frapid.Web
             string path = context.Request.Url.AbsolutePath;
 
             var ignoredPaths = new[]
-                               {
-                                   "/api",
-                                   "/dashboard",
-                                   "/content-not-found"
-                               };
+            {
+                "/api",
+                "/dashboard",
+                "/content-not-found"
+            };
 
-            if(!ignoredPaths.Any(x => path.StartsWith(x)))
+            if (!ignoredPaths.Any(x => path.StartsWith(x)))
             {
                 context.Server.TransferRequest("/content-not-found?path=" + path, true);
             }
@@ -82,27 +82,28 @@ namespace Frapid.Web
         {
             var context = FrapidHttpContext.GetCurrent();
 
-            if(context == null)
+            if (context == null)
             {
                 return;
             }
 
             string domain = TenantConvention.GetDomain();
-            Log.Verbose($"Got a {context.Request.HttpMethod} request {context.Request.AppRelativeCurrentExecutionFilePath} on domain {domain}.");
+            Log.Verbose(
+                $"Got a {context.Request.HttpMethod} request {context.Request.AppRelativeCurrentExecutionFilePath} on domain {domain}.");
 
             bool enforceSsl = TenantConvention.EnforceSsl(domain);
 
-            if(!enforceSsl)
+            if (!enforceSsl)
             {
                 Log.Verbose($"SSL was not enforced on domain {domain}.");
                 return;
             }
 
-            if(context.Request.Url.Scheme == "https")
+            if (context.Request.Url.Scheme == "https")
             {
                 context.Response.AddHeader("Strict-Transport-Security", "max-age=31536000");
             }
-            else if(context.Request.Url.Scheme == "http")
+            else if (context.Request.Url.Scheme == "http")
             {
                 string path = "https://" + context.Request.Url.Host + context.Request.Url.PathAndQuery;
                 context.Response.Status = "301 Moved Permanently";

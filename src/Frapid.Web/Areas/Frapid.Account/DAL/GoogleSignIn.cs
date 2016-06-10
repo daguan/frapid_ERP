@@ -17,7 +17,7 @@ namespace Frapid.Account.DAL
             string sql = FrapidDbServer.GetProcedureCommand(tenant, "account.google_sign_in",
                 new[] {"@0", "@1", "@2", "@3", "@4", "@5", "@6"});
             return (await Factory.GetAsync<LoginResult>(tenant, sql, email, officeId, name, token, browser,
-                ipAddress, culture.Or("en-US"))).FirstOrDefault();
+                ipAddress, culture.Or("en-US")).ConfigureAwait(false)).FirstOrDefault();
         }
     }
 }

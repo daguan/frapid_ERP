@@ -13,8 +13,8 @@ namespace Frapid.Web.Controllers
         {
             string domain = TenantConvention.GetDomain();
 
-            var approved = new DomainSerializer("DomainsApproved.json");
-            var installed = new DomainSerializer("DomainsInstalled.json");
+            var approved = new ApprovedDomainSerializer();
+            var installed = new InstalledDomainSerializer();
 
             if(!approved.GetMemberSites().Any(x => x.Equals(domain)))
             {
