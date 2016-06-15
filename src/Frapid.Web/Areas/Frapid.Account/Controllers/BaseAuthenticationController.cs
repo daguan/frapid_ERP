@@ -38,13 +38,14 @@ namespace Frapid.Account.Controllers
                 applicationId = model.ApplicationId;
             }
 
-            var manager = new Provider(AppUsers.GetTenant(), applicationId, result.LoginId);
+            var loginView = await AppUsers.GetCurrentAsync(this.Tenant, result.LoginId).ConfigureAwait(false);
+
+            var manager = new Provider(this.Tenant, applicationId, result.LoginId, loginView.UserId, loginView.OfficeId);
             var token = manager.GetToken();
             string domain = TenantConvention.GetDomain();
-            string tenant = AppUsers.GetTenant();
 
             await
-                AccessTokens.SaveAsync(tenant, token, this.RemoteUser.IpAddress, this.RemoteUser.UserAgent)
+                AccessTokens.SaveAsync(this.Tenant, token, this.RemoteUser.IpAddress, this.RemoteUser.UserAgent)
                     .ConfigureAwait(true);
 
             var cookie = new HttpCookie("access_token")

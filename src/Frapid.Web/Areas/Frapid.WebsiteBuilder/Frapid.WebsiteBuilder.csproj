@@ -174,7 +174,6 @@
     <Compile Include="DTO\MenuItemView.cs" />
     <Compile Include="DTO\PublishedContentView.cs" />
     <Compile Include="Extensions\StringExtension.cs" />
-    <Compile Include="Helpers\BitmapHelper.cs" />
     <Compile Include="Helpers\CanonicalHelper.cs" />
     <Compile Include="Plugins\HitExtension.cs" />
     <Compile Include="SiteMap.cs" />

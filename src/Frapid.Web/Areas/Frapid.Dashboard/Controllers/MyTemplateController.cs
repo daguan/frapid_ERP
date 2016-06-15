@@ -38,7 +38,7 @@ namespace Frapid.Dashboard.Controllers
                 return this.HttpNotFound();
             }
 
-            string directory = HostingEnvironment.MapPath(Configuration.GetCurrentThemePath());
+            string directory = HostingEnvironment.MapPath(Configuration.GetCurrentThemePath(this.Tenant));
 
             if (directory == null)
             {

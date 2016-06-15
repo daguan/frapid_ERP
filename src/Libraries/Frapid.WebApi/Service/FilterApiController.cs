@@ -17,7 +17,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FilterRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FilterRepository(this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 await repository.MakeDefaultAsync(objectName, filterName).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
@@ -48,7 +48,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FilterRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FilterRepository(this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 await repository.RemoveDefaultAsync(objectName).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
@@ -79,7 +79,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FilterRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FilterRepository(this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 await repository.DeleteAsync(filterName).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
@@ -110,7 +110,7 @@ namespace Frapid.WebApi.Service
         {
             try
             {
-                var repository = new FilterRepository(this.MetaUser.Tenant, this.MetaUser.LoginId, this.MetaUser.UserId);
+                var repository = new FilterRepository(this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 await repository.RecreateFiltersAsync(objectName, filterName, collection).ConfigureAwait(false);
             }
             catch(UnauthorizedException)

@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using Frapid.Configuration;
 using Frapid.Framework.Extensions;
 using Frapid.TokenManager.DAL;
 using Serilog;
@@ -34,7 +35,7 @@ namespace Frapid.WebApi
             string ipAddress = context.Request.GetClientIpAddress();
             string userAgent = context.Request.GetUserAgent();
             string clientToken = context.Request.GetBearerToken();
-
+            string tenant = TenantConvention.GetTenant();
 
             if(string.IsNullOrWhiteSpace(clientToken))
             {
@@ -57,7 +58,7 @@ namespace Frapid.WebApi
             }
 
 
-            bool isValid = AccessTokens.IsValidAsync(clientToken, ipAddress, userAgent).Result;
+            bool isValid = AccessTokens.IsValidAsync(tenant, clientToken, ipAddress, userAgent).Result;
 
             if(expriesOn <= DateTimeOffset.UtcNow)
             {

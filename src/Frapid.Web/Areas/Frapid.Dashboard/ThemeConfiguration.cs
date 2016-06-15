@@ -8,14 +8,14 @@ namespace Frapid.Dashboard
     {
         private const string LayoutFile = "LayoutFile";
 
-        public static string GetLayout(string theme)
+        public static string GetLayout(string tenant, string theme)
         {
-            return Get(theme, LayoutFile);
+            return Get(tenant, theme, LayoutFile);
         }
 
-        public static string Get(string theme, string key)
+        public static string Get(string tenant, string theme, string key)
         {
-            string path = Configuration.GetCurrentThemePath() + "/Theme.config";
+            string path = Configuration.GetCurrentThemePath(tenant) + "/Theme.config";
             path = HostingEnvironment.MapPath(path);
 
             return !File.Exists(path) ? string.Empty : ConfigurationManager.ReadConfigurationValue(path, key);

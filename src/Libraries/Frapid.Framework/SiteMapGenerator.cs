@@ -11,7 +11,7 @@ namespace Frapid.Framework
 {
     public static class SiteMapGenerator
     {
-        public static async Task<string> GetAsync(string domain)
+        public static async Task<string> GetAsync(string tenant, string domain)
         {
             var xml = new MemoryStream();
 
@@ -26,7 +26,7 @@ namespace Frapid.Framework
 
             writer.WriteStartElement("urlset", "http://www.sitemaps.org/schemas/sitemap/0.9");
 
-            var urls = await GetUrlsAsync().ConfigureAwait(false);
+            var urls = await GetUrlsAsync(tenant).ConfigureAwait(false);
             foreach(var url in urls)
             {
                 writer.WriteStartElement("url");
@@ -66,7 +66,7 @@ namespace Frapid.Framework
             writer.WriteEndElement();
         }
 
-        private static async Task<List<SiteMapUrl>> GetUrlsAsync()
+        private static async Task<List<SiteMapUrl>> GetUrlsAsync(string tenant)
         {
             var urls = new List<SiteMapUrl>();
 
@@ -78,7 +78,7 @@ namespace Frapid.Framework
             {
                 try
                 {
-                    urls.AddRange(await member.GenerateAsync().ConfigureAwait(false));
+                    urls.AddRange(await member.GenerateAsync(tenant).ConfigureAwait(false));
                 }
                 catch (Exception ex)
                 {

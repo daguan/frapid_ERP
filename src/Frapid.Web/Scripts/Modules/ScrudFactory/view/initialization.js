@@ -21,6 +21,8 @@ var flagSelect = $("#FlagSelect");
 var updateButton = $("#UpdateButton");
 var verificationPopUnder = $("#VerificationPopUnder");
 var reasonTextArea = $("#ReasonTextArea");
+var attachmentServiceUrl = "/api/forms/config/attachments/document/300/250/";
+
 
 var filterConditions = [{ "value": "0", "text": "IsEqualTo", "operator": "=" },
 { "value": "1", "text": "IsNotEqualTo", "operator" :"!=" },

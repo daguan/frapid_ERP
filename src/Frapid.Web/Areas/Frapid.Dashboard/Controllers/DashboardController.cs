@@ -10,21 +10,15 @@ namespace Frapid.Dashboard.Controllers
     {
         private static readonly string LandingPage = "~/Areas/Frapid.Dashboard/Views/Default/LandingPage.cshtml";
 
-        public DashboardController()
-        {
-            ViewBag.LayoutPath = this.GetLayoutPath();
-            ViewBag.LayoutFile = this.GetLayoutFile();
-        }
-
         private string GetLayoutFile()
         {
-            string theme = Configuration.GetDefaultTheme();
-            return ThemeConfiguration.GetLayout(theme);
+            string theme = Configuration.GetDefaultTheme(this.Tenant);
+            return ThemeConfiguration.GetLayout(this.Tenant, theme);
         }
 
         private string GetLayoutPath()
         {
-            string layout = Configuration.GetCurrentThemePath();
+            string layout = Configuration.GetCurrentThemePath(this.Tenant);
             string layoutDirectory = HostingEnvironment.MapPath(layout);
 
             if (layoutDirectory != null && Directory.Exists(layoutDirectory))
@@ -37,9 +31,14 @@ namespace Frapid.Dashboard.Controllers
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            base.OnActionExecuting(filterContext);
+
+            ViewBag.LayoutPath = this.GetLayoutPath();
+            ViewBag.LayoutFile = this.GetLayoutFile();
+
             if (!filterContext.HttpContext.Request.IsAjaxRequest())
             {
-                ViewBag.Layout = GetLayoutPath() + this.GetLayoutFile();
+                ViewBag.Layout = ViewBag.LayoutPath + ViewBag.LayoutFile;
             }
         }
 
@@ -56,7 +55,7 @@ namespace Frapid.Dashboard.Controllers
 
         protected string GetRazorView(string areaName, string path, string tenant)
         {
-            string theme = Configuration.GetDefaultTheme();
+            string theme = Configuration.GetDefaultTheme(this.Tenant);
 
             string overridePath = "~/Tenants/{0}/Areas/Frapid.Dashboard/Themes/{1}/Areas/{2}/Views/" + path;
             overridePath = string.Format(CultureInfo.InvariantCulture, overridePath, tenant, theme, areaName);

@@ -7,7 +7,6 @@ using Frapid.Account.DTO;
 using Frapid.Account.Emails;
 using Frapid.Account.InputModels;
 using Frapid.Account.ViewModels;
-using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -16,11 +15,12 @@ namespace Frapid.Account.RemoteAuthentication
 {
     public class GoogleAuthentication
     {
+        public string Tenant { get; }
         private const string ProviderName = "Google";
 
-        public GoogleAuthentication()
+        public GoogleAuthentication(string tenant)
         {
-            string tenant = AppUsers.GetTenant();
+            this.Tenant = tenant;
             var profile = ConfigurationProfiles.GetActiveProfileAsync(tenant).Result;
             ClientId = profile.GoogleSigninClientId;
         }
@@ -75,18 +75,19 @@ namespace Frapid.Account.RemoteAuthentication
                 Name = account.Name
             };
 
-            string tenant = AppUsers.GetTenant();
-
-            var result = await GoogleSignIn.SignInAsync(tenant, account.Email, account.OfficeId, account.Name, account.Token, user.Browser,
-                user.IpAddress, account.Culture).ConfigureAwait(false);
+            var result =
+                await
+                    GoogleSignIn.SignInAsync(this.Tenant, account.Email, account.OfficeId, account.Name, account.Token,
+                        user.Browser,
+                        user.IpAddress, account.Culture).ConfigureAwait(false);
 
             if (result.Status)
             {
-                if (!await Registrations.HasAccountAsync(tenant, account.Email).ConfigureAwait(false))
+                if (!await Registrations.HasAccountAsync(this.Tenant, account.Email).ConfigureAwait(false))
                 {
                     string template = "~/Tenants/{tenant}/Areas/Frapid.Account/EmailTemplates/welcome-email-other.html";
                     var welcomeEmail = new WelcomeEmail(gUser, template, ProviderName);
-                    await welcomeEmail.SendAsync().ConfigureAwait(false);
+                    await welcomeEmail.SendAsync(this.Tenant).ConfigureAwait(false);
                 }
             }
 

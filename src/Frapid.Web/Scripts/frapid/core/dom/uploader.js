@@ -3,7 +3,7 @@
     var allowedExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".zip"];
     var uploaderTemplate = '<div class="ui uploader field">\
                             <div class="">\
-                                <img src="{ImageSource}" class="ui rounded small vpad8 image preview">\
+                                <img src="{ImageSource}" class="ui rounded vpad8 image preview">\
                             </div>\
                             </div>\
                             <div class="uploader">\
@@ -14,13 +14,14 @@
 
     function initializeUploader() {
         var instances = $("input.image");
+
         instances.each(function () {
             var el = $(this);
 
             el.parent().find(".uploader").remove();
             var val = el.val();
             var id = el.attr("id");
-            var imagePath = "/Static/images/logo.png";
+            var imagePath = "/Static/images/logo-sm.png";
 
             if (val) {
                 imagePath = val;

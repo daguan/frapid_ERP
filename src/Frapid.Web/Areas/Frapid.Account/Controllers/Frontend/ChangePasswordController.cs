@@ -34,7 +34,7 @@ namespace Frapid.Account.Controllers.Frontend
                 return this.InvalidModelState();
             }
 
-            bool result = await ChangePasswordModel.ChangePasswordAsync(model, this.RemoteUser).ConfigureAwait(true);
+            bool result = await ChangePasswordModel.ChangePasswordAsync(this.AppUser, model, this.RemoteUser).ConfigureAwait(true);
             return this.Ok(result);
         }
 

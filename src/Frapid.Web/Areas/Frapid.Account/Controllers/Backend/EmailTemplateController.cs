@@ -43,13 +43,13 @@ namespace Frapid.Account.Controllers.Backend
 
         private string GetContents(string file)
         {
-            string path = Configuration.GetOverridePath() + "/EmailTemplates/" + file + ".html";
+            string path = Configuration.GetOverridePath(this.Tenant) + "/EmailTemplates/" + file + ".html";
             return System.IO.File.Exists(path) ? System.IO.File.ReadAllText(path, Encoding.UTF8) : string.Empty;
         }
 
         private void SetContents(string file, string contents)
         {
-            string path = Configuration.GetOverridePath() + "/EmailTemplates/" + file;
+            string path = Configuration.GetOverridePath(this.Tenant) + "/EmailTemplates/" + file;
             if (System.IO.File.Exists(path))
             {
                 System.IO.File.WriteAllText(path, contents, Encoding.UTF8);

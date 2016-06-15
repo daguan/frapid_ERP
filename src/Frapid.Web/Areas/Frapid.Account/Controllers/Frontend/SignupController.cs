@@ -5,7 +5,6 @@ using Frapid.Account.DAL;
 using Frapid.Account.Emails;
 using Frapid.Account.Models;
 using Frapid.Account.ViewModels;
-using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
 using Frapid.Areas.CSRF;
 using Frapid.Framework.Extensions;
@@ -25,8 +24,7 @@ namespace Frapid.Account.Controllers.Frontend
                 return this.View(this.GetRazorView<AreaRegistration>("ListedInSpamDatabase.cshtml", this.Tenant));
             }
 
-            string tenant = AppUsers.GetTenant();
-            var profile = await ConfigurationProfiles.GetActiveProfileAsync(tenant).ConfigureAwait(true);
+            var profile = await ConfigurationProfiles.GetActiveProfileAsync(this.Tenant).ConfigureAwait(true);
 
             if (!profile.AllowRegistration ||
                 this.User.Identity.IsAuthenticated)
@@ -59,16 +57,15 @@ namespace Frapid.Account.Controllers.Frontend
             }
 
             var id = token.To<Guid>();
-            string tenant = AppUsers.GetTenant();
 
-            if (!await Registrations.ConfirmRegistrationAsync(tenant, id).ConfigureAwait(false))
+            if (!await Registrations.ConfirmRegistrationAsync(this.Tenant, id).ConfigureAwait(false))
             {
                 return this.View(this.GetRazorView<AreaRegistration>("SignUp/InvalidToken.cshtml", this.Tenant));
             }
 
-            var registration = await Registrations.GetAsync(tenant, id).ConfigureAwait(true);
+            var registration = await Registrations.GetAsync(this.Tenant, id).ConfigureAwait(true);
             var email = new WelcomeEmail(registration);
-            await email.SendAsync().ConfigureAwait(false);
+            await email.SendAsync(this.Tenant).ConfigureAwait(false);
 
             return this.View(this.GetRazorView<AreaRegistration>("SignUp/Welcome.cshtml", this.Tenant));
         }
@@ -79,11 +76,10 @@ namespace Frapid.Account.Controllers.Frontend
         public async Task<ActionResult> ValidateEmailAsync(string email)
         {
             await Task.Delay(1000).ConfigureAwait(false);
-            string tenant = AppUsers.GetTenant();
 
             return string.IsNullOrWhiteSpace(email)
                 ? this.Json(true)
-                : this.Json(!await Registrations.EmailExistsAsync(tenant, email).ConfigureAwait(true));
+                : this.Json(!await Registrations.EmailExistsAsync(this.Tenant, email).ConfigureAwait(true));
         }
 
         [Route("account/sign-up")]
@@ -91,7 +87,7 @@ namespace Frapid.Account.Controllers.Frontend
         [AllowAnonymous]
         public async Task<ActionResult> PostAsync(Registration model)
         {
-            bool result = await SignUpModel.SignUpAsync(model, this.RemoteUser).ConfigureAwait(true);
+            bool result = await SignUpModel.SignUpAsync(this.Tenant, model, this.RemoteUser).ConfigureAwait(true);
             return this.Ok(result);
         }
     }

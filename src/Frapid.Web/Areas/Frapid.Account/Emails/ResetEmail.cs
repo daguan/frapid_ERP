@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
 using Frapid.Account.DTO;
-using Frapid.ApplicationState.Cache;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;
 
@@ -20,9 +19,9 @@ namespace Frapid.Account.Emails
             this._resetDetails = reset;
         }
 
-        private string GetTemplate()
+        private string GetTemplate(string tenant)
         {
-            string path = $"~/Tenants/{AppUsers.GetTenant()}/Areas/Frapid.Account/EmailTemplates/password-reset.html";
+            string path = $"~/Tenants/{tenant}/Areas/Frapid.Account/EmailTemplates/password-reset.html";
 
             path = HostingEnvironment.MapPath(path);
 
@@ -62,16 +61,15 @@ namespace Frapid.Account.Emails
             };
         }
 
-        public async Task SendAsync()
+        public async Task SendAsync(string tenant)
         {
-            string template = this.GetTemplate();
+            string template = this.GetTemplate(tenant);
             string parsed = this.ParseTemplate(template);
             string subject = "Your Password Reset Link for " + HttpContext.Current.Request.Url.Authority;
 
-            string tenant = AppUsers.GetTenant();
             var processor = EmailProcessor.GetDefault(tenant);
 
-            if(processor != null)
+            if (processor != null)
             {
                 var email = this.GetEmail(processor, this._resetDetails, subject, parsed);
 

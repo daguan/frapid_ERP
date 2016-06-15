@@ -183,9 +183,10 @@ function createCard(dynamic, key, kanbanDetail) {
     if (imageField) {
         var src = getCardField(dynamic, imageField);
         if (src) {
-            var image = $('<div class="photo" />');
+            var image = $('<div class="image" />');
             var img = $("<img />");
-            img.attr("src", "/api/forms/config/attachments/document/300/250/" + src);
+
+            img.attr("src", src + "?Width=300&Height=300");
 
             image.append(img);
             card.append(image);

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Frapid.ApplicationState.Cache;
 using Frapid.Framework;
 using Frapid.WebsiteBuilder.DAL;
 
@@ -10,9 +9,8 @@ namespace Frapid.WebsiteBuilder
 {
     public sealed class SiteMap : ISiteMapGenerator
     {
-        public async Task<List<SiteMapUrl>> GenerateAsync()
+        public async Task<List<SiteMapUrl>> GenerateAsync(string tenant)
         {
-            string tenant = AppUsers.GetTenant();
             var all = (await Contents.GetAllPublishedContentsAsync(tenant).ConfigureAwait(false)).ToList();
             var contents = all.Where(x => !x.IsBlog).ToList();
             var blogs = all.Where(x => x.IsBlog).ToList();
@@ -41,7 +39,7 @@ namespace Frapid.WebsiteBuilder
                 Priority = 1
             }).ToList());
 
-            if(blogs.Any())
+            if (blogs.Any())
             {
                 urls.Add(new SiteMapUrl
                 {

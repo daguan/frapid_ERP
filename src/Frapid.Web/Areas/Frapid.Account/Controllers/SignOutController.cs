@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using System.Web.Security;
 using Frapid.Account.DAL;
-using Frapid.ApplicationState.Cache;
 using Frapid.Areas.Authorization;
 using Frapid.Configuration;
 
@@ -15,11 +14,9 @@ namespace Frapid.Account.Controllers
         [RestrictAnonymous]
         public async Task<ActionResult> SignOutAsync()
         {
-            string tenant = AppUsers.GetTenant();
-
-            if (this.MetaUser != null)
+            if (this.AppUser != null)
             {
-                await AccessTokens.RevokeAsync(tenant, this.MetaUser.ClientToken).ConfigureAwait(true);
+                await AccessTokens.RevokeAsync(this.Tenant, this.AppUser.ClientToken).ConfigureAwait(true);
             }
 
             FormsAuthentication.SignOut();

@@ -236,7 +236,7 @@ namespace Frapid.Web
                 "~/Scripts/notify-combined.min.js",
                 "~/Scripts/semantic-ui/semantic.js",
                 "~/Scripts/jquery.signalR.js",
-                "~/Scripts/vakata-jstree/dist/jstree.js",
+                "~/Scripts/vakata-jstree/dist/jstree.min.js",
                 "~/Scripts/momentjs/moment-with-locales.js",
                 "~/Scripts/underscore/underscore-min.js",
                 "~/Scripts/angular/angular.min.js",
@@ -266,11 +266,12 @@ namespace Frapid.Web
                 "~/Scripts/notify-combined.min.js",
                 "~/Scripts/semantic-ui/semantic.js",
                 "~/Scripts/jquery.signalR.js",
-                "~/Scripts/vakata-jstree/dist/jstree.js",
+                "~/Scripts/vakata-jstree/dist/jstree.min.js",
                 "~/Scripts/momentjs/moment-with-locales.js",
                 "~/Scripts/underscore/underscore-min.js",
                 "~/Scripts/sprintf/sprintf.min.js",
-                "~/Scripts/linq.js/linq.js"
+                "~/Scripts/linq.js/linq.js",
+                "~/Scripts/ajax-file-upload.js"
             };
 
             script.AddRange(GetFrapidCoreScript());

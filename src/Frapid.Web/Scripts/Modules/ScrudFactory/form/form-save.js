@@ -49,7 +49,6 @@
     bigError.removeClass("vpad16").html("");
 
     function getFormValue(columnName, type, isSerial, dbDataType) {
-        debugger;
         var el = $("#" + columnName);
         var val = null;
         if (el.length) {

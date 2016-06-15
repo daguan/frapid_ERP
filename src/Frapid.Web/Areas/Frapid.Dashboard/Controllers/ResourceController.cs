@@ -24,7 +24,7 @@ namespace Frapid.Dashboard.Controllers
             }
 
             string directory = "~/Tenants/{0}/Areas/Frapid.Dashboard/Resources/";
-            directory = string.Format(CultureInfo.InvariantCulture, directory, AppUsers.GetTenant());
+            directory = string.Format(CultureInfo.InvariantCulture, directory, this.Tenant);
             directory = HostingEnvironment.MapPath(directory);
 
             if (directory == null)

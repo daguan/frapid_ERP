@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using System.IO;
 using System.Web.Hosting;
-using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
 using static System.String;
 
@@ -15,20 +14,14 @@ namespace Frapid.WebsiteBuilder
 
         public static string GetCurrentThemePath(string tenant)
         {
-            if (string.IsNullOrWhiteSpace(tenant))
-            {
-                tenant = AppUsers.GetTenant();
-            }
-
             string path = Path + "Themes/{1}/";
             string theme = GetDefaultTheme(tenant);
 
             return Format(CultureInfo.InvariantCulture, path, tenant, theme);
         }
 
-        public static string GetThemeDirectory()
+        public static string GetThemeDirectory(string tenant)
         {
-            string tenant = AppUsers.GetTenant();
             string path = Path + "Themes";
 
             return Format(CultureInfo.InvariantCulture, path, tenant);
@@ -36,11 +29,6 @@ namespace Frapid.WebsiteBuilder
 
         public static string GetWebsiteBuilderPath(string tenant)
         {
-            if (string.IsNullOrWhiteSpace(tenant))
-            {
-                tenant = AppUsers.GetTenant();
-            }
-
             string path = HostingEnvironment.MapPath(Format(CultureInfo.InvariantCulture, Path, tenant));
 
             return path != null && !Directory.Exists(path) ? Empty : path;

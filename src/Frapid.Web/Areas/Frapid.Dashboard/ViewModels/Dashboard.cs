@@ -1,4 +1,4 @@
-﻿using Frapid.ApplicationState.Models;
+﻿using Frapid.TokenManager;
 
 namespace Frapid.Dashboard.ViewModels
 {
@@ -12,7 +12,7 @@ namespace Frapid.Dashboard.ViewModels
         public int? UserId { get; set; }
         public string User { get; set; }
         public string Office { get; set; }
-        public LoginView MetaView { get; set; }
+        public AppUser MetaView { get; set; }
         public string ShortDateFormat { get; set; }
         public string LongDateFormat { get; set; }
         public string ThousandSeparator { get; set; }

@@ -4,6 +4,8 @@ using Frapid.ApplicationState;
 using Frapid.ApplicationState.CacheFactory;
 using Frapid.Areas;
 using Frapid.AssetBundling;
+using Frapid.Configuration;
+using Frapid.Framework.Extensions;
 using Serilog;
 
 namespace Frapid.Web.Controllers
@@ -16,10 +18,22 @@ namespace Frapid.Web.Controllers
             this.Factory = new DefaultCacheFactory();
         }
 
+        private bool IsDevelopment()
+        {
+            string value = ConfigurationManager.GetConfigurationValue("ParameterConfigFileLocation", "IsDevelopment");
+            return value.Or("").ToUpperInvariant().StartsWith("T");
+        }
+
         private ICacheFactory Factory { get; }
 
         private string GetContents(string key)
         {
+            //Disabling cache on development environment
+            if (this.IsDevelopment())
+            {
+                return null;
+            }
+
             return this.Factory.Get<string>(key);
         }
 

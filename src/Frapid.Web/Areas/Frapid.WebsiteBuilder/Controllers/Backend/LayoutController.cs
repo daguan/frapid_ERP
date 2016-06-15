@@ -24,7 +24,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         [RestrictAnonymous]
         public ActionResult SaveLayoutFile(string theme, string fileName, string contents)
         {
-            bool result = LayoutManagerModel.SaveLayoutFile(theme, fileName, contents);
+            bool result = LayoutManagerModel.SaveLayoutFile(this.Tenant, theme, fileName, contents);
 
             if(!result)
             {

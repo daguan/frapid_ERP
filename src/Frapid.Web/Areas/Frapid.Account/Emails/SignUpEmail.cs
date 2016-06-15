@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
 using Frapid.Account.DTO;
-using Frapid.ApplicationState.Cache;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;
 
@@ -22,9 +21,9 @@ namespace Frapid.Account.Emails
             this._registrationId = registrationId;
         }
 
-        private string GetTemplate()
+        private string GetTemplate(string tenant)
         {
-            string path = $"~/Tenants/{AppUsers.GetTenant()}/Areas/Frapid.Account/EmailTemplates/account-verification.html";
+            string path = $"~/Tenants/{tenant}/Areas/Frapid.Account/EmailTemplates/account-verification.html";
 
             path = HostingEnvironment.MapPath(path);
 
@@ -64,17 +63,15 @@ namespace Frapid.Account.Emails
             };
         }
 
-        public async Task SendAsync()
+        public async Task SendAsync(string tenant)
         {
-            string template = this.GetTemplate();
+            string template = this.GetTemplate(tenant);
             string parsed = this.ParseTemplate(template);
             string subject = "Confirm Your Registration at " + HttpContext.Current.Request.Url.Authority;
 
-            string tenant = AppUsers.GetTenant();
-
             var processor = EmailProcessor.GetDefault(tenant);
 
-            if(processor != null)
+            if (processor != null)
             {
                 var email = this.GetEmail(processor, this._registration, subject, parsed);
 

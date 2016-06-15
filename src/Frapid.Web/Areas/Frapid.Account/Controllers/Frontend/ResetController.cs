@@ -4,7 +4,6 @@ using Frapid.Account.DAL;
 using Frapid.Account.Emails;
 using Frapid.Account.InputModels;
 using Frapid.Account.ViewModels;
-using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
 using Frapid.Areas.CSRF;
 using Frapid.WebsiteBuilder.Controllers;
@@ -44,14 +43,13 @@ namespace Frapid.Account.Controllers.Frontend
 
             model.Browser = this.RemoteUser.Browser;
             model.IpAddress = this.RemoteUser.IpAddress;
-            string tenant = AppUsers.GetTenant();
 
-            if (await ResetRequests.HasActiveResetRequestAsync(tenant, model.Email).ConfigureAwait(false))
+            if (await ResetRequests.HasActiveResetRequestAsync(this.Tenant, model.Email).ConfigureAwait(false))
             {
                 return this.Json(true);
             }
 
-            var result = await ResetRequests.RequestAsync(tenant, model).ConfigureAwait(false);
+            var result = await ResetRequests.RequestAsync(this.Tenant, model).ConfigureAwait(false);
 
             if (result.UserId <= 0)
             {
@@ -60,7 +58,7 @@ namespace Frapid.Account.Controllers.Frontend
 
 
             var email = new ResetEmail(result);
-            await email.SendAsync().ConfigureAwait(true);
+            await email.SendAsync(this.Tenant).ConfigureAwait(true);
             return this.Json(true);
         }
 
@@ -70,11 +68,10 @@ namespace Frapid.Account.Controllers.Frontend
         public async Task<ActionResult> ValidateEmailAsync(string email)
         {
             await Task.Delay(1000).ConfigureAwait(false);
-            string tenant = AppUsers.GetTenant();
 
             return string.IsNullOrWhiteSpace(email)
                 ? this.Json(true)
-                : this.Json(!await Registrations.HasAccountAsync(tenant, email).ConfigureAwait(true));
+                : this.Json(!await Registrations.HasAccountAsync(this.Tenant, email).ConfigureAwait(true));
         }
 
         [Route("account/reset/email-sent")]
@@ -103,9 +100,8 @@ namespace Frapid.Account.Controllers.Frontend
                 return this.Redirect("/site/404");
             }
 
-            string tenant = AppUsers.GetTenant();
 
-            var reset = await ResetRequests.GetIfActiveAsync(tenant, token).ConfigureAwait(true);
+            var reset = await ResetRequests.GetIfActiveAsync(this.Tenant, token).ConfigureAwait(true);
 
             if (reset == null)
             {
@@ -129,13 +125,11 @@ namespace Frapid.Account.Controllers.Frontend
                 return this.Json(false);
             }
 
-            string tenant = AppUsers.GetTenant();
-
-            var reset = await ResetRequests.GetIfActiveAsync(tenant, token).ConfigureAwait(true);
+            var reset = await ResetRequests.GetIfActiveAsync(this.Tenant, token).ConfigureAwait(true);
 
             if (reset != null)
             {
-                await ResetRequests.CompleteResetAsync(tenant, token, password).ConfigureAwait(true);
+                await ResetRequests.CompleteResetAsync(this.Tenant, token, password).ConfigureAwait(true);
                 return this.Json(true);
             }
 

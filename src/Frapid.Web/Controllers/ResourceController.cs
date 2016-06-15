@@ -18,8 +18,7 @@ namespace Frapid.Web.Controllers
         public ActionResult Index()
         {
             string culture = CultureManager.GetCurrent().TwoLetterISOLanguageName;
-            string tenant = AppUsers.GetTenant();
-            string script = GetScript(tenant, culture);
+            string script = GetScript(this.Tenant, culture);
             return this.Content(script, "text/javascript", Encoding.UTF8);
         }
 

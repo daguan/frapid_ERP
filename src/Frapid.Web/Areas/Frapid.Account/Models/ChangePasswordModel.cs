@@ -1,17 +1,17 @@
 ﻿using System.Threading.Tasks;
 using Frapid.Account.DAL;
 using Frapid.Account.InputModels;
-using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
+using Frapid.TokenManager;
 
 namespace Frapid.Account.Models
 {
     public static class ChangePasswordModel
     {
-        public static async Task<bool> ChangePasswordAsync(ChangePassword model, RemoteUser user)
+        public static async Task<bool> ChangePasswordAsync(AppUser current, ChangePassword model,
+            RemoteUser user)
         {
-            var my = await AppUsers.GetCurrentAsync().ConfigureAwait(false);
-            int userId = my.UserId;
+            int userId = current.UserId;
 
             if (userId <= 0)
             {
@@ -24,9 +24,8 @@ namespace Frapid.Account.Models
                 return false;
             }
 
-            string tenant = AppUsers.GetTenant();
-            string email = my.Email;
-            var frapidUser = await Users.GetAsync(tenant, email).ConfigureAwait(false);
+            string email = current.Email;
+            var frapidUser = await Users.GetAsync(current.Tenant, email).ConfigureAwait(false);
 
             bool oldPasswordIsValid = PasswordManager.ValidateBcrypt(model.OldPassword, frapidUser.Password);
             if (!oldPasswordIsValid)
@@ -36,7 +35,7 @@ namespace Frapid.Account.Models
             }
 
             string newPassword = PasswordManager.GetHashedPassword(model.Password);
-            await Users.ChangePasswordAsync(tenant, userId, newPassword, user).ConfigureAwait(false);
+            await Users.ChangePasswordAsync(current.Tenant, userId, newPassword, user).ConfigureAwait(false);
             return true;
         }
     }

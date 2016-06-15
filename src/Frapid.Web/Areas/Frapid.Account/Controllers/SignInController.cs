@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using Frapid.Account.DAL;
 using Frapid.Account.InputModels;
 using Frapid.Account.ViewModels;
-using Frapid.ApplicationState.Cache;
 using Frapid.Areas.CSRF;
 using Frapid.Configuration;
 using Frapid.Framework.Extensions;
@@ -31,8 +30,7 @@ namespace Frapid.Account.Controllers
                 return Redirect("/dashboard");
             }
 
-            string tenant = AppUsers.GetTenant();
-            var profile = await ConfigurationProfiles.GetActiveProfileAsync(tenant).ConfigureAwait(true);
+            var profile = await ConfigurationProfiles.GetActiveProfileAsync(this.Tenant).ConfigureAwait(true);
 
             var model = profile.Adapt<SignIn>() ?? new SignIn();
             return View(GetRazorView<AreaRegistration>("SignIn/Index.cshtml", this.Tenant), model);
@@ -51,8 +49,8 @@ namespace Frapid.Account.Controllers
 
             try
             {
-                string tenant = AppUsers.GetTenant();
-                bool isValid = await this.CheckPasswordAsync(tenant, model.Email, model.Password).ConfigureAwait(false);
+                bool isValid =
+                    await this.CheckPasswordAsync(this.Tenant, model.Email, model.Password).ConfigureAwait(false);
 
                 if (!isValid)
                 {
@@ -61,7 +59,7 @@ namespace Frapid.Account.Controllers
 
                 var result =
                     await
-                        DAL.SignIn.DoAsync(tenant, model.Email, model.OfficeId, this.RemoteUser.Browser,
+                        DAL.SignIn.DoAsync(this.Tenant, model.Email, model.OfficeId, this.RemoteUser.Browser,
                             this.RemoteUser.IpAddress, model.Culture.Or("en-US")).ConfigureAwait(false);
 
                 return await this.OnAuthenticatedAsync(result, model).ConfigureAwait(true);
@@ -77,8 +75,7 @@ namespace Frapid.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> GetOfficesAsync()
         {
-            string tenant = AppUsers.GetTenant();
-            return this.Ok(await Offices.GetOfficesAsync(tenant).ConfigureAwait(true));
+            return this.Ok(await Offices.GetOfficesAsync(this.Tenant).ConfigureAwait(true));
         }
 
         [Route("account/sign-in/languages")]

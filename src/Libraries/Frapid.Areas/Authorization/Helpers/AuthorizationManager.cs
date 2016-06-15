@@ -3,6 +3,8 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using Frapid.ApplicationState.Cache;
+using Frapid.Configuration;
 using Frapid.Framework.Extensions;
 using Frapid.TokenManager.DAL;
 using Serilog;
@@ -11,7 +13,7 @@ namespace Frapid.Areas.Authorization.Helpers
 {
     public static class AuthorizationManager
     {
-        public static async Task<bool> IsAuthorizedAsync(HttpContextBase context)
+        public static async Task<bool> IsAuthorizedAsync(string tenant, HttpContextBase context)
         {
             if(context == null)
             {
@@ -35,7 +37,6 @@ namespace Frapid.Areas.Authorization.Helpers
             string userAgent = context.GetUserAgent();
             string clientToken = context.Request.GetClientToken();
 
-
             if(string.IsNullOrWhiteSpace(clientToken))
             {
                 return false;
@@ -56,7 +57,7 @@ namespace Frapid.Areas.Authorization.Helpers
             }
 
 
-            bool isValid = await AccessTokens.IsValidAsync(clientToken, ipAddress, userAgent).ConfigureAwait(false);
+            bool isValid = await AccessTokens.IsValidAsync(tenant, clientToken, ipAddress, userAgent).ConfigureAwait(false);
 
             if(expriesOn <= DateTimeOffset.UtcNow)
             {

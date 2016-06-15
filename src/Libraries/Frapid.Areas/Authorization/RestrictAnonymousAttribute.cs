@@ -3,6 +3,7 @@ using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using Frapid.Areas.Authorization.Helpers;
+using Frapid.Configuration;
 using Frapid.Framework;
 
 namespace Frapid.Areas.Authorization
@@ -20,7 +21,8 @@ namespace Frapid.Areas.Authorization
 
         protected override bool AuthorizeCore(HttpContextBase context)
         {
-            bool authorized = AuthorizationManager.IsAuthorizedAsync(context).Result;
+            string tenant = TenantConvention.GetTenant();
+            bool authorized = AuthorizationManager.IsAuthorizedAsync(tenant, context).Result;
 
             if(!authorized)
             {

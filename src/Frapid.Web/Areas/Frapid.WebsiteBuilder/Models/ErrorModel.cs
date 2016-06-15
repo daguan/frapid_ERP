@@ -30,7 +30,7 @@ namespace Frapid.WebsiteBuilder.Models
             return query;
         }
 
-        public static async Task<SearchResult> GetResultAsync(string query)
+        public static async Task<SearchResult> GetResultAsync(string tenant, string query)
         {
             query = Sanitize(query);
             string key = "/search-contents/" + query;
@@ -40,14 +40,14 @@ namespace Frapid.WebsiteBuilder.Models
 
             if (result == null)
             {
-                result = await FromStoreAsync(query).ConfigureAwait(false);
+                result = await FromStoreAsync(tenant, query).ConfigureAwait(false);
                 factory.Add(key, result, DateTimeOffset.UtcNow.AddMinutes(15));
             }
 
             return result;
         }
 
-        public static async Task<SearchResult> FromStoreAsync(string query)
+        public static async Task<SearchResult> FromStoreAsync(string tenant, string query)
         {
             var contents = new List<SearchResultContent>();
 
@@ -55,7 +55,7 @@ namespace Frapid.WebsiteBuilder.Models
 
             foreach (var candidate in candidates)
             {
-                var items = await candidate.SearchAsync(query).ConfigureAwait(false);
+                var items = await candidate.SearchAsync(tenant, query).ConfigureAwait(false);
                 contents.AddRange(items);
             }
 

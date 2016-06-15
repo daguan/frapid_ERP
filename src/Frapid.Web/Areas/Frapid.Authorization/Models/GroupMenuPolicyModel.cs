@@ -1,24 +1,22 @@
 ﻿using System.Threading.Tasks;
-using Frapid.ApplicationState.Cache;
 using Frapid.Authorization.DAL;
 using Frapid.Authorization.ViewModels;
+using Frapid.TokenManager;
 
 namespace Frapid.Authorization.Models
 {
     public static class GroupMenuPolicyModel
     {
-        public static async Task<GroupMenuPolicy> GetAsync()
+        public static async Task<GroupMenuPolicy> GetAsync(AppUser appUser)
         {
-            if (!(await AppUsers.GetCurrentAsync().ConfigureAwait(false)).IsAdministrator)
+            if (!appUser.IsAdministrator)
             {
                 return new GroupMenuPolicy();
             }
 
-            string tenant = AppUsers.GetTenant();
-
-            var offices = await Offices.GetOfficesAsync(tenant).ConfigureAwait(false);
-            var roles = await Roles.GetRolesAsync(tenant).ConfigureAwait(false);
-            var menus = await Menus.GetMenusAsync(tenant).ConfigureAwait(false);
+            var offices = await Offices.GetOfficesAsync(appUser.Tenant).ConfigureAwait(false);
+            var roles = await Roles.GetRolesAsync(appUser.Tenant).ConfigureAwait(false);
+            var menus = await Menus.GetMenusAsync(appUser.Tenant).ConfigureAwait(false);
 
             return new GroupMenuPolicy
             {
@@ -28,15 +26,14 @@ namespace Frapid.Authorization.Models
             };
         }
 
-        internal static async Task<GroupMenuPolicyInfo> GetAsync(int officeId, int roleId)
+        internal static async Task<GroupMenuPolicyInfo> GetAsync(AppUser appUser, int officeId, int roleId)
         {
-            if (!(await AppUsers.GetCurrentAsync().ConfigureAwait(false)).IsAdministrator)
+            if (!appUser.IsAdministrator)
             {
                 return new GroupMenuPolicyInfo();
             }
 
-            string tenant = AppUsers.GetTenant();
-            var menuIds = await Menus.GetGroupPolicyAsync(tenant, officeId, roleId).ConfigureAwait(false);
+            var menuIds = await Menus.GetGroupPolicyAsync(appUser.Tenant, officeId, roleId).ConfigureAwait(false);
 
             return new GroupMenuPolicyInfo
             {
@@ -46,15 +43,16 @@ namespace Frapid.Authorization.Models
             };
         }
 
-        public static async Task SaveAsync(GroupMenuPolicyInfo model)
+        public static async Task SaveAsync(AppUser appUser, GroupMenuPolicyInfo model)
         {
-            if (!(await AppUsers.GetCurrentAsync().ConfigureAwait(false)).IsAdministrator)
+            if (!appUser.IsAdministrator)
             {
                 return;
             }
 
-            string tenant = AppUsers.GetTenant();
-            await Menus.SaveGroupPolicyAsync(tenant, model.OfficeId, model.RoleId, model.MenuIds).ConfigureAwait(false);
+            await
+                Menus.SaveGroupPolicyAsync(appUser.Tenant, model.OfficeId, model.RoleId, model.MenuIds)
+                    .ConfigureAwait(false);
         }
     }
 }

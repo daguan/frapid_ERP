@@ -10,7 +10,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         public async Task<ActionResult> Http404Async()
         {
             string query = this.Request.Url?.PathAndQuery;
-            var model = await ErrorModel.GetResultAsync(query).ConfigureAwait(false);
+            var model = await ErrorModel.GetResultAsync(this.Tenant, query).ConfigureAwait(false);
 
             string path = GetLayoutPath(this.Tenant);
             string layout = this.GetLayout();

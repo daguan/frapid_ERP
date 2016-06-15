@@ -12,31 +12,29 @@ namespace Frapid.Dashboard
         private const string ConfigFile = "Dashboard.config";
         private const string DefaultThemeKey = "DefaultTheme";
 
-        public static string GetCurrentThemePath()
+        public static string GetCurrentThemePath(string tenant)
         {
-            string tenant = AppUsers.GetTenant();
             string path = Path + "Themes/{1}/";
-            string theme = GetDefaultTheme();
+            string theme = GetDefaultTheme(tenant);
 
             return Format(CultureInfo.InvariantCulture, path, tenant, theme);
         }
 
-        public static string GetDashboardPath()
+        public static string GetDashboardPath(string tenant)
         {
-            string tenant = AppUsers.GetTenant();
             string path = HostingEnvironment.MapPath(Format(CultureInfo.InvariantCulture, Path, tenant));
 
             return path != null && !System.IO.Directory.Exists(path) ? Empty : path;
         }
 
-        public static string GetDefaultTheme()
+        public static string GetDefaultTheme(string tenant)
         {
-            return Get(DefaultThemeKey);
+            return Get(tenant, DefaultThemeKey);
         }
 
-        public static string Get(string key)
+        public static string Get(string tenant, string key)
         {
-            string path = GetDashboardPath() + "/" + ConfigFile;
+            string path = GetDashboardPath(tenant) + "/" + ConfigFile;
             return ConfigurationManager.ReadConfigurationValue(path, key);
         }
     }

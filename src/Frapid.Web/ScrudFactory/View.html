@@ -28,9 +28,20 @@
         height: 100%;
     }
 
-    .card:hover {
-        opacity: 0.75;
+
+
+    .kanban .card {
+        filter: gray; /* IE6-9 */
+        filter: grayscale(0.8); /* Microsoft Edge and Firefox 35+ */
+        -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
     }
+
+        /* Disable grayscale on hover */
+        .kanban .card:hover {
+            filter: gray; /* IE6-9 */
+            filter: grayscale(0.4); /* Microsoft Edge and Firefox 35+ */
+            -webkit-filter: grayscale(0.2);
+        }
 
     .unstyled.segment {
         border: none !important;
@@ -80,19 +91,19 @@
         color: #666 !important;
         font-size: 0.9em;
     }
-	
-	#ScrudView tr{
-		cursor: pointer;
-	  transition: background-color 1s ease;
-	}
 
-	#ScrudView tr:hover{
-		background-color: #f6f6f6;
-	}
+    #ScrudView tr {
+        cursor: pointer;
+        transition: background-color 1s ease;
+    }
 
-	#ScrudView td:hover{
-		background-color: #f1f1f1;
-	}
+        #ScrudView tr:hover {
+            background-color: #f6f6f6;
+        }
+
+    #ScrudView td:hover {
+        background-color: #f1f1f1;
+    }
 </style>
 
 
@@ -268,7 +279,7 @@
                         </a>
                         <a class="ui basic button" onclick="clearQuery();" title="Clear Filters">
                             <i class="delete mini icon"></i>
-                        </a>                        
+                        </a>
                     </div>
                 </div>
             </div>

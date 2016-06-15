@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
 using Frapid.Dashboard.DAL;
 using Frapid.Framework.Extensions;
+using Frapid.Configuration;
 
 namespace Frapid.Dashboard
 {
@@ -18,7 +19,8 @@ namespace Frapid.Dashboard
             int userId = my.UserId;
             int officeId = my.OfficeId;
             string culture = my.Culture;
-            string tenant = AppUsers.GetTenant();
+
+            string tenant = TenantConvention.GetTenant();
 
             var policy = Menu.GetAsync(tenant, userId, officeId, culture).Result;
 

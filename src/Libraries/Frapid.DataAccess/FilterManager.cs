@@ -98,9 +98,9 @@ namespace Frapid.DataAccess
                 return null;
             }
 
-            string typeName = type.FullName;
+            string typeName = type == null ? "System.String" : type.FullName;
 
-            if(typeName == "System.Boolean")
+            if (typeName == "System.Boolean")
             {
                 return new[]
                        {

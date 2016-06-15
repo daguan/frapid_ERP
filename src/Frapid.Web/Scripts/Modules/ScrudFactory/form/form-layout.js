@@ -98,6 +98,10 @@ function createLayout(collection, container) {
     initializeAjaxRequest();
     initializeUploader();
 
+    if (window.scrudFactory.uploadHanlder) {
+        $(".uploader input.file").attr("data-handler", window.scrudFactory.uploadHanlder);
+    };
+
     function displayLive(val) {
         if (!val.length) {
             $(".huge.header .sub.header").html("");

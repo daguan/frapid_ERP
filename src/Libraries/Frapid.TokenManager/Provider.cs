@@ -10,24 +10,32 @@ namespace Frapid.TokenManager
 {
     public class Provider
     {
-        public Provider(string database): this(database, null, long.MinValue)
+        public Provider()
         {
-        }
-
-        public Provider(string database, Guid? applicationId, long loginId)
-        {
-            this.ApplicationId = applicationId;
-            this.LoginId = loginId;
-            this.Database = database;
             this.TokenIssuerName = TokenConfig.TokenIssuerName;
             this.TokenValidHours = TokenConfig.TokenValidHours;
             this.Algorithm = TokenConfig.Algorithm;
             this.Key = Encoding.UTF8.GetBytes(TokenConfig.PrivateKey);
         }
 
+        public Provider(string tenant, Guid? applicationId, long loginId, int userId, int officeId)
+        {
+            this.ApplicationId = applicationId;
+            this.LoginId = loginId;
+            this.Tenant = tenant;
+            this.TokenIssuerName = TokenConfig.TokenIssuerName;
+            this.TokenValidHours = TokenConfig.TokenValidHours;
+            this.Algorithm = TokenConfig.Algorithm;
+            this.Key = Encoding.UTF8.GetBytes(TokenConfig.PrivateKey);
+            this.UserId = userId;
+            this.OfficeId = officeId;
+        }
+
         public Guid? ApplicationId { get; set; }
-        public string Database { get; set; }
+        public string Tenant { get; set; }
         public long LoginId { get; set; }
+        public int UserId { get; set; }
+        public int OfficeId { get; set; }
         public string TokenIssuerName { get; set; }
         public int TokenValidHours { get; set; }
         public JwsAlgorithm Algorithm { get; set; }
@@ -40,12 +48,14 @@ namespace Frapid.TokenManager
             token.AddHeader("typ", "JWT");
 
             token.IssuedBy = this.TokenIssuerName;
-            token.Audience = this.Database;
+            token.Audience = this.Tenant;
             token.CreatedOn = DateTimeOffset.UtcNow;
             token.ExpiresOn = DateTimeOffset.UtcNow.AddHours(this.TokenValidHours);
-            token.Subject = this.Database;
-            token.TokenId = this.Database + this.LoginId;
+            token.Subject = this.Tenant;
+            token.TokenId = this.Tenant + this.LoginId;
             token.LoginId = this.LoginId;
+            token.UserId = this.UserId;
+            token.OfficeId = this.OfficeId;
             token.ApplicationId = this.ApplicationId;
             token.ClientToken = this.Encode(token);
 
@@ -54,7 +64,7 @@ namespace Frapid.TokenManager
 
         public Token GetToken(string clientToken)
         {
-            if(string.IsNullOrWhiteSpace(clientToken))
+            if (string.IsNullOrWhiteSpace(clientToken))
             {
                 return null;
             }
@@ -75,9 +85,9 @@ namespace Frapid.TokenManager
             var dto = JsonConvert.DeserializeObject<List<Claim>>(decoded);
             token.ClientToken = clientToken;
 
-            foreach(var c in dto)
+            foreach (var c in dto)
             {
-                switch(c.Type)
+                switch (c.Type)
                 {
                     case "aud":
                         token.Audience = c.Value;

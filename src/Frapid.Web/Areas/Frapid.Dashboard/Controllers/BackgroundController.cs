@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Web.Hosting;
 using System.Web.Mvc;
-using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
 using Frapid.Areas.Authorization;
 
@@ -19,7 +18,7 @@ namespace Frapid.Dashboard.Controllers
         {
             string resourceDirectory = HostingEnvironment.MapPath("~/Tenants/{0}/Areas/Frapid.Dashboard/Resources");
             string directory = "~/Tenants/{0}/Areas/Frapid.Dashboard/Resources/backgrounds";
-            directory = string.Format(CultureInfo.InvariantCulture, directory, AppUsers.GetTenant());
+            directory = string.Format(CultureInfo.InvariantCulture, directory, this.Tenant);
             directory = HostingEnvironment.MapPath(directory);
 
             if (directory == null)

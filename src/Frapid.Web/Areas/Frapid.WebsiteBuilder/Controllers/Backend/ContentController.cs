@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
-using Frapid.ApplicationState.Cache;
 using Frapid.Areas.Authorization;
 using Frapid.Dashboard;
 using Frapid.Dashboard.Controllers;
@@ -25,8 +24,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         [MenuPolicy(OverridePath = "/dashboard/website/contents")]
         public async Task<ActionResult> ManageAsync(int contentId = 0)
         {
-            string tenant = AppUsers.GetTenant();
-            var model = await Contents.GetAsync(tenant, contentId).ConfigureAwait(false) ?? new Content();
+            var model = await Contents.GetAsync(this.Tenant, contentId).ConfigureAwait(false) ?? new Content();
             return this.FrapidView(this.GetRazorView<AreaRegistration>("Content/Manage.cshtml", this.Tenant), model);
         }
     }

@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Frapid.ApplicationState.Cache;
 using Frapid.Areas.Caching;
 using Frapid.WebsiteBuilder.DAL;
 using Frapid.WebsiteBuilder.Models;
@@ -17,7 +16,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [HttpPost]
         public async Task<ActionResult> CounterAsync(string categoryAlias = "", string alias = "")
         {
-            await ContentModel.AddHitAsync(AppUsers.GetTenant(), categoryAlias, alias).ConfigureAwait(false);
+            await ContentModel.AddHitAsync(this.Tenant, categoryAlias, alias).ConfigureAwait(false);
             return this.Ok();
         }
 
@@ -25,7 +24,8 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [FrapidOutputCache(ProfileName = "BlogContent")]
         public async Task<ActionResult> PostAsync(string categoryAlias, string alias)
         {
-            var model = await ContentModel.GetContentAsync(this.Tenant, categoryAlias, alias, true).ConfigureAwait(false);
+            var model =
+                await ContentModel.GetContentAsync(this.Tenant, categoryAlias, alias, true).ConfigureAwait(false);
 
             if (model == null)
             {
@@ -55,7 +55,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
                     pageNumber = 1;
                 }
 
-                var contents = (await ContentModel.GetBlogContentsAsync(pageNumber).ConfigureAwait(false)).ToList();
+                var contents = (await ContentModel.GetBlogContentsAsync(this.Tenant, pageNumber).ConfigureAwait(false)).ToList();
 
                 if (!contents.Any())
                 {
@@ -64,14 +64,14 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
                 foreach (var content in contents)
                 {
-                    content.Contents = await ContentExtensions.ParseHtmlAsync(this.Tenant, content.Contents).ConfigureAwait(false);
+                    content.Contents =
+                        await ContentExtensions.ParseHtmlAsync(this.Tenant, content.Contents).ConfigureAwait(false);
                 }
 
                 string theme = this.GetTheme();
                 string layout = ThemeConfiguration.GetBlogLayout(this.Tenant, theme);
-                string tenant = AppUsers.GetTenant();
 
-                var configuration = await Configurations.GetDefaultConfigurationAsync(tenant).ConfigureAwait(false);
+                var configuration = await Configurations.GetDefaultConfigurationAsync(this.Tenant).ConfigureAwait(false);
 
                 var model = new Blog
                 {

@@ -6,9 +6,9 @@ namespace Frapid.WebsiteBuilder.Models
 {
     public static class LayoutManagerModel
     {
-        public static bool SaveLayoutFile(string theme, string fileName, string contents)
+        public static bool SaveLayoutFile(string tenant, string theme, string fileName, string contents)
         {
-            string path = HostingEnvironment.MapPath(Configuration.GetThemeDirectory());
+            string path = HostingEnvironment.MapPath(Configuration.GetThemeDirectory(tenant));
 
             if (path != null)
             {

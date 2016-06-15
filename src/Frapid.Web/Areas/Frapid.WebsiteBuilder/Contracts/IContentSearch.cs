@@ -6,6 +6,6 @@ namespace Frapid.WebsiteBuilder.Contracts
 {
     public interface IContentSearch
     {
-        Task<IEnumerable<SearchResultContent>> SearchAsync(string query);
+        Task<IEnumerable<SearchResultContent>> SearchAsync(string tenant, string query);
     }
 }

@@ -5,6 +5,6 @@ namespace Frapid.Framework
 {
     public interface ISiteMapGenerator
     {
-        Task<List<SiteMapUrl>> GenerateAsync();
+        Task<List<SiteMapUrl>> GenerateAsync(string tenant);
     }
 }

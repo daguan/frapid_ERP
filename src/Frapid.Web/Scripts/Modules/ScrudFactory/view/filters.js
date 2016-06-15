@@ -1,4 +1,4 @@
-﻿var ignoredQueryStrings = ["TitleSuffix", "View", "Page", "Filter"];
+﻿var ignoredQueryStrings = ["TitleSuffix", "View", "Page", "Filter", "data-tab", "ReturnUrl"];
 
 $("#FilterName").text(window.Resources.Titles.Untitled());
 
@@ -23,10 +23,10 @@ function getFilterName() {
     return "";
 };
 
-var getQuerystringFilters = function() {
+var getQuerystringFilters = function () {
     function getType(propertyName) {
         var type = window.Enumerable.From(metaDefinition.Columns)
-            .Where(function (x) { return x.ColumnName === propertyName }).FirstOrDefault();
+            .Where(function (x) { return x.PropertyName === propertyName }).FirstOrDefault();
         
         if (type) {
             return type.DbDataType;
@@ -37,6 +37,7 @@ var getQuerystringFilters = function() {
 
     function isString(propertyName) {
         var type = getType(propertyName);
+
         if (stringTypes.indexOf(type) > -1) {
             return true;
         };
@@ -46,7 +47,6 @@ var getQuerystringFilters = function() {
 
     function parseValue(propertyName, val) {
         var type = getType(propertyName);
-
         if (isNullOrWhiteSpace(val)) {
             val = null;
         } else {
@@ -69,10 +69,11 @@ var getQuerystringFilters = function() {
     var queryStrings = getQueryStrings();
 
     $.each(queryStrings, function (index, item) {
+
         if (ignoredQueryStrings.indexOf(item.key) === -1) {
             var key = toUnderscoreCase(item.key);
             var value = parseValue(item.key, item.value);
-            var type = getFilterType(item.key);
+            var type = getFilterType(key);
 
             var targetEl = $("#filter_" + key);
             if (targetEl.length) {

@@ -20,10 +20,10 @@ using Newtonsoft.Json;
 
 namespace Frapid.Areas
 {
-    public abstract class FrapidController: Controller
+    public abstract class FrapidController : Controller
     {
         public RemoteUser RemoteUser { get; private set; }
-        public MetaUser MetaUser { get; set; }
+        public AppUser AppUser { get; set; }
         public string CurrentDomain { get; set; }
         public string Tenant { get; set; }
         public string CurrentPageUrl { get; set; }
@@ -34,17 +34,17 @@ namespace Frapid.Areas
             var result = ViewEngines.Engines.FindView(controllerContext, viewName, null);
 
             StringWriter output;
-            using(output = new StringWriter())
+            using (output = new StringWriter())
             {
                 var dictionary = new ViewDataDictionary(model);
 
                 var dynamic = this.ViewBag as DynamicObject;
 
-                if(dynamic != null)
+                if (dynamic != null)
                 {
                     var members = dynamic.GetDynamicMemberNames().ToList();
 
-                    foreach(string member in members)
+                    foreach (string member in members)
                     {
                         var value = Versioned.CallByName(dynamic, member, CallType.Get);
                         dictionary.Add(member, value);
@@ -52,7 +52,8 @@ namespace Frapid.Areas
                 }
 
 
-                var viewContext = new ViewContext(controllerContext, result.View, dictionary, controllerContext.Controller.TempData, output);
+                var viewContext = new ViewContext(controllerContext, result.View, dictionary,
+                    controllerContext.Controller.TempData, output);
                 result.View.Render(viewContext, output);
                 result.ViewEngine.ReleaseView(controllerContext, result.View);
             }
@@ -76,40 +77,51 @@ namespace Frapid.Areas
         }
 
 
-        protected  override async void Initialize(RequestContext context)
+        protected override async void Initialize(RequestContext context)
         {
-            string clientToken = context.HttpContext.Request.GetClientToken();
-            var provider = new Provider(TenantConvention.GetTenant());
-            var token = provider.GetToken(clientToken);
             string tenant = TenantConvention.GetTenant();
+            string clientToken = context.HttpContext.Request.GetClientToken();
+            var provider = new Provider();
+            var token = provider.GetToken(clientToken);
 
-            if(token != null)
+            if (token != null)
             {
-                bool isValid = await AccessTokens.IsValidAsync(token.ClientToken, context.HttpContext.GetClientIpAddress(), context.HttpContext.GetUserAgent()).ConfigureAwait(false);
+                bool isValid =
+                    await
+                        AccessTokens.IsValidAsync(tenant, token.ClientToken, context.HttpContext.GetClientIpAddress(),
+                            context.HttpContext.GetUserAgent()).ConfigureAwait(false);
 
-                if(isValid)
+                if (isValid)
                 {
                     await AppUsers.SetCurrentLoginAsync(tenant, token.LoginId).ConfigureAwait(false);
                     var loginView = await AppUsers.GetCurrentAsync(tenant, token.LoginId).ConfigureAwait(false);
 
-                    this.MetaUser = new MetaUser
-                                    {
-                                        Tenant = tenant,
-                                        ClientToken = token.ClientToken,
-                                        LoginId = token.LoginId,
-                                        UserId = token.UserId,
-                                        OfficeId = token.OfficeId
-                                    };
+                    this.AppUser = new AppUser
+                    {
+                        Tenant = tenant,
+                        ClientToken = token.ClientToken,
+                        LoginId = loginView.LoginId,
+                        UserId = loginView.UserId,
+                        Name = loginView.Name,
+                        OfficeId = loginView.OfficeId,
+                        OfficeName = loginView.OfficeName,
+                        Email = loginView.Email,
+                        RoleId = loginView.RoleId,
+                        RoleName = loginView.RoleName,
+                        IsAdministrator = loginView.IsAdministrator
+                    };
 
-                    var identity = new ClaimsIdentity(token.Claims, DefaultAuthenticationTypes.ApplicationCookie, ClaimTypes.NameIdentifier, ClaimTypes.Role);
-                    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, token.LoginId.ToString(CultureInfo.InvariantCulture)));
+                    var identity = new ClaimsIdentity(token.Claims, DefaultAuthenticationTypes.ApplicationCookie,
+                        ClaimTypes.NameIdentifier, ClaimTypes.Role);
+                    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier,
+                        token.LoginId.ToString(CultureInfo.InvariantCulture)));
 
-                    if(loginView.RoleName != null)
+                    if (loginView.RoleName != null)
                     {
                         identity.AddClaim(new Claim(ClaimTypes.Role, loginView.RoleName));
                     }
 
-                    if(loginView.Email != null)
+                    if (loginView.Email != null)
                     {
                         identity.AddClaim(new Claim(ClaimTypes.Email, loginView.Email));
                     }
@@ -123,7 +135,7 @@ namespace Frapid.Areas
 
         protected ActionResult Ok(object model = null)
         {
-            if(model == null)
+            if (model == null)
             {
                 model = "OK";
             }
@@ -135,7 +147,7 @@ namespace Frapid.Areas
 
         protected ActionResult Failed(string message, HttpStatusCode statusCode)
         {
-            this.Response.StatusCode = (int)statusCode;
+            this.Response.StatusCode = (int) statusCode;
             return this.Content(message, MediaTypeNames.Text.Plain, Encoding.UTF8);
         }
 

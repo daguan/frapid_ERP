@@ -19,12 +19,12 @@ namespace Frapid.Areas.Authorization
             string tenant = TenantConvention.GetTenant();
 
             string clientToken = request.GetClientToken();
-            var provider = new Provider(tenant);
+            var provider = new Provider();
             var token = provider.GetToken(clientToken);
 
             if(token != null)
             {
-                bool isValid = AccessTokens.IsValidAsync(token.ClientToken, request.GetClientIpAddress(), request.Headers["user-agent"]).Result;
+                bool isValid = AccessTokens.IsValidAsync(tenant, token.ClientToken, request.GetClientIpAddress(), request.Headers["user-agent"]).Result;
 
                 if(isValid)
                 {

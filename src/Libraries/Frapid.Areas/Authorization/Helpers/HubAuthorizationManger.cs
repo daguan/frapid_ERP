@@ -10,9 +10,9 @@ namespace Frapid.Areas.Authorization.Helpers
 {
     public static class HubAuthorizationManger
     {
-        public static async Task<long> GetLoginIdAsync(HubCallerContext context)
+        public static async Task<long> GetLoginIdAsync(string tenant, HubCallerContext context)
         {
-            var token = await GetTokenAsync(context).ConfigureAwait(false);
+            var token = await GetTokenAsync(tenant, context).ConfigureAwait(false);
 
             if(token == null)
             {
@@ -22,14 +22,15 @@ namespace Frapid.Areas.Authorization.Helpers
             return token.LoginId;
         }
 
-        private static async Task<Token> GetTokenAsync(HubCallerContext context)
+        private static async Task<Token> GetTokenAsync(string tenant, HubCallerContext context)
         {
             string clientToken = context.Request.GetClientToken();
-            var provider = new Provider(TenantConvention.GetTenant());
+            var provider = new Provider();
             var token = provider.GetToken(clientToken);
-            if(token != null)
+
+            if (token != null)
             {
-                bool isValid = await AccessTokens.IsValidAsync(token.ClientToken, context.Request.GetClientIpAddress(), context.Headers["User-Agent"]).ConfigureAwait(false);
+                bool isValid = await AccessTokens.IsValidAsync(tenant, token.ClientToken, context.Request.GetClientIpAddress(), context.Headers["User-Agent"]).ConfigureAwait(false);
 
                 if(isValid)
                 {
@@ -40,24 +41,28 @@ namespace Frapid.Areas.Authorization.Helpers
             return null;
         }
 
-        public static async Task<MetaUser> GetUserAsync(HubCallerContext context)
+        public static async Task<AppUser> GetUserAsync(string tenant, HubCallerContext context)
         {
-            var token = await GetTokenAsync(context).ConfigureAwait(false);
+            var token = await GetTokenAsync(tenant, context).ConfigureAwait(false);
 
             if(token != null)
             {
-                string tenant = TenantConvention.GetTenant();
-
                 await AppUsers.SetCurrentLoginAsync(tenant, token.LoginId).ConfigureAwait(false);
                 var loginView = await AppUsers.GetCurrentAsync(tenant, token.LoginId).ConfigureAwait(false);
 
-                return new MetaUser
+                return new AppUser
                        {
                            Tenant = tenant,
                            ClientToken = token.ClientToken,
                            LoginId = token.LoginId,
                            UserId = loginView.UserId,
-                           OfficeId = loginView.OfficeId
+                           OfficeId = loginView.OfficeId,
+                           Email = loginView.Email,
+                           IsAdministrator = loginView.IsAdministrator,
+                           RoleId = loginView.RoleId,
+                           Name = loginView.Name,
+                           RoleName = loginView.RoleName,
+                           OfficeName = loginView.OfficeName
                        };
             }
 

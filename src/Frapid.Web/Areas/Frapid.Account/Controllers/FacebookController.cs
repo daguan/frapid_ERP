@@ -15,7 +15,7 @@ namespace Frapid.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> FacebookSignInAsync(FacebookAccount account)
         {
-            var auth = new FacebookAuthentication();
+            var auth = new FacebookAuthentication(this.Tenant);
             try
             {
                 var result = await auth.AuthenticateAsync(account, this.RemoteUser).ConfigureAwait(false);

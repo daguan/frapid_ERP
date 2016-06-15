@@ -82,6 +82,10 @@
     <Reference Include="Frapid.NPoco">
       <HintPath>..\..\bin\Frapid.NPoco.dll</HintPath>
     </Reference>
+    <Reference Include="Frapid.TokenManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Frapid.TokenManager.dll</HintPath>
+    </Reference>
     <Reference Include="Frapid.WebsiteBuilder, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.WebsiteBuilder.dll</HintPath>

@@ -1,20 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Frapid.ApplicationState.Cache;
 using Frapid.WebsiteBuilder.DAL;
+using Frapid.WebsiteBuilder.ViewModels;
 using Mapster;
-using Content = Frapid.WebsiteBuilder.ViewModels.Content;
 
 namespace Frapid.WebsiteBuilder.Models
 {
     public static class ContentModel
     {
-        public static async Task<IEnumerable<Content>> GetBlogContentsAsync(int pageNumber)
+        public static async Task<IEnumerable<Content>> GetBlogContentsAsync(string tenant, int pageNumber)
         {
             int pageSize = 10;
-            int offset = (pageNumber - 1) * pageSize;
-            string tenant = AppUsers.GetTenant();
+            int offset = (pageNumber - 1)*pageSize;
 
             var awaiter = await Contents.GetBlogContentsAsync(tenant, pageSize, offset).ConfigureAwait(false);
             var contents = awaiter.ToList();

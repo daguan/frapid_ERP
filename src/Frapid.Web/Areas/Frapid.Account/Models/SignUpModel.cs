@@ -3,7 +3,6 @@ using Frapid.Account.DAL;
 using Frapid.Account.Emails;
 using Frapid.Account.Exceptions;
 using Frapid.Account.ViewModels;
-using Frapid.ApplicationState.Cache;
 using Frapid.Areas;
 using Mapster;
 
@@ -11,7 +10,7 @@ namespace Frapid.Account.Models
 {
     public static class SignUpModel
     {
-        public static async Task<bool> SignUpAsync(Registration model, RemoteUser user)
+        public static async Task<bool> SignUpAsync(string tenant, Registration model, RemoteUser user)
         {
             if (model.Password != model.ConfirmPassword)
             {
@@ -28,9 +27,9 @@ namespace Frapid.Account.Models
 
             var registration = model.Adapt<DTO.Registration>();
             registration.Password = PasswordManager.GetHashedPassword(model.Password);
-            string tenant = AppUsers.GetTenant();
 
-            string registrationId = (await Registrations.RegisterAsync(tenant, registration).ConfigureAwait(false)).ToString();
+            string registrationId =
+                (await Registrations.RegisterAsync(tenant, registration).ConfigureAwait(false)).ToString();
 
             if (string.IsNullOrWhiteSpace(registrationId))
             {
@@ -38,7 +37,7 @@ namespace Frapid.Account.Models
             }
 
             var email = new SignUpEmail(registration, registrationId);
-            await email.SendAsync().ConfigureAwait(false);
+            await email.SendAsync(tenant).ConfigureAwait(false);
             return true;
         }
     }

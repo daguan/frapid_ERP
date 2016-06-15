@@ -1,9 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
-using Frapid.ApplicationState.Cache;
 using Frapid.Areas.Caching;
 using Frapid.Areas.CSRF;
-using Frapid.Configuration;
 using Frapid.WebsiteBuilder.Models;
 using Frapid.WebsiteBuilder.Plugins;
 using Frapid.WebsiteBuilder.ViewModels;
@@ -13,21 +11,22 @@ using Serilog;
 namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 {
     [AntiForgery]
-    public class IndexController: WebsiteBuilderController
+    public class IndexController : WebsiteBuilderController
     {
         [Route("hit")]
         [Route("site/{categoryAlias}/{alias}/hit")]
         [HttpPost]
         public async Task<ActionResult> CounterAsync(string categoryAlias = "", string alias = "")
         {
-            await ContentModel.AddHitAsync(AppUsers.GetTenant(), categoryAlias, alias).ConfigureAwait(false);
+            await ContentModel.AddHitAsync(this.Tenant, categoryAlias, alias).ConfigureAwait(false);
             return this.Ok();
         }
 
         [Route("")]
         [Route("site/{categoryAlias}/{alias}")]
         [FrapidOutputCache(ProfileName = "Content")]
-        public async Task<ActionResult> IndexAsync(string categoryAlias = "", string alias = "", bool isPost = false, FormCollection form = null)
+        public async Task<ActionResult> IndexAsync(string categoryAlias = "", string alias = "", bool isPost = false,
+            FormCollection form = null)
         {
             try
             {
@@ -36,42 +35,45 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
                 var model = await this.GetContentsAsync(categoryAlias, alias, isPost, form).ConfigureAwait(false);
 
-                if(model == null)
+                if (model == null)
                 {
                     Log.Error($"Could not serve the url \"{this.CurrentPageUrl}\" because the model was null.");
                     return this.View(GetLayoutPath(this.Tenant) + "404.cshtml");
                 }
 
                 Log.Verbose($"Parsing custom content extensions for \"{this.CurrentPageUrl}\".");
-                model.Contents = await ContentExtensions.ParseHtmlAsync(this.Tenant, model.Contents).ConfigureAwait(false);
+                model.Contents =
+                    await ContentExtensions.ParseHtmlAsync(this.Tenant, model.Contents).ConfigureAwait(false);
 
                 Log.Verbose($"Parsing custom form extensions for \"{this.CurrentPageUrl}\".");
-                model.Contents = await FormsExtension.ParseHtmlAsync(this.Tenant, model.Contents, isPost, form).ConfigureAwait(true);
+                model.Contents =
+                    await FormsExtension.ParseHtmlAsync(this.Tenant, model.Contents, isPost, form).ConfigureAwait(true);
 
                 model.Contents = HitHelper.Add(model.Contents);
 
                 return this.View(this.GetRazorView<AreaRegistration>("Index/Index.cshtml", this.Tenant), model);
             }
-            catch(NpgsqlException ex)
+            catch (NpgsqlException ex)
             {
                 Log.Error
                     (
-                     "An exception was encountered while trying to get content. More info:\nCategory alias: {categoryAlias}, alias: {alias}, is post: {isPost}, form: {form}. Exception\n{ex}.",
-                     categoryAlias,
-                     alias,
-                     isPost,
-                     form,
-                     ex);
+                        "An exception was encountered while trying to get content. More info:\nCategory alias: {categoryAlias}, alias: {alias}, is post: {isPost}, form: {form}. Exception\n{ex}.",
+                        categoryAlias,
+                        alias,
+                        isPost,
+                        form,
+                        ex);
                 return new HttpNotFoundResult();
             }
         }
 
 
-        private async Task<Content> GetContentsAsync(string categoryAlias, string alias, bool isPost = false, FormCollection form = null)
+        private async Task<Content> GetContentsAsync(string categoryAlias, string alias, bool isPost = false,
+            FormCollection form = null)
         {
             var model = await ContentModel.GetContentAsync(this.Tenant, categoryAlias, alias).ConfigureAwait(false);
 
-            if(model == null)
+            if (model == null)
             {
                 return null;
             }

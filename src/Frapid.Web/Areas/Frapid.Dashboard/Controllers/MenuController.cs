@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Web.Mvc;
-using Frapid.ApplicationState.Cache;
+﻿using System.Web.Mvc;
 using Frapid.Areas;
 using Frapid.Areas.Authorization;
 using Frapid.Dashboard.DAL;
@@ -12,16 +10,13 @@ namespace Frapid.Dashboard.Controllers
     {
         [Route("dashboard/my/menus")]
         [RestrictAnonymous]
-        public async Task<ActionResult> GetMenusAsync()
+        public ActionResult GetMenus()
         {
-            var user = await AppUsers.GetCurrentAsync().ConfigureAwait(false);
-
-            int userId = user.UserId;
-            int officeId = user.OfficeId;
+            int userId = this.AppUser.UserId;
+            int officeId = this.AppUser.OfficeId;
             string culture = CultureManager.GetCurrent().TwoLetterISOLanguageName;
-            string tenant = AppUsers.GetTenant();
 
-            return this.Ok(Menu.GetAsync(tenant, userId, officeId, culture));
+            return this.Ok(Menu.GetAsync(this.Tenant, userId, officeId, culture));
         }
     }
 }

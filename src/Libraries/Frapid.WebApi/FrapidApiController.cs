@@ -17,14 +17,14 @@ namespace Frapid.WebApi
     public class FrapidApiController: ApiController
     {
         public string Tenant { get; set; }
-        public MetaUser MetaUser { get; set; }
+        public AppUser AppUser { get; set; }
 
         protected override async void Initialize(HttpControllerContext context)
         {
             this.Tenant = TenantConvention.GetTenant();
 
             string clientToken = context.Request.GetBearerToken();
-            var provider = new Provider(this.Tenant);
+            var provider = new Provider();
             var token = provider.GetToken(clientToken);
 
 
@@ -33,27 +33,33 @@ namespace Frapid.WebApi
                 await AppUsers.SetCurrentLoginAsync(this.Tenant, token.LoginId).ConfigureAwait(false);
                 var loginView = await AppUsers.GetCurrentAsync(this.Tenant, token.LoginId).ConfigureAwait(false);
 
-                this.MetaUser = new MetaUser
-                                {
-                                    Tenant = this.Tenant,
-                                    ClientToken = token.ClientToken,
-                                    LoginId = token.LoginId,
-                                    UserId = loginView.UserId.To<int>(),
-                                    OfficeId = loginView.OfficeId.To<int>()
-                                };
+                this.AppUser = new AppUser
+                {
+                    Tenant = this.Tenant,
+                    ClientToken = token.ClientToken,
+                    LoginId = token.LoginId,
+                    UserId = token.UserId,
+                    Name = loginView.Name,
+                    OfficeId = token.OfficeId,
+                    OfficeName = loginView.OfficeName,
+                    Email = loginView.Email,
+                    RoleId = loginView.RoleId,
+                    RoleName = loginView.RoleName,
+                    IsAdministrator = loginView.IsAdministrator
+                };
 
                 var identity = new ClaimsIdentity(token.Claims);
 
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, token.LoginId.ToString(CultureInfo.InvariantCulture)));
 
-                if(loginView.RoleName != null)
+                if(this.AppUser.RoleName != null)
                 {
-                    identity.AddClaim(new Claim(ClaimTypes.Role, loginView.RoleName));
+                    identity.AddClaim(new Claim(ClaimTypes.Role, this.AppUser.RoleName));
                 }
 
-                if(loginView.Email != null)
+                if(this.AppUser.Email != null)
                 {
-                    identity.AddClaim(new Claim(ClaimTypes.Email, loginView.Email));
+                    identity.AddClaim(new Claim(ClaimTypes.Email, this.AppUser.Email));
                 }
 
                 context.RequestContext.Principal = new ClaimsPrincipal(identity);
