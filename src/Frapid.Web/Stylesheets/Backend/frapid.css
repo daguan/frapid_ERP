@@ -210,3 +210,16 @@ table.nowrap {
         filter: grayscale(0.4); /* Microsoft Edge and Firefox 35+ */
         -webkit-filter: grayscale(0.2);
     }
+
+@media only screen and (min-width: 960px) {
+    #signin-form {
+        bottom: 0;
+        height: 500px;
+        left: 0;
+        margin: auto;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 440px;
+    }
+}

@@ -74,10 +74,11 @@ namespace Frapid.Areas
             }
 
             this.RemoteUser = RemoteUser.Get(this.HttpContext);
+            this.Initialize(context.RequestContext);
         }
 
 
-        protected override async void Initialize(RequestContext context)
+        protected override void Initialize(RequestContext context)
         {
             string tenant = TenantConvention.GetTenant();
             string clientToken = context.HttpContext.Request.GetClientToken();
@@ -86,15 +87,13 @@ namespace Frapid.Areas
 
             if (token != null)
             {
-                bool isValid =
-                    await
-                        AccessTokens.IsValidAsync(tenant, token.ClientToken, context.HttpContext.GetClientIpAddress(),
-                            context.HttpContext.GetUserAgent()).ConfigureAwait(false);
+                bool isValid = AccessTokens.IsValidAsync(tenant, token.ClientToken, context.HttpContext.GetClientIpAddress(),
+                            context.HttpContext.GetUserAgent()).Result;
 
                 if (isValid)
                 {
-                    await AppUsers.SetCurrentLoginAsync(tenant, token.LoginId).ConfigureAwait(false);
-                    var loginView = await AppUsers.GetCurrentAsync(tenant, token.LoginId).ConfigureAwait(false);
+                    AppUsers.SetCurrentLoginAsync(tenant, token.LoginId).Wait();
+                    var loginView = AppUsers.GetCurrentAsync(tenant, token.LoginId).Result;
 
                     this.AppUser = new AppUser
                     {
@@ -147,7 +146,7 @@ namespace Frapid.Areas
 
         protected ActionResult Failed(string message, HttpStatusCode statusCode)
         {
-            this.Response.StatusCode = (int) statusCode;
+            this.Response.StatusCode = (int)statusCode;
             return this.Content(message, MediaTypeNames.Text.Plain, Encoding.UTF8);
         }
 

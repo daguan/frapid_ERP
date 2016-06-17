@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Frapid.Framework.Extensions;
 
 namespace frapid.Commands
 {
@@ -21,9 +22,9 @@ namespace frapid.Commands
         private static ICommand Get(string commandName, string line)
         {
             var iType = typeof(ICommand);
-            var members = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).Where(x => iType.IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract).Select(Activator.CreateInstance);
+            var members = iType.GetTypeMembers<ICommand>();                
 
-            foreach(ICommand member in members)
+            foreach(var member in members)
             {
                 if(member.CommandName == commandName)
                 {
