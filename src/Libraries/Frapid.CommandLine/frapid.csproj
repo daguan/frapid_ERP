@@ -65,8 +65,7 @@
     <Compile Include="Commands\CommandProcessor.cs" />
     <Compile Include="Commands\Create\CreateCommand.cs" />
     <Compile Include="Commands\Create\CreateTemplate.cs" />
-    <Compile Include="Modules\WebApiProjectCreator.cs" />
-    <Compile Include="Modules\MvcProjectCreator.cs" />
+    <Compile Include="Commands\Create\MvcProjectCreator.cs" />
     <Compile Include="TokenExtension.cs" />
     <Compile Include="FrapidConsole.cs" />
     <Compile Include="Commands\ICommand.cs" />

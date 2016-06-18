@@ -30,8 +30,8 @@ namespace Frapid.Installer.Tenant
 
             InstallerLog.Verbose("Getting installables.");
             var installables = GetInstallables(tenant);
-            InstallerLog.Information($"The following apps will be installed:\n\n {installables}.");
 
+           
             foreach(var installable in installables)
             {
                 try

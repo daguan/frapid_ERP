@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using Frapid.Framework;
 
-namespace frapid.Modules
+namespace frapid.Commands.Create
 {
     internal sealed class MvcProjectCreator
     {

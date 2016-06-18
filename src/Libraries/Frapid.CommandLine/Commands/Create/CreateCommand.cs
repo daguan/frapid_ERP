@@ -27,7 +27,7 @@ namespace frapid.Commands.Create
                 member.Line = this.Line;
                 member.Initialize();
                 member.Validate();
-                member.ExecuteCommandAsync();
+                member.ExecuteCommandAsync().Wait();
             }
         }
 

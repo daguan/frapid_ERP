@@ -1250,6 +1250,8 @@ SELECT
     account.users.name AS user_name
 FROM account.users;
 
+GO
+
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/05.views/account.sign_in_view.sql --<--<--
 IF OBJECT_ID('account.sign_in_view') IS NOT NULL
 DROP VIEW account.sign_in_view;

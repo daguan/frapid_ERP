@@ -74,6 +74,10 @@ call all.bat
 cd %builddir%..\src\Frapid.Web\bin\
 call frapid.exe create site postgresql.test provider Npgsql cleanup when done
 @echo Creating SQL Server Tenant
-cd %builddir%..\src\Frapid.Web\bin\
 call frapid.exe create site sqlserver.test provider System.Data.SqlClient cleanup when done
+@echo Creating a Test App
+call frapid.exe create app TestApp
+
+rmdir %builddir%..\src\Frapid.Web\Areas\TestApp /Q /S
+
 @echo OK

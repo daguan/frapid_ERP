@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using frapid.Modules;
 
 namespace frapid.Commands.Create
 {
@@ -11,7 +10,6 @@ namespace frapid.Commands.Create
         public override string Name { get; } = "app";
         public override bool IsValid { get; set; }
         public string AppName { get; private set; }
-        public bool WebApiProject { get; private set; }
 
         public override void Initialize()
         {
@@ -48,26 +46,6 @@ namespace frapid.Commands.Create
 
             if(!this.IsValid)
             {
-                return;
-            }
-
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("Create WebAPI project? Y/N");
-            string result = Console.ReadLine();
-
-            if(result != null &&
-               result.ToLower().Equals("y"))
-            {
-                this.WebApiProject = true;
-            }
-
-            Console.ForegroundColor = ConsoleColor.White;
-
-            if(this.WebApiProject)
-            {
-                Console.WriteLine("creating app " + this.AppName + " with WebAPI.");
-                var webApi = new WebApiProjectCreator(this.AppName);
-                webApi.Create();
                 return;
             }
 
