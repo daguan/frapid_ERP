@@ -85,7 +85,14 @@ namespace Frapid.Areas
             var provider = new Provider();
             var token = provider.GetToken(clientToken);
 
-            if (token != null)
+            if (token == null)
+            {
+                this.AppUser = new AppUser
+                {
+                    Tenant = tenant
+                };
+            }
+            else
             {
                 bool isValid = AccessTokens.IsValidAsync(tenant, token.ClientToken, context.HttpContext.GetClientIpAddress(),
                             context.HttpContext.GetUserAgent()).Result;
