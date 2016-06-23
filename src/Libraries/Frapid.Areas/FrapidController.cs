@@ -85,14 +85,7 @@ namespace Frapid.Areas
             var provider = new Provider();
             var token = provider.GetToken(clientToken);
 
-            if (token == null)
-            {
-                this.AppUser = new AppUser
-                {
-                    Tenant = tenant
-                };
-            }
-            else
+            if (token != null)
             {
                 bool isValid = AccessTokens.IsValidAsync(tenant, token.ClientToken, context.HttpContext.GetClientIpAddress(),
                             context.HttpContext.GetUserAgent()).Result;
@@ -134,6 +127,14 @@ namespace Frapid.Areas
 
                     context.HttpContext.User = new ClaimsPrincipal(identity);
                 }
+            }
+
+            if (this.AppUser == null)
+            {
+                this.AppUser = new AppUser
+                {
+                    Tenant = tenant
+                };
             }
 
             base.Initialize(context);
