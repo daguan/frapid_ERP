@@ -32,8 +32,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
             {
                 Log.Verbose($"Prepping \"{this.CurrentPageUrl}\".");
 
-
-                var model = await this.GetContentsAsync(categoryAlias, alias, isPost, form).ConfigureAwait(false);
+                var model = await this.GetContentsAsync(categoryAlias, alias, isPost, form).ConfigureAwait(true);
 
                 if (model == null)
                 {
@@ -43,7 +42,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
                 Log.Verbose($"Parsing custom content extensions for \"{this.CurrentPageUrl}\".");
                 model.Contents =
-                    await ContentExtensions.ParseHtmlAsync(this.Tenant, model.Contents).ConfigureAwait(false);
+                    await ContentExtensions.ParseHtmlAsync(this.Tenant, model.Contents).ConfigureAwait(true);
 
                 Log.Verbose($"Parsing custom form extensions for \"{this.CurrentPageUrl}\".");
                 model.Contents =
