@@ -1,4 +1,5 @@
-﻿using Frapid.DataAccess.Models;
+﻿using System.Threading.Tasks;
+using Frapid.DataAccess.Models;
 
 namespace Frapid.DbPolicy
 {
@@ -10,6 +11,6 @@ namespace Frapid.DbPolicy
         bool HasAccess { get; }
         long LoginId { get; set; }
         string Database { get; set; }
-        void Validate();
+        Task ValidateAsync();
     }
 }

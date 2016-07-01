@@ -50,5 +50,10 @@ namespace Frapid.Backups.SqlServer
             var fail = this.Fail;
             fail?.Invoke(progressinfo);
         }
+
+        private void OnProgress(ProgressInfo progressinfo)
+        {
+            this.Progress?.Invoke(progressinfo);
+        }
     }
 }

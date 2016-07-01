@@ -25,10 +25,7 @@ BEGIN
 		field_label             national character varying(100),
 		description             national character varying(500),
 		data_type               national character varying(50),
-		is_number               bit,
-		is_date                 bit,
-		is_bit              	bit,
-		is_long_text            bit,
+		underlying_type			national character varying(100),
 		resource_id             national character varying(500),
 		value                   national character varying(500)
 	);

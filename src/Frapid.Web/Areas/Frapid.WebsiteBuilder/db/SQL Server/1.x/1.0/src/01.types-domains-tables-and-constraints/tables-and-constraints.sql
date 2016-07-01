@@ -91,7 +91,8 @@ CREATE TABLE website.menu_items
     title                                       national character varying(100) NOT NULL,
     url                                         national character varying(500),
     target                                      national character varying(20),
-    content_id                                  integer REFERENCES website.contents,    
+    content_id                                  integer REFERENCES website.contents,
+	parent_menu_item_id							integer REFERENCES website.menu_items,
     audit_user_id                               integer REFERENCES account.users,
     audit_ts                                    datetimeoffset NULL 
                                                 DEFAULT(getutcdate())    

@@ -58,14 +58,14 @@ namespace Frapid.Account.Controllers.Frontend
 
             var id = token.To<Guid>();
 
-            if (!await Registrations.ConfirmRegistrationAsync(this.Tenant, id).ConfigureAwait(false))
+            if (!await Registrations.ConfirmRegistrationAsync(this.Tenant, id).ConfigureAwait(true))
             {
                 return this.View(this.GetRazorView<AreaRegistration>("SignUp/InvalidToken.cshtml", this.Tenant));
             }
 
             var registration = await Registrations.GetAsync(this.Tenant, id).ConfigureAwait(true);
             var email = new WelcomeEmail(registration);
-            await email.SendAsync(this.Tenant).ConfigureAwait(false);
+            await email.SendAsync(this.Tenant).ConfigureAwait(true);
 
             return this.View(this.GetRazorView<AreaRegistration>("SignUp/Welcome.cshtml", this.Tenant));
         }

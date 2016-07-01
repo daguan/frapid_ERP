@@ -65,7 +65,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -90,7 +90,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.ExportData, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.ExportData, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -120,7 +120,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -152,7 +152,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -181,7 +181,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -212,7 +212,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -245,7 +245,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -277,7 +277,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -310,7 +310,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -354,7 +354,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -381,7 +381,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -424,7 +424,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.ImportData, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.ImportData, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
 
                 if (!this.HasAccess)
@@ -522,7 +522,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Edit, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Edit, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -573,7 +573,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Delete, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Delete, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -598,7 +598,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -628,7 +628,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -674,7 +674,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -701,7 +701,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -741,7 +741,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -769,7 +769,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -812,7 +812,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Create, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Create, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {
@@ -961,7 +961,7 @@ namespace Frapid.WebApi.DataAccess
             {
                 if (!this.Validated)
                 {
-                    this.Validate(AccessTypeEnum.Read, this.LoginId, this.Database, false);
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
                 if (!this.HasAccess)
                 {

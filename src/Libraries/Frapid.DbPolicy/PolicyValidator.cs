@@ -14,7 +14,7 @@ namespace Frapid.DbPolicy
         public long LoginId { get; set; }
         public string Database { get; set; }
 
-        public async void Validate()
+        public async Task ValidateAsync()
         {
             this.HasAccess = await ValidateAsync(this).ConfigureAwait(false);
         }

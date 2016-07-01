@@ -9,7 +9,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     {
         [Route("dashboard/website/menus/items")]
         [RestrictAnonymous]
-        [MenuPolicy]
+        [MenuPolicy(OverridePath = "/dashboard/website/menus")]
         public ActionResult Index()
         {
             return this.FrapidView(this.GetRazorView<AreaRegistration>("MenuItem/Index.cshtml", this.Tenant));

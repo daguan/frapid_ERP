@@ -92,6 +92,7 @@ CREATE TABLE website.menu_items
     url                                         national character varying(500),
     target                                      national character varying(20),
     content_id                                  integer REFERENCES website.contents,    
+	parent_menu_item_id							integer REFERENCES website.menu_items,
     audit_user_id                               integer REFERENCES account.users,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
                                                 DEFAULT(NOW())    

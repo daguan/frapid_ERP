@@ -86,14 +86,14 @@ namespace Frapid.ApplicationState.Cache
 
             var view =  login ?? await SetCurrentLoginAsync(tenant, loginId).ConfigureAwait(false);
 
-            await UpdateActivityAsync(view.UserId.To<int>(), view.IpAddress, view.Browser).ConfigureAwait(false);
+            await UpdateActivityAsync(tenant, view.UserId.To<int>(), view.IpAddress, view.Browser).ConfigureAwait(false);
 
             return view;
         }
 
-        private static async Task UpdateActivityAsync(int userId, string ip, string browser)
+        private static async Task UpdateActivityAsync(string tenant, int userId, string ip, string browser)
         {
-            await DAL.AppUsers.UpdateActivityAsync(GetTenant(), userId, ip, browser).ConfigureAwait(false);
+            await DAL.AppUsers.UpdateActivityAsync(tenant, userId, ip, browser).ConfigureAwait(false);
         }
 
         public static async Task<LoginView> GetMetaLoginAsync(string database, long loginId)

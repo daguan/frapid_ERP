@@ -54,11 +54,18 @@
             textField: "Value"
         },
         {
-            property: "ContentId",
-            url: '/api/forms/website/contents/display-fields',
+            property: "ParentMenuItemId",
+            url: '/api/forms/website/menu-items/all',
             data: null,
-            valueField: "Key",
-            textField: "Value"
+            valueField: "menu_item_id",
+            textField: "title"
+        },
+        {
+            property: "ContentId",
+            url: '/api/forms/website/contents/all',
+            data: null,
+            valueField: "content_id",
+            textField: "title"
         }
     ];
 

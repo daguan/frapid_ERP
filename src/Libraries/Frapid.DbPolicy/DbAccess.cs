@@ -1,4 +1,5 @@
-﻿using Frapid.DataAccess;
+﻿using System.Threading.Tasks;
+using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 
 namespace Frapid.DbPolicy
@@ -23,7 +24,7 @@ namespace Frapid.DbPolicy
         ///     If this is switched off, UnauthorizedException is not thrown even when the caller does not
         ///     have access rights to this function.
         /// </param>
-        public void Validate(AccessTypeEnum type, long loginId, string database, bool noException)
+        public async Task ValidateAsync(AccessTypeEnum type, long loginId, string database, bool noException)
         {
             var policy = new PolicyValidator
                          {
@@ -34,7 +35,7 @@ namespace Frapid.DbPolicy
                              AccessType = type
                          };
 
-            policy.Validate();
+            await policy.ValidateAsync().ConfigureAwait(false);
             this.HasAccess = policy.HasAccess;
 
             this.Validated = true;

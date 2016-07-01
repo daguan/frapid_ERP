@@ -9,7 +9,7 @@ namespace Frapid.Backups
 {
     public class BackupJob : IJob
     {
-        public async void Execute(IJobExecutionContext context)
+        public void Execute(IJobExecutionContext context)
         {
             string fileName = DateTimeOffset.UtcNow.Ticks.ToString();
             var domains = TenantConvention.GetDomains();
@@ -25,7 +25,7 @@ namespace Frapid.Backups
 
                 try
                 {
-                    await agent.BackupAsync
+                    agent.BackupAsync
                         (
                             done =>
                             {
@@ -36,7 +36,7 @@ namespace Frapid.Backups
                                 backup.Clean();
                             },
                             error => { Log.Error($"Could not backup because and error occurred. \n\n{error}"); })
-                        .ConfigureAwait(false);
+                        .Wait();
                 }
                 catch (Exception ex)
                 {

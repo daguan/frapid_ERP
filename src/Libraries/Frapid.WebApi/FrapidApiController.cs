@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
@@ -19,7 +20,7 @@ namespace Frapid.WebApi
         public string Tenant { get; set; }
         public AppUser AppUser { get; set; }
 
-        protected override async void Initialize(HttpControllerContext context)
+        protected override void Initialize(HttpControllerContext context)
         {
             this.Tenant = TenantConvention.GetTenant();
 
@@ -30,8 +31,8 @@ namespace Frapid.WebApi
 
             if(token != null)
             {
-                await AppUsers.SetCurrentLoginAsync(this.Tenant, token.LoginId).ConfigureAwait(false);
-                var loginView = await AppUsers.GetCurrentAsync(this.Tenant, token.LoginId).ConfigureAwait(false);
+                AppUsers.SetCurrentLoginAsync(this.Tenant, token.LoginId).Wait();
+                var loginView = AppUsers.GetCurrentAsync(this.Tenant, token.LoginId).Result;
 
                 this.AppUser = new AppUser
                 {

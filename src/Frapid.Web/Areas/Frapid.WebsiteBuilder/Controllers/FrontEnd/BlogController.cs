@@ -25,7 +25,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         public async Task<ActionResult> PostAsync(string categoryAlias, string alias)
         {
             var model =
-                await ContentModel.GetContentAsync(this.Tenant, categoryAlias, alias, true).ConfigureAwait(false);
+                await ContentModel.GetContentAsync(this.Tenant, categoryAlias, alias, true).ConfigureAwait(true);
 
             if (model == null)
             {
@@ -38,7 +38,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
             model.LayoutPath = path;
             model.Layout = layout;
-            model.Contents = await ContentExtensions.ParseHtmlAsync(this.Tenant, model.Contents).ConfigureAwait(false);
+            model.Contents = await ContentExtensions.ParseHtmlAsync(this.Tenant, model.Contents).ConfigureAwait(true);
 
             return this.View(this.GetRazorView<AreaRegistration>("Blog/Post.cshtml", this.Tenant), model);
         }
@@ -55,7 +55,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
                     pageNumber = 1;
                 }
 
-                var contents = (await ContentModel.GetBlogContentsAsync(this.Tenant, pageNumber).ConfigureAwait(false)).ToList();
+                var contents = (await ContentModel.GetBlogContentsAsync(this.Tenant, pageNumber).ConfigureAwait(true)).ToList();
 
                 if (!contents.Any())
                 {

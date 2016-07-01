@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Threading.Tasks;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Frapid.Web;
@@ -9,12 +10,11 @@ using Microsoft.Owin.Cors;
 using Owin;
 
 [assembly: OwinStartup(typeof (Startup))]
-
 namespace Frapid.Web
 {
     public class Startup
     {
-        public async void Configuration(IAppBuilder app)
+        public void Configuration(IAppBuilder app)
         {
             app.Map
                 (
@@ -40,7 +40,7 @@ namespace Frapid.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             AssetConfig.Register();
             NPocoConfig.Register();
-            await StartupRegistration.RegisterAsync().ConfigureAwait(false);
+            StartupRegistration.RegisterAsync().Wait();
             BackupRegistration.Register();
             EodTaskRegistration.Register();
             AccountConfig.Register(app);
