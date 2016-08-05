@@ -144,3 +144,12 @@ CREATE TABLE config.flags
 
 CREATE UNIQUE INDEX flags_user_id_resource_resource_id_uix
 ON config.flags(user_id, UPPER(resource), UPPER(resource_key), UPPER(resource_id));
+
+CREATE TABLE config.custom_fields
+(
+    custom_field_id                             SERIAL PRIMARY KEY,
+    custom_field_setup_id                       integer NOT NULL REFERENCES config.custom_field_setup,
+    resource_id                                 national character varying(500) NOT NULL,
+    value                                       text
+);
+

@@ -41,12 +41,10 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
                 }
 
                 Log.Verbose($"Parsing custom content extensions for \"{this.CurrentPageUrl}\".");
-                model.Contents =
-                    await ContentExtensions.ParseHtmlAsync(this.Tenant, model.Contents).ConfigureAwait(true);
+                model.Contents = await ContentExtensions.ParseHtmlAsync(this.Tenant, model.Contents).ConfigureAwait(true);
 
                 Log.Verbose($"Parsing custom form extensions for \"{this.CurrentPageUrl}\".");
-                model.Contents =
-                    await FormsExtension.ParseHtmlAsync(this.Tenant, model.Contents, isPost, form).ConfigureAwait(true);
+                model.Contents = await FormsExtension.ParseHtmlAsync(this.Tenant, model.Contents, isPost, form).ConfigureAwait(true);
 
                 model.Contents = HitHelper.Add(model.Contents);
 

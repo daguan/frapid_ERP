@@ -27,3 +27,5 @@ src/Frapid.Web/Areas/MixERP.Sales/
 src/Frapid.Web/Areas/MixERP.Purchase/
 src/Frapid.Web/Areas/MixERP.Inventory/
 src/Frapid.Web/Areas/MixERP.BackOffice/
+src/Frapid.Web/Areas/CineSys/
+src/Frapid.Web/Areas/CineSys.FoodCourt/

@@ -19,6 +19,7 @@ namespace Frapid.ApplicationState.Models
         public int OfficeId { get; set; }
         public string OfficeName { get; set; }
         public string Office { get; set; }
+        public string Logo { get; set; }
         public DateTimeOffset LastSeenOn { get; set; }
     }
 }

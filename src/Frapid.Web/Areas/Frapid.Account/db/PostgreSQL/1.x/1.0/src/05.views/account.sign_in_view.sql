@@ -18,6 +18,7 @@ SELECT
     account.logins.office_id,
     core.offices.office_name,
     core.offices.office_code || ' (' || core.offices.office_name || ')' AS office,
+    core.offices.logo,
     account.users.last_seen_on
 FROM account.logins
 INNER JOIN account.users
