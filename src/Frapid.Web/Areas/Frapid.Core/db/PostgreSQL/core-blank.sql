@@ -612,6 +612,8 @@ CREATE TABLE core.offices
     url                                         national character varying(50),
     logo                                        public.photo,
     parent_office_id                            integer NULL REFERENCES core.offices,
+	registration_number							national character varying(100),
+	pan_number									national character varying(50),
     audit_user_id                               integer NULL,
     audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
                                                 DEFAULT(NOW())

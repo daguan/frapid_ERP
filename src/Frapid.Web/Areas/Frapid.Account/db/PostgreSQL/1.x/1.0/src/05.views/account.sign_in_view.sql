@@ -16,9 +16,24 @@ SELECT
     account.logins.culture,
     account.logins.is_active,
     account.logins.office_id,
+    core.offices.office_code,
     core.offices.office_name,
     core.offices.office_code || ' (' || core.offices.office_name || ')' AS office,
     core.offices.logo,
+    core.offices.registration_date,
+    core.offices.po_box,
+    core.offices.address_line_1,
+    core.offices.address_line_2,
+    core.offices.street,
+    core.offices.city,
+    core.offices.state,
+    core.offices.zip_code,
+    core.offices.country,
+    core.offices.phone,
+    core.offices.fax,
+    core.offices.url,
+    core.offices.currency_code,
+    core.offices.pan_number,
     account.users.last_seen_on
 FROM account.logins
 INNER JOIN account.users
@@ -27,3 +42,5 @@ INNER JOIN account.roles
 ON account.roles.role_id = account.users.role_id
 INNER JOIN core.offices
 ON core.offices.office_id = account.logins.office_id;
+
+

@@ -10,7 +10,6 @@ namespace Frapid.Backups.Postgres
         {
             this.Server = server;
             this.PgDumpPath = Path.Combine(this.Server.BinDirectory, "pg_dump.exe");
-            ;
             this.FileName = fileName;
             this.Tenant = tenant;
         }

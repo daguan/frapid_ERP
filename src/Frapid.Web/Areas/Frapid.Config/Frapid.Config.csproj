@@ -53,6 +53,10 @@
     <Reference Include="Frapid.Dashboard">
       <HintPath>..\..\bin\Frapid.Dashboard.dll</HintPath>
     </Reference>
+    <Reference Include="Frapid.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Frapid.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -79,6 +83,7 @@
     <Compile Include="Controllers\FlagController.cs" />
     <Compile Include="Controllers\MenuAccessController.cs" />
     <Compile Include="Controllers\OfficeController.cs" />
+    <Compile Include="Controllers\Services\AttachmentController.cs" />
     <Compile Include="Controllers\SmtpController.cs" />
     <Compile Include="FrapidConfig.cs" />
     <Compile Include="Models\FileManagerResource.cs" />

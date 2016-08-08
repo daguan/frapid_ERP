@@ -17,9 +17,24 @@ namespace Frapid.ApplicationState.Models
         public DateTimeOffset LoginTimestamp { get; set; }
         public string Culture { get; set; }
         public int OfficeId { get; set; }
+        public string OfficeCode { get; set; }
         public string OfficeName { get; set; }
         public string Office { get; set; }
         public string Logo { get; set; }
+        public DateTime RegistrationDate { get; set; }
+        public string PoBox { get; set; }
+        public string AddressLine1 { get; set; }
+        public string AddressLine2 { get; set; }
+        public string Street { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string ZipCode { get; set; }
+        public string Country { get; set; }
+        public string Phone { get; set; }
+        public string Fax { get; set; }
+        public string Url { get; set; }
+        public string CurrencyCode { get; set; }
+        public string PanNumber { get; set; }
         public DateTimeOffset LastSeenOn { get; set; }
     }
 }
