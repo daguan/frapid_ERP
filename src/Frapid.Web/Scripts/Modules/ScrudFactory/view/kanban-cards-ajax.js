@@ -10,7 +10,7 @@
         return getAjaxRequest(url);
     };
 
-    if (!window.json) {
+    if (!window.scrudjson) {
         return;
     };
 
@@ -19,7 +19,7 @@
     };
 
     var keyField = (window.scrudFactory.card.keyField || getIdField());
-    var resourceIds = Enumerable.From(window.json).Select(function (x) { return x[keyField]; }).ToArray();
+    var resourceIds = Enumerable.From(window.scrudjson).Select(function (x) { return x[keyField]; }).ToArray();
     var kanbanIds = Enumerable.From(window.kanbans).Select(function (x) { return x.kanban_id; }).ToArray();
 
     var ajax = request(kanbanIds, resourceIds);
@@ -27,13 +27,13 @@
     ajax.success(function (response) {
         $(".kanban.holder").html("");
 
-        $.each(window.json, function (i, v) {
+        $.each(window.scrudjson, function (i, v) {
             var key = getCardKey(v);
             var kanbanDetail = (Enumerable.From(response).Where(function(detail) {
                     return detail.resource_id.toString() === key.toString();
             }).ToArray()[0] || new Object());
 
-            createCard(v, key, kanbanDetail);
+            createCard(this, key, kanbanDetail);
         });
 
         makeSortable();

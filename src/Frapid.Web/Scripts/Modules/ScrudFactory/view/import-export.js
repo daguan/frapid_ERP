@@ -1,8 +1,8 @@
-﻿function jsonToCsv(json) {
+﻿function jsonToCsv(scrudjson) {
     var header = "";
     var rows = "";
 
-    $.each(json[0], function (name) {
+    $.each(scrudjson[0], function (name) {
         if (header) {
             header += ",";
         };
@@ -12,7 +12,7 @@
 
     header += "\r\n";
 
-    $.each(json, function (i, value) {
+    $.each(scrudjson, function (i, value) {
         var row = "";
 
         $.each(value, function (key, val) {

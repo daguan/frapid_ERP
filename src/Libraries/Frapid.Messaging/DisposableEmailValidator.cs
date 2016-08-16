@@ -45,7 +45,7 @@ namespace Frapid.Messaging
                      "\n"
                  },
                  StringSplitOptions.None).Select(x => x.ToUpperInvariant().Trim());
-            return domains.Any(domain => email.ToUpperInvariant().EndsWith(domain));
+            return domains.Any(domain => email.Trim().ToUpperInvariant().EndsWith(domain.ToUpperInvariant()));
         }
     }
 }

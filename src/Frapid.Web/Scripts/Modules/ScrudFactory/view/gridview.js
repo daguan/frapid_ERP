@@ -1,12 +1,12 @@
-﻿function createGridView(appendTo, json) {
+﻿function createGridView(appendTo, scrudjson) {
     appendTo.html("");
 
-    if (isNullOrWhiteSpace(json || "")) {
+    if (isNullOrWhiteSpace(scrudjson || "")) {
         return null;
     };
     var excludedColumnIndices = [];
 
-    if (!json) {
+    if (!scrudjson) {
         return null;
     };
 
@@ -19,7 +19,7 @@
         window.scrudFactory.excludedColumns = [];
     };
 
-    $.each(json[0], function (name) {
+    $.each(scrudjson[0], function (name) {
         if (window.scrudFactory.excludedColumns.indexOf(name) === -1) {
             header += "<th>" + name + "</th>";
         } else {
@@ -31,7 +31,7 @@
 
     header += "</tr><tr class='ui small form'>";
 
-    $.each(json[0], function (name) {
+    $.each(scrudjson[0], function (name) {
         if (window.scrudFactory.excludedColumns.indexOf(name) === -1) {
             var input = "<input type='text' class='grid filter' data-member='" + name + "' id='filter_" + name + "' />";
             header += "<th>" + input + "</th>";
@@ -47,7 +47,7 @@
 
     var body = $("<tbody />");
 
-    $.each(json, function (i, value) {
+    $.each(scrudjson, function (i, value) {
         var row = "<tr>";
 
         index = 0;

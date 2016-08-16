@@ -121,12 +121,26 @@ function getIdField() {
 };
 
 function getCardKey(dynamic) {
-    var keyField = (window.scrudFactory.card.keyField || getIdField());
+    if (!dynamic) {
+        return "";
+    };
+
+    var keyField = getIdField();
+
+    if (window.scrudFactory.card && window.scrudFactory.card.keyField) {
+        keyField = window.scrudFactory.card.keyField;
+    };
+
     return dynamic[keyField];
 };
 
 function getImageField(entity) {
+    if (!entity || !entity.length) {
+        return "";
+    };
+
     var imageField;
+    alert(JSON.stringify(entity));
 
     $.each(entity, function (i) {
         if (!imageField) {
@@ -152,11 +166,19 @@ function getImageField(entity) {
 };
 
 function getDescriptionField(entity) {
+    if (!entity) {
+        return "";
+    };
+
     var candidates = ["email", "url", "city", "phone", "company_name", "currency"];
     return getQualified(entity, "", candidates);
 };
 
 function getCardField(card, field) {
+    if (!card || !field) {
+        return "";
+    };
+
     var isExpression = field.substring(2, 0) === "{{" && field.slice(-2) === "}}";
     if (isExpression) {
         var expression = field.replace("{{", "").replace("}}", "");

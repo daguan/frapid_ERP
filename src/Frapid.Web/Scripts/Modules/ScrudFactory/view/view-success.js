@@ -1,7 +1,7 @@
 ﻿function onViewSuccess(response) {
-    window.json = response;
-    var el = $("#json");
-    createGridView(el, window.json);
+    window.scrudjson = response;
+    var el = $("#scrudjson");
+    createGridView(el, window.scrudjson);
     loadQueryStringFilters();
     localizeHeaders(el);
     gridFilterActions();

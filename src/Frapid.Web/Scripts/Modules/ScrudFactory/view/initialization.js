@@ -1,4 +1,4 @@
-﻿var json;
+﻿var scrudjson;
 var kanbans;
 var scrudForm = $(".form.factory");
 var scrudView = $(".view.factory");
