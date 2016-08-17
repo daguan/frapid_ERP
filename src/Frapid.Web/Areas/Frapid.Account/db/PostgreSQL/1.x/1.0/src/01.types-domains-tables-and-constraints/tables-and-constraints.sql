@@ -7,8 +7,8 @@ CREATE TABLE account.roles
     role_name                               national character varying(100) NOT NULL UNIQUE,
     is_administrator                        boolean NOT NULL DEFAULT(false),
     audit_user_id                           integer,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)    
 );
 
 CREATE TABLE account.installed_domains
@@ -37,8 +37,8 @@ CREATE TABLE account.configuration_profiles
     facebook_app_id                         text,
     facebook_scope                          text,
     audit_user_id                           integer,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)    
 );
 
 
@@ -78,8 +78,8 @@ CREATE TABLE account.users
 	last_ip									text,
 	last_browser							text,
     audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())    
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)    
 );
 
 
@@ -157,8 +157,8 @@ CREATE TABLE account.applications
     redirect_url                                national character varying(500),
     app_secret                                  text UNIQUE,
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
-                                                DEFAULT(NOW())        
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)        
 );
 
 CREATE UNIQUE INDEX applications_app_name_uix

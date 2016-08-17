@@ -14,7 +14,8 @@ CREATE TABLE website.configurations
 	blog_description							    national character varying(500),	
 	is_default                                      bit NOT NULL DEFAULT(1),
     audit_user_id                                   integer REFERENCES account.users,
-    audit_ts                                        datetimeoffset NULL DEFAULT(getutcdate())
+    audit_ts                                		DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted											bit DEFAULT(0)
 );
 
 CREATE UNIQUE INDEX configuration_domain_name_uix
@@ -43,8 +44,8 @@ CREATE TABLE website.categories
     seo_description                             national character varying(100),
 	is_blog										bit NOT NULL DEFAULT(0),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                    datetimeoffset NULL 
-                                                DEFAULT(getutcdate())    
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)    
 );
 
 CREATE TABLE website.contents
@@ -66,8 +67,8 @@ CREATE TABLE website.contents
     seo_description                             national character varying(1000) NOT NULL DEFAULT(''),
     is_homepage                                 bit NOT NULL DEFAULT(0),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                    datetimeoffset NULL 
-                                                DEFAULT(getutcdate())    
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)    
 );
 
 CREATE TABLE website.menus
@@ -76,8 +77,8 @@ CREATE TABLE website.menus
     menu_name                                   national character varying(100),
     description                                 national character varying(500),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                    datetimeoffset NULL 
-                                                DEFAULT(getutcdate())
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 CREATE UNIQUE INDEX menus_menu_name_uix
@@ -94,9 +95,8 @@ CREATE TABLE website.menu_items
     content_id                                  integer REFERENCES website.contents,
 	parent_menu_item_id							integer REFERENCES website.menu_items,
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                    datetimeoffset NULL 
-                                                DEFAULT(getutcdate())    
-);
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0));
 
 
 CREATE TABLE website.contacts
@@ -119,6 +119,6 @@ CREATE TABLE website.contacts
     sort                                        integer NOT NULL DEFAULT(0),
     status                                      bit NOT NULL DEFAULT(1),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                    datetimeoffset NULL 
-                                                DEFAULT(getutcdate())    
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)    
 );

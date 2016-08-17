@@ -9,8 +9,8 @@ CREATE TABLE config.kanbans
     kanban_name                                 national character varying(128) NOT NULL,
     description                                 text,
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
-                                                DEFAULT(NOW())    
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)    
 );
 CREATE TABLE config.kanban_details
 (
@@ -19,8 +19,8 @@ CREATE TABLE config.kanban_details
     rating                                      smallint CHECK(rating>=0 AND rating<=5),
     resource_id                                 national character varying(128) NOT NULL,
     audit_user_id                               integer NULL REFERENCES account.users,
-    audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
-                                                DEFAULT(NOW())    
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)    
 );
 
 CREATE UNIQUE INDEX kanban_details_kanban_id_resource_id_uix
@@ -41,7 +41,8 @@ CREATE TABLE config.smtp_configs
     smtp_password                               national character varying(256) NOT NULL,
     smtp_port                                   integer NOT NULL DEFAULT(587),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                    timestamp with time zone DEFAULT now()
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 
@@ -80,8 +81,8 @@ CREATE TABLE config.filters
     filter_value                                text,
     filter_and_value                            text,
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
-                                                DEFAULT(NOW())
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 CREATE INDEX filters_object_name_inx
@@ -124,8 +125,8 @@ CREATE TABLE config.flag_types
     background_color                            color NOT NULL,
     foreground_color                            color NOT NULL,
     audit_user_id                               integer NULL REFERENCES account.users,
-    audit_ts                                    TIMESTAMP WITH TIME ZONE NULL
-                                                DEFAULT(NOW())
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 COMMENT ON TABLE config.flag_types IS 'Flags are used by users to mark transactions. The flags created by a user is not visible to others.';

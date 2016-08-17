@@ -542,8 +542,8 @@ CREATE TABLE core.countries
     country_code                            national character varying(12) PRIMARY KEY,
     country_name                            national character varying(100) NOT NULL,
     audit_user_id                           integer,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
 );
 
 CREATE TABLE core.apps
@@ -615,8 +615,8 @@ CREATE TABLE core.offices
 	registration_number							national character varying(100),
 	pan_number									national character varying(50),
     audit_user_id                               integer NULL,
-    audit_ts                                    TIMESTAMP WITH TIME ZONE NULL 
-                                                DEFAULT(NOW())
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 CREATE TABLE core.frequencies
@@ -670,7 +670,8 @@ CREATE TABLE core.genders
 	gender_code                             national character varying(4) NOT NULL PRIMARY KEY,
 	gender_name                             national character varying(50) NOT NULL UNIQUE,
 	audit_user_id                           integer,
-	audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW())    
+	audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)    
 );
 
 CREATE TABLE core.marital_statuses
@@ -680,7 +681,8 @@ CREATE TABLE core.marital_statuses
 	marital_status_name                     national character varying(128) NOT NULL,
 	is_legally_recognized_marriage          boolean NOT NULL DEFAULT(false),
 	audit_user_id                           integer,    
-	audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW())
+	audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
 );
 
 

@@ -13,8 +13,8 @@ CREATE TABLE config.kanbans
     kanban_name                                 national character varying(128) NOT NULL,
     description                                 national character varying(500),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                    datetimeoffset NULL 
-                                                DEFAULT(getutcdate())    
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 CREATE TABLE config.kanban_details
 (
@@ -23,8 +23,8 @@ CREATE TABLE config.kanban_details
     rating                                      smallint CHECK(rating>=0 AND rating<=5),
     resource_id                                 national character varying(128) NOT NULL,
     audit_user_id                               integer NULL REFERENCES account.users,
-    audit_ts                                    datetimeoffset NULL 
-                                                DEFAULT(getutcdate())    
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)    
 );
 
 CREATE UNIQUE INDEX kanban_details_kanban_id_resource_id_uix
@@ -45,7 +45,8 @@ CREATE TABLE config.smtp_configs
     smtp_password                               national character varying(256) NOT NULL,
     smtp_port                                   integer NOT NULL DEFAULT(587),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                    datetimeoffset DEFAULT getutcdate()
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 
@@ -84,8 +85,8 @@ CREATE TABLE config.filters
     filter_value                                national character varying(500),
     filter_and_value                            national character varying(500),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                    datetimeoffset NULL 
-                                                DEFAULT(getutcdate())
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 CREATE INDEX filters_object_name_inx
@@ -137,9 +138,8 @@ CREATE TABLE config.flag_types
     background_color                            color NOT NULL,
     foreground_color                            color NOT NULL,
     audit_user_id                               integer NULL REFERENCES account.users,
-    audit_ts                                    datetimeoffset NULL
-                                                DEFAULT(getutcdate())
-);
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0));
 
 
 CREATE TABLE config.flags

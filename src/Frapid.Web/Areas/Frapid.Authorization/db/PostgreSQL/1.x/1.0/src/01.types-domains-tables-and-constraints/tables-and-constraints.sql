@@ -20,8 +20,8 @@ CREATE TABLE auth.group_entity_access_policy
     access_type_id                          integer NULL REFERENCES auth.access_types,
     allow_access                            boolean NOT NULL,
     audit_user_id                           integer NULL REFERENCES account.users,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
 );
 
 CREATE TABLE auth.entity_access_policy
@@ -33,8 +33,8 @@ CREATE TABLE auth.entity_access_policy
     access_type_id                          integer NULL REFERENCES auth.access_types,
     allow_access                            boolean NOT NULL,
     audit_user_id                           integer NULL REFERENCES account.users,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
 );
 
 CREATE TABLE auth.group_menu_access_policy
@@ -44,8 +44,8 @@ CREATE TABLE auth.group_menu_access_policy
     menu_id                                 integer NOT NULL REFERENCES core.menus,
     role_id                                 integer REFERENCES account.roles,
     audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
 );
 
 CREATE UNIQUE INDEX menu_access_uix
@@ -61,8 +61,8 @@ CREATE TABLE auth.menu_access_policy
     disallow_access                         boolean
                                             CHECK(NOT(allow_access is true AND disallow_access is true)),
     audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL 
-                                            DEFAULT(NOW())
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
 );
 
 CREATE UNIQUE INDEX menu_access_policy_uix

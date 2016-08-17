@@ -21,7 +21,7 @@ namespace Frapid.NPoco
                 AutoIncrement = this.AutoIncrement,
                 TableName = this.TableName,
                 PrimaryKey = this.PrimaryKey,
-                SequenceName = this.SequenceName,
+                SequenceName = this.SequenceName,                
                 UseOutputClause = this.UseOutputClause
             };
         }

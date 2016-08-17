@@ -621,7 +621,8 @@ CREATE TABLE core.countries
     country_code                            	national character varying(12) PRIMARY KEY,
     country_name                            	national character varying(100) NOT NULL,
     audit_user_id                           	integer,
-	audit_ts									datetimeoffset NULL DEFAULT(getutcdate())
+	audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 CREATE TABLE core.apps
@@ -691,7 +692,8 @@ CREATE TABLE core.offices
     logo                                        dbo.photo,
     parent_office_id                            integer NULL REFERENCES core.offices,
     audit_user_id                               integer NULL,
-    audit_ts                                    datetimeoffset NULL DEFAULT(getutcdate())
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 CREATE TABLE core.frequencies
@@ -728,7 +730,8 @@ CREATE TABLE core.genders
 	gender_code									national character varying(4) NOT NULL PRIMARY KEY,
 	gender_name									national character varying(50) NOT NULL UNIQUE,
 	audit_user_id								integer NULL,
-	audit_ts									datetimeoffset NULL DEFAULT(getutcdate())    
+	audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)    
 );
 
 CREATE TABLE core.marital_statuses
@@ -738,7 +741,8 @@ CREATE TABLE core.marital_statuses
 	marital_status_name							national character varying(128) NOT NULL,
 	is_legally_recognized_marriage				bit NOT NULL DEFAULT(0),
 	audit_user_id								integer NULL,    
-	audit_ts									datetimeoffset NULL DEFAULT(getutcdate())
+	audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 
