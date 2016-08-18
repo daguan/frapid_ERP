@@ -50,7 +50,8 @@ CREATE TABLE auth.group_menu_access_policy
 );
 
 CREATE UNIQUE INDEX menu_access_uix
-ON auth.group_menu_access_policy(office_id, menu_id, role_id);
+ON auth.group_menu_access_policy(office_id, menu_id, role_id)
+WHERE NOT deleted;
 
 CREATE TABLE auth.menu_access_policy
 (
@@ -67,7 +68,8 @@ CREATE TABLE auth.menu_access_policy
 );
 
 CREATE UNIQUE INDEX menu_access_policy_uix
-ON auth.menu_access_policy(office_id, menu_id, user_id);
+ON auth.menu_access_policy(office_id, menu_id, user_id)
+WHERE NOT deleted;
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.create_api_access_policy.sql --<--<--

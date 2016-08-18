@@ -19,7 +19,8 @@ CREATE TABLE website.configurations
 );
 
 CREATE UNIQUE INDEX configuration_domain_name_uix
-ON website.configurations(domain_name);
+ON website.configurations(domain_name)
+WHERE deleted = 0;
 
 CREATE TABLE website.email_subscriptions
 (
@@ -82,7 +83,8 @@ CREATE TABLE website.menus
 );
 
 CREATE UNIQUE INDEX menus_menu_name_uix
-ON website.menus(menu_name);
+ON website.menus(menu_name)
+WHERE deleted = 0;
 
 CREATE TABLE website.menu_items
 (

@@ -45,7 +45,8 @@ CREATE TABLE account.configuration_profiles
 
 CREATE UNIQUE INDEX configuration_profile_uix
 ON account.configuration_profiles(is_active)
-WHERE is_active;
+WHERE is_active
+AND NOT deleted;
 
 CREATE TABLE account.registrations
 (
@@ -85,7 +86,8 @@ CREATE TABLE account.users
 
 
 CREATE UNIQUE INDEX users_email_uix
-ON account.users(LOWER(email));
+ON account.users(LOWER(email))
+WHERE NOT deleted;
 
 ALTER TABLE account.configuration_profiles
 ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
@@ -163,7 +165,8 @@ CREATE TABLE account.applications
 );
 
 CREATE UNIQUE INDEX applications_app_name_uix
-ON account.applications(LOWER(application_name));
+ON account.applications(LOWER(application_name))
+WHERE NOT deleted;
 
 CREATE TABLE account.access_tokens
 (

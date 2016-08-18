@@ -25,7 +25,8 @@ CREATE TABLE config.kanban_details
 );
 
 CREATE UNIQUE INDEX kanban_details_kanban_id_resource_id_uix
-ON config.kanban_details(kanban_id, resource_id);
+ON config.kanban_details(kanban_id, resource_id)
+WHERE NOT deleted;
 
 
 CREATE TABLE config.smtp_configs
@@ -87,7 +88,8 @@ CREATE TABLE config.filters
 );
 
 CREATE INDEX filters_object_name_inx
-ON config.filters(object_name);
+ON config.filters(object_name)
+WHERE NOT deleted;
 
 CREATE TABLE config.custom_field_data_types
 (

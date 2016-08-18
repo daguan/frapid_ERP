@@ -52,7 +52,8 @@ CREATE TABLE auth.group_menu_access_policy
 );
 
 CREATE UNIQUE INDEX menu_access_uix
-ON auth.group_menu_access_policy(office_id, menu_id, role_id);
+ON auth.group_menu_access_policy(office_id, menu_id, role_id)
+WHERE deleted = 0;
 
 CREATE TABLE auth.menu_access_policy
 (
@@ -70,10 +71,8 @@ CREATE TABLE auth.menu_access_policy
 
 
 CREATE UNIQUE INDEX menu_access_policy_uix
-ON auth.menu_access_policy(office_id, menu_id, user_id);
-
-
-
+ON auth.menu_access_policy(office_id, menu_id, user_id)
+WHERE deleted = 0;
 
 
 GO

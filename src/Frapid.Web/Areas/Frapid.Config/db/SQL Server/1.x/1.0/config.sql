@@ -28,7 +28,8 @@ CREATE TABLE config.kanban_details
 );
 
 CREATE UNIQUE INDEX kanban_details_kanban_id_resource_id_uix
-ON config.kanban_details(kanban_id, resource_id);
+ON config.kanban_details(kanban_id, resource_id)
+WHERE deleted = 0;
 
 
 CREATE TABLE config.smtp_configs
@@ -90,7 +91,8 @@ CREATE TABLE config.filters
 );
 
 CREATE INDEX filters_object_name_inx
-ON config.filters(object_name);
+ON config.filters(object_name)
+WHERE deleted = 0;
 
 CREATE TABLE config.custom_field_data_types
 (
@@ -296,7 +298,7 @@ INNER JOIN config.custom_field_data_types ON custom_field_data_types.data_type =
 INNER JOIN config.custom_field_forms ON custom_field_forms.form_name = custom_field_setup.form_name
 INNER JOIN config.custom_fields ON custom_fields.custom_field_setup_id = custom_field_setup.custom_field_setup_id;
 
-
+GO
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/05.views/config.filter_name_view.sql --<--<--
 IF OBJECT_ID('config.filter_name_view') IS NOT NULL
