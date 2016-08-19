@@ -309,7 +309,8 @@ SELECT
 	website.contacts.email,
 	website.contacts.display_contact_form,
 	website.contacts.display_email
-FROM website.contacts;
+FROM website.contacts
+WHERE NOT website.contacts.deleted;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.scrud-views/website.content_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS website.content_scrud_view;
@@ -326,7 +327,8 @@ SELECT
 	website.contents.publish_on
 FROM website.contents
 INNER JOIN website.categories
-ON website.categories.category_id = website.contents.category_id;
+ON website.categories.category_id = website.contents.category_id
+WHERE NOT website.contents.deleted;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.scrud-views/website.email_subscription_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS website.email_subscription_scrud_view;
@@ -342,7 +344,8 @@ SELECT
     website.email_subscriptions.confirmed_on,
     website.email_subscriptions.unsubscribed,
     website.email_subscriptions.unsubscribed_on
-FROM website.email_subscriptions;
+FROM website.email_subscriptions
+WHERE NOT website.email_subscriptions.deleted;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.triggers/website.email_subscription_confirmation_trigger.sql --<--<--
 DROP FUNCTION IF EXISTS website.email_subscription_confirmation_trigger() CASCADE;
@@ -431,7 +434,8 @@ FROM website.menu_items
 INNER JOIN website.menus
 ON website.menus.menu_id = website.menu_items.menu_id
 LEFT JOIN website.contents
-ON website.contents.content_id = website.menu_items.content_id;
+ON website.contents.content_id = website.menu_items.content_id
+WHERE NOT website.menu_items.deleted;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.published_content_view.sql --<--<--
 DROP VIEW IF EXISTS website.published_content_view;
@@ -461,7 +465,8 @@ ON website.categories.category_id = website.contents.category_id
 LEFT JOIN account.users
 ON website.contents.author_id = account.users.user_id
 WHERE NOT is_draft
-AND publish_on <= NOW();
+AND publish_on <= NOW()
+AND NOT website.contents.deleted;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.tag_view.sql --<--<--
 DROP VIEW IF EXISTS website.tag_view;
@@ -471,7 +476,9 @@ AS
 WITH tags
 AS
 (
-SELECT DISTINCT unnest(regexp_split_to_array(tags, ',')) AS tag FROM website.contents
+	SELECT DISTINCT unnest(regexp_split_to_array(tags, ',')) AS tag 
+	FROM website.contents
+	WHERE NOT website.contents.deleted
 )
 SELECT
     ROW_NUMBER() OVER (ORDER BY tag) AS tag_id,
@@ -492,6 +499,7 @@ SELECT
 FROM website.email_subscriptions
 WHERE subscribed_on::date = 'yesterday'::date
 AND NOT confirmed_on::date = 'yesterday'::date
+AND NOT website.email_subscriptions.deleted
 UNION ALL
 SELECT
     email,
@@ -500,6 +508,7 @@ SELECT
     'unsubscribed'
 FROM website.email_subscriptions
 WHERE unsubscribed_on::date = 'yesterday'::date
+AND NOT website.email_subscriptions.deleted
 UNION ALL
 SELECT
     email,
@@ -507,7 +516,8 @@ SELECT
     last_name,
     'confirmed'
 FROM website.email_subscriptions
-WHERE confirmed_on::date = 'yesterday'::date;
+WHERE confirmed_on::date = 'yesterday'::date
+AND NOT website.email_subscriptions.deleted;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/10.policy/access_policy.sql --<--<--
 SELECT * FROM auth.create_api_access_policy('{Content Editor, User, Admin}', core.get_office_id_by_office_name('Default'), 'website.categories', '{*}', true);

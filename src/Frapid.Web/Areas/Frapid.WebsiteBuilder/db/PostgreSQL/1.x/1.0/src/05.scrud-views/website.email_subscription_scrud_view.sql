@@ -11,4 +11,5 @@ SELECT
     website.email_subscriptions.confirmed_on,
     website.email_subscriptions.unsubscribed,
     website.email_subscriptions.unsubscribed_on
-FROM website.email_subscriptions;
+FROM website.email_subscriptions
+WHERE NOT website.email_subscriptions.deleted;

@@ -10,4 +10,5 @@ SELECT
 	parent_office.office_code || ' (' || parent_office.office_name || ')' AS parent_office
 FROM core.offices
 LEFT JOIN core.offices AS parent_office
-ON parent_office.office_id = core.offices.parent_office_id;
+ON parent_office.office_id = core.offices.parent_office_id
+WHERE NOT core.offices.deleted;

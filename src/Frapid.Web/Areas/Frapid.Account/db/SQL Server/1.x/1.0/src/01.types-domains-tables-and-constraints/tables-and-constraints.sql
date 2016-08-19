@@ -18,11 +18,15 @@ CREATE TABLE account.installed_domains
 (
     domain_id									integer IDENTITY NOT NULL PRIMARY KEY,
     domain_name									national character varying(500),
-    admin_email									national character varying(500)
+    admin_email									national character varying(500),
+    audit_user_id                           	integer,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 CREATE UNIQUE INDEX installed_domains_domain_name_uix
-ON account.installed_domains(domain_name);
+ON account.installed_domains(domain_name)
+WHERE deleted = 0;
 
 
 CREATE TABLE account.configuration_profiles
@@ -61,11 +65,15 @@ CREATE TABLE account.registrations
     ip_address									national character varying(50),
     registered_on								datetimeoffset NOT NULL DEFAULT(getutcdate()),
     confirmed									bit DEFAULT(0),
-    confirmed_on								datetimeoffset
+    confirmed_on								datetimeoffset,
+    audit_user_id                           	integer,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 CREATE UNIQUE INDEX registrations_email_uix
-ON account.registrations(email);
+ON account.registrations(email)
+WHERE deleted = 0;
 
 CREATE TABLE account.users
 (
@@ -108,7 +116,10 @@ CREATE TABLE account.reset_requests
     browser										national character varying(500),
     ip_address									national character varying(50),
     confirmed									bit DEFAULT(0),
-    confirmed_on								datetimeoffset
+    confirmed_on								datetimeoffset,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 
@@ -118,14 +129,20 @@ CREATE TABLE account.fb_access_tokens
 (
     user_id										integer PRIMARY KEY REFERENCES account.users,
     fb_user_id									national character varying(500),
-    token										national character varying(MAX)
+    token										national character varying(MAX),
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 
 CREATE TABLE account.google_access_tokens
 (
     user_id										integer PRIMARY KEY REFERENCES account.users,
-    token										national character varying(MAX)
+    token										national character varying(MAX),
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 CREATE TABLE account.logins
@@ -137,7 +154,10 @@ CREATE TABLE account.logins
     ip_address									national character varying(50),
     is_active									bit NOT NULL DEFAULT(1),
     login_timestamp								datetimeoffset NOT NULL DEFAULT(getutcdate()),
-    culture										national character varying(12) NOT NULL    
+    culture										national character varying(12) NOT NULL,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 
@@ -185,6 +205,9 @@ CREATE TABLE account.access_tokens
     expires_on                                  datetimeoffset NOT NULL,
     revoked                                     bit NOT NULL DEFAULT(0),
     revoked_by                                  integer REFERENCES account.users,
-    revoked_on                                  datetimeoffset
+    revoked_on                                  datetimeoffset,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 

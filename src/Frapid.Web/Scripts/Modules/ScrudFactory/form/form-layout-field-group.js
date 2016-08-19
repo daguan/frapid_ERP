@@ -7,7 +7,7 @@
         return;
     };
 
-    if (["audit_user_id", "audit_ts"].indexOf(column.ColumnName) >= 0) {
+    if (["audit_user_id", "audit_ts", "deleted"].indexOf(column.ColumnName) >= 0) {
         return;
     };
 

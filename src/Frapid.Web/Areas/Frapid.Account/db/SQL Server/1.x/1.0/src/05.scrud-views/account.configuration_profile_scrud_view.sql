@@ -16,6 +16,7 @@ FROM account.configuration_profiles
 LEFT JOIN account.roles
 ON account.roles.role_id = account.configuration_profiles.registration_role_id
 LEFT JOIN core.offices
-ON core.offices.office_id = account.configuration_profiles.registration_office_id;
+ON core.offices.office_id = account.configuration_profiles.registration_office_id
+WHERE account.configuration_profiles.deleted = 0;
 
 GO

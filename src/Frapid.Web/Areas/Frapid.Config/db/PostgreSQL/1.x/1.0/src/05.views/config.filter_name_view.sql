@@ -7,4 +7,5 @@ SELECT
     object_name,
     filter_name,
     is_default
-FROM config.filters;
+FROM config.filters
+WHERE NOT config.filters.deleted;

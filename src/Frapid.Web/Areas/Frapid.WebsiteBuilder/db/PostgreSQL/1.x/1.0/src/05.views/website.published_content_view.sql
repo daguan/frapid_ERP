@@ -25,4 +25,5 @@ ON website.categories.category_id = website.contents.category_id
 LEFT JOIN account.users
 ON website.contents.author_id = account.users.user_id
 WHERE NOT is_draft
-AND publish_on <= NOW();
+AND publish_on <= NOW()
+AND NOT website.contents.deleted;

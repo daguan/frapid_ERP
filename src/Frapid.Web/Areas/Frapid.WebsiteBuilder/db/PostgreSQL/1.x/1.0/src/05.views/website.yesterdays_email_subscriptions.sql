@@ -10,6 +10,7 @@ SELECT
 FROM website.email_subscriptions
 WHERE subscribed_on::date = 'yesterday'::date
 AND NOT confirmed_on::date = 'yesterday'::date
+AND NOT website.email_subscriptions.deleted
 UNION ALL
 SELECT
     email,
@@ -18,6 +19,7 @@ SELECT
     'unsubscribed'
 FROM website.email_subscriptions
 WHERE unsubscribed_on::date = 'yesterday'::date
+AND NOT website.email_subscriptions.deleted
 UNION ALL
 SELECT
     email,
@@ -25,4 +27,5 @@ SELECT
     last_name,
     'confirmed'
 FROM website.email_subscriptions
-WHERE confirmed_on::date = 'yesterday'::date;
+WHERE confirmed_on::date = 'yesterday'::date
+AND NOT website.email_subscriptions.deleted;

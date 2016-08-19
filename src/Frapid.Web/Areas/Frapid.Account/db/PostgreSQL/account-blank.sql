@@ -12,15 +12,64 @@ CREATE TABLE account.roles
 	deleted									boolean DEFAULT(false)    
 );
 
+CREATE TABLE account.registrations
+(
+    registration_id                         uuid PRIMARY KEY DEFAULT(gen_random_uuid()),
+    name                                    national character varying(100),
+    email                                   national character varying(100) NOT NULL,
+    phone                                   national character varying(100),
+    password                                text,
+    browser                                 text,
+    ip_address                              national character varying(50),
+    registered_on                           TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
+    confirmed                               boolean DEFAULT(false),
+    confirmed_on                            TIMESTAMP WITH TIME ZONE,
+    audit_user_id                           integer,
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
+);
+
+CREATE UNIQUE INDEX registrations_email_uix
+ON account.registrations(LOWER(email))
+WHERE NOT deleted;
+
+CREATE TABLE account.users
+(
+    user_id                                 SERIAL PRIMARY KEY,
+    email                                   national character varying(100) NOT NULL,
+    password                                text,
+    office_id                               integer NOT NULL REFERENCES core.offices,
+    role_id                                 integer NOT NULL REFERENCES account.roles,
+    name                                    national character varying(100),
+    phone                                   national character varying(100),
+    status                                  boolean DEFAULT(true),
+    created_on                              TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
+	last_seen_on							TIMESTAMP WITH TIME ZONE,
+	last_ip									text,
+	last_browser							text,
+    audit_user_id                           integer REFERENCES account.users,
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)    
+);
+
+
+CREATE UNIQUE INDEX users_email_uix
+ON account.users(LOWER(email))
+WHERE NOT deleted;
+
 CREATE TABLE account.installed_domains
 (
     domain_id                               SERIAL NOT NULL PRIMARY KEY,
     domain_name                             national character varying(500),
-    admin_email                             national character varying(500)
+    admin_email                             national character varying(500),
+    audit_user_id                           integer REFERENCES account.users,
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
 );
 
 CREATE UNIQUE INDEX installed_domains_domain_name_uix
-ON account.installed_domains(LOWER(domain_name));
+ON account.installed_domains(LOWER(domain_name))
+WHERE NOT deleted;
 
 
 CREATE TABLE account.configuration_profiles
@@ -48,46 +97,6 @@ ON account.configuration_profiles(is_active)
 WHERE is_active
 AND NOT deleted;
 
-CREATE TABLE account.registrations
-(
-    registration_id                         uuid PRIMARY KEY DEFAULT(gen_random_uuid()),
-    name                                    national character varying(100),
-    email                                   national character varying(100) NOT NULL,
-    phone                                   national character varying(100),
-    password                                text,
-    browser                                 text,
-    ip_address                              national character varying(50),
-    registered_on                           TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
-    confirmed                               boolean DEFAULT(false),
-    confirmed_on                            TIMESTAMP WITH TIME ZONE
-);
-
-CREATE UNIQUE INDEX registrations_email_uix
-ON account.registrations(LOWER(email));
-
-CREATE TABLE account.users
-(
-    user_id                                 SERIAL PRIMARY KEY,
-    email                                   national character varying(100) NOT NULL,
-    password                                text,
-    office_id                               integer NOT NULL REFERENCES core.offices,
-    role_id                                 integer NOT NULL REFERENCES account.roles,
-    name                                    national character varying(100),
-    phone                                   national character varying(100),
-    status                                  boolean DEFAULT(true),
-    created_on                              TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
-	last_seen_on							TIMESTAMP WITH TIME ZONE,
-	last_ip									text,
-	last_browser							text,
-    audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
-	deleted									boolean DEFAULT(false)    
-);
-
-
-CREATE UNIQUE INDEX users_email_uix
-ON account.users(LOWER(email))
-WHERE NOT deleted;
 
 ALTER TABLE account.configuration_profiles
 ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
@@ -106,7 +115,10 @@ CREATE TABLE account.reset_requests
     browser                                 text,
     ip_address                              national character varying(50),
     confirmed                               boolean DEFAULT(false),
-    confirmed_on                            TIMESTAMP WITH TIME ZONE
+    confirmed_on                            TIMESTAMP WITH TIME ZONE,
+    audit_user_id                           integer REFERENCES account.users,
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
 );
 
 
@@ -116,14 +128,20 @@ CREATE TABLE account.fb_access_tokens
 (
     user_id                                 integer PRIMARY KEY REFERENCES account.users,
     fb_user_id                              text,
-    token                                   text
+    token                                   text,
+    audit_user_id                           integer REFERENCES account.users,
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
 );
 
 
 CREATE TABLE account.google_access_tokens
 (
     user_id                                 integer PRIMARY KEY REFERENCES account.users,
-    token                                   text
+    token                                   text,
+    audit_user_id                           integer REFERENCES account.users,
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
 );
 
 CREATE TABLE account.logins
@@ -136,7 +154,10 @@ CREATE TABLE account.logins
     is_active                               boolean NOT NULL DEFAULT(true),
     login_timestamp                         TIMESTAMP WITH TIME ZONE NOT NULL 
                                             DEFAULT(NOW()),
-    culture                                 national character varying(12) NOT NULL    
+    culture                                 national character varying(12) NOT NULL,
+    audit_user_id                           integer REFERENCES account.users,
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
 );
 
 DROP TABLE IF EXISTS account.access_tokens;
@@ -160,8 +181,8 @@ CREATE TABLE account.applications
     redirect_url                                national character varying(500),
     app_secret                                  text UNIQUE,
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
-	deleted									boolean DEFAULT(false)        
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)        
 );
 
 CREATE UNIQUE INDEX applications_app_name_uix
@@ -186,7 +207,10 @@ CREATE TABLE account.access_tokens
     expires_on                                  TIMESTAMP WITH TIME ZONE NOT NULL,
     revoked                                     boolean NOT NULL DEFAULT(false),
     revoked_by                                  integer REFERENCES account.users,
-    revoked_on                                  TIMESTAMP WITH TIME ZONE
+    revoked_on                                  TIMESTAMP WITH TIME ZONE,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 CREATE INDEX access_tokens_token_info_inx
@@ -1088,7 +1112,8 @@ FROM account.configuration_profiles
 LEFT JOIN account.roles
 ON account.roles.role_id = account.configuration_profiles.registration_role_id
 LEFT JOIN core.offices
-ON core.offices.office_id = account.configuration_profiles.registration_office_id;
+ON core.offices.office_id = account.configuration_profiles.registration_office_id
+WHERE NOT account.configuration_profiles.deleted;
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/05.scrud-views/account.user_scrud_view.sql --<--<--
@@ -1107,7 +1132,8 @@ FROM account.users
 INNER JOIN account.roles
 ON account.roles.role_id = account.users.role_id
 INNER JOIN core.offices
-ON core.offices.office_id = account.users.office_id;
+ON core.offices.office_id = account.users.office_id
+WHERE NOT account.users.deleted;
 
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/05.scrud-views/account.user_selector_view.sql --<--<--
@@ -1118,7 +1144,8 @@ AS
 SELECT
     account.users.user_id,
     account.users.name AS user_name
-FROM account.users;
+FROM account.users
+WHERE NOT account.users.deleted;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/05.views/account.sign_in_view.sql --<--<--
 DROP VIEW IF EXISTS account.sign_in_view;

@@ -18,6 +18,7 @@ FROM website.menu_items
 INNER JOIN website.menus
 ON website.menus.menu_id = website.menu_items.menu_id
 LEFT JOIN website.contents
-ON website.contents.content_id = website.menu_items.content_id;
+ON website.contents.content_id = website.menu_items.content_id
+WHERE website.menu_items.deleted = 0;
 
 GO

@@ -65,7 +65,10 @@ CREATE TABLE config.email_queue
     delivered_on                                TIMESTAMP WITH TIME ZONE,
     canceled                                    boolean NOT NULL DEFAULT(false),
     canceled_on                                 TIMESTAMP WITH TIME ZONE,
-	is_test										boolean NOT NULL DEFAULT(false)
+	is_test										boolean NOT NULL DEFAULT(false),
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 
@@ -94,14 +97,20 @@ WHERE NOT deleted;
 CREATE TABLE config.custom_field_data_types
 (
     data_type                                   national character varying(50) NOT NULL PRIMARY KEY,
-	underlying_type								national character varying(500) NOT NULL
+	underlying_type								national character varying(500) NOT NULL,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 CREATE TABLE config.custom_field_forms
 (
     form_name                                   national character varying(100) NOT NULL PRIMARY KEY,
     table_name                                  national character varying(500) NOT NULL UNIQUE,
-    key_name                                    national character varying(500) NOT NULL
+    key_name                                    national character varying(500) NOT NULL,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 
@@ -117,7 +126,10 @@ CREATE TABLE config.custom_field_setup
     field_label                                 national character varying(200) NOT NULL,                   
     data_type                                   national character varying(50)
                                                 REFERENCES config.custom_field_data_types,
-    description                                 text NOT NULL
+    description                                 text NOT NULL,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 
@@ -143,18 +155,25 @@ CREATE TABLE config.flags
     resource_key                                text, --The unique identifier for lookup. Example: non_gl_stock_master_id,
     resource_id                                 text, --The value of the unique identifier to lookup for,
     flagged_on                                  TIMESTAMP WITH TIME ZONE NULL 
-                                                DEFAULT(NOW())
+                                                DEFAULT(NOW()),
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 CREATE UNIQUE INDEX flags_user_id_resource_resource_id_uix
-ON config.flags(user_id, UPPER(resource), UPPER(resource_key), UPPER(resource_id));
+ON config.flags(user_id, UPPER(resource), UPPER(resource_key), UPPER(resource_id))
+WHERE NOT deleted;
 
 CREATE TABLE config.custom_fields
 (
     custom_field_id                             SERIAL PRIMARY KEY,
     custom_field_setup_id                       integer NOT NULL REFERENCES config.custom_field_setup,
     resource_id                                 national character varying(500) NOT NULL,
-    value                                       text
+    value                                       text,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 
@@ -231,7 +250,8 @@ SELECT
 	config.smtp_configs.is_default,
 	config.smtp_configs.from_display_name,
 	config.smtp_configs.from_email_address
-FROM config.smtp_configs;
+FROM config.smtp_configs
+WHERE NOT config.smtp_configs.deleted;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/05.views/config.custom_field_definition_view.sql --<--<--
 DROP VIEW IF EXISTS config.custom_field_definition_view;
@@ -256,6 +276,7 @@ INNER JOIN config.custom_field_data_types
 ON config.custom_field_data_types.data_type = config.custom_field_setup.data_type
 INNER JOIN config.custom_field_forms
 ON config.custom_field_forms.form_name = config.custom_field_setup.form_name
+WHERE NOT config.custom_field_setup.deleted
 ORDER BY field_order;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/05.views/config.filter_name_view.sql --<--<--
@@ -268,7 +289,8 @@ SELECT
     object_name,
     filter_name,
     is_default
-FROM config.filters;
+FROM config.filters
+WHERE NOT config.filters.deleted;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/05.views/config.flag_view.sql --<--<--
 DROP VIEW IF EXISTS config.flag_view;
@@ -288,7 +310,8 @@ SELECT
     config.flag_types.foreground_color
 FROM config.flags
 INNER JOIN config.flag_types
-ON config.flags.flag_type_id = config.flag_types.flag_type_id;
+ON config.flags.flag_type_id = config.flag_types.flag_type_id
+WHERE NOT config.flags.deleted;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/config.create_custom_field.sql --<--<--
 DROP FUNCTION IF EXISTS config.create_custom_field

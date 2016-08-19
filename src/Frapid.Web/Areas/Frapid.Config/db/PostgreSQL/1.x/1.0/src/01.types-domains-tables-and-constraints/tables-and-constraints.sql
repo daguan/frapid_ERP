@@ -64,7 +64,10 @@ CREATE TABLE config.email_queue
     delivered_on                                TIMESTAMP WITH TIME ZONE,
     canceled                                    boolean NOT NULL DEFAULT(false),
     canceled_on                                 TIMESTAMP WITH TIME ZONE,
-	is_test										boolean NOT NULL DEFAULT(false)
+	is_test										boolean NOT NULL DEFAULT(false),
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 
@@ -93,14 +96,20 @@ WHERE NOT deleted;
 CREATE TABLE config.custom_field_data_types
 (
     data_type                                   national character varying(50) NOT NULL PRIMARY KEY,
-	underlying_type								national character varying(500) NOT NULL
+	underlying_type								national character varying(500) NOT NULL,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 CREATE TABLE config.custom_field_forms
 (
     form_name                                   national character varying(100) NOT NULL PRIMARY KEY,
     table_name                                  national character varying(500) NOT NULL UNIQUE,
-    key_name                                    national character varying(500) NOT NULL
+    key_name                                    national character varying(500) NOT NULL,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 
@@ -116,7 +125,10 @@ CREATE TABLE config.custom_field_setup
     field_label                                 national character varying(200) NOT NULL,                   
     data_type                                   national character varying(50)
                                                 REFERENCES config.custom_field_data_types,
-    description                                 text NOT NULL
+    description                                 text NOT NULL,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 
@@ -142,17 +154,24 @@ CREATE TABLE config.flags
     resource_key                                text, --The unique identifier for lookup. Example: non_gl_stock_master_id,
     resource_id                                 text, --The value of the unique identifier to lookup for,
     flagged_on                                  TIMESTAMP WITH TIME ZONE NULL 
-                                                DEFAULT(NOW())
+                                                DEFAULT(NOW()),
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 CREATE UNIQUE INDEX flags_user_id_resource_resource_id_uix
-ON config.flags(user_id, UPPER(resource), UPPER(resource_key), UPPER(resource_id));
+ON config.flags(user_id, UPPER(resource), UPPER(resource_key), UPPER(resource_id))
+WHERE NOT deleted;
 
 CREATE TABLE config.custom_fields
 (
     custom_field_id                             SERIAL PRIMARY KEY,
     custom_field_setup_id                       integer NOT NULL REFERENCES config.custom_field_setup,
     resource_id                                 national character varying(500) NOT NULL,
-    value                                       text
+    value                                       text,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 

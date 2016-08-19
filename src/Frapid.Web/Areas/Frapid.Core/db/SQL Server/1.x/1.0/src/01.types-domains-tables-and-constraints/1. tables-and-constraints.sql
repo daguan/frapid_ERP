@@ -15,17 +15,24 @@ CREATE TABLE core.apps
     publisher                                   national character varying(500),
     published_on                                date,
     icon                                        national character varying(100),
-    landing_url                                 national character varying(500)
+    landing_url                                 national character varying(500),
+    audit_user_id                           	integer,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 CREATE UNIQUE INDEX apps_app_name_uix
-ON core.apps(app_name);
+ON core.apps(app_name)
+WHERE deleted = 0;
 
 CREATE TABLE core.app_dependencies
 (
     app_dependency_id                           int IDENTITY PRIMARY KEY,
     app_name                                    national character varying(100) REFERENCES core.apps,
-    depends_on                                  national character varying(100) REFERENCES core.apps
+    depends_on                                  national character varying(100) REFERENCES core.apps,
+    audit_user_id                           	integer,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 
@@ -37,18 +44,25 @@ CREATE TABLE core.menus
     menu_name                                   national character varying(100) NOT NULL,
     url                                         national character varying(500),
     icon                                        national character varying(100),
-    parent_menu_id                              integer REFERENCES core.menus
+    parent_menu_id                              integer REFERENCES core.menus,
+    audit_user_id                           	integer,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 CREATE UNIQUE INDEX menus_app_name_menu_name_uix
-ON core.menus(app_name, menu_name);
+ON core.menus(app_name, menu_name)
+WHERE deleted = 0;
 
 CREATE TABLE core.menu_locale
 (
     menu_locale_id                              int IDENTITY PRIMARY KEY,
     menu_id                                     integer NOT NULL REFERENCES core.menus,
     culture                                     national character varying(12) NOT NULL,
-    menu_text                                   national character varying(250) NOT NULL
+    menu_text                                   national character varying(250) NOT NULL,
+    audit_user_id                           	integer,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)	
 );
 
 CREATE TABLE core.offices
@@ -73,6 +87,8 @@ CREATE TABLE core.offices
     url                                         national character varying(50),
     logo                                        dbo.photo,
     parent_office_id                            integer NULL REFERENCES core.offices,
+	registration_number							national character varying(100),
+	pan_number									national character varying(100),
     audit_user_id                               integer NULL,
     audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
 	deleted										bit DEFAULT(0)
@@ -82,21 +98,29 @@ CREATE TABLE core.frequencies
 (
     frequency_id								int IDENTITY PRIMARY KEY,
     frequency_code								national character varying(12) NOT NULL,
-    frequency_name								national character varying(50) NOT NULL
+    frequency_name								national character varying(50) NOT NULL,
+    audit_user_id                           	integer,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 
 CREATE UNIQUE INDEX frequencies_frequency_code_uix
-ON core.frequencies(frequency_code);
+ON core.frequencies(frequency_code)
+WHERE deleted = 0;
 
 CREATE UNIQUE INDEX frequencies_frequency_name_uix
-ON core.frequencies(frequency_name);
+ON core.frequencies(frequency_name)
+WHERE deleted = 0;
 
 
 CREATE TABLE core.verification_statuses
 (
     verification_status_id						smallint PRIMARY KEY,
-    verification_status_name					national character varying(128) NOT NULL
+    verification_status_name					national character varying(128) NOT NULL,
+    audit_user_id                           	integer,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 
@@ -104,7 +128,10 @@ CREATE TABLE core.week_days
 (
 	week_day_id									integer NOT NULL CHECK(week_day_id > =1 AND week_day_id < =7) PRIMARY KEY,
 	week_day_code								national character varying(12) NOT NULL UNIQUE,
-	week_day_name								national character varying(50) NOT NULL UNIQUE
+	week_day_name								national character varying(50) NOT NULL UNIQUE,
+    audit_user_id                           	integer,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 CREATE TABLE core.genders

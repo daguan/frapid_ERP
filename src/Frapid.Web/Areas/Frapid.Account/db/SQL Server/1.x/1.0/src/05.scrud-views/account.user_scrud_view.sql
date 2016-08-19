@@ -16,6 +16,7 @@ FROM account.users
 INNER JOIN account.roles
 ON account.roles.role_id = account.users.role_id
 INNER JOIN core.offices
-ON core.offices.office_id = account.users.office_id;
+ON core.offices.office_id = account.users.office_id
+WHERE account.users.deleted = 0;
 
 GO

@@ -14,6 +14,7 @@ SELECT
 FROM website.email_subscriptions
 WHERE CONVERT(date, subscribed_on) = CONVERT(date, DATEADD(d, -1, getutcdate()))
 AND NOT CONVERT(date, confirmed_on) = CONVERT(date, DATEADD(d, -1, getutcdate()))
+AND website.email_subscriptions.deleted = 0
 UNION ALL
 SELECT
     email,
@@ -22,6 +23,7 @@ SELECT
     'unsubscribed'
 FROM website.email_subscriptions
 WHERE CONVERT(date, unsubscribed_on) = CONVERT(date, DATEADD(d, -1, getutcdate()))
+AND website.email_subscriptions.deleted = 0
 UNION ALL
 SELECT
     email,
@@ -29,7 +31,8 @@ SELECT
     last_name,
     'confirmed'
 FROM website.email_subscriptions
-WHERE CONVERT(date, confirmed_on) = CONVERT(date, DATEADD(d, -1, getutcdate()));
+WHERE CONVERT(date, confirmed_on) = CONVERT(date, DATEADD(d, -1, getutcdate()))
+AND website.email_subscriptions.deleted = 0;
 
 
 GO

@@ -9,6 +9,7 @@ AS
 	SELECT DISTINCT split.member AS tag
 	FROM website.contents
 	CROSS APPLY core.split(website.contents.tags)
+	WHERE website.contents.deleted = 0
 )
 SELECT
     ROW_NUMBER() OVER (ORDER BY tag) AS tag_id,

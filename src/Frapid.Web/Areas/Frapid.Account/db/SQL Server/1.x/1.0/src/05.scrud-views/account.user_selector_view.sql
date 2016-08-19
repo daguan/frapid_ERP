@@ -8,6 +8,7 @@ AS
 SELECT
     account.users.user_id,
     account.users.name AS user_name
-FROM account.users;
+FROM account.users
+WHERE account.users.deleted = 0;
 
 GO

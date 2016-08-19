@@ -10,4 +10,5 @@ SELECT
 	website.contacts.email,
 	website.contacts.display_contact_form,
 	website.contacts.display_email
-FROM website.contacts;
+FROM website.contacts
+WHERE NOT website.contacts.deleted;

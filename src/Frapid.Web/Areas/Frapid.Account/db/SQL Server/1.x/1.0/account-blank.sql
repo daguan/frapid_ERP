@@ -19,11 +19,15 @@ CREATE TABLE account.installed_domains
 (
     domain_id									integer IDENTITY NOT NULL PRIMARY KEY,
     domain_name									national character varying(500),
-    admin_email									national character varying(500)
+    admin_email									national character varying(500),
+    audit_user_id                           	integer,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 CREATE UNIQUE INDEX installed_domains_domain_name_uix
-ON account.installed_domains(domain_name);
+ON account.installed_domains(domain_name)
+WHERE deleted = 0;
 
 
 CREATE TABLE account.configuration_profiles
@@ -62,11 +66,15 @@ CREATE TABLE account.registrations
     ip_address									national character varying(50),
     registered_on								datetimeoffset NOT NULL DEFAULT(getutcdate()),
     confirmed									bit DEFAULT(0),
-    confirmed_on								datetimeoffset
+    confirmed_on								datetimeoffset,
+    audit_user_id                           	integer,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 CREATE UNIQUE INDEX registrations_email_uix
-ON account.registrations(email);
+ON account.registrations(email)
+WHERE deleted = 0;
 
 CREATE TABLE account.users
 (
@@ -109,7 +117,10 @@ CREATE TABLE account.reset_requests
     browser										national character varying(500),
     ip_address									national character varying(50),
     confirmed									bit DEFAULT(0),
-    confirmed_on								datetimeoffset
+    confirmed_on								datetimeoffset,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 
@@ -119,14 +130,20 @@ CREATE TABLE account.fb_access_tokens
 (
     user_id										integer PRIMARY KEY REFERENCES account.users,
     fb_user_id									national character varying(500),
-    token										national character varying(MAX)
+    token										national character varying(MAX),
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 
 CREATE TABLE account.google_access_tokens
 (
     user_id										integer PRIMARY KEY REFERENCES account.users,
-    token										national character varying(MAX)
+    token										national character varying(MAX),
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 CREATE TABLE account.logins
@@ -138,7 +155,10 @@ CREATE TABLE account.logins
     ip_address									national character varying(50),
     is_active									bit NOT NULL DEFAULT(1),
     login_timestamp								datetimeoffset NOT NULL DEFAULT(getutcdate()),
-    culture										national character varying(12) NOT NULL    
+    culture										national character varying(12) NOT NULL,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 
@@ -186,7 +206,10 @@ CREATE TABLE account.access_tokens
     expires_on                                  datetimeoffset NOT NULL,
     revoked                                     bit NOT NULL DEFAULT(0),
     revoked_by                                  integer REFERENCES account.users,
-    revoked_on                                  datetimeoffset
+    revoked_on                                  datetimeoffset,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 
@@ -1217,7 +1240,8 @@ FROM account.configuration_profiles
 LEFT JOIN account.roles
 ON account.roles.role_id = account.configuration_profiles.registration_role_id
 LEFT JOIN core.offices
-ON core.offices.office_id = account.configuration_profiles.registration_office_id;
+ON core.offices.office_id = account.configuration_profiles.registration_office_id
+WHERE account.configuration_profiles.deleted = 0;
 
 GO
 
@@ -1240,7 +1264,8 @@ FROM account.users
 INNER JOIN account.roles
 ON account.roles.role_id = account.users.role_id
 INNER JOIN core.offices
-ON core.offices.office_id = account.users.office_id;
+ON core.offices.office_id = account.users.office_id
+WHERE account.users.deleted = 0;
 
 GO
 
@@ -1255,7 +1280,8 @@ AS
 SELECT
     account.users.user_id,
     account.users.name AS user_name
-FROM account.users;
+FROM account.users
+WHERE account.users.deleted = 0;
 
 GO
 
@@ -1281,9 +1307,24 @@ SELECT
     account.logins.culture,
     account.logins.is_active,
     account.logins.office_id,
+    core.offices.office_code,
     core.offices.office_name,
     core.offices.office_code + ' (' + core.offices.office_name + ')' AS office,
     core.offices.logo,
+    core.offices.registration_date,
+    core.offices.po_box,
+    core.offices.address_line_1,
+    core.offices.address_line_2,
+    core.offices.street,
+    core.offices.city,
+    core.offices.state,
+    core.offices.zip_code,
+    core.offices.country,
+    core.offices.phone,
+    core.offices.fax,
+    core.offices.url,
+    core.offices.currency_code,
+    core.offices.pan_number,
     account.users.last_seen_on
 FROM account.logins
 INNER JOIN account.users

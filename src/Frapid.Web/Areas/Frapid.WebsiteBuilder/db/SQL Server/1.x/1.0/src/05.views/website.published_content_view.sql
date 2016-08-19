@@ -26,7 +26,8 @@ ON website.categories.category_id = website.contents.category_id
 LEFT JOIN account.users
 ON website.contents.author_id = account.users.user_id
 WHERE is_draft = 0
-AND publish_on <= getutcdate();
+AND publish_on <= getutcdate()
+AND website.contents.deleted = 0;
 
 
 GO

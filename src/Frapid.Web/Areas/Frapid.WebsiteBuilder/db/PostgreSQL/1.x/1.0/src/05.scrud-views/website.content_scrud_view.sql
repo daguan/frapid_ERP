@@ -12,4 +12,5 @@ SELECT
 	website.contents.publish_on
 FROM website.contents
 INNER JOIN website.categories
-ON website.categories.category_id = website.contents.category_id;
+ON website.categories.category_id = website.contents.category_id
+WHERE NOT website.contents.deleted;

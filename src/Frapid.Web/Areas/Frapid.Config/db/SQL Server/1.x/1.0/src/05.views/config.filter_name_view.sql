@@ -8,6 +8,7 @@ SELECT
     object_name,
     filter_name,
     is_default
-FROM config.filters;
+FROM config.filters
+WHERE config.filters.deleted = 0;
 
 GO

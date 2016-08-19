@@ -8,11 +8,15 @@ GO
 CREATE TABLE auth.access_types
 (
     access_type_id                          integer PRIMARY KEY,
-    access_type_name                        national character varying(48) NOT NULL
+    access_type_name                        national character varying(48) NOT NULL,
+    audit_user_id                           integer REFERENCES account.users,
+    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted									bit DEFAULT(0)
 );
 
 CREATE UNIQUE INDEX access_types_uix
-ON auth.access_types(access_type_name);
+ON auth.access_types(access_type_name)
+WHERE deleted = 0;
 
 
 CREATE TABLE auth.group_entity_access_policy

@@ -35,7 +35,10 @@ CREATE TABLE website.email_subscriptions
     confirmed_on                               	datetimeoffset,
     unsubscribed                                bit DEFAULT(0),
     subscribed_on                               datetimeoffset DEFAULT(getutcdate()),    
-    unsubscribed_on                             datetimeoffset
+    unsubscribed_on                             datetimeoffset,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 CREATE TABLE website.categories
@@ -331,7 +334,8 @@ SELECT
 	website.contacts.email,
 	website.contacts.display_contact_form,
 	website.contacts.display_email
-FROM website.contacts;
+FROM website.contacts
+WHERE website.contacts.deleted = 0;
 
 GO
 
@@ -352,7 +356,8 @@ SELECT
 	website.contents.publish_on
 FROM website.contents
 INNER JOIN website.categories
-ON website.categories.category_id = website.contents.category_id;
+ON website.categories.category_id = website.contents.category_id
+WHERE website.contents.deleted = 0;
 
 GO
 
@@ -374,7 +379,8 @@ SELECT
     website.email_subscriptions.confirmed_on,
     website.email_subscriptions.unsubscribed,
     website.email_subscriptions.unsubscribed_on
-FROM website.email_subscriptions;
+FROM website.email_subscriptions
+WHERE website.email_subscriptions.deleted = 0;
 
 GO
 
@@ -501,7 +507,8 @@ FROM website.menu_items
 INNER JOIN website.menus
 ON website.menus.menu_id = website.menu_items.menu_id
 LEFT JOIN website.contents
-ON website.contents.content_id = website.menu_items.content_id;
+ON website.contents.content_id = website.menu_items.content_id
+WHERE website.menu_items.deleted = 0;
 
 GO
 
@@ -535,7 +542,8 @@ ON website.categories.category_id = website.contents.category_id
 LEFT JOIN account.users
 ON website.contents.author_id = account.users.user_id
 WHERE is_draft = 0
-AND publish_on <= getutcdate();
+AND publish_on <= getutcdate()
+AND website.contents.deleted = 0;
 
 
 GO
@@ -553,6 +561,7 @@ AS
 	SELECT DISTINCT split.member AS tag
 	FROM website.contents
 	CROSS APPLY core.split(website.contents.tags)
+	WHERE website.contents.deleted = 0
 )
 SELECT
     ROW_NUMBER() OVER (ORDER BY tag) AS tag_id,
@@ -578,6 +587,7 @@ SELECT
 FROM website.email_subscriptions
 WHERE CONVERT(date, subscribed_on) = CONVERT(date, DATEADD(d, -1, getutcdate()))
 AND NOT CONVERT(date, confirmed_on) = CONVERT(date, DATEADD(d, -1, getutcdate()))
+AND website.email_subscriptions.deleted = 0
 UNION ALL
 SELECT
     email,
@@ -586,6 +596,7 @@ SELECT
     'unsubscribed'
 FROM website.email_subscriptions
 WHERE CONVERT(date, unsubscribed_on) = CONVERT(date, DATEADD(d, -1, getutcdate()))
+AND website.email_subscriptions.deleted = 0
 UNION ALL
 SELECT
     email,
@@ -593,7 +604,8 @@ SELECT
     last_name,
     'confirmed'
 FROM website.email_subscriptions
-WHERE CONVERT(date, confirmed_on) = CONVERT(date, DATEADD(d, -1, getutcdate()));
+WHERE CONVERT(date, confirmed_on) = CONVERT(date, DATEADD(d, -1, getutcdate()))
+AND website.email_subscriptions.deleted = 0;
 
 
 GO

@@ -16,7 +16,8 @@ SELECT
     config.flag_types.foreground_color
 FROM config.flags
 INNER JOIN config.flag_types
-ON config.flags.flag_type_id = config.flag_types.flag_type_id;
+ON config.flags.flag_type_id = config.flag_types.flag_type_id
+WHERE config.flags.deleted = 0;
 
 
 GO

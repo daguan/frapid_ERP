@@ -5,4 +5,5 @@ AS
 SELECT
     account.users.user_id,
     account.users.name AS user_name
-FROM account.users;
+FROM account.users
+WHERE NOT account.users.deleted;

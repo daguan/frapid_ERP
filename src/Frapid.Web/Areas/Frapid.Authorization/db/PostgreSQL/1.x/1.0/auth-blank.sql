@@ -5,11 +5,15 @@ CREATE SCHEMA auth;
 CREATE TABLE auth.access_types
 (
     access_type_id                              integer PRIMARY KEY,
-    access_type_name                            national character varying(48) NOT NULL
+    access_type_name                            national character varying(48) NOT NULL,
+    audit_user_id                           integer REFERENCES account.users,
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
 );
 
 CREATE UNIQUE INDEX access_types_uix
-ON auth.access_types(UPPER(access_type_name));
+ON auth.access_types(UPPER(access_type_name))
+WHERE NOT deleted;
 
 
 CREATE TABLE auth.group_entity_access_policy

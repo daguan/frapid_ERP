@@ -20,4 +20,5 @@ INNER JOIN config.custom_field_data_types
 ON config.custom_field_data_types.data_type = config.custom_field_setup.data_type
 INNER JOIN config.custom_field_forms
 ON config.custom_field_forms.form_name = config.custom_field_setup.form_name
+WHERE NOT config.custom_field_setup.deleted
 ORDER BY field_order;

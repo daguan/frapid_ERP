@@ -12,6 +12,7 @@ SELECT
 	config.smtp_configs.is_default,
 	config.smtp_configs.from_display_name,
 	config.smtp_configs.from_email_address
-FROM config.smtp_configs;
+FROM config.smtp_configs
+WHERE config.smtp_configs.deleted = 0;
 
 GO

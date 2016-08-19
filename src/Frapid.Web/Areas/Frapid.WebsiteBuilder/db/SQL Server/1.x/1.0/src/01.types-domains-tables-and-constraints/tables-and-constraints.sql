@@ -34,7 +34,10 @@ CREATE TABLE website.email_subscriptions
     confirmed_on                               	datetimeoffset,
     unsubscribed                                bit DEFAULT(0),
     subscribed_on                               datetimeoffset DEFAULT(getutcdate()),    
-    unsubscribed_on                             datetimeoffset
+    unsubscribed_on                             datetimeoffset,
+    audit_user_id                           	integer REFERENCES account.users,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
 );
 
 CREATE TABLE website.categories

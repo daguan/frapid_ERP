@@ -539,11 +539,11 @@ CREATE SCHEMA core;
 
 CREATE TABLE core.countries
 (
-    country_code                            national character varying(12) PRIMARY KEY,
-    country_name                            national character varying(100) NOT NULL,
-    audit_user_id                           integer,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
-	deleted									boolean DEFAULT(false)
+    country_code                            	national character varying(12) PRIMARY KEY,
+    country_name                            	national character varying(100) NOT NULL,
+    audit_user_id                           	integer,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 CREATE TABLE core.apps
@@ -554,17 +554,24 @@ CREATE TABLE core.apps
     publisher                                   national character varying(100),
     published_on                                date,
     icon                                        national character varying(100),
-    landing_url                                 text
+    landing_url                                 text,
+    audit_user_id                           	integer,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 CREATE UNIQUE INDEX apps_app_name_uix
-ON core.apps(UPPER(app_name));
+ON core.apps(UPPER(app_name))
+WHERE NOT deleted;
 
 CREATE TABLE core.app_dependencies
 (
     app_dependency_id                           SERIAL PRIMARY KEY,
     app_name                                    national character varying(100) REFERENCES core.apps,
-    depends_on                                  national character varying(100) REFERENCES core.apps
+    depends_on                                  national character varying(100) REFERENCES core.apps,
+    audit_user_id                           	integer,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 
@@ -576,18 +583,25 @@ CREATE TABLE core.menus
     menu_name                                   national character varying(100) NOT NULL,
     url                                         text,
     icon                                        national character varying(100),
-    parent_menu_id                              integer REFERENCES core.menus
+    parent_menu_id                              integer REFERENCES core.menus,
+    audit_user_id                           	integer,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 CREATE UNIQUE INDEX menus_app_name_menu_name_uix
-ON core.menus(UPPER(app_name), UPPER(menu_name));
+ON core.menus(UPPER(app_name), UPPER(menu_name))
+WHERE NOT deleted;
 
 CREATE TABLE core.menu_locale
 (
     menu_locale_id                              SERIAL PRIMARY KEY,
     menu_id                                     integer NOT NULL REFERENCES core.menus,
     culture                                     national character varying(12) NOT NULL,
-    menu_text                                   national character varying(250) NOT NULL
+    menu_text                                   national character varying(250) NOT NULL,
+    audit_user_id                           	integer,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
 );
 
 CREATE TABLE core.offices
@@ -614,7 +628,7 @@ CREATE TABLE core.offices
     parent_office_id                            integer NULL REFERENCES core.offices,
 	registration_number							national character varying(100),
 	pan_number									national character varying(50),
-    audit_user_id                               integer NULL,
+    audit_user_id                               integer,
     audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)
 );
@@ -623,21 +637,29 @@ CREATE TABLE core.frequencies
 (
     frequency_id                            SERIAL PRIMARY KEY,
     frequency_code                          national character varying(12) NOT NULL,
-    frequency_name                          national character varying(50) NOT NULL
+    frequency_name                          national character varying(50) NOT NULL,
+    audit_user_id                           integer,
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
 );
 
 
 CREATE UNIQUE INDEX frequencies_frequency_code_uix
-ON core.frequencies(UPPER(frequency_code));
+ON core.frequencies(UPPER(frequency_code))
+WHERE NOT deleted;
 
 CREATE UNIQUE INDEX frequencies_frequency_name_uix
-ON core.frequencies(UPPER(frequency_name));
+ON core.frequencies(UPPER(frequency_name))
+WHERE NOT deleted;
 
 
 CREATE TABLE core.verification_statuses
 (
     verification_status_id                  smallint PRIMARY KEY,
-    verification_status_name                national character varying(128) NOT NULL
+    verification_status_name                national character varying(128) NOT NULL,
+    audit_user_id                           integer,
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
 );
 
 COMMENT ON TABLE core.verification_statuses IS 
@@ -662,7 +684,10 @@ CREATE TABLE core.week_days
 (
 	week_day_id                 			integer NOT NULL CHECK(week_day_id >=1 AND week_day_id <=7) PRIMARY KEY,
 	week_day_code               			national character varying(12) NOT NULL UNIQUE,
-	week_day_name               			national character varying(50) NOT NULL UNIQUE
+	week_day_name               			national character varying(50) NOT NULL UNIQUE,
+    audit_user_id                           integer,
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	deleted									boolean DEFAULT(false)
 );
 
 CREATE TABLE core.genders
@@ -717,7 +742,8 @@ SELECT
 	parent_office.office_code || ' (' || parent_office.office_name || ')' AS parent_office
 FROM core.offices
 LEFT JOIN core.offices AS parent_office
-ON parent_office.office_id = core.offices.parent_office_id;
+ON parent_office.office_id = core.offices.parent_office_id
+WHERE NOT core.offices.deleted;
 
 -->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/core.create_app.sql --<--<--
 DROP FUNCTION IF EXISTS core.create_app

@@ -75,8 +75,8 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            string sql = $"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName};";
-            return await Factory.ScalarAsync<long>(this.Database, sql).ConfigureAwait(false);
+            string sql = $"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName} WHERE DELETED = @0;";
+            return await Factory.ScalarAsync<long>(this.Database, sql, false).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<dynamic>> GetAllAsync()
@@ -100,13 +100,13 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName}";
+            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0";
             if (!string.IsNullOrWhiteSpace(this.PrimaryKey))
             {
-                sql += $" ORDER BY {this.PrimaryKey}";
+                sql += $" ORDER BY {this.PrimaryKey};";
             }
 
-            return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
+            return await Factory.GetAsync<dynamic>(this.Database, sql, false).ConfigureAwait(false);
         }
 
         public async Task<dynamic> GetAsync(object primaryKey)
@@ -136,9 +136,9 @@ namespace Frapid.WebApi.DataAccess
             }
 
 
-            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE {this.PrimaryKey}=@0;";
+            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0 AND {this.PrimaryKey}=@1;";
             return
-                (await Factory.GetAsync<dynamic>(this.Database, sql, primaryKey).ConfigureAwait(false)).FirstOrDefault();
+                (await Factory.GetAsync<dynamic>(this.Database, sql, false, primaryKey).ConfigureAwait(false)).FirstOrDefault();
         }
 
         public async Task<dynamic> GetFirstAsync()
@@ -162,7 +162,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName}");
+            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0", false);
             sql.OrderBy(this.PrimaryKey);
             sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
             sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 1);
@@ -192,7 +192,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
 
-            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName}");
+            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0", false);
             sql.Where($"{this.PrimaryKey} < @0", primaryKey);
             sql.Append($"ORDER BY {this.PrimaryKey} DESC");
             sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
@@ -225,7 +225,7 @@ namespace Frapid.WebApi.DataAccess
             //$"SELECT * FROM {this.FullyQualifiedObjectName} WHERE {this.PrimaryKey} > @0 
             //ORDER BY {this.PrimaryKey} LIMIT 1;";
 
-            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName}");
+            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0", false);
             sql.Where($"{this.PrimaryKey} > @0", primaryKey);
             sql.OrderBy(this.PrimaryKey);
             sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
@@ -258,7 +258,7 @@ namespace Frapid.WebApi.DataAccess
             //$"SELECT * FROM {this.FullyQualifiedObjectName} 
             //ORDER BY {this.PrimaryKey} DESC LIMIT 1;";
 
-            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName}");
+            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0", false);
             sql.Append($"ORDER BY {this.PrimaryKey} DESC");
             sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
             sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 1);
@@ -287,12 +287,13 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE {this.PrimaryKey} IN (@primaryKeys);";
+            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0 AND {this.PrimaryKey} IN (@primaryKeys);";
 
             return await Factory.GetAsync<dynamic>
                 (
                     this.Database,
                     sql,
+                    false,
                     new
                     {
                         primaryKeys
@@ -366,8 +367,8 @@ namespace Frapid.WebApi.DataAccess
             }
 
             string sql =
-                $"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName};";
-            return await Factory.GetAsync<DisplayField>(this.Database, sql).ConfigureAwait(false);
+                $"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName} WHERE deleted=@0;";
+            return await Factory.GetAsync<DisplayField>(this.Database, sql, false).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<DisplayField>> GetLookupFieldsAsync()
@@ -393,8 +394,8 @@ namespace Frapid.WebApi.DataAccess
             }
 
             string sql =
-                $"SELECT {this.LookupField} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName};";
-            return await Factory.GetAsync<DisplayField>(this.Database, sql).ConfigureAwait(false);
+                $"SELECT {this.LookupField} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName} WHERE deleted=@0;";
+            return await Factory.GetAsync<DisplayField>(this.Database, sql, false).ConfigureAwait(false);
         }
 
         public async Task<object> AddOrEditAsync(Dictionary<string, object> item, List<CustomField> customFields)
@@ -451,6 +452,7 @@ namespace Frapid.WebApi.DataAccess
 
                             item["audit_user_id"] = this.UserId;
                             item["audit_ts"] = DateTimeOffset.UtcNow;
+                            item["deleted"] = false;
 
                             var primaryKeyValue = item[this.PrimaryKey];
 
@@ -536,6 +538,7 @@ namespace Frapid.WebApi.DataAccess
 
             item["audit_user_id"] = this.UserId;
             item["audit_ts"] = DateTimeOffset.UtcNow;
+            item["deleted"] = false;
 
             using (var db = DbProvider.GetDatabase(this.Database))
             {
@@ -562,6 +565,8 @@ namespace Frapid.WebApi.DataAccess
             }
         }
 
+        
+
         public async Task DeleteAsync(object primaryKey)
         {
             if (string.IsNullOrWhiteSpace(this.Database))
@@ -583,8 +588,8 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            string sql = $"DELETE FROM {this.FullyQualifiedObjectName} WHERE {this.PrimaryKey}=@0;";
-            await Factory.NonQueryAsync(this.Database, sql, primaryKey).ConfigureAwait(false);
+            string sql = $"UPDATE {this.FullyQualifiedObjectName} SET deleted = @0, audit_user_id=@1, audit_ts=@2 WHERE {this.PrimaryKey}=@3;";
+            await Factory.NonQueryAsync(this.Database, sql, true, this.UserId, DateTimeOffset.UtcNow, primaryKey).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<dynamic>> GetPaginatedResultAsync()
@@ -609,7 +614,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
 
-            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName}");
+            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0", false);
             sql.OrderBy(this.PrimaryKey);
             sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
             sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
@@ -639,12 +644,12 @@ namespace Frapid.WebApi.DataAccess
             }
 
             long offset = (pageNumber - 1)*50;
-            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} ORDER BY {this.PrimaryKey}";
+            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0 ORDER BY {this.PrimaryKey}";
 
-            sql += FrapidDbServer.AddOffset(this.Database, "@0");
+            sql += FrapidDbServer.AddOffset(this.Database, "@1");
             sql += FrapidDbServer.AddLimit(this.Database, "50");
 
-            return await Factory.GetAsync<dynamic>(this.Database, sql, offset).ConfigureAwait(false);
+            return await Factory.GetAsync<dynamic>(this.Database, sql, false, offset).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<Filter>> GetFiltersAsync(string tenant, string filterName)
@@ -684,7 +689,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            var sql = Sql.Builder.Append($"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
+            var sql = Sql.Builder.Append($"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
             FilterManager.AddFilters(ref sql, filters);
 
             return await Factory.ScalarAsync<long>(this.Database, sql).ConfigureAwait(false);
@@ -712,7 +717,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             long offset = (pageNumber - 1)*50;
-            var sql = Sql.Builder.Append($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
+            var sql = Sql.Builder.Append($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
 
             FilterManager.AddFilters(ref sql, filters);
 
@@ -752,7 +757,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             var filters = await this.GetFiltersAsync(this.Database, filterName).ConfigureAwait(false);
-            var sql = Sql.Builder.Append($"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
+            var sql = Sql.Builder.Append($"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
             FilterManager.AddFilters(ref sql, filters.ToList());
 
             return await Factory.ScalarAsync<long>(this.Database, sql).ConfigureAwait(false);
@@ -782,7 +787,7 @@ namespace Frapid.WebApi.DataAccess
             var filters = await this.GetFiltersAsync(this.Database, filterName).ConfigureAwait(false);
 
             long offset = (pageNumber - 1)*50;
-            var sql = Sql.Builder.Append($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
+            var sql = Sql.Builder.Append($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
 
             FilterManager.AddFilters(ref sql, filters.ToList());
 
@@ -826,6 +831,7 @@ namespace Frapid.WebApi.DataAccess
 
             item["audit_user_id"] = this.UserId;
             item["audit_ts"] = DateTimeOffset.UtcNow;
+            item["deleted"] = false;
 
             using (var db = DbProvider.GetDatabase(this.Database))
             {
