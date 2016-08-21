@@ -90,7 +90,11 @@ function editScrudFormElement(targetEl, value) {
             };
 
             if (type === "bit") {
-                value = value === "1" ? "yes" : "no";
+                if (typeof (value) === "boolean") {
+                    value = value ? "yes" : "no";
+                } else {
+                    value = value === "1" ? "yes" : "no";
+                };
             };
 
             targetEl.dropdown("set selected", value.toString());

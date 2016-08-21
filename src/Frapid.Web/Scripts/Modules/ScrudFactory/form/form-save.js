@@ -30,7 +30,6 @@
         form.push(customFields);
 
         var data = JSON.stringify(form);
-
         var verb = type.substring(0, 4) === "edit" ? "PUT" : "POST";
         return getAjaxRequest(url, verb, data);
     };
@@ -53,7 +52,6 @@
         var val = null;
         if (el.length) {
             val = el.val();
-
             if (isNullOrWhiteSpace(val)) {
                 val = null;
             } else {
