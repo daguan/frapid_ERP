@@ -5,7 +5,7 @@ var booleans = ["bit", "bool", "System.Boolean"];
 var dateTypes = ["System.DateTime", "datetimeoffset", "datetime", "timestamp", "timestamptz", "date"];
 
 function toUnderscoreCase(str) {
-    return str.replace(/(?:^|\.?)([A-Z])/g, function (x, y) { return "_" + y.toLowerCase() }).replace(/^_/, "");
+    return str.replace(/(?:^|\.?)([A-Z])/g, function (x, y) { return "_" + (y || "").toLowerCase() }).replace(/^_/, "");
 };
 
 function toProperCase(str) {

@@ -16,7 +16,15 @@ namespace Frapid.WebsiteBuilder
         public async Task<IEnumerable<SearchResultContent>> SearchAsync(string tenant, string query)
         {
             var result = await Contents.SearchAsync(tenant, query).ConfigureAwait(false);
-            string domain = TenantConvention.GetBaseDomain(new HttpContextWrapper(FrapidHttpContext.GetCurrent()), true);
+
+            var context = FrapidHttpContext.GetCurrent();
+
+            if (context == null)
+            {
+                return new List<SearchResultContent>();
+            }
+
+            string domain = TenantConvention.GetBaseDomain(new HttpContextWrapper(context), true);
 
             return result.Select(item => new SearchResultContent
             {

@@ -63,7 +63,7 @@ namespace Frapid.WebsiteBuilder.DAL
             {
                 return await
                     db.Query<PublishedContentView>().Where(x => x.IsBlog && x.CategoryAlias == categoryAlias)
-                        .Limit(offset, limit).ToListAsync();
+                        .Limit(offset, limit).ToListAsync().ConfigureAwait(false);
             }
         }
 

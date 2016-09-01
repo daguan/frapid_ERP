@@ -52,7 +52,7 @@ function getKanbans() {
 
 function isKanban() {
     var target = window.getQueryStringByName("View");
-    return target.toLowerCase() === "kanban";
+    return (target || "").toLowerCase() === "kanban";
 };
 
 function refreshKanbans(dontRefresh) {

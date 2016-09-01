@@ -25,7 +25,7 @@
     label.attr("for", column.ColumnName);
 
 
-    var element = getField(column.PropertyName, column.DbDataType, column.IsNullable);
+    var element = getField(column.PropertyName, column.DbDataType, column.IsNullable, column.MaxLength);
 
 
     element.attr("id", column.ColumnName);

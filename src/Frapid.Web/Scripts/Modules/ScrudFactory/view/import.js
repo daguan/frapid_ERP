@@ -17,7 +17,7 @@
                 } else if (dateTypes.indexOf(type) > -1) {
                     //
                 } else if (booleans.indexOf(type) > -1) {
-                    val = (["true", "t", "yes", "y", "1"].indexOf(val.toString().toLowerCase()) > -1);
+                    val = (["true", "t", "yes", "y", "1"].indexOf((val || "").toString().toLowerCase()) > -1);
                 };
             };
 

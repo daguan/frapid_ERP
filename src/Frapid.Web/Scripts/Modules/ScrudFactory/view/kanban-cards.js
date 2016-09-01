@@ -140,23 +140,24 @@ function getImageField(entity) {
     };
 
     var imageField;
-    alert(JSON.stringify(entity));
+    //alert(JSON.stringify(entity));
 
     $.each(entity, function (i) {
+        //debugger;
         if (!imageField) {
-            if (i.toLowerCase().indexOf("photo") !== -1) {
+            if ((i || "").toString().toLowerCase().indexOf("photo") !== -1) {
                 imageField = i;
             };
         };
 
         if (!imageField) {
-            if (i.toLowerCase().indexOf("logo") !== -1) {
+            if ((i || "").toString().toLowerCase().indexOf("logo") !== -1) {
                 imageField = i;
             };
         };
 
         if (!imageField) {
-            if (i.toLowerCase().indexOf("photo") !== -1) {
+            if ((i || "").toString().toLowerCase().indexOf("photo") !== -1) {
                 imageField = i;
             };
         };

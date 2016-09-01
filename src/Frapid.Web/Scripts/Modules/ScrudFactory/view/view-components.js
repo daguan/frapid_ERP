@@ -1,6 +1,6 @@
 ﻿function showTarget(target) {
     $("div[data-target]").hide();
-    var targetEl = $('div[data-target="' + target.toLowerCase() + '"]');
+    var targetEl = $('div[data-target="' + (target || "").toLowerCase() + '"]');
     targetEl.removeClass("hidden").show();
 
     $('a[data-target]').removeClass("active green");

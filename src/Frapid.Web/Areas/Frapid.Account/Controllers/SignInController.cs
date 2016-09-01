@@ -75,7 +75,8 @@ namespace Frapid.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> GetOfficesAsync()
         {
-            return this.Ok(await Offices.GetOfficesAsync(this.Tenant).ConfigureAwait(true));
+            var model = await Offices.GetOfficesAsync(this.Tenant).ConfigureAwait(true);
+            return this.Ok(model);
         }
 
         [Route("account/sign-in/languages")]

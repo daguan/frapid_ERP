@@ -57,7 +57,8 @@
                     target = $("#" + targetSelector);
                 };
 
-                readURL(this, segment);
+                var imageEl = el.parent().parent().find("img.preview");
+                readURL(this, imageEl);
 
                 if (segment.length) {
                     segment.addClass("loading");
@@ -112,12 +113,13 @@
         return true;
     };
 
-    function readURL(input, loader) {
+    function readURL(input, imageEl) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
+            console.log(imageEl.length);
             reader.onload = function (e) {
-                var image = loader.find("img.preview");
+                var image = imageEl;
 				image.removeAttr('src');
                 image.attr('src', e.target.result).fadeIn(1000);
                 $(input).trigger("readComplete");

@@ -66,7 +66,7 @@
                         val = window.parseLocalizedDate(val) || null;
                     };
                 } else if (booleans.indexOf(type) > -1) {
-                    val = (["true", "t", "yes", "y", "1"].indexOf(val.toString().toLowerCase()) > -1);
+                    val = (["true", "t", "yes", "y", "1"].indexOf((val || "").toString().toLowerCase()) > -1);
                 } else {
                     val = val.toString().trim();
 

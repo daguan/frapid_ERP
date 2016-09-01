@@ -57,7 +57,7 @@ var getQuerystringFilters = function () {
             } else if (dateTypes.indexOf(type) > -1) {
                 val = window.parseLocalizedDate(val);
             } else if (booleans.indexOf(type) > -1) {
-                val = (["true", "t", "yes", "y", "1"].indexOf(val.toString().toLowerCase()) > -1);
+                val = (["true", "t", "yes", "y", "1"].indexOf((val || "").toString().toLowerCase()) > -1);
             };
         };
 

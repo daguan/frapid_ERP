@@ -1,9 +1,9 @@
-﻿function getField(propertyName, dataType, nullable) {
+﻿function getField(propertyName, dataType, nullable, maxLength) {
     if (typeof (window.scrudFactory.keys) === "undefined") {
         window.scrudFactory.keys = [];
     };
 
-    if (propertyName.toString().toLowerCase() === "password") {
+    if ((propertyName || "").toString().toLowerCase() === "password") {
         dataType = "password";
     };
 
@@ -30,6 +30,12 @@
         case "money_strict2":
         case "money_strict":
             return $("<input type='text' class='currency' />");
+        case "nvarchar":
+            if (maxLength === -1) {
+                return $("<textarea />");
+            } else {
+                return $("<input type='text' />");
+            };
         case "text":
             return $("<textarea />");
         case "datetimeoffset":
