@@ -97,5 +97,3 @@ $(".dropdown").dropdown();
 window.validator.initialize($("#LoginForm"));
 bindOffices();
 bindLanguages();
-
-localStorage.removeItem("access_token");

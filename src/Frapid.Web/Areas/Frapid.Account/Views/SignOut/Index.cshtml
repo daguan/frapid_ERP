@@ -1,0 +1,29 @@
+﻿@using Frapid.i18n
+@using Frapid.i18n.Resources
+@using Frapid.Areas
+@model Frapid.Account.ViewModels.SignIn
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="Frapid Framework" />
+    <script src="/i18n/resources.js"></script>
+    <script src="/assets/js/backend.js"></script>
+    <script src="/Scripts/jssha1.5/src/sha.js"></script>
+    <script src="/Scripts/frapid/utilities/form.js"></script>
+    <script src="/Scripts/frapid/utilities/validator.js"></script>
+    <title>
+        @Titles.SignIn
+    </title>
+</head>
+<body>
+Please wait
+
+<script>
+    localStorage.removeItem("access_token");
+    document.location = "/account/sign-in";
+</script>
+</body>
+</html>
