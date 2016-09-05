@@ -169,20 +169,13 @@ var ajaxDataBind = function (url, targetControl, data, selectedValue, associated
     if (targetControl.length === 0) {
         return;
     };
+    var type = "GET";
 
-    var ajax;
-
-    if (isWebApiRequest) {
-        var type = "GET";
-
-        if (isProcedure) {
-            type = "POST";
-        };
-
-        ajax = new getAjaxRequest(url, type, data);
-    } else {
-        ajax = new getAjax(url, data);
+    if (isProcedure) {
+        type = "POST";
     };
+
+    var ajax = new window.getAjaxRequest(url, type, data);
 
     ajax.success(function (msg) {
         var result = msg.d;
