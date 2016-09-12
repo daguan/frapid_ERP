@@ -16,6 +16,7 @@
     scrudFactory.formTableName = "account.users";
 
     scrudFactory.excludedColumns = ["audit_user_id", "audit_ts", "password"];
+    scrudFactory.hiddenColumns = ["Password"];
 
     scrudFactory.allowDelete = true;
     scrudFactory.allowEdit = true;

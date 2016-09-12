@@ -35,6 +35,7 @@ namespace Frapid.ApplicationState.Models
         public string Url { get; set; }
         public string CurrencyCode { get; set; }
         public string PanNumber { get; set; }
+        public bool HasVat { get; set; }
         public DateTimeOffset LastSeenOn { get; set; }
     }
 }

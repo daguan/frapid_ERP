@@ -34,6 +34,7 @@ SELECT
     core.offices.url,
     core.offices.currency_code,
     core.offices.pan_number,
+    core.offices.has_vat,
     account.users.last_seen_on
 FROM account.logins
 INNER JOIN account.users
