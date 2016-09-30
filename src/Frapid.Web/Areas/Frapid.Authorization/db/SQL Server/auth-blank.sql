@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+﻿-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 EXECUTE dbo.drop_schema 'auth';
 GO
 CREATE SCHEMA auth;
@@ -83,7 +83,7 @@ WHERE deleted = 0;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.create_api_access_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.create_api_access_policy.sql --<--<--
 IF OBJECT_ID('auth.create_api_access_policy') IS NOT NULL
 DROP PROCEDURE auth.create_api_access_policy;
 
@@ -159,7 +159,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.create_app_menu_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.create_app_menu_policy.sql --<--<--
 IF OBJECT_ID('auth.create_app_menu_policy') IS NOT NULL
 DROP PROCEDURE auth.create_app_menu_policy;
 
@@ -210,7 +210,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.get_apps.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.get_apps.sql --<--<--
 
 
 IF OBJECT_ID('auth.get_apps') IS NOT NULL
@@ -254,7 +254,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.get_group_menu_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.get_group_menu_policy.sql --<--<--
 IF OBJECT_ID('auth.get_group_menu_policy') IS NOT NULL
 DROP PROCEDURE auth.get_group_menu_policy;
 
@@ -327,7 +327,7 @@ END;
 --EXECUTE auth.get_group_menu_policy 1, 1, '';
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.get_menu.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.get_menu.sql --<--<--
 IF OBJECT_ID('auth.get_menu') IS NOT NULL
 DROP FUNCTION auth.get_menu;
 
@@ -424,7 +424,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.get_user_menu_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.get_user_menu_policy.sql --<--<--
 IF OBJECT_ID('auth.get_user_menu_policy') IS NOT NULL
 DROP PROCEDURE auth.get_user_menu_policy;
 
@@ -528,7 +528,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.has_access.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.has_access.sql --<--<--
 IF OBJECT_ID('auth.has_access') IS NOT NULL
 DROP PROCEDURE auth.has_access;
 
@@ -639,7 +639,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.save_api_group_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.save_api_group_policy.sql --<--<--
 IF OBJECT_ID('auth.save_api_group_policy') IS NOT NULL
 DROP PROCEDURE auth.save_api_group_policy;
 
@@ -709,7 +709,7 @@ EXECUTE auth.create_api_access_policy '{Admin}', @office_id, '', '{*}', 1;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.save_group_menu_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.save_group_menu_policy.sql --<--<--
 IF OBJECT_ID('auth.save_group_menu_policy') IS NOT NULL
 DROP PROCEDURE auth.save_group_menu_policy;
 
@@ -770,7 +770,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.save_user_menu_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.save_user_menu_policy.sql --<--<--
 IF OBJECT_ID('auth.save_user_menu_policy') IS NOT NULL
 DROP PROCEDURE auth.save_user_menu_policy;
 
@@ -832,7 +832,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/03.menus/0.menus.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/03.menus/0.menus.sql --<--<--
 EXECUTE core.create_app 'Frapid.Authorization', 'Authorization', '1.0', 'MixERP Inc.', 'December 1, 2015', 'purple privacy', '/dashboard/authorization/menu-access/group-policy', '{Frapid.Account}';
 
 
@@ -847,7 +847,7 @@ EXECUTE core.create_menu 'Frapid.Authorization', 'User Policy', '/dashboard/auth
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/03.menus/1.menu-policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/03.menus/1.menu-policy.sql --<--<--
 GO
 
 DECLARE @office_id integer = core.get_office_id_by_office_name('Default');
@@ -886,10 +886,10 @@ EXECUTE auth.create_app_menu_policy
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/03.menus/2.menu-policy-account.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/03.menus/2.menu-policy-account.sql --<--<--
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
 INSERT INTO auth.access_types(access_type_id, access_type_name)
 SELECT 1, 'Read'            UNION ALL
 SELECT 2, 'Create'          UNION ALL
@@ -903,7 +903,7 @@ SELECT 9, 'ImportData'      UNION ALL
 SELECT 10, 'Execute'        UNION ALL
 SELECT 11, 'Verify';
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/05.views/auth.entity_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/05.views/auth.entity_view.sql --<--<--
 IF OBJECT_ID('auth.entity_view') IS NOT NULL
 DROP VIEW auth.entity_view;
 GO
@@ -924,7 +924,7 @@ AND table_schema NOT IN ('pg_catalog', 'information_schema');
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/10.policy/access_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/10.policy/access_policy.sql --<--<--
 GO
 
 DECLARE @office_id integer = core.get_office_id_by_office_name('Default');
@@ -932,7 +932,7 @@ EXECUTE auth.create_api_access_policy '{Admin}', @office_id, '', '{*}', 1;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/99.ownership.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/99.ownership.sql --<--<--
 EXEC sp_addrolemember  @rolename = 'db_owner', @membername  = 'frapid_db_user'
 GO
 

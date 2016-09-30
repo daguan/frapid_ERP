@@ -1,12 +1,12 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/00.db core/casts.sql --<--<--
+﻿-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/00.db core/casts.sql --<--<--
 DROP FUNCTION IF EXISTS text_to_bigint(text) CASCADE;
 CREATE FUNCTION text_to_bigint(text) RETURNS bigint AS 'SELECT int8in(textout($1));' LANGUAGE SQL STRICT IMMUTABLE;
 CREATE CAST (text AS bigint) WITH FUNCTION text_to_bigint(text) AS IMPLICIT;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/00.db core/extensions.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/00.db core/extensions.sql --<--<--
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/00.db core/postgresql-roles.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/00.db core/postgresql-roles.sql --<--<--
 DO
 $$
 BEGIN
@@ -34,7 +34,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/01.poco.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/01.poco.sql --<--<--
 DROP FUNCTION IF EXISTS public.text_to_int_array
 (
     _input                              text,
@@ -450,7 +450,7 @@ $$
 $$
 LANGUAGE sql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/01.types-domains-tables-and-constraints/domains.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/01.types-domains-tables-and-constraints/domains.sql --<--<--
 DROP DOMAIN IF EXISTS public.money_strict CASCADE;
 CREATE DOMAIN public.money_strict
 AS DECIMAL(24, 4)
@@ -533,7 +533,7 @@ DROP DOMAIN IF EXISTS public.password CASCADE;
 CREATE DOMAIN public.password
 AS text;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 DROP SCHEMA IF EXISTS core CASCADE;
 CREATE SCHEMA core;
 
@@ -628,6 +628,7 @@ CREATE TABLE core.offices
     parent_office_id                            integer NULL REFERENCES core.offices,
 	registration_number							national character varying(100),
 	pan_number									national character varying(50),
+	has_vat										boolean NOT NULL DEFAULT(false),
     audit_user_id                               integer,
     audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)
@@ -711,7 +712,7 @@ CREATE TABLE core.marital_statuses
 );
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
 INSERT INTO core.offices(office_code, office_name)
 SELECT 'DEF', 'Default';
 
@@ -729,7 +730,7 @@ SELECT 'WID', 'Widower',                false UNION ALL
 SELECT 'CIV', 'Civil Union',            true;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/05.scrud-views/core.office_scrud_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/05.scrud-views/core.office_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.office_scrud_view;
 
 CREATE VIEW core.office_scrud_view
@@ -745,7 +746,7 @@ LEFT JOIN core.offices AS parent_office
 ON parent_office.office_id = core.offices.parent_office_id
 WHERE NOT core.offices.deleted;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/core.create_app.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/core.create_app.sql --<--<--
 DROP FUNCTION IF EXISTS core.create_app
 (
     _app_name                                   text,
@@ -804,7 +805,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/core.create_menu.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/core.create_menu.sql --<--<--
 DROP FUNCTION IF EXISTS core.create_menu
 (
     _sort                                       integer,
@@ -919,7 +920,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/core.get_office_id_by_office_name.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/core.get_office_id_by_office_name.sql --<--<--
 DROP FUNCTION IF EXISTS core.get_office_id_by_office_name(_office_name text);
 
 CREATE FUNCTION core.get_office_id_by_office_name(_office_name text)
@@ -934,7 +935,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/core.get_office_ids.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/core.get_office_ids.sql --<--<--
 DROP FUNCTION IF EXISTS core.get_office_ids(root_office_id integer);
 
 CREATE FUNCTION core.get_office_ids(root_office_id integer)
@@ -960,10 +961,10 @@ END
 $$LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/10.policy/access_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/10.policy/access_policy.sql --<--<--
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/99.ownership.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/99.ownership.sql --<--<--
 DO
 $$
     DECLARE this record;

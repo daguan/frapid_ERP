@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+﻿-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 EXECUTE dbo.drop_schema 'config';
 GO
 CREATE SCHEMA config;
@@ -183,7 +183,7 @@ WHERE deleted = 0;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
 GO
 
 IF NOT EXISTS(SELECT * FROM config.custom_field_data_types WHERE data_type='text')
@@ -244,7 +244,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/05.scrud-views/config.smtp_config_scrud_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/05.scrud-views/config.smtp_config_scrud_view.sql --<--<--
 IF OBJECT_ID('config.smtp_config_scrud_view') IS NOT NULL
 DROP VIEW config.smtp_config_scrud_view;
 
@@ -264,7 +264,7 @@ WHERE config.smtp_configs.deleted = 0;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/05.views/config.custom_field_definition_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/05.views/config.custom_field_definition_view.sql --<--<--
 IF OBJECT_ID('config.custom_field_definition_view') IS NOT NULL
 DROP VIEW config.custom_field_definition_view;
 
@@ -294,7 +294,7 @@ WHERE config.custom_field_setup.deleted = 0;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/05.views/config.custom_field_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/05.views/config.custom_field_view.sql --<--<--
 IF OBJECT_ID('config.custom_field_view ') IS NOT NULL
 DROP VIEW config.custom_field_view;
 
@@ -323,7 +323,7 @@ WHERE config.custom_field_setup.deleted = 0;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/05.views/config.filter_name_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/05.views/config.filter_name_view.sql --<--<--
 IF OBJECT_ID('config.filter_name_view') IS NOT NULL
 DROP VIEW config.filter_name_view;
 GO
@@ -340,7 +340,7 @@ WHERE config.filters.deleted = 0;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/05.views/config.flag_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/05.views/config.flag_view.sql --<--<--
 IF OBJECT_ID('config.flag_view') IS NOT NULL
 DROP VIEW config.flag_view;
 GO
@@ -366,7 +366,7 @@ WHERE config.flags.deleted = 0;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/06.functions-and-logic/config.create_flag.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/06.functions-and-logic/config.create_flag.sql --<--<--
 IF OBJECT_ID('config.create_flag') IS NOT NULL
 DROP PROCEDURE config.create_flag;
 
@@ -419,7 +419,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_definition.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_definition.sql --<--<--
 
 IF OBJECT_ID('config.get_custom_field_definition') IS NOT NULL
 DROP PROCEDURE config.get_custom_field_definition;
@@ -476,7 +476,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_form_name.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_form_name.sql --<--<--
 IF OBJECT_ID('config.get_custom_field_form_name') IS NOT NULL
 DROP FUNCTION config.get_custom_field_form_name;
 
@@ -499,7 +499,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_setup_id_by_table_name.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/06.functions-and-logic/config.get_custom_field_setup_id_by_table_name.sql --<--<--
 IF OBJECT_ID('config.get_custom_field_setup_id_by_table_name') IS NOT NULL
 DROP FUNCTION config.get_custom_field_setup_id_by_table_name;
 
@@ -526,7 +526,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/06.functions-and-logic/config.get_flag_type_id.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/06.functions-and-logic/config.get_flag_type_id.sql --<--<--
 IF OBJECT_ID('config.get_flag_type_id') IS NOT NULL
 DROP FUNCTION config.get_flag_type_id;
 
@@ -557,7 +557,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/06.functions-and-logic/config.get_user_id_by_login_id.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/06.functions-and-logic/config.get_user_id_by_login_id.sql --<--<--
 IF OBJECT_ID('config.get_user_id_by_login_id') IS NOT NULL
 DROP FUNCTION config.get_user_id_by_login_id;
 
@@ -579,7 +579,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/09.menus/0.menu.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/09.menus/0.menu.sql --<--<--
 EXECUTE core.create_app 'Frapid.Config', 'Config', '1.0', 'MixERP Inc.', 'December 1, 2015', 'orange configure', '/dashboard/config/offices', null;
 EXECUTE core.create_menu 'Frapid.Config', 'Offices', '/dashboard/config/offices', 'building outline', '';
 EXECUTE core.create_menu 'Frapid.Config', 'Flags', '/dashboard/config/flags', 'flag', '';
@@ -589,7 +589,7 @@ EXECUTE core.create_menu 'Frapid.Config', 'File Manager', '/dashboard/config/fil
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/09.menus/1.menu-policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/09.menus/1.menu-policy.sql --<--<--
 DECLARE @office_id integer = core.get_office_id_by_office_name('Default');
 
 EXECUTE auth.create_app_menu_policy
@@ -613,7 +613,7 @@ EXECUTE auth.create_app_menu_policy
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/10.policy/access_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/10.policy/access_policy.sql --<--<--
 DECLARE @office_id integer = core.get_office_id_by_office_name('Default');
 
 EXECUTE auth.create_api_access_policy '{*}', @office_id, 'config.kanban_details', '{*}', 1;
@@ -631,7 +631,7 @@ EXECUTE auth.create_api_access_policy '{Admin}', @office_id, '', '{*}', 1;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/99.ownership.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/SQL Server/1.x/1.0/src/99.ownership.sql --<--<--
 EXEC sp_addrolemember  @rolename = 'db_owner', @membername  = 'frapid_db_user'
 GO
 

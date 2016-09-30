@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+﻿-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 EXECUTE dbo.drop_schema 'account';
 GO
 CREATE SCHEMA account;
@@ -214,7 +214,7 @@ CREATE TABLE account.access_tokens
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.add_installed_domain.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.add_installed_domain.sql --<--<--
 IF OBJECT_ID('account.add_installed_domain') IS NOT NULL
 DROP PROCEDURE account.add_installed_domain;
 
@@ -249,7 +249,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.can_confirm_registration.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.can_confirm_registration.sql --<--<--
 IF OBJECT_ID('account.can_confirm_registration') IS NOT NULL
 DROP FUNCTION account.can_confirm_registration;
 
@@ -277,7 +277,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.can_register_with_facebook.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.can_register_with_facebook.sql --<--<--
 IF OBJECT_ID('account.can_register_with_facebook') IS NOT NULL
 DROP FUNCTION account.can_register_with_facebook;
 
@@ -305,7 +305,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.can_register_with_google.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.can_register_with_google.sql --<--<--
 IF OBJECT_ID('account.can_register_with_google') IS NOT NULL
 DROP FUNCTION account.can_register_with_google;
 
@@ -332,7 +332,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.complete_reset.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.complete_reset.sql --<--<--
 IF OBJECT_ID('account.complete_reset') IS NOT NULL
 DROP PROCEDURE account.complete_reset;
 
@@ -373,7 +373,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.confirm_registration.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.confirm_registration.sql --<--<--
 IF OBJECT_ID('account.confirm_registration') IS NOT NULL
 DROP PROCEDURE account.confirm_registration;
 
@@ -420,7 +420,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.email_exists.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.email_exists.sql --<--<--
 IF OBJECT_ID('account.email_exists') IS NOT NULL
 DROP FUNCTION account.email_exists;
 
@@ -453,7 +453,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.fb_sign_in.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.fb_sign_in.sql --<--<--
 IF OBJECT_ID('account.fb_sign_in') IS NOT NULL
 DROP PROCEDURE account.fb_sign_in;
 
@@ -557,7 +557,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.fb_user_exists.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.fb_user_exists.sql --<--<--
 IF OBJECT_ID('account.fb_user_exists') IS NOT NULL
 DROP FUNCTION account.fb_user_exists;
 
@@ -583,7 +583,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_email_by_user_id.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_email_by_user_id.sql --<--<--
 IF OBJECT_ID('account.get_email_by_user_id') IS NOT NULL
 DROP FUNCTION account.get_email_by_user_id;
 
@@ -605,7 +605,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_name_by_user_id.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_name_by_user_id.sql --<--<--
 IF OBJECT_ID('account.get_name_by_user_id') IS NOT NULL
 DROP FUNCTION account.get_name_by_user_id;
 
@@ -627,7 +627,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_registration_office_id.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_registration_office_id.sql --<--<--
 IF OBJECT_ID('account.get_registration_office_id') IS NOT NULL
 DROP FUNCTION account.get_registration_office_id;
 
@@ -650,7 +650,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_registration_role_id.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_registration_role_id.sql --<--<--
 IF OBJECT_ID('account.get_registration_role_id') IS NOT NULL
 DROP FUNCTION account.get_registration_role_id;
 
@@ -693,7 +693,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_user_id_by_email.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_user_id_by_email.sql --<--<--
 IF OBJECT_ID('account.get_user_id_by_email') IS NOT NULL
 DROP FUNCTION account.get_user_id_by_email;
 
@@ -715,7 +715,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_user_id_by_login_id.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_user_id_by_login_id.sql --<--<--
 IF OBJECT_ID('account.get_user_id_by_login_id') IS NOT NULL
 DROP FUNCTION account.get_user_id_by_login_id;
 
@@ -738,7 +738,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.google_sign_in.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.google_sign_in.sql --<--<--
 IF OBJECT_ID('account.google_sign_in') IS NOT NULL
 DROP PROCEDURE account.google_sign_in;
 
@@ -835,7 +835,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.google_user_exists.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.google_user_exists.sql --<--<--
 IF OBJECT_ID('account.google_user_exists') IS NOT NULL
 DROP FUNCTION account.google_user_exists;
 
@@ -862,7 +862,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.has_account.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.has_account.sql --<--<--
 IF OBJECT_ID('account.has_account') IS NOT NULL
 DROP FUNCTION account.has_account;
 
@@ -886,7 +886,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.has_active_reset_request.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.has_active_reset_request.sql --<--<--
 IF OBJECT_ID('account.has_active_reset_request') IS NOT NULL
 DROP FUNCTION account.has_active_reset_request;
 
@@ -913,7 +913,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.is_restricted_user.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.is_restricted_user.sql --<--<--
 IF OBJECT_ID('account.is_restricted_user') IS NOT NULL
 DROP FUNCTION account.is_restricted_user;
 
@@ -940,7 +940,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.is_valid_client_token.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.is_valid_client_token.sql --<--<--
 IF OBJECT_ID('account.is_valid_client_token') IS NOT NULL
 DROP FUNCTION account.is_valid_client_token;
 
@@ -989,7 +989,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.reset_account.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.reset_account.sql --<--<--
 IF OBJECT_ID('account.reset_account') IS NOT NULL
 DROP PROCEDURE account.reset_account;
 
@@ -1053,7 +1053,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.sign_in.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.sign_in.sql --<--<--
 IF OBJECT_ID('account.sign_in') IS NOT NULL
 DROP PROCEDURE account.sign_in;
 
@@ -1127,7 +1127,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.user_exists.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.user_exists.sql --<--<--
 IF OBJECT_ID('account.user_exists') IS NOT NULL
 DROP FUNCTION account.user_exists;
 
@@ -1152,14 +1152,14 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.relationships/auth.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.relationships/auth.sql --<--<--
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.relationships/core.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.relationships/core.sql --<--<--
 ALTER TABLE core.offices
 ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.triggers/account.token_auto_expiry_trigger.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.triggers/account.token_auto_expiry_trigger.sql --<--<--
 IF OBJECT_ID('account.token_auto_expiry_trigger') IS NOT NULL
 DROP TRIGGER account.token_auto_expiry_trigger;
 
@@ -1195,7 +1195,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/03.menus/menus.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/03.menus/menus.sql --<--<--
 EXECUTE core.create_app 'Frapid.Account', 'Account', '1.0', 'MixERP Inc.', 'December 1, 2015', 'grey lock', '/dashboard/account/configuration-profile', NULL;
 
 EXECUTE core.create_menu 'Frapid.Account', 'Roles', '/dashboard/account/roles', 'users', '';
@@ -1208,7 +1208,7 @@ EXECUTE core.create_menu 'Frapid.Account', 'Welcome Email', '/dashboard/account/
 EXECUTE core.create_menu 'Frapid.Account', 'Welcome Email (3rd Party)', '/dashboard/account/email-templates/welcome-email-other', 'star outline', 'Email Templates';
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
 INSERT INTO account.roles(role_id, role_name, is_administrator)
 SELECT 1000,   'Guest',                 0 UNION ALL
 SELECT 2000,   'Website User',          0 UNION ALL
@@ -1221,7 +1221,7 @@ SELECT 9999,   'Admin',                 1;
 INSERT INTO account.configuration_profiles(profile_name, is_active, allow_registration, registration_role_id, registration_office_id)
 SELECT 'Default', 1, 1, 2000, 1;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/05.scrud-views/account.configuration_profile_scrud_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/05.scrud-views/account.configuration_profile_scrud_view.sql --<--<--
 IF OBJECT_ID('account.configuration_profile_scrud_view') IS NOT NULL
 DROP VIEW account.configuration_profile_scrud_view;
 
@@ -1245,7 +1245,7 @@ WHERE account.configuration_profiles.deleted = 0;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/05.scrud-views/account.user_scrud_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/05.scrud-views/account.user_scrud_view.sql --<--<--
 IF OBJECT_ID('account.user_scrud_view') IS NOT NULL
 DROP VIEW account.user_scrud_view;
 
@@ -1269,7 +1269,7 @@ WHERE account.users.deleted = 0;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/05.scrud-views/account.user_selector_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/05.scrud-views/account.user_selector_view.sql --<--<--
 IF OBJECT_ID('account.user_selector_view') IS NOT NULL
 DROP VIEW account.user_selector_view;
 
@@ -1285,7 +1285,7 @@ WHERE account.users.deleted = 0;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/05.views/account.sign_in_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/05.views/account.sign_in_view.sql --<--<--
 IF OBJECT_ID('account.sign_in_view') IS NOT NULL
 DROP VIEW account.sign_in_view;
 
@@ -1337,7 +1337,7 @@ ON core.offices.office_id = account.logins.office_id;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/99.ownership.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/99.ownership.sql --<--<--
 EXEC sp_addrolemember  @rolename = 'db_owner', @membername  = 'frapid_db_user'
 GO
 

@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+﻿-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 DROP SCHEMA IF EXISTS website CASCADE; --WEB BUILDER
 CREATE SCHEMA website;
 
@@ -127,7 +127,7 @@ CREATE TABLE website.contacts
 	deleted										boolean DEFAULT(false)    
 );
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/website.add_email_subscription.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/website.add_email_subscription.sql --<--<--
 DROP FUNCTION IF EXISTS website.add_email_subscription
 (
     _email                                  text
@@ -158,7 +158,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/website.add_hit.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/website.add_hit.sql --<--<--
 DROP FUNCTION IF EXISTS website.add_hit(_category_alias national character varying(250), _alias national character varying(500));
 
 CREATE FUNCTION website.add_hit(_category_alias national character varying(250), _alias national character varying(500))
@@ -186,7 +186,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/website.get_category_id_by_category_name.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/website.get_category_id_by_category_name.sql --<--<--
 DROP FUNCTION IF EXISTS website.get_category_id_by_category_name(_category_name text);
 
 CREATE FUNCTION website.get_category_id_by_category_name(_category_name text)
@@ -215,7 +215,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/website.remove_email_subscription.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/website.remove_email_subscription.sql --<--<--
 DROP FUNCTION IF EXISTS website.remove_email_subscription
 (
     _email                                  text
@@ -249,7 +249,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/03.menus/menus.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/03.menus/menus.sql --<--<--
 SELECT * FROM core.create_app('Frapid.WebsiteBuilder', 'Website', '1.0', 'MixERP Inc.', 'December 1, 2015', 'world blue', '/dashboard/website/contents', null);
 
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Tasks', '', 'tasks icon', '');
@@ -296,7 +296,7 @@ SELECT * FROM auth.create_app_menu_policy
 );
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.scrud-views/website.contact_scrud_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.scrud-views/website.contact_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS website.contact_scrud_view;
 
 CREATE VIEW website.contact_scrud_view
@@ -312,7 +312,7 @@ SELECT
 FROM website.contacts
 WHERE NOT website.contacts.deleted;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.scrud-views/website.content_scrud_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.scrud-views/website.content_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS website.content_scrud_view;
 
 CREATE VIEW website.content_scrud_view
@@ -330,7 +330,7 @@ INNER JOIN website.categories
 ON website.categories.category_id = website.contents.category_id
 WHERE NOT website.contents.deleted;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.scrud-views/website.email_subscription_scrud_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.scrud-views/website.email_subscription_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS website.email_subscription_scrud_view;
 
 CREATE VIEW website.email_subscription_scrud_view
@@ -347,7 +347,7 @@ SELECT
 FROM website.email_subscriptions
 WHERE NOT website.email_subscriptions.deleted;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.triggers/website.email_subscription_confirmation_trigger.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.triggers/website.email_subscription_confirmation_trigger.sql --<--<--
 DROP FUNCTION IF EXISTS website.email_subscription_confirmation_trigger() CASCADE;
 
 CREATE FUNCTION website.email_subscription_confirmation_trigger()
@@ -369,7 +369,7 @@ BEFORE UPDATE ON website.email_subscriptions
 FOR EACH ROW
 EXECUTE PROCEDURE website.email_subscription_confirmation_trigger();
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.email_subscription_insert_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.email_subscription_insert_view.sql --<--<--
 DROP VIEW IF EXISTS website.email_subscription_insert_view;
 
 CREATE VIEW website.email_subscription_insert_view
@@ -414,7 +414,7 @@ WHERE NOT EXISTS
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.menu_item_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.menu_item_view.sql --<--<--
 DROP VIEW IF EXISTS website.menu_item_view;
 
 CREATE VIEW website.menu_item_view
@@ -437,7 +437,7 @@ LEFT JOIN website.contents
 ON website.contents.content_id = website.menu_items.content_id
 WHERE NOT website.menu_items.deleted;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.published_content_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.published_content_view.sql --<--<--
 DROP VIEW IF EXISTS website.published_content_view;
 
 CREATE VIEW website.published_content_view
@@ -468,7 +468,7 @@ WHERE NOT is_draft
 AND publish_on <= NOW()
 AND NOT website.contents.deleted;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.tag_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.tag_view.sql --<--<--
 DROP VIEW IF EXISTS website.tag_view;
 
 CREATE VIEW website.tag_view
@@ -486,7 +486,7 @@ SELECT
 FROM tags;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.yesterdays_email_subscriptions.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.yesterdays_email_subscriptions.sql --<--<--
 DROP VIEW IF EXISTS website.yesterdays_email_subscriptions;
 
 CREATE VIEW website.yesterdays_email_subscriptions
@@ -519,7 +519,7 @@ FROM website.email_subscriptions
 WHERE confirmed_on::date = 'yesterday'::date
 AND NOT website.email_subscriptions.deleted;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/10.policy/access_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/10.policy/access_policy.sql --<--<--
 SELECT * FROM auth.create_api_access_policy('{Content Editor, User, Admin}', core.get_office_id_by_office_name('Default'), 'website.categories', '{*}', true);
 SELECT * FROM auth.create_api_access_policy('{Content Editor, User, Admin}', core.get_office_id_by_office_name('Default'), 'website.contents', '{*}', true);
 SELECT * FROM auth.create_api_access_policy('{User, Admin}', core.get_office_id_by_office_name('Default'), 'website.menus', '{*}', true);
@@ -528,7 +528,7 @@ SELECT * FROM auth.create_api_access_policy('{User, Admin}', core.get_office_id_
 SELECT * FROM auth.create_api_access_policy('{Admin}', core.get_office_id_by_office_name('Default'), 'website.configurations', '{*}', true);
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/99.ownership.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/99.ownership.sql --<--<--
 DO
 $$
     DECLARE this record;

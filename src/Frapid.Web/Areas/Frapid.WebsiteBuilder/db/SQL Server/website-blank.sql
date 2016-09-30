@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+﻿-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 
 EXECUTE dbo.drop_schema 'website';
 GO
@@ -129,7 +129,7 @@ CREATE TABLE website.contacts
 	deleted										bit DEFAULT(0)    
 );
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/02.functions-and-logic/website.add_email_subscription.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/02.functions-and-logic/website.add_email_subscription.sql --<--<--
 IF OBJECT_ID('website.add_email_subscription') IS NOT NULL
 DROP PROCEDURE website.add_email_subscription;
 
@@ -163,7 +163,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/02.functions-and-logic/website.add_hit.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/02.functions-and-logic/website.add_hit.sql --<--<--
 IF OBJECT_ID('website.add_hit') IS NOT NULL
 DROP PROCEDURE website.add_hit;
 
@@ -193,7 +193,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/02.functions-and-logic/website.get_category_id_by_category_name.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/02.functions-and-logic/website.get_category_id_by_category_name.sql --<--<--
 IF OBJECT_ID('website.get_category_id_by_category_name') IS NOT NULL
 DROP FUNCTION website.get_category_id_by_category_name;
 
@@ -233,7 +233,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/02.functions-and-logic/website.remove_email_subscription.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/02.functions-and-logic/website.remove_email_subscription.sql --<--<--
 IF OBJECT_ID('website.remove_email_subscription') IS NOT NULL
 DROP PROCEDURE website.remove_email_subscription;
 
@@ -270,7 +270,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/03.menus/menus.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/03.menus/menus.sql --<--<--
 EXECUTE core.create_app 'Frapid.WebsiteBuilder', 'Website', '1.0', 'MixERP Inc.', 'December 1, 2015', 'world blue', '/dashboard/website/contents', null;
 
 EXECUTE core.create_menu 'Frapid.WebsiteBuilder', 'Tasks', '', 'tasks icon', '';
@@ -318,7 +318,7 @@ EXECUTE auth.create_app_menu_policy
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.scrud-views/website.contact_scrud_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.scrud-views/website.contact_scrud_view.sql --<--<--
 IF OBJECT_ID('website.contact_scrud_view') IS NOT NULL
 DROP VIEW website.contact_scrud_view;
 
@@ -339,7 +339,7 @@ WHERE website.contacts.deleted = 0;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.scrud-views/website.content_scrud_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.scrud-views/website.content_scrud_view.sql --<--<--
 IF OBJECT_ID('website.content_scrud_view') IS NOT NULL
 DROP VIEW website.content_scrud_view;
 
@@ -362,7 +362,7 @@ WHERE website.contents.deleted = 0;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.scrud-views/website.email_subscription_scrud_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.scrud-views/website.email_subscription_scrud_view.sql --<--<--
 IF OBJECT_ID('website.email_subscription_scrud_view') IS NOT NULL
 DROP VIEW website.email_subscription_scrud_view;
 
@@ -385,7 +385,7 @@ WHERE website.email_subscriptions.deleted = 0;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.triggers/website.email_subscription_confirmation_trigger.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.triggers/website.email_subscription_confirmation_trigger.sql --<--<--
 IF OBJECT_ID('website.email_subscription_confirmation_trigger') IS NOT NULL
 DROP TRIGGER website.email_subscription_confirmation_trigger;
 
@@ -428,7 +428,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.views/website.email_subscription_insert_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.views/website.email_subscription_insert_view.sql --<--<--
 IF OBJECT_ID('website.email_subscription_insert_view') IS NOT NULL
 DROP VIEW website.email_subscription_insert_view;
 GO
@@ -486,7 +486,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.views/website.menu_item_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.views/website.menu_item_view.sql --<--<--
 IF OBJECT_ID('website.menu_item_view') IS NOT NULL
 DROP VIEW website.menu_item_view;
 GO
@@ -513,7 +513,7 @@ WHERE website.menu_items.deleted = 0;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.views/website.published_content_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.views/website.published_content_view.sql --<--<--
 IF OBJECT_ID('website.published_content_view') IS NOT NULL
 DROP VIEW website.published_content_view;
 GO
@@ -549,7 +549,7 @@ AND website.contents.deleted = 0;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.views/website.tag_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.views/website.tag_view.sql --<--<--
 IF OBJECT_ID('website.tag_view') IS NOT NULL
 DROP VIEW website.tag_view;
 GO
@@ -570,7 +570,7 @@ FROM tags;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.views/website.yesterdays_email_subscriptions.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.views/website.yesterdays_email_subscriptions.sql --<--<--
 IF OBJECT_ID('website.yesterdays_email_subscriptions') IS NOT NULL
 DROP VIEW website.yesterdays_email_subscriptions;
 
@@ -611,7 +611,7 @@ AND website.email_subscriptions.deleted = 0;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/10.policy/access_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/10.policy/access_policy.sql --<--<--
 DECLARE @office_id integer = core.get_office_id_by_office_name('Default');
 
 EXECUTE auth.create_api_access_policy '{Content Editor, User, Admin}', @office_id, 'website.categories', '{*}', 1;
@@ -622,7 +622,7 @@ EXECUTE auth.create_api_access_policy '{User, Admin}', @office_id, 'website.cont
 EXECUTE auth.create_api_access_policy '{Admin}', @office_id, 'website.configurations', '{*}', 1;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/99.ownership.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/99.ownership.sql --<--<--
 EXEC sp_addrolemember  @rolename = 'db_owner', @membername  = 'frapid_db_user'
 GO
 

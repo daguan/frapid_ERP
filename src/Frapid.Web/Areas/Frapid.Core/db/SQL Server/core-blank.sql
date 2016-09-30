@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/00.db core/db-roles.sql --<--<--
+﻿-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/00.db core/db-roles.sql --<--<--
 IF NOT EXISTS 
 (
 	SELECT * FROM sys.database_principals 
@@ -23,7 +23,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.poco.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.poco.sql --<--<--
 
 
 IF OBJECT_ID('dbo.get_app_data_type') IS NOT NULL
@@ -265,7 +265,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/0. types.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/0. types.sql --<--<--
 IF OBJECT_ID('dbo.drop_schema') IS NOT NULL
 EXECUTE dbo.drop_schema 'core';
 GO
@@ -349,7 +349,7 @@ BEGIN
 END;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/0.utilities.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/0.utilities.sql --<--<--
 IF OBJECT_ID('dbo.drop_column') IS NOT NULL
 DROP PROCEDURE dbo.drop_column;
 
@@ -615,7 +615,7 @@ END
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/1. tables-and-constraints.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/1. tables-and-constraints.sql --<--<--
 CREATE TABLE core.countries
 (
     country_code                            	national character varying(12) PRIMARY KEY,
@@ -707,6 +707,7 @@ CREATE TABLE core.offices
     parent_office_id                            integer NULL REFERENCES core.offices,
 	registration_number							national character varying(100),
 	pan_number									national character varying(100),
+	has_vat										bit NOT NULL DEFAULT(0),
     audit_user_id                               integer NULL,
     audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
 	deleted										bit DEFAULT(0)
@@ -773,7 +774,7 @@ CREATE TABLE core.marital_statuses
 );
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
 INSERT INTO core.offices(office_code, office_name)
 SELECT 'DEF', 'Default';
 
@@ -791,7 +792,7 @@ SELECT 'WID', 'Widower',                0 UNION ALL
 SELECT 'CIV', 'Civil Union',            1;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/05.scrud-views/core.office_scrud_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/05.scrud-views/core.office_scrud_view.sql --<--<--
 IF OBJECT_ID('core.office_scrud_view') IS NOT NULL
 DROP VIEW core.office_scrud_view;
 
@@ -812,7 +813,7 @@ WHERE core.offices.deleted = 0;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.create_app.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.create_app.sql --<--<--
 IF OBJECT_ID('core.create_app') IS NOT NULL
 DROP PROCEDURE core.create_app;
 
@@ -870,7 +871,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.create_menu.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.create_menu.sql --<--<--
 IF OBJECT_ID('core.create_menu2') IS NOT NULL
 DROP PROCEDURE core.create_menu2;
 
@@ -959,7 +960,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.get_office_id_by_office_name.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.get_office_id_by_office_name.sql --<--<--
 IF OBJECT_ID('core.get_office_id_by_office_name') IS NOT NULL
 DROP FUNCTION core.get_office_id_by_office_name;
 
@@ -982,7 +983,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.get_office_ids.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.get_office_ids.sql --<--<--
 IF OBJECT_ID('core.get_office_ids') IS NOT NULL
 DROP FUNCTION core.get_office_ids;
 
@@ -1013,10 +1014,10 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/10.policy/access_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/10.policy/access_policy.sql --<--<--
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/99.ownership.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/99.ownership.sql --<--<--
 IF NOT EXISTS
 (
 	SELECT * FROM sys.database_principals

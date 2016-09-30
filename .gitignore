@@ -31,3 +31,7 @@ src/Frapid.Web/Areas/CineSys/
 src/Frapid.Web/Areas/CineSys.FoodCourt/
 src/Frapid.Web/Areas/CineSys.GateKeeper/
 src/Frapid.Web/Areas/Frapid.RecoveryManager/
+src/Frapid.Web/Areas/Frapid.POS/
+src/Frapid.Web/Areas/MixERP.Inventory/
+src/Frapid.Web/Areas/MixERP.Purchases/
+src/Frapid.Web/Areas/MixERP.Sales/

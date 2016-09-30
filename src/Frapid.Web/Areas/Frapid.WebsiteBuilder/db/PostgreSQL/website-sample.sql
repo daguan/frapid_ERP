@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/99.sample-data/website.sample.sql --<--<--
+﻿-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/99.sample-data/website.sample.sql --<--<--
 DELETE FROM website.contents;
 DELETE FROM website.menu_items;
 DELETE FROM website.menus;

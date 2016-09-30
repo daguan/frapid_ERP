@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+﻿-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 DROP SCHEMA IF EXISTS auth CASCADE;
 CREATE SCHEMA auth;
 
@@ -76,7 +76,7 @@ ON auth.menu_access_policy(office_id, menu_id, user_id)
 WHERE NOT deleted;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.create_api_access_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.create_api_access_policy.sql --<--<--
 DROP FUNCTION IF EXISTS auth.create_api_access_policy
 (
     _role_names                     text[],
@@ -141,7 +141,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.create_app_menu_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.create_app_menu_policy.sql --<--<--
 DROP FUNCTION IF EXISTS auth.create_app_menu_policy
 (
     _role_name                      text,
@@ -193,7 +193,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.get_apps.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.get_apps.sql --<--<--
 DROP FUNCTION IF EXISTS auth.get_apps(_user_id integer, _office_id integer, _culture text);
 
 CREATE FUNCTION auth.get_apps(_user_id integer, _office_id integer, _culture text)
@@ -231,7 +231,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.get_group_menu_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.get_group_menu_policy.sql --<--<--
 DROP FUNCTION IF EXISTS auth.get_group_menu_policy
 (
     _role_id        integer,
@@ -316,7 +316,7 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM auth.get_group_menu_policy(1, 1, '');
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.get_menu.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.get_menu.sql --<--<--
 DROP FUNCTION IF EXISTS auth.get_menu
 (
     _user_id                            integer, 
@@ -424,7 +424,7 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM auth.get_menu(1, 1, '');
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.get_user_menu_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.get_user_menu_policy.sql --<--<--
 DROP FUNCTION IF EXISTS auth.get_user_menu_policy
 (
     _user_id        integer,
@@ -538,7 +538,7 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM auth.get_user_menu_policy(1, 1, '');
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.has_access.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.has_access.sql --<--<--
 DROP FUNCTION IF EXISTS auth.has_access(_login_id bigint, _entity text, _access_type_id integer);
 
 CREATE FUNCTION auth.has_access(_login_id bigint, _entity text, _access_type_id integer)
@@ -656,7 +656,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.save_api_group_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.save_api_group_policy.sql --<--<--
 DROP FUNCTION IF EXISTS auth.save_api_group_policy
 (
     _role_id            integer,
@@ -721,7 +721,7 @@ LANGUAGE plpgsql;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.save_group_menu_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.save_group_menu_policy.sql --<--<--
 DROP FUNCTION IF EXISTS auth.save_group_menu_policy
 (
     _role_id        integer,
@@ -789,7 +789,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.save_user_menu_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/auth.save_user_menu_policy.sql --<--<--
 DROP FUNCTION IF EXISTS auth.save_user_menu_policy
 (
     _user_id                        integer,
@@ -845,7 +845,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/03.menus/0.menus.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/03.menus/0.menus.sql --<--<--
 SELECT * FROM core.create_app('Frapid.Authorization', 'Authorization', '1.0', 'MixERP Inc.', 'December 1, 2015', 'purple privacy', '/dashboard/authorization/menu-access/group-policy', '{Frapid.Account}'::text[]);
 
 SELECT * FROM core.create_menu('Frapid.Authorization', 'Entity Access Policy', '', 'lock', '');
@@ -873,7 +873,7 @@ SELECT * FROM auth.create_app_menu_policy
 );
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/03.menus/1.menu-policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/03.menus/1.menu-policy.sql --<--<--
 SELECT * FROM auth.create_app_menu_policy
 (
     'Admin', 
@@ -883,7 +883,7 @@ SELECT * FROM auth.create_app_menu_policy
 );
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/03.menus/2.menu-policy-account.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/03.menus/2.menu-policy-account.sql --<--<--
 SELECT * FROM auth.create_app_menu_policy
 (
     'User', 
@@ -900,7 +900,7 @@ SELECT * FROM auth.create_app_menu_policy
     '{*}'::text[]
 );
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
 INSERT INTO auth.access_types(access_type_id, access_type_name)
 SELECT 1, 'Read'            UNION ALL
 SELECT 2, 'Create'          UNION ALL
@@ -914,7 +914,7 @@ SELECT 9, 'ImportData'      UNION ALL
 SELECT 10, 'Execute'        UNION ALL
 SELECT 11, 'Verify';
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/05.views/auth.entity_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/05.views/auth.entity_view.sql --<--<--
 DROP VIEW IF EXISTS auth.entity_view;
 
 CREATE VIEW auth.entity_view
@@ -929,10 +929,10 @@ FROM information_schema.tables
 WHERE (information_schema.tables.table_type='BASE TABLE' OR information_schema.tables.table_type='VIEW')
 AND table_schema NOT IN ('pg_catalog', 'information_schema');
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/10.policy/access_policy.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/10.policy/access_policy.sql --<--<--
 SELECT * FROM auth.create_api_access_policy('{Admin}', core.get_office_id_by_office_name('Default'), '', '{*}', true);
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/99.ownership.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/PostgreSQL/1.x/1.0/src/99.ownership.sql --<--<--
 DO
 $$
     DECLARE this record;

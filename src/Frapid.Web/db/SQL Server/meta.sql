@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/00.db core/sql-server-roles.sql --<--<--
+﻿-->-->-- src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/00.db core/sql-server-roles.sql --<--<--
 IF NOT EXISTS 
 (
 	SELECT 1
@@ -32,7 +32,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+-->-->-- src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 IF NOT EXISTS
 (
 	SELECT * FROM sys.schemas
@@ -67,7 +67,7 @@ CREATE TABLE i18n.localized_resources
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/05.views/0.resource_view.sql --<--<--
+-->-->-- src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/05.views/0.resource_view.sql --<--<--
 GO
 IF OBJECT_ID('i18n.resource_view') IS NOT NULL
 DROP VIEW i18n.resource_view;
@@ -89,7 +89,7 @@ ON i18n.localized_resources.resource_id = i18n.resources.resource_id;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/05.views/localized_resource_view.sql --<--<--
+-->-->-- src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/05.views/localized_resource_view.sql --<--<--
 IF OBJECT_ID('i18n.localized_resource_view') IS NOT NULL
 DROP VIEW i18n.localized_resource_view;
 
@@ -107,7 +107,7 @@ FROM i18n.resource_view;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/06.functions-and-logic/add_localized_resource.sql --<--<--
+-->-->-- src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/06.functions-and-logic/add_localized_resource.sql --<--<--
 IF OBJECT_ID('i18n.add_localized_resource') IS NOT NULL
 DROP PROCEDURE i18n.add_localized_resource;
 
@@ -159,7 +159,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/06.functions-and-logic/add_resource.sql --<--<--
+-->-->-- src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/06.functions-and-logic/add_resource.sql --<--<--
 IF OBJECT_ID('i18n.add_resource') IS NOT NULL
 DROP PROCEDURE i18n.add_resource;
 
@@ -190,7 +190,7 @@ END;
 
 GO
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/06.functions-and-logic/get_localization_table.sql --<--<--
+-->-->-- src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/06.functions-and-logic/get_localization_table.sql --<--<--
 IF OBJECT_ID('i18n.get_localization_table') IS NOT NULL
 DROP FUNCTION i18n.get_localization_table;
 
@@ -225,7 +225,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/06.functions-and-logic/get_output_for.sql --<--<--
+-->-->-- src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/06.functions-and-logic/get_output_for.sql --<--<--
 IF OBJECT_ID('i18n.get_output_for') IS NOT NULL
 DROP FUNCTION i18n.get_output_for;
 
@@ -256,7 +256,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/06.functions-and-logic/get_resource.sql --<--<--
+-->-->-- src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/06.functions-and-logic/get_resource.sql --<--<--
 IF OBJECT_ID('i18n.get_resource') IS NOT NULL
 DROP FUNCTION i18n.get_resource;
 
@@ -297,7 +297,7 @@ END;
 GO
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/10.Localization/0.neutral-resource(en)/language.sql --<--<--
+-->-->-- src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/10.Localization/0.neutral-resource(en)/language.sql --<--<--
 EXECUTE i18n.add_localized_resource 'Titles', '', 'SignIn', 'Sign In';
 EXECUTE i18n.add_localized_resource 'Titles', '', 'Username', 'Username';
 EXECUTE i18n.add_localized_resource 'Titles', '', 'Password', 'Password';
@@ -393,6 +393,6 @@ EXECUTE i18n.add_localized_resource 'Labels', '', 'NamedFilter', 'Filter: {0}.';
 EXECUTE i18n.add_localized_resource 'DbErrors', '', 'TableNotFound', 'The table was not found.';
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/99.permission.sql --<--<--
+-->-->-- src/Frapid.Web/db/SQL Server/meta/1.x/1.0/src/99.permission.sql --<--<--
 GRANT EXECUTE ON SCHEMA::i18n TO frapid_db_user;
 

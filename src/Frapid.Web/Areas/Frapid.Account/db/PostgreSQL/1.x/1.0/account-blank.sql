@@ -1,4 +1,4 @@
-﻿-->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+﻿-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
 DROP SCHEMA IF EXISTS account CASCADE;
 CREATE SCHEMA account;
 
@@ -217,7 +217,7 @@ CREATE INDEX access_tokens_token_info_inx
 ON account.access_tokens(client_token, ip_address, user_agent);
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.add_installed_domain.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.add_installed_domain.sql --<--<--
 DROP FUNCTION IF EXISTS account.add_installed_domain
 (
     _domain_name                                text,
@@ -251,7 +251,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.can_confirm_registration.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.can_confirm_registration.sql --<--<--
 DROP FUNCTION IF EXISTS account.can_confirm_registration(_token uuid);
 
 CREATE FUNCTION account.can_confirm_registration(_token uuid)
@@ -276,7 +276,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.can_register_with_facebook.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.can_register_with_facebook.sql --<--<--
 DROP FUNCTION IF EXISTS account.can_register_with_facebook();
 
 CREATE FUNCTION account.can_register_with_facebook()
@@ -300,7 +300,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.can_register_with_google.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.can_register_with_google.sql --<--<--
 DROP FUNCTION IF EXISTS account.can_register_with_google();
 
 CREATE FUNCTION account.can_register_with_google()
@@ -324,7 +324,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.complete_reset.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.complete_reset.sql --<--<--
 DROP FUNCTION IF EXISTS account.complete_reset
 (
     _request_id                     uuid,
@@ -366,7 +366,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.confirm_registration.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.confirm_registration.sql --<--<--
 DROP FUNCTION IF EXISTS account.confirm_registration(_token uuid);
 
 CREATE FUNCTION account.confirm_registration(_token uuid)
@@ -409,7 +409,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.email_exists.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.email_exists.sql --<--<--
 DROP FUNCTION IF EXISTS account.email_exists(_email national character varying(100));
 
 CREATE FUNCTION account.email_exists(_email national character varying(100))
@@ -430,7 +430,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.fb_sign_in.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.fb_sign_in.sql --<--<--
 DROP FUNCTION IF EXISTS account.fb_sign_in
 (
     _fb_user_id                             text,
@@ -525,7 +525,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.fb_user_exists.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.fb_user_exists.sql --<--<--
 DROP FUNCTION IF EXISTS account.fb_user_exists(_user_id integer);
 
 CREATE FUNCTION account.fb_user_exists(_user_id integer)
@@ -548,7 +548,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_email_by_user_id.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_email_by_user_id.sql --<--<--
 DROP FUNCTION IF EXISTS account.get_email_by_user_id(_user_id integer);
 CREATE FUNCTION account.get_email_by_user_id(_user_id integer)
 RETURNS text
@@ -565,7 +565,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_name_by_user_id.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_name_by_user_id.sql --<--<--
 DROP FUNCTION IF EXISTS account.get_name_by_user_id(_user_id integer);
 CREATE FUNCTION account.get_name_by_user_id(_user_id integer)
 RETURNS text
@@ -582,7 +582,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_registration_office_id.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_registration_office_id.sql --<--<--
 DROP FUNCTION IF EXISTS account.get_registration_office_id();
 
 CREATE FUNCTION account.get_registration_office_id()
@@ -597,7 +597,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_registration_role_id.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_registration_role_id.sql --<--<--
 DROP FUNCTION IF EXISTS account.get_registration_role_id(_email text);
 
 CREATE FUNCTION account.get_registration_role_id(_email text)
@@ -638,7 +638,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_user_id_by_email.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_user_id_by_email.sql --<--<--
 DROP FUNCTION IF EXISTS account.get_user_id_by_email(_email national character varying(100));
 
 CREATE FUNCTION account.get_user_id_by_email(_email national character varying(100))
@@ -654,7 +654,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_user_id_by_login_id.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_user_id_by_login_id.sql --<--<--
 DROP FUNCTION IF EXISTS account.get_user_id_by_login_id(_login_id bigint);
 
 CREATE FUNCTION account.get_user_id_by_login_id(_login_id bigint)
@@ -670,7 +670,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.google_sign_in.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.google_sign_in.sql --<--<--
 DROP FUNCTION IF EXISTS account.google_sign_in
 (
     _email                                  text,
@@ -756,7 +756,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.google_user_exists.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.google_user_exists.sql --<--<--
 DROP FUNCTION IF EXISTS account.google_user_exists(_user_id integer);
 
 CREATE FUNCTION account.google_user_exists(_user_id integer)
@@ -779,7 +779,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.has_account.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.has_account.sql --<--<--
 DROP FUNCTION IF EXISTS account.has_account(_email national character varying(100));
 
 CREATE FUNCTION account.has_account(_email national character varying(100))
@@ -795,7 +795,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.has_active_reset_request.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.has_active_reset_request.sql --<--<--
 DROP FUNCTION IF EXISTS account.has_active_reset_request(_email text);
 
 CREATE FUNCTION account.has_active_reset_request(_email text)
@@ -818,7 +818,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.is_restricted_user.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.is_restricted_user.sql --<--<--
 DROP FUNCTION IF EXISTS account.is_restricted_user(_email national character varying(100));
 
 CREATE FUNCTION account.is_restricted_user(_email national character varying(100))
@@ -842,7 +842,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.is_valid_client_token.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.is_valid_client_token.sql --<--<--
 DROP FUNCTION IF EXISTS account.is_valid_client_token(_client_token text, _ip_address text, _user_agent text);
 
 CREATE FUNCTION account.is_valid_client_token(_client_token text, _ip_address text, _user_agent text)
@@ -888,7 +888,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.reset_account.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.reset_account.sql --<--<--
 DROP FUNCTION IF EXISTS account.reset_account
 (
     _email                                  text,
@@ -948,7 +948,7 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.sign_in.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.sign_in.sql --<--<--
 DROP FUNCTION IF EXISTS account.sign_in
 (
     _email                                  text,
@@ -1013,7 +1013,7 @@ END
 $$
 LANGUAGE plpgsql;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.user_exists.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.user_exists.sql --<--<--
 DROP FUNCTION IF EXISTS account.user_exists(_email national character varying(100));
 
 CREATE FUNCTION account.user_exists(_email national character varying(100))
@@ -1036,14 +1036,14 @@ $$
 LANGUAGE plpgsql;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.relationships/auth.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.relationships/auth.sql --<--<--
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.relationships/core.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.relationships/core.sql --<--<--
 ALTER TABLE core.offices
 ADD FOREIGN KEY(audit_user_id) REFERENCES account.users;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.triggers/account.token_auto_expiry_trigger.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.triggers/account.token_auto_expiry_trigger.sql --<--<--
 DROP FUNCTION IF EXISTS account.token_auto_expiry_trigger() CASCADE;
 
 CREATE FUNCTION account.token_auto_expiry_trigger()
@@ -1070,7 +1070,7 @@ FOR EACH ROW
 EXECUTE PROCEDURE account.token_auto_expiry_trigger();
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/03.menus/menus.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/03.menus/menus.sql --<--<--
 SELECT * FROM core.create_app('Frapid.Account', 'Account', '1.0', 'MixERP Inc.', 'December 1, 2015', 'grey lock', '/dashboard/account/configuration-profile', NULL::text[]);
 
 SELECT * FROM core.create_menu('Frapid.Account', 'Roles', '/dashboard/account/roles', 'users', '');
@@ -1083,7 +1083,7 @@ SELECT * FROM core.create_menu('Frapid.Account', 'Welcome Email', '/dashboard/ac
 SELECT * FROM core.create_menu('Frapid.Account', 'Welcome Email (3rd Party)', '/dashboard/account/email-templates/welcome-email-other', 'star outline', 'Email Templates');
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
 INSERT INTO account.roles
 SELECT 1000,   'Guest',                 false UNION ALL
 SELECT 2000,   'Website User',          false UNION ALL
@@ -1096,7 +1096,7 @@ SELECT 9999,   'Admin',                 true;
 INSERT INTO account.configuration_profiles(profile_name, is_active, allow_registration, registration_role_id, registration_office_id)
 SELECT 'Default', true, true, 2000, 1;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/05.scrud-views/account.configuration_profile_scrud_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/05.scrud-views/account.configuration_profile_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS account.configuration_profile_scrud_view;
 
 CREATE VIEW account.configuration_profile_scrud_view
@@ -1116,7 +1116,7 @@ ON core.offices.office_id = account.configuration_profiles.registration_office_i
 WHERE NOT account.configuration_profiles.deleted;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/05.scrud-views/account.user_scrud_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/05.scrud-views/account.user_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS account.user_scrud_view;
 
 CREATE VIEW account.user_scrud_view
@@ -1136,7 +1136,7 @@ ON core.offices.office_id = account.users.office_id
 WHERE NOT account.users.deleted;
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/05.scrud-views/account.user_selector_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/05.scrud-views/account.user_selector_view.sql --<--<--
 DROP VIEW IF EXISTS account.user_selector_view;
 
 CREATE VIEW account.user_selector_view
@@ -1147,7 +1147,7 @@ SELECT
 FROM account.users
 WHERE NOT account.users.deleted;
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/05.views/account.sign_in_view.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/05.views/account.sign_in_view.sql --<--<--
 DROP VIEW IF EXISTS account.sign_in_view;
 
 CREATE VIEW account.sign_in_view
@@ -1197,7 +1197,7 @@ ON core.offices.office_id = account.logins.office_id;
 
 
 
--->-->-- C:/Users/nirvan/Desktop/mixerp/frapid/src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/99.ownership.sql --<--<--
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/99.ownership.sql --<--<--
 DO
 $$
     DECLARE this record;
