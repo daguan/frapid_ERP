@@ -139,5 +139,19 @@ namespace Frapid.Configuration.Db
 
             return new Database(connectionString, type, provider);
         }
+
+        public static Database GetDatabase(string tenant, string database, string connectionString = "")
+        {
+            string providerName = GetProviderName(tenant);
+            var type = GetDbType(providerName);
+            var provider = GetFactory(providerName);
+
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                connectionString = FrapidDbServer.GetConnectionString(tenant, database);
+            }
+
+            return new Database(connectionString, type, provider);
+        }
     }
 }

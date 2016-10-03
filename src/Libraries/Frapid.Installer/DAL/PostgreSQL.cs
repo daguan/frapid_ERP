@@ -75,7 +75,7 @@ namespace Frapid.Installer.DAL
 
 
             string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
-            await Factory.ExecuteAsync(connectionString, database, sql).ConfigureAwait(false);
+            await Factory.ExecuteAsync(connectionString, tenant, database, sql).ConfigureAwait(true);
         }
 
         public async Task CleanupDbAsync(string tenant, string database)
