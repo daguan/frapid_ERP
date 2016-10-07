@@ -8,6 +8,7 @@ using Frapid.Framework;
 using Frapid.Installer.DAL;
 using Frapid.Installer.Helpers;
 using Frapid.Installer.Models;
+using Frapid.Framework.Extensions;
 
 namespace Frapid.Installer
 {
@@ -31,7 +32,7 @@ namespace Frapid.Installer
 
         public async Task InstallAsync()
         {
-            foreach(var dependency in this.Installable.Dependencies)
+            foreach (var dependency in this.Installable.Dependencies)
             {
                 InstallerLog.Verbose($"Installing module {dependency.ApplicationName} because the module {this.Installable.ApplicationName} depends on it.");
                 await new AppInstaller(this.Tenant, this.Database, dependency).InstallAsync().ConfigureAwait(false);
@@ -44,13 +45,13 @@ namespace Frapid.Installer
 
         protected async Task CreateMyAsync()
         {
-            if(string.IsNullOrWhiteSpace(this.Installable.My))
+            if (string.IsNullOrWhiteSpace(this.Installable.My))
             {
                 return;
             }
 
             string database = this.Database;
-            if(this.Installable.IsMeta)
+            if (this.Installable.IsMeta)
             {
                 database = Factory.GetMetaDatabase(database);
             }
@@ -64,20 +65,21 @@ namespace Frapid.Installer
         {
             string database = this.Database;
 
-            if(this.Installable.IsMeta)
+            if (this.Installable.IsMeta)
             {
                 InstallerLog.Verbose($"Creating database of {this.Installable.ApplicationName} under meta database {Factory.GetMetaDatabase(this.Database)}.");
                 database = Factory.GetMetaDatabase(this.Database);
             }
 
-            if(string.IsNullOrWhiteSpace(this.Installable.DbSchema))
+            if (string.IsNullOrWhiteSpace(this.Installable.DbSchema))
             {
                 return;
             }
 
-            if(await this.HasSchemaAsync(database).ConfigureAwait(false))
+
+            if (await this.HasSchemaAsync(database).ConfigureAwait(false))
             {
-                InstallerLog.Verbose($"Skipped {this.Installable.ApplicationName} schema creation because it already exists.");
+                InstallerLog.Verbose($"Skipped {this.Installable.ApplicationName} schema ({ this.Installable.DbSchema}) creation because it already exists.");
                 return;
             }
 
@@ -88,7 +90,7 @@ namespace Frapid.Installer
             string path = PathMapper.MapPath(db);
             await this.RunSqlAsync(this.Tenant, database, path).ConfigureAwait(false);
 
-            if(this.Installable.InstallSample &&
+            if (this.Installable.InstallSample &&
                !string.IsNullOrWhiteSpace(this.Installable.SampleDbPath))
             {
                 InstallerLog.Verbose($"Creating sample data of {this.Installable.ApplicationName}.");
@@ -114,7 +116,7 @@ namespace Frapid.Installer
 
         protected void CreateOverride()
         {
-            if(string.IsNullOrWhiteSpace(this.Installable.OverrideTemplatePath) ||
+            if (string.IsNullOrWhiteSpace(this.Installable.OverrideTemplatePath) ||
                string.IsNullOrWhiteSpace(this.Installable.OverrideDestination))
             {
                 return;
@@ -125,13 +127,13 @@ namespace Frapid.Installer
             destination = PathMapper.MapPath(destination);
 
 
-            if(string.IsNullOrWhiteSpace(source) ||
+            if (string.IsNullOrWhiteSpace(source) ||
                string.IsNullOrWhiteSpace(destination))
             {
                 return;
             }
 
-            if(!Directory.Exists(source))
+            if (!Directory.Exists(source))
             {
                 return;
             }

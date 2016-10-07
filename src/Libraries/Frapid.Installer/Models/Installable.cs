@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Frapid.Configuration;
 using Newtonsoft.Json;
+using Frapid.Installer.Tenant;
 
 namespace Frapid.Installer.Models
 {
@@ -52,17 +53,18 @@ namespace Frapid.Installer.Models
                 return installables;
             }
 
-            string root = PathMapper.MapPath("~/");
-            var files = new List<string>();
+            //string root = PathMapper.MapPath("~/");
+            //var files = new List<string>();
 
-            if(root != null)
-            {
-                files = Directory.GetFiles(root, "AppInfo.json", SearchOption.AllDirectories).ToList();
-            }
+            //if(root != null)
+            //{
+            //    files = Directory.GetFiles(root, "AppInfo.json", SearchOption.AllDirectories).ToList();
+            //}
 
-            foreach(
-                var installable in
-                    files.Select(file => File.ReadAllText(file, Encoding.UTF8)).Select(JsonConvert.DeserializeObject<Installable>).Where(installable => this.DependsOn.Contains(installable.ApplicationName)))
+            var apps = AppResolver.Installables;
+
+            foreach (var installable in
+                    apps.Where(installable => this.DependsOn.Contains(installable.ApplicationName)))
             {
                 installable.SetDependencies();
                 installables.Add(installable);

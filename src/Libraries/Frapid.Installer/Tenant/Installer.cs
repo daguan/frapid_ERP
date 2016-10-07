@@ -12,6 +12,18 @@ using Newtonsoft.Json;
 
 namespace Frapid.Installer.Tenant
 {
+    public static class AppResolver
+    {
+        public static List<Installable> Installables { get; set; }
+
+        static AppResolver()
+        {
+            string root = PathMapper.MapPath("~/");
+            var files = Directory.GetFiles(root, "AppInfo.json", SearchOption.AllDirectories).ToList();
+            Installables = files.Select(file => File.ReadAllText(file, Encoding.UTF8)).Select(JsonConvert.DeserializeObject<Installable>).ToList();            
+        }
+    }
+
     public class Installer
     {
         public Installer(string url)
@@ -30,7 +42,6 @@ namespace Frapid.Installer.Tenant
 
             InstallerLog.Verbose("Getting installables.");
             var installables = GetInstallables(tenant);
-
            
             foreach(var installable in installables)
             {
@@ -66,9 +77,9 @@ namespace Frapid.Installer.Tenant
                 return installables;
             }
 
-            var files = Directory.GetFiles(root, "AppInfo.json", SearchOption.AllDirectories).ToList();
+            var apps = AppResolver.Installables;
 
-            foreach(var app in files.Select(file => File.ReadAllText(file, Encoding.UTF8)).Select(JsonConvert.DeserializeObject<Installable>))
+            foreach (var app in apps)
             {
                 app.SetDependencies();
 
