@@ -4,7 +4,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace Frapid.Areas.Tests
+namespace Frapid.Areas.Tests.Fakes
 {
     public sealed class FakeLogger:ILogger
     {

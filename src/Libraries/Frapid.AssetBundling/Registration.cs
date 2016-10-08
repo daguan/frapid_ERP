@@ -18,7 +18,7 @@ namespace Frapid.AssetBundling
             this.EnsureDirectoryExists(path);
         }
 
-        private string AssetDirectory { get; set; }
+        private string AssetDirectory { get; }
         public Asset Asset { get; set; }
 
         private void EnsureDirectoryExists(string path)

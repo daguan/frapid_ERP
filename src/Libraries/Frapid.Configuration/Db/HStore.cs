@@ -48,8 +48,8 @@ namespace Frapid.Configuration.Db
 
             foreach (Match match in matches)
             {
-                var key = match.Groups[1].Value;
-                var val = match.Groups[2].Value;
+                string key = match.Groups[1].Value;
+                string val = match.Groups[2].Value;
 
                 key = KeyReg2.Replace(KeyReg.Replace(key, "$1"), "$1");
                 val = val.ToUpper() == "NULL" ? null : KeyReg2.Replace(KeyReg.Replace(val, "$1"), "$1");

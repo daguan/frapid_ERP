@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
+using Frapid.Configuration;
 using Frapid.Configuration.Db;
+using Frapid.Framework.Extensions;
 using Frapid.Installer.DAL;
 using Frapid.Installer.Helpers;
-using Frapid.Configuration;
-using Frapid.Framework.Extensions;
 
 namespace Frapid.Installer
 {
@@ -31,11 +31,11 @@ namespace Frapid.Installer
             bool hasDb = await inspector.HasDbAsync().ConfigureAwait(false);
             bool isWellKnown = inspector.IsWellKnownDb();
 
-            if(hasDb)
+            if (hasDb)
             {
                 if (IsDevelopment())
                 {
-                    InstallerLog.Verbose($"Cleaning up the database.");
+                    InstallerLog.Verbose("Cleaning up the database.");
                     await this.CleanUpDbAsync();
                 }
                 else
@@ -44,12 +44,13 @@ namespace Frapid.Installer
                 }
             }
 
-            if(!isWellKnown)
+            if (!isWellKnown)
             {
-                InstallerLog.Verbose($"Cannot create a database under the name \"{this.Tenant}\" because the name is not a well-known tenant name.");
+                InstallerLog.Verbose(
+                    $"Cannot create a database under the name \"{this.Tenant}\" because the name is not a well-known tenant name.");
             }
 
-            if(!hasDb && isWellKnown)
+            if (!hasDb && isWellKnown)
             {
                 InstallerLog.Information($"Creating database \"{this.Tenant}\".");
                 await this.CreateDbAsync().ConfigureAwait(false);

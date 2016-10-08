@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using Frapid.Configuration;
 using Newtonsoft.Json;
-using Frapid.Installer.Tenant;
 
 namespace Frapid.Installer.Models
 {
@@ -47,8 +43,8 @@ namespace Frapid.Installer.Models
         {
             var installables = new List<Installable>();
 
-            if(this.DependsOn == null ||
-               this.DependsOn.Length.Equals(0))
+            if (this.DependsOn == null ||
+                this.DependsOn.Length.Equals(0))
             {
                 return installables;
             }
@@ -56,7 +52,7 @@ namespace Frapid.Installer.Models
             var apps = AppResolver.Installables;
 
             foreach (var installable in
-                    apps.Where(installable => this.DependsOn.Contains(installable.ApplicationName)))
+                apps.Where(installable => this.DependsOn.Contains(installable.ApplicationName)))
             {
                 installable.SetDependencies();
                 installables.Add(installable);

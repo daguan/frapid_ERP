@@ -7,7 +7,7 @@ namespace frapid
         public static string GetTokenOn(this string token, int index)
         {
             var tokens = token.Split(' ');
-            if(tokens.Count() > index)
+            if(tokens.Length > index)
             {
                 return tokens[index];
             }
@@ -18,7 +18,7 @@ namespace frapid
         public static int CountTokens(this string token)
         {
             var tokens = token.Split(' ');
-            return tokens.Count();
+            return tokens.Length;
         }
     }
 }

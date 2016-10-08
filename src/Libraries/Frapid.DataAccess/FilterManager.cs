@@ -31,7 +31,7 @@ namespace Frapid.DataAccess
         public static void AddFilters(ref Sql sql, List<Filter> filters)
         {
             if(filters == null ||
-               filters.Count().Equals(0))
+               filters.Count.Equals(0))
             {
                 return;
             }
@@ -122,7 +122,7 @@ namespace Frapid.DataAccess
         public static void AddFilters<T>(ref Sql sql, T poco, List<Filter> filters)
         {
             if(filters == null ||
-               filters.Count().Equals(0))
+               filters.Count.Equals(0))
             {
                 return;
             }

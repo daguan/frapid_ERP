@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ using Frapid.DataAccess;
 
 namespace Frapid.Installer.DAL
 {
-    public sealed class PostgreSQL: IStore
+    public sealed class PostgreSQL : IStore
     {
         public string ProviderName { get; } = "Npgsql";
 
@@ -29,7 +28,7 @@ namespace Frapid.Installer.DAL
 
             string connectionString = FrapidDbServer.GetSuperUserConnectionString(tenant, database);
 
-            using(var db = DbProvider.Get(connectionString, tenant).GetDatabase())
+            using (var db = DbProvider.Get(connectionString, tenant).GetDatabase())
             {
                 int awaiter = await db.ExecuteScalarAsync<int>
                     (
@@ -46,7 +45,9 @@ namespace Frapid.Installer.DAL
         {
             const string sql = "SELECT COUNT(*) FROM pg_catalog.pg_namespace WHERE nspname=@0;";
 
-            using(var db = DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(tenant, database), tenant).GetDatabase())
+            using (
+                var db =
+                    DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(tenant, database), tenant).GetDatabase())
             {
                 int awaiter = await db.ExecuteScalarAsync<int>
                     (
@@ -62,8 +63,8 @@ namespace Frapid.Installer.DAL
         public async Task RunSqlAsync(string tenant, string database, string fromFile)
         {
             fromFile = fromFile.Replace("{DbServer}", "PostgreSQL");
-            if(string.IsNullOrWhiteSpace(fromFile) ||
-               File.Exists(fromFile).Equals(false))
+            if (string.IsNullOrWhiteSpace(fromFile) ||
+                File.Exists(fromFile).Equals(false))
             {
                 return;
             }

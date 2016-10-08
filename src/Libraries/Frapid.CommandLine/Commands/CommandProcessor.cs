@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Frapid.Framework.Extensions;
 
 namespace frapid.Commands
@@ -8,7 +7,7 @@ namespace frapid.Commands
     {
         public static void Process(string line)
         {
-            if(string.IsNullOrWhiteSpace(line))
+            if (string.IsNullOrWhiteSpace(line))
             {
                 return;
             }
@@ -22,11 +21,11 @@ namespace frapid.Commands
         private static ICommand Get(string commandName, string line)
         {
             var iType = typeof(ICommand);
-            var members = iType.GetTypeMembers<ICommand>();                
+            var members = iType.GetTypeMembers<ICommand>();
 
-            foreach(var member in members)
+            foreach (var member in members)
             {
-                if(member.CommandName == commandName)
+                if (member.CommandName == commandName)
                 {
                     member.Line = line;
                     return member;
@@ -43,7 +42,7 @@ namespace frapid.Commands
 
             Console.ForegroundColor = ConsoleColor.White;
 
-            if(!string.IsNullOrWhiteSpace(syntax))
+            if (!string.IsNullOrWhiteSpace(syntax))
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("\r\nSyntax(es) : \r\n" + syntax);
