@@ -53,14 +53,6 @@ namespace Frapid.Installer.Models
                 return installables;
             }
 
-            //string root = PathMapper.MapPath("~/");
-            //var files = new List<string>();
-
-            //if(root != null)
-            //{
-            //    files = Directory.GetFiles(root, "AppInfo.json", SearchOption.AllDirectories).ToList();
-            //}
-
             var apps = AppResolver.Installables;
 
             foreach (var installable in

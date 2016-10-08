@@ -298,34 +298,6 @@
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Override\Areas\web.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Override\Attachments\web.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Override\Backups\web.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Override\Configs\Applications.config" />
-    <Content Include="Override\Configs\Frapid.config" />
-    <Content Include="Override\Configs\SMTP\Mailgun.json" />
-    <Content Include="Override\Configs\SMTP\SendGrid.json" />
-    <Content Include="Override\Configs\web.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Override\Documents\web.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Override\Logs\web.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Override\Static\web.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Override\Temp\web.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Properties\PublishProfiles\frapid-publish-profile.pubxml" />
     <Content Include="Scripts\ajax-file-upload.js" />
     <Content Include="Scripts\angular\angular.min.js" />

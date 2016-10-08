@@ -1,31 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Frapid.Configuration;
 using Frapid.Framework.Extensions;
 using Frapid.Installer.Helpers;
 using Frapid.Installer.Models;
-using Newtonsoft.Json;
 
 namespace Frapid.Installer.Tenant
 {
-    public static class AppResolver
-    {
-        public static List<Installable> Installables { get; set; }
-
-        static AppResolver()
-        {
-            string root = PathMapper.MapPath("~/");
-            var files = Directory.GetFiles(root, "AppInfo.json", SearchOption.AllDirectories).ToList();
-            Installables = files.Select(file => File.ReadAllText(file, Encoding.UTF8)).Select(JsonConvert.DeserializeObject<Installable>).ToList();            
-        }
-    }
-
     public class Installer
     {
+        public static List<Installable> InstalledApps;
+
         public Installer(string url)
         {
             this.Url = url;
@@ -35,6 +22,8 @@ namespace Frapid.Installer.Tenant
 
         public async Task InstallAsync()
         {
+            InstalledApps = new List<Installable>();
+
             string tenant = TenantConvention.GetTenant(this.Url);
             InstallerLog.Verbose($"Creating database {tenant}.");
             var db = new DbInstaller(tenant);
@@ -42,8 +31,8 @@ namespace Frapid.Installer.Tenant
 
             InstallerLog.Verbose("Getting installables.");
             var installables = GetInstallables(tenant);
-           
-            foreach(var installable in installables)
+
+            foreach (var installable in installables)
             {
                 try
                 {
@@ -60,8 +49,13 @@ namespace Frapid.Installer.Tenant
 
         private static List<string> GetDefaultInstallableNames(string tenant)
         {
-            string path = PathMapper.MapPath("~/Override/Configs/Applications.config");
-            var apps = ConfigurationManager.ReadConfigurationValue(path, "InstalledApplications").Or("").Split(',').Select(x => x.Trim()).ToList();
+            string path = PathMapper.MapPath("~/Overrides/Configs/Applications.config");
+            var apps =
+                ConfigurationManager.ReadConfigurationValue(path, "InstalledApplications")
+                    .Or("")
+                    .Split(',')
+                    .Select(x => x.Trim())
+                    .ToList();
 
             return apps;
         }
@@ -72,7 +66,7 @@ namespace Frapid.Installer.Tenant
             string root = PathMapper.MapPath("~/");
             var installables = new List<Installable>();
 
-            if(root == null)
+            if (root == null)
             {
                 return installables;
             }
@@ -83,8 +77,8 @@ namespace Frapid.Installer.Tenant
             {
                 app.SetDependencies();
 
-                if(app.AutoInstall &&
-                   defaultApps.Contains(app.ApplicationName))
+                if (app.AutoInstall &&
+                    defaultApps.Contains(app.ApplicationName))
                 {
                     installables.Add(app);
                 }

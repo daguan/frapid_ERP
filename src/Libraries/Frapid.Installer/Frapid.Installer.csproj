@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppInstaller.cs" />
+    <Compile Include="AppResolver.cs" />
     <Compile Include="Tenant\Uninstaller.cs" />
     <Compile Include="Helpers\ConsolePathMapper.cs" />
     <Compile Include="Commands\CreateSite.cs" />

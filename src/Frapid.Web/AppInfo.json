@@ -18,7 +18,7 @@
     "PatchFilePath" : null,
 	"InstallSample": false,
 	"My": null,
-    "OverrideTemplatePath":"~/Override",
+    "OverrideTemplatePath":"~/Overrides",
     "OverrideDestination":"~/Tenants/{0}",
 	"DependsOn": null
 }

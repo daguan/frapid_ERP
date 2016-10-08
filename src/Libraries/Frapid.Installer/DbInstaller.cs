@@ -18,7 +18,7 @@ namespace Frapid.Installer
 
         private static bool IsDevelopment()
         {
-            var path = PathMapper.MapPath("~/Resources/Configs/Parameters.config");
+            string path = PathMapper.MapPath("~/Resources/Configs/Parameters.config");
             string value = ConfigurationManager.ReadConfigurationValue(path, "IsDevelopment");
             return value.Or("").ToUpperInvariant().StartsWith("T");
         }
