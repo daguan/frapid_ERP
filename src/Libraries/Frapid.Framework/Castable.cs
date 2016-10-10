@@ -14,7 +14,17 @@ namespace Frapid.Framework
             }
 
             var converter = TypeDescriptor.GetConverter(typeof(T));
-            return (T)converter.ConvertFromString(input);
+
+            try
+            {
+                return (T)converter.ConvertFromString(input);
+            }
+            catch
+            {
+                //swallow
+            }
+
+            return d;
         }
 
         public T To<T>(string input, T or)

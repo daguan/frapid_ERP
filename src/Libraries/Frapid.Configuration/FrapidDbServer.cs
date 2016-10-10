@@ -34,13 +34,25 @@ namespace Frapid.Configuration
 
         public static string GetConnectionString(string tenant, string database = "", string userId = "", string password = "")
         {
-            if(string.IsNullOrWhiteSpace(database))
+            if (string.IsNullOrWhiteSpace(database))
             {
                 database = tenant;
             }
 
             return GetServer(tenant).GetConnectionString(tenant, database, userId, password);
         }
+
+
+        public static string GetReportUserConnectionString(string tenant, string database = "")
+        {
+            if (string.IsNullOrWhiteSpace(database))
+            {
+                database = tenant;
+            }
+
+            return GetServer(tenant).GetReportUserConnectionString(tenant, database);
+        }
+
 
         public static string GetSuperUserConnectionString(string tenant, string database = "")
         {

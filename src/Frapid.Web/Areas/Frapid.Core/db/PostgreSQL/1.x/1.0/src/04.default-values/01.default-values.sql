@@ -1,5 +1,5 @@
-INSERT INTO core.offices(office_code, office_name)
-SELECT 'DEF', 'Default';
+INSERT INTO core.offices(office_code, office_name, currency_code)
+SELECT 'DEF', 'Default', 'USD';
 
 INSERT INTO core.genders(gender_code, gender_name)
 SELECT 'M', 'Male' UNION ALL

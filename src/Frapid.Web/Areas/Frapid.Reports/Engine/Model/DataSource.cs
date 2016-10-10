@@ -1,0 +1,15 @@
+﻿using System.Collections.Generic;
+using System.Data;
+
+namespace Frapid.Reports.Engine.Model
+{
+    public sealed class DataSource
+    {
+        public int Index { get; set; }
+        public string Query { get; set; }
+        public List<DataSourceParameter> Parameters { get; set; }
+        public int? RunningTotalTextColumnIndex { get; set; }
+        public List<int> RunningTotalFieldIndices { get; set; }
+        public DataTable Data { get; set; }
+    }
+}

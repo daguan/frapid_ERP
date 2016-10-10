@@ -713,8 +713,8 @@ CREATE TABLE core.marital_statuses
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
-INSERT INTO core.offices(office_code, office_name)
-SELECT 'DEF', 'Default';
+INSERT INTO core.offices(office_code, office_name, currency_code)
+SELECT 'DEF', 'Default', 'USD';
 
 INSERT INTO core.genders(gender_code, gender_name)
 SELECT 'M', 'Male' UNION ALL
@@ -960,6 +960,21 @@ BEGIN
 END
 $$LANGUAGE plpgsql;
 
+
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/core.get_office_name_by_office_id.sql --<--<--
+DROP FUNCTION IF EXISTS core.get_office_name_by_office_id(_office_id integer);
+
+CREATE FUNCTION core.get_office_name_by_office_id(_office_id integer)
+RETURNS text
+AS
+$$
+BEGIN
+    RETURN core.offices.office_name
+    FROM core.offices
+    WHERE core.offices.office_id = _office_id;
+END
+$$
+LANGUAGE plpgsql;
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/10.policy/access_policy.sql --<--<--
 

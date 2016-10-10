@@ -42,7 +42,7 @@ namespace Frapid.ApplicationState.Cache
             var dictionary = GetDictionary(tenant, login);
 
 
-            factory.Add(tenant + "/dictionary/" + key, dictionary, DateTimeOffset.UtcNow.AddHours(2));
+            factory.Add(tenant + "/dictionary/" + loginId, dictionary, DateTimeOffset.UtcNow.AddHours(2));
             factory.Add(key, login, DateTimeOffset.UtcNow.AddHours(2));
 
             return login;
@@ -115,10 +115,31 @@ namespace Frapid.ApplicationState.Cache
             dictionary.Add("Email", metaLogin.Email);
             dictionary.Add("Office", metaLogin.Office);
             dictionary.Add("OfficeId", metaLogin.OfficeId);
+            dictionary.Add("OfficeCode", metaLogin.OfficeCode);
             dictionary.Add("OfficeName", metaLogin.OfficeName);
             dictionary.Add("RoleName", metaLogin.RoleName);
             dictionary.Add("UserId", metaLogin.UserId);
-            dictionary.Add("UserName", metaLogin.Email);
+            dictionary.Add("UserName", metaLogin.Name);
+            dictionary.Add("ZipCode", metaLogin.ZipCode);
+            dictionary.Add("PoBox", metaLogin.PoBox);
+            dictionary.Add("AddressLine1", metaLogin.AddressLine1);
+            dictionary.Add("AddressLine2", metaLogin.AddressLine2);
+            dictionary.Add("Street", metaLogin.Street);
+            dictionary.Add("State", metaLogin.State);
+            dictionary.Add("City", metaLogin.City);
+            dictionary.Add("Country", metaLogin.Country);
+            dictionary.Add("CurrencyCode", metaLogin.CurrencyCode);
+            dictionary.Add("Phone", metaLogin.Phone);
+            dictionary.Add("Fax", metaLogin.Fax);
+            dictionary.Add("HasVat", metaLogin.HasVat);
+            dictionary.Add("IsAdministrator", metaLogin.IsAdministrator);
+            dictionary.Add("LastSeenOn", metaLogin.LastSeenOn);
+            dictionary.Add("LoginTimestamp", metaLogin.LoginTimestamp);
+            dictionary.Add("Url", metaLogin.Url);
+            dictionary.Add("PanNumber", metaLogin.PanNumber);
+            dictionary.Add("RegistrationDate", metaLogin.RegistrationDate);
+            dictionary.Add("Browser", metaLogin.Browser);
+            dictionary.Add("IpAddress", metaLogin.IpAddress);
 
             return dictionary;
         }

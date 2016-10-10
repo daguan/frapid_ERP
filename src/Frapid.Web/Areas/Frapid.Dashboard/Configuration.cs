@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
+using System.IO;
 using System.Web.Hosting;
-using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
 using static System.String;
 
@@ -24,7 +24,7 @@ namespace Frapid.Dashboard
         {
             string path = HostingEnvironment.MapPath(Format(CultureInfo.InvariantCulture, Path, tenant));
 
-            return path != null && !System.IO.Directory.Exists(path) ? Empty : path;
+            return path != null && !Directory.Exists(path) ? Empty : path;
         }
 
         public static string GetDefaultTheme(string tenant)

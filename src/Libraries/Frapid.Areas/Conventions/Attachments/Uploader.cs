@@ -42,11 +42,19 @@ namespace Frapid.Areas.Conventions.Attachments
 
             string path = PathMapper.MapPath($"/Tenants/{this.Tenant}/Areas/{this.Area.AreaName}/attachments/");
 
-            if (path == null || !Directory.Exists(path))
+            if (path == null)
             {
-                this.Logger.Warning(
-                    "Could not upload resource because the attachment directory \"{path}\" does not exist.", path);
-                throw new UploadException("Configuration error, please check the log.");
+                this.Logger.Warning("The attachment directory could not be located.");
+            }
+
+            if (!Directory.Exists(path))
+            {
+                this.Logger.Warning("The attachment directory \"{path}\" does not exist.", path);
+
+                if (path != null)
+                {
+                    Directory.CreateDirectory(path);
+                }
             }
 
             string fileName = Path.GetFileName(file.FileName);

@@ -1,0 +1,75 @@
+using System.Collections.Generic;
+using System.Xml;
+using Frapid.Framework.Extensions;
+using Frapid.Reports.Engine.Model;
+
+namespace Frapid.Reports.Engine.Parsers
+{
+    public sealed class BodyParser
+    {
+        public string Path { get; set; }
+        public ReportBody Body { get; set; }
+        public List<GridView> GridViews { get; set; }
+
+        public BodyParser(string path)
+        {
+            this.Path = path;
+            this.Body = new ReportBody();
+            this.GridViews = new List<GridView>();
+        }
+
+        private string GetContent()
+        {
+            return XmlHelper.GetNodeText(this.Path, "/FrapidReport/Body/Content");    
+        }
+
+        private int? GetGridViewDataSourceIndex(XmlNode node)
+        {
+            var attribute = node.Attributes?["Index"];
+            return attribute?.Value.To<int>();
+        }
+
+        private string GetGridViewCssClass(XmlNode node)
+        {
+            var attribute = node.Attributes?["Class"];
+            if (attribute != null)
+            {
+                return attribute.Value;
+            }
+
+            return string.Empty;
+        }
+        private string GetGridViewCssStyle(XmlNode node)
+        {
+            var attribute = node.Attributes?["Style"];
+            if (attribute != null)
+            {
+                return attribute.Value;
+            }
+
+            return string.Empty;
+        }
+
+        public ReportBody Get()
+        {
+            this.Body.Content = this.GetContent();
+
+
+            var nodes = XmlHelper.GetNodes(this.Path, "//GridViewDataSource");
+            foreach (XmlNode node in nodes)
+            {
+                this.GridViews.Add(new GridView
+                {
+                    DataSourceIndex = this.GetGridViewDataSourceIndex(node),
+                    CssClass = this.GetGridViewCssClass(node),
+                    CssStyle = this.GetGridViewCssStyle(node)
+                });
+
+            }
+
+            this.Body.GridViews = this.GridViews;
+
+            return this.Body;
+        }
+    }
+}
