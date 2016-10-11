@@ -17,7 +17,7 @@ namespace Frapid.Reports.Engine
         {
             this.Parameters = parameters;
 
-            string root = PathMapper.MapPath("/Reports");
+            string root = PathMapper.MapPath("/");
             this.Path = System.IO.Path.Combine(root, path);
 
             var parser = new ReportParser(this.Path, tenant, parameters);

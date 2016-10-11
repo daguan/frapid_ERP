@@ -28,6 +28,8 @@ namespace Frapid.Reports.Helpers
                     break;
                 case DataSourceParameterType.Number:
                     return value.To<long>();
+                case DataSourceParameterType.Bool:
+                    return value.To<bool>();
                 case DataSourceParameterType.Decimal:
                     return value.To<decimal>();
                 case DataSourceParameterType.Double:

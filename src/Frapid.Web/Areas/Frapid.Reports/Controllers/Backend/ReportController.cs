@@ -19,7 +19,7 @@ namespace Frapid.Reports.Controllers.Backend
             string query = this.Request?.Url?.Query.Or("");
             string sourcePath = "/dashboard/reports/source/" + path + query;
 
-            string root = PathMapper.MapPath("/Reports");
+            string root = PathMapper.MapPath("/");
             path = Path.Combine(root, path);
 
             var parameters = ParameterHelper.GetParameters(this.Request?.QueryString);
@@ -59,18 +59,12 @@ namespace Frapid.Reports.Controllers.Backend
                 }
             }
 
-            //foreach (var param in dbParams)
-            //{
-            //    string name = param.Name.Replace("@", "");
-            //    var value = report.Parameters.Where(x => x.Name.ToLower().Equals(name.ToLower()));
-
-            //    param.DefaultValue = value;
-            //}
 
             var model = new ParameterMeta
             {
                 ReportSourcePath = sourcePath,
-                Parameters = dbParams
+                Parameters = dbParams,
+                ReportTitle = report.Title
             };
 
             return this.View("~/Areas/Frapid.Reports/Views/Index.cshtml", model);

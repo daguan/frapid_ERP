@@ -8,6 +8,18 @@
 
 
 <style>
+    #dashboard-container {
+        padding: 1em 0 !important;
+    }
+
+    .padded.container {
+        padding: 2em !important;
+    }
+
+    .collapsed.column {
+        padding: 0 !important;
+    }
+
     .pusher, .ng-scope {
         height: 100% !important;
     }
@@ -20,7 +32,8 @@
     .toolbar {
         background-color: #444;
         height: 3em;
-        text-align: center;
+        text-align: left;
+        padding-left: 1em;
     }
 
         .toolbar .button {
@@ -63,49 +76,42 @@
     }
 </style>
 <div class="report-panel">
-    <div class="toolbar">
-        <div class="query button" onclick="$('.ui.report.sidebar')
-    .sidebar('setting', 'dimPage', false)    .sidebar('setting', 'transition', 'scale down')    .sidebar('toggle');" title="Display Parameters">
-            <i class="filter icon"></i>
-        </div>
-        <div onclick="$('iframe').get(0).contentWindow.print();" class="print button" title="Print This Report">
-            <i class="print icon"></i>
-        </div>
-        <div class="mail button" title="Email This Report">
-            <i class="mail icon"></i>
-        </div>
-        <div class="pdf button" title="Download PDF">
-            <i class="file pdf outline icon"></i>
-        </div>
-        <div class="excel button" title="Download Excel">
-            <i class="file excel outline icon"></i>
-        </div>
-        <div class="word button" title="Download Word">
-            <i class="file word outline icon"></i>
-        </div>
-        <div class="xml button" title="Download XML">
-            <i class="code icon"></i>
-        </div>
-        <div class="text button" title="Download Text">
-            <i class="file text outline icon"></i>
-        </div>
-        <div class="zoom in button" title="Zoom In">
-            <i class="zoom icon"></i>
-        </div>
-        <div class="zoom out button" title="Zoom Out">
-            <i class="zoom icon"></i>
-        </div>
-        <div onclick="document.location = document.location" class="refresh button" title="Refresh">
-            <i class="refresh icon"></i>
-        </div>
-    </div>
-    <div class="ui stackable grid" style="height: 100%;">
-        <div class="thirteen wide column">
-            <iframe src="@Model.ReportSourcePath"></iframe>
-        </div>
-        <div class="three wide column">
-            <div class="filter container" style="background-color: #efefef; height: 100%;">
-                <div class="ui huge header">Account Statement</div>
+    <div class="ui stackable report grid" style="height: 100%;">
+        <div class="three wide collapsed column">
+            <div class="toolbar">
+                <div onclick="$('iframe').get(0).contentWindow.print();" class="print button" title="Print This Report">
+                    <i class="print icon"></i>
+                </div>
+                <div class="mail button" title="Email This Report">
+                    <i class="mail icon"></i>
+                </div>
+                <div class="pdf button" title="Download PDF">
+                    <i class="file pdf outline icon"></i>
+                </div>
+                <div class="excel button" title="Download Excel">
+                    <i class="file excel outline icon"></i>
+                </div>
+                <div class="word button" title="Download Word">
+                    <i class="file word outline icon"></i>
+                </div>
+                <div class="xml button" title="Download XML">
+                    <i class="code icon"></i>
+                </div>
+                <div class="text button" title="Download Text">
+                    <i class="file text outline icon"></i>
+                </div>
+                <div class="zoom in button" title="Zoom In">
+                    <i class="zoom icon"></i>
+                </div>
+                <div class="zoom out button" title="Zoom Out">
+                    <i class="zoom icon"></i>
+                </div>
+                <div onclick="document.location = document.location" class="refresh button" title="Refresh">
+                    <i class="refresh icon"></i>
+                </div>
+            </div>
+            <div class="filter padded container" style="background-color: #efefef; height: 100%;">
+                <div class="ui huge header">@Model.ReportTitle</div>
 
                 <div class="ui small parameter form">
                     @foreach (var parameter in Model.Parameters)
@@ -131,6 +137,12 @@
                                     case DataSourceParameterType.Date:
                                         <input data-paramter="@name" id="@(name)InputDate" value="@parameter.DefaultValue" class="date" type="date" />
                                         break;
+                                    case DataSourceParameterType.Bool:
+                                        <div class="ui toggle checkbox">
+                                            <input data-paramter="@name" id="@(name)InputDate" value="@parameter.DefaultValue" type="checkbox">
+                                            <label>Yes</label>
+                                        </div>
+                                        break;
                                     case DataSourceParameterType.Decimal:
                                     case DataSourceParameterType.Double:
                                     case DataSourceParameterType.Number:
@@ -144,11 +156,11 @@
                         </div>
                     }
                     <button id="ShowButton" class="ui positive button">Show</button>
-                    <button class="ui orange button" onclick="$('.ui.report.sidebar').sidebar('hide');">
-                        Close
-                    </button>
                 </div>
             </div>
+        </div>
+        <div class="thirteen wide column">
+            <iframe src="@Model.ReportSourcePath"></iframe>
         </div>
     </div>
 </div>
@@ -160,31 +172,33 @@
 
         var persist = JSON.parse(localStorage.getItem(document.location.pathname));
 
-        $.each(persist, function () {
-            var el = $("#" + this.id);
-            var value = this.value;
-            var defaultValue;
+        if (persist) {
+            $.each(persist, function () {
+                var el = $("#" + this.id);
+                var value = this.value;
+                var defaultValue;
 
-            if (el.is("select")) {
-                defaultValue = el.attr("data-default-value");
-                if (!defaultValue) {
-                    el.attr("data-default-value", value);
-                };
-            } else {
-                defaultValue = el.val();
-                if (!defaultValue) {
+                if (el.is("select")) {
+                    defaultValue = el.attr("data-default-value");
+                    if (!defaultValue) {
+                        el.attr("data-default-value", value);
+                    };
+                } else {
+                    defaultValue = el.val();
+                    if (!defaultValue) {
 
-                    if (el.is(".date")) {
-                        var date = new Date(value);
+                        if (el.is(".date")) {
+                            var date = new Date(value);
 
-                        el.datepicker("setDate", date);
-                    } else {
-                        el.val(value);
+                            el.datepicker("setDate", date);
+                        } else {
+                            el.val(value);
+                        };
                     };
                 };
-            };
 
-        });
+            });
+        };
 
         var candidates = $("select[data-url]");
 
@@ -203,8 +217,6 @@
                     100);
             }, keyField, valueField, false);
         });
-
-
     })();
 
     $("#ShowButton")

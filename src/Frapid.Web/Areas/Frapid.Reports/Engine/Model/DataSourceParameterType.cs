@@ -6,6 +6,7 @@
         Number,
         Decimal,
         Double,
-        Date
+        Date,
+        Bool
     }
 }
