@@ -6,20 +6,20 @@ namespace Frapid.TokenManager
 {
     public class Token
     {
-        private string _audience;
+        //private string _audience;
         private DateTimeOffset _createdOn;
         private DateTimeOffset _expiresOn;
         private string _issuedBy;
         private long _loginId;
-        private int _officeId;
+        //private int _officeId;
         private string _subject;
-        private string _tokenId;
-        private int _userId;
+        //private string _tokenId;
+        //private int _userId;
 
         public Token()
         {
             this.Header = new Dictionary<string, object>();
-            this.Claims = new List<Claim>();
+            this.Claims = new Dictionary<string, string>();
         }
 
         public void AddHeader(string key, object value)
@@ -39,21 +39,32 @@ namespace Frapid.TokenManager
                 return;
             }
 
-            var claim = new Claim(key, value.ToString());
+            //var claim = new Claim(key, value.ToString());
 
-            this.Claims.Add(claim);
+            this.Claims.Add(key, value.ToString());
         }
 
         public void AddClaim(Claim claim)
         {
-            this.Claims.Add(claim);
+            this.Claims.Add(claim.Type, claim.Value);
         }
 
         #region Properties
 
         public Dictionary<string, object> Header { get; }
-        public List<Claim> Claims { get; }
+        public Dictionary<string, string> Claims { get; }
         public string ClientToken { get; set; }
+
+        public List<Claim> GetClaims()
+        {
+            var claims = new List<Claim>();
+            foreach (var claim in this.Claims)
+            {
+                claims.Add(new Claim(claim.Key, claim.Value, null, this.IssuedBy));
+            }
+
+            return claims;
+        }
 
         public DateTimeOffset CreatedOn
         {
@@ -81,18 +92,18 @@ namespace Frapid.TokenManager
             }
         }
 
-        public string Audience
-        {
-            get
-            {
-                return this._audience;
-            }
-            set
-            {
-                this._audience = value;
-                this.AddClaim("aud", value);
-            }
-        }
+        //public string Audience
+        //{
+        //    get
+        //    {
+        //        return this._audience;
+        //    }
+        //    set
+        //    {
+        //        this._audience = value;
+        //        this.AddClaim("aud", value);
+        //    }
+        //}
 
         public string Subject
         {
@@ -120,18 +131,18 @@ namespace Frapid.TokenManager
             }
         }
 
-        public string TokenId
-        {
-            get
-            {
-                return this._tokenId;
-            }
-            set
-            {
-                this._tokenId = value;
-                this.AddClaim("jti", value);
-            }
-        }
+        //public string TokenId
+        //{
+        //    get
+        //    {
+        //        return this._tokenId;
+        //    }
+        //    set
+        //    {
+        //        this._tokenId = value;
+        //        this.AddClaim("jti", value);
+        //    }
+        //}
 
         public long LoginId
         {
@@ -148,31 +159,31 @@ namespace Frapid.TokenManager
 
         public Guid? ApplicationId { get; set; }
 
-        public int UserId
-        {
-            get
-            {
-                return this._userId;
-            }
-            set
-            {
-                this._userId = value;
-                this.AddClaim("userid", value);
-            }
-        }
+        //public int UserId
+        //{
+        //    get
+        //    {
+        //        return this._userId;
+        //    }
+        //    set
+        //    {
+        //        this._userId = value;
+        //        this.AddClaim("userid", value);
+        //    }
+        //}
 
-        public int OfficeId
-        {
-            get
-            {
-                return this._officeId;
-            }
-            set
-            {
-                this._officeId = value;
-                this.AddClaim("officeid", value);
-            }
-        }
+        //public int OfficeId
+        //{
+        //    get
+        //    {
+        //        return this._officeId;
+        //    }
+        //    set
+        //    {
+        //        this._officeId = value;
+        //        this.AddClaim("officeid", value);
+        //    }
+        //}
 
         #endregion
     }

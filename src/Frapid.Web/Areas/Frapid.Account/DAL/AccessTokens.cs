@@ -25,7 +25,8 @@ namespace Frapid.Account.DAL
             await Factory.InsertAsync(tenant, new AccessToken
             {
                 ApplicationId = token.ApplicationId,
-                Audience = token.Audience,
+                //Audience = token.Audience,
+                Audience = tenant,
                 Claims = JsonConvert.SerializeObject(token.Claims),
                 ClientToken = token.ClientToken,
                 CreatedOn = token.CreatedOn,
@@ -35,7 +36,8 @@ namespace Frapid.Account.DAL
                 IssuedBy = token.IssuedBy,
                 LoginId = token.LoginId,
                 Subject = token.Subject,
-                TokenId = token.TokenId,
+                //TokenId = token.TokenId,
+                TokenId = tenant + "/" + token.LoginId,
                 UserAgent = userAgent
             }).ConfigureAwait(false);
         }

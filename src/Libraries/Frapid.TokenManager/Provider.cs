@@ -48,14 +48,14 @@ namespace Frapid.TokenManager
             token.AddHeader("typ", "JWT");
 
             token.IssuedBy = this.TokenIssuerName;
-            token.Audience = this.Tenant;
+            //token.Audience = this.Tenant;
             token.CreatedOn = DateTimeOffset.UtcNow;
             token.ExpiresOn = DateTimeOffset.UtcNow.AddHours(this.TokenValidHours);
             token.Subject = this.Tenant;
-            token.TokenId = this.Tenant + this.LoginId;
+            //token.TokenId = this.Tenant + this.LoginId;
             token.LoginId = this.LoginId;
-            token.UserId = this.UserId;
-            token.OfficeId = this.OfficeId;
+            //token.UserId = this.UserId;
+            //token.OfficeId = this.OfficeId;
             token.ApplicationId = this.ApplicationId;
             token.ClientToken = this.Encode(token);
 
@@ -82,16 +82,16 @@ namespace Frapid.TokenManager
         {
             var token = new Token();
             string decoded = JWT.Decode(clientToken, this.Key);
-            var dto = JsonConvert.DeserializeObject<List<Claim>>(decoded);
+            var dto = JsonConvert.DeserializeObject<Dictionary<string, string>>(decoded);
             token.ClientToken = clientToken;
 
             foreach (var c in dto)
             {
-                switch (c.Type)
+                switch (c.Key)
                 {
-                    case "aud":
-                        token.Audience = c.Value;
-                        break;
+                    //case "aud":
+                    //    token.Audience = c.Value;
+                    //    break;
                     case "iat":
                         token.CreatedOn = new DateTime(c.Value.To<long>(), DateTimeKind.Utc);
                         break;
@@ -101,21 +101,21 @@ namespace Frapid.TokenManager
                     case "sub":
                         token.Subject = c.Value;
                         break;
-                    case "jti":
-                        token.TokenId = c.Value;
-                        break;
+                    //case "jti":
+                    //    token.TokenId = c.Value;
+                    //    break;
                     case "iss":
                         token.IssuedBy = c.Value;
                         break;
                     case "loginid":
                         token.LoginId = c.Value.To<long>();
                         break;
-                    case "userid":
-                        token.UserId = c.Value.To<int>();
-                        break;
-                    case "officeid":
-                        token.OfficeId = c.Value.To<int>();
-                        break;
+                    //case "userid":
+                    //    token.UserId = c.Value.To<int>();
+                    //    break;
+                    //case "officeid":
+                    //    token.OfficeId = c.Value.To<int>();
+                    //    break;
                 }
             }
 

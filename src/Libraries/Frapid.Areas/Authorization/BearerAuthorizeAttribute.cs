@@ -31,7 +31,7 @@ namespace Frapid.Areas.Authorization
                     AppUsers.SetCurrentLoginAsync(tenant, token.LoginId).Wait();
                     var loginView = AppUsers.GetCurrentAsync(tenant, token.LoginId).Result;
 
-                    var identity = new ClaimsIdentity(token.Claims, DefaultAuthenticationTypes.ApplicationCookie, ClaimTypes.NameIdentifier, ClaimTypes.Role);
+                    var identity = new ClaimsIdentity(token.GetClaims(), DefaultAuthenticationTypes.ApplicationCookie, ClaimTypes.NameIdentifier, ClaimTypes.Role);
 
                     identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, token.LoginId.ToString(CultureInfo.InvariantCulture)));
 

@@ -110,7 +110,7 @@ namespace Frapid.Areas
                         IsAdministrator = loginView.IsAdministrator
                     };
 
-                    var identity = new ClaimsIdentity(token.Claims, DefaultAuthenticationTypes.ApplicationCookie,
+                    var identity = new ClaimsIdentity(token.GetClaims(), DefaultAuthenticationTypes.ApplicationCookie,
                         ClaimTypes.NameIdentifier, ClaimTypes.Role);
                     identity.AddClaim(new Claim(ClaimTypes.NameIdentifier,
                         token.LoginId.ToString(CultureInfo.InvariantCulture)));

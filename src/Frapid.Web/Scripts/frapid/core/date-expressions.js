@@ -118,9 +118,20 @@ function loadDatepicker() {
         numberOfMonths: eval(datepickerNumberOfMonths)
     },
     $.datepicker.regional[language]);
+	
+	
+	$.each(candidates, function(){
+		var el = $(this);
+		var val = el.val();
+		
+		if(!val){
+			if(window.today){
+				el.datepicker( "setDate", new Date(window.today));				
+			};
+		};
+	});
 
-
-    $("input[type=date], .date").blur(function () {
+    candidates.blur(function () {
         if (today === "") return;
         var control = $(this);
         var value = control.val().trim().toLowerCase();

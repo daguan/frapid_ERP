@@ -39,9 +39,9 @@ namespace Frapid.WebApi
                     Tenant = this.Tenant,
                     ClientToken = token.ClientToken,
                     LoginId = token.LoginId,
-                    UserId = token.UserId,
+                    UserId = loginView.UserId,
                     Name = loginView.Name,
-                    OfficeId = token.OfficeId,
+                    OfficeId = loginView.OfficeId,
                     OfficeName = loginView.OfficeName,
                     Email = loginView.Email,
                     RoleId = loginView.RoleId,
@@ -49,7 +49,7 @@ namespace Frapid.WebApi
                     IsAdministrator = loginView.IsAdministrator
                 };
 
-                var identity = new ClaimsIdentity(token.Claims);
+                var identity = new ClaimsIdentity(token.GetClaims());
 
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, token.LoginId.ToString(CultureInfo.InvariantCulture)));
 
