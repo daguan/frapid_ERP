@@ -3,7 +3,7 @@ SET builddir=%~dp0
 rmdir %~dp0..\src\Frapid.Web\bin /Q /S
 
 if exist "../src/Frapid.Web.sln" (
-	@echo Building Frapid.Web.sln
+	@echo Building Frapid.Web
 	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web.sln /p:VisualStudioVersion=14.0
 )
 
@@ -39,7 +39,7 @@ if exist "../src/Frapid.Web/Areas/Frapid.Account/Frapid.Account.sln" (
 )
 
 if exist "../src/Frapid.Web/Areas/Frapid.Reports/Frapid.Reports.sln" (
-	@echo Building Account Module
+	@echo Building Frapid Reporting Module
 	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/Frapid.Reports/Frapid.Reports.sln /p:VisualStudioVersion=14.0
 )
 
