@@ -48,7 +48,7 @@ function serializeForm(el) {
                     return null;
                 };
                 
-                return val;
+                return el.datepicker("getDate");
                 break;
             case "checkbox":                
                 return el.is(":checked");

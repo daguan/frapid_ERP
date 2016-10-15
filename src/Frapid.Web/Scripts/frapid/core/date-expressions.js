@@ -122,6 +122,12 @@ function loadDatepicker() {
 	
 	$.each(candidates, function(){
 		var el = $(this);
+		
+		//Chrome does not support <input type="date" /> and jQuery UI datepicker
+		if(el.attr("type") === "date"){
+			el.attr("type", "text");
+		};
+		
 		var val = el.val();
 		
 		if(!val){

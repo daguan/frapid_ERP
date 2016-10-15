@@ -18,3 +18,29 @@ jQuery.fn.setSelectedText = function (text) {
 
     target.prop('selected', true);
 };
+
+function displayFieldBinder(el, url, notNull) {
+	function request() {
+		return window.getAjaxRequest(url);
+	};
+
+	var ajax = request();
+
+	ajax.success(function (response) {
+		var options = "";
+
+		if (!notNull) {
+			options += "<option>Select</option>";
+		};
+
+		$.each(response, function () {
+			var option = "<option value='{key}'>{value}</option>";
+			option = option.replace("{key}", this.Key);
+			option = option.replace("{value}", this.Value);
+
+			options += option;
+		});
+
+		el.html(options);
+	});
+};

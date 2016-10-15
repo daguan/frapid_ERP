@@ -13,6 +13,11 @@ if exist "../src/Frapid.Web/Areas/Frapid.Dashboard/Frapid.Dashboard.sln" (
 )
 
 
+if exist "../src/Frapid.Web/Areas/Frapid.WebsiteBuilder/Frapid.WebsiteBuilder.sln" (
+	@echo Building WebsiteBuilder Module
+	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/Frapid.WebsiteBuilder/Frapid.WebsiteBuilder.sln /p:VisualStudioVersion=14.0
+)
+
 if exist "../src/Frapid.Web/Areas/Frapid.Authorization/Frapid.Authorization.sln" (
 	@echo Building Frapid Authorization Module
 	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/Frapid.Authorization/Frapid.Authorization.sln /p:VisualStudioVersion=14.0
@@ -26,11 +31,6 @@ if exist "../src/Frapid.Web/Areas/Frapid.Config/Frapid.Config.sln" (
 if exist "../src/Frapid.Web/Areas/Frapid.Core/Frapid.Core.sln" (
 	@echo Building Core Module
 	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/Frapid.Core/Frapid.Core.sln /p:VisualStudioVersion=14.0
-)
-
-if exist "../src/Frapid.Web/Areas/Frapid.WebsiteBuilder/Frapid.WebsiteBuilder.sln" (
-	@echo Building WebsiteBuilder Module
-	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/Frapid.WebsiteBuilder/Frapid.WebsiteBuilder.sln /p:VisualStudioVersion=14.0
 )
 
 if exist "../src/Frapid.Web/Areas/Frapid.Account/Frapid.Account.sln" (
