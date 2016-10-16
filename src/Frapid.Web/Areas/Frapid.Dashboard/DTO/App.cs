@@ -5,6 +5,7 @@ namespace Frapid.Dashboard.DTO
 {
     public class App : IPoco
     {
+        public int AppId { get; set; }
         public string AppName { get; set; }
         public string Name { get; set; }
         public string VersionNumber { get; set; }

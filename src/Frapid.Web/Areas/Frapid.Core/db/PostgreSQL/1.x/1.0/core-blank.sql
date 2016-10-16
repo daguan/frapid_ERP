@@ -548,6 +548,7 @@ CREATE TABLE core.countries
 
 CREATE TABLE core.apps
 (
+	app_id										SERIAL,
     app_name                                    national character varying(100) PRIMARY KEY,
     name                                        national character varying(100),
     version_number                              national character varying(100),

@@ -3,6 +3,7 @@
 CREATE FUNCTION auth.get_apps(_user_id integer, _office_id integer, _culture text)
 RETURNS TABLE
 (
+    app_id                              integer,
     app_name                            text,
     name                                text,
     version_number                      text,
@@ -16,6 +17,7 @@ $$
 BEGIN
     RETURN QUERY
     SELECT
+        core.apps.app_id,
         core.apps.app_name::text,
         core.apps.name::text,
         core.apps.version_number::text,

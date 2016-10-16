@@ -19,7 +19,7 @@
     scrudFactory.hiddenColumns = ["Password"];
 
     scrudFactory.allowDelete = true;
-    scrudFactory.allowEdit = true;
+    scrudFactory.allowEdit = false;
 
     scrudFactory.live = "Email";
 
@@ -57,12 +57,8 @@
     ];
 
     $.get('/ScrudFactory/View.html?id=' + Math.random(), function(view) {
-        $.get('/ScrudFactory/Form.html', function(form) {
-            $("#ScrudFactoryView").html(view);
-            $("#ScrudFactoryForm").html(form);
-            $.cachedScript("/assets/js/scrudfactory-view.js");
-            $.cachedScript("/assets/js/scrudfactory-form.js");
-        });
+        $("#ScrudFactoryView").html(view);
+        $.cachedScript("/assets/js/scrudfactory-view.js");
     });
 </script>
 

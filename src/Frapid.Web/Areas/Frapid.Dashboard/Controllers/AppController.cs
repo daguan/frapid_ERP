@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.Areas;
 using Frapid.Areas.Authorization;
@@ -17,7 +18,8 @@ namespace Frapid.Dashboard.Controllers
             int officeId = this.AppUser.OfficeId;
 
             string culture = CultureManager.GetCurrent().TwoLetterISOLanguageName;
-            var apps = await App.GetAsync(this.Tenant, userId, officeId, culture).ConfigureAwait(false);
+            var awaiter = await App.GetAsync(this.Tenant, userId, officeId, culture).ConfigureAwait(false);
+            var apps = awaiter.OrderBy(x => x.AppId);
 
             return this.Ok(apps);
         }

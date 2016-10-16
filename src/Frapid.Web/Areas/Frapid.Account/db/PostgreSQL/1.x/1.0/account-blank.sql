@@ -1074,7 +1074,11 @@ EXECUTE PROCEDURE account.token_auto_expiry_trigger();
 SELECT * FROM core.create_app('Frapid.Account', 'Account', '1.0', 'MixERP Inc.', 'December 1, 2015', 'grey lock', '/dashboard/account/configuration-profile', NULL::text[]);
 
 SELECT * FROM core.create_menu('Frapid.Account', 'Roles', '/dashboard/account/roles', 'users', '');
-SELECT * FROM core.create_menu('Frapid.Account', 'User Management', '/dashboard/account/user-management', 'user', '');
+SELECT * FROM core.create_menu('Frapid.Account', 'Users', '', 'user', '');
+SELECT * FROM core.create_menu('Frapid.Account', 'Add New User', '/dashboard/account/user/add', 'user', 'Users');
+SELECT * FROM core.create_menu('Frapid.Account', 'Change Password', '/dashboard/account/user/change-password', 'user', 'Users');
+SELECT * FROM core.create_menu('Frapid.Account', 'List Users', '/dashboard/account/user/list', 'user', 'Users');
+
 SELECT * FROM core.create_menu('Frapid.Account', 'Configuration Profile', '/dashboard/account/configuration-profile', 'configure', '');
 SELECT * FROM core.create_menu('Frapid.Account', 'Email Templates', '', 'mail', '');
 SELECT * FROM core.create_menu('Frapid.Account', 'Account Verification', '/dashboard/account/email-templates/account-verification', 'checkmark box', 'Email Templates');

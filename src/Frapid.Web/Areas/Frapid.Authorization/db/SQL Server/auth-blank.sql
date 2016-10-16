@@ -211,8 +211,6 @@ GO
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.get_apps.sql --<--<--
-
-
 IF OBJECT_ID('auth.get_apps') IS NOT NULL
 DROP FUNCTION auth.get_apps;
 
@@ -221,6 +219,7 @@ GO
 CREATE FUNCTION auth.get_apps(@user_id integer, @office_id integer, @culture national character varying(500))
 RETURNS @result TABLE
 (
+	app_id								integer,
     app_name                            national character varying(500),
     name                                national character varying(500),
     version_number                      national character varying(500),
@@ -233,6 +232,7 @@ AS
 BEGIN
     INSERT INTO @result
     SELECT
+		core.apps.app_id,
         core.apps.app_name,
         core.apps.name,
         core.apps.version_number,

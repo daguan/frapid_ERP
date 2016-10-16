@@ -1,6 +1,4 @@
-﻿
-
-IF OBJECT_ID('auth.get_apps') IS NOT NULL
+﻿IF OBJECT_ID('auth.get_apps') IS NOT NULL
 DROP FUNCTION auth.get_apps;
 
 GO
@@ -8,6 +6,7 @@ GO
 CREATE FUNCTION auth.get_apps(@user_id integer, @office_id integer, @culture national character varying(500))
 RETURNS @result TABLE
 (
+	app_id								integer,
     app_name                            national character varying(500),
     name                                national character varying(500),
     version_number                      national character varying(500),
@@ -20,6 +19,7 @@ AS
 BEGIN
     INSERT INTO @result
     SELECT
+		core.apps.app_id,
         core.apps.app_name,
         core.apps.name,
         core.apps.version_number,

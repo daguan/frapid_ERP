@@ -156,6 +156,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
+    <Compile Include="Controllers\Backend\AddUserController.cs" />
+    <Compile Include="Controllers\Backend\ChangePasswordController.cs" />
     <Compile Include="Controllers\Backend\EmailTemplateController.cs" />
     <Compile Include="Controllers\Frontend\ChangePasswordController.cs" />
     <Compile Include="Controllers\SignInController.cs" />
@@ -179,6 +181,7 @@
     <Compile Include="Emails\ResetEmail.cs" />
     <Compile Include="Models\ChangePasswordModel.cs" />
     <Compile Include="Models\SignUpModel.cs" />
+    <Compile Include="ViewModels\ChangePasswordInfo.cs" />
     <Compile Include="ViewModels\IUserInfo.cs" />
     <Compile Include="Emails\WelcomeEmail.cs" />
     <Compile Include="Emails\SignUpEmail.cs" />
@@ -210,6 +213,7 @@
     <Compile Include="AreaRegistration.cs" />
     <Compile Include="InputModels\SignInInfo.cs" />
     <Compile Include="ViewModels\Template.cs" />
+    <Compile Include="ViewModels\UserInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\EmailTemplate\Editor.js" />
@@ -235,6 +239,8 @@
     <Content Include="web.config" />
     <Content Include="Views\ChangePassword\Index.cshtml" />
     <Content Include="Views\SignOut\Index.cshtml" />
+    <Content Include="Views\User\AddNew.cshtml" />
+    <Content Include="Views\User\ChangePassword.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
