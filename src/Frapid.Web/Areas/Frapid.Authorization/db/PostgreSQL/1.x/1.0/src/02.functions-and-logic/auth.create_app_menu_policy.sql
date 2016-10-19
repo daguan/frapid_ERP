@@ -20,11 +20,12 @@ $$
     DECLARE _menu_ids               int[];
 BEGIN
     SELECT
-        role_id
+        account.roles.role_id
     INTO
         _role_id
     FROM account.roles
-    WHERE role_name = _role_name;
+    WHERE account.roles.role_name = _role_name
+	AND NOT account.roles.deleted;
 
     IF(_menu_names = '{*}'::text[]) THEN
         SELECT
@@ -32,15 +33,17 @@ BEGIN
         INTO
             _menu_ids
         FROM core.menus
-        WHERE app_name = _app_name;
+        WHERE core.menus.app_name = _app_name
+		AND NOT core.menus.deleted;
     ELSE
         SELECT
             array_agg(menu_id)
         INTO
             _menu_ids
         FROM core.menus
-        WHERE app_name = _app_name
-        AND menu_name = ANY(_menu_names);
+        WHERE core.menus.app_name = _app_name
+        AND core.menus.menu_name = ANY(_menu_names)
+		AND NOT core.menus.deleted;
     END IF;
     
     PERFORM auth.save_group_menu_policy(_role_id, _office_id, array_to_string(_menu_ids, ','), _app_name);    

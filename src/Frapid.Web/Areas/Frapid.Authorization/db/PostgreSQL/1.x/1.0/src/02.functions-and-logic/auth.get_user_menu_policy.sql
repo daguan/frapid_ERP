@@ -33,7 +33,8 @@ BEGIN
     INTO
         _role_id
     FROM account.users
-    WHERE user_id = _user_id;
+    WHERE account.users.user_id = _user_id
+	AND NOT account.users.deleted;
 
     DROP TABLE IF EXISTS _temp_menu;
     CREATE TEMPORARY TABLE _temp_menu

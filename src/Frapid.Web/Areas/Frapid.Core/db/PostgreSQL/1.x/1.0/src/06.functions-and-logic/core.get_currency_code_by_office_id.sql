@@ -7,7 +7,8 @@ $$
 BEGIN
     RETURN currency_code 
     FROM core.offices
-    WHERE office_id = _office_id;
+    WHERE core.offices.office_id = _office_id
+	AND NOT core.offices.deleted;
 END
 $$
 LANGUAGE plpgsql;

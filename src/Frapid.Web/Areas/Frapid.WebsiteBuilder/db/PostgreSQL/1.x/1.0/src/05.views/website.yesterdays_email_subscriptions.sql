@@ -3,29 +3,29 @@
 CREATE VIEW website.yesterdays_email_subscriptions
 AS
 SELECT
-    email,
-    first_name,
-    last_name,
+    website.email_subscriptions.email,
+    website.email_subscriptions.first_name,
+    website.email_subscriptions.last_name,
     'subscribed' AS subscription_type
 FROM website.email_subscriptions
-WHERE subscribed_on::date = 'yesterday'::date
-AND NOT confirmed_on::date = 'yesterday'::date
+WHERE website.email_subscriptions.subscribed_on::date = 'yesterday'::date
+AND NOT website.email_subscriptions.confirmed_on::date = 'yesterday'::date
 AND NOT website.email_subscriptions.deleted
 UNION ALL
 SELECT
-    email,
-    first_name,
-    last_name,
+    website.email_subscriptions.email,
+    website.email_subscriptions.first_name,
+    website.email_subscriptions.last_name,
     'unsubscribed'
 FROM website.email_subscriptions
-WHERE unsubscribed_on::date = 'yesterday'::date
+WHERE website.email_subscriptions.unsubscribed_on::date = 'yesterday'::date
 AND NOT website.email_subscriptions.deleted
 UNION ALL
 SELECT
-    email,
-    first_name,
-    last_name,
+    website.email_subscriptions.email,
+    website.email_subscriptions.first_name,
+    website.email_subscriptions.last_name,
     'confirmed'
 FROM website.email_subscriptions
-WHERE confirmed_on::date = 'yesterday'::date
+WHERE website.email_subscriptions.confirmed_on::date = 'yesterday'::date
 AND NOT website.email_subscriptions.deleted;

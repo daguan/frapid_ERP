@@ -10,27 +10,31 @@ $$
 BEGIN
     IF EXISTS
     (
-        SELECT * FROM account.installed_domains
-        WHERE admin_email = _email
+        SELECT * 
+		FROM account.installed_domains
+        WHERE account.installed_domains.admin_email = _email
+		AND NOT account.installed_domains.deleted
     ) THEN
         _is_admin = true;
     END IF;
    
     IF(_is_admin) THEN
         SELECT
-            role_id
+            account.roles.role_id
         INTO
             _role_id
         FROM account.roles
-        WHERE is_administrator
+        WHERE account.roles.is_administrator
+		AND NOT account.roles.deleted
         LIMIT 1;
     ELSE
         SELECT 
-            registration_role_id
+            account.configuration_profiles.registration_role_id
         INTO
             _role_id
         FROM account.configuration_profiles
-        WHERE is_active;
+        WHERE account.configuration_profiles.is_active
+		AND NOT account.configuration_profiles.deleted;
     END IF;
 
     RETURN _role_id;

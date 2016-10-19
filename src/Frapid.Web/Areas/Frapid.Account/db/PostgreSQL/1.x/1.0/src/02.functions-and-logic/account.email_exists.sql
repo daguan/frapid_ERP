@@ -6,10 +6,16 @@ AS
 $$
     DECLARE _count                          integer;
 BEGIN
-    SELECT count(*) INTO _count FROM account.users WHERE lower(email) = LOWER(_email);
+    SELECT COUNT(*) INTO _count
+	FROM account.users 
+	WHERE LOWER(email) = LOWER(_email)
+	AND NOT account.users.deleted;
 
     IF(COALESCE(_count, 0) =0) THEN
-        SELECT count(*) INTO _count FROM account.registrations WHERE lower(email) = LOWER(_email);
+        SELECT COUNT(*) INTO _count 
+		FROM account.registrations 
+		WHERE LOWER(email) = LOWER(_email)
+		AND NOT account.registrations.deleted;
     END IF;
     
     RETURN COALESCE(_count, 0) > 0;

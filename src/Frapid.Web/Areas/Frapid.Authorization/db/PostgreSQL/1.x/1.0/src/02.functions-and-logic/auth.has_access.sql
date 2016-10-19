@@ -23,9 +23,10 @@ BEGIN
     INTO 
         _user_all_policy
     FROM auth.entity_access_policy
-    WHERE user_id = _user_id
-    AND access_type_id IS NULL
-    AND COALESCE(entity_name, '') = '';
+    WHERE auth.entity_access_policy.user_id = _user_id
+    AND auth.entity_access_policy.access_type_id IS NULL
+    AND COALESCE(entity_name, '') = ''
+	AND NOT auth.entity_access_policy.deleted;
 
     --USER AUTHORIZATION BASED ON ALL ENTITIES AND SPECIFIED ACCESS TYPE
     SELECT 
@@ -33,9 +34,10 @@ BEGIN
     INTO
         _user_all_entity_specific_access_type
     FROM auth.entity_access_policy
-    WHERE user_id = _user_id
-    AND access_type_id = _access_type_id
-    AND COALESCE(entity_name, '') = '';
+    WHERE auth.entity_access_policy.user_id = _user_id
+    AND auth.entity_access_policy.access_type_id = _access_type_id
+    AND COALESCE(entity_name, '') = ''
+	AND NOT auth.entity_access_policy.deleted;
 
     --USER AUTHORIZATION BASED ON SPECIFIED ENTITY AND ALL ACCESS TYPES
     SELECT
@@ -43,9 +45,10 @@ BEGIN
     INTO
         _user_specific_entity_all_access_type
     FROM auth.entity_access_policy
-    WHERE user_id = _user_id
-    AND access_type_id IS NULL
-    AND entity_name = _entity;
+    WHERE auth.entity_access_policy.user_id = _user_id
+    AND auth.entity_access_policy.access_type_id IS NULL
+    AND auth.entity_access_policy.entity_name = _entity
+	AND NOT auth.entity_access_policy.deleted;
 
     --USER AUTHORIZATION BASED ON SPECIFIED ENTITY AND SPECIFIED ACCESS TYPE
     SELECT 
@@ -53,9 +56,10 @@ BEGIN
     INTO
         _user_explicit_policy
     FROM auth.entity_access_policy
-    WHERE user_id = _user_id
-    AND access_type_id = _access_type_id
-    AND entity_name = _entity;
+    WHERE auth.entity_access_policy.user_id = _user_id
+    AND auth.entity_access_policy.access_type_id = _access_type_id
+    AND auth.entity_access_policy.entity_name = _entity
+	AND NOT auth.entity_access_policy.deleted;
 
     --EFFECTIVE USER POLICY BASED ON PRECEDENCE.
     _effective_user_policy := COALESCE(_user_explicit_policy, _user_specific_entity_all_access_type, _user_all_entity_specific_access_type, _user_all_policy);
@@ -72,9 +76,10 @@ BEGIN
     INTO 
         _group_all_policy
     FROM auth.group_entity_access_policy
-    WHERE role_id = _role_id
-    AND access_type_id IS NULL
-    AND COALESCE(entity_name, '') = '';
+    WHERE auth.group_entity_access_policy.role_id = _role_id
+    AND auth.group_entity_access_policy.access_type_id IS NULL
+    AND COALESCE(entity_name, '') = ''
+	AND NOT auth.group_entity_access_policy.deleted;
 
     --GROUP AUTHORIZATION BASED ON ALL ENTITIES AND SPECIFIED ACCESS TYPE
     SELECT 
@@ -82,9 +87,10 @@ BEGIN
     INTO
         _group_all_entity_specific_access_type
     FROM auth.group_entity_access_policy
-    WHERE role_id = _role_id
-    AND access_type_id = _access_type_id
-    AND COALESCE(entity_name, '') = '';
+    WHERE auth.group_entity_access_policy.role_id = _role_id
+    AND auth.group_entity_access_policy.access_type_id = _access_type_id
+    AND COALESCE(entity_name, '') = ''
+	AND NOT auth.group_entity_access_policy.deleted;
 
     --GROUP AUTHORIZATION BASED ON SPECIFIED ENTITY AND ALL ACCESS TYPES
     SELECT
@@ -92,9 +98,10 @@ BEGIN
     INTO
         _group_specific_entity_all_access_type
     FROM auth.group_entity_access_policy
-    WHERE role_id = _role_id
-    AND access_type_id IS NULL
-    AND entity_name = _entity;
+    WHERE auth.group_entity_access_policy.role_id = _role_id
+    AND auth.group_entity_access_policy.access_type_id IS NULL
+    AND entity_name = _entity
+	AND NOT auth.group_entity_access_policy.deleted;
 
     --GROUP AUTHORIZATION BASED ON SPECIFIED ENTITY AND SPECIFIED ACCESS TYPE
     SELECT 
@@ -102,9 +109,10 @@ BEGIN
     INTO
         _group_explicit_policy
     FROM auth.group_entity_access_policy
-    WHERE role_id = _role_id
-    AND access_type_id = _access_type_id
-    AND entity_name = _entity;
+    WHERE auth.group_entity_access_policy.role_id = _role_id
+    AND auth.group_entity_access_policy.access_type_id = _access_type_id
+    AND auth.group_entity_access_policy.entity_name = _entity
+	AND NOT auth.group_entity_access_policy.deleted;
 
     --EFFECTIVE GROUP POLICY BASED ON PRECEDENCE.
     _effective_group_policy := COALESCE(_group_explicit_policy, _group_specific_entity_all_access_type, _group_all_entity_specific_access_type, _group_all_policy);

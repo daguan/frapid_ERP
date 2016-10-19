@@ -42,6 +42,7 @@ ON account.users.user_id = account.logins.user_id
 INNER JOIN account.roles
 ON account.roles.role_id = account.users.role_id
 INNER JOIN core.offices
-ON core.offices.office_id = account.logins.office_id;
+ON core.offices.office_id = account.logins.office_id
+WHERE NOT account.logins.deleted;
 
 

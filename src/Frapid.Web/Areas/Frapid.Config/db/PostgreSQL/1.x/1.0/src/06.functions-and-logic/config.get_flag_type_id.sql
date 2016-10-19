@@ -20,10 +20,11 @@ $$
 BEGIN
     RETURN flag_type_id
     FROM config.flags
-    WHERE user_id=$1
-    AND resource=$2
-    AND resource_key=$3
-    AND resource_id=$4;
+    WHERE config.flags.user_id=$1
+    AND config.flags.resource=$2
+    AND config.flags.resource_key=$3
+    AND config.flags.resource_id=$4
+	AND NOT config.flags.deleted;
 END
 $$
 LANGUAGE plpgsql;

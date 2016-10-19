@@ -7,7 +7,8 @@ $$
 BEGIN
     RETURN category_id
     FROM website.categories
-    WHERE category_name = _category_name;
+    WHERE website.categories.category_name = _category_name
+	AND NOT website.categories.deleted;
 END
 $$
 LANGUAGE plpgsql;
@@ -21,7 +22,8 @@ $$
 BEGIN
     RETURN category_id
     FROM website.categories
-    WHERE alias = _alias;
+    WHERE website.categories.alias = _alias
+	AND NOT website.categories.deleted;
 END
 $$
 LANGUAGE plpgsql;

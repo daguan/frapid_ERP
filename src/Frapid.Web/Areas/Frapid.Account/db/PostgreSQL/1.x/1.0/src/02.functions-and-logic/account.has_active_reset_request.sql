@@ -11,6 +11,7 @@ BEGIN
         SELECT * FROM account.reset_requests
         WHERE LOWER(email) = LOWER(_email)
         AND expires_on <= _expires_on
+		AND NOT account.reset_requests.deleted
     ) THEN        
         RETURN true;
     END IF;

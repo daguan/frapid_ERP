@@ -27,14 +27,16 @@ BEGIN
             array_agg(role_id)
         INTO
             _role_ids
-        FROM account.roles;
+        FROM account.roles
+		WHERE NOT account.roles.deleted;
     ELSE
         SELECT
             array_agg(role_id)
         INTO
             _role_ids
         FROM account.roles
-        WHERE role_name = ANY(_role_names);
+        WHERE role_name = ANY(_role_names)
+		AND NOT account.roles.deleted;
     END IF;
 
     IF(_access_types = '{*}'::text[]) THEN
@@ -42,14 +44,16 @@ BEGIN
             array_agg(access_type_id)
         INTO
             _access_type_ids
-        FROM auth.access_types;
+        FROM auth.access_types
+		WHERE NOT auth.access_types.deleted;
     ELSE
         SELECT
             array_agg(access_type_id)
         INTO
             _access_type_ids
         FROM auth.access_types
-        WHERE access_type_name = ANY(_access_types);
+        WHERE access_type_name = ANY(_access_types)
+		AND NOT auth.access_types.deleted;
     END IF;
 
     IF(_role_ids IS NOT NULL) THEN

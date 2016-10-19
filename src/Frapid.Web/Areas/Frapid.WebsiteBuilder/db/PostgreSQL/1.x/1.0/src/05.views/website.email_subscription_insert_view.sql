@@ -2,11 +2,15 @@ DROP VIEW IF EXISTS website.email_subscription_insert_view;
 
 CREATE VIEW website.email_subscription_insert_view
 AS
-SELECT * FROM website.email_subscriptions
-WHERE 1 = 0;
+SELECT * 
+FROM website.email_subscriptions
+WHERE 1 = 0
+AND NOT website.email_subscriptions.deleted;
 
 
-SELECT * FROM website.email_subscription_insert_view;
+SELECT * 
+FROM website.email_subscription_insert_view
+WHERE NOT website.email_subscription_insert_view.deleted;
 
 CREATE RULE log_subscriptions AS 
 ON INSERT TO website.email_subscription_insert_view
@@ -37,6 +41,7 @@ WHERE NOT EXISTS
 (
     SELECT 1 
     FROM website.email_subscriptions
-    WHERE email = NEW.email
+    WHERE website.email_subscriptions.email = NEW.email
+	AND NOT website.email_subscriptions.deleted
 );
 

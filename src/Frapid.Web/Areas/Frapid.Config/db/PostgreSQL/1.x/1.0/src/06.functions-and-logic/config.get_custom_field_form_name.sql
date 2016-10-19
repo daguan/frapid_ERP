@@ -14,7 +14,8 @@ $$
 BEGIN
     RETURN form_name 
     FROM config.custom_field_forms
-    WHERE table_name = _table_name;
+    WHERE config.custom_field_forms.table_name = _table_name
+	AND NOT config.custom_field_forms.deleted;
 END
 $$
 LANGUAGE plpgsql;
