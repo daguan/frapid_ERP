@@ -8,7 +8,8 @@ BEGIN
     RETURN 
     user_id
     FROM account.logins
-    WHERE login_id = _login_id;
+    WHERE account.logins.login_id = _login_id
+	AND NOT account.logins.deleted;
 END
 $$
 LANGUAGE plpgsql;

@@ -10,8 +10,9 @@ BEGIN
     (
         SELECT *
         FROM account.registrations
-        WHERE registration_id = _token
-        AND NOT confirmed
+        WHERE account.registrations.registration_id = _token
+        AND NOT account.registrations.confirmed
+		AND NOT account.registrations.deleted
     ) THEN
         RETURN true;
     END IF;

@@ -37,7 +37,8 @@ BEGIN
         _table_name,
         _key_name
     FROM config.custom_field_forms
-    WHERE config.custom_field_forms.form_name = _form_name;
+    WHERE config.custom_field_forms.form_name = _form_name
+	AND NOT config.custom_field_forms.deleted;
 
     SELECT 
         format_type(a.atttypid, a.atttypmod)
@@ -54,7 +55,8 @@ BEGIN
     INTO
         _cf_data_type
     FROM config.custom_field_data_types
-    WHERE data_type = _data_type;
+    WHERE config.custom_field_data_types.data_type = _data_type
+	AND NOT config.custom_field_data_types.deleted;
 
     
     _sql := 'CREATE TABLE IF NOT EXISTS %s_cf
@@ -88,8 +90,9 @@ BEGIN
    (
         SELECT 1
         FROM config.custom_field_setup
-        WHERE form_name = _form_name
-        AND field_name = _field_name
+        WHERE config.custom_field_setup.form_name = _form_name
+        AND config.custom_field_setup.field_name = _field_name
+		AND NOT config.custom_field_setup.deleted
    ) THEN
        INSERT INTO config.custom_field_setup(form_name, before_field, field_order, after_field, field_name, field_label, data_type, description)
        SELECT _form_name, _before_field, _field_order, _after_field, _field_name, _field_label, _data_type, _description;

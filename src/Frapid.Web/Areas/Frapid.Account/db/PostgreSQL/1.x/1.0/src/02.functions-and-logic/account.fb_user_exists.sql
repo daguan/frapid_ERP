@@ -10,6 +10,7 @@ BEGIN
         SELECT *
         FROM account.fb_access_tokens
         WHERE account.fb_access_tokens.user_id = _user_id
+		AND NOT account.fb_access_tokens.deleted
     ) THEN
         RETURN true;
     END IF;

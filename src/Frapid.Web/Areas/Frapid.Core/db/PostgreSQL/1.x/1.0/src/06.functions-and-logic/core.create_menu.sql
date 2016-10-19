@@ -78,7 +78,8 @@ BEGIN
     SELECT menu_id INTO _parent_menu_id
     FROM core.menus
     WHERE LOWER(menu_name) = LOWER(_parent_menu_name)
-    AND LOWER(app_name) = LOWER(_app_name);
+    AND LOWER(app_name) = LOWER(_app_name)
+	AND NOT core.menus.deleted;
 
     RETURN core.create_menu(_sort, _app_name, _menu_name, _url, _icon, _parent_menu_id);
 END

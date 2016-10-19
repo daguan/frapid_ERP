@@ -5,9 +5,10 @@ RETURNS integer
 AS
 $$
 BEGIN
-    RETURN registration_office_id
+    RETURN account.configuration_profiles.registration_office_id
     FROM account.configuration_profiles
-    WHERE is_active;
+    WHERE account.configuration_profiles.is_active
+	AND NOT account.configuration_profiles.deleted;
 END
 $$
 LANGUAGE plpgsql;

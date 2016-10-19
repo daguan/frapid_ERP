@@ -7,7 +7,8 @@ $$
 BEGIN
     RETURN user_id
     FROM account.users
-    WHERE LOWER(account.users.email) = LOWER(_email);
+    WHERE LOWER(account.users.email) = LOWER(_email)
+	AND NOT account.users.deleted;	
 END
 $$
 LANGUAGE plpgsql;

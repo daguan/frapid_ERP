@@ -6,7 +6,11 @@ AS
 $$
     DECLARE _count                          integer;
 BEGIN
-    SELECT count(*) INTO _count FROM account.users WHERE lower(email) = LOWER(_email);
+    SELECT COUNT(*) INTO _count 
+	FROM account.users 
+	WHERE lower(email) = LOWER(_email)
+	AND NOT account.users.deleted;
+	
     RETURN COALESCE(_count, 0) = 1;
 END
 $$

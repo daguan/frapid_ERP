@@ -14,8 +14,10 @@ $$
 BEGIN
     IF NOT EXISTS
     (
-        SELECT * FROM website.email_subscriptions
-        WHERE email = _email
+        SELECT * 
+		FROM website.email_subscriptions
+        WHERE website.email_subscriptions.email = _email
+		AND NOT website.email_subscriptions.deleted
     ) THEN
         INSERT INTO website.email_subscriptions(email)
         SELECT _email;

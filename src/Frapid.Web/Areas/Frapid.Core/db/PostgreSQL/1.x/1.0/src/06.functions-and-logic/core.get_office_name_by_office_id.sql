@@ -7,7 +7,8 @@ $$
 BEGIN
     RETURN core.offices.office_name
     FROM core.offices
-    WHERE core.offices.office_id = _office_id;
+    WHERE core.offices.office_id = _office_id
+	AND NOT core.offices.deleted;
 END
 $$
 LANGUAGE plpgsql;

@@ -30,7 +30,8 @@ BEGIN
     INTO
         _role_id
     FROM account.users
-    WHERE user_id = _user_id;
+    WHERE account.users.user_id = _user_id
+	AND NOT account.users.deleted;
 
     DROP TABLE IF EXISTS _temp_menu;
     CREATE TEMPORARY TABLE _temp_menu
@@ -49,21 +50,23 @@ BEGIN
     INSERT INTO _temp_menu(menu_id)
     SELECT auth.group_menu_access_policy.menu_id
     FROM auth.group_menu_access_policy
-    WHERE office_id = _office_id
-    AND role_id = _role_id;
+    WHERE auth.group_menu_access_policy.office_id = _office_id
+    AND auth.group_menu_access_policy.role_id = _role_id
+	AND NOT auth.group_menu_access_policy.deleted;
 
     --USER POLICY : ALLOWED MENUS
     INSERT INTO _temp_menu(menu_id)
     SELECT auth.menu_access_policy.menu_id
     FROM auth.menu_access_policy
-    WHERE office_id = _office_id
-    AND user_id = _user_id
-    AND allow_access
+    WHERE auth.menu_access_policy.office_id = _office_id
+    AND auth.menu_access_policy.user_id = _user_id
+    AND auth.menu_access_policy.allow_access
     AND auth.menu_access_policy.menu_id NOT IN
     (
         SELECT _temp_menu.menu_id
         FROM _temp_menu
-    );
+    )
+	AND NOT auth.menu_access_policy.deleted;
 
     --USER POLICY : DISALLOWED MENUS
     DELETE FROM _temp_menu
@@ -72,9 +75,10 @@ BEGIN
     (
         SELECT auth.menu_access_policy.menu_id
         FROM auth.menu_access_policy
-        WHERE office_id = _office_id
-        AND user_id = _user_id
-        AND disallow_access
+        WHERE auth.menu_access_policy.office_id = _office_id
+        AND auth.menu_access_policy.user_id = _user_id
+        AND auth.menu_access_policy.disallow_access
+		AND NOT auth.menu_access_policy.deleted
     );
 
     

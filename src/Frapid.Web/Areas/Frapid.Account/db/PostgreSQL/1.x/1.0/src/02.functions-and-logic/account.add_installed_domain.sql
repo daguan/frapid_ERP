@@ -15,8 +15,9 @@ $$
 BEGIN
     IF EXISTS
     (
-        SELECT * FROM account.installed_domains
-        WHERE domain_name = _domain_name        
+        SELECT * 
+		FROM account.installed_domains
+        WHERE account.installed_domains.domain_name = _domain_name        
     ) THEN
         UPDATE account.installed_domains
         SET admin_email = _admin_email

@@ -31,7 +31,8 @@ BEGIN
         SELECT DISTINCT menus.app_name
         FROM auth.get_menu(_user_id, _office_id, _culture)
         AS menus
-    );
+    )
+	AND NOT core.apps.deleted;
 END
 $$
 LANGUAGE plpgsql;

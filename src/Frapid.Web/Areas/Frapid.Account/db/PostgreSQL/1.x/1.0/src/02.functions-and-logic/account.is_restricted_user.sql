@@ -11,6 +11,7 @@ BEGIN
         FROM account.users
         WHERE LOWER(account.users.email) = LOWER(_email)
         AND NOT account.users.status
+		AND NOT account.users.deleted
     ) THEN
         RETURN true;
     END IF;

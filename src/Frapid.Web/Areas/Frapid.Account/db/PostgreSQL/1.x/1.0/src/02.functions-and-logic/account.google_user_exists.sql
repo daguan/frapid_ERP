@@ -10,6 +10,7 @@ BEGIN
         SELECT *
         FROM account.google_access_tokens
         WHERE account.google_access_tokens.user_id = _user_id
+		AND NOT account.google_access_tokens.deleted		
     ) THEN
         RETURN true;
     END IF;
