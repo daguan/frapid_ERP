@@ -14,6 +14,5 @@ namespace Frapid.Framework
             T result;
             return Enum.TryParse(value, true, out result) ? result : defaultValue;
         }
-
     }
 }

@@ -887,7 +887,8 @@ BEGIN
     SELECT menu_id INTO _parent_menu_id
     FROM core.menus
     WHERE LOWER(menu_name) = LOWER(_parent_menu_name)
-    AND LOWER(app_name) = LOWER(_app_name);
+    AND LOWER(app_name) = LOWER(_app_name)
+	AND NOT core.menus.deleted;
 
     RETURN core.create_menu(_sort, _app_name, _menu_name, _url, _icon, _parent_menu_id);
 END
@@ -931,7 +932,8 @@ $$
 BEGIN
     RETURN currency_code 
     FROM core.offices
-    WHERE office_id = _office_id;
+    WHERE core.offices.office_id = _office_id
+	AND NOT core.offices.deleted;
 END
 $$
 LANGUAGE plpgsql;
@@ -946,7 +948,8 @@ $$
 BEGIN
     RETURN core.offices.office_id
     FROM core.offices
-    WHERE core.offices.office_name = _office_name;
+    WHERE core.offices.office_name = _office_name
+	AND NOT core.offices.deleted;
 END
 $$
 LANGUAGE plpgsql;
@@ -964,14 +967,18 @@ BEGIN
         WITH RECURSIVE office_cte(office_id, path) AS (
          SELECT
             tn.office_id,  tn.office_id::TEXT AS path
-            FROM core.offices AS tn WHERE tn.office_id =$1
+            FROM core.offices AS tn 
+			WHERE tn.office_id =$1
+			AND NOT core.offices.deleted
         UNION ALL
          SELECT
             c.office_id, (p.path || '->' || c.office_id::TEXT)
-            FROM office_cte AS p, core.offices AS c WHERE parent_office_id = p.office_id
+            FROM office_cte AS p, core.offices AS c 
+			WHERE parent_office_id = p.office_id
         )
 
-        SELECT office_id FROM office_cte
+        SELECT office_id 
+		FROM office_cte
     );
 END
 $$LANGUAGE plpgsql;
@@ -987,7 +994,8 @@ $$
 BEGIN
     RETURN core.offices.office_name
     FROM core.offices
-    WHERE core.offices.office_id = _office_id;
+    WHERE core.offices.office_id = _office_id
+	AND NOT core.offices.deleted;
 END
 $$
 LANGUAGE plpgsql;

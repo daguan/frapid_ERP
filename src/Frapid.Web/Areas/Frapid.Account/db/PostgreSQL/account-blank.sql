@@ -235,8 +235,9 @@ $$
 BEGIN
     IF EXISTS
     (
-        SELECT * FROM account.installed_domains
-        WHERE domain_name = _domain_name        
+        SELECT * 
+		FROM account.installed_domains
+        WHERE account.installed_domains.domain_name = _domain_name        
     ) THEN
         UPDATE account.installed_domains
         SET admin_email = _admin_email
@@ -264,8 +265,9 @@ BEGIN
     (
         SELECT *
         FROM account.registrations
-        WHERE registration_id = _token
-        AND NOT confirmed
+        WHERE account.registrations.registration_id = _token
+        AND NOT account.registrations.confirmed
+		AND NOT account.registrations.deleted
     ) THEN
         RETURN true;
     END IF;
@@ -286,10 +288,12 @@ $$
 BEGIN
     IF EXISTS
     (
-        SELECT 1 FROM account.configuration_profiles
-        WHERE is_active
-        AND allow_registration
-        AND allow_facebook_registration
+        SELECT 1 
+		FROM account.configuration_profiles
+        WHERE account.configuration_profiles.is_active
+        AND account.configuration_profiles.allow_registration
+        AND account.configuration_profiles.allow_facebook_registration
+		AND NOT account.configuration_profiles.deleted
     ) THEN
         RETURN true;
     END IF;
@@ -310,10 +314,12 @@ $$
 BEGIN
     IF EXISTS
     (
-        SELECT 1 FROM account.configuration_profiles
-        WHERE is_active
-        AND allow_registration
-        AND allow_google_registration
+        SELECT 1 
+		FROM account.configuration_profiles
+        WHERE account.configuration_profiles.is_active
+        AND account.configuration_profiles.allow_registration
+        AND account.configuration_profiles.allow_google_registration
+		AND NOT account.configuration_profiles.deleted
     ) THEN
         RETURN true;
     END IF;
@@ -418,10 +424,16 @@ AS
 $$
     DECLARE _count                          integer;
 BEGIN
-    SELECT count(*) INTO _count FROM account.users WHERE lower(email) = LOWER(_email);
+    SELECT COUNT(*) INTO _count
+	FROM account.users 
+	WHERE LOWER(email) = LOWER(_email)
+	AND NOT account.users.deleted;
 
     IF(COALESCE(_count, 0) =0) THEN
-        SELECT count(*) INTO _count FROM account.registrations WHERE lower(email) = LOWER(_email);
+        SELECT COUNT(*) INTO _count 
+		FROM account.registrations 
+		WHERE LOWER(email) = LOWER(_email)
+		AND NOT account.registrations.deleted;
     END IF;
     
     RETURN COALESCE(_count, 0) > 0;
@@ -538,6 +550,7 @@ BEGIN
         SELECT *
         FROM account.fb_access_tokens
         WHERE account.fb_access_tokens.user_id = _user_id
+		AND NOT account.fb_access_tokens.deleted
     ) THEN
         RETURN true;
     END IF;
@@ -550,6 +563,7 @@ LANGUAGE plpgsql;
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_email_by_user_id.sql --<--<--
 DROP FUNCTION IF EXISTS account.get_email_by_user_id(_user_id integer);
+
 CREATE FUNCTION account.get_email_by_user_id(_user_id integer)
 RETURNS text
 STABLE
@@ -559,7 +573,8 @@ BEGIN
     RETURN
         account.users.email
     FROM account.users
-    WHERE account.users.user_id = _user_id;
+    WHERE account.users.user_id = _user_id
+	AND NOT account.users.deleted;
 END
 $$
 LANGUAGE plpgsql;
@@ -567,6 +582,7 @@ LANGUAGE plpgsql;
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_name_by_user_id.sql --<--<--
 DROP FUNCTION IF EXISTS account.get_name_by_user_id(_user_id integer);
+
 CREATE FUNCTION account.get_name_by_user_id(_user_id integer)
 RETURNS text
 STABLE
@@ -576,7 +592,8 @@ BEGIN
     RETURN
         account.users.name
     FROM account.users
-    WHERE account.users.user_id = _user_id;
+    WHERE account.users.user_id = _user_id
+	AND NOT account.users.deleted;
 END
 $$
 LANGUAGE plpgsql;
@@ -590,9 +607,10 @@ RETURNS integer
 AS
 $$
 BEGIN
-    RETURN registration_office_id
+    RETURN account.configuration_profiles.registration_office_id
     FROM account.configuration_profiles
-    WHERE is_active;
+    WHERE account.configuration_profiles.is_active
+	AND NOT account.configuration_profiles.deleted;
 END
 $$
 LANGUAGE plpgsql;
@@ -610,27 +628,31 @@ $$
 BEGIN
     IF EXISTS
     (
-        SELECT * FROM account.installed_domains
-        WHERE admin_email = _email
+        SELECT * 
+		FROM account.installed_domains
+        WHERE account.installed_domains.admin_email = _email
+		AND NOT account.installed_domains.deleted
     ) THEN
         _is_admin = true;
     END IF;
    
     IF(_is_admin) THEN
         SELECT
-            role_id
+            account.roles.role_id
         INTO
             _role_id
         FROM account.roles
-        WHERE is_administrator
+        WHERE account.roles.is_administrator
+		AND NOT account.roles.deleted
         LIMIT 1;
     ELSE
         SELECT 
-            registration_role_id
+            account.configuration_profiles.registration_role_id
         INTO
             _role_id
         FROM account.configuration_profiles
-        WHERE is_active;
+        WHERE account.configuration_profiles.is_active
+		AND NOT account.configuration_profiles.deleted;
     END IF;
 
     RETURN _role_id;
@@ -648,7 +670,8 @@ $$
 BEGIN
     RETURN user_id
     FROM account.users
-    WHERE LOWER(account.users.email) = LOWER(_email);
+    WHERE LOWER(account.users.email) = LOWER(_email)
+	AND NOT account.users.deleted;	
 END
 $$
 LANGUAGE plpgsql;
@@ -664,7 +687,8 @@ $$
 BEGIN
     RETURN user_id
     FROM account.logins
-    WHERE account.logins.login_id = _login_id;
+    WHERE account.logins.login_id = _login_id
+    AND NOT account.logins.deleted;
 END
 $$
 LANGUAGE plpgsql;
@@ -769,6 +793,7 @@ BEGIN
         SELECT *
         FROM account.google_access_tokens
         WHERE account.google_access_tokens.user_id = _user_id
+		AND NOT account.google_access_tokens.deleted		
     ) THEN
         RETURN true;
     END IF;
@@ -788,7 +813,11 @@ AS
 $$
     DECLARE _count                          integer;
 BEGIN
-    SELECT count(*) INTO _count FROM account.users WHERE lower(email) = LOWER(_email);
+    SELECT COUNT(*) INTO _count 
+	FROM account.users 
+	WHERE lower(email) = LOWER(_email)
+	AND NOT account.users.deleted;
+	
     RETURN COALESCE(_count, 0) = 1;
 END
 $$
@@ -809,6 +838,7 @@ BEGIN
         SELECT * FROM account.reset_requests
         WHERE LOWER(email) = LOWER(_email)
         AND expires_on <= _expires_on
+		AND NOT account.reset_requests.deleted
     ) THEN        
         RETURN true;
     END IF;
@@ -832,6 +862,7 @@ BEGIN
         FROM account.users
         WHERE LOWER(account.users.email) = LOWER(_email)
         AND NOT account.users.status
+		AND NOT account.users.deleted
     ) THEN
         RETURN true;
     END IF;
@@ -1026,6 +1057,7 @@ BEGIN
         SELECT *
         FROM account.users
         WHERE LOWER(account.users.email) = LOWER(_email)
+		AND NOT account.users.deleted
     ) THEN
         RETURN true;
     END IF;
@@ -1196,7 +1228,8 @@ ON account.users.user_id = account.logins.user_id
 INNER JOIN account.roles
 ON account.roles.role_id = account.users.role_id
 INNER JOIN core.offices
-ON core.offices.office_id = account.logins.office_id;
+ON core.offices.office_id = account.logins.office_id
+WHERE NOT account.logins.deleted;
 
 
 

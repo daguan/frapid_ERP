@@ -2,6 +2,7 @@
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Frapid.Framework;
 using Frapid.Web;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -32,6 +33,9 @@ namespace Frapid.Web
                         var module = new AuthorizeModule(null, null);
                         GlobalHost.HubPipeline.AddModule(module);
                     });
+
+            ViewEngines.Engines.Clear();
+            ViewEngines.Engines.Add(new FrapidRazorViewEngine());
 
             LogManager.InternalizeLogger();
             AreaRegistration.RegisterAllAreas();

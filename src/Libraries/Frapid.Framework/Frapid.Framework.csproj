@@ -106,6 +106,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FrapidRazorViewEngine.cs" />
     <Compile Include="StaticContent\Asset.cs" />
     <Compile Include="StaticContent\AssetType.cs" />
     <Compile Include="AttributeValueInvestigator.cs" />

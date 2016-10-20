@@ -12,10 +12,10 @@ using Frapid.Areas.Caching;
 namespace Frapid.Dashboard.Controllers
 {
     [RestrictAnonymous]
-    [FileOutputCache(Duration = 60 * 60 * 24, Location = OutputCacheLocation.Client)]
     public class ResourceController : FrapidController
     {
         [Route("dashboard/resources/{*resource}")]
+        [FileOutputCache(Duration = 60 * 60 * 24, Location = OutputCacheLocation.Client)]
         public ActionResult Get(string resource = "")
         {
             if (string.IsNullOrWhiteSpace(resource))
