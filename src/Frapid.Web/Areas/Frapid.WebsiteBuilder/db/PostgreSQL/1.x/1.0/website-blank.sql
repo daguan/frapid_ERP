@@ -144,8 +144,10 @@ $$
 BEGIN
     IF NOT EXISTS
     (
-        SELECT * FROM website.email_subscriptions
-        WHERE email = _email
+        SELECT * 
+		FROM website.email_subscriptions
+        WHERE website.email_subscriptions.email = _email
+		AND NOT website.email_subscriptions.deleted
     ) THEN
         INSERT INTO website.email_subscriptions(email)
         SELECT _email;
@@ -196,7 +198,8 @@ $$
 BEGIN
     RETURN category_id
     FROM website.categories
-    WHERE category_name = _category_name;
+    WHERE website.categories.category_name = _category_name
+	AND NOT website.categories.deleted;
 END
 $$
 LANGUAGE plpgsql;
@@ -210,7 +213,8 @@ $$
 BEGIN
     RETURN category_id
     FROM website.categories
-    WHERE alias = _alias;
+    WHERE website.categories.alias = _alias
+	AND NOT website.categories.deleted;
 END
 $$
 LANGUAGE plpgsql;
@@ -374,11 +378,15 @@ DROP VIEW IF EXISTS website.email_subscription_insert_view;
 
 CREATE VIEW website.email_subscription_insert_view
 AS
-SELECT * FROM website.email_subscriptions
-WHERE 1 = 0;
+SELECT * 
+FROM website.email_subscriptions
+WHERE 1 = 0
+AND NOT website.email_subscriptions.deleted;
 
 
-SELECT * FROM website.email_subscription_insert_view;
+SELECT * 
+FROM website.email_subscription_insert_view
+WHERE NOT website.email_subscription_insert_view.deleted;
 
 CREATE RULE log_subscriptions AS 
 ON INSERT TO website.email_subscription_insert_view
@@ -409,7 +417,8 @@ WHERE NOT EXISTS
 (
     SELECT 1 
     FROM website.email_subscriptions
-    WHERE email = NEW.email
+    WHERE website.email_subscriptions.email = NEW.email
+	AND NOT website.email_subscriptions.deleted
 );
 
 
@@ -492,31 +501,31 @@ DROP VIEW IF EXISTS website.yesterdays_email_subscriptions;
 CREATE VIEW website.yesterdays_email_subscriptions
 AS
 SELECT
-    email,
-    first_name,
-    last_name,
+    website.email_subscriptions.email,
+    website.email_subscriptions.first_name,
+    website.email_subscriptions.last_name,
     'subscribed' AS subscription_type
 FROM website.email_subscriptions
-WHERE subscribed_on::date = 'yesterday'::date
-AND NOT confirmed_on::date = 'yesterday'::date
+WHERE website.email_subscriptions.subscribed_on::date = 'yesterday'::date
+AND NOT website.email_subscriptions.confirmed_on::date = 'yesterday'::date
 AND NOT website.email_subscriptions.deleted
 UNION ALL
 SELECT
-    email,
-    first_name,
-    last_name,
+    website.email_subscriptions.email,
+    website.email_subscriptions.first_name,
+    website.email_subscriptions.last_name,
     'unsubscribed'
 FROM website.email_subscriptions
-WHERE unsubscribed_on::date = 'yesterday'::date
+WHERE website.email_subscriptions.unsubscribed_on::date = 'yesterday'::date
 AND NOT website.email_subscriptions.deleted
 UNION ALL
 SELECT
-    email,
-    first_name,
-    last_name,
+    website.email_subscriptions.email,
+    website.email_subscriptions.first_name,
+    website.email_subscriptions.last_name,
     'confirmed'
 FROM website.email_subscriptions
-WHERE confirmed_on::date = 'yesterday'::date
+WHERE website.email_subscriptions.confirmed_on::date = 'yesterday'::date
 AND NOT website.email_subscriptions.deleted;
 
 -->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/10.policy/access_policy.sql --<--<--
