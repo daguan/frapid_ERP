@@ -670,7 +670,7 @@ namespace Frapid.WebApi.Service
         [Route("~/api/forms/{schemaName}/{tableName}/add")]
         [Route("~/api/forms/{schemaName}/{tableName}/add/{skipPrimaryKey:bool}")]
         [RestAuthorize]
-        public async Task AddAsync(string schemaName, string tableName, [FromBody] JArray form, bool skipPrimaryKey = true)
+        public async Task<object> AddAsync(string schemaName, string tableName, [FromBody] JArray form, bool skipPrimaryKey = true)
         {
             var item = form[0].ToObject<Dictionary<string, object>>();
             var customFields = form[1].ToObject<List<CustomField>>(JsonHelper.GetJsonSerializer());
@@ -683,7 +683,7 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
-                await repository.AddAsync(item, customFields, skipPrimaryKey).ConfigureAwait(false);
+                return await repository.AddAsync(item, customFields, skipPrimaryKey).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {
@@ -710,7 +710,7 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("PUT")]
         [Route("~/api/forms/{schemaName}/{tableName}/edit/{primaryKey}")]
         [RestAuthorize]
-        public async Task EditAsync(string schemaName, string tableName, string primaryKey, [FromBody] JArray form)
+        public async Task<object> EditAsync(string schemaName, string tableName, string primaryKey, [FromBody] JArray form)
         {
             var item = form[0].ToObject<Dictionary<string, object>>();
             var customFields = form[1].ToObject<List<CustomField>>(JsonHelper.GetJsonSerializer());
@@ -724,6 +724,7 @@ namespace Frapid.WebApi.Service
             {
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 await repository.UpdateAsync(item, primaryKey, customFields).ConfigureAwait(false);
+                return primaryKey;
             }
             catch(UnauthorizedException)
             {

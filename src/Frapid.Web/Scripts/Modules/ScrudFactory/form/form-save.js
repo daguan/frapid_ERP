@@ -118,8 +118,14 @@
 
     var ajax = request(getType(), entity, customFields);
 
-    ajax.success(function () {
+    ajax.success(function (response) {
         saveButton.removeClass("loading");
+		
+		if(typeof(window.scrudSaveButtonCallback) === "function"){
+			window.scrudSaveButtonCallback(response);
+			return;
+		};
+		
         var confirmed = confirm(window.Resources.Questions.TaskCompletedSuccessfullyReturnToView());
 
         resetForm();

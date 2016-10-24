@@ -8,7 +8,7 @@ CREATE TABLE account.roles
     role_name                               national character varying(100) NOT NULL UNIQUE,
     is_administrator                        boolean NOT NULL DEFAULT(false),
     audit_user_id                           integer,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted									boolean DEFAULT(false)    
 );
 
@@ -25,7 +25,7 @@ CREATE TABLE account.registrations
     confirmed                               boolean DEFAULT(false),
     confirmed_on                            TIMESTAMP WITH TIME ZONE,
     audit_user_id                           integer,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted									boolean DEFAULT(false)
 );
 
@@ -48,7 +48,7 @@ CREATE TABLE account.users
 	last_ip									text,
 	last_browser							text,
     audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted									boolean DEFAULT(false)    
 );
 
@@ -63,7 +63,7 @@ CREATE TABLE account.installed_domains
     domain_name                             national character varying(500),
     admin_email                             national character varying(500),
     audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted									boolean DEFAULT(false)
 );
 
@@ -87,7 +87,7 @@ CREATE TABLE account.configuration_profiles
     facebook_app_id                         text,
     facebook_scope                          text,
     audit_user_id                           integer,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted									boolean DEFAULT(false)    
 );
 
@@ -117,7 +117,7 @@ CREATE TABLE account.reset_requests
     confirmed                               boolean DEFAULT(false),
     confirmed_on                            TIMESTAMP WITH TIME ZONE,
     audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted									boolean DEFAULT(false)
 );
 
@@ -130,7 +130,7 @@ CREATE TABLE account.fb_access_tokens
     fb_user_id                              text,
     token                                   text,
     audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted									boolean DEFAULT(false)
 );
 
@@ -140,7 +140,7 @@ CREATE TABLE account.google_access_tokens
     user_id                                 integer PRIMARY KEY REFERENCES account.users,
     token                                   text,
     audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted									boolean DEFAULT(false)
 );
 
@@ -156,7 +156,7 @@ CREATE TABLE account.logins
                                             DEFAULT(NOW()),
     culture                                 national character varying(12) NOT NULL,
     audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted									boolean DEFAULT(false)
 );
 
@@ -181,7 +181,7 @@ CREATE TABLE account.applications
     redirect_url                                national character varying(500),
     app_secret                                  text UNIQUE,
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)        
 );
 
@@ -209,7 +209,7 @@ CREATE TABLE account.access_tokens
     revoked_by                                  integer REFERENCES account.users,
     revoked_on                                  TIMESTAMP WITH TIME ZONE,
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)
 );
 

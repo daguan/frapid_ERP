@@ -6,7 +6,7 @@ CREATE TABLE core.countries
     country_code                            	national character varying(12) PRIMARY KEY,
     country_name                            	national character varying(100) NOT NULL,
     audit_user_id                           	integer,
-    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)
 );
 
@@ -21,7 +21,7 @@ CREATE TABLE core.apps
     icon                                        national character varying(100),
     landing_url                                 text,
     audit_user_id                           	integer,
-    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)
 );
 
@@ -35,7 +35,7 @@ CREATE TABLE core.app_dependencies
     app_name                                    national character varying(100) REFERENCES core.apps,
     depends_on                                  national character varying(100) REFERENCES core.apps,
     audit_user_id                           	integer,
-    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)
 );
 
@@ -50,7 +50,7 @@ CREATE TABLE core.menus
     icon                                        national character varying(100),
     parent_menu_id                              integer REFERENCES core.menus,
     audit_user_id                           	integer,
-    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)
 );
 
@@ -65,7 +65,7 @@ CREATE TABLE core.menu_locale
     culture                                     national character varying(12) NOT NULL,
     menu_text                                   national character varying(250) NOT NULL,
     audit_user_id                           	integer,
-    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)
 );
 
@@ -95,7 +95,7 @@ CREATE TABLE core.offices
 	pan_number									national character varying(50),
 	has_vat										boolean NOT NULL DEFAULT(false),
     audit_user_id                               integer,
-    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)
 );
 
@@ -105,7 +105,7 @@ CREATE TABLE core.frequencies
     frequency_code                          national character varying(12) NOT NULL,
     frequency_name                          national character varying(50) NOT NULL,
     audit_user_id                           integer,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted									boolean DEFAULT(false)
 );
 
@@ -124,7 +124,7 @@ CREATE TABLE core.verification_statuses
     verification_status_id                  smallint PRIMARY KEY,
     verification_status_name                national character varying(128) NOT NULL,
     audit_user_id                           integer,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted									boolean DEFAULT(false)
 );
 
@@ -152,7 +152,7 @@ CREATE TABLE core.week_days
 	week_day_code               			national character varying(12) NOT NULL UNIQUE,
 	week_day_name               			national character varying(50) NOT NULL UNIQUE,
     audit_user_id                           integer,
-    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted									boolean DEFAULT(false)
 );
 
@@ -161,7 +161,7 @@ CREATE TABLE core.genders
 	gender_code                             national character varying(4) NOT NULL PRIMARY KEY,
 	gender_name                             national character varying(50) NOT NULL UNIQUE,
 	audit_user_id                           integer,
-	audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	audit_ts                                TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted									boolean DEFAULT(false)    
 );
 
@@ -172,6 +172,6 @@ CREATE TABLE core.marital_statuses
 	marital_status_name                     national character varying(128) NOT NULL,
 	is_legally_recognized_marriage          boolean NOT NULL DEFAULT(false),
 	audit_user_id                           integer,    
-	audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+	audit_ts                                TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted									boolean DEFAULT(false)
 );

@@ -12,7 +12,7 @@ CREATE TABLE website.configurations
 	blog_description							text,	
 	is_default                                  boolean NOT NULL DEFAULT(true),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)
 );
 
@@ -34,7 +34,7 @@ CREATE TABLE website.email_subscriptions
     subscribed_on                               TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),    
     unsubscribed_on                             TIMESTAMP WITH TIME ZONE,
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)
 );
 
@@ -46,7 +46,7 @@ CREATE TABLE website.categories
     seo_description                             national character varying(100),
 	is_blog										boolean NOT NULL DEFAULT(false),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)    
 );
 
@@ -69,7 +69,7 @@ CREATE TABLE website.contents
     seo_description                             national character varying(1000) NOT NULL DEFAULT(''),
     is_homepage                                 boolean NOT NULL DEFAULT(false),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)    
 );
 
@@ -79,7 +79,7 @@ CREATE TABLE website.menus
     menu_name                                   national character varying(100),
     description                                 text,
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)
 );
 
@@ -98,7 +98,7 @@ CREATE TABLE website.menu_items
     content_id                                  integer REFERENCES website.contents,    
 	parent_menu_item_id							integer REFERENCES website.menu_items,
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)    
 );
 
@@ -123,7 +123,7 @@ CREATE TABLE website.contacts
     sort                                        integer NOT NULL DEFAULT(0),
     status                                      boolean NOT NULL DEFAULT(true),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)    
 );
 
