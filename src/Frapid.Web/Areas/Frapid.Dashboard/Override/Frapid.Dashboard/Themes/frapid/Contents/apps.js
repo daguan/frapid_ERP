@@ -5,23 +5,25 @@ function loadIcons(apps) {
 		var icon = $("<i/>");
 		var span = $("<span/>");
 
-		div.attr("class", "two wide computer three wide tablet six wide mobile column");
-		anchor.attr("class", "ui link icons");
+		div.attr("class", "item");
+		anchor.attr("class", "app");
 		anchor.attr("data-app-name", app.AppName);
 		anchor.attr("href", app.LandingUrl || "javascript:void(0);");
 
+	    var iContainer = $("<div class='icon'/>");
+		icon.attr("class", (app.Icon || "user") + " inverted circular icon");
+		iContainer.append(icon);
 
-		icon.attr("class", "ui inverted circular large " + (app.Icon || "user") + " icon");
 		span.text(app.Name);
 
-		anchor.append(icon);
+		anchor.append(iContainer);
 		anchor.append(span);
 		div.append(anchor);
 
 		target.append(div);
 	};
 
-	var target = $("#PhoneMenu .ui.grid");
+	var target = $("#PhoneMenu");
 
 	for (var i = 0; i < apps.length; i++) {
 		addIcon(apps[i], target);

@@ -23,9 +23,43 @@ html, body, .jstree {
         margin: 12px !important;
     }
 
-    #PhoneMenu a:hover, #PhoneMenu a:active, #PhoneMenu a:focus {
-        color: #0556B3;
+.apps{
+	text-align: center;
+}
+
+.apps>.item{
+	display: inline-flex;
+	flex-direction:column;
+	padding:0.5em 1em 0 1em;
+	border:1px solid transparent;
+	width:150px;
+}
+
+.apps>.item>.app>div.icon{
+	padding-top:0.25em;
+	font-size: 3em;
+}
+
+.apps>.item>.app>div.icon i{
+	text-shadow:0.3em 0.2em 40px rgba(0, 0, 0, 0.7)!important;	
+}
+.apps>.item>.app>div.icon .circular.icon{
+	border-radius:0.5em!important;
+	box-shadow:  5px 5px 10px #555;
+	margin-bottom:0.25em;
+}
+
+
+.apps>.item>.app>span{
+	color:#444;
+	text-shadow:2px 2px 50px #222;
+	text-transform:uppercase;
+	font-size: 0.87em;
+}
+
+    #PhoneMenu .item:hover, #PhoneMenu .item:active, #PhoneMenu .item:focus {
         box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.3);
+			  border:1px solid rgba(150, 150, 150, 0.1);
         outline: none;
     }
 
@@ -107,6 +141,15 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
     background-repeat: repeat;
     border: 1px dotted #e3e3e3;
 }
+
+
+@media (min-width: 1100px) {
+#PhoneMenu {
+    position: relative;
+    top: 50%;
+}
+}
+
 
 .nowrap {
     -moz-text-overflow: ellipsis;
