@@ -26,8 +26,8 @@
     var ajax = request();
 
     ajax.success(function (response) {
-        if (response && response.Result) {
-            $.each(response.Result, function () {
+        if (response) {
+            $.each(response, function () {
                 append(this);
             });
 
@@ -112,6 +112,7 @@ function loadMenus() {
     };
 
     if (window.appMenus) {
+        loadApplications();
         return;
     };
 
