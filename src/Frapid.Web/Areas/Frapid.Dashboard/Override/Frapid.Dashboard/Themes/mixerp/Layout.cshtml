@@ -20,6 +20,14 @@
     <script src="~/dashboard/my/template/Scripts/vakata-jstree/jstree.min.js"></script>
     <script src="~/dashboard/my/template/Contents/dashboard.js"></script>
     <script src="~/dashboard/my/template/Contents/theme-selector.js"></script>
+@if (CultureManager.IsRtl())
+{
+    <link rel="Stylesheet" href="@Href("~/assets/css/master-page-rtl.css")" />
+}
+else
+{
+    <link rel="Stylesheet" href="@Href("~/assets/css/master-page.css")" />
+}
 </head>
 <body>
     <div class="ui stackable grid">
@@ -39,12 +47,12 @@
 
     <div id="main-menu" class="ui attached stackable menu">
     </div>
-    <div id="dashboard-container" class="ui basic attached segment" style="height: 100%;">
+    <div id="dashboard-container" class="ui basic attached segment">
         <div data-ng-view>
             @RenderBody()
         </div>
     </div>
-    <footer class="ui attached inverted teal segment">
+    <footer class="ui attached inverted teal borderless segment">
         <div class="ui container">
             <div class="ui stackable grid">
                 <div class="two wide column">
