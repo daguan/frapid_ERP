@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿using System;
+using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -158,9 +159,10 @@ namespace Frapid.Areas
             return this.Content(message, MediaTypeNames.Text.Plain, Encoding.UTF8);
         }
 
-        protected ActionResult InvalidModelState()
+        protected ActionResult InvalidModelState(ModelStateDictionary modelState)
         {
-            return this.Failed("Invalid model state", HttpStatusCode.BadRequest);
+            string errors = string.Join("\n", this.ModelState.SelectMany(x => x.Value.Errors.Select(z => z.ErrorMessage)));
+            return this.Failed(errors, HttpStatusCode.BadRequest);
         }
 
         protected ActionResult AccessDenied()

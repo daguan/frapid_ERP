@@ -37,7 +37,7 @@ namespace Frapid.Authorization.Controllers
         {
             if(!this.ModelState.IsValid)
             {
-                return this.InvalidModelState();
+                return this.InvalidModelState(this.ModelState);
             }
 
             await GroupMenuPolicyModel.SaveAsync(this.AppUser, model).ConfigureAwait(true);

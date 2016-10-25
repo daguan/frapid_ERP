@@ -37,7 +37,7 @@ namespace Frapid.Authorization.Controllers
         {
             if(!this.ModelState.IsValid)
             {
-                return this.InvalidModelState();
+                return this.InvalidModelState(this.ModelState);
             }
 
             await GroupEntityAccessPolicyModel.SaveAsync(this.AppUser, officeId, roleId, model).ConfigureAwait(true);

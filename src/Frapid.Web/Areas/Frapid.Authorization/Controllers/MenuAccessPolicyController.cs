@@ -37,7 +37,7 @@ namespace Frapid.Authorization.Controllers
         {
             if(!ModelState.IsValid)
             {
-                return this.InvalidModelState();
+                return this.InvalidModelState(this.ModelState);
             }
 
             await MenuAccessPolicyModel.SaveAsync(this.Tenant, model).ConfigureAwait(true);

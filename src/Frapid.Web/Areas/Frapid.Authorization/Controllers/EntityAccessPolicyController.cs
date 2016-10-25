@@ -39,7 +39,7 @@ namespace Frapid.Authorization.Controllers
         {
             if(!ModelState.IsValid)
             {
-                return this.InvalidModelState();
+                return this.InvalidModelState(this.ModelState);
             }
 
             await EntityAccessPolicyModel.SaveAsync(this.AppUser, officeId, userId, model).ConfigureAwait(true);
