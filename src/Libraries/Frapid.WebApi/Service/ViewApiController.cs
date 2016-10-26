@@ -281,11 +281,45 @@ namespace Frapid.WebApi.Service
                 var repository = new ViewRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.GetDisplayFieldsAsync().ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
+            {
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
+            }
+#if !DEBUG
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+#endif
+        }
+
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("~/api/views/{schemaName}/{tableName}/display-fields/get-where")]
+        [HttpPost]
+        [RestAuthorize]
+        public async Task<IEnumerable<DisplayField>> GetDisplayFieldsAsync(string schemaName, string tableName, [FromBody] JArray filters)
+        {
+            try
+            {
+                var f = Filter.FromJArray(filters);
+                var repository = new ViewRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
+                return await repository.GetDisplayFieldsAsync(f).ConfigureAwait(false);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -312,6 +346,40 @@ namespace Frapid.WebApi.Service
             {
                 var repository = new ViewRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.GetLookupFieldsAsync().ConfigureAwait(false);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+            catch (DataAccessException ex)
+            {
+                throw new HttpResponseException
+                    (
+                    new HttpResponseMessage
+                    {
+                        Content = new StringContent(ex.Message),
+                        StatusCode = HttpStatusCode.InternalServerError
+                    });
+            }
+#if !DEBUG
+            catch
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            }
+#endif
+        }
+
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("~/api/views/{schemaName}/{tableName}/lookup-fields/get-where")]
+        [HttpPost]
+        [RestAuthorize]
+        public async Task<IEnumerable<DisplayField>> GetLookupFieldsAsync(string schemaName, string tableName, [FromBody] JArray filters)
+        {
+            try
+            {
+                var f = Filter.FromJArray(filters);
+                var repository = new ViewRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
+                return await repository.GetLookupFieldsAsync(f).ConfigureAwait(false);
             }
             catch (UnauthorizedException)
             {

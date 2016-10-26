@@ -101,18 +101,18 @@ namespace Frapid.WebApi.DataAccess
 
         public async Task<IEnumerable<DisplayField>> GetDisplayFieldsAsync()
         {
-            if(string.IsNullOrWhiteSpace(this.Database))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return new List<DisplayField>();
             }
 
-            if(!this.SkipValidation)
+            if (!this.SkipValidation)
             {
-                if(!this.Validated)
+                if (!this.Validated)
                 {
                     await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
-                if(!this.HasAccess)
+                if (!this.HasAccess)
                 {
                     Log.Information($"Access to get display field for entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}", this.LoginId);
                     throw new UnauthorizedException("Access is denied.");
@@ -120,6 +120,62 @@ namespace Frapid.WebApi.DataAccess
             }
 
             string sql = $"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName};";
+            return await Factory.GetAsync<DisplayField>(this.Database, sql).ConfigureAwait(false);
+        }
+
+        public async Task<IEnumerable<DisplayField>> GetDisplayFieldsAsync(List<Filter> filters)
+        {
+            if (string.IsNullOrWhiteSpace(this.Database))
+            {
+                return new List<DisplayField>();
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information($"Access to get display field for entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            var sql = new Sql($"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName} WHERE 1=1");
+
+            FilterManager.AddFilters(ref sql, filters);
+            sql.OrderBy("1");
+
+            return await Factory.GetAsync<DisplayField>(this.Database, sql).ConfigureAwait(false);
+        }
+
+        public async Task<IEnumerable<DisplayField>> GetLookupFieldsAsync(List<Filter> filters)
+        {
+            if (string.IsNullOrWhiteSpace(this.Database))
+            {
+                return new List<DisplayField>();
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information($"Access to get display field for entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}", this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            var sql = new Sql($"SELECT {this.LookupField} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName} WHERE 1=1");
+
+            FilterManager.AddFilters(ref sql, filters);
+            sql.OrderBy("1");
+
             return await Factory.GetAsync<DisplayField>(this.Database, sql).ConfigureAwait(false);
         }
 

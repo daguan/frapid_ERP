@@ -19,9 +19,22 @@ jQuery.fn.setSelectedText = function (text) {
     target.prop('selected', true);
 };
 
-function displayFieldBinder(el, url, notNull) {
+function displayFieldBinder(el, url, notNull, filters) {
 	function request() {
-		return window.getAjaxRequest(url);
+		function getRequest(){
+			return window.getAjaxRequest(url);			
+		};
+		
+		function postRequest(){
+			var data = JSON.stringify(filters);
+			return window.getAjaxRequest(url, "POST", data);
+		};
+		
+		if(!filters){
+			return getRequest();
+		};
+		
+		return postRequest();
 	};
 
 	var ajax = request();
@@ -32,15 +45,30 @@ function displayFieldBinder(el, url, notNull) {
 		if (!notNull) {
 			options += "<option>Select</option>";
 		};
+		
+		var totalItems = response.length;
 
 		$.each(response, function () {
-			var option = "<option value='{key}'>{value}</option>";
+			var option = "<option value='{key}' {selected}>{value}</option>";
 			option = option.replace("{key}", this.Key);
 			option = option.replace("{value}", this.Value);
+			
+			if(totalItems === 1){
+				option = option.replace("{selected}", "selected='selected'");				
+			} else{
+				option = option.replace("{selected}", "");								
+			}
 
 			options += option;
 		});
 
 		el.html(options);
+		
+		if(el.parent().is(".dropdown")){
+			setTimeout(function(){
+				el.dropdown("clear");
+				el.dropdown("restore defaults");
+			}, 100)
+		};
 	});
 };
