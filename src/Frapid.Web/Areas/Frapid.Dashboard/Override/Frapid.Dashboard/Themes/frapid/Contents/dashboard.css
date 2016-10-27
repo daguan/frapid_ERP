@@ -1,75 +1,77 @@
 html, body, .jstree {
-    font-size: 14px;
+    font-size: 12px;
 }
 
-#editor{
+#editor {
     font-size: 12pt;
 }
 
 #PhoneMenu a {
     display: block !important;
     text-align: center !important;
-    padding: 8px 0;
+    padding: 0.8em 0;
     font-weight: bold;
     color: #1B1C1D;
 }
 
-#PhoneMenu a {
-    font-size: 12px;
-}
-
     #PhoneMenu a span {
         display: block;
-        margin: 12px !important;
+        margin: 1em !important;
     }
 
-.apps{
-	text-align: center;
+.apps {
+    text-align: center;
 }
 
-.apps>.item{
-	display: inline-flex;
-	flex-direction:column;
-	padding:0.5em 1em 0 1em;
-	border:1px solid transparent;
-	width:150px;
+    .apps > .item {
+        display: inline-flex;
+        flex-direction: column;
+        padding: 0.5em 1em 0 1em;
+        border: 1px solid transparent;
+        width: 13em;
+    }
+
+        .apps > .item > .app > div.icon {
+            padding-top: 0.25em;
+            font-size: 3em;
+        }
+
+            .apps > .item > .app > div.icon i {
+                text-shadow: 0.3em 0.2em 3.5em rgba(0, 0, 0, 0.7) !important;
+            }
+
+            .apps > .item > .app > div.icon .circular.icon {
+                border-radius: 0.5em !important;
+                box-shadow: 0.3em 0.3em 0.7em #555;
+                margin-bottom: 0.25em;
+            }
+
+
+        .apps > .item > .app > span {
+            color: #444;
+            text-shadow: 0.1em 0.1em 4em #222;
+            text-transform: uppercase;
+            font-size: 0.87em;
+        }
+
+#PhoneMenu .item:hover, #PhoneMenu .item:active, #PhoneMenu .item:focus {
+    box-shadow: inset 0 0 9em 9em rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(150, 150, 150, 0.1);
+    outline: none;
 }
 
-.apps>.item>.app>div.icon{
-	padding-top:0.25em;
-	font-size: 3em;
-}
-
-.apps>.item>.app>div.icon i{
-	text-shadow:0.3em 0.2em 40px rgba(0, 0, 0, 0.7)!important;	
-}
-.apps>.item>.app>div.icon .circular.icon{
-	border-radius:0.5em!important;
-	box-shadow:  5px 5px 10px #555;
-	margin-bottom:0.25em;
-}
-
-
-.apps>.item>.app>span{
-	color:#444;
-	text-shadow:2px 2px 50px #222;
-	text-transform:uppercase;
-	font-size: 0.87em;
-}
-
-    #PhoneMenu .item:hover, #PhoneMenu .item:active, #PhoneMenu .item:focus {
-        box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.3);
-			  border:1px solid rgba(150, 150, 150, 0.1);
-        outline: none;
+    #PhoneMenu .item:hover i {
+        transition: all 0.3s ease;
+        transform: scale(1.2);
     }
 
 .large.icon {
-    font-size: 34px !important;
+    font-size: 3em !important;
     text-align: center !important;
 }
 
 .ui.link span.text {
-    padding: 8px 0 !important;
+    padding: 0.7em 0 !important;
     display: block !important;
     text-align: center !important;
 }
@@ -92,7 +94,7 @@ label, .ui.toggle.checkbox label {
 }
 
 .dashboard.menu {
-    height: 32px;
+    height: 2.5em;
 }
 
 input[readonly], input[disabled], textarea[readonly], textarea[disabled], select[readonly], select[disabled], .dropdown.disabled {
@@ -134,20 +136,50 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
     }
 
 #PhoneMenu {
-    padding: 48px;
-    border-radius: 12px;
+    padding: 0.5em;
+    border-radius: 1em;
     background-color: transparent;
     background-image: url('/Static/images/70white.png') !important;
     background-repeat: repeat;
     border: 1px dotted #e3e3e3;
 }
 
+.powered.by {
+    padding: 2em;
+    text-align: center;
+}
+
+.dashboard.menu .item, .dashboard.menu .item span {
+    text-transform: uppercase !important;
+    font-size: 0.9em;
+    letter-spacing: 0.09em;
+    word-spacing: 0.15em;
+    font-weight: 400;
+}
+
+.powered.by a {
+    color: #eaeaea;
+    text-shadow: 2px 2px 5px #222;
+    text-transform: uppercase !important;
+    font-size: 0.87em;
+    letter-spacing: 0.1em;
+}
+
+.powered.by img {
+    margin: 0 auto;
+}
+
+
 
 @media (min-width: 1100px) {
-#PhoneMenu {
-    position: relative;
-    top: 50%;
-}
+    #PhoneMenu {
+        padding: 4em;
+    }
+
+    .area {
+        position: relative;
+        top: 50%;
+    }
 }
 
 
@@ -155,4 +187,14 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
     -moz-text-overflow: ellipsis;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.table {
+    font-size: 0.87em;
+}
+
+.table th {
+    letter-spacing: 0.05em;
+    text-transform: uppercase !important;
+    font-size: 0.89em;
 }
