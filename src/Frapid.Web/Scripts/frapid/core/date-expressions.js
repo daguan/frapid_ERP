@@ -97,6 +97,8 @@ function convertNetDateFormat(format)
 }
 
 function loadDatepicker() {
+	loadPersister();
+
     if (!$.isFunction($.fn.datepicker)) {
         return;
     };
