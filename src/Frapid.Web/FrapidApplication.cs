@@ -23,6 +23,16 @@ namespace Frapid.Web
         {
         }
 
+        private void SetCorsHeaders()
+        {
+            var context = FrapidHttpContext.GetCurrent();
+
+            context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
+            context.Response.Headers.Add("Access-Control-Allow-Methods", "HEAD,GET,POST,PUT,DELETE,OPTIONS");
+            context.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
+        }
+
         private void App_PostAuthenticateRequest(object sender, EventArgs eventArgs)
         {
             string tenant = TenantConvention.GetTenant();
@@ -75,6 +85,7 @@ namespace Frapid.Web
 
         public void App_EndRequest(object sender, EventArgs e)
         {
+            //this.SetCorsHeaders();
             this.Handle404Error();
         }
 
