@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using Frapid.Areas;
@@ -23,6 +25,13 @@ namespace Frapid.Web
         {
         }
 
+        private bool IsFont(string url)
+        {
+            var candidates = new[] { ".woff", ".woff2", ".ttf", ".font" };
+            string file = Path.GetFileName(url);
+            return !string.IsNullOrWhiteSpace(file) && candidates.Any(file.EndsWith);
+        }
+
         private void SetCorsHeaders()
         {
             var context = FrapidHttpContext.GetCurrent();
@@ -32,10 +41,18 @@ namespace Frapid.Web
                 return;
             }
 
-            context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
-            context.Response.Headers.Add("Access-Control-Allow-Methods", "HEAD,GET,POST,PUT,DELETE,OPTIONS");
-            context.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
+            bool isFont = this.IsFont(context.Request.PhysicalPath);
+
+            if (!isFont)
+            {
+                return;
+            }
+
+            context.Response.Headers.Set("Access-Control-Allow-Origin", "*");
+            context.Response.Headers.Set("Vary", "Origin");
+            context.Response.Headers.Set("Access-Control-Allow-Headers", "Content-Type");
+            context.Response.Headers.Set("Access-Control-Allow-Methods", "HEAD,GET");
+            context.Response.Headers.Set("Access-Control-Allow-Credentials", "true");
         }
 
         private void App_PostAuthenticateRequest(object sender, EventArgs eventArgs)

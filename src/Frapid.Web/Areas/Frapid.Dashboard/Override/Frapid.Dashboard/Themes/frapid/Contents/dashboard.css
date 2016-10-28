@@ -177,8 +177,7 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
     }
 
     .area {
-        position: relative;
-        top: 50%;
+        padding-top: 12em;
     }
 }
 

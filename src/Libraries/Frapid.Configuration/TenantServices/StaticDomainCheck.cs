@@ -28,16 +28,16 @@ namespace Frapid.Configuration.TenantServices
 
             var tenant = approvedDomains.FirstOrDefault(x => x.GetSubtenants().Contains(domain.ToLowerInvariant()));
 
-            if(tenant != null)
+            if (tenant == null)
             {
-                bool isStatic = domain.ToUpperInvariant().Equals(tenant.CdnDomain.ToUpperInvariant());
-
-                this.Logger.Verbose(isStatic ? $"The domain \"{domain}\" is a static domain." : $"The domain \"{domain}\" is not a static domain.");
-
-                return isStatic;
+                return false;
             }
 
-            return false;
+            bool isStatic = domain.ToUpperInvariant().Equals(tenant.CdnDomain.ToUpperInvariant());
+
+            this.Logger.Verbose(isStatic ? $"The domain \"{domain}\" is a static domain." : $"The domain \"{domain}\" is not a static domain.");
+
+            return isStatic;
         }
     }
 }

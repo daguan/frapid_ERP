@@ -158,6 +158,12 @@ namespace Frapid.Configuration
             return investigator;
         }
 
+        public static List<string> GetTenantMembers(string tenant)
+        {
+            var site = GetSite(tenant);
+            return site.GetSubtenants();
+        }
+
         public static string GetDefaultTenantName()
         {
             return System.Configuration.ConfigurationManager.AppSettings["DefaultTenant"];
