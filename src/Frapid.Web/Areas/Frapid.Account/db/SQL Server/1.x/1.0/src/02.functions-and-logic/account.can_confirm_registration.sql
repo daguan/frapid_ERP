@@ -13,6 +13,7 @@ BEGIN
         FROM account.registrations
         WHERE registration_id = @token
         AND confirmed = 0
+		AND account.registrations.deleted = 0
     )
     BEGIN
         RETURN 1;

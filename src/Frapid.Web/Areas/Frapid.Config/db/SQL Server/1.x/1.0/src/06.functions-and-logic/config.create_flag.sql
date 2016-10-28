@@ -24,6 +24,7 @@ BEGIN
 		AND resource = @resource 
 		AND resource_key = @resource_key 
 		AND resource_id=@resource_id
+		AND config.flags.deleted = 0
 	)
     BEGIN
         INSERT INTO config.flags(user_id, flag_type_id, resource, resource_key, resource_id)

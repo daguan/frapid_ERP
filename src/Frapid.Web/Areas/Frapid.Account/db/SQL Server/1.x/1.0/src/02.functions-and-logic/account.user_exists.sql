@@ -12,6 +12,7 @@ BEGIN
         SELECT *
         FROM account.users
         WHERE account.users.email = @email
+		AND account.users.deleted = 0
     )
     BEGIN
         RETURN 1;

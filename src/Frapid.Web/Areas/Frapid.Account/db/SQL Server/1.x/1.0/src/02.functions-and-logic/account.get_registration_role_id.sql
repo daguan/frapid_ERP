@@ -14,6 +14,7 @@ BEGIN
     (
         SELECT * FROM account.installed_domains
         WHERE admin_email = @email
+		AND account.installed_domains.deleted = 0
     )
     BEGIN
         SET @is_admin = 1;
@@ -25,14 +26,16 @@ BEGIN
         TOP 1
             @role_id = role_id            
         FROM account.roles
-        WHERE is_administrator = 1;
+        WHERE is_administrator = 1
+		AND account.roles.deleted = 0;
     END
     ELSE
     BEGIN
         SELECT 
             @role_id = registration_role_id
         FROM account.configuration_profiles
-        WHERE is_active = 1;
+        WHERE is_active = 1
+		AND account.configuration_profiles.deleted = 0;
     END;
 
     RETURN @role_id;

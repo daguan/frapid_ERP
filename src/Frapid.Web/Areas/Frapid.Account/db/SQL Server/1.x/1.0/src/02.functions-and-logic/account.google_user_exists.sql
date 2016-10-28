@@ -12,6 +12,7 @@ BEGIN
         SELECT *
         FROM account.google_access_tokens
         WHERE account.google_access_tokens.user_id = @user_id
+		AND account.google_access_tokens.deleted = 0
     )
     BEGIN
         RETURN 1;

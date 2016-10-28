@@ -19,6 +19,7 @@ BEGIN
 		FROM config.custom_field_setup
 		WHERE form_name = config.get_custom_field_form_name(@schema_name + '.' + @table_name)
 		AND field_name = @field_name
+		AND config.custom_field_setup.deleted = 0
 	);
 END;
 

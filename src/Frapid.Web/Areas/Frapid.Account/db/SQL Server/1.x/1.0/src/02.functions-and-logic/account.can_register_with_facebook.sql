@@ -14,6 +14,7 @@ BEGIN
         WHERE is_active = 1
         AND allow_registration = 1
         AND allow_facebook_registration = 1
+		AND account.configuration_profiles.deleted = 0
     )
     BEGIN
         RETURN 1;

@@ -14,6 +14,7 @@ BEGIN
 			registration_office_id
 		FROM account.configuration_profiles
 		WHERE is_active = 1
+		AND account.configuration_profiles.deleted = 0 
 	);
 END;
 
