@@ -17,6 +17,7 @@ BEGIN
     (
         SELECT * FROM website.email_subscriptions
         WHERE email = @email
+		AND website.email_subscriptions.deleted = 0;
     )
     BEGIN
         INSERT INTO website.email_subscriptions(email)

@@ -13,6 +13,7 @@ BEGIN
 		user_id
 		FROM account.logins
 		WHERE login_id = @login_id
+		AND account.logins.deleted = 0
 	);
 END;
 

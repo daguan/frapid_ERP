@@ -11,12 +11,16 @@ BEGIN
     DECLARE @count integer;
 
     SELECT @count = count(*)  
-    FROM account.users WHERE email = @email;
+    FROM account.users 
+	WHERE email = @email
+	AND account.users.deleted = 0;
 
     IF(COALESCE(@count, 0) = 0)
     BEGIN
         SELECT @count = count(*)  
-        FROM account.registrations WHERE email = @email;
+        FROM account.registrations 
+		WHERE email = @email
+		AND account.registrations.deleted = 0;
     END;
     
     IF COALESCE(@count, 0) > 0

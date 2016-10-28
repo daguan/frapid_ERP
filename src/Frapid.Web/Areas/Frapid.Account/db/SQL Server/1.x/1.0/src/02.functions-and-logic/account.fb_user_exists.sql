@@ -12,6 +12,7 @@ BEGIN
         SELECT *
         FROM account.fb_access_tokens
         WHERE account.fb_access_tokens.user_id = @user_id
+		AND account.fb_access_tokens.deleted = 0
     )
     BEGIN
         RETURN 1;

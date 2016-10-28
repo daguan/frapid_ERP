@@ -23,7 +23,8 @@ BEGIN
     FROM account.access_tokens
     WHERE client_token = @client_token
     AND ip_address = @ip_address
-    AND user_agent = @user_agent;
+    AND user_agent = @user_agent
+	AND account.access_tokens.deleted = 0;
     
     IF(COALESCE(@revoked, 1)) = 1
     BEGIN

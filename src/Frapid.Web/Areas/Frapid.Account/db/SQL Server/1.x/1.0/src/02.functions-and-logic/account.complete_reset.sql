@@ -23,7 +23,8 @@ BEGIN
     INNER JOIN account.users
     ON account.users.user_id = account.reset_requests.user_id
     WHERE account.reset_requests.request_id = @request_id
-    AND expires_on >= getutcdate();
+    AND expires_on >= getutcdate()
+	AND account.reset_requests.deleted = 0;
 
     
     UPDATE account.users

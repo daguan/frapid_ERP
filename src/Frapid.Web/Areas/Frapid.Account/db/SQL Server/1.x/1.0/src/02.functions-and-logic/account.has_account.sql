@@ -9,7 +9,10 @@ AS
 BEGIN
     DECLARE @count                          integer;
 
-    SELECT @count = count(*) FROM account.users WHERE email = @email;
+    SELECT @count = count(*) 
+	FROM account.users 
+	WHERE email = @email
+	AND account.users.deleted = 0;
     IF COALESCE(@count, 0) = 1
     BEGIN
 		RETURN 1;

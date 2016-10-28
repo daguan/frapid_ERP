@@ -14,6 +14,7 @@ BEGIN
         SELECT * FROM account.reset_requests
         WHERE email = @email
         AND expires_on <= @expires_on
+		AND account.reset_requests.deleted = 0
     )
     BEGIN        
         RETURN 1;

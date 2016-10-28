@@ -12,6 +12,7 @@ BEGIN
 		SELECT category_id
 		FROM website.categories
 		WHERE category_name = @category_name
+		AND website.categories.deleted = 0
 	);
 END;
 
@@ -31,6 +32,7 @@ BEGIN
 		SELECT category_id
 		FROM website.categories
 		WHERE alias = @alias
+		AND website.categories.deleted = 0
 	);
 END;
 

@@ -28,7 +28,8 @@ BEGIN
         @user_id = user_id,
         @name = name
     FROM account.users
-    WHERE email = @email;
+    WHERE email = @email
+	AND account.users.deleted = 0;
 
     IF account.has_active_reset_request(@email) = 1
     BEGIN
@@ -36,7 +37,8 @@ BEGIN
         TOP 1
         * FROM account.reset_requests
         WHERE email = @email
-        AND expires_on <= @expires_on;
+        AND expires_on <= @expires_on
+		AND account.reset_requests.deleted = 0;
         
         RETURN;
     END;

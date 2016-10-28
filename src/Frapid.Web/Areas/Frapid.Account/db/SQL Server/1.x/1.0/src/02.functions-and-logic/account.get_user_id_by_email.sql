@@ -13,6 +13,7 @@ BEGIN
 		user_id
 		FROM account.users
 		WHERE account.users.email = @email
+		AND account.users.deleted = 0 
 	);
 END;
 

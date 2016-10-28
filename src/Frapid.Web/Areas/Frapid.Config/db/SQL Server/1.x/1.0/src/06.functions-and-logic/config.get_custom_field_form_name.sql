@@ -14,6 +14,7 @@ BEGIN
 		SELECT form_name 
 		FROM config.custom_field_forms
 		WHERE table_name = @table_name
+		AND config.custom_field_forms.deleted = 0
 	);
 END;
 

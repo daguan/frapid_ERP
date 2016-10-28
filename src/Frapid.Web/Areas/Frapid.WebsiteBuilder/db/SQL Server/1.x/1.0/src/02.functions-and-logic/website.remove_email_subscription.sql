@@ -17,6 +17,7 @@ BEGIN
         SELECT * FROM website.email_subscriptions
         WHERE email = @email
         AND unsubscribed = 0
+		AND website.email_subscriptions.deleted = 0
     ) 
     BEGIN
         UPDATE website.email_subscriptions
