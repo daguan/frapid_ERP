@@ -47,22 +47,8 @@ namespace Frapid.Installer.Tenant
             }
         }
 
-        private static List<string> GetDefaultInstallableNames(string tenant)
-        {
-            string path = PathMapper.MapPath("~/Overrides/Configs/Applications.config");
-            var apps =
-                ConfigurationManager.ReadConfigurationValue(path, "InstalledApplications")
-                    .Or("")
-                    .Split(',')
-                    .Select(x => x.Trim())
-                    .ToList();
-
-            return apps;
-        }
-
         private static IEnumerable<Installable> GetInstallables(string tenant)
         {
-            var defaultApps = GetDefaultInstallableNames(tenant);
             string root = PathMapper.MapPath("~/");
             var installables = new List<Installable>();
 
@@ -77,8 +63,7 @@ namespace Frapid.Installer.Tenant
             {
                 app.SetDependencies();
 
-                if (app.AutoInstall &&
-                    defaultApps.Contains(app.ApplicationName))
+                if (app.AutoInstall)
                 {
                     installables.Add(app);
                 }
