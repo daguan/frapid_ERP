@@ -27,6 +27,11 @@ namespace Frapid.Web
         {
             var context = FrapidHttpContext.GetCurrent();
 
+            if (context == null)
+            {
+                return;
+            }
+
             context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
             context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
             context.Response.Headers.Add("Access-Control-Allow-Methods", "HEAD,GET,POST,PUT,DELETE,OPTIONS");
@@ -85,7 +90,7 @@ namespace Frapid.Web
 
         public void App_EndRequest(object sender, EventArgs e)
         {
-            //this.SetCorsHeaders();
+            this.SetCorsHeaders();
             this.Handle404Error();
         }
 

@@ -16,7 +16,7 @@ BEGIN
     (
         SELECT * FROM account.installed_domains
         WHERE domain_name = @domain_name  
-		AND account.installed_domains.deleted = 0;
+		AND account.installed_domains.deleted = 0
     )
     BEGIN
         UPDATE account.installed_domains

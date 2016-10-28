@@ -232,7 +232,8 @@ BEGIN
     IF EXISTS
     (
         SELECT * FROM account.installed_domains
-        WHERE domain_name = @domain_name        
+        WHERE domain_name = @domain_name  
+		AND account.installed_domains.deleted = 0
     )
     BEGIN
         UPDATE account.installed_domains
@@ -265,6 +266,7 @@ BEGIN
         FROM account.registrations
         WHERE registration_id = @token
         AND confirmed = 0
+		AND account.registrations.deleted = 0
     )
     BEGIN
         RETURN 1;
@@ -294,6 +296,7 @@ BEGIN
         WHERE is_active = 1
         AND allow_registration = 1
         AND allow_facebook_registration = 1
+		AND account.configuration_profiles.deleted = 0
     )
     BEGIN
         RETURN 1;
@@ -322,6 +325,7 @@ BEGIN
         WHERE is_active = 1
         AND allow_registration = 1
         AND allow_google_registration = 1
+		AND account.configuration_profiles.deleted = 0
     )
     BEGIN
         RETURN 1;
@@ -358,7 +362,8 @@ BEGIN
     INNER JOIN account.users
     ON account.users.user_id = account.reset_requests.user_id
     WHERE account.reset_requests.request_id = @request_id
-    AND expires_on >= getutcdate();
+    AND expires_on >= getutcdate()
+	AND account.reset_requests.deleted = 0;
 
     
     UPDATE account.users
@@ -434,12 +439,16 @@ BEGIN
     DECLARE @count integer;
 
     SELECT @count = count(*)  
-    FROM account.users WHERE email = @email;
+    FROM account.users 
+	WHERE email = @email
+	AND account.users.deleted = 0;
 
     IF(COALESCE(@count, 0) = 0)
     BEGIN
         SELECT @count = count(*)  
-        FROM account.registrations WHERE email = @email;
+        FROM account.registrations 
+		WHERE email = @email
+		AND account.registrations.deleted = 0;
     END;
     
     IF COALESCE(@count, 0) > 0
@@ -572,6 +581,7 @@ BEGIN
         SELECT *
         FROM account.fb_access_tokens
         WHERE account.fb_access_tokens.user_id = @user_id
+		AND account.fb_access_tokens.deleted = 0
     )
     BEGIN
         RETURN 1;
@@ -599,6 +609,7 @@ BEGIN
 			account.users.email
 		FROM account.users
 		WHERE account.users.user_id = @user_id
+		AND account.users.deleted = 0
     );
 END;
 
@@ -621,6 +632,7 @@ BEGIN
 			account.users.name
 		FROM account.users
 		WHERE account.users.user_id = @user_id
+		AND account.users.deleted = 0
 	);
 END;
 
@@ -644,6 +656,7 @@ BEGIN
 			registration_office_id
 		FROM account.configuration_profiles
 		WHERE is_active = 1
+		AND account.configuration_profiles.deleted = 0 
 	);
 END;
 
@@ -667,6 +680,7 @@ BEGIN
     (
         SELECT * FROM account.installed_domains
         WHERE admin_email = @email
+		AND account.installed_domains.deleted = 0
     )
     BEGIN
         SET @is_admin = 1;
@@ -678,14 +692,16 @@ BEGIN
         TOP 1
             @role_id = role_id            
         FROM account.roles
-        WHERE is_administrator = 1;
+        WHERE is_administrator = 1
+		AND account.roles.deleted = 0;
     END
     ELSE
     BEGIN
         SELECT 
             @role_id = registration_role_id
         FROM account.configuration_profiles
-        WHERE is_active = 1;
+        WHERE is_active = 1
+		AND account.configuration_profiles.deleted = 0;
     END;
 
     RETURN @role_id;
@@ -709,6 +725,7 @@ BEGIN
 		user_id
 		FROM account.users
 		WHERE account.users.email = @email
+		AND account.users.deleted = 0 
 	);
 END;
 
@@ -731,6 +748,7 @@ BEGIN
 		user_id
 		FROM account.logins
 		WHERE account.logins.login_id = @login_id
+		AND account.logins.deleted = 0 
 	);
 END;
 
@@ -850,6 +868,7 @@ BEGIN
         SELECT *
         FROM account.google_access_tokens
         WHERE account.google_access_tokens.user_id = @user_id
+		AND account.google_access_tokens.deleted = 0
     )
     BEGIN
         RETURN 1;
@@ -874,7 +893,10 @@ AS
 BEGIN
     DECLARE @count                          integer;
 
-    SELECT @count = count(*) FROM account.users WHERE email = @email;
+    SELECT @count = count(*) 
+	FROM account.users 
+	WHERE email = @email
+	AND account.users.deleted = 0;
     IF COALESCE(@count, 0) = 1
     BEGIN
 		RETURN 1;
@@ -903,6 +925,7 @@ BEGIN
         SELECT * FROM account.reset_requests
         WHERE email = @email
         AND expires_on <= @expires_on
+		AND account.reset_requests.deleted = 0
     )
     BEGIN        
         RETURN 1;
@@ -929,6 +952,7 @@ BEGIN
         FROM account.users
         WHERE account.users.email = @email
         AND account.users.status = 0
+		AND account.users.deleted = 0
     )
     BEGIN
         RETURN 1;
@@ -966,7 +990,8 @@ BEGIN
     FROM account.access_tokens
     WHERE client_token = @client_token
     AND ip_address = @ip_address
-    AND user_agent = @user_agent;
+    AND user_agent = @user_agent
+	AND account.access_tokens.deleted = 0;
     
     IF(COALESCE(@revoked, 1)) = 1
     BEGIN
@@ -1020,7 +1045,8 @@ BEGIN
         @user_id = user_id,
         @name = name
     FROM account.users
-    WHERE email = @email;
+    WHERE email = @email
+	AND account.users.deleted = 0;
 
     IF account.has_active_reset_request(@email) = 1
     BEGIN
@@ -1028,7 +1054,8 @@ BEGIN
         TOP 1
         * FROM account.reset_requests
         WHERE email = @email
-        AND expires_on <= @expires_on;
+        AND expires_on <= @expires_on
+		AND account.reset_requests.deleted = 0;
         
         RETURN;
     END;
@@ -1142,6 +1169,7 @@ BEGIN
         SELECT *
         FROM account.users
         WHERE account.users.email = @email
+		AND account.users.deleted = 0
     )
     BEGIN
         RETURN 1;
@@ -1339,7 +1367,8 @@ ON account.users.user_id = account.logins.user_id
 INNER JOIN account.roles
 ON account.roles.role_id = account.users.role_id
 INNER JOIN core.offices
-ON core.offices.office_id = account.logins.office_id;
+ON core.offices.office_id = account.logins.office_id
+WHERE account.logins.deleted = 0;
 
 GO
 

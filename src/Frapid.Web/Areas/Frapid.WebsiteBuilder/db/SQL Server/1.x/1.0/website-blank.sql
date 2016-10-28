@@ -149,6 +149,7 @@ BEGIN
     (
         SELECT * FROM website.email_subscriptions
         WHERE email = @email
+		AND website.email_subscriptions.deleted = 0
     )
     BEGIN
         INSERT INTO website.email_subscriptions(email)
@@ -208,6 +209,7 @@ BEGIN
 		SELECT category_id
 		FROM website.categories
 		WHERE category_name = @category_name
+		AND website.categories.deleted = 0
 	);
 END;
 
@@ -227,6 +229,7 @@ BEGIN
 		SELECT category_id
 		FROM website.categories
 		WHERE alias = @alias
+		AND website.categories.deleted = 0
 	);
 END;
 
@@ -253,6 +256,7 @@ BEGIN
         SELECT * FROM website.email_subscriptions
         WHERE email = @email
         AND unsubscribed = 0
+		AND website.email_subscriptions.deleted = 0
     ) 
     BEGIN
         UPDATE website.email_subscriptions

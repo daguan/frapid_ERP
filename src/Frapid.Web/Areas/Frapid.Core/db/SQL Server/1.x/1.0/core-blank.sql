@@ -979,6 +979,7 @@ BEGIN
 		SELECT core.offices.office_id
 		FROM core.offices
 		WHERE core.offices.office_name = @office_name
+		AND core.offices.deleted = 0
     );
 END;
 

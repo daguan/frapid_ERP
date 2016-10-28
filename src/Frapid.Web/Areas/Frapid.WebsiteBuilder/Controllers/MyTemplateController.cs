@@ -5,19 +5,18 @@ using System.Web.Hosting;
 using System.Web.Mvc;
 using Frapid.Areas;
 using Frapid.Areas.Caching;
-using Frapid.Configuration;
 
 namespace Frapid.WebsiteBuilder.Controllers
 {
     public class MyTemplateController : FrapidController
     {
         [Route("my/template/{*resource}")]
-        [FileOutputCache(Duration = 60 * 24 * 7, SlidingExpiration = true)]
+        [FileOutputCache(Duration = 60*24*7, SlidingExpiration = true)]
         public ActionResult Get(string resource = "")
         {
             if (string.IsNullOrWhiteSpace(resource))
             {
-                return HttpNotFound();
+                return this.HttpNotFound();
             }
 
             var allowed = FrapidConfig.GetMyAllowedResources(this.Tenant);
@@ -31,14 +30,14 @@ namespace Frapid.WebsiteBuilder.Controllers
 
             if (directory == null)
             {
-                return HttpNotFound();
+                return this.HttpNotFound();
             }
 
             string path = Path.Combine(directory, resource);
 
             if (!System.IO.File.Exists(path))
             {
-                return HttpNotFound();
+                return this.HttpNotFound();
             }
 
             string extension = Path.GetExtension(path);

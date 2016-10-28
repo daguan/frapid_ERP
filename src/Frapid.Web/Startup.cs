@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Frapid.Framework;
@@ -10,7 +9,8 @@ using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Owin;
 
-[assembly: OwinStartup(typeof (Startup))]
+[assembly: OwinStartup(typeof(Startup))]
+
 namespace Frapid.Web
 {
     public class Startup

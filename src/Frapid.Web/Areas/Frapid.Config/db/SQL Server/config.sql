@@ -393,6 +393,7 @@ BEGIN
 		AND resource = @resource 
 		AND resource_key = @resource_key 
 		AND resource_id=@resource_id
+		AND config.flags.deleted = 0
 	)
     BEGIN
         INSERT INTO config.flags(user_id, flag_type_id, resource, resource_key, resource_id)
@@ -493,6 +494,7 @@ BEGIN
 		SELECT form_name 
 		FROM config.custom_field_forms
 		WHERE table_name = @table_name
+		AND config.custom_field_forms.deleted = 0
 	);
 END;
 
@@ -521,6 +523,7 @@ BEGIN
 		FROM config.custom_field_setup
 		WHERE form_name = config.get_custom_field_form_name(@schema_name + '.' + @table_name)
 		AND field_name = @field_name
+		AND config.custom_field_setup.deleted = 0
 	);
 END;
 
@@ -551,6 +554,8 @@ BEGIN
 		AND resource=@resource
 		AND resource_key=@resource_key
 		AND resource_id=@resource_id
+		AND config.flags.deleted = 0
+		
 	);
 END;
 
@@ -573,6 +578,7 @@ BEGIN
 		user_id
 		FROM account.logins
 		WHERE login_id = @login_id
+		AND account.logins.deleted = 0
 	);
 END;
 
