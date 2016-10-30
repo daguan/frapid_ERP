@@ -53,6 +53,11 @@ namespace Frapid.ApplicationState.Cache
             return GetCurrentAsync(tenant).Result;
         }
 
+        public static LoginView GetCurrent(string tenant, long loginId)
+        {
+            return GetCurrentAsync(tenant, loginId).Result;
+        }
+
         public static async Task<LoginView> GetCurrentAsync(string tenant = "")
         {
             var context = FrapidHttpContext.GetCurrent();

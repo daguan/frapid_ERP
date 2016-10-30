@@ -91,6 +91,7 @@ CREATE TABLE core.offices
 	registration_number							national character varying(100),
 	pan_number									national character varying(100),
 	has_vat										bit NOT NULL DEFAULT(0),
+	allow_transaction_posting					bit NOT NULL DEFAULT(0),
     audit_user_id                               integer NULL,
     audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
 	deleted										bit DEFAULT(0)

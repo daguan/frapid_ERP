@@ -133,7 +133,7 @@ namespace Frapid.NPoco.RowMappers
         {
             if (!reader.IsDBNull(posName.Key.Pos))
             {
-                object value = converter != null ? converter(reader.GetValue(posName.Key.Pos)) : reader.GetValue(posName.Key.Pos);
+                object value = converter != null ? converter(reader.GetValue(posName.Key.Pos)): reader.GetValue(posName.Key.Pos);
                 pocoColumn.SetValue(instance, value);
                 return true;
             }

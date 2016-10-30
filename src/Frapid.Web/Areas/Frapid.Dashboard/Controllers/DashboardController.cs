@@ -33,12 +33,12 @@ namespace Frapid.Dashboard.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            ViewBag.LayoutPath = this.GetLayoutPath();
-            ViewBag.LayoutFile = this.GetLayoutFile();
+            this.ViewBag.LayoutPath = this.GetLayoutPath();
+            this.ViewBag.LayoutFile = this.GetLayoutFile();
 
             if (!filterContext.HttpContext.Request.IsAjaxRequest())
             {
-                ViewBag.Layout = ViewBag.LayoutPath + ViewBag.LayoutFile;
+                this.ViewBag.Layout = this.ViewBag.LayoutPath + this.ViewBag.LayoutFile;
             }
         }
 

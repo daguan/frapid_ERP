@@ -22,6 +22,10 @@ $.getJSON("/dashboard/meta", function (response) {
     window.datepickerNumberOfMonths = meta.DatepickerNumberOfMonths;
 });
 
+$.getJSON("/dashboard/custom-variables", function (response) {
+    window.customVars = response;
+});
+
 jQuery.ajaxSetup({
   cache: true
 });

@@ -10,6 +10,7 @@ namespace Frapid.Dashboard
     public class MenuPolicyAttribute : ActionFilterAttribute
     {
         public string OverridePath { get; set; }
+        public bool StatusResponse { get; set; }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -26,7 +27,14 @@ namespace Frapid.Dashboard
 
             if (!policy.Any(x => x.Url.Equals(path)))
             {
-                filterContext.Result = new HttpUnauthorizedResult("Access is denied.");
+                if (this.StatusResponse)
+                {
+                    filterContext.Result = new HttpUnauthorizedResult("Access is denied.");
+                }
+                else
+                {
+                    filterContext.Result = new RedirectResult("/account/sign-in");
+                }
             }
         }
     }

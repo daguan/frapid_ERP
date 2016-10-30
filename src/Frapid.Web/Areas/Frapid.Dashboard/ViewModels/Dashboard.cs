@@ -5,6 +5,7 @@ namespace Frapid.Dashboard.ViewModels
     public class Dashboard
     {
         public string Culture { get; set; }
+        public string Tenant { get; set; }
         public string Language { get; set; }
         public string JqueryUIi18NPath { get; set; }
         public string Today { get; set; }

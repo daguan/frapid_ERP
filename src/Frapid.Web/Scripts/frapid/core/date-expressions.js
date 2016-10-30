@@ -1,6 +1,6 @@
 function convertDate(d) {
     try {
-        var date = new Date(parseInt(d.substr(6)));
+        const date = new Date(parseInt(d.substr(6)));
         return date;
     } catch (e) {
         return null;
@@ -12,10 +12,10 @@ function parseLocalizedDate(dateString) {
         return "";
     };
 
-    var date = Date.parseExact(dateString, window.shortDateFormat);
+    const date = Date.parseExact(dateString, window.shortDateFormat);
 
     if (date) {
-        var offset = date.getTimezoneOffset() * 60000;
+        const offset = date.getTimezoneOffset() * 60000;
 
         return removeTimezone(new Date(date.getTime() - offset).toISOString());
     }
@@ -34,21 +34,20 @@ function getTime(dateTime) {
 
     function padMinutes(minutes) {
         if (parseInt(minutes || 0) < 10) {
-            return "0" + minutes;
+            return `0${minutes}`;
         };
 
         return minutes;
     };
 
     var value = removeTimezone(dateTime);
-    var d = new Date(value);
+    const d = new Date(value);
     value = d.getHours() + ":" + padMinutes(d.getMinutes());
 
     return value;
 };
 
-function dateAdd(dt, expression, number) {
-    var d = Date.parseExact(removeTimezone(dt), window.shortDateFormat);
+function dateAdd(d, expression, number) {
     var ret = new Date();
 
     if (expression === "d") {
@@ -66,103 +65,195 @@ function dateAdd(dt, expression, number) {
     return ret.toString(window.shortDateFormat);
 };
 
-function convertNetDateFormat(format)
-{
+function getDate() {
+    var d;
+    if (window.today) {
+        d = new Date(window.today);
+    };
+
+    if (window.customVars && window.customVars.Today) {
+        d = new Date(window.customVars.Today);
+    };
+
+    if (!d) {
+        d = new Date();
+    };
+
+    return d;
+};
+
+function convertNetDateFormat(format) {
     //Convert the date
     format = format.replace("dddd", "DD");
     format = format.replace("ddd", "D");
- 
+
     //Convert month
-    if (format.indexOf("MMMM") !== -1)
-    {
+    if (format.indexOf("MMMM") !== -1) {
         format = format.replace("MMMM", "MM");
     }
 
-    if (format.indexOf("MMM") !== -1)
-    {
+    if (format.indexOf("MMM") !== -1) {
         format = format.replace("MMM", "M");
     }
 
-    if (format.indexOf("MM") !== -1)
-    {
+    if (format.indexOf("MM") !== -1) {
         format = format.replace("MM", "mm");
     }
 
     format = format.replace("M", "m");
- 
+
     //Convert year
     format = format.indexOf("yyyy") >= 0 ? format.replace("yyyy", "yy") : format.replace("yy", "y");
- 
+
     return format;
 }
 
 function loadDatepicker() {
-	loadPersister();
+    loadPersister();
 
     if (!$.isFunction($.fn.datepicker)) {
         return;
     };
 
-    if (typeof (window.datepickerFormat) === "undefined") { window.datepickerFormat = ""; }
-    if (typeof (window.datepickerShowWeekNumber) === "undefined") { window.datepickerShowWeekNumber = false; }
-    if (typeof (window.datepickerWeekStartDay) === "undefined") { window.datepickerWeekStartDay = "1"; }
-    if (typeof (window.datepickerNumberOfMonths) === "undefined") { window.datepickerNumberOfMonths = ""; }
-    if (typeof (window.language) === "undefined") { window.language = ""; }
+    if (typeof (window.datepickerFormat) === "undefined") {
+        window.datepickerFormat = "";
+    }
+    if (typeof (window.datepickerShowWeekNumber) === "undefined") {
+        window.datepickerShowWeekNumber = false;
+    }
+    if (typeof (window.datepickerWeekStartDay) === "undefined") {
+        window.datepickerWeekStartDay = "1";
+    }
+    if (typeof (window.datepickerNumberOfMonths) === "undefined") {
+        window.datepickerNumberOfMonths = "";
+    }
+    if (typeof (window.language) === "undefined") {
+        window.language = "";
+    }
 
-    var candidates = $("input.date:not([readonly]), input[type=date]:not([readonly])");
+    const candidates = $("input.date:not([readonly]), input[type=date]:not([readonly])");
 
     candidates.datepicker(
-    {
-        dateFormat: datepickerFormat,
-        showWeek: datepickerShowWeekNumber,
-        firstDay: datepickerWeekStartDay,
-        constrainInput: false,
-        numberOfMonths: eval(datepickerNumberOfMonths)
-    },
-    $.datepicker.regional[language]);
-	
-	
-	$.each(candidates, function(){
-		var el = $(this);
-		
-		//Chrome does not support <input type="date" /> and jQuery UI datepicker
-		if(el.attr("type") === "date"){
-			el.attr("type", "text");
-		};
-		
-		var val = el.val();
-		
-		if(!val){
-			if(window.today){
-				el.datepicker( "setDate", new Date(window.today));				
-			};
-		};
-	});
+        {
+            dateFormat: datepickerFormat,
+            showWeek: datepickerShowWeekNumber,
+            firstDay: datepickerWeekStartDay,
+            constrainInput: false,
+            numberOfMonths: eval(datepickerNumberOfMonths)
+        },
+        $.datepicker.regional[language]);
+
+
+    $.each(candidates, function () {
+        const el = $(this);
+
+        //Chrome does not support <input type="date" /> and jQuery UI datepicker
+        if (el.attr("type") === "date") {
+            el.attr("type", "text");
+        };
+
+        const val = el.val();
+        var expression = el.attr("data-expression");
+
+        if (expression) {
+            el.val(expression).trigger("blur");
+        };
+
+        if (!val) {
+            el.datepicker("setDate", getDate());
+        };
+    });
 
     candidates.blur(function () {
-        if (today === "") return;
+        var date = getDate();
         var control = $(this);
-        var value = control.val().trim().toLowerCase();
+        var expression = control.val().trim().toLowerCase();
         var result;
         var number;
 
-        if (value === "d") { result = dateAdd(today, "d", 0); }; //Today
-        if (value === "w" || value === "+w") { result = dateAdd(today, "d", 7); }; //Next Week
-        if (value === "m" || value === "+m") { result = dateAdd(today, "m", 1); }; //Next Month
-        if (value === "y" || value === "+y") { result = dateAdd(today, "y", 1); }; //Next Year
+        if (expression === "bom") {
+            result = new Date(window.customVars.MonthStartDate).toString(window.shortDateFormat);
+        };
+
+        if (expression === "eom") {
+            result = new Date(window.customVars.MonthEndDate).toString(window.shortDateFormat);
+        };
+
+        if (expression === "boq") {
+            result = new Date(window.customVars.QuarterStartDate).toString(window.shortDateFormat);
+        };
 
 
-        if (value === "-d") { result = dateAdd(today, "d", -1); };  //YesterDay      
-        if (value === "+d") { result = dateAdd(today, "d", 1); };//Tomorrow
-        if (value === "-w") { result = dateAdd(today, "d", -7); }; //Last Week
-        if (value === "-m") { result = dateAdd(today, "m", -1); }; //Last Month
-        if (value === "-y") { result = dateAdd(today, "y", -1); };
+        if (expression === "eoq") {
+            result = new Date(window.customVars.QuarterEndDate).toString(window.shortDateFormat);
+        };
+
+
+        if (expression === "boh") {
+            result = new Date(window.customVars.FiscalHalfStartDate).toString(window.shortDateFormat);
+        };
+
+
+        if (expression === "eoh") {
+            result = new Date(window.customVars.FiscalHalfEndDate).toString(window.shortDateFormat);
+        };
+
+        if (expression === "boy") {
+            result = new Date(window.customVars.FiscalYearStartDate).toString(window.shortDateFormat);
+        };
+
+        if (expression === "eoy") {
+            result = new Date(window.customVars.FiscalYearEndDate).toString(window.shortDateFormat);
+        };
+
+
+        if (expression === "d") {
+            result = dateAdd(date, "d", 0);
+        }; //Today
+        if (expression === "w" || expression === "+w") {
+            result = dateAdd(date, "d", 7);
+        }; //Next Week
+        if (expression === "m" || expression === "+m") {
+            result = dateAdd(date, "m", 1);
+        }; //Next Month
+        if (expression === "y" || expression === "+y") {
+            result = dateAdd(date, "y", 1);
+        }; //Next Year
+
+
+        if (expression === "-d") {
+            result = dateAdd(date, "d", -1);
+        }; //YesterDay      
+        if (expression === "+d") {
+            result = dateAdd(date, "d", 1);
+        }; //Tomorrow
+        if (expression === "-w") {
+            result = dateAdd(date, "d", -7);
+        }; //Last Week
+        if (expression === "-m") {
+            result = dateAdd(date, "m", -1);
+        }; //Last Month
+        if (expression === "-y") {
+            result = dateAdd(date, "y", -1);
+        };
 
         if (!result) {
-            if (value.indexOf("d") >= 0) { number = parseInt(value.replace("d")); result = dateAdd(today, "d", number); };
-            if (value.indexOf("w") >= 0) { number = parseInt(value.replace("w")); result = dateAdd(today, "d", number * 7); };
-            if (value.indexOf("m") >= 0) { number = parseInt(value.replace("m")); result = dateAdd(today, "m", number); };
-            if (value.indexOf("y") >= 0) { number = parseInt(value.replace("y")); result = dateAdd(today, "y", number); };
+            if (expression.indexOf("d") >= 0) {
+                number = parseInt(expression.replace("d"));
+                result = dateAdd(date, "d", number);
+            };
+            if (expression.indexOf("w") >= 0) {
+                number = parseInt(expression.replace("w"));
+                result = dateAdd(date, "d", number * 7);
+            };
+            if (expression.indexOf("m") >= 0) {
+                number = parseInt(expression.replace("m"));
+                result = dateAdd(date, "m", number);
+            };
+            if (expression.indexOf("y") >= 0) {
+                number = parseInt(expression.replace("y"));
+                result = dateAdd(date, "y", number);
+            };
         };
 
         if (result) {

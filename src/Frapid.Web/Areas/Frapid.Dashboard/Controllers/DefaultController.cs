@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using Frapid.ApplicationState.Cache;
 using Frapid.Areas.Authorization;
+using Frapid.Framework.Extensions;
 using Frapid.i18n;
 
 namespace Frapid.Dashboard.Controllers
@@ -11,7 +16,7 @@ namespace Frapid.Dashboard.Controllers
         [RestrictAnonymous]
         public ActionResult Index()
         {
-            return View(GetRazorView<AreaRegistration>("Default/Index.cshtml", this.Tenant));
+            return this.View(this.GetRazorView<AreaRegistration>("Default/Index.cshtml", this.Tenant));
         }
 
         [Route("dashboard/meta")]
@@ -23,6 +28,7 @@ namespace Frapid.Dashboard.Controllers
                     new ViewModels.Dashboard
                     {
                         Culture = CultureManager.GetCurrent().Name,
+                        Tenant = this.Tenant,
                         Language = CultureManager.GetCurrent().TwoLetterISOLanguageName,
                         JqueryUIi18NPath = "/Scripts/jquery-ui/i18n/",
                         Today = DateTime.Today.Date.ToString("O"),
@@ -39,9 +45,32 @@ namespace Frapid.Dashboard.Controllers
                         CurrencySymbol = CultureManager.GetCurrencySymbol(),
                         DatepickerFormat = CultureManager.GetCurrent().DateTimeFormat.ShortDatePattern,
                         DatepickerShowWeekNumber = true,
-                        DatepickerWeekStartDay = (int) CultureManager.GetCurrent().DateTimeFormat.FirstDayOfWeek,
+                        DatepickerWeekStartDay = (int)CultureManager.GetCurrent().DateTimeFormat.FirstDayOfWeek,
                         DatepickerNumberOfMonths = "[2, 3]"
                     });
         }
+
+
+        [Route("dashboard/custom-variables")]
+        [RestrictAnonymous]
+        public async Task<ActionResult> GetCustomVariablesAsync()
+        {
+            var meta = await AppUsers.GetCurrentAsync().ConfigureAwait(true);
+
+            var model = new Dictionary<string, string>();
+            var iType = typeof(ICustomJavascriptVariable);
+            var members = iType.GetTypeMembers<ICustomJavascriptVariable>();
+
+            foreach (var member in members)
+            {
+                var items = await member.GetAsync(this.Tenant, meta.OfficeId).ConfigureAwait(true);
+                model = model.Union(items).ToDictionary(k=>k.Key, v=>v.Value);
+            }
+
+
+            return this.Ok(model);
+        }
+
+
     }
 }
