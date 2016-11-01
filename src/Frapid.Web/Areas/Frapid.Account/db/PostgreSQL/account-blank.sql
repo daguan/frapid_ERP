@@ -848,6 +848,29 @@ END
 $$
 LANGUAGE plpgsql;
 
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.is_admin.sql --<--<--
+DROP FUNCTION IF EXISTS account.is_admin(_user_id integer);
+
+CREATE FUNCTION account.is_admin(_user_id integer)
+RETURNS boolean
+AS
+$$
+BEGIN
+    RETURN
+    (
+        SELECT account.roles.is_administrator FROM account.users
+        INNER JOIN account.roles
+        ON account.users.role_id = account.roles.role_id
+        WHERE account.users.user_id=$1
+    );
+END
+$$
+LANGUAGE PLPGSQL;
+
+--SELECT * FROM account.is_admin(1);
+
+
+
 -->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.is_restricted_user.sql --<--<--
 DROP FUNCTION IF EXISTS account.is_restricted_user(_email national character varying(100));
 
@@ -918,6 +941,26 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.is_valid_login_id.sql --<--<--
+DROP FUNCTION IF EXISTS account.is_valid_login_id(bigint);
+
+CREATE FUNCTION account.is_valid_login_id(bigint)
+RETURNS boolean
+STABLE
+AS
+$$
+BEGIN
+    IF EXISTS(SELECT 1 FROM account.logins WHERE login_id=$1) THEN
+            RETURN true;
+    END IF;
+
+    RETURN false;
+END
+$$
+LANGUAGE plpgsql;
+
+--SELECT account.is_valid_login_id(1);
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.reset_account.sql --<--<--
 DROP FUNCTION IF EXISTS account.reset_account
@@ -1219,6 +1262,9 @@ SELECT
     core.offices.fax,
     core.offices.url,
     core.offices.currency_code,
+    core.currencies.currency_name,
+    core.currencies.currency_symbol,
+    core.currencies.hundredth_name,
     core.offices.pan_number,
     core.offices.has_vat,
     account.users.last_seen_on
@@ -1229,8 +1275,9 @@ INNER JOIN account.roles
 ON account.roles.role_id = account.users.role_id
 INNER JOIN core.offices
 ON core.offices.office_id = account.logins.office_id
+LEFT JOIN core.currencies
+ON core.currencies.currency_code = core.offices.currency_code
 WHERE NOT account.logins.deleted;
-
 
 
 
@@ -1249,6 +1296,25 @@ BEGIN
     AND tableowner <> 'frapid_db_user'
     LOOP
         EXECUTE 'ALTER TABLE '|| this.schemaname || '.' || this.tablename ||' OWNER TO frapid_db_user;';
+    END LOOP;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+    DECLARE this record;
+BEGIN
+    IF(CURRENT_USER = 'frapid_db_user') THEN
+        RETURN;
+    END IF;
+
+    FOR this IN 
+    SELECT oid::regclass::text as mat_view
+    FROM   pg_class
+    WHERE  relkind = 'm'
+    LOOP
+        EXECUTE 'ALTER TABLE '|| this.mat_view ||' OWNER TO frapid_db_user;';
     END LOOP;
 END
 $$
@@ -1424,3 +1490,5 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+

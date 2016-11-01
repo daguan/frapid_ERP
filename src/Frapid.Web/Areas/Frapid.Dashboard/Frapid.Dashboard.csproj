@@ -92,6 +92,7 @@
     <Compile Include="AreaRegistration.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Controllers\AppController.cs" />
+    <Compile Include="Controllers\BackendController.cs" />
     <Compile Include="Controllers\BackgroundController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />

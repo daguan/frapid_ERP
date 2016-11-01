@@ -146,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AreaRegistration.cs" />
+    <Compile Include="Models\ReportLocator.cs" />
     <Compile Include="ViewModels\ParameterMeta.cs" />
     <Compile Include="Controllers\Backend\ReportController.cs" />
     <Compile Include="Controllers\Backend\SourceController.cs" />
@@ -199,7 +200,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DTO\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

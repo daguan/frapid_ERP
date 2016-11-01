@@ -684,6 +684,18 @@ CREATE TABLE core.menu_locale
 	deleted										bit DEFAULT(0)	
 );
 
+CREATE TABLE core.currencies
+(
+	currency_id									int identity NOT NULL,
+    currency_code                           	national character varying(12) PRIMARY KEY,
+    currency_symbol                         	national character varying(12) NOT NULL,
+    currency_name                           	national character varying(48) NOT NULL UNIQUE,
+    hundredth_name                          	national character varying(48) NOT NULL,
+    audit_user_id                           	integer,
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)	
+);
+
 CREATE TABLE core.offices
 (
     office_id                                   int IDENTITY PRIMARY KEY,
@@ -709,6 +721,7 @@ CREATE TABLE core.offices
 	registration_number							national character varying(100),
 	pan_number									national character varying(100),
 	has_vat										bit NOT NULL DEFAULT(0),
+	allow_transaction_posting					bit NOT NULL DEFAULT(0),
     audit_user_id                               integer NULL,
     audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
 	deleted										bit DEFAULT(0)
@@ -791,6 +804,20 @@ SELECT 'LIV', 'Living Relationship',    0 UNION ALL
 SELECT 'DIV', 'Divorced',               0 UNION ALL
 SELECT 'WID', 'Widower',                0 UNION ALL
 SELECT 'CIV', 'Civil Union',            1;
+
+INSERT INTO core.currencies(currency_code, currency_symbol, currency_name, hundredth_name)
+SELECT 'NPR', 'रू.',       'Nepali Rupees',        'paisa'     UNION ALL
+SELECT 'USD', '$',      'United States Dollar', 'cents'     UNION ALL
+SELECT 'GBP', '£',      'Pound Sterling',       'penny'     UNION ALL
+SELECT 'EUR', '€',      'Euro',                 'cents'     UNION ALL
+SELECT 'JPY', '¥',      'Japanese Yen',         'sen'       UNION ALL
+SELECT 'CHF', 'CHF',    'Swiss Franc',          'centime'   UNION ALL
+SELECT 'CAD', '¢',      'Canadian Dollar',      'cent'      UNION ALL
+SELECT 'AUD', 'AU$',    'Australian Dollar',    'cent'      UNION ALL
+SELECT 'HKD', 'HK$',    'Hong Kong Dollar',     'cent'      UNION ALL
+SELECT 'INR', '₹',      'Indian Rupees',        'paise'     UNION ALL
+SELECT 'SEK', 'kr',     'Swedish Krona',        'öre'       UNION ALL
+SELECT 'NZD', 'NZ$',    'New Zealand Dollar',   'cent';
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/05.scrud-views/core.office_scrud_view.sql --<--<--
@@ -961,6 +988,29 @@ END;
 
 GO
 
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.get_office_code_by_office_id.sql --<--<--
+IF OBJECT_ID('core.get_office_code_by_office_id') IS NOT NULL
+DROP FUNCTION core.get_office_code_by_office_id;
+
+GO
+
+CREATE FUNCTION core.get_office_code_by_office_id(@office_id integer)
+RETURNS national character varying(12)
+AS
+BEGIN
+    RETURN 
+	(
+		SELECT core.offices.office_code
+		FROM core.offices
+		WHERE core.offices.office_id = @office_id
+		AND core.offices.deleted = 0
+	);
+END;
+
+GO
+
+SELECT core.get_office_code_by_office_id(1);
+
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.get_office_id_by_office_name.sql --<--<--
 IF OBJECT_ID('core.get_office_id_by_office_name') IS NOT NULL
 DROP FUNCTION core.get_office_id_by_office_name;
@@ -1015,6 +1065,28 @@ BEGIN
 END;
 
 GO
+
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.is_valid_office_id.sql --<--<--
+IF OBJECT_ID('core.is_valid_office_id') IS NOT NULL
+DROP FUNCTION core.is_valid_office_id;
+
+GO
+
+CREATE FUNCTION core.is_valid_office_id(@office_id integer)
+RETURNS bit
+AS
+BEGIN
+    IF EXISTS(SELECT 1 FROM core.offices WHERE office_id=@office_id)
+	BEGIN
+        RETURN 1;
+    END;
+
+    RETURN 0;
+END;
+
+GO
+
+--SELECT core.is_valid_office_id(1);
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/10.policy/access_policy.sql --<--<--
 

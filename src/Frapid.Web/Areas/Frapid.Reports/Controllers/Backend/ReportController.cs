@@ -7,6 +7,7 @@ using Frapid.Framework.Extensions;
 using Frapid.Reports.Engine;
 using Frapid.Reports.Engine.Model;
 using Frapid.Reports.Helpers;
+using Frapid.Reports.Models;
 using Frapid.Reports.ViewModels;
 
 namespace Frapid.Reports.Controllers.Backend
@@ -19,8 +20,8 @@ namespace Frapid.Reports.Controllers.Backend
             string query = this.Request?.Url?.Query.Or("");
             string sourcePath = "/dashboard/reports/source/" + path + query;
 
-            string root = PathMapper.MapPath("/");
-            path = Path.Combine(root, path);
+            var locator = new ReportLocator();
+            path = locator.GetPathToDisk(this.Tenant, path);
 
             var parameters = ParameterHelper.GetParameters(this.Request?.QueryString);
             var parser = new ReportParser(path, this.Tenant, parameters);

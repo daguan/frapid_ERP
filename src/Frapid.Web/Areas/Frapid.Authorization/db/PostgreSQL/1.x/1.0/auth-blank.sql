@@ -984,6 +984,25 @@ BEGIN
     END IF;
 
     FOR this IN 
+    SELECT oid::regclass::text as mat_view
+    FROM   pg_class
+    WHERE  relkind = 'm'
+    LOOP
+        EXECUTE 'ALTER TABLE '|| this.mat_view ||' OWNER TO frapid_db_user;';
+    END LOOP;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+    DECLARE this record;
+BEGIN
+    IF(CURRENT_USER = 'frapid_db_user') THEN
+        RETURN;
+    END IF;
+
+    FOR this IN 
     SELECT 'ALTER '
         || CASE WHEN p.proisagg THEN 'AGGREGATE ' ELSE 'FUNCTION ' END
         || quote_ident(n.nspname) || '.' || quote_ident(p.proname) || '(' 
@@ -1145,3 +1164,5 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+

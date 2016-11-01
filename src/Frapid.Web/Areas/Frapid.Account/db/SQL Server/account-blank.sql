@@ -936,6 +936,31 @@ END;
 
 GO
 
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.is_admin.sql --<--<--
+IF OBJECT_ID('account.is_admin') IS NOT NULL
+DROP FUNCTION account.is_admin;
+
+GO
+
+CREATE FUNCTION account.is_admin(@user_id integer)
+RETURNS bit
+AS
+BEGIN
+    RETURN
+    (
+        SELECT account.roles.is_administrator FROM account.users
+        INNER JOIN account.roles
+        ON account.users.role_id = account.roles.role_id
+        WHERE account.users.user_id=@user_id
+    );
+END;
+
+GO
+
+--SELECT account.is_admin(1);
+
+
+
 -->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.is_restricted_user.sql --<--<--
 IF OBJECT_ID('account.is_restricted_user') IS NOT NULL
 DROP FUNCTION account.is_restricted_user;
@@ -1013,6 +1038,27 @@ END;
 
 GO
 
+
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.is_valid_login_id.sql --<--<--
+IF OBJECT_ID('account.is_valid_login_id') IS NOT NULL
+DROP FUNCTION account.is_valid_login_id;
+
+GO
+
+CREATE FUNCTION account.is_valid_login_id(@login_id bigint)
+RETURNS bit
+BEGIN
+    IF EXISTS(SELECT 1 FROM account.logins WHERE login_id=@login_id)
+	BEGIN
+        RETURN 1;
+    END;
+
+    RETURN 0;
+END;
+
+GO
+
+--SELECT account.is_valid_login_id(1);
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.reset_account.sql --<--<--
 IF OBJECT_ID('account.reset_account') IS NOT NULL
@@ -1343,7 +1389,7 @@ SELECT
     account.logins.office_id,
     core.offices.office_code,
     core.offices.office_name,
-    core.offices.office_code + ' (' + core.offices.office_name + ')' AS office,
+    core.offices.office_code || ' (' || core.offices.office_name || ')' AS office,
     core.offices.logo,
     core.offices.registration_date,
     core.offices.po_box,
@@ -1358,6 +1404,9 @@ SELECT
     core.offices.fax,
     core.offices.url,
     core.offices.currency_code,
+    core.currencies.currency_name,
+    core.currencies.currency_symbol,
+    core.currencies.hundredth_name,
     core.offices.pan_number,
     core.offices.has_vat,
     account.users.last_seen_on
@@ -1368,6 +1417,8 @@ INNER JOIN account.roles
 ON account.roles.role_id = account.users.role_id
 INNER JOIN core.offices
 ON core.offices.office_id = account.logins.office_id
+LEFT JOIN core.currencies
+ON core.currencies.currency_code = core.offices.currency_code
 WHERE account.logins.deleted = 0;
 
 GO

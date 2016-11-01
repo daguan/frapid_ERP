@@ -546,6 +546,26 @@ $$
 LANGUAGE plpgsql;
 
 
+-->-->-- src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/config.get_server_timezone().sql --<--<--
+DROP FUNCTION IF EXISTS config.get_server_timezone();
+
+CREATE FUNCTION config.get_server_timezone()
+RETURNS national character varying(200)
+AS
+$$
+BEGIN
+    RETURN
+        pg_catalog.pg_settings.setting
+    FROM pg_catalog.pg_settings
+    WHERE name = 'log_timezone';
+END
+$$
+LANGUAGE plpgsql;
+
+--SELECT * FROM config.get_server_timezone();
+
+
+
 -->-->-- src/Frapid.Web/Areas/Frapid.Config/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/config.get_user_id_by_login_id.sql --<--<--
 DROP FUNCTION IF EXISTS config.get_user_id_by_login_id(_login_id bigint);
 
@@ -624,6 +644,25 @@ BEGIN
     AND tableowner <> 'frapid_db_user'
     LOOP
         EXECUTE 'ALTER TABLE '|| this.schemaname || '.' || this.tablename ||' OWNER TO frapid_db_user;';
+    END LOOP;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+    DECLARE this record;
+BEGIN
+    IF(CURRENT_USER = 'frapid_db_user') THEN
+        RETURN;
+    END IF;
+
+    FOR this IN 
+    SELECT oid::regclass::text as mat_view
+    FROM   pg_class
+    WHERE  relkind = 'm'
+    LOOP
+        EXECUTE 'ALTER TABLE '|| this.mat_view ||' OWNER TO frapid_db_user;';
     END LOOP;
 END
 $$
@@ -799,3 +838,5 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+

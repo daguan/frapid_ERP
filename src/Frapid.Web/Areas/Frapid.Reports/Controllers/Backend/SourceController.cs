@@ -8,9 +8,9 @@ namespace Frapid.Reports.Controllers.Backend
     public class SourceController : BackendReportController
     {
         [Route("dashboard/reports/source/{*path}")]
-        public async Task<ActionResult> Index(string path)
+        public async Task<ActionResult> IndexAsync(string path)
         {
-            await Task.Delay(1);
+            await Task.Delay(1).ConfigureAwait(true);
             return this.View("~/Areas/Frapid.Reports/Views/Source.cshtml", path);
         }
 

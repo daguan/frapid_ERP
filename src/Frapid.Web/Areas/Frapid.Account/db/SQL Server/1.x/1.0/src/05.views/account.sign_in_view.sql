@@ -21,7 +21,7 @@ SELECT
     account.logins.office_id,
     core.offices.office_code,
     core.offices.office_name,
-    core.offices.office_code + ' (' + core.offices.office_name + ')' AS office,
+    core.offices.office_code || ' (' || core.offices.office_name || ')' AS office,
     core.offices.logo,
     core.offices.registration_date,
     core.offices.po_box,
@@ -36,6 +36,9 @@ SELECT
     core.offices.fax,
     core.offices.url,
     core.offices.currency_code,
+    core.currencies.currency_name,
+    core.currencies.currency_symbol,
+    core.currencies.hundredth_name,
     core.offices.pan_number,
     core.offices.has_vat,
     account.users.last_seen_on
@@ -46,6 +49,8 @@ INNER JOIN account.roles
 ON account.roles.role_id = account.users.role_id
 INNER JOIN core.offices
 ON core.offices.office_id = account.logins.office_id
+LEFT JOIN core.currencies
+ON core.currencies.currency_code = core.offices.currency_code
 WHERE account.logins.deleted = 0;
 
 GO

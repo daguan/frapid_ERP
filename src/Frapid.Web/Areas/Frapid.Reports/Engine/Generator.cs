@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using Frapid.Configuration;
 using Frapid.Framework.Extensions;
 using Frapid.Reports.DAL;
 using Frapid.Reports.Engine.Model;
 using Frapid.Reports.Helpers;
+using Frapid.Reports.Models;
 
 namespace Frapid.Reports.Engine
 {
@@ -17,8 +17,8 @@ namespace Frapid.Reports.Engine
         {
             this.Parameters = parameters;
 
-            string root = PathMapper.MapPath("/");
-            this.Path = System.IO.Path.Combine(root, path);
+            var locator = new ReportLocator();
+            this.Path = locator.GetPathToDisk(tenant, path);
 
             var parser = new ReportParser(this.Path, tenant, parameters);
             this.Report = parser.Get();
@@ -42,7 +42,7 @@ namespace Frapid.Reports.Engine
         }
 
         private string ParseExpressions(string html)
-        {            
+        {
             html = ExpressionHelper.ParseExpression(this.Report.Tenant, html, this.Report.DataSources, ParameterHelper.GetPraParameterInfo(this.Report));
             html = ExpressionHelper.ParseDataSource(html, this.Report.DataSources);
 

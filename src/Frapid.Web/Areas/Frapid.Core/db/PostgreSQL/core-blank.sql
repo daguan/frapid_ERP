@@ -605,6 +605,18 @@ CREATE TABLE core.menu_locale
 	deleted										boolean DEFAULT(false)
 );
 
+CREATE TABLE core.currencies
+(
+	currency_id									SERIAL,
+    currency_code                           	national character varying(12) PRIMARY KEY,
+    currency_symbol                         	national character varying(12) NOT NULL,
+    currency_name                           	national character varying(48) NOT NULL UNIQUE,
+    hundredth_name                          	national character varying(48) NOT NULL,
+    audit_user_id                           	integer,
+    audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
+	deleted										boolean DEFAULT(false)
+);
+
 CREATE TABLE core.offices
 (
     office_id                                   SERIAL PRIMARY KEY,
@@ -630,6 +642,7 @@ CREATE TABLE core.offices
 	registration_number							national character varying(100),
 	pan_number									national character varying(50),
 	has_vat										boolean NOT NULL DEFAULT(false),
+	allow_transaction_posting					boolean NOT NULL DEFAULT(false),
     audit_user_id                               integer,
     audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),
 	deleted										boolean DEFAULT(false)
@@ -713,6 +726,7 @@ CREATE TABLE core.marital_statuses
 );
 
 
+
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
 INSERT INTO core.offices(office_code, office_name, currency_code)
 SELECT 'DEF', 'Default', 'USD';
@@ -729,6 +743,20 @@ SELECT 'LIV', 'Living Relationship',    false UNION ALL
 SELECT 'DIV', 'Divorced',               false UNION ALL
 SELECT 'WID', 'Widower',                false UNION ALL
 SELECT 'CIV', 'Civil Union',            true;
+
+INSERT INTO core.currencies(currency_code, currency_symbol, currency_name, hundredth_name)
+SELECT 'NPR', 'रू.',       'Nepali Rupees',        'paisa'     UNION ALL
+SELECT 'USD', '$',      'United States Dollar', 'cents'     UNION ALL
+SELECT 'GBP', '£',      'Pound Sterling',       'penny'     UNION ALL
+SELECT 'EUR', '€',      'Euro',                 'cents'     UNION ALL
+SELECT 'JPY', '¥',      'Japanese Yen',         'sen'       UNION ALL
+SELECT 'CHF', 'CHF',    'Swiss Franc',          'centime'   UNION ALL
+SELECT 'CAD', '¢',      'Canadian Dollar',      'cent'      UNION ALL
+SELECT 'AUD', 'AU$',    'Australian Dollar',    'cent'      UNION ALL
+SELECT 'HKD', 'HK$',    'Hong Kong Dollar',     'cent'      UNION ALL
+SELECT 'INR', '₹',      'Indian Rupees',        'paise'     UNION ALL
+SELECT 'SEK', 'kr',     'Swedish Krona',        'öre'       UNION ALL
+SELECT 'NZD', 'NZ$',    'New Zealand Dollar',   'cent';
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/05.scrud-views/core.office_scrud_view.sql --<--<--
@@ -938,6 +966,23 @@ END
 $$
 LANGUAGE plpgsql;
 
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/core.get_office_code_by_office_id.sql --<--<--
+DROP FUNCTION IF EXISTS core.get_office_code_by_office_id(_office_id integer);
+
+CREATE FUNCTION core.get_office_code_by_office_id(_office_id integer)
+RETURNS national character varying(12)
+AS
+$$
+BEGIN
+    RETURN core.offices.office_code
+    FROM core.offices
+    WHERE core.offices.office_id = _office_id
+	AND NOT core.offices.deleted;
+END
+$$
+LANGUAGE plpgsql;
+
+
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/core.get_office_id_by_office_name.sql --<--<--
 DROP FUNCTION IF EXISTS core.get_office_id_by_office_name(_office_name text);
 
@@ -1000,6 +1045,25 @@ END
 $$
 LANGUAGE plpgsql;
 
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/core.is_valid_office_id.sql --<--<--
+DROP FUNCTION IF EXISTS core.is_valid_office_id(integer);
+
+CREATE FUNCTION core.is_valid_office_id(integer)
+RETURNS boolean
+AS
+$$
+BEGIN
+    IF EXISTS(SELECT 1 FROM core.offices WHERE office_id=$1) THEN
+        RETURN true;
+    END IF;
+
+    RETURN false;
+END
+$$
+LANGUAGE plpgsql;
+
+SELECT core.is_valid_office_id(1);
+
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/10.policy/access_policy.sql --<--<--
 
 
@@ -1018,6 +1082,25 @@ BEGIN
     AND tableowner <> 'frapid_db_user'
     LOOP
         EXECUTE 'ALTER TABLE '|| this.schemaname || '.' || this.tablename ||' OWNER TO frapid_db_user;';
+    END LOOP;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+    DECLARE this record;
+BEGIN
+    IF(CURRENT_USER = 'frapid_db_user') THEN
+        RETURN;
+    END IF;
+
+    FOR this IN 
+    SELECT oid::regclass::text as mat_view
+    FROM   pg_class
+    WHERE  relkind = 'm'
+    LOOP
+        EXECUTE 'ALTER TABLE '|| this.mat_view ||' OWNER TO frapid_db_user;';
     END LOOP;
 END
 $$
@@ -1193,3 +1276,5 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+
