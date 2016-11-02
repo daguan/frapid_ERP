@@ -60,8 +60,8 @@ namespace Frapid.Areas
             }
 
             string html = CdnHelper.UseCdn(output.ToString());
+            html = CustomJavascriptInjector.Inject(viewName, html);
             html = MinificationHelper.Minify(html);
-
             return this.Content(html, "text/html");
         }
 

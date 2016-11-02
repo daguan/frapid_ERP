@@ -121,6 +121,7 @@
     <Compile Include="AntiforgeryHelper.cs" />
     <Compile Include="Conventions\Attachments\Uploader.cs" />
     <Compile Include="Conventions\Attachments\UploadException.cs" />
+    <Compile Include="CustomJavascriptInjector.cs" />
     <Compile Include="Drawing\BitmapHelper.cs" />
     <Compile Include="Conventions\Attachments\Deserializer.cs" />
     <Compile Include="Caching\BinaryCacheItem.cs" />

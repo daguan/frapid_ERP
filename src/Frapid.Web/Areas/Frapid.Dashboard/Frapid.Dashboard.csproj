@@ -97,6 +97,8 @@
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Helpers\FrapidViewHelper.cs" />
+    <Compile Include="Extensions\PartialView.cs" />
     <Compile Include="ICustomJavascriptVariable.cs" />
     <Compile Include="MenuPolicyAttribute.cs" />
     <Compile Include="Controllers\MyTemplateController.cs" />

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Frapid.Configuration.Db;
 using Frapid.DataAccess.Models;
+using Frapid.Framework.Extensions;
 using Frapid.i18n;
 using Frapid.NPoco;
 
@@ -82,10 +83,10 @@ namespace Frapid.DataAccess
                         sql.Append(statement + Sanitizer.SanitizeIdentifierName(column) + " NOT BETWEEN @0 AND @1", GetValue(filter.Type, filter.FilterValue), GetValue(filter.Type, filter.FilterValue));
                         break;
                     case FilterCondition.IsLike:
-                        sql.Append(statement + " lower(" + Sanitizer.SanitizeIdentifierName(column) + ") LIKE @0", "%" + filter.FilterValue.ToLower(CultureManager.GetCurrent()) + "%");
+                        sql.Append(statement + " LOWER(COALESCE(" + Sanitizer.SanitizeIdentifierName(column) + ", '')) LIKE @0", "%" + filter.FilterValue.Or("").ToLower(CultureManager.GetCurrent()) + "%");
                         break;
                     case FilterCondition.IsNotLike:
-                        sql.Append(statement + " lower(" + Sanitizer.SanitizeIdentifierName(column) + ") NOT LIKE @0", "%" + filter.FilterValue.ToLower(CultureManager.GetCurrent()) + "%");
+                        sql.Append(statement + " LOWER(COALESCE(" + Sanitizer.SanitizeIdentifierName(column) + ", '') NOT LIKE @0", "%" + filter.FilterValue.Or("").ToLower(CultureManager.GetCurrent()) + "%");
                         break;
                 }
             }

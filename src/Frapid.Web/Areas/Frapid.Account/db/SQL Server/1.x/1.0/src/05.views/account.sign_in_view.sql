@@ -21,7 +21,7 @@ SELECT
     account.logins.office_id,
     core.offices.office_code,
     core.offices.office_name,
-    core.offices.office_code || ' (' || core.offices.office_name || ')' AS office,
+    core.offices.office_code + ' (' + core.offices.office_name + ')' AS office,
     core.offices.logo,
     core.offices.registration_date,
     core.offices.po_box,
