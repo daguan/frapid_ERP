@@ -2,6 +2,11 @@ html, body, .jstree {
     font-size: 12px;
 }
 
+#dashboard-container{
+	height:100%!important;
+	border:none!important;
+}
+
 #editor {
     font-size: 12pt;
 }

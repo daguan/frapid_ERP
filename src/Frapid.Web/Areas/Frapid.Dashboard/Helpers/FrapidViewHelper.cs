@@ -34,6 +34,15 @@ namespace Frapid.Dashboard.Helpers
                 return overridePath;
             }
 
+            overridePath = "~/Tenants/{0}/Areas/{1}/Views/" + path;
+            overridePath = string.Format(CultureInfo.InvariantCulture, overridePath, tenant, areaName);
+
+            if (File.Exists(HostingEnvironment.MapPath(overridePath)))
+            {
+                return overridePath;
+            }
+
+
             string defaultPath = "~/Areas/{0}/Views/{1}";
             defaultPath = string.Format(CultureInfo.InvariantCulture, defaultPath, areaName, path);
 
