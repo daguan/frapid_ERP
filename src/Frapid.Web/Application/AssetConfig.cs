@@ -252,7 +252,7 @@ namespace Frapid.Web
         {
             var script = new List<string>
             {
-                "~/Scripts/jquery-1.9.1.js",
+                "~/Scripts/jquery-2.2.3.js",
                 "~/Scripts/angular/angular.min.js",
                 "~/Scripts/jquery.address.js",
                 "~/Scripts/jquery-ui.js",
