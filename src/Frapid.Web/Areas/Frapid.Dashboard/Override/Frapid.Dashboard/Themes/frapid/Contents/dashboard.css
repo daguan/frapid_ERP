@@ -182,7 +182,7 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
     }
 
     .area {
-        padding-top: 12em;
+        padding-top: 2em;
     }
 }
 
