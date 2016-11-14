@@ -597,7 +597,7 @@ namespace Frapid.WebApi.Service
         }
 
         [AcceptVerbs("GET", "HEAD")]
-        [Route("~/api/forms/{schemaName}/{tableName}/lookup-fields")]
+        [Route("~/api/forms/{schemaName}/{tableName}/lookup-fields/get-where")]
         [HttpPost]
         [RestAuthorize]
         public async Task<IEnumerable<DisplayField>> GetLookupFieldsAsync(string schemaName, string tableName, [FromBody] JArray filters)

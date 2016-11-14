@@ -19,7 +19,7 @@ jQuery.fn.setSelectedText = function (text) {
     target.prop('selected', true);
 };
 
-function displayFieldBinder(el, url, notNull, filters) {
+function displayFieldBinder(el, url, notNull, filters, callback) {
 	function request() {
 		function getRequest(){
 			return window.getAjaxRequest(url);			
@@ -47,17 +47,24 @@ function displayFieldBinder(el, url, notNull, filters) {
 		};
 		
 		var totalItems = response.length;
-
-		$.each(response, function () {
+		var selectedValue;
+		
+		$.each(response, function (i) {
 			var option = "<option value='{key}' {selected}>{value}</option>";
 			option = option.replace("{key}", this.Key);
 			option = option.replace("{value}", this.Value);
 			
 			if(totalItems === 1){
-				option = option.replace("{selected}", "selected='selected'");				
+				option = option.replace("{selected}", "selected='selected'");
+				selectedValue = this.Value;
 			} else{
-				option = option.replace("{selected}", "");								
-			}
+				if(notNull && i === 0){
+					option = option.replace("{selected}", "selected='selected'");									
+					selectedValue = this.Value;
+				}else{
+					option = option.replace("{selected}", "");													
+				};
+			};
 
 			options += option;
 		});
@@ -68,7 +75,19 @@ function displayFieldBinder(el, url, notNull, filters) {
 			setTimeout(function(){
 				el.dropdown("clear");
 				el.dropdown("restore defaults");
+
+				if(selectedValue){
+					el.dropdown("set selected", selectedValue);
+
+					setTimeout(function(){
+						el.trigger("change").trigger("blur");						
+					}, 100);
+				};
 			}, 100)
+		};
+		
+		if(typeof(callback) === "function"){
+			callback();
 		};
 	});
 };
