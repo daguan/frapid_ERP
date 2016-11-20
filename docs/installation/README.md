@@ -58,11 +58,14 @@ The master configuration files are available on the `~/Resources/Configs` direct
 
 |File Name                                | Description              |
 |-----------------------------------------|--------------------------|
-| [DbServer.config](../configs/DbServer.config.md)   | Contains configuration realted your PostgreSQL server. |
 | [DomainsApproved.json](../configs/DomainsApproved.json.md) | Contains list of approved DNS domain names which will be served by Frapid. |
 | [DomainsInstalled.json](../configs/DomainsInstalled.json.md) | Contains list of installed DNS domain names. This file should not be edited manually. |
 | [JwtConfig.json](../configs/JwtConfig.json.md) | Contains configuration related to Json Web Tokens. |
 | [Parameters.config](../configs/Parameters.config.md) | Contains standard application configuration data.|
+| [PostgreSQL.config](../configs/PostgreSQL.config.md)   | Contains configuration realted your PostgreSQL server. |
+| RblServers.config | Contains list of RBL (DNS Blacklist) Servers.|
+| RedisConfig.json | Contains Redis server configuration. |
+| [SQLServer.config](../configs/SQLServer.config.md)   | Contains configuration realted your SQL Server. |
 
 
 **You must be fairly familiar with the master configuration files before you proceed to the next steps.**

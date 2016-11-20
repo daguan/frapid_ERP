@@ -10,14 +10,18 @@ Please be advised that once you correctly configure this file, frapid will autom
   <appSettings>
     <add key="Server" value="localhost" />
     <add key="Port" value="5432" />
-    <add key="SuperUserId" value="postgres" />
-    <add key="SuperUserPassword" value="binod" />
-    <add key="UserId" value="frapid_db_user" />
-    <add key="Password" value="change-on-deployment" />
     <add key="MetaDatabase" value="postgres" />
-    <add key="ReportUserId" value="report_user" />
-    <add key="ReportUserPassword" value="change-on-deployment" />
-    <add key="PostgreSQLBinDirectory" value="C:\Program Files\PostgreSQL\9.4\bin\" />
+	<add key="EnablePooling" value="true" />
+	<add key="MinPoolSize" value="0" />
+	<add key="MaxPoolSize" value="0" />
+    <add key="SuperUserId" value="postgres" /><!-- Super user account is needed only to create database(s). -->
+    <add key="SuperUserPassword" value="???" />
+    <add key="UserId" value="frapid_db_user" /><!-- If not found, Frapid automatically creates the login: frapid_db_user/change-on-deployment@123. -->
+    <add key="Password" value="change-on-deployment@123" />
+    <add key="ReportUserId" value="report_user" /><!-- If not found, Frapid automatically creates the login: report_user/change-on-deployment@123. Make sure that you do not allow write permission to this user.-->
+    <add key="ReportUserPassword" value="change-on-deployment@123" />
+    <add key="PostgreSQLBinDirectory" value="C:\Program Files\PostgreSQL\9.5\bin\" />
+    <add key="DatabaseBackupDirectory" value="/Backups/" />
   </appSettings>
 </configuration>
 ```
