@@ -1,6 +1,6 @@
-# Database Server Configuration
+# SQL Server Configuration
 
-The database server parameters are configured on `~/Resources/Configs/DBServer.config` file.
+The database server parameters are configured on `~/Resources/Configs/SQLServer.config` file.
 Please be advised that once you correctly configure this file, frapid will automatically create database(s) as and when required.
 
 **~/Resources/Configs/DBServer.config**
