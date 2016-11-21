@@ -88,9 +88,17 @@ namespace Frapid.DataAccess
 
         public static async Task NonQueryAsync(string database, string sql, params object[] args)
         {
-            using(var db = DbProvider.GetDatabase(database))
+            using (var db = DbProvider.GetDatabase(database))
             {
                 await db.ExecuteAsync(sql, args).ConfigureAwait(false);
+            }
+        }
+
+        public static async Task NonQueryAsync(string database, Sql sql)
+        {
+            using (var db = DbProvider.GetDatabase(database))
+            {
+                await db.ExecuteAsync(sql).ConfigureAwait(false);
             }
         }
 
