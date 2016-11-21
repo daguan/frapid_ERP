@@ -3,7 +3,7 @@
 Before you begin reading this document, throw your pillows off and get these tools installed on your PC first:
 
 * [Visual Studio 2015 Community](http://visualstudio.com)
-* [PostgreSQL Server 9.3 or above](http://postgresql.org)
+* [PostgreSQL Server 9.3+](http://postgresql.org) or [SQL Server 2014+](https://www.microsoft.com/en-us/sql-server/sql-server-2016)
 * [Git for Windows](http://git-scm.com)
 * [TortoiseGit (if you want a nice Git GUI)](https://tortoisegit.org/download/)
 
