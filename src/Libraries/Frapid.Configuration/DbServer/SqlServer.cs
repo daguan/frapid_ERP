@@ -3,7 +3,7 @@ using Frapid.Framework.Extensions;
 
 namespace Frapid.Configuration.DbServer
 {
-    public class SqlServer: IDbServer
+    public class SqlServer : IDbServer
     {
         public SqlServer()
         {
@@ -16,17 +16,17 @@ namespace Frapid.Configuration.DbServer
         {
             string host = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "Server");
 
-            if(string.IsNullOrWhiteSpace(database))
+            if (string.IsNullOrWhiteSpace(database))
             {
                 database = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "Database");
             }
 
-            if(string.IsNullOrWhiteSpace(userId))
+            if (string.IsNullOrWhiteSpace(userId))
             {
                 userId = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "UserId");
             }
 
-            if(string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(password))
             {
                 password = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "Password");
             }
@@ -41,7 +41,7 @@ namespace Frapid.Configuration.DbServer
 
         public string GetReportUserConnectionString(string tenant, string database = "")
         {
-            if(string.IsNullOrWhiteSpace(database))
+            if (string.IsNullOrWhiteSpace(database))
             {
                 database = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "Database");
             }
@@ -56,15 +56,49 @@ namespace Frapid.Configuration.DbServer
 
         public string GetSuperUserConnectionString(string tenant, string database = "")
         {
-            if(string.IsNullOrWhiteSpace(database))
+            if (string.IsNullOrWhiteSpace(database))
             {
                 database = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "Database");
             }
 
+            string host = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "Server");
             string userId = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "SuperUserId");
             string password = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "SuperUserPassword");
 
-            return this.GetConnectionString(tenant, database, userId, password);
+            bool trusted = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "TrustedSuperUserConnection").ToUpperInvariant().Equals("TRUE");
+            bool enablePooling = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "EnablePooling").ToUpperInvariant().Equals("TRUE");
+            int port = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "Port").To<int>();
+            int minPoolSize = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "MinPoolSize").To<int>();
+            int maxPoolSize = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "MaxPoolSize").To<int>();
+
+            string dataSource = host;
+
+            if (port > 0)
+            {
+                dataSource += ", " + port;
+            }
+
+            var builder = new SqlConnectionStringBuilder
+            {
+                DataSource = dataSource,
+                InitialCatalog = database,
+                Pooling = enablePooling,
+                MinPoolSize = minPoolSize,
+                MaxPoolSize = maxPoolSize,
+                ApplicationName = "Frapid"
+            };
+
+            if (trusted)
+            {
+                builder.IntegratedSecurity = true;
+            }
+            else
+            {
+                builder.UserID = userId;
+                builder.Password = password;
+            }
+
+            return builder.ConnectionString;
         }
 
         public string GetMetaConnectionString(string tenant)
@@ -77,22 +111,22 @@ namespace Frapid.Configuration.DbServer
         {
             string dataSource = host;
 
-            if(port > 0)
+            if (port > 0)
             {
                 dataSource += ", " + port;
             }
 
             return new SqlConnectionStringBuilder
-                   {
-                       DataSource = dataSource,
-                       InitialCatalog = database,
-                       UserID = username,
-                       Password = password,
-                       Pooling = enablePooling,
-                       MinPoolSize = minPoolSize,
-                       MaxPoolSize = maxPoolSize,
-                       ApplicationName = "Frapid"
-                   }.ConnectionString;
+            {
+                DataSource = dataSource,
+                InitialCatalog = database,
+                UserID = username,
+                Password = password,
+                Pooling = enablePooling,
+                MinPoolSize = minPoolSize,
+                MaxPoolSize = maxPoolSize,
+                ApplicationName = "Frapid"
+            }.ConnectionString;
         }
 
         public string GetProcedureCommand(string procedureName, string[] parameters)
