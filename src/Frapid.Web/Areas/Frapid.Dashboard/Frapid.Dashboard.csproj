@@ -111,12 +111,28 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThemeConfiguration.cs" />
     <Compile Include="ViewModels\Dashboard.cs" />
+    <Compile Include="Views\Default\Index.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Default\LandingPage.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LandingPage.cshtml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
-    <Content Include="Views\Default\Index.cshtml" />
-    <Content Include="Views\Default\LandingPage.cshtml" />
+    <Content Include="Views\Default\Index.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Index.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\Default\LandingPage.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>LandingPage.generated.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

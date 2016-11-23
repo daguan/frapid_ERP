@@ -147,6 +147,26 @@
     <Compile Include="ViewModels\UserEntityAccessPolicy.cs" />
     <Compile Include="ViewModels\UserMenuPolicy.cs" />
     <Compile Include="ViewModels\UserMenuPolicyInfo.cs" />
+    <Compile Include="Views\AccessPolicy\GroupPolicy.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GroupPolicy.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AccessPolicy\Policy.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Policy.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MenuPolicy\GroupPolicy.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GroupPolicy.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MenuPolicy\Policy.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Policy.cshtml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -158,10 +178,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="web.config" />
-    <Content Include="Views\MenuPolicy\GroupPolicy.cshtml" />
-    <Content Include="Views\MenuPolicy\Policy.cshtml" />
-    <Content Include="Views\AccessPolicy\GroupPolicy.cshtml" />
-    <Content Include="Views\AccessPolicy\Policy.cshtml" />
+    <Content Include="Views\MenuPolicy\GroupPolicy.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>GroupPolicy.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\MenuPolicy\Policy.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Policy.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\AccessPolicy\GroupPolicy.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>GroupPolicy.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\AccessPolicy\Policy.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Policy.generated.cs</LastGenOutput>
+    </Content>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

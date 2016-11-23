@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
-using Frapid.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Frapid.ApplicationState.CacheFactory;
 using Frapid.DataAccess;
+using Frapid.TokenManager.DTO;
 
 namespace Frapid.TokenManager.DAL
 {
@@ -8,8 +12,45 @@ namespace Frapid.TokenManager.DAL
     {
         public static async Task<bool> IsValidAsync(string tenant, string clientToken, string ipAddress, string userAgent)
         {
-            const string sql = "SELECT account.is_valid_client_token(@0, @1, @2);";
-            return await Factory.ScalarAsync<bool>(tenant, sql, clientToken, ipAddress, userAgent).ConfigureAwait(false);
+            var tokens = await GetActiveTokensAsync(tenant).ConfigureAwait(false);
+
+            var token = tokens.FirstOrDefault
+                (
+                x => x.ClientToken.Equals(clientToken)
+                && !x.Revoked
+                && x.CreatedOn <= DateTimeOffset.UtcNow
+                && (x.ExpiresOn == null || x.ExpiresOn.Value >= DateTimeOffset.UtcNow)
+               );
+
+            if (token == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static async Task<IEnumerable<AccessToken>> GetActiveTokensAsync(string tenant)
+        {
+            string key = "access_tokens_" + tenant;
+            var factory = new DefaultCacheFactory();
+            var tokens = factory.Get<IEnumerable<AccessToken>>(key);
+
+            if (tokens != null)
+            {
+                return tokens;
+            }
+
+            tokens = await FromStoreAsync(tenant).ConfigureAwait(false);
+            factory.Add(key, tokens, DateTimeOffset.Now.AddMinutes(5));
+
+            return tokens;
+        }
+
+        private static async Task<IEnumerable<AccessToken>> FromStoreAsync(string tenant)
+        {
+            const string sql = "SELECT access_token_id, created_on, expires_on, revoked, ip_address, user_agent, client_token FROM account.access_tokens WHERE NOT account.access_tokens.revoked;";
+            return await Factory.GetAsync<AccessToken>(tenant, sql).ConfigureAwait(false);
         }
     }
 }
