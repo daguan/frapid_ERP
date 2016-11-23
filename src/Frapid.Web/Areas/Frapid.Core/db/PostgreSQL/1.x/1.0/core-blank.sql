@@ -728,8 +728,8 @@ CREATE TABLE core.marital_statuses
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
-INSERT INTO core.offices(office_code, office_name, currency_code)
-SELECT 'DEF', 'Default', 'USD';
+INSERT INTO core.offices(office_code, office_name, currency_code, nick_name, po_box, address_line_1, address_line_2, street, city, state, country, phone, fax, email, url)
+SELECT 'DEF', 'Default', 'USD', 'MixERP', '3415', 'Lobortis. Avenue', '', '', 'Rocky Mount', 'WA', 'United States', '(213) 3640-6139', '', 'info@mixerp.com', 'http://mixerp.com';
 
 INSERT INTO core.genders(gender_code, gender_name)
 SELECT 'M', 'Male' UNION ALL
