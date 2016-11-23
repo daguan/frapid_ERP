@@ -214,33 +214,185 @@
     <Compile Include="InputModels\SignInInfo.cs" />
     <Compile Include="ViewModels\Template.cs" />
     <Compile Include="ViewModels\UserInfo.cs" />
+    <Compile Include="Views\ChangePassword\Index.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ChangePassword\Success.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Success.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConfigurationProfile\Index.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EmailTemplate\Index.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EmailTemplate\Shared\Editor.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Editor.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ListedInSpamDatabase.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ListedInSpamDatabase.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reset\Do.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Do.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reset\Index.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reset\ResetEmailSent.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResetEmailSent.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Role\Index.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SignIn\Index.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SignOut\Index.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SignUp\EmailSent.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmailSent.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SignUp\Index.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SignUp\InvalidToken.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvalidToken.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SignUp\Welcome.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Welcome.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\User\AddNew.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddNew.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\User\ChangePassword.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChangePassword.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\User\Index.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.cshtml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\EmailTemplate\Editor.js" />
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
-    <Content Include="Views\SignIn\Index.cshtml" />
-    <Content Include="Views\SignUp\Index.cshtml" />
-    <Content Include="Views\SignUp\EmailSent.cshtml" />
-    <Content Include="Views\SignUp\InvalidToken.cshtml" />
-    <Content Include="Views\SignUp\Welcome.cshtml" />
-    <Content Include="Views\Reset\ResetEmailSent.cshtml" />
-    <Content Include="Views\ConfigurationProfile\Index.cshtml" />
-    <Content Include="Views\User\Index.cshtml" />
-    <Content Include="Views\Role\Index.cshtml" />
+    <Content Include="Views\SignIn\Index.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Index.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\SignUp\Index.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Index.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\SignUp\EmailSent.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>EmailSent.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\SignUp\InvalidToken.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>InvalidToken.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\SignUp\Welcome.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Welcome.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\Reset\ResetEmailSent.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>ResetEmailSent.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\ConfigurationProfile\Index.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Index.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\User\Index.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Index.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\Role\Index.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Index.generated.cs</LastGenOutput>
+    </Content>
     <Content Include="AppInfo.json" />
     <None Include="Properties\PublishProfiles\frapid-publish-profile.pubxml" />
-    <Content Include="Views\ChangePassword\Success.cshtml" />
-    <None Include="Views\EmailTemplate\Index.cshtml" />
-    <Content Include="Views\EmailTemplate\Shared\Editor.cshtml" />
-    <Content Include="Views\ListedInSpamDatabase.cshtml" />
-    <None Include="Views\Reset\Do.cshtml" />
-    <None Include="Views\Reset\Index.cshtml" />
+    <Content Include="Views\ChangePassword\Success.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Success.generated.cs</LastGenOutput>
+    </Content>
+    <None Include="Views\EmailTemplate\Index.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Index.generated.cs</LastGenOutput>
+    </None>
+    <Content Include="Views\EmailTemplate\Shared\Editor.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Editor.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\ListedInSpamDatabase.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>ListedInSpamDatabase.generated.cs</LastGenOutput>
+    </Content>
+    <None Include="Views\Reset\Do.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Do.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\Reset\Index.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Index.generated.cs</LastGenOutput>
+    </None>
     <Content Include="web.config" />
-    <Content Include="Views\ChangePassword\Index.cshtml" />
-    <Content Include="Views\SignOut\Index.cshtml" />
-    <Content Include="Views\User\AddNew.cshtml" />
-    <Content Include="Views\User\ChangePassword.cshtml" />
+    <Content Include="Views\ChangePassword\Index.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Index.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\SignOut\Index.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Index.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\User\AddNew.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>AddNew.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\User\ChangePassword.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>ChangePassword.generated.cs</LastGenOutput>
+    </Content>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
