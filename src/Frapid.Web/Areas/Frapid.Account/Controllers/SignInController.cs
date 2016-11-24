@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Frapid.Account.DAL;
 using Frapid.Account.InputModels;
 using Frapid.Account.ViewModels;
+using Frapid.ApplicationState.CacheFactory;
 using Frapid.Areas.CSRF;
 using Frapid.Configuration;
 using Frapid.Framework.Extensions;
@@ -25,15 +26,15 @@ namespace Frapid.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> IndexAsync()
         {
-            if (User.Identity.IsAuthenticated)
+            if (this.User.Identity.IsAuthenticated)
             {
-                return Redirect("/dashboard");
+                return this.Redirect("/dashboard");
             }
 
             var profile = await ConfigurationProfiles.GetActiveProfileAsync(this.Tenant).ConfigureAwait(true);
 
             var model = profile.Adapt<SignIn>() ?? new SignIn();
-            return View(GetRazorView<AreaRegistration>("SignIn/Index.cshtml", this.Tenant), model);
+            return this.View(this.GetRazorView<AreaRegistration>("SignIn/Index.cshtml", this.Tenant), model);
         }
 
         [Route("account/sign-in")]
@@ -42,7 +43,7 @@ namespace Frapid.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> DoAsync(SignInInfo model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
@@ -57,10 +58,12 @@ namespace Frapid.Account.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                 }
 
-                var result =
-                    await
-                        DAL.SignIn.DoAsync(this.Tenant, model.Email, model.OfficeId, this.RemoteUser.Browser,
+                var result = await DAL.SignIn.DoAsync(this.Tenant, model.Email, model.OfficeId, this.RemoteUser.Browser,
                             this.RemoteUser.IpAddress, model.Culture.Or("en-US")).ConfigureAwait(false);
+
+                string key = "access_tokens_" + this.Tenant;
+                var factory = new DefaultCacheFactory();
+                factory.Remove(key);
 
                 return await this.OnAuthenticatedAsync(result, model).ConfigureAwait(true);
             }

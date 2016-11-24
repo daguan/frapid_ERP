@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Security;
 using Frapid.Account.DAL;
+using Frapid.ApplicationState.CacheFactory;
 
 namespace Frapid.Account.Controllers
 {
@@ -14,10 +15,13 @@ namespace Frapid.Account.Controllers
             if (!string.IsNullOrWhiteSpace(this.AppUser?.ClientToken))
             {
                 await AccessTokens.RevokeAsync(this.Tenant, this.AppUser.ClientToken).ConfigureAwait(true);
+                string key = "access_tokens_" + this.Tenant;
+                var factory = new DefaultCacheFactory();
+                factory.Remove(key);
             }
 
             FormsAuthentication.SignOut();
-            return View(GetRazorView<AreaRegistration>("SignOut/Index.cshtml", this.Tenant));
+            return this.View(this.GetRazorView<AreaRegistration>("SignOut/Index.cshtml", this.Tenant));
         }
     }
 }
