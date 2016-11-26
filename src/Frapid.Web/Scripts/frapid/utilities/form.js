@@ -58,8 +58,9 @@ function serializeForm(el) {
                 return val;
         };
     };
-    
-    var members = el.find(".field input, .field select, .field textarea");
+
+    var members = el.find("input, select, textarea");
+
     var form = {};
 
     members.each(function () {
