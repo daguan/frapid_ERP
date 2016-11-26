@@ -49,8 +49,8 @@ namespace Frapid.TokenManager.DAL
 
         private static async Task<IEnumerable<AccessToken>> FromStoreAsync(string tenant)
         {
-            const string sql = "SELECT access_token_id, created_on, expires_on, revoked, ip_address, user_agent, client_token FROM account.access_tokens WHERE NOT account.access_tokens.revoked;";
-            return await Factory.GetAsync<AccessToken>(tenant, sql).ConfigureAwait(false);
+            const string sql = "SELECT access_token_id, created_on, expires_on, revoked, ip_address, user_agent, client_token FROM account.access_tokens WHERE account.access_tokens.revoked=@0;";
+            return await Factory.GetAsync<AccessToken>(tenant, sql, false).ConfigureAwait(false);
         }
     }
 }
