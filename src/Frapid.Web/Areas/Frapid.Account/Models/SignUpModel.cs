@@ -5,12 +5,13 @@ using Frapid.Account.Exceptions;
 using Frapid.Account.ViewModels;
 using Frapid.Areas;
 using Mapster;
+using System.Web;
 
 namespace Frapid.Account.Models
 {
     public static class SignUpModel
     {
-        public static async Task<bool> SignUpAsync(string tenant, Registration model, RemoteUser user)
+        public static async Task<bool> SignUpAsync(HttpContextBase context, string tenant, Registration model, RemoteUser user)
         {
             if (model.Password != model.ConfirmPassword)
             {
@@ -36,7 +37,7 @@ namespace Frapid.Account.Models
                 return false;
             }
 
-            var email = new SignUpEmail(registration, registrationId);
+            var email = new SignUpEmail(context, registration, registrationId);
             await email.SendAsync(tenant).ConfigureAwait(false);
             return true;
         }

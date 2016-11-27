@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Net.Mail;
 using System.Threading.Tasks;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;
@@ -10,7 +8,7 @@ using Serilog;
 
 namespace Frapid.SendGridMail
 {
-    public class Processor: IEmailProcessor
+    public class Processor : IEmailProcessor
     {
         public IEmailConfig Config { get; set; }
         public bool IsEnabled { get; set; }
@@ -22,12 +20,12 @@ namespace Frapid.SendGridMail
 
             this.IsEnabled = this.Config.Enabled;
 
-            if(!this.IsEnabled)
+            if (!this.IsEnabled)
             {
                 return;
             }
 
-            if(string.IsNullOrWhiteSpace(config.ApiKey) ||
+            if (string.IsNullOrWhiteSpace(config.ApiKey) ||
                string.IsNullOrWhiteSpace(config.ApiUser))
             {
                 this.IsEnabled = false;
@@ -41,10 +39,9 @@ namespace Frapid.SendGridMail
 
         public async Task<bool> SendAsync(EmailMessage email, bool deleteAttachmentes, params string[] attachments)
         {
-            throw new NotImplementedException();
             var config = this.Config as Config;
 
-            if(config == null)
+            if (config == null)
             {
                 email.Status = Status.Cancelled;
                 return false;
@@ -54,46 +51,77 @@ namespace Frapid.SendGridMail
             {
                 email.Status = Status.Executing;
 
-                var message = new Mail
-                              {                   
-                                  From = new Email(email.FromEmail, email.FromName),
-                                  Subject = email.Subject
-                              };
+                var personalization = new Personalization
+                {
+                    Subject = email.Subject
+                };
 
-                if(!string.IsNullOrWhiteSpace(email.ReplyToEmail))
+
+                var message = new Mail
+                {
+                    From = new Email(email.FromEmail, email.FromName),
+                    Subject = email.Subject
+                };
+
+                if (!string.IsNullOrWhiteSpace(email.ReplyToEmail))
                 {
                     message.ReplyTo = new Email(email.ReplyToEmail, email.ReplyToName);
                 }
 
-                
 
-                //message.AddTo(email.SentTo.Split(',').Select(x => x.Trim()).ToList());
+                foreach (var address in email.SentTo.Split(','))
+                {
+                    personalization.AddTo(new Email(address.Trim()));
+                }
 
-                //if(email.IsBodyHtml)
-                //{
-                //    message.Html = email.Message;
-                //}
-                //else
-                //{
-                //    message.Text = email.Message;
-                //}
 
-                //message = AttachmentHelper.AddAttachments(message, attachments);
-                //var transportWeb = new Web(config.ApiKey);
-                //await transportWeb.DeliverAsync(message).ConfigureAwait(false);
+                message.AddPersonalization(personalization);
 
-                email.Status = Status.Completed;
+                var content = new Content();
+                content.Value = email.Message;
+
+                if (email.IsBodyHtml)
+                {
+                    content.Type = "text/html";
+                }
+                else
+                {
+                    content.Type = "text/plain";
+                }
+
+                message.AddContent(content);
+
+                message = AttachmentHelper.AddAttachments(message, attachments);
+
+                var sg = new SendGridAPIClient(config.ApiKey, "https://api.sendgrid.com");
+                dynamic response = await sg.client.mail.send.post(requestBody: message.Get());
+
+                System.Net.HttpStatusCode status = response.StatusCode;
+
+                switch (status)
+                {
+                    case System.Net.HttpStatusCode.OK:
+                    case System.Net.HttpStatusCode.Created:
+                    case System.Net.HttpStatusCode.Accepted:
+                    case System.Net.HttpStatusCode.NoContent:
+                        email.Status = Status.Completed;
+                        break;
+                    default:
+                        email.Status = Status.Failed;
+                        break;
+                }
+
                 return true;
             }
-                // ReSharper disable once CatchAllClause
-            catch(Exception ex)
+            // ReSharper disable once CatchAllClause
+            catch (Exception ex)
             {
                 email.Status = Status.Failed;
                 Log.Warning(@"Could not send email to {To} using SendGrid API. {Ex}. ", email.SentTo, ex);
             }
             finally
             {
-                if(deleteAttachmentes)
+                if (deleteAttachmentes)
                 {
                     FileHelper.DeleteFiles(attachments);
                 }

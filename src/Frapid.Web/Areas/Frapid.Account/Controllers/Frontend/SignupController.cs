@@ -87,7 +87,7 @@ namespace Frapid.Account.Controllers.Frontend
         [AllowAnonymous]
         public async Task<ActionResult> PostAsync(Registration model)
         {
-            bool result = await SignUpModel.SignUpAsync(this.Tenant, model, this.RemoteUser).ConfigureAwait(true);
+            bool result = await SignUpModel.SignUpAsync(this.HttpContext, this.Tenant, model, this.RemoteUser).ConfigureAwait(true);
             return this.Ok(result);
         }
     }

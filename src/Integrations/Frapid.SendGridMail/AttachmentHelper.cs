@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Web;
 using SendGrid.Helpers.Mail;
 
@@ -9,7 +8,6 @@ namespace Frapid.SendGridMail
     {
         internal static Mail AddAttachments(Mail message, string[] attachments)
         {
-            throw new NotImplementedException();
             if(attachments != null)
             {
                 foreach(string file in attachments)
@@ -34,7 +32,6 @@ namespace Frapid.SendGridMail
                                     };
 
                                     message.AddAttachment(attachment);
-                                    //message.AddAttachment(stream, Path.GetFileName(file));
                                 }
                             }
                         }
@@ -44,5 +41,6 @@ namespace Frapid.SendGridMail
 
             return message;
         }
+
     }
 }

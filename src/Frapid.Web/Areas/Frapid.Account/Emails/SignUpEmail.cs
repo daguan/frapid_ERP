@@ -14,9 +14,11 @@ namespace Frapid.Account.Emails
     {
         private readonly Registration _registration;
         private readonly string _registrationId;
+        private readonly HttpContextBase _context;
 
-        public SignUpEmail(Registration registration, string registrationId)
+        public SignUpEmail(HttpContextBase context, Registration registration, string registrationId)
         {
+            this._context = context;
             this._registration = registration;
             this._registrationId = registrationId;
         }
@@ -35,9 +37,14 @@ namespace Frapid.Account.Emails
             return path != null ? File.ReadAllText(path, Encoding.UTF8) : string.Empty;
         }
 
-        private string ParseTemplate(string template)
+        private string ParseTemplate(HttpContextBase context, string template)
         {
-            string siteUrl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+            if (context?.Request?.Url == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            string siteUrl = context.Request.Url.GetLeftPart(UriPartial.Authority);
             string link = siteUrl + "/account/sign-up/confirm?token=" + this._registrationId;
 
             string parsed = template.Replace("{{Name}}", this._registration.Name);
@@ -66,8 +73,8 @@ namespace Frapid.Account.Emails
         public async Task SendAsync(string tenant)
         {
             string template = this.GetTemplate(tenant);
-            string parsed = this.ParseTemplate(template);
-            string subject = "Confirm Your Registration at " + HttpContext.Current.Request.Url.Authority;
+            string parsed = this.ParseTemplate(this._context, template);
+            string subject = "Confirm Your Registration at " + this._context.Request.Url.Authority;
 
             var processor = EmailProcessor.GetDefault(tenant);
 
