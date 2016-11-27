@@ -1,2 +1,2 @@
 @echo off
-all.ps1
+%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\Powershell.exe -executionpolicy remotesigned -File all.ps1

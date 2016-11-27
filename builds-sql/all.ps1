@@ -15,7 +15,7 @@ function getBundleDirectories(){
 };
 
 function execute($path){
-	cmd.exe /c $path;
+	Invoke-Expression "$env:SystemRoot\System32\cmd.exe /c $path"
 };
 
 function bundle($directory){
