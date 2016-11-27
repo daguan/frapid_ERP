@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;
 using SendGrid;
+using SendGrid.Helpers.Mail;
 using Serilog;
 
 namespace Frapid.SendGridMail
@@ -40,6 +41,7 @@ namespace Frapid.SendGridMail
 
         public async Task<bool> SendAsync(EmailMessage email, bool deleteAttachmentes, params string[] attachments)
         {
+            throw new NotImplementedException();
             var config = this.Config as Config;
 
             if(config == null)
@@ -52,35 +54,33 @@ namespace Frapid.SendGridMail
             {
                 email.Status = Status.Executing;
 
-                var message = new SendGridMessage
-                              {
-                                  From = new MailAddress(email.FromEmail, email.FromName),
+                var message = new Mail
+                              {                   
+                                  From = new Email(email.FromEmail, email.FromName),
                                   Subject = email.Subject
                               };
 
                 if(!string.IsNullOrWhiteSpace(email.ReplyToEmail))
                 {
-                    message.ReplyTo = new[]
-                                      {
-                                          new MailAddress(email.ReplyToEmail, email.ReplyToName)
-                                      };
+                    message.ReplyTo = new Email(email.ReplyToEmail, email.ReplyToName);
                 }
 
+                
 
-                message.AddTo(email.SentTo.Split(',').Select(x => x.Trim()).ToList());
+                //message.AddTo(email.SentTo.Split(',').Select(x => x.Trim()).ToList());
 
-                if(email.IsBodyHtml)
-                {
-                    message.Html = email.Message;
-                }
-                else
-                {
-                    message.Text = email.Message;
-                }
+                //if(email.IsBodyHtml)
+                //{
+                //    message.Html = email.Message;
+                //}
+                //else
+                //{
+                //    message.Text = email.Message;
+                //}
 
-                message = AttachmentHelper.AddAttachments(message, attachments);
-                var transportWeb = new Web(config.ApiKey);
-                await transportWeb.DeliverAsync(message).ConfigureAwait(false);
+                //message = AttachmentHelper.AddAttachments(message, attachments);
+                //var transportWeb = new Web(config.ApiKey);
+                //await transportWeb.DeliverAsync(message).ConfigureAwait(false);
 
                 email.Status = Status.Completed;
                 return true;

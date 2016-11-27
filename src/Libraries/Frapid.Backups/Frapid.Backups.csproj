@@ -40,16 +40,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Quartz, Version=2.3.3.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Quartz.2.3.3\lib\net40\Quartz.dll</HintPath>
+    <Reference Include="Quartz, Version=2.4.1.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Quartz.2.4.1\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Serilog, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Serilog.1.5.14\lib\net45\Serilog.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Serilog.FullNetFx, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Serilog.1.5.14\lib\net45\Serilog.FullNetFx.dll</HintPath>
+    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Serilog.2.3.0\lib\net46\Serilog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

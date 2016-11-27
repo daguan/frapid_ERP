@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Frapid.ApplicationState.Cache;
-using Frapid.Configuration;
 using Frapid.Framework.Extensions;
 using Frapid.TokenManager;
 using Frapid.TokenManager.DAL;
@@ -14,7 +13,7 @@ namespace Frapid.Areas.Authorization.Helpers
         {
             var token = await GetTokenAsync(tenant, context).ConfigureAwait(false);
 
-            if(token == null)
+            if (token == null)
             {
                 return 0;
             }
@@ -32,7 +31,7 @@ namespace Frapid.Areas.Authorization.Helpers
             {
                 bool isValid = await AccessTokens.IsValidAsync(tenant, token.ClientToken, context.Request.GetClientIpAddress(), context.Headers["User-Agent"]).ConfigureAwait(false);
 
-                if(isValid)
+                if (isValid)
                 {
                     return token;
                 }
@@ -45,25 +44,25 @@ namespace Frapid.Areas.Authorization.Helpers
         {
             var token = await GetTokenAsync(tenant, context).ConfigureAwait(false);
 
-            if(token != null)
+            if (token != null)
             {
                 await AppUsers.SetCurrentLoginAsync(tenant, token.LoginId).ConfigureAwait(false);
                 var loginView = await AppUsers.GetCurrentAsync(tenant, token.LoginId).ConfigureAwait(false);
 
                 return new AppUser
-                       {
-                           Tenant = tenant,
-                           ClientToken = token.ClientToken,
-                           LoginId = token.LoginId,
-                           UserId = loginView.UserId,
-                           OfficeId = loginView.OfficeId,
-                           Email = loginView.Email,
-                           IsAdministrator = loginView.IsAdministrator,
-                           RoleId = loginView.RoleId,
-                           Name = loginView.Name,
-                           RoleName = loginView.RoleName,
-                           OfficeName = loginView.OfficeName
-                       };
+                {
+                    Tenant = tenant,
+                    ClientToken = token.ClientToken,
+                    LoginId = token.LoginId,
+                    UserId = loginView.UserId,
+                    OfficeId = loginView.OfficeId,
+                    Email = loginView.Email,
+                    IsAdministrator = loginView.IsAdministrator,
+                    RoleId = loginView.RoleId,
+                    Name = loginView.Name,
+                    RoleName = loginView.RoleName,
+                    OfficeName = loginView.OfficeName
+                };
             }
 
             return null;

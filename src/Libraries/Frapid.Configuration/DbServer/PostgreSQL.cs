@@ -90,7 +90,7 @@ namespace Frapid.Configuration.DbServer
             }
             else
             {
-                builder.UserName = userId;
+                builder.Username = userId;
                 builder.Password = password;
             }
 
@@ -109,11 +109,11 @@ namespace Frapid.Configuration.DbServer
             {
                 Host = host,
                 Database = database,
-                UserName = username,
+                Username= username,
                 Password = password,
                 Port = port,
                 Pooling = enablePooling,
-                SSL = true,
+                UseSslStream= true,
                 SslMode = SslMode.Prefer,
                 MinPoolSize = minPoolSize,
                 MaxPoolSize = maxPoolSize,

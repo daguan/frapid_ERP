@@ -10,39 +10,14 @@ namespace Frapid.Configuration.Db
     {
         private object GetFromDbConverter(object value, Type destType, Type sourceType)
         {
-            if (value is NpgsqlTimeStampTZ)
+            if (value is NpgsqlTimeSpan)
             {
                 if (destType == typeof(DateTime))
                 {
-                    return (DateTime) (NpgsqlTimeStampTZ) value;
-                }
-                if (destType == typeof(DateTime?))
-                {
-                    return (DateTime?) (NpgsqlTimeStampTZ) value;
-                }
-                if (destType == typeof(DateTimeOffset))
-                {
-                    var tstz = (NpgsqlTimeStampTZ) value;
-                    return new DateTimeOffset((DateTime) tstz);
-                }
-                if (destType == typeof(DateTimeOffset?))
-                {
-                    var tstz = (NpgsqlTimeStampTZ) value;
-                    return new DateTimeOffset((DateTime) tstz);
+                    return new DateTime(((NpgsqlTimeSpan)value).Ticks);
                 }
             }
 
-            if (value is NpgsqlTimeStamp)
-            {
-                if (destType == typeof(DateTime))
-                {
-                    return (DateTime) (NpgsqlTimeStamp) value;
-                }
-                if (destType == typeof(DateTime?))
-                {
-                    return (DateTime?) (NpgsqlTimeStamp) value;
-                }
-            }
 
             if (value is NpgsqlDate)
             {

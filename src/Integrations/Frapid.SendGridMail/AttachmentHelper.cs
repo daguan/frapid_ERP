@@ -1,12 +1,15 @@
-﻿using System.IO;
-using SendGrid;
+﻿using System;
+using System.IO;
+using System.Web;
+using SendGrid.Helpers.Mail;
 
 namespace Frapid.SendGridMail
 {
     internal static class AttachmentHelper
     {
-        internal static SendGridMessage AddAttachments(SendGridMessage message, string[] attachments)
+        internal static Mail AddAttachments(Mail message, string[] attachments)
         {
+            throw new NotImplementedException();
             if(attachments != null)
             {
                 foreach(string file in attachments)
@@ -17,7 +20,22 @@ namespace Frapid.SendGridMail
                         {
                             using(var stream = new FileStream(file, FileMode.Open))
                             {
-                                message.AddAttachment(stream, Path.GetFileName(file));
+                                using (var reader = new StreamReader(stream))
+                                {
+                                    string fileName = new FileInfo(file).Name;
+
+                                    var attachment = new Attachment
+                                    {
+                                        Filename = fileName,
+                                        Content = reader.ReadToEnd(),
+                                        Type = MimeMapping.GetMimeMapping(file),
+                                        Disposition = "attachment",
+                                        ContentId = fileName
+                                    };
+
+                                    message.AddAttachment(attachment);
+                                    //message.AddAttachment(stream, Path.GetFileName(file));
+                                }
                             }
                         }
                     }

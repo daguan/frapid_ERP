@@ -224,7 +224,7 @@ namespace Frapid.Web
         {
             string[] libraries =
             {
-                "~/Scripts/jquery-2.2.3.js",
+                "~/Scripts/jquery-2.2.4.js",
                 "~/Scripts/jquery.address.js",
                 "~/Scripts/jquery-ui.js",
                 "~/Scripts/jquery-timePicker/jquery.timepicker.js",
@@ -252,7 +252,7 @@ namespace Frapid.Web
         {
             var script = new List<string>
             {
-                "~/Scripts/jquery-2.2.3.js",
+                "~/Scripts/jquery-2.2.4.js",
                 "~/Scripts/angular/angular.min.js",
                 "~/Scripts/jquery.address.js",
                 "~/Scripts/jquery-ui.js",
