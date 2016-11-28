@@ -55,6 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\NpgsqlExtensions.cs" />
+    <Compile Include="Extensions\SqlClientExtensions.cs" />
     <Compile Include="Models\AccessTypeEnum.cs" />
     <Compile Include="Models\CustomField.cs" />
     <Compile Include="DataAccessException.cs" />

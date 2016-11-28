@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Frapid.Configuration;
-using Frapid.Reports.Engine;
+using Frapid.DataAccess.Extensions;
 using Frapid.Reports.Engine.Model;
 using Frapid.Reports.Helpers;
 using Npgsql;
@@ -88,7 +87,7 @@ namespace Frapid.Reports.DAL
                     {
                         foreach (var p in info.DataSourceParameters)
                         {
-                            command.Parameters.AddWithValue(p.Name, GetParameterValue(p.Name, p.Type, info));
+                            command.Parameters.AddWithNullableValue(p.Name, GetParameterValue(p.Name, p.Type, info));
                         }
                     }
 
@@ -113,7 +112,7 @@ namespace Frapid.Reports.DAL
                     {
                         foreach (var p in info.DataSourceParameters)
                         {
-                            command.Parameters.AddWithValue(p.Name, GetParameterValue(p.Name, p.Type, info));
+                            command.Parameters.AddWithNullableValue(p.Name, GetParameterValue(p.Name, p.Type, info));
                         }
                     }
 
