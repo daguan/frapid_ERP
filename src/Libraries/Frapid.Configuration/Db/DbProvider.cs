@@ -1,56 +1,33 @@
-﻿using System;
-using System.Data.Common;
+﻿using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using Frapid.NPoco;
-using Frapid.NPoco.FluentMappings;
+using Frapid.Mapper.Database;
+using Frapid.Mapper.Types;
 using Npgsql;
 using Serilog;
 
 namespace Frapid.Configuration.Db
 {
-    public static class DbProvider
+    public sealed class DatabaseFactory
     {
-        public static FluentConfig Config;
-
-        public static void Setup(Type type)
+        public DatabaseFactory(MapperDb db)
         {
-            try
-            {
-                var items = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(type.IsAssignableFrom).Select(t => t.Assembly);
-
-                var fluentConfig = FluentMappingConfiguration.Scan
-                    (
-                     s =>
-                     {
-                         foreach(var item in items)
-                         {
-                             s.Assembly(item);
-                             s.WithSmartConventions();
-                             s.TablesNamed(t => t.GetCustomAttributes(true).OfType<TableNameAttribute>().FirstOrDefault()?.Value ?? Inflector.AddUnderscores(Inflector.MakePlural(t.Name)).ToLower());
-
-                             s.Columns.Named(m => Inflector.AddUnderscores(m.Name).ToLower());
-                             s.Columns.IgnoreWhere(x => x.GetCustomAttributes<IgnoreAttribute>().Any());
-                             s.PrimaryKeysNamed(t => Inflector.AddUnderscores(t.Name).ToLower() + "_id");
-                             s.PrimaryKeysAutoIncremented(t => true);
-                         }
-                     });
-
-
-                Config = fluentConfig;
-            }
-            catch(ReflectionTypeLoadException ex)
-            {
-                Log.Error("Error in fluent configuration. {ex}", ex);
-                //Swallow
-            }
+            this.Db = db;
         }
 
+        private MapperDb Db { get; }
+
+        public MapperDb GetDatabase()
+        {
+            return this.Db;
+        }
+    }
+
+    public static class DbProvider
+    {
         public static string GetProviderName(string tenant)
         {
-            if(string.IsNullOrWhiteSpace(tenant))
+            if (string.IsNullOrWhiteSpace(tenant))
             {
                 return string.Empty;
             }
@@ -64,7 +41,7 @@ namespace Frapid.Configuration.Db
             string provider = GetProviderName(tenant);
             string path = "/Resources/Configs/PostgreSQL.config";
 
-            if(!provider.ToUpperInvariant().Equals("NPGSQL"))
+            if (!provider.ToUpperInvariant().Equals("NPGSQL"))
             {
                 path = "/Resources/Configs/SQLServer.config";
             }
@@ -74,7 +51,7 @@ namespace Frapid.Configuration.Db
 
         public static string GetMetaDatabase(string tenant)
         {
-            if(string.IsNullOrWhiteSpace(tenant))
+            if (string.IsNullOrWhiteSpace(tenant))
             {
                 return string.Empty;
             }
@@ -83,14 +60,14 @@ namespace Frapid.Configuration.Db
             string path = GetDbConfigurationFilePath(tenant);
             string meta = "postgres";
 
-            if(!provider.ToUpperInvariant().Equals("NPGSQL"))
+            if (!provider.ToUpperInvariant().Equals("NPGSQL"))
             {
                 meta = "master";
             }
 
             path = PathMapper.MapPath(path);
 
-            if(File.Exists(path))
+            if (File.Exists(path))
             {
                 meta = ConfigurationManager.ReadConfigurationValue(path, "MetaDatabase");
             }
@@ -105,28 +82,42 @@ namespace Frapid.Configuration.Db
 
         public static DatabaseFactory Get(string connectionString, string tenant)
         {
-            return DatabaseFactory.Config
-                (
-                 x =>
-                 {
-                     x.WithMapper(new Mapper());
-                     x.UsingDatabase(() => new Database(connectionString, GetProviderName(tenant)));
-                     x.WithFluentConfig(Config);
-                 });
+            var database = GetDatabase(tenant, connectionString);
+            return new DatabaseFactory(database);
         }
 
         public static DatabaseType GetDbType(string providerName)
         {
-            return providerName == "System.Data.SqlClient" ? DatabaseType.SqlServer2012 : DatabaseType.PostgreSQL;
+            switch (providerName)
+            {
+                case "MySql.Data":
+                    return DatabaseType.MySql;
+                case "Npgsql":
+                    return DatabaseType.PostgreSQL;
+                case "System.Data.SqlClient":
+                    return DatabaseType.SqlServer;
+                default:
+                    throw new MapperException("Invalid provider name " + providerName);
+            }
         }
 
         public static DbProviderFactory GetFactory(string providerName)
         {
-            return providerName == "System.Data.SqlClient" ? (DbProviderFactory)SqlClientFactory.Instance : NpgsqlFactory.Instance;
+            switch (providerName)
+            {
+                case "MySql.Data":
+                    return MySql.Data.MySqlClient.MySqlClientFactory.Instance;
+                case "Npgsql":
+                    return NpgsqlFactory.Instance;
+                case "System.Data.SqlClient":
+                    return SqlClientFactory.Instance;
+                default:
+                    throw new MapperException("Invalid provider name " + providerName);
+            }
         }
 
 
-        public static Database GetDatabase(string tenant, string connectionString = "")
+        public static MapperDb GetDatabase(string tenant, string connectionString = "")
         {
             string providerName = GetProviderName(tenant);
             var type = GetDbType(providerName);
@@ -137,10 +128,10 @@ namespace Frapid.Configuration.Db
                 connectionString = FrapidDbServer.GetConnectionString(tenant);
             }
 
-            return new Database(connectionString, type, provider);
+            return new MapperDb(type, provider, connectionString);
         }
 
-        public static Database GetDatabase(string tenant, string database, string connectionString = "")
+        public static MapperDb GetDatabase(string tenant, string database, string connectionString)
         {
             string providerName = GetProviderName(tenant);
             var type = GetDbType(providerName);
@@ -151,7 +142,7 @@ namespace Frapid.Configuration.Db
                 connectionString = FrapidDbServer.GetConnectionString(tenant, database);
             }
 
-            return new Database(connectionString, type, provider);
+            return new MapperDb(type, provider, connectionString);
         }
     }
 }

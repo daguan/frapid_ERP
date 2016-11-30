@@ -99,8 +99,8 @@ function initializeFlag() {
             var card = el.closest(".card");
 
             var selection = new Object();
-            selection.flag_id = (card.attr("data-flag-id") || 0);
-            selection.resource_id = (card.attr("data-key") || 0);
+            selection.FlagId = (card.attr("data-flag-id") || 0);
+            selection.ResourceId = (card.attr("data-key") || 0);
 
             collection.push(selection);
         });
@@ -124,8 +124,8 @@ function initializeFlag() {
         selectedElements.each(function () {
             var el = $(this);
             var selection = new Object();
-            selection.flag_id = (el.attr("data-flag-id") || 0);
-            selection.resource_id = el.find("td:nth-child(3)").text();
+            selection.FlagId = (el.attr("data-flag-id") || 0);
+            selection.ResourceId = el.find("td:nth-child(3)").text();
 
             collection.push(selection);
         });
@@ -145,24 +145,24 @@ function initializeFlag() {
         $.each(selection, function (i, v) {
             var flag = new Object();
 
-            flag.flag_id = v.flag_id;
-            flag.resource_id = v.resource_id;
-            flag.flag_type_id = parseInt(flagSelect.val());
-            flag.resource = window.scrudFactory.viewTableName;
-            flag.resource_key = "";
+            flag.FlagId = v.FlagId;
+            flag.ResourceId = v.ResourceId;
+            flag.FlagTypeId = parseInt(flagSelect.val());
+            flag.Resource = window.scrudFactory.viewTableName;
+            flag.ResourceKey = "";
 
             var flagAjax;
 
-            if (flag.flag_type_id) {
+            if (flag.FlagTypeId) {
                 flagAjax = addFlag(flag);
             } else {
-                flagAjax = deleteFlag(flag.flag_id);
+                flagAjax = deleteFlag(flag.FlagId);
             };
 
 
             flagAjax.success(function () {
                 if (i + 1 === selection.length) {
-                    if (flag.flag_type_id) {
+                    if (flag.FlagTypeId) {
                         window.displayMessage(window.Resources.Labels.FlagSaved(), "success");
                     } else {
                         window.displayMessage(window.Resources.Labels.FlagRemoved());

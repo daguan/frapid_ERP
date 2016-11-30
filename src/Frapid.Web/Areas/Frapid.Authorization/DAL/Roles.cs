@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Frapid.Authorization.DTO;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
+using Frapid.Mapper;
+using Frapid.Mapper.Query.Select;
 
 namespace Frapid.Authorization.DAL
 {
@@ -12,7 +14,10 @@ namespace Frapid.Authorization.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<Role>().OrderByDescending(x => x.RoleId).ToListAsync().ConfigureAwait(false);
+                var sql = new Sql("SELECT * FROM account.roles");
+                sql.OrderBy("role_id DESC");
+
+                return await db.SelectAsync<Role>(sql).ConfigureAwait(false);
             }
         }
     }

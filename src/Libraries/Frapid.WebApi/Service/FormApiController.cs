@@ -343,7 +343,8 @@ namespace Frapid.WebApi.Service
             try
             {
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
-                return await repository.GetPaginatedResultAsync(pageNumber).ConfigureAwait(false);
+                var result = await repository.GetPaginatedResultAsync(pageNumber).ConfigureAwait(false);
+                return result;
             }
             catch(UnauthorizedException)
             {

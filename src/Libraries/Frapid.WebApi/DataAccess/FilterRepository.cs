@@ -7,12 +7,15 @@ using Frapid.Configuration.Db;
 using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.DbPolicy;
-using Frapid.NPoco;
+using Frapid.Mapper;
+using Frapid.Mapper.Query.Insert;
+using Frapid.Mapper.Types;
 using Serilog;
+using Frapid.Mapper.Query.Delete;
 
 namespace Frapid.WebApi.DataAccess
 {
-    public class FilterRepository: DbAccess
+    public class FilterRepository : DbAccess
     {
         public FilterRepository(string database, long loginId, int userId)
         {
@@ -34,18 +37,18 @@ namespace Frapid.WebApi.DataAccess
 
         public async Task<IEnumerable<dynamic>> GetWhereAsync(long pageNumber, List<Filter> filters)
         {
-            if(string.IsNullOrWhiteSpace(this.Database))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return null;
             }
 
-            if(!this.SkipValidation)
+            if (!this.SkipValidation)
             {
-                if(!this.Validated)
+                if (!this.Validated)
                 {
                     await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
-                if(!this.HasAccess)
+                if (!this.HasAccess)
                 {
                     Log.Information("Access to Page #{Page} of the filtered entity \"Filter\" was denied to the user with Login ID {LoginId}. Filters: {Filters}.", pageNumber, this.LoginId, filters);
                     throw new UnauthorizedException("Access is denied.");
@@ -53,13 +56,13 @@ namespace Frapid.WebApi.DataAccess
             }
 
             long offset = (pageNumber - 1) * 50;
-            var sql = Sql.Builder.Append("SELECT * FROM config.filters WHERE 1 = 1");
+            var sql = new Sql("SELECT * FROM config.filters WHERE 1 = 1");
 
             FilterManager.AddFilters(ref sql, new Filter(), filters);
 
             sql.OrderBy("filter_id");
 
-            if(pageNumber > 0)
+            if (pageNumber > 0)
             {
                 sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), offset);
                 sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
@@ -70,14 +73,14 @@ namespace Frapid.WebApi.DataAccess
 
         public async Task MakeDefaultAsync(string objectName, string filterName)
         {
-            if(!this.SkipValidation)
+            if (!this.SkipValidation)
             {
-                if(!this.Validated)
+                if (!this.Validated)
                 {
                     await this.ValidateAsync(AccessTypeEnum.CreateFilter, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
 
-                if(!this.HasAccess)
+                if (!this.HasAccess)
                 {
                     Log.Information("Access to create default filter '{FilterName}' for {ObjectName} was denied to the user with Login ID {LoginId}.", filterName, objectName, this.LoginId);
                     throw new UnauthorizedException("Access is denied.");
@@ -98,18 +101,18 @@ namespace Frapid.WebApi.DataAccess
         /// </exception>
         public async Task DeleteAsync(string filterName)
         {
-            if(string.IsNullOrWhiteSpace(this.Database))
+            if (string.IsNullOrWhiteSpace(this.Database))
             {
                 return;
             }
 
-            if(!this.SkipValidation)
+            if (!this.SkipValidation)
             {
-                if(!this.Validated)
+                if (!this.Validated)
                 {
                     await this.ValidateAsync(AccessTypeEnum.Delete, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
-                if(!this.HasAccess)
+                if (!this.HasAccess)
                 {
                     Log.Information("Access to delete entity \"Filter\" with Filter Name {FilterName} was denied to the user with Login ID {LoginId}.", filterName, this.LoginId);
                     throw new UnauthorizedException("Access is denied.");
@@ -122,14 +125,14 @@ namespace Frapid.WebApi.DataAccess
 
         public async Task RecreateFiltersAsync(string objectName, string filterName, List<ExpandoObject> filters)
         {
-            if(!this.SkipValidation)
+            if (!this.SkipValidation)
             {
-                if(!this.Validated)
+                if (!this.Validated)
                 {
                     await this.ValidateAsync(AccessTypeEnum.Create, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
 
-                if(!this.HasAccess)
+                if (!this.HasAccess)
                 {
                     Log.Information("Access to add entity \"Filter\" was denied to the user with Login ID {LoginId}. {filters}", this.LoginId, filters);
                     throw new UnauthorizedException("Access is denied.");
@@ -137,10 +140,12 @@ namespace Frapid.WebApi.DataAccess
             }
 
 
-            using(var db = DbProvider.GetDatabase(this.Database))
+            using (var db = DbProvider.GetDatabase(this.Database))
             {
-                using(var transaction = db.GetTransaction())
+                try
                 {
+                    await db.BeginTransactionAsync().ConfigureAwait(false);
+
                     var toDelete = await this.GetWhereAsync
                         (
                             1,
@@ -149,46 +154,51 @@ namespace Frapid.WebApi.DataAccess
                                 new Filter
                                 {
                                     ColumnName = "object_name",
-                                    FilterCondition = (int)FilterCondition.IsEqualTo,
+                                    FilterCondition = (int) FilterCondition.IsEqualTo,
                                     FilterValue = objectName
                                 },
                                 new Filter
                                 {
                                     ColumnName = "filter_name",
-                                    FilterCondition = (int)FilterCondition.IsEqualTo,
+                                    FilterCondition = (int) FilterCondition.IsEqualTo,
                                     FilterValue = filterName
                                 }
                             }).ConfigureAwait(false);
 
 
-                    foreach(var filter in toDelete)
+                    foreach (var filterId in toDelete)
                     {
-                        await db.DeleteAsync("config.filters", "filter_id", filter);
+                        await DefaultDelete.DeleteAsync(db, filterId, "config.filters", "filter_id").ConfigureAwait(false);
                     }
 
-                    foreach(dynamic filter in filters)
+                    foreach (dynamic filter in filters)
                     {
                         filter.audit_user_id = this.UserId;
                         filter.audit_ts = DateTimeOffset.UtcNow;
 
-                        await db.InsertAsync("config.filters", "filter_id", true, filter);
+                        await DefaultInsert.InsertAsync(db, "config.filters", "filter_id", true, filter);
                     }
 
-                    transaction.Complete();
+                    db.CommitTransaction();
+                }
+                catch
+                {
+                    db.RollbackTransaction();
+                    throw;
                 }
             }
         }
 
         public async Task RemoveDefaultAsync(string objectName)
         {
-            if(!this.SkipValidation)
+            if (!this.SkipValidation)
             {
-                if(!this.Validated)
+                if (!this.Validated)
                 {
                     await this.ValidateAsync(AccessTypeEnum.CreateFilter, this.LoginId, this.Database, false).ConfigureAwait(false);
                 }
 
-                if(!this.HasAccess)
+                if (!this.HasAccess)
                 {
                     Log.Information("Access to delete default filter for {ObjectName} was denied to the user with Login ID {LoginId}.", objectName, this.LoginId);
                     throw new UnauthorizedException("Access is denied.");

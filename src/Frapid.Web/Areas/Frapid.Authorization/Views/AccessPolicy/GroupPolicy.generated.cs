@@ -34,7 +34,6 @@ namespace ASP
     using Frapid.Framework;
     using Frapid.i18n;
     using Frapid.Messaging;
-    using Frapid.NPoco;
     using Frapid.WebsiteBuilder;
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]

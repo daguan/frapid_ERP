@@ -1,20 +1,17 @@
+using System.Threading.Tasks;
 using Frapid.Configuration;
-using Frapid.Configuration.Db;
-using Frapid.NPoco;
+using Frapid.DataAccess;
+using Frapid.Mapper;
 
 namespace Frapid.Installer
 {
     public static class DbInstalledDomains
     {
-        public static void Add(ApprovedDomain tenant)
+        public static async Task AddAsync(ApprovedDomain tenant)
         {
             string database = TenantConvention.GetDbNameByConvention(tenant.DomainName);
-
-            using(var db = DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(database, database), database).GetDatabase())
-            {
-                var sql = new Sql("INSERT INTO account.installed_domains(domain_name, admin_email) SELECT @0, @1;", tenant.DomainName, tenant.AdminEmail);
-                db.Execute(sql);
-            }
+            var sql = new Sql("INSERT INTO account.installed_domains(domain_name, admin_email) SELECT @0, @1;", tenant.DomainName, tenant.AdminEmail);
+            await Factory.NonQueryAsync(database, sql).ConfigureAwait(false);
         }
     }
 }

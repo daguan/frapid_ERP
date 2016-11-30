@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Frapid.Configuration.Db;
+using Frapid.Mapper;
+using Frapid.Mapper.Query.Select;
 using Frapid.Messaging.DTO;
 
 namespace Frapid.Messaging.DAL
@@ -10,7 +13,14 @@ namespace Frapid.Messaging.DAL
         {
             using(var db = DbProvider.GetDatabase(tenant))
             {
-                return await db.Query<SmtpConfig>().Where(u => u.Enabled && u.IsDefault).FirstOrDefaultAsync().ConfigureAwait(false);
+                var sql = new Sql("SELECT * FROM config.smtp_configs");
+                sql.Where("enabled=@0", true);
+                sql.And("is_default=@0", true);
+                sql.Limit(db.DatabaseType, 1);
+
+                var awaiter = await db.SelectAsync<SmtpConfig>(sql).ConfigureAwait(false);
+
+                return awaiter.FirstOrDefault();
             }
         }
     }

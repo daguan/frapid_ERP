@@ -125,7 +125,7 @@ function getCardKey(dynamic) {
         return "";
     };
 
-    var keyField = getIdField();
+    var keyField = toProperCase(getIdField());
 
     if (window.scrudFactory.card && window.scrudFactory.card.keyField) {
         keyField = window.scrudFactory.card.keyField;
@@ -171,7 +171,7 @@ function getDescriptionField(entity) {
         return "";
     };
 
-    var candidates = ["email", "url", "city", "phone", "company_name", "currency"];
+    var candidates = ["Email", "Url", "City", "Phone", "CompanyName", "Currency"];
     return getQualified(entity, "", candidates);
 };
 
@@ -190,7 +190,7 @@ function getCardField(card, field) {
 };
 
 function createCard(dynamic, key, kanbanDetail) {
-    var kanbanId = (kanbanDetail.kanban_id || 0);
+    var kanbanId = (kanbanDetail.KanbanId || 0);
 
     var text;
     var imageField = (window.scrudFactory.card.image || getImageField(dynamic));
@@ -224,6 +224,7 @@ function createCard(dynamic, key, kanbanDetail) {
     checkbox.append(input);
 
     content.append(checkbox);
+
 
     if (headerField) {
         text = getCardField(dynamic, headerField);

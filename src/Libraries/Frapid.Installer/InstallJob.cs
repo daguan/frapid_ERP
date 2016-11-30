@@ -19,7 +19,7 @@ namespace Frapid.Installer
                 installer.InstallAsync().Wait();
 
                 var site = new ApprovedDomainSerializer().Get().FirstOrDefault(x => x.DomainName.Equals(url));
-                DbInstalledDomains.Add(site);
+                DbInstalledDomains.AddAsync(site).Wait();
                 new InstalledDomainSerializer().Add(site);
             }
             catch (Exception ex)

@@ -4,7 +4,8 @@ using Frapid.ApplicationState.Models;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
 using Frapid.DataAccess;
-using Frapid.NPoco;
+using Frapid.Mapper;
+using Frapid.Mapper.Query.NonQuery;
 
 namespace Frapid.ApplicationState.DAL
 {
@@ -20,7 +21,7 @@ namespace Frapid.ApplicationState.DAL
 
         public static async Task UpdateActivityAsync(string tenant, int userId, string ip, string browser)
         {
-            using(var db = DbProvider.GetDatabase(tenant))
+            using (var db = DbProvider.GetDatabase(tenant))
             {
                 var sql = new Sql("UPDATE account.users SET ");
                 sql.Append("last_seen_on = " + FrapidDbServer.GetDbTimestampFunction(tenant));
@@ -30,7 +31,7 @@ namespace Frapid.ApplicationState.DAL
                 sql.Append("last_browser = @0", browser);
                 sql.Where("user_id=@0", userId);
 
-                await db.ExecuteAsync(sql).ConfigureAwait(false);
+                await db.NonQueryAsync(sql).ConfigureAwait(false);
             }
         }
     }

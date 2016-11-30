@@ -23,7 +23,7 @@ namespace Frapid.Dashboard
 
             string tenant = TenantConvention.GetTenant();
 
-            var policy = Menu.GetAsync(tenant, userId, officeId, culture).Result;
+            var policy = Menus.GetAsync(tenant, userId, officeId, culture).Result;
 
             if (!policy.Any(x => x.Url.Equals(path)))
             {

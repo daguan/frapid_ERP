@@ -10,6 +10,7 @@ using Frapid.Configuration.Db;
 using Frapid.DataAccess;
 using Frapid.DataAccess.Subtext;
 using Frapid.Installer.Helpers;
+using Frapid.Mapper.Query.Select;
 using Serilog;
 
 namespace Frapid.Installer.DAL
@@ -36,13 +37,7 @@ namespace Frapid.Installer.DAL
 
             using(var db = DbProvider.Get(connectionString, tenant).GetDatabase())
             {
-                int awaiter = await db.ExecuteScalarAsync<int>
-                    (
-                        sql,
-                        new object[]
-                        {
-                            tenant
-                        }).ConfigureAwait(false);
+                int awaiter = await db.ScalarAsync<int>(sql, tenant).ConfigureAwait(false);
                 return awaiter.Equals(1);
             }
         }
@@ -53,7 +48,7 @@ namespace Frapid.Installer.DAL
 
             using(var db = DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(tenant, database), tenant).GetDatabase())
             {
-                int awaiter = await db.ExecuteScalarAsync<int>
+                int awaiter = await db.ScalarAsync<int>
                     (
                         sql,
                         new object[]

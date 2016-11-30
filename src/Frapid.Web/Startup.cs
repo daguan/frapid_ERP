@@ -43,7 +43,6 @@ namespace Frapid.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             AssetConfig.Register();
-            NPocoConfig.Register();
             StartupRegistration.RegisterAsync().Wait();
             BackupRegistration.Register();
             EodTaskRegistration.Register();

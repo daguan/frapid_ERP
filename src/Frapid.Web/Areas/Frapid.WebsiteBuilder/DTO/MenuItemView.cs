@@ -1,10 +1,9 @@
 using Frapid.DataAccess;
-using Frapid.NPoco;
+using Frapid.Mapper.Decorators;
 
 namespace Frapid.WebsiteBuilder.DTO
 {
     [TableName("website.menu_item_view")]
-    [PrimaryKey("", AutoIncrement = false)]
     public sealed class MenuItemView : IPoco
     {
         public int? MenuId { get; set; }

@@ -1,11 +1,11 @@
 using System;
 using Frapid.DataAccess;
-using Frapid.NPoco;
+using Frapid.Mapper.Decorators;
 
 namespace Frapid.Messaging.DTO
 {
     [TableName("config.smtp_configs")]
-    public sealed class SmtpConfig: IPoco
+    public sealed class SmtpConfig : IPoco
     {
         public int SmtpConfigId { get; set; }
         public string ConfigurationName { get; set; }

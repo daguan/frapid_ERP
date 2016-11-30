@@ -1,19 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
 using Frapid.i18n.Models;
+using Frapid.Mapper.Query.Select;
 
 namespace Frapid.i18n.DAL
 {
     public static class DbResources
     {
-        public static Dictionary<string, string> GetLocalizedResources(string tenant)
+        public static async Task<Dictionary<string, string>> GetLocalizedResourcesAsync(string tenant)
         {
             const string sql = "SELECT * FROM i18n.localized_resource_view;";
 
             using(var db = DbProvider.Get(FrapidDbServer.GetMetaConnectionString(tenant), tenant).GetDatabase())
             {
-                var dbResources = db.Query<dynamic>(sql);
+                var dbResources = await db.SelectAsync<dynamic>(sql).ConfigureAwait(false);
 
                 var resources = new Dictionary<string, string>();
 
@@ -29,12 +31,12 @@ namespace Frapid.i18n.DAL
             }
         }
 
-        public static IEnumerable<LocalizedResource> GetLocalizationTable(string tenant, string language)
+        public static async Task<IEnumerable<LocalizedResource>> GetLocalizationTableAsync(string tenant, string language)
         {
             const string sql = "SELECT * FROM i18n.get_localization_table(@0) WHERE COALESCE(\"key\", '') != '';";
             using(var db = DbProvider.Get(FrapidDbServer.GetMetaConnectionString(tenant), tenant).GetDatabase())
             {
-                return db.Query<LocalizedResource>(sql, language);
+                return await db.SelectAsync<LocalizedResource>(sql, language).ConfigureAwait(false);
             }
         }
     }

@@ -33,7 +33,6 @@ namespace ASP
     using Frapid.Framework;
     using Frapid.i18n;
     using Frapid.Messaging;
-    using Frapid.NPoco;
     using Frapid.Reports;
     
     #line 1 "..\..\Views\Index.cshtml"

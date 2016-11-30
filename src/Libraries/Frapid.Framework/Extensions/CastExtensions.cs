@@ -16,6 +16,11 @@ namespace Frapid.Framework.Extensions
 
         public static T To<T>(this object input)
         {
+            if (typeof(T) == typeof(object))
+            {
+                return (T)input;
+            }
+
             var castable = new Castable();
             return castable.To<T>(input);
         }

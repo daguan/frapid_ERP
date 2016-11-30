@@ -20,10 +20,10 @@
 
         if (kanbanDetailId) {
             var kanbanDetail = new Object();
-            kanbanDetail.kanban_detail_id = kanbanDetailId;
-            kanbanDetail.kanban_id = parseInt(card.closest(".segment").attr("id").replace("kanban", "") || null);
-            kanbanDetail.resource_id = card.attr("data-key");
-            kanbanDetail.rating = el.parent().find("i.active").length;
+            kanbanDetail.KanbanDetailId = kanbanDetailId;
+            kanbanDetail.KanbanId = parseInt(card.closest(".segment").attr("id").replace("kanban", "") || null);
+            kanbanDetail.ResourceId = card.attr("data-key");
+            kanbanDetail.Rating = el.parent().find("i.active").length;
 
             request(kanbanDetail);
         };

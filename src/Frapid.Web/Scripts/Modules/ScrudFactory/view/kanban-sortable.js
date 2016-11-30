@@ -25,20 +25,20 @@
                 var card = $(ui.item[0]);
 
                 var kanbanDetail = new Object();
-                kanbanDetail.kanban_detail_id = parseInt(card.attr("data-kanban-detail-id") || null);
-                kanbanDetail.kanban_id = parseInt(card.parent().parent().attr("id").replace("kanban", "") || 0);
-                kanbanDetail.rating = card.find(".rating .active.icon").length;
-                kanbanDetail.resource_id = card.attr("data-key");
+                kanbanDetail.KanbanDetailId = parseInt(card.attr("data-kanban-detail-id") || null);
+                kanbanDetail.KanbanId = parseInt(card.parent().parent().attr("id").replace("kanban", "") || 0);
+                kanbanDetail.Rating = card.find(".rating .active.icon").length;
+                kanbanDetail.ResourceId = card.attr("data-key");
 
-                if (kanbanDetail.kanban_id) {
+                if (kanbanDetail.KanbanId) {
                     var ajax = request(kanbanDetail);
 
                     ajax.success(function (msg) {
                         card.attr("data-kanban-detail-id", msg);
                     });
                 } else {
-                    if (kanbanDetail.kanban_detail_id) {
-                        var deleteAjax = deleteRequest(kanbanDetail.kanban_detail_id);
+                    if (kanbanDetail.KanbanDetailId) {
+                        var deleteAjax = deleteRequest(kanbanDetail.KanbanDetailId);
 
                         deleteAjax.success(function () {
                             card.removeAttr("data-kanban-detail-id");

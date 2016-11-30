@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Frapid.Authorization.DTO;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
+using Frapid.Mapper;
+using Frapid.Mapper.Query.Select;
 
 namespace Frapid.Authorization.DAL
 {
@@ -12,7 +14,10 @@ namespace Frapid.Authorization.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<User>().Where(x => x.Status).ToListAsync().ConfigureAwait(false);
+                var sql = new Sql("SELECT * FROM account.users");
+                sql.Where("status=@0", true);
+
+                return await db.SelectAsync<User>(sql).ConfigureAwait(false);
             }
         }
     }

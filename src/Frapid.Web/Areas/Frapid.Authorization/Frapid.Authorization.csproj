@@ -75,12 +75,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.i18n.dll</HintPath>
     </Reference>
+    <Reference Include="Frapid.Mapper">
+      <HintPath>..\..\bin\Frapid.Mapper.dll</HintPath>
+    </Reference>
     <Reference Include="Frapid.Messaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.Messaging.dll</HintPath>
-    </Reference>
-    <Reference Include="Frapid.NPoco">
-      <HintPath>..\..\bin\Frapid.NPoco.dll</HintPath>
     </Reference>
     <Reference Include="Frapid.TokenManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -102,6 +102,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="System.Configuration" />
   </ItemGroup>

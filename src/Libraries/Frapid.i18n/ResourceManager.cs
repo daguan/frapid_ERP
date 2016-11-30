@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Globalization;
 using System.Resources;
 using System.Runtime.Caching;
+using System.Threading.Tasks;
 using Frapid.i18n.DAL;
 using Frapid.i18n.Helpers;
 
@@ -81,7 +82,7 @@ namespace Frapid.i18n
                 return cache;
             }
 
-            InitializeResourcesAsync(tenant);
+            InitializeResourcesAsync(tenant).Wait();
             return GetCache(tenant);
         }
 
@@ -140,9 +141,9 @@ namespace Frapid.i18n
             }
         }
 
-        private static void InitializeResourcesAsync(string tenant)
+        private static async Task InitializeResourcesAsync(string tenant)
         {
-            IDictionary<string, string> resources = DbResources.GetLocalizedResources(tenant);
+            IDictionary<string, string> resources = await DbResources.GetLocalizedResourcesAsync(tenant).ConfigureAwait(false);
             CacheFactory.AddToDefaultCache("Resources", resources);
         }
     }

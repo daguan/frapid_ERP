@@ -10,8 +10,11 @@ using Frapid.Configuration.Db;
 using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.DbPolicy;
-using Frapid.NPoco;
-using Frapid.NPoco.FluentMappings;
+using Frapid.Mapper;
+using Frapid.Mapper.Database;
+using Frapid.Mapper.Extensions;
+using Frapid.Mapper.Query.NonQuery;
+using Frapid.Mapper.Query.Select;
 using Serilog;
 
 namespace Frapid.WebApi.DataAccess
@@ -287,17 +290,13 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0 AND {this.PrimaryKey} IN (@primaryKeys);";
+            var sql = new Sql("SELECT * FROM {this.FullyQualifiedObjectName}");
+            sql.Where("deleted=@0", false);
+            sql.Append("AND");
+            sql.In("\"{this.PrimaryKey}\" IN (@0)", primaryKeys);
 
-            return await Factory.GetAsync<dynamic>
-                (
-                    this.Database,
-                    sql,
-                    false,
-                    new
-                    {
-                        primaryKeys
-                    }).ConfigureAwait(false);
+
+            return await Factory.GetAsync<dynamic>(this.Database,sql).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<CustomField>> GetCustomFieldsAsync(string resourceId)
@@ -342,66 +341,6 @@ namespace Frapid.WebApi.DataAccess
                 await
                     Factory.GetAsync<CustomField>(this.Database, sql, this.FullyQualifiedObjectName, resourceId)
                         .ConfigureAwait(false);
-        }
-
-        public async Task<IEnumerable<DisplayField>> GetDisplayFieldsAsync(List<Filter> filters)
-        {
-            if (string.IsNullOrWhiteSpace(this.Database))
-            {
-                return new List<DisplayField>();
-            }
-
-            if (!this.SkipValidation)
-            {
-                if (!this.Validated)
-                {
-                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
-                }
-                if (!this.HasAccess)
-                {
-                    Log.Information(
-                        $"Access to get display field for entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}",
-                        this.LoginId);
-                    throw new UnauthorizedException("Access is denied.");
-                }
-            }
-
-            var sql = new Sql($"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName} WHERE deleted=@0 ", false);
-
-            FilterManager.AddFilters(ref sql, filters);
-            sql.OrderBy("1");
-
-            return await Factory.GetAsync<DisplayField>(this.Database, sql).ConfigureAwait(false);
-        }
-
-        public async Task<IEnumerable<DisplayField>> GetLookupFieldsAsync(List<Filter> filters)
-        {
-            if (string.IsNullOrWhiteSpace(this.Database))
-            {
-                return new List<DisplayField>();
-            }
-
-            if (!this.SkipValidation)
-            {
-                if (!this.Validated)
-                {
-                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
-                }
-                if (!this.HasAccess)
-                {
-                    Log.Information(
-                        $"Access to get display field for entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}",
-                        this.LoginId);
-                    throw new UnauthorizedException("Access is denied.");
-                }
-            }
-
-            var sql = new Sql($"SELECT {this.LookupField} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName} WHERE deleted=@0 ", false);
-
-            FilterManager.AddFilters(ref sql, filters);
-            sql.OrderBy("1");
-
-            return await Factory.GetAsync<DisplayField>(this.Database, sql).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<DisplayField>> GetDisplayFieldsAsync()
@@ -465,7 +404,7 @@ namespace Frapid.WebApi.DataAccess
                 return null;
             }
 
-            var primaryKeyValue = item[this.PrimaryKey];
+            var primaryKeyValue = item[this.PrimaryKey.ToPascalCase()];
 
             if (primaryKeyValue != null)
             {
@@ -498,77 +437,77 @@ namespace Frapid.WebApi.DataAccess
 
             var result = new List<object>();
             int line = 0;
-            try
+            using (var db = DbProvider.GetDatabase(this.Database))
             {
-                using (var db = DbProvider.GetDatabase(this.Database))
+                try
                 {
-                    using (var transaction = db.GetTransaction())
+                    await db.BeginTransactionAsync().ConfigureAwait(false);
+
+                    items = this.Crypt(items);
+
+                    foreach (var item in items)
                     {
-                        items = this.Crypt(items);
+                        line++;
 
-                        foreach (var item in items)
+                        item["audit_user_id"] = this.UserId;
+                        item["audit_ts"] = DateTimeOffset.UtcNow;
+                        item["deleted"] = false;
+
+                        var primaryKeyValue = item[this.PrimaryKey];
+
+                        if (primaryKeyValue != null)
                         {
-                            line++;
+                            result.Add(primaryKeyValue);
+                            var sql = new Sql("UPDATE " + this.FullyQualifiedObjectName + " SET");
 
-                            item["audit_user_id"] = this.UserId;
-                            item["audit_ts"] = DateTimeOffset.UtcNow;
-                            item["deleted"] = false;
+                            int index = 0;
 
-                            var primaryKeyValue = item[this.PrimaryKey];
-
-                            if (primaryKeyValue != null)
+                            foreach (var prop in item.Where(x => !x.Key.Equals(this.PrimaryKey)))
                             {
-                                result.Add(primaryKeyValue);
-                                var sql = new Sql("UPDATE " + this.FullyQualifiedObjectName + " SET");
-
-                                int index = 0;
-
-                                foreach (var prop in item.Where(x => !x.Key.Equals(this.PrimaryKey)))
+                                if (index > 0)
                                 {
-                                    if (index > 0)
-                                    {
-                                        sql.Append(",");
-                                    }
-
-                                    sql.Append(Sanitizer.SanitizeIdentifierName(prop.Key) + "=@0", prop.Value);
-                                    index++;
+                                    sql.Append(",");
                                 }
 
-
-                                sql.Where(this.PrimaryKey + "=@0", primaryKeyValue);
-
-                                await db.ExecuteAsync(sql).ConfigureAwait(false);
+                                sql.Append(Sanitizer.SanitizeIdentifierName(prop.Key) + "=@0", prop.Value);
+                                index++;
                             }
-                            else
-                            {
-                                string columns = string.Join(",",
-                                    item.Where(x => !x.Key.Equals(this.PrimaryKey))
-                                        .Select(x => Sanitizer.SanitizeIdentifierName(x.Key)));
 
-                                string parameters = string.Join(",",
-                                    Enumerable.Range(0, item.Count - 1).Select(x => "@" + x));
-                                var arguments =
-                                    item.Where(x => !x.Key.Equals(this.PrimaryKey)).Select(x => x.Value).ToArray();
 
-                                var sql = new Sql("INSERT INTO " + this.FullyQualifiedObjectName + "(" + columns + ")");
-                                sql.Append("SELECT " + parameters, arguments);
+                            sql.Where(this.PrimaryKey + "=@0", primaryKeyValue);
 
-                                sql.Append(FrapidDbServer.AddReturnInsertedKey(this.Database, this.PrimaryKey));
-
-                                result.Add(await db.ExecuteScalarAsync<object>(sql).ConfigureAwait(false));
-                            }
+                            await db.NonQueryAsync(sql).ConfigureAwait(false);
                         }
+                        else
+                        {
+                            string columns = string.Join(",",
+                                item.Where(x => !x.Key.Equals(this.PrimaryKey))
+                                    .Select(x => Sanitizer.SanitizeIdentifierName(x.Key)));
 
-                        transaction.Complete();
+                            string parameters = string.Join(",",
+                                Enumerable.Range(0, item.Count - 1).Select(x => "@" + x));
+                            var arguments =
+                                item.Where(x => !x.Key.Equals(this.PrimaryKey)).Select(x => x.Value).ToArray();
+
+                            var sql = new Sql("INSERT INTO " + this.FullyQualifiedObjectName + "(" + columns + ")");
+                            sql.Append("SELECT " + parameters, arguments);
+
+                            sql.Append(FrapidDbServer.AddReturnInsertedKey(this.Database, this.PrimaryKey));
+
+                            result.Add(await db.ScalarAsync<object>(sql).ConfigureAwait(false));
+                        }
                     }
+
+                    db.CommitTransaction();
 
                     return result;
                 }
-            }
-            catch (Exception ex)
-            {
-                string errorMessage = $"Error on line {line}. {ex.Message} ";
-                throw new DataAccessException(errorMessage, ex);
+                catch (Exception ex)
+                {
+                    db.RollbackTransaction();
+                    string errorMessage = $"Error on line {line}. {ex.Message} ";
+                    throw new DataAccessException(errorMessage, ex);
+                }
             }
         }
 
@@ -620,12 +559,11 @@ namespace Frapid.WebApi.DataAccess
 
                 sql.Where(this.PrimaryKey + "=@0", primaryKeyValue);
 
-                await db.ExecuteAsync(sql).ConfigureAwait(false);
+                await db.NonQueryAsync(sql).ConfigureAwait(false);
                 await this.AddCustomFieldsAsync(primaryKeyValue, customFields).ConfigureAwait(false);
             }
         }
 
-        
 
         public async Task DeleteAsync(object primaryKey)
         {
@@ -703,7 +641,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            long offset = (pageNumber - 1)*50;
+            long offset = (pageNumber - 1) * 50;
             string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0 ORDER BY {this.PrimaryKey}";
 
             sql += FrapidDbServer.AddOffset(this.Database, "@1");
@@ -716,15 +654,11 @@ namespace Frapid.WebApi.DataAccess
         {
             using (var db = DbProvider.GetDatabase(this.Database))
             {
-                return
-                    await
-                        db.Query<Filter>()
-                            .Where(
-                                u =>
-                                    u.ObjectName.Equals(this.FullyQualifiedObjectName) &&
-                                    u.FilterName.ToLower().Equals(filterName.ToLower()))
-                            .ToListAsync()
-                            .ConfigureAwait(false);
+                var sql = new Sql("SELECT * FROM config.filters");
+                sql.Where("object_name = @0", this.FullyQualifiedObjectName);
+                sql.And("LOWER(filter_name)=@0", filterName.ToLower());
+
+                return await db.SelectAsync<Filter>(sql).ConfigureAwait(false);
             }
         }
 
@@ -749,7 +683,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            var sql = Sql.Builder.Append($"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
+            var sql = new Sql($"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
             FilterManager.AddFilters(ref sql, filters);
 
             return await Factory.ScalarAsync<long>(this.Database, sql).ConfigureAwait(false);
@@ -776,8 +710,8 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            long offset = (pageNumber - 1)*50;
-            var sql = Sql.Builder.Append($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
+            long offset = (pageNumber - 1) * 50;
+            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
 
             FilterManager.AddFilters(ref sql, filters);
 
@@ -817,7 +751,7 @@ namespace Frapid.WebApi.DataAccess
             }
 
             var filters = await this.GetFiltersAsync(this.Database, filterName).ConfigureAwait(false);
-            var sql = Sql.Builder.Append($"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
+            var sql = new Sql($"SELECT COUNT(*) FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
             FilterManager.AddFilters(ref sql, filters.ToList());
 
             return await Factory.ScalarAsync<long>(this.Database, sql).ConfigureAwait(false);
@@ -846,8 +780,8 @@ namespace Frapid.WebApi.DataAccess
 
             var filters = await this.GetFiltersAsync(this.Database, filterName).ConfigureAwait(false);
 
-            long offset = (pageNumber - 1)*50;
-            var sql = Sql.Builder.Append($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
+            long offset = (pageNumber - 1) * 50;
+            var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
 
             FilterManager.AddFilters(ref sql, filters.ToList());
 
@@ -898,15 +832,16 @@ namespace Frapid.WebApi.DataAccess
                 string columns = string.Join
                     (",",
                         skipPrimaryKey
-                            ? item.Where(x => !x.Key.Equals(this.PrimaryKey))
-                                .Select(x => Sanitizer.SanitizeIdentifierName(x.Key))
-                            : item.Select(x => Sanitizer.SanitizeIdentifierName(x.Key)));
+                            ? item.Where(x => !x.Key.ToUnderscoreLowerCase().Equals(this.PrimaryKey))
+                                .Select(x => Sanitizer.SanitizeIdentifierName(x.Key).ToUnderscoreLowerCase())
+                            : item.Select(x => Sanitizer.SanitizeIdentifierName(x.Key).ToUnderscoreLowerCase()));
 
                 string parameters = string.Join(",",
                     Enumerable.Range(0, skipPrimaryKey ? item.Count - 1 : item.Count).Select(x => "@" + x));
 
                 var arguments = skipPrimaryKey
-                    ? item.Where(x => !x.Key.Equals(this.PrimaryKey)).Select(x => x.Value).ToArray()
+                    ? item.Where(x => !x.Key.ToUnderscoreLowerCase().Equals(this.PrimaryKey))
+                    .Select(x => x.Value).ToArray()
                     : item.Select(x => x.Value).ToArray();
 
                 var sql = new Sql("INSERT INTO " + this.FullyQualifiedObjectName + "(" + columns + ")");
@@ -914,10 +849,70 @@ namespace Frapid.WebApi.DataAccess
 
                 sql.Append(FrapidDbServer.AddReturnInsertedKey(this.Database, this.PrimaryKey));
 
-                var primaryKeyValue = await db.ExecuteScalarAsync<object>(sql).ConfigureAwait(false);
+                var primaryKeyValue = await db.ScalarAsync<object>(sql).ConfigureAwait(false);
                 await this.AddCustomFieldsAsync(primaryKeyValue, customFields).ConfigureAwait(false);
                 return primaryKeyValue;
             }
+        }
+
+        public async Task<IEnumerable<DisplayField>> GetDisplayFieldsAsync(List<Filter> filters)
+        {
+            if (string.IsNullOrWhiteSpace(this.Database))
+            {
+                return new List<DisplayField>();
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information(
+                        $"Access to get display field for entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}",
+                        this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            var sql = new Sql($"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName} WHERE deleted=@0 ", false);
+
+            FilterManager.AddFilters(ref sql, filters);
+            sql.OrderBy("1");
+
+            return await Factory.GetAsync<DisplayField>(this.Database, sql).ConfigureAwait(false);
+        }
+
+        public async Task<IEnumerable<DisplayField>> GetLookupFieldsAsync(List<Filter> filters)
+        {
+            if (string.IsNullOrWhiteSpace(this.Database))
+            {
+                return new List<DisplayField>();
+            }
+
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    await this.ValidateAsync(AccessTypeEnum.Read, this.LoginId, this.Database, false).ConfigureAwait(false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information(
+                        $"Access to get display field for entity \"{this.FullyQualifiedObjectName}\" was denied to the user with Login ID {this.LoginId}",
+                        this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            var sql = new Sql($"SELECT {this.LookupField} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName} WHERE deleted=@0 ", false);
+
+            FilterManager.AddFilters(ref sql, filters);
+            sql.OrderBy("1");
+
+            return await Factory.GetAsync<DisplayField>(this.Database, sql).ConfigureAwait(false);
         }
 
         private List<Dictionary<string, object>> Crypt(List<Dictionary<string, object>> items)

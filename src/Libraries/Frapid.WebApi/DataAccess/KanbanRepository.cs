@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.DbPolicy;
+using Frapid.Mapper;
 using Serilog;
 
 namespace Frapid.WebApi.DataAccess
@@ -60,20 +61,12 @@ namespace Frapid.WebApi.DataAccess
             }
 
 
-            const string sql =
-                "SELECT * FROM config.kanban_details WHERE kanban_id IN(@kanbans) AND resource_id IN (@resources);";
-            return await Factory.GetAsync<dynamic>
-                (
-                    this.Database,
-                    sql,
-                    new
-                    {
-                        kanbans = kanbanIds
-                    },
-                    new
-                    {
-                        resources = resourceIds
-                    }).ConfigureAwait(false);
+            var sql = new Sql("SELECT * FROM config.kanban_details WHERE");
+            sql.In("kanban_id IN(@0)", kanbanIds);
+            sql.Append("AND");
+            sql.In("resource_id IN(@0)", resourceIds);
+
+            return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
         }
     }
 }

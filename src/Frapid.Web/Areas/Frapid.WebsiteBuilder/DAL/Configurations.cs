@@ -1,6 +1,9 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
+using Frapid.Mapper;
+using Frapid.Mapper.Query.Select;
 
 namespace Frapid.WebsiteBuilder.DAL
 {
@@ -10,7 +13,12 @@ namespace Frapid.WebsiteBuilder.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<DTO.Configuration>().Where(c => c.IsDefault).FirstOrDefaultAsync().ConfigureAwait(false);
+                var sql = new Sql("SELECT * FROM website.configurations");
+                sql.Where("is_default=@0", true);
+                sql.Limit(db.DatabaseType, 1);
+
+                var awaiter = await db.SelectAsync<DTO.Configuration>(sql).ConfigureAwait(false);
+                return awaiter.FirstOrDefault();
             }
         }
     }

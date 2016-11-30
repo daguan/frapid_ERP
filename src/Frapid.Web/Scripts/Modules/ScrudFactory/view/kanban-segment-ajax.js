@@ -70,11 +70,11 @@ function saveOrUpdateKanban() {
     removeDirty(kanbanNameInputText);
 
     var kanban = new Object();
-    kanban.kanban_id = parseInt(kanbanIdInputText.val() || null);
-    kanban.object_name = window.scrudFactory.viewTableName;
-    kanban.user_id = window.userId;
-    kanban.kanban_name = kanbanNameInputText.val();
-    kanban.description = kanbanDescriptionTextArea.val();
+    kanban.KanbanId = parseInt(kanbanIdInputText.val() || null);
+    kanban.ObjectName = window.scrudFactory.viewTableName;
+    kanban.UserId = window.userId;
+    kanban.KanbanName = kanbanNameInputText.val();
+    kanban.Description = kanbanDescriptionTextArea.val();
 
     var ajax = request(kanban);
 

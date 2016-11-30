@@ -1,5 +1,5 @@
 ﻿using Frapid.DataAccess;
-using Frapid.NPoco;
+using Frapid.Mapper.Decorators;
 
 namespace Frapid.Account.DTO
 {

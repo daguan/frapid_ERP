@@ -24,9 +24,9 @@
     scrudFactory.editUrl = "contents/manage?ReturnUrl=" + encodeURIComponent(location.pathname + location.search) + "&ContentId=";
 
     scrudFactory.card = {
-        header: "title",
-        meta: "alias",
-        description: "seo_description"
+        header: "Title",
+        meta: "Alias",
+        description: "SeoDescription"
     };    
 
     $.get('/ScrudFactory/View.html', function (view) {

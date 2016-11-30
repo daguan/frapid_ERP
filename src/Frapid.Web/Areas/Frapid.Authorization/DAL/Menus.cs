@@ -5,6 +5,8 @@ using Frapid.Authorization.DTO;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
 using Frapid.DataAccess;
+using Frapid.Mapper;
+using Frapid.Mapper.Query.Select;
 
 namespace Frapid.Authorization.DAL
 {
@@ -14,7 +16,10 @@ namespace Frapid.Authorization.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return await db.Query<Menu>().OrderBy(x => x.Sort).ThenBy(x => x.MenuId).ToListAsync().ConfigureAwait(false);
+                var sql = new Sql("SELECT * FROM core.menus");
+                sql.OrderBy("sort, menu_id");
+
+                return await db.SelectAsync<Menu>(sql).ConfigureAwait(false);
             }
         }
 
@@ -22,12 +27,13 @@ namespace Frapid.Authorization.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                var awaiter = await db.Query<GroupMenuAccessPolicy>()
-                    .Where(x => x.OfficeId.Equals(officeId) && x.RoleId.Equals(roleId))
-                    .ToListAsync().ConfigureAwait(false);
+                var sql = new Sql("SELECT * FROM auth.group_menu_access_policy");
+                sql.Where("office_id=@0", officeId);
+                sql.And("role_id=@0", roleId);
 
-                return awaiter.Select(x => x.MenuId)
-                    .ToArray();
+                var awaiter = await db.SelectAsync<GroupMenuAccessPolicy>(sql).ConfigureAwait(false);
+
+                return awaiter.Select(x => x.MenuId).ToArray();
             }
         }
 
@@ -35,30 +41,26 @@ namespace Frapid.Authorization.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
-                return
-                    await
-                        db.Query<MenuAccessPolicy>()
-                            .Where(x => x.OfficeId.Equals(officeId) && x.UserId.Equals(userId))
-                            .ToListAsync();
+                var sql = new Sql("SELECT * FROM auth.menu_access_policy");
+                sql.Where("office_id=@0", officeId);
+                sql.And("user_id=@0", userId);
+
+                return await db.SelectAsync<MenuAccessPolicy>(sql).ConfigureAwait(false);
             }
         }
 
         public static async Task SaveGroupPolicyAsync(string tenant, int officeId, int roleId, int[] menuIds)
         {
-            string sql = FrapidDbServer.GetProcedureCommand(tenant, "auth.save_group_menu_policy",
-                new[] {"@0", "@1", "@2", "@3"});
-            await
-                Factory.NonQueryAsync(tenant, sql, roleId, officeId, string.Join(",", menuIds ?? new int[0]),
-                    string.Empty);
+            string sql = FrapidDbServer.GetProcedureCommand(tenant, "auth.save_group_menu_policy", new[] {"@0", "@1", "@2", "@3"});
+
+            await Factory.NonQueryAsync(tenant, sql, roleId, officeId, string.Join(",", menuIds ?? new int[0]), string.Empty).ConfigureAwait(false);
         }
 
         public static async Task SavePolicyAsync(string tenant, int officeId, int userId, int[] allowed, int[] disallowed)
         {
-            string sql = FrapidDbServer.GetProcedureCommand(tenant, "auth.save_user_menu_policy",
-                new[] {"@0", "@1", "@2", "@3"});
-            await
-                Factory.NonQueryAsync(tenant, sql, userId, officeId, string.Join(",", allowed ?? new int[0]),
-                    string.Join(",", disallowed ?? new int[0]));
+            string sql = FrapidDbServer.GetProcedureCommand(tenant, "auth.save_user_menu_policy", new[] {"@0", "@1", "@2", "@3"});
+
+            await Factory.NonQueryAsync(tenant, sql, userId, officeId, string.Join(",", allowed ?? new int[0]), string.Join(",", disallowed ?? new int[0])).ConfigureAwait(false);
         }
     }
 }

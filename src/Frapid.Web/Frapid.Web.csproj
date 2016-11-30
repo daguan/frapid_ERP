@@ -267,7 +267,6 @@
     <Compile Include="Application\EodTaskRegistration.cs" />
     <Compile Include="Application\FilterConfig.cs" />
     <Compile Include="Application\LogManager.cs" />
-    <Compile Include="Application\NPocoConfig.cs" />
     <Compile Include="Application\RouteConfig.cs" />
     <Compile Include="Application\StartupRegistration.cs" />
     <Compile Include="Application\WebApiConfig.cs" />

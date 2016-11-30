@@ -1,12 +1,11 @@
 using System;
 using Frapid.DataAccess;
-using Frapid.NPoco;
+using Frapid.Mapper.Decorators;
 
 namespace Frapid.WebsiteBuilder.DTO
 {
     [TableName("website.published_content_view")]
-    [PrimaryKey("", AutoIncrement = false)]
-    public sealed class PublishedContentView: IPoco
+    public sealed class PublishedContentView : IPoco
     {
         public int ContentId { get; set; }
         public int CategoryId { get; set; }

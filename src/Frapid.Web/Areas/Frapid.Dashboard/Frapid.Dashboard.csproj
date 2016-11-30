@@ -112,8 +112,8 @@
     <Compile Include="Controllers\MyTemplateController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\ThemeController.cs" />
-    <Compile Include="DAL\App.cs" />
-    <Compile Include="DAL\Menu.cs" />
+    <Compile Include="DAL\Apps.cs" />
+    <Compile Include="DAL\Menus.cs" />
     <Compile Include="DTO\App.cs" />
     <Compile Include="DTO\Menu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

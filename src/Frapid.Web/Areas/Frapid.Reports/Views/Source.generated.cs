@@ -33,7 +33,6 @@ namespace ASP
     using Frapid.Framework;
     using Frapid.i18n;
     using Frapid.Messaging;
-    using Frapid.NPoco;
     using Frapid.Reports;
     using Frapid.WebsiteBuilder;
     

@@ -18,7 +18,7 @@ namespace Frapid.Dashboard.Controllers
             int officeId = this.AppUser.OfficeId;
 
             string culture = CultureManager.GetCurrent().TwoLetterISOLanguageName;
-            var awaiter = await App.GetAsync(this.Tenant, userId, officeId, culture).ConfigureAwait(false);
+            var awaiter = await Apps.GetAsync(this.Tenant, userId, officeId, culture).ConfigureAwait(false);
             var apps = awaiter.OrderBy(x => x.AppId);
 
             return this.Ok(apps);
