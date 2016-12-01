@@ -85,7 +85,6 @@
     <Compile Include="Query\Update\UpdateOperation.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="Types\MapperException.cs" />
-    <Compile Include="Types\FrapidDynamic.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Frapid.Framework\Frapid.Framework.csproj">

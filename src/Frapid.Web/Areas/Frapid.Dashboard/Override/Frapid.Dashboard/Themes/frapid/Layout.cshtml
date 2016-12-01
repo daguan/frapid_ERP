@@ -34,21 +34,21 @@ else
 
     <div class="ui attached basic small dashboard menu">
         <a class="item" data-ng-click="toogleDashboard();">
-            <i class="mini pin icon"></i>
+            <i class="small pin icon"></i>
         </a>
         <div class="menu" data-scope="app-menus">
 
         </div>
         <div class="right menu">
             <a class="item" href="/" target="_blank" title="Go to Website">
-                <i class="mini external icon"></i>
+                <i class="small external icon"></i>
             </a>
             @{
                 string themeSelector = ViewBag.LayoutPath + "ThemeSelector.cshtml";
             }
             @Html.Partial(themeSelector)
             <a class="item" href="/account/sign-out" target="_self">
-                <i class="mini log out icon"></i>
+                <i class="small log out icon"></i>
             </a>
         </div>
     </div>

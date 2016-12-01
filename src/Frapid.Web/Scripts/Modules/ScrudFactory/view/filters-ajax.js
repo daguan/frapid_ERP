@@ -4,8 +4,8 @@ function selectFilter(filterName) {
         var url = "/api/forms/config/filters/get-where/-1";
         var where = [];
 
-        where.push(getAjaxColumnFilter("WHERE", "object_name", "string", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));
-        where.push(getAjaxColumnFilter("AND", "filter_name", "string", FilterConditions.IsEqualTo, filterName));
+        where.push(getAjaxColumnFilter("WHERE", "ObjectName", "string", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));
+        where.push(getAjaxColumnFilter("AND", "FilterName", "string", FilterConditions.IsEqualTo, filterName));
 
         var data = JSON.stringify(where);
         return getAjaxRequest(url, "POST", data);
@@ -32,7 +32,7 @@ function loadFilterNames() {
         var url = "/api/views/config/filter-name-view/get-where/1";
         var where = [];
 
-        where.push(getAjaxColumnFilter("WHERE", "object_name", "string", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));
+        where.push(getAjaxColumnFilter("WHERE", "ObjectName", "string", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));
         var data = JSON.stringify(where);
 
         return getAjaxRequest(url, "POST", data, false);
@@ -108,8 +108,8 @@ function loadFilterForEdit() {
         var url = "/api/forms/config/filters/get-where/-1";
         var where = [];
 
-        where.push(getAjaxColumnFilter("WHERE", "object_name", "string", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));
-        where.push(getAjaxColumnFilter("AND", "filter_name", "string", FilterConditions.IsEqualTo, filterName));
+        where.push(getAjaxColumnFilter("WHERE", "ObjectName", "string", FilterConditions.IsEqualTo, window.scrudFactory.viewTableName));
+        where.push(getAjaxColumnFilter("AND", "FilterName", "string", FilterConditions.IsEqualTo, filterName));
 
         var data = JSON.stringify(where);
         return getAjaxRequest(url, "POST", data);

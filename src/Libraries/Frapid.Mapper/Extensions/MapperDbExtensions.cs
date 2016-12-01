@@ -31,7 +31,7 @@ namespace Frapid.Mapper.Extensions
                 }
 
                 parameter.ParameterName = "@" + arg;
-                parameter.Value = parameters[arg];
+                parameter.Value = parameters[arg] ?? DBNull.Value;
                 command.Parameters.Add(parameter);
             }
 
@@ -65,7 +65,9 @@ namespace Frapid.Mapper.Extensions
                 }
 
                 parameter.ParameterName = "@" + index;
-                parameter.Value = arg;
+
+                parameter.Value = arg ?? DBNull.Value;
+
                 command.Parameters.Add(parameter);
                 index++;
             }

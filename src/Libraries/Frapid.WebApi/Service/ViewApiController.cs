@@ -144,13 +144,12 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("POST")]
         [Route("~/api/views/{schemaName}/{tableName}/count-where")]
         [RestAuthorize]
-        public async Task<long> CountWhereAsync(string schemaName, string tableName, [FromBody] JArray filters)
+        public async Task<long> CountWhereAsync(string schemaName, string tableName, [FromBody] List<Filter> filters)
         {
             try
             {
-                var f = Filter.FromJArray(filters);
                 var repository = new ViewRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
-                return await repository.CountWhereAsync(f).ConfigureAwait(false);
+                return await repository.CountWhereAsync(filters).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {
@@ -177,13 +176,12 @@ namespace Frapid.WebApi.Service
         [AcceptVerbs("POST")]
         [Route("~/api/views/{schemaName}/{tableName}/get-where/{pageNumber}")]
         [RestAuthorize]
-        public async Task<IEnumerable<dynamic>> GetWhereAsync(string schemaName, string tableName, long pageNumber, [FromBody] JArray filters)
+        public async Task<IEnumerable<dynamic>> GetWhereAsync(string schemaName, string tableName, long pageNumber, [FromBody] List<Filter> filters)
         {
             try
             {
-                var f = Filter.FromJArray(filters);
                 var repository = new ViewRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
-                return await repository.GetWhereAsync(pageNumber, f).ConfigureAwait(false);
+                return await repository.GetWhereAsync(pageNumber, filters).ConfigureAwait(false);
             }
             catch(UnauthorizedException)
             {
@@ -307,13 +305,12 @@ namespace Frapid.WebApi.Service
         [Route("~/api/views/{schemaName}/{tableName}/display-fields/get-where")]
         [HttpPost]
         [RestAuthorize]
-        public async Task<IEnumerable<DisplayField>> GetDisplayFieldsAsync(string schemaName, string tableName, [FromBody] JArray filters)
+        public async Task<IEnumerable<DisplayField>> GetDisplayFieldsAsync(string schemaName, string tableName, [FromBody] List<Filter> filters)
         {
             try
             {
-                var f = Filter.FromJArray(filters);
                 var repository = new ViewRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
-                return await repository.GetDisplayFieldsAsync(f).ConfigureAwait(false);
+                return await repository.GetDisplayFieldsAsync(filters).ConfigureAwait(false);
             }
             catch (UnauthorizedException)
             {
@@ -373,13 +370,12 @@ namespace Frapid.WebApi.Service
         [Route("~/api/views/{schemaName}/{tableName}/lookup-fields/get-where")]
         [HttpPost]
         [RestAuthorize]
-        public async Task<IEnumerable<DisplayField>> GetLookupFieldsAsync(string schemaName, string tableName, [FromBody] JArray filters)
+        public async Task<IEnumerable<DisplayField>> GetLookupFieldsAsync(string schemaName, string tableName, [FromBody] List<Filter> filters)
         {
             try
             {
-                var f = Filter.FromJArray(filters);
                 var repository = new ViewRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
-                return await repository.GetLookupFieldsAsync(f).ConfigureAwait(false);
+                return await repository.GetLookupFieldsAsync(filters).ConfigureAwait(false);
             }
             catch (UnauthorizedException)
             {

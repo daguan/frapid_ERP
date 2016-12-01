@@ -4,8 +4,8 @@
 
         var filters = [];
 
-        filters.push(window.getAjaxColumnFilter("WHERE", "table_name", "string", FilterConditions.IsEqualTo, tableName));
-        filters.push(window.getAjaxColumnFilter("AND", "resource_id", "string", FilterConditions.IsEqualTo, primaryKeyValue));
+        filters.push(window.getAjaxColumnFilter("WHERE", "TableName", "string", FilterConditions.IsEqualTo, tableName));
+        filters.push(window.getAjaxColumnFilter("AND", "ResourceId", "string", FilterConditions.IsEqualTo, primaryKeyValue));
 
         var data = JSON.stringify(filters);
 

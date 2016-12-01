@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Frapid.Framework.Extensions;
 
 namespace Frapid.Mapper.Helpers
 {
@@ -6,28 +8,47 @@ namespace Frapid.Mapper.Helpers
     {
         public static object Convert(object value, Type destType)
         {
-            if (value is DateTime)
+            if (destType == typeof(string))
             {
-                if (destType == typeof(DateTimeOffset) ||
-                    destType == typeof(DateTimeOffset?))
-                {
-                    //value is not null
-                    return new DateTimeOffset((DateTime) value);
-                }
+                return value.ToString();
+            }
 
+            if (destType == typeof(bool))
+            {
+                if (value is string)
+                {
+                    return new[]
+                    {
+                    "TRUE",
+                    "YES",
+                    "T"
+                    }.Contains(value.ToString().ToUpperInvariant());
+                }
+            }
+
+            if (destType == typeof(object))
+            {
                 return value;
             }
 
-            if (value is DateTimeOffset)
+            if (destType == typeof(DateTimeOffset) || destType == typeof(DateTimeOffset?))
             {
-                if (destType == typeof(DateTime) ||
-                    destType == typeof(DateTime?))
+                if (value is DateTime)
                 {
-                    //value is not null
-                    return ((DateTimeOffset) value).DateTime;
+                    return new DateTimeOffset((DateTime)value);
                 }
 
-                return (DateTimeOffset) value;
+                return value.To<DateTime>();
+            }
+
+            if (destType == typeof(DateTime) || destType == typeof(DateTime?))
+            {
+                if (value is DateTimeOffset)
+                {
+                    return ((DateTimeOffset)value).DateTime;
+                }
+
+                return value.To<DateTime>();
             }
 
             return value;

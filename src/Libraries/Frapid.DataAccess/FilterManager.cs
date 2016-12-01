@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using Frapid.Configuration.Db;
 using Frapid.DataAccess.Models;
 using Frapid.Framework.Extensions;
@@ -24,7 +23,7 @@ namespace Frapid.DataAccess
 
             foreach (var filter in filters)
             {
-                string column = Sanitizer.SanitizeIdentifierName(filter.ColumnName);
+                string column = Sanitizer.SanitizeIdentifierName(filter.ColumnName).ToUnderscoreLowerCase();
 
                 if (string.IsNullOrWhiteSpace(column))
                 {
@@ -81,30 +80,7 @@ namespace Frapid.DataAccess
 
         private static object GetValue(Type type, string value)
         {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return null;
-            }
-
-            string typeName = type == null ? "System.String" : type.FullName;
-
-            if (typeName == "System.Boolean")
-            {
-                return new[]
-                {
-                    "TRUE",
-                    "YES",
-                    "T"
-                }.Contains(value.ToUpperInvariant());
-            }
-
-            if (typeName == "System.String")
-            {
-                return value;
-            }
-
-            var converter = TypeDescriptor.GetConverter(type);
-            return converter.ConvertFromString(value);
+            return Mapper.Helpers.TypeConverter.Convert(value, type);
         }
 
         public static void AddFilters<T>(ref Sql sql, T poco, List<Filter> filters)
