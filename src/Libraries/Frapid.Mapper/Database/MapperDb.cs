@@ -13,6 +13,7 @@ namespace Frapid.Mapper.Database
             this.DatabaseType = databaseType;
             this.DbFactory = dbFactory;
             this.ConnectionString = connectionString;
+            this.InitializeConnection();
         }
 
         public DatabaseType DatabaseType { get; set; }
@@ -25,13 +26,13 @@ namespace Frapid.Mapper.Database
         public void Dispose()
         {
             this.Transaction?.Dispose();
+            this.Transaction = null;
             this.Connection?.Dispose();
+            this.Connection = null;
         }
 
-        public async Task BeginTransactionAsync()
+        public async Task OpenSharedConnectionAsync()
         {
-            this.InitializeConnection();
-
             if (this.Connection.State == ConnectionState.Broken)
             {
                 this.Connection.Close();
@@ -41,7 +42,11 @@ namespace Frapid.Mapper.Database
             {
                 await this.Connection.OpenAsync().ConfigureAwait(false);
             }
+        }
 
+        public async Task BeginTransactionAsync()
+        {
+            await this.OpenSharedConnectionAsync().ConfigureAwait(false);
             this.Transaction = this.Connection.BeginTransaction();
         }
 
@@ -77,7 +82,6 @@ namespace Frapid.Mapper.Database
 
         public DbConnection GetConnection()
         {
-            this.InitializeConnection();
             return this.Connection;
         }
 

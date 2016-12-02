@@ -81,9 +81,9 @@ function editScrudFormElement(targetEl, value) {
         targetEl.val(value);
 
         if (targetEl.attr("data-type") === "photo") {
-            initializeUploader();
-
             if (window.scrudFactory.uploadHanlder) {
+                initializeUploader();
+
                 $(".uploader input.file").attr("data-handler", window.scrudFactory.uploadHanlder);
             };
         };

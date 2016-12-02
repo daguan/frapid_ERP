@@ -18,8 +18,8 @@ namespace Frapid.Mapper.Extensions
             command.CommandText = sql.GetQuery();
             var parameters = sql.GetParameterValues();
 
-            Console.WriteLine(sql.GetQuery());
-            Console.WriteLine(string.Join(",", sql.GetParameterValues()));
+            //Console.WriteLine(sql.GetQuery());
+            //Console.WriteLine(string.Join(",", sql.GetParameterValues()));
 
             foreach (int arg in sql.GetParameters())
             {

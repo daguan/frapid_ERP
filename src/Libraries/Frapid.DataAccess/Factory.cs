@@ -21,7 +21,7 @@ namespace Frapid.DataAccess
             return DbProvider.GetMetaDatabase(tenant);
         }
 
-        public static async Task<IEnumerable<T>> GetAsync<T>(string database, string sql, params object[] args)
+        public static async Task<IEnumerable<T>> GetAsync<T>(string database, string sql, params object[] args) where T : new()
         {
             using (var db = DbProvider.GetDatabase(database))
             {
@@ -29,7 +29,7 @@ namespace Frapid.DataAccess
             }
         }
 
-        public static async Task<IEnumerable<T>> GetAsync<T>(string database, string sql)
+        public static async Task<IEnumerable<T>> GetAsync<T>(string database, string sql) where T : new()
         {
             using (var db = DbProvider.GetDatabase(database))
             {
@@ -37,7 +37,7 @@ namespace Frapid.DataAccess
             }
         }
 
-        public static async Task<IEnumerable<T>> GetAsync<T>(string database, Sql sql)
+        public static async Task<IEnumerable<T>> GetAsync<T>(string database, Sql sql) where T : new()
         {
             using (var db = DbProvider.GetDatabase(database))
             {

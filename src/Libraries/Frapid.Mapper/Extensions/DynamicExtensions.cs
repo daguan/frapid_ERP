@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Linq;
 using Frapid.Mapper.Helpers;
@@ -9,85 +9,76 @@ namespace Frapid.Mapper.Extensions
 {
     public static class DynamicExtensions
     {
-        public static ExpandoObject ToExpando(this IDictionary<string, object> source)
+        public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
-            var retVal = new ExpandoObject();
-            var dictionary = (IDictionary<string, object>) retVal;
-
-            foreach (var keyValue in source)
+            foreach (var item in items)
             {
-                if (keyValue.Value is IDictionary<string, object>)
-                {
-                    var expandoValue = ((IDictionary<string, object>) keyValue.Value).ToExpando();
-                    dictionary.Add(keyValue.Key, expandoValue);
-                }
-                else if (keyValue.Value is ICollection)
-                {
-                    var itemList = new List<object>();
+                collection.Add(item);
+            }
+        }
 
-                    foreach (var item in (ICollection) keyValue.Value)
+        public static IEnumerable<T> ToObject<T>(this ICollection<ICollection<KeyValuePair<string, object>>> list) where T : new()
+        {
+            var type = typeof(T);
+            var retVal = new List<T>();
+
+            if (type == typeof(object))
+            {
+                foreach (var item in list)
+                {
+                    var expando = new ExpandoObject();
+                    var collection = (ICollection<KeyValuePair<string, object>>) expando;
+
+                    collection.AddRange(item);
+
+                    dynamic dynamic = expando;
+                    retVal.Add(dynamic);
+                }
+
+                return retVal;
+            }
+
+
+            var allKeys = new Collection<string>();
+
+            var props = PropertyAccessor.GetProperties(type);
+
+            foreach (var property in props)
+            {
+                var dictionary = list.FirstOrDefault();
+
+                string key = dictionary?.FirstOrDefault(x => x.Key.Equals(property.Name, StringComparison.OrdinalIgnoreCase)).Key;
+
+                if (!string.IsNullOrWhiteSpace(key))
+                {
+                    allKeys.Add(key);
+                }
+            }
+
+
+            foreach (var collection in list)
+            {
+                var instance = New<T>.Instance();
+
+                foreach (string key in allKeys)
+                {
+                    var property = props.FirstOrDefault(x => x.Name.Equals(key));
+                    var propertyValue = collection.FirstOrDefault(x => x.Key.Equals(key)).Value;
+
+
+                    if (property == null || propertyValue == null)
                     {
-                        if (item is IDictionary<string, object>)
-                        {
-                            var expandoItem = ((IDictionary<string, object>) item).ToExpando();
-                            itemList.Add(expandoItem);
-                        }
-                        else
-                        {
-                            itemList.Add(item);
-                        }
+                        continue;
                     }
 
-                    dictionary.Add(keyValue.Key, itemList);
+                    var value = TypeConverter.Convert(propertyValue, property.PropertyType);
+                    property.SetValue(instance, value);
                 }
-                else
-                {
-                    dictionary.Add(keyValue);
-                }
+
+                retVal.Add(instance);
             }
 
             return retVal;
-        }
-
-        public static T FromDynamic<T>(this ExpandoObject dynamic)
-        {
-            var dictionary = new Dictionary<string, object>(dynamic);
-
-            if (typeof(T) == typeof(object))
-            {
-                var eo = new ExpandoObject();
-                var eoColl = (ICollection<KeyValuePair<string, object>>) eo;
-
-                foreach (var kvp in dictionary)
-                {
-                    eoColl.Add(kvp);
-                }
-
-                dynamic eoDynamic = eo;
-                return eoDynamic;
-            }
-
-            var item = Activator.CreateInstance<T>();
-
-
-            foreach (var property in typeof(T).GetProperties().Where(x => x.CanWrite))
-            {
-                string key = dictionary.Keys.SingleOrDefault(x => x.Equals(property.Name, StringComparison.OrdinalIgnoreCase));
-
-                if (string.IsNullOrEmpty(key))
-                {
-                    continue;
-                }
-
-                var propertyValue = dictionary[key];
-
-                if (propertyValue != null)
-                {
-                    property.SetValue(item, TypeConverter.Convert(propertyValue, property.PropertyType));
-                }
-            }
-
-            return item;
         }
     }
 }

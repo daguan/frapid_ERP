@@ -1,4 +1,3 @@
-using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
 using Frapid.Mapper.Database;
@@ -33,18 +32,9 @@ namespace Frapid.Mapper.Query.NonQuery
                 throw new MapperException("Could not create database connection.");
             }
 
+            await db.OpenSharedConnectionAsync().ConfigureAwait(false);
             command.Connection = connection;
             command.Transaction = db.GetTransaction();
-
-            if (connection.State == ConnectionState.Broken)
-            {
-                connection.Close();
-            }
-
-            if (connection.State == ConnectionState.Closed)
-            {
-                await connection.OpenAsync().ConfigureAwait(false);
-            }
 
             await command.ExecuteNonQueryAsync().ConfigureAwait(false);
         }

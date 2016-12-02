@@ -1014,7 +1014,7 @@ BEGIN
             tn.office_id,  tn.office_id::TEXT AS path
             FROM core.offices AS tn 
 			WHERE tn.office_id =$1
-			AND NOT core.offices.deleted
+			AND NOT tn.deleted
         UNION ALL
          SELECT
             c.office_id, (p.path || '->' || c.office_id::TEXT)
@@ -1028,6 +1028,7 @@ BEGIN
 END
 $$LANGUAGE plpgsql;
 
+--select * from core.get_office_ids(1)
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/06.functions-and-logic/core.get_office_name_by_office_id.sql --<--<--
 DROP FUNCTION IF EXISTS core.get_office_name_by_office_id(_office_id integer);
@@ -1209,6 +1210,25 @@ BEGIN
     AND tableowner <> 'report_user'
     LOOP
         EXECUTE 'GRANT SELECT ON TABLE '|| this.schemaname || '.' || this.tablename ||' TO report_user;';
+    END LOOP;
+END
+$$
+LANGUAGE plpgsql;
+
+DO
+$$
+    DECLARE this record;
+BEGIN
+    IF(CURRENT_USER = 'report_user') THEN
+        RETURN;
+    END IF;
+
+    FOR this IN 
+    SELECT oid::regclass::text as mat_view
+    FROM   pg_class
+    WHERE  relkind = 'm'
+    LOOP
+        EXECUTE 'GRANT SELECT ON TABLE '|| this.mat_view  ||' TO report_user;';
     END LOOP;
 END
 $$

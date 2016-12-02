@@ -54,6 +54,7 @@ namespace Frapid.Mapper
 
         private string ProcessToken(string token)
         {
+            token = token.Replace(",@", ", @");
             var matches = ParameterPattern.Matches(token);
             int offset = this._parameterTokens.DefaultIfEmpty().Max();
             int count = this._parameterTokens.Count;
@@ -63,23 +64,23 @@ namespace Frapid.Mapper
                 offset++;
             }
 
-            var matchList = new List<int>();
+            var matchList = (from Match match in matches select int.Parse(match.Value.Replace("@", ""))).OrderByDescending(x=>x).ToList();
 
-            foreach (Match match in matches)
-            {
-                int item = int.Parse(match.Value.Replace("@", ""));
-                matchList.Add(item);
-            }
-
-            foreach (int index in matchList.OrderByDescending(x => x))
+            foreach (int index in matchList)
             {
                 int newIndex = offset + index;
-                token = token.Replace("@" + index, "@" + newIndex);
+                token = ReplaceWord(token, "@" + index, "@" + newIndex);
 
                 this._parameterTokens.Add(newIndex);
             }
 
             return token;
+        }
+
+        private static string ReplaceWord(string token, string find, string replace)
+        {
+            string pattern = $@"\B{find}\b";
+            return Regex.Replace(token, pattern, replace);
         }
 
         public Sql Append(string token, params object[] args)
@@ -119,7 +120,7 @@ namespace Frapid.Mapper
 
 
             int count = parameters.Length;
-            string argTokens = string.Join(",", Enumerable.Range(0, count).Select(x => "@" + x));
+            string argTokens = string.Join(", ", Enumerable.Range(0, count).Select(x => "@" + x));
 
             token = token.Replace("@0", argTokens);
 

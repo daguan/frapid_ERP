@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Frapid.Framework.Extensions;
+using Frapid.Mapper.Extensions;
 
 namespace Frapid.Mapper.Helpers
 {
@@ -19,9 +19,9 @@ namespace Frapid.Mapper.Helpers
                 {
                     return new[]
                     {
-                    "TRUE",
-                    "YES",
-                    "T"
+                        "TRUE",
+                        "YES",
+                        "T"
                     }.Contains(value.ToString().ToUpperInvariant());
                 }
             }
@@ -35,7 +35,7 @@ namespace Frapid.Mapper.Helpers
             {
                 if (value is DateTime)
                 {
-                    return new DateTimeOffset((DateTime)value);
+                    return new DateTimeOffset((DateTime) value);
                 }
 
                 return value.To<DateTime>();
@@ -45,7 +45,7 @@ namespace Frapid.Mapper.Helpers
             {
                 if (value is DateTimeOffset)
                 {
-                    return ((DateTimeOffset)value).DateTime;
+                    return ((DateTimeOffset) value).DateTime;
                 }
 
                 return value.To<DateTime>();

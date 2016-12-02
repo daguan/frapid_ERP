@@ -153,7 +153,6 @@
     <Compile Include="Engine\Generators\TopSectionGenerator.cs" />
     <Compile Include="Engine\IGenerator.cs" />
     <Compile Include="Engine\Model\DataSourceParameter.cs" />
-    <Compile Include="Engine\Model\DataSourceParameterType.cs" />
     <Compile Include="Engine\Model\DataSource.cs" />
     <Compile Include="Engine\Model\GridView.cs" />
     <Compile Include="Engine\Model\ParameterInfo.cs" />

@@ -148,13 +148,11 @@ namespace Frapid.Reports.Helpers
                     {
                         string value = FormattingHelper.GetFormattedValue(parameter.Value);
 
-                        var datasourceParameter =
-                            info.DataSourceParameters.FirstOrDefault(
-                                x => x.Name.Replace("@", "").ToLower().Equals(parameter.Name.ToLower()));
+                        var datasourceParameter = info.DataSourceParameters.FirstOrDefault(x => x.Name.Replace("@", "").ToLower().Equals(parameter.Name.ToLower()));
 
                         if (datasourceParameter != null)
                         {
-                            var type = datasourceParameter.Type;
+                            string type = datasourceParameter.Type;
                             value = DataSourceParameterHelper.CastValue(value, type).ToString();
                         }
 

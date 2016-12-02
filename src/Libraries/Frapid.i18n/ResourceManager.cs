@@ -6,6 +6,8 @@ using System.Runtime.Caching;
 using System.Threading.Tasks;
 using Frapid.i18n.DAL;
 using Frapid.i18n.Helpers;
+using Frapid.Mapper.Extensions;
+using Frapid.Mapper.Helpers;
 
 namespace Frapid.i18n
 {
@@ -41,7 +43,7 @@ namespace Frapid.i18n
 
             if(SuppressException)
             {
-                return resourceKey;
+                return new TitleCaseConverter().Convert(resourceKey.Replace("_", " "));
             }
 
             throw new MissingManifestResourceException("Resource " + resourceClass + "." + resourceKey + " was not found.");

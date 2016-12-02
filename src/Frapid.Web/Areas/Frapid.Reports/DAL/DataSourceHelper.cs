@@ -54,7 +54,7 @@ namespace Frapid.Reports.DAL
             return GetSqlServerDataTable(connectionString, sql, parameters);
         }
 
-        private static object GetParameterValue(string name, DataSourceParameterType type, ParameterInfo info)
+        private static object GetParameterValue(string name, string type, ParameterInfo info)
         {
             var paramter = info.Parameters.FirstOrDefault(x => x.Name.ToLower().Equals(name.Replace("@", "").ToLower()));
 

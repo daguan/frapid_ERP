@@ -1,5 +1,4 @@
-﻿@using Frapid.Reports.Engine.Model
-@model Frapid.Reports.ViewModels.ParameterMeta
+﻿@model Frapid.Reports.ViewModels.ParameterMeta
 
 @{
     ViewBag.Title = "Frapid Dashboard";
@@ -8,21 +7,13 @@
 
 
 <style>
-    #dashboard-container {
-        padding: 1em 0 !important;
-    }
+    #dashboard-container { padding: 1em 0 !important; }
 
-    .padded.container {
-        padding: 2em !important;
-    }
+    .padded.container { padding: 2em !important; }
 
-    .collapsed.column {
-        padding: 0 !important;
-    }
+    .collapsed.column { padding: 0 !important; }
 
-    .pusher, .ng-scope {
-        height: 100% !important;
-    }
+    .pusher, .ng-scope { height: 100% !important; }
 
     .report-panel {
         background-color: #949596;
@@ -32,48 +23,40 @@
     .toolbar {
         background-color: #444;
         height: 3em;
-        text-align: left;
         padding-left: 1em;
+        text-align: left;
     }
 
-        .toolbar .button {
-            display: inline-flex;
-            font-size: 0.8em;
-            cursor: pointer;
-            padding: 0.8em;
-            height: 3.5em;
-            width: 2.5em;
-            margin: 2px;
-            color: #dadada;
-            text-shadow: 2px 2px 20px white;
-        }
+    .toolbar .button {
+        color: #dadada;
+        cursor: pointer;
+        display: inline-flex;
+        font-size: 0.8em;
+        height: 3.5em;
+        margin: 2px;
+        padding: 0.8em;
+        text-shadow: 2px 2px 20px white;
+        width: 2.5em;
+    }
 
-            .toolbar .button:hover {
-                background-color: green;
-            }
+    .toolbar .button:hover { background-color: green; }
 
     iframe {
-        width: 1000px;
         background-color: #fafafa;
         border: none;
         display: block;
-        margin: 0 auto;
         height: 100%;
+        margin: 0 auto;
         overflow: auto;
         padding: 2em 2em 0 2em;
+        width: 1000px;
     }
 
-    .vertically.very.relaxed {
-        padding: 3em 0;
-    }
+    .vertically.very.relaxed { padding: 3em 0; }
 
-    .header {
-        font-weight: 100 !important;
-    }
+    .header { font-weight: 100 !important; }
 
-    .filter.container {
-        padding: 1em;
-    }
+    .filter.container { padding: 1em; }
 </style>
 <div class="report-panel">
     <div class="ui stackable report grid" style="height: 100%;">
@@ -128,28 +111,33 @@
                                         data-key-field="@parameter.KeyField"
                                         data-value-field="@parameter.ValueField"
                                         data-default-value="@parameter.DefaultValue"
-                                        data-url="@parameter.PopulateFrom"></select>
+                                        data-url="@parameter.PopulateFrom">
+                                </select>
                             }
                             else
                             {
-                                switch (parameter.Type)
+                                switch (parameter.Type.ToUpperInvariant())
                                 {
-                                    case DataSourceParameterType.Date:
-                                        <input data-paramter="@name" id="@(name)InputDate" value="@parameter.DefaultValue" class="date" type="date" />
+                                    case "SYSTEM.DATETIME":
+                                        <input data-paramter="@name" id="@(name)InputDate" value="@parameter.DefaultValue" class="date" type="date"/>
                                         break;
-                                    case DataSourceParameterType.Bool:
+                                    case "BOOL":
+                                    case "BOOLEAN":
                                         <div class="ui toggle checkbox">
                                             <input data-paramter="@name" id="@(name)InputDate" value="@parameter.DefaultValue" type="checkbox">
                                             <label>Yes</label>
                                         </div>
                                         break;
-                                    case DataSourceParameterType.Decimal:
-                                    case DataSourceParameterType.Double:
-                                    case DataSourceParameterType.Number:
-                                        <input data-paramter="@name" id="@(name)InputText" value="@parameter.DefaultValue" type="text" class="decimal" data-number="" />
+                                    case "DECIMAL":
+                                    case "DOUBLE":
+                                        <input data-paramter="@name" id="@(name)InputText" value="@parameter.DefaultValue" type="text" class="decimal" data-number=""/>
+                                        break;
+                                    case "INT":
+                                    case "LONG":
+                                        <input data-paramter="@name" id="@(name)InputText" value="@parameter.DefaultValue" type="text" class="integer" data-number=""/>
                                         break;
                                     default:
-                                        <input data-paramter="@name" id="@(name)InputText" value="@parameter.DefaultValue" type="text" />
+                                        <input data-paramter="@name" id="@(name)InputText" value="@parameter.DefaultValue" type="text"/>
                                         break;
                                 }
                             }
@@ -168,14 +156,14 @@
 <script>
     $(".dropdown").dropdown();
     loadDatepicker();
-    (function () {
+    (function() {
 
-        var persist = JSON.parse(localStorage.getItem(document.location.pathname));
+        const persist = JSON.parse(localStorage.getItem(document.location.pathname));
 
         if (persist) {
-            $.each(persist, function () {
-                var el = $("#" + this.id);
-                var value = this.value;
+            $.each(persist, function() {
+                const el = $(`#${this.id}`);
+                const value = this.value;
                 var defaultValue;
 
                 if (el.is("select")) {
@@ -188,7 +176,7 @@
                     if (!defaultValue) {
 
                         if (el.is(".date")) {
-                            var date = new Date(value);
+                            const date = new Date(value);
 
                             el.datepicker("setDate", date);
                         } else {
@@ -200,20 +188,20 @@
             });
         };
 
-        var candidates = $("select[data-url]");
+        const candidates = $("select[data-url]");
 
-        $.each(candidates, function () {
+        $.each(candidates, function() {
             var el = $(this);
-            var url = el.attr("data-url");
-            var keyField = el.attr("data-key-field");
-            var valueField = el.attr("data-value-field");
+            const url = el.attr("data-url");
+            const keyField = el.attr("data-key-field");
+            const valueField = el.attr("data-value-field");
             var defaultValue = el.attr("data-default-value");
 
 
-            window.ajaxDataBind(url, el, null, defaultValue, null, function () {
-                setTimeout(function () {
-                    el.dropdown("set selected", defaultValue);
-                },
+            window.ajaxDataBind(url, el, null, defaultValue, null, function() {
+                setTimeout(function() {
+                        el.dropdown("set selected", defaultValue);
+                    },
                     100);
             }, keyField, valueField, false);
         });
@@ -222,19 +210,19 @@
     $("#ShowButton")
         .unbind("click")
         .bind("click",
-            function () {
+            function() {
                 var persist = [];
 
                 var query = [];
 
-                var dateEls = $(".parameter.form .field input.date");
+                const dateEls = $(".parameter.form .field input.date");
 
                 $.each(dateEls,
-                    function () {
-                        var el = $(this);
-                        var parameter = el.attr("data-paramter");
-                        var value = el.datepicker("getDate").valueOf();
-                        var id = el.attr("id");
+                    function() {
+                        const el = $(this);
+                        const parameter = el.attr("data-paramter");
+                        const value = el.datepicker("getDate").valueOf();
+                        const id = el.attr("id");
 
                         persist.push({
                             id: id,
@@ -246,15 +234,15 @@
                         };
                     });
 
-                var otherEls = $(".parameter.form .field input:not(.date), .parameter.form .field select");
+                const otherEls = $(".parameter.form .field input:not(.date), .parameter.form .field select");
 
                 $.each(otherEls,
-                    function () {
-                        var el = $(this);
-                        var parameter = el.attr("data-paramter");
-                        var value = el.val();
+                    function() {
+                        const el = $(this);
+                        const parameter = el.attr("data-paramter");
+                        const value = el.val();
 
-                        var id = el.attr("id");
+                        const id = el.attr("id");
 
                         persist.push({
                             id: id,
@@ -268,7 +256,7 @@
 
                 localStorage.setItem(document.location.pathname, JSON.stringify(persist));
 
-                var location = document.location.pathname + "?" + query.join("&");
+                const location = document.location.pathname + "?" + query.join("&");
                 document.location = location;
             });
 </script>

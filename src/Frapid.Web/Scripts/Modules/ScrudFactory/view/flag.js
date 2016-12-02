@@ -201,6 +201,8 @@ function initializeFlag() {
         });
     };
 
-    displayFlags();
+    setTimeout(function() {
+        displayFlags();
+    }, 1000);
 };
 

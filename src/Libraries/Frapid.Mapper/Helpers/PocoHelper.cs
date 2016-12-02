@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
-using Frapid.Framework.Extensions;
 using Frapid.Mapper.Decorators;
+using Frapid.Mapper.Extensions;
 
 namespace Frapid.Mapper.Helpers
 {

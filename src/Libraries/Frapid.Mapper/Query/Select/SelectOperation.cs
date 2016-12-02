@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Collections.ObjectModel;
 using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
-using Frapid.Framework.Extensions;
+using Frapid.Mapper.Database;
 using Frapid.Mapper.Extensions;
 using Frapid.Mapper.Types;
 
@@ -12,39 +12,39 @@ namespace Frapid.Mapper.Query.Select
 {
     public class SelectOperation
     {
-        public virtual async Task<IEnumerable<T>> SelectAsync<T>(Database.MapperDb db, Sql sql)
+        public virtual async Task<IEnumerable<T>> SelectAsync<T>(MapperDb db, Sql sql) where T : new()
         {
             using (var command = db.GetCommand(sql))
             {
-                return await this.SelectAsync<T>(db, command).ConfigureAwait(false);
+                return await SelectAsync<T>(db, command).ConfigureAwait(false);
             }
         }
 
-        public virtual async Task<IEnumerable<T>> SelectAsync<T>(Database.MapperDb db, string sql, params object[] args)
+        public virtual async Task<IEnumerable<T>> SelectAsync<T>(MapperDb db, string sql, params object[] args) where T : new()
         {
             using (var command = db.GetCommand(sql, args))
             {
-                return await this.SelectAsync<T>(db, command).ConfigureAwait(false);
+                return await SelectAsync<T>(db, command).ConfigureAwait(false);
             }
         }
 
-        public virtual async Task<T> ScalarAsync<T>(Database.MapperDb db, Sql sql)
+        public virtual async Task<T> ScalarAsync<T>(MapperDb db, Sql sql)
         {
             using (var command = db.GetCommand(sql))
             {
-                return await this.ScalarAsync<T>(db, command).ConfigureAwait(false);
+                return await ScalarAsync<T>(db, command).ConfigureAwait(false);
             }
         }
 
-        public virtual async Task<T> ScalarAsync<T>(Database.MapperDb db, string sql, params object[] args)
+        public virtual async Task<T> ScalarAsync<T>(MapperDb db, string sql, params object[] args)
         {
             using (var command = db.GetCommand(sql, args))
             {
-                return await this.ScalarAsync<T>(db, command).ConfigureAwait(false);
+                return await ScalarAsync<T>(db, command).ConfigureAwait(false);
             }
         }
 
-        public virtual async Task<T> ScalarAsync<T>(Database.MapperDb db, DbCommand command)
+        public virtual async Task<T> ScalarAsync<T>(MapperDb db, DbCommand command)
         {
             var connection = db.GetConnection();
             if (connection == null)
@@ -52,25 +52,16 @@ namespace Frapid.Mapper.Query.Select
                 throw new MapperException("Could not create database connection.");
             }
 
+            await db.OpenSharedConnectionAsync().ConfigureAwait(false);
             command.Connection = connection;
             command.Transaction = db.GetTransaction();
-
-            if (connection.State == ConnectionState.Broken)
-            {
-                connection.Close();
-            }
-
-            if (connection.State == ConnectionState.Closed)
-            {
-                await connection.OpenAsync().ConfigureAwait(false);
-            }
 
             var value = await command.ExecuteScalarAsync().ConfigureAwait(false);
- 
-           return value.To<T>();
+
+            return value.To<T>();
         }
 
-        public virtual async Task<IEnumerable<T>> SelectAsync<T>(Database.MapperDb db, DbCommand command)
+        public virtual async Task<IEnumerable<T>> SelectAsync<T>(MapperDb db, DbCommand command) where T : new()
         {
             var connection = db.GetConnection();
             if (connection == null)
@@ -78,51 +69,41 @@ namespace Frapid.Mapper.Query.Select
                 throw new MapperException("Could not create database connection.");
             }
 
+            await db.OpenSharedConnectionAsync().ConfigureAwait(false);
             command.Connection = connection;
             command.Transaction = db.GetTransaction();
-
-            if (connection.State == ConnectionState.Broken)
-            {
-                connection.Close();
-            }
-
-            if (connection.State == ConnectionState.Closed)
-            {
-                await connection.OpenAsync().ConfigureAwait(false);
-            }
-
 
             using (var reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
             {
-                var result = new List<T>();
-
-                if (reader.HasRows)
+                if (!reader.HasRows)
                 {
-                    while (await reader.ReadAsync().ConfigureAwait(false))
+                    return new List<T>();
+                }
+
+                var mapped = new Collection<ICollection<KeyValuePair<string, object>>>();
+                var properties = Enumerable.Range(0, reader.FieldCount).Select(reader.GetName).ToList();
+
+                while (await reader.ReadAsync().ConfigureAwait(false))
+                {
+                    var instance = new Collection<KeyValuePair<string, object>>();
+
+                    foreach (string property in properties)
                     {
-                        var instance = new Dictionary<string, object>();
-                        var properties = Enumerable.Range(0, reader.FieldCount).Select(reader.GetName).ToList();
+                        var value = reader[property];
 
-                        foreach (string property in properties)
+                        if (value == DBNull.Value)
                         {
-                            var value = reader[property];
-
-                            if (value == DBNull.Value)
-                            {
-                                value = null;
-                            }
-
-                            instance.Add(property.ToPascalCase(), value);
+                            value = null;
                         }
 
 
-                        var item = instance.ToExpando();
-                        var adapted = item.FromDynamic<T>();
-                        result.Add(adapted);
+                        instance.Add(new KeyValuePair<string, object>(property.ToPascalCase(), value));
                     }
+
+                    mapped.Add(instance);
                 }
 
-                return result;
+                return mapped.ToObject<T>();
             }
         }
     }

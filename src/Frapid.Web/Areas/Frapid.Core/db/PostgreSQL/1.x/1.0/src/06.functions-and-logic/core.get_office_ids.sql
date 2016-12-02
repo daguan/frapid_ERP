@@ -12,7 +12,7 @@ BEGIN
             tn.office_id,  tn.office_id::TEXT AS path
             FROM core.offices AS tn 
 			WHERE tn.office_id =$1
-			AND NOT core.offices.deleted
+			AND NOT tn.deleted
         UNION ALL
          SELECT
             c.office_id, (p.path || '->' || c.office_id::TEXT)
@@ -25,3 +25,5 @@ BEGIN
     );
 END
 $$LANGUAGE plpgsql;
+
+--select * from core.get_office_ids(1)

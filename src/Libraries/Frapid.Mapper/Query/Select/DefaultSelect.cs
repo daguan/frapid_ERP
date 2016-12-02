@@ -45,20 +45,20 @@ namespace Frapid.Mapper.Query.Select
             return await operation.ScalarAsync<T>(db, command).ConfigureAwait(false);
         }
 
-        public static async Task<IEnumerable<T>> SelectAsync<T>(this MapperDb db, string sql, params object[] args)
+        public static async Task<IEnumerable<T>> SelectAsync<T>(this MapperDb db, string sql, params object[] args) where T : new()
         {
             var operation = GetOperation(db);
             return await operation.SelectAsync<T>(db, sql, args).ConfigureAwait(false);
         }
 
 
-        public static async Task<IEnumerable<T>> SelectAsync<T>(this MapperDb db, DbCommand command)
+        public static async Task<IEnumerable<T>> SelectAsync<T>(this MapperDb db, DbCommand command) where T : new()
         {
             var operation = GetOperation(db);
             return await operation.SelectAsync<T>(db, command).ConfigureAwait(false);
         }
 
-        public static async Task<IEnumerable<T>> SelectAsync<T>(this MapperDb db, Sql sql)
+        public static async Task<IEnumerable<T>> SelectAsync<T>(this MapperDb db, Sql sql) where T : new()
         {
             var operation = GetOperation(db);
             return await operation.SelectAsync<T>(db, sql).ConfigureAwait(false);

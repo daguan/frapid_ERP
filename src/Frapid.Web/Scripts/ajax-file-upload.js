@@ -2,7 +2,7 @@
 // Sean Clark http://square-bracket.com
 // xhr2 file upload
 // data is optional
-$.fn.upload = function (remote, data, successFn, progressFn) {
+$.fn.upload = function (remote, data, successFn, progressFn, failFn) {
     // if we dont have post data, move it along
     if (typeof data != "object") {
         progressFn = successFn;
@@ -53,10 +53,10 @@ $.fn.upload = function (remote, data, successFn, progressFn) {
                     var json;
                     try {
                         json = JSON.parse(res.responseText);
+                        if (successFn) successFn(json);
                     } catch (e) {
-                        json = res.responseText;
+                        if (failFn) failFn(e);
                     }
-                    if (successFn) successFn(json);
                 }
             });
         }

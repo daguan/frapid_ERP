@@ -77,6 +77,8 @@
                     el.trigger("done", [{ response: response }]);
                 }, function (progress, value) {
                     //not implemented yet.
+                }, function(e) {
+                    window.displayMessage(JSON.stringify(e));
                 });
             };
         });

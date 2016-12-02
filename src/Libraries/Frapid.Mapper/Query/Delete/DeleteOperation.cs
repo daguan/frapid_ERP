@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Frapid.Mapper.Database;
 using Frapid.Mapper.Helpers;
@@ -21,8 +20,8 @@ namespace Frapid.Mapper.Query.Delete
         public virtual async Task DeleteAsync(MapperDb db, object primaryKeyValue, string tableName, string primaryKeyName)
         {
             var sql = this.GetSql(tableName, primaryKeyName, primaryKeyValue);
-            Console.WriteLine(sql.GetQuery());
-            Console.WriteLine(string.Join(",", sql.GetParameterValues()));
+            //Console.WriteLine(sql.GetQuery());
+            //Console.WriteLine(string.Join(",", sql.GetParameterValues()));
 
             await db.NonQueryAsync(sql.GetCommand(db)).ConfigureAwait(false);
         }

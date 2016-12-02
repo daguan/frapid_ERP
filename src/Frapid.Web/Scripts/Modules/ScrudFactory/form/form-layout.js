@@ -96,9 +96,9 @@ function createLayout(collection, container) {
 
 	$(document).trigger("layoutCreated");
     initializeAjaxRequest();
-    initializeUploader();
 
     if (window.scrudFactory.uploadHanlder) {
+        initializeUploader();
         $(".uploader input.file").attr("data-handler", window.scrudFactory.uploadHanlder);
     };
 

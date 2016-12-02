@@ -1,18 +1,17 @@
 ﻿using System;
 using Frapid.Framework.Extensions;
-using Frapid.Reports.Engine.Model;
 
 namespace Frapid.Reports.Helpers
 {
     public static class DataSourceParameterHelper
     {
-        public static object CastValue(object value, DataSourceParameterType type)
+        public static object CastValue(object value, string type)
         {
-            switch (type)
+            switch (type.ToUpperInvariant())
             {
-                case DataSourceParameterType.Date:
+                case "SYSTEM.DATETIME":
                     double milliseconds = value.To<double>();
-                                
+
                     if (milliseconds > 0)
                     {
                         value = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
@@ -26,13 +25,16 @@ namespace Frapid.Reports.Helpers
                         return value.To<DateTime>();
                     }
                     break;
-                case DataSourceParameterType.Number:
+                case "INT":
+                    return value.To<int>();
+                case "LONG":
                     return value.To<long>();
-                case DataSourceParameterType.Bool:
+                case "BOOL":
+                case "BOOLEAN":
                     return value.To<bool>();
-                case DataSourceParameterType.Decimal:
+                case "DECIMAL":
                     return value.To<decimal>();
-                case DataSourceParameterType.Double:
+                case "DOUBLE":
                     return value.To<double>();
             }
 

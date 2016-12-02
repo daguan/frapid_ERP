@@ -3,7 +3,7 @@
     public sealed class DataSourceParameter
     {
         public string Name { get; set; }
-        public DataSourceParameterType Type { get; set; }
+        public string Type { get; set; }
         public object DefaultValue { get; set; }
         public bool HasMetaValue { get; set; }
         public string PopulateFrom { get; set; }

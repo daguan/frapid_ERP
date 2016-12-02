@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,9 +48,15 @@
     <Compile Include="Decorators\IgnoreAttribute.cs" />
     <Compile Include="Decorators\PrimaryKeyAttribute.cs" />
     <Compile Include="Decorators\TableNameAttribute.cs" />
+    <Compile Include="Extensions\AttributeExtensions.cs" />
+    <Compile Include="Extensions\CastExtensions.cs" />
+    <Compile Include="Extensions\New.cs" />
+    <Compile Include="Helpers\MapperCache.cs" />
     <Compile Include="Extensions\MapperDbExtensions.cs" />
     <Compile Include="Extensions\DynamicExtensions.cs" />
+    <Compile Include="Helpers\PropertyAccessor.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Helpers\Castable.cs" />
     <Compile Include="Helpers\NpgsqlTimeSpan.cs" />
     <Compile Include="Helpers\PascalCaseConverter.cs" />
     <Compile Include="Helpers\PocoHelper.cs" />
@@ -85,12 +92,6 @@
     <Compile Include="Query\Update\UpdateOperation.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="Types\MapperException.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Frapid.Framework\Frapid.Framework.csproj">
-      <Project>{a4dee358-3203-425c-80e9-8eba0a01b73f}</Project>
-      <Name>Frapid.Framework</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

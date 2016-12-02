@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -153,7 +152,7 @@ namespace Frapid.Mapper.Database
         public static bool IsStringNumeric(string str)
         {
             double result;
-            return (double.TryParse(str, NumberStyles.Float, NumberFormatInfo.CurrentInfo, out result));
+            return double.TryParse(str, NumberStyles.Float, NumberFormatInfo.CurrentInfo, out result);
         }
 
         public static string AddOrdinalSuffix(string number)
@@ -161,12 +160,12 @@ namespace Frapid.Mapper.Database
             if (IsStringNumeric(number))
             {
                 int n = int.Parse(number);
-                int nMod100 = n % 100;
+                int nMod100 = n%100;
 
                 if (nMod100 >= 11 && nMod100 <= 13)
                     return string.Concat(number, "th");
 
-                switch (n % 10)
+                switch (n%10)
                 {
                     case 1:
                         return string.Concat(number, "st");
@@ -185,7 +184,6 @@ namespace Frapid.Mapper.Database
         {
             return underscoredWord.Replace('_', '-');
         }
-
 
         #region Nested type: InflectorRule
 

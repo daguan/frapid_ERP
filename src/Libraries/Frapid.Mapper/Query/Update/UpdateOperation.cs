@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Frapid.Mapper.Database;
 using Frapid.Mapper.Extensions;
@@ -23,8 +22,8 @@ namespace Frapid.Mapper.Query.Update
         public virtual async Task UpdateAsync<T>(MapperDb db, T poco, object primaryKeyValue, string tableName, string primaryKeyName, bool isIdentity = true)
         {
             var sql = this.GetSql(poco, tableName, primaryKeyName, primaryKeyValue, isIdentity);
-            Console.WriteLine(sql.GetQuery());
-            Console.WriteLine(string.Join(",", sql.GetParameterValues()));
+            //Console.WriteLine(sql.GetQuery());
+            //Console.WriteLine(string.Join(",", sql.GetParameterValues()));
 
             await db.NonQueryAsync(sql.GetCommand(db)).ConfigureAwait(false);
         }
