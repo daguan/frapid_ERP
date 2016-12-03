@@ -74,8 +74,7 @@ namespace Frapid.WebsiteBuilder.DAL
                 var sql = new Sql("SELECT * FROM website.published_content_view");
                 sql.Where("LOWER(category_alias)=@0", categoryAlias);
                 sql.And("is_blog=@0", true);
-                sql.Limit(db.DatabaseType, limit);
-                sql.Offset(db.DatabaseType, offset);
+                sql.Limit(db.DatabaseType, limit, offset, "publish_on");
 
                 return await db.SelectAsync<PublishedContentView>(sql).ConfigureAwait(false);
             }
@@ -110,8 +109,7 @@ namespace Frapid.WebsiteBuilder.DAL
             {
                 var sql = new Sql("SELECT * FROM website.published_content_view");
                 sql.And("is_blog=@0", true);
-                sql.Limit(db.DatabaseType, limit);
-                sql.Offset(db.DatabaseType, offset);
+                sql.Limit(db.DatabaseType, limit, offset, "publish_on");
 
                 return await db.SelectAsync<PublishedContentView>(sql).ConfigureAwait(false);
             }
@@ -123,7 +121,7 @@ namespace Frapid.WebsiteBuilder.DAL
             {
                 var sql = new Sql("SELECT * FROM website.published_content_view");
                 sql.Where("is_homepage=@0", true);
-                sql.Limit(db.DatabaseType, 1);
+                sql.Limit(db.DatabaseType, 1, 0, "publish_on");
 
                 var awaiter = await db.SelectAsync<PublishedContentView>(sql).ConfigureAwait(false);
                 return awaiter.FirstOrDefault();

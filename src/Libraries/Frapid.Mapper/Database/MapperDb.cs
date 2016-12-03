@@ -16,6 +16,8 @@ namespace Frapid.Mapper.Database
             this.InitializeConnection();
         }
 
+        public bool CacheResults { get; set; } = true;
+        public int CacheMilliseconds { get; set; } = 5000; //5 seconds
         public DatabaseType DatabaseType { get; set; }
         public DbProviderFactory DbFactory { get; set; }
         public string ConnectionString { get; set; }

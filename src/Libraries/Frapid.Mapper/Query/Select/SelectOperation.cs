@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Frapid.Mapper.Database;
 using Frapid.Mapper.Extensions;
+using Frapid.Mapper.Helpers;
 using Frapid.Mapper.Types;
 
 namespace Frapid.Mapper.Query.Select
@@ -61,8 +62,16 @@ namespace Frapid.Mapper.Query.Select
             return value.To<T>();
         }
 
+
         public virtual async Task<IEnumerable<T>> SelectAsync<T>(MapperDb db, DbCommand command) where T : new()
         {
+            var result = ResultsetCache.Get(db, command);
+
+            if (result != null)
+            {
+                return result.ToObject<T>();
+            }
+
             var connection = db.GetConnection();
             if (connection == null)
             {
@@ -103,6 +112,7 @@ namespace Frapid.Mapper.Query.Select
                     mapped.Add(instance);
                 }
 
+                ResultsetCache.Set(db, command, mapped);
                 return mapped.ToObject<T>();
             }
         }

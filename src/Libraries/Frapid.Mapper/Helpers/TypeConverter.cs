@@ -38,7 +38,7 @@ namespace Frapid.Mapper.Helpers
                     return new DateTimeOffset((DateTime) value);
                 }
 
-                return value.To<DateTime>();
+                return value.To<DateTimeOffset>();
             }
 
             if (destType == typeof(DateTime) || destType == typeof(DateTime?))

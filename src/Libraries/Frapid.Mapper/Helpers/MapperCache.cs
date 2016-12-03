@@ -1,4 +1,5 @@
-﻿using System.Runtime.Caching;
+﻿using System;
+using System.Runtime.Caching;
 
 namespace Frapid.Mapper.Helpers
 {
@@ -9,6 +10,16 @@ namespace Frapid.Mapper.Helpers
             var cache = MemoryCache.Default;
             var item = new CacheItem(key, value);
             var policy = new CacheItemPolicy();
+
+            cache.Add(item, policy);
+        }
+
+        public static void AddToCache<T>(string key, T value, DateTimeOffset expiresOn)
+        {
+            var cache = MemoryCache.Default;
+            var item = new CacheItem(key, value);
+
+            var policy = new CacheItemPolicy {AbsoluteExpiration = expiresOn};
 
             cache.Add(item, policy);
         }

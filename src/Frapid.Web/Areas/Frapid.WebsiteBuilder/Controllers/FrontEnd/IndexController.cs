@@ -1,11 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.Areas.Caching;
 using Frapid.Areas.CSRF;
 using Frapid.WebsiteBuilder.Models;
 using Frapid.WebsiteBuilder.Plugins;
 using Frapid.WebsiteBuilder.ViewModels;
-using Npgsql;
 using Serilog;
 
 namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
@@ -25,8 +25,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [Route("")]
         [Route("site/{categoryAlias}/{alias}")]
         [FrapidOutputCache(ProfileName = "Content")]
-        public async Task<ActionResult> IndexAsync(string categoryAlias = "", string alias = "", bool isPost = false,
-            FormCollection form = null)
+        public async Task<ActionResult> IndexAsync(string categoryAlias = "", string alias = "", bool isPost = false, FormCollection form = null)
         {
             try
             {
@@ -50,7 +49,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
                 return this.View(this.GetRazorView<AreaRegistration>("Index/Index.cshtml", this.Tenant), model);
             }
-            catch (NpgsqlException ex)
+            catch (Exception ex)
             {
                 Log.Error
                     (
@@ -65,8 +64,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         }
 
 
-        private async Task<Content> GetContentsAsync(string categoryAlias, string alias, bool isPost = false,
-            FormCollection form = null)
+        private async Task<Content> GetContentsAsync(string categoryAlias, string alias, bool isPost = false, FormCollection form = null)
         {
             var model = await ContentModel.GetContentAsync(this.Tenant, categoryAlias, alias).ConfigureAwait(false);
 

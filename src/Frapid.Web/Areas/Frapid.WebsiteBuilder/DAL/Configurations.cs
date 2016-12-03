@@ -15,7 +15,7 @@ namespace Frapid.WebsiteBuilder.DAL
             {
                 var sql = new Sql("SELECT * FROM website.configurations");
                 sql.Where("is_default=@0", true);
-                sql.Limit(db.DatabaseType, 1);
+                sql.Limit(db.DatabaseType, 1, 0, "configuration_id");
 
                 var awaiter = await db.SelectAsync<DTO.Configuration>(sql).ConfigureAwait(false);
                 return awaiter.FirstOrDefault();

@@ -60,6 +60,7 @@
     <Compile Include="Helpers\NpgsqlTimeSpan.cs" />
     <Compile Include="Helpers\PascalCaseConverter.cs" />
     <Compile Include="Helpers\PocoHelper.cs" />
+    <Compile Include="Helpers\ResultsetCache.cs" />
     <Compile Include="Helpers\SqlHelper.cs" />
     <Compile Include="Helpers\TitleCaseConverter.cs" />
     <Compile Include="Helpers\TypeConverter.cs" />

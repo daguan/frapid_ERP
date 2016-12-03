@@ -22,7 +22,7 @@ namespace Frapid.Account.DAL
             {
                 var sql = new Sql("SELECT * FROM account.users");
                 sql.Where("email=@0", email);
-                sql.Limit(db.DatabaseType, 1);
+                sql.Limit(db.DatabaseType, 1, 0, "user_id");
 
                 var awaiter = await db.SelectAsync<User>(sql).ConfigureAwait(false);
                 return awaiter.FirstOrDefault();

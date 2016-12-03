@@ -134,30 +134,24 @@ namespace Frapid.Mapper
             return this.Append(new Sql("AND (" + token + ")", args));
         }
 
-        public Sql Limit(DatabaseType type, int limit)
+        public Sql Limit(DatabaseType type, int limit, int offset, string orderBy)
         {
-            string token = "LIMIT @0";
+            string token = "ORDER BY " + orderBy;
 
             if (type == DatabaseType.SqlServer)
             {
-                token = "FETCH NEXT @0 ROWS ONLY";
+                var builder = new StringBuilder();
+                builder.Append("ORDER BY " + orderBy);
+                builder.Append(" OFFSET @0 ROWS");
+                builder.Append(" FETCH NEXT @1 ROWS ONLY");
+                token = this.ProcessToken(builder.ToString());
+                return this.Append(new Sql(token, offset, limit));
             }
 
+
+            token += " LIMIT @0 OFFSET @1";
             token = this.ProcessToken(token);
-            return this.Append(new Sql(token, limit));
-        }
-
-        public Sql Offset(DatabaseType type, int offset)
-        {
-            string token = "OFFSET @0";
-
-            if (type == DatabaseType.SqlServer)
-            {
-                token = "OFFSET @0 ROWS";
-            }
-
-            token = this.ProcessToken(token);
-            return this.Append(new Sql(token, offset));
+            return this.Append(new Sql(token, limit, offset));
         }
 
         public Sql OrderBy(params object[] columns)
