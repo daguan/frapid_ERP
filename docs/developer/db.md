@@ -27,12 +27,12 @@ It is advised to use [MixERP Sql Bundler Utility](http://github.com/mixerp/sqlbu
 **Conventions**
 
 * do not create a single SQL script and keep everything on it. It is difficult to manage that way.
-* create your own directory structure [similar to frapid](https://github.com/frapid/frapid/tree/master/src/Frapid.Web/db/meta/1.x/1.0/src) and store individual sql files there.
+* create your own directory structure [similar to frapid](https://github.com/frapid/frapid/tree/master/src/Frapid.Web/db/SQL%20Server/meta/1.x/1.0) and store individual sql files there.
 * use SqlBundler.exe to bundle everything together to generate a single SQL file.
 
 **How Sql Bundler Works?**
 
-Create a `.sqlbundle` file (`yaml` format) on your [db directory](https://github.com/frapid/frapid/tree/master/src/Frapid.Web/db/meta/1.x/1.0).
+Create a `.sqlbundle` file (`yaml` format) on your [db directory](https://github.com/frapid/frapid/tree/master/src/Frapid.Web/db/SQL%20Server/meta/1.x/1.0).
 
 ```yaml
 - script-directory : db/1.x/1.0/src
