@@ -32,7 +32,7 @@ It is advised to use [MixERP Sql Bundler Utility](http://github.com/mixerp/sqlbu
 
 **How Sql Bundler Works?**
 
-Create a `.sqlbundle` file (`yaml` format) on your [db directory](https://github.com/frapid/frapid/tree/master/src/Frapid.Web/db/meta/1.x/1.0).
+Create a `.sqlbundle` file (`yaml` format) on your [db directory](https://github.com/frapid/frapid/tree/master/src/Frapid.Web/db/SQL%20Server/meta/1.x/1.0).
 
 ```yaml
 - script-directory : db/1.x/1.0/src
