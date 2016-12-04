@@ -38,8 +38,8 @@ The database menu items can be iterated through using the function `GetMenuItems
 
 **Note**
 
-Since that we are using [Semantic UI](http://semantic-ui.com/collections/menu.html), 
-we have added `stackable menu` classes to the section.
+Since we are using [Semantic UI](http://semantic-ui.com/collections/menu.html), 
+we have added `stackable menu` class to the section.
 
 [Back to Theme Development](theme.md)
 
