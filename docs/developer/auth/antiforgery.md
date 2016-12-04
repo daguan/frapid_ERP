@@ -6,7 +6,7 @@ Since frapid uses JWT (Json Web Tokens) instead of FormsAuthentication for both 
 
 ## When to use AntiForgery attribute?
 
-Not only for authenticated users, but also for the anonymous access frapid uses the request verification token mechanism of ASP.net which enables the application to accept requests only from where it originated. If any of your controller actions accepts ```HTTP POST``` verb, you should decorate your controller class with ```[AntiForgery]```, as shown in the example below.
+Not only for authenticated users, but also for the anonymous access frapid uses the request verification token mechanism of ASP.net which enables the application to accept requests only from where it originated. If any of your controller actions accepts verbs such as ```HTTP POST, PUI, DELETE``` which can alter or change the underlying data, you should decorate your controller class with ```[AntiForgery]```, as shown in the example below.
 
 ```cs
 using System.Text;
