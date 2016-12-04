@@ -51,6 +51,6 @@ path-to\SqlBundler.exe root-path sqlbundle-directory include_sample
 
 **Example**
 
-[https://github.com/frapid/frapid/blob/master/src/Frapid.Web/db/meta/1.x/1.0/rebundle.bat](https://github.com/frapid/frapid/blob/master/src/Frapid.Web/db/meta/1.x/1.0/rebundle.bat)
+[https://github.com/frapid/frapid/blob/master/src/Frapid.Web/db/SQL%20Server/meta/1.x/1.0/rebundle.bat](https://github.com/frapid/frapid/blob/master/src/Frapid.Web/db/SQL%20Server/meta/1.x/1.0/rebundle.bat)
 
 [Back to Developer Documentation](README.md)
