@@ -18,7 +18,7 @@ function gitPull($path, $projectName){
 
 	"Cleaning up $projectName";
 	git clean -n
-	git clean -f -d
+	git clean -fd
 
 	"Pulling $projectName";	
 	git.exe pull origin master
