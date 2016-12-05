@@ -40,3 +40,7 @@ function parseSerializedDate(str) {
     str = str.replace(/[^0-9 +]/g, '');
     return new Date(parseInt(str));
 };
+
+function round(number, decimalPlaces) {    
+    return +(Math.round(number + "e+" + decimalPlaces)  + "e-" + decimalPlaces);
+};
