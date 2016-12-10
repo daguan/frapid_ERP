@@ -1,6 +1,7 @@
 @echo off
 SET builddir=%~dp0
 rmdir "%~dp0..\src\Frapid.Web\bin" /Q /S
+xcopy "%~dp0..\src\Frapid.Web\Resources\_Configs\Assets" "%~dp0..\src\Frapid.Web\Resources\Configs\Assets\" /s/y
 
 if exist "../src/Frapid.Web.sln" (
 	@echo Building Frapid.Web
