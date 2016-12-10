@@ -45,7 +45,7 @@ namespace Frapid.Dashboard.Controllers
                         CurrencySymbol = CultureManager.GetCurrencySymbol(),
                         DatepickerFormat = CultureManager.GetCurrent().DateTimeFormat.ShortDatePattern,
                         DatepickerShowWeekNumber = true,
-                        DatepickerWeekStartDay = (int)CultureManager.GetCurrent().DateTimeFormat.FirstDayOfWeek,
+                        DatepickerWeekStartDay = (int) CultureManager.GetCurrent().DateTimeFormat.FirstDayOfWeek,
                         DatepickerNumberOfMonths = "[2, 3]"
                     });
         }
@@ -64,13 +64,11 @@ namespace Frapid.Dashboard.Controllers
             foreach (var member in members)
             {
                 var items = await member.GetAsync(this.Tenant, meta.OfficeId).ConfigureAwait(true);
-                model = model.Union(items).ToDictionary(k=>k.Key, v=>v.Value);
+                model = model.Union(items).ToDictionary(k => k.Key, v => v.Value);
             }
 
 
             return this.Ok(model);
         }
-
-
     }
 }

@@ -189,3 +189,23 @@ CREATE TABLE core.marital_statuses
 	deleted									boolean DEFAULT(false)
 );
 
+CREATE TABLE core.notifications
+(
+    notification_id                             uuid PRIMARY KEY DEFAULT(gen_random_uuid()),
+    event_timestamp                             TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
+	associated_app							    national character varying(100) NOT NULL REFERENCES core.apps,
+    associated_menu_id                          integer REFERENCES core.menus,
+    private_notification                        boolean NOT NULL DEFAULT(false),
+    to_user_id                                  integer,
+    url                                         national character varying(2000),
+    formatted_text                              national character varying(4000),
+    icon                                        national character varying(100)
+);
+
+CREATE TABLE core.notification_statuses
+(
+    notification_status_id                      uuid PRIMARY KEY DEFAULT(gen_random_uuid()),
+    notification_id                             uuid NOT NULL REFERENCES core.notifications,
+    last_seen_on                                TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
+    seen_by                                     integer NOT NULL
+);

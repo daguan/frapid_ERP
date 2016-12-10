@@ -168,3 +168,26 @@ CREATE TABLE core.marital_statuses
 	audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
 	deleted										bit DEFAULT(0)
 );
+
+CREATE TABLE core.notifications
+(
+    notification_id                             uniqueidentifier PRIMARY KEY DEFAULT(NEWID()),
+    event_timestamp                             DATETIMEOFFSET NOT NULL DEFAULT(GETDATE()),
+	associated_app								national character varying(100) NOT NULL REFERENCES core.apps,
+    associated_menu_id                          integer REFERENCES core.menus,
+    private_notification                        bit NOT NULL DEFAULT(0),
+    to_user_id                                  integer,
+    url                                         national character varying(2000),
+    formatted_text                              national character varying(4000),
+    icon                                        national character varying(100)    
+);
+
+CREATE TABLE core.notification_statuses
+(
+    notification_status_id                      uniqueidentifier PRIMARY KEY DEFAULT(NEWID()),
+    notification_id                             uniqueidentifier NOT NULL REFERENCES core.notifications,
+    last_seen_on                                DATETIMEOFFSET NOT NULL DEFAULT(GETDATE()),
+    seen_by                                     integer NOT NULL
+);
+
+GO

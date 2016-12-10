@@ -11,14 +11,14 @@ namespace Frapid.Web
             routes.MapMvcAttributeRoutes();
             routes.MapRoute
                 (
-                 "Dashboard",
-                 "dashboard/{controller}/{action}/{id}",
-                 new
-                 {
-                     controller = "Dashboard",
-                     action = "Index",
-                     id = UrlParameter.Optional
-                 });
+                    "Dashboard",
+                    "dashboard/{controller}/{action}/{id}",
+                    new
+                    {
+                        controller = "Dashboard",
+                        action = "Index",
+                        id = UrlParameter.Optional
+                    });
         }
     }
 }

@@ -141,9 +141,9 @@ namespace Frapid.WebsiteBuilder.DAL
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
                 var sql = new Sql("SELECT * FROM website.published_content_view");
-                sql.Where("LOWER(title) LIKE =@0", query);
-                sql.Where("LOWER(alias) LIKE =@0", query);
-                sql.And("LOWER(contents) LIKE =@0", query);
+                sql.Where("LOWER(title) LIKE @0", query);
+                sql.And("LOWER(alias) LIKE @0", query);
+                sql.And("LOWER(contents) LIKE @0", query);
 
                 return await db.SelectAsync<PublishedContentView>(sql).ConfigureAwait(false);
             }

@@ -1,7 +1,10 @@
 ﻿using Frapid.DataAccess;
+using Frapid.Mapper.Decorators;
 
 namespace Frapid.Dashboard.DTO
 {
+    [TableName("core.menus")]
+    [PrimaryKey("menu_id")]
     public class Menu:IPoco
     {
         public int MenuId { get; set; }

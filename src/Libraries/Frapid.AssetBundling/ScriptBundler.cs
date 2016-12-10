@@ -7,8 +7,7 @@ namespace Frapid.AssetBundling
 {
     public class ScriptBundler : Bundler
     {
-        public ScriptBundler(ILogger logger, Asset asset)
-            : base(logger, asset)
+        public ScriptBundler(ILogger logger, Asset asset): base(logger, asset)
         {
         }
 

@@ -28,7 +28,6 @@ namespace Frapid.Web.Controllers
 
         private string GetContents(string key)
         {
-            //Disabling cache on development environment
             if (this.IsDevelopment())
             {
                 return null;

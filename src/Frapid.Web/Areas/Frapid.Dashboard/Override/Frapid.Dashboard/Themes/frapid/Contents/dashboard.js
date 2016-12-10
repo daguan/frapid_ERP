@@ -27,7 +27,7 @@ $.getJSON("/dashboard/custom-variables", function (response) {
 });
 
 jQuery.ajaxSetup({
-  cache: true
+    cache: true
 });
 
 var lastPage;
@@ -52,9 +52,9 @@ frapidApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
                 var path = '/dashboard/' + url.url;
 
 
-                var qs = [];
+                const qs = [];
 
-                for (var q in url) {
+                for (let q in url) {
                     if (url.hasOwnProperty(q)) {
                         if (q === "url") {
                             continue;;
@@ -103,7 +103,7 @@ frapidApp.run(function ($rootScope, $location) {
 });
 var menuBuilder = {
     build: function (app, container, menuId) {
-        var myMenus = window.Enumerable.From(window.appMenus)
+        const myMenus = window.Enumerable.From(window.appMenus)
             .Where(function (x) { return x.AppName === app; })
             .Where(function (x) { return x.ParentMenuId === menuId; })
             .OrderBy(function (x) { return x.Sort; })
@@ -120,8 +120,8 @@ var menuBuilder = {
         };
 
         $.each(myMenus, function () {
-            var anchor = $("<a />");
-            var span = $("<span/>");
+            const anchor = $("<a />");
+            const span = $("<span/>");
             anchor.addClass("item");
             anchor.attr("data-menu-id", this.MenuId);
             anchor.attr("data-app-name", this.AppName);
@@ -131,7 +131,7 @@ var menuBuilder = {
             span.html(this.MenuName);
 
             if (this.Icon) {
-                var i = $("<i/>");
+                const i = $("<i/>");
                 i.addClass(this.Icon);
                 i.addClass("icon");
 
@@ -154,10 +154,10 @@ var menuBuilder = {
 
 function buildMenus() {
     setTimeout(function () {
-        var target = $('[data-scope="app-menus"]').html("");
+        const target = $('[data-scope="app-menus"]').html("");
         var path = window.overridePath || window.location.pathname;
         if (window.menuBuilder) {
-            var application = window.Enumerable.From(window.appMenus)
+            const application = window.Enumerable.From(window.appMenus)
                 .Where(function (x) { return x.Url === path; })
                 .FirstOrDefault();
 
@@ -174,11 +174,11 @@ function buildMenus() {
 (function () {
     function loadMenus() {
         function request() {
-            var url = "/dashboard/my/menus";
+            const url = "/dashboard/my/menus";
             return window.getAjaxRequest(url);
         };
 
-        var ajax = request();
+        const ajax = request();
 
         ajax.success(function (response) {
             window.appMenus = response.Result;
@@ -191,13 +191,13 @@ function buildMenus() {
 
 
 function initalizeSelectApis() {
-    var candidates = $("select[data-api]");
+    const candidates = $("select[data-api]");
 
     candidates.each(function () {
         var el = $(this);
-        var apiUrl = el.attr("data-api");
-        var valueField = el.attr("data-api-value-field");
-        var keyField = el.attr("data-api-key-field");
+        const apiUrl = el.attr("data-api");
+        const valueField = el.attr("data-api-value-field");
+        const keyField = el.attr("data-api-key-field");
 
         window.ajaxDataBind(apiUrl, el, null, null, null, function () {
             var selectedValue = el.attr("data-api-selected-value");
@@ -211,7 +211,7 @@ function initalizeSelectApis() {
 
             if (selectedValues) {
                 setTimeout(function () {
-                    var values = selectedValues.split(",");
+                    const values = selectedValues.split(",");
                     el.dropdown("set selected", values);
                 }, 100);
             };
@@ -261,3 +261,123 @@ function setBackground(image) {
     });
 
 };
+
+$('.notification.item').popup({
+    inline: true,
+    hoverable: false,
+    position: 'bottom left',
+    popup: $('.notification.popup'),
+    on: 'click',
+    closable: false,
+    delay: {
+        show: 300,
+        hide: 800
+    }
+});
+
+function addNotification(model) {
+    function getIcon(icon, fromApp) {
+        return "user";
+    };
+
+    function getEl() {
+        const el = $("<div class='notification item' />");
+        el.attr("data-notification-id", model.NotificationId);
+        el.attr("event-timestamp", model.EventTimestampOffset);
+        el.attr("data-associated-app", model.AssociatedApp);
+        el.attr("data-associated-menu-id", model.AssociatedMenuId);
+        el.attr("data-private", model.PrivateNotification);
+        el.attr("data-url", model.Url);
+
+        const appIcon = getIcon(model.Icon, model.AssociatedApp);
+
+        const app = $("<div class='app' />");
+        const icon = $("<div class='icon' />");
+        const i = $("<i class='icon' />");
+        i.addClass(appIcon).appendTo(icon);
+        icon.appendTo(app);
+
+        app.appendTo(el);
+
+        const message = $("<a class='message' />");
+        message.attr("href", model.Url);
+        message.html(model.FormattedText);
+
+        const timestamp = $("<span class='timestamp'>Just Now</span>");
+        timestamp.attr("data-date", model.EventTimestampOffset);
+
+        timestamp.appendTo(message);
+
+        message.appendTo(el);
+
+        return el;
+    };
+
+    const target = $(".notification.popup .items");
+    target.find(".placeholder").remove();
+
+
+    window.displayNotification(model.FormattedText, "info");
+
+    const el = getEl();
+
+    target.prepend(el);
+
+    const totalItems = target.find(".notification.item").length;
+
+    if (totalItems) {
+        const sticker = $("<div class='sticker' />");
+        sticker.html(totalItems);
+        $(".right.menu .notification.item").append(sticker);
+    } else {
+        $(".right.menu .notification.item .sticker").remove();
+    };
+};
+
+const notifcationHub = $.connection.notificationHub;
+
+$(function () {
+    notifcationHub.client.notificationReceived = function (message) {
+        addNotification(message);
+    };
+
+    $.connection.hub.start().done(function () {
+
+    });
+});
+
+function sayHi() {
+    const greetings =
+    [
+        "It's good to see you again, {0}!",
+        "Nice to see you, {0}!",
+        "How was your day, {0}?",
+        "Welcome back {0}.",
+        "Hi!",
+        "There you are!",
+        "We missed you!!!",
+        "You're back with a bang!!!",
+        "You're awesome. ;)"
+    ];
+
+    const haveWeMet = localStorage.getItem("haveWeMet");
+
+    if (haveWeMet) {
+        return;
+    };
+
+    localStorage.setItem("haveWeMet", true);
+
+    var name = "";
+
+    if (window.metaView) {
+        name = window.metaView.Name;
+    };
+
+const hello = greetings[Math.floor(Math.random() * greetings.length)];
+    window.displayMessage(window.stringFormat(hello, name), "success");
+};
+
+setTimeout(function() {
+    sayHi();
+}, 1000);

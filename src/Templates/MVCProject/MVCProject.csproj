@@ -175,7 +175,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>start xcopy /y /r $(ProjectDir)\bin\*.dll $(ProjectDir)..\..\bin</PostBuildEvent>
+    <PostBuildEvent>start xcopy /y /r "$(ProjectDir)\bin\*.dll" "$(ProjectDir)..\..\bin"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

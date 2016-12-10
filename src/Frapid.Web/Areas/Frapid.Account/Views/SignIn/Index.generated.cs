@@ -231,14 +231,6 @@ WriteLiteral("></script>\r\n    <script");
 
 WriteLiteral(" src=\"/Scripts/jssha1.5/src/sha.js\"");
 
-WriteLiteral("></script>\r\n    <script");
-
-WriteLiteral(" src=\"/Scripts/frapid/utilities/form.js\"");
-
-WriteLiteral("></script>\r\n    <script");
-
-WriteLiteral(" src=\"/Scripts/frapid/utilities/validator.js\"");
-
 WriteLiteral("></script>\r\n</head>\r\n<body");
 
 WriteLiteral(" id=\"SignInBody\"");
@@ -381,14 +373,14 @@ WriteLiteral(" type=\"hidden\"");
 
 WriteLiteral(" id=\"ChallengeInputHidden\"");
 
-WriteAttribute("value", Tuple.Create("\r\n                           value=\"", 3401), Tuple.Create("\"", 3453)
+WriteAttribute("value", Tuple.Create("\r\n                           value=\"", 3270), Tuple.Create("\"", 3322)
             
-            #line 76 "..\..\Views\SignIn\Index.cshtml"
-, Tuple.Create(Tuple.Create("", 3437), Tuple.Create<System.Object, System.Int32>(Model.Challenge
+            #line 74 "..\..\Views\SignIn\Index.cshtml"
+, Tuple.Create(Tuple.Create("", 3306), Tuple.Create<System.Object, System.Int32>(Model.Challenge
             
             #line default
             #line hidden
-, 3437), false)
+, 3306), false)
 );
 
 WriteLiteral(" />\r\n                </div>\r\n                <div");
@@ -505,7 +497,7 @@ WriteLiteral(">Reset My Password</a>\r\n            </div>\r\n        </div>\r\n
 WriteLiteral("    ");
 
             
-            #line 110 "..\..\Views\SignIn\Index.cshtml"
+            #line 108 "..\..\Views\SignIn\Index.cshtml"
 Write(Html.GetAntiForgeryToken(this.Request.Url));
 
             
@@ -514,7 +506,7 @@ Write(Html.GetAntiForgeryToken(this.Request.Url));
 WriteLiteral("\r\n    <script>\r\n        var fbAppId = \'");
 
             
-            #line 112 "..\..\Views\SignIn\Index.cshtml"
+            #line 110 "..\..\Views\SignIn\Index.cshtml"
                   Write(Model.FacebookAppId);
 
             
@@ -523,13 +515,13 @@ WriteLiteral("\r\n    <script>\r\n        var fbAppId = \'");
 WriteLiteral("\';\r\n        var fbScope = \'");
 
             
-            #line 113 "..\..\Views\SignIn\Index.cshtml"
+            #line 111 "..\..\Views\SignIn\Index.cshtml"
                   Write(Model.FacebookScope);
 
             
             #line default
             #line hidden
-WriteLiteral("\';\r\n    </script>\r\n    <div");
+WriteLiteral("\';\r\n        localStorage.removeItem(\"haveWeMet\");\r\n    </script>\r\n    <div");
 
 WriteLiteral(" id=\"fb-root\"");
 
@@ -540,13 +532,13 @@ WriteLiteral(" src=\"/Areas/Frapid.Account/Scripts/Account/SignIn/default.js\"")
 WriteLiteral("></script>\r\n\r\n");
 
             
-            #line 118 "..\..\Views\SignIn\Index.cshtml"
+            #line 117 "..\..\Views\SignIn\Index.cshtml"
     
             
             #line default
             #line hidden
             
-            #line 118 "..\..\Views\SignIn\Index.cshtml"
+            #line 117 "..\..\Views\SignIn\Index.cshtml"
      if (!string.IsNullOrWhiteSpace(Model.FacebookAppId))
     {
 
@@ -562,7 +554,7 @@ WriteLiteral(" src=\"/Areas/Frapid.Account/Scripts/Account/SignIn/facebook.js\""
 WriteLiteral("></script>\r\n");
 
             
-            #line 122 "..\..\Views\SignIn\Index.cshtml"
+            #line 121 "..\..\Views\SignIn\Index.cshtml"
     }
 
             
@@ -571,13 +563,13 @@ WriteLiteral("></script>\r\n");
 WriteLiteral("\r\n");
 
             
-            #line 124 "..\..\Views\SignIn\Index.cshtml"
+            #line 123 "..\..\Views\SignIn\Index.cshtml"
     
             
             #line default
             #line hidden
             
-            #line 124 "..\..\Views\SignIn\Index.cshtml"
+            #line 123 "..\..\Views\SignIn\Index.cshtml"
      if (!string.IsNullOrWhiteSpace(Model.GoogleSigninClientId))
     {
 
@@ -593,7 +585,7 @@ WriteLiteral(" src=\"/Areas/Frapid.Account/Scripts/Account/SignIn/google.js\"");
 WriteLiteral("></script>\r\n");
 
             
-            #line 128 "..\..\Views\SignIn\Index.cshtml"
+            #line 127 "..\..\Views\SignIn\Index.cshtml"
     }
 
             

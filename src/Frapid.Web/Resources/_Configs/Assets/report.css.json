@@ -1,0 +1,10 @@
+﻿{
+  "Type": "StyleSheet",
+  "BundleName": "report.css",
+  "IsDevelopment": true,
+  "Files": [
+    "~/Scripts/semantic-ui/components/icon.css",
+    "~/Stylesheets/report.css"
+  ],
+  "CacheDurationInMinutes": 10080
+}

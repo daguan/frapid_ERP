@@ -15,7 +15,7 @@ namespace Frapid.Web
         {
             try
             {
-                var iType = typeof (IStartupRegistration);
+                var iType = typeof(IStartupRegistration);
                 var members =
                     AppDomain.CurrentDomain.GetAssemblies()
                         .SelectMany(x => x.GetTypes())

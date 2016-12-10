@@ -1,8 +1,11 @@
 ﻿using System;
 using Frapid.DataAccess;
+using Frapid.Mapper.Decorators;
 
 namespace Frapid.Dashboard.DTO
 {
+    [TableName("core.apps")]
+    [PrimaryKey("app_name", false, false)]
     public class App : IPoco
     {
         public int AppId { get; set; }

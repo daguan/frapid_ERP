@@ -104,8 +104,8 @@
       <HintPath>packages\JavaScriptEngineSwitcher.Core.2.1.2\lib\net451\JavaScriptEngineSwitcher.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Mapster, Version=2.5.0.0, Culture=neutral, PublicKeyToken=2f39883af23c29a8, processorArchitecture=MSIL">
-      <HintPath>packages\Mapster.2.5.0\lib\net45\Mapster.dll</HintPath>
+    <Reference Include="Mapster, Version=2.6.1.0, Culture=neutral, PublicKeyToken=2f39883af23c29a8, processorArchitecture=MSIL">
+      <HintPath>packages\Mapster.2.6.1\lib\net45\Mapster.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />

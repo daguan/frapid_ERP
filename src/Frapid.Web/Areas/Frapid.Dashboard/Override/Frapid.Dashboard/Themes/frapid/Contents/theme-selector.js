@@ -5,12 +5,12 @@ function setTheme(el){
         return window.getAjaxRequest(url, "POST");
     };
 
-    var theme = $(el).text();
+    const theme = $(el).text();
     if(!theme){
         return;
     };
     
-    var ajax = request(theme);
+    const ajax = request(theme);
     
     ajax.success(function(){
         window.location = window.location;
@@ -19,17 +19,17 @@ function setTheme(el){
 
 function loadThemes(){
     function append(theme){
-        var item = $("<a onclick='setTheme(this);' class='item' />");
+        const item = $("<a onclick='setTheme(this);' class='item' />");
         item.text(theme);
         $(".theme.selector .scrolling.menu").append(item);
     };
     
-    function request(){
-        var url = "/dashboard/my/themes";
+    function request() {
+        const url = "/dashboard/my/themes";
         return window.getAjaxRequest(url);
     };
     
-    var ajax = request();
+    const ajax = request();
     
     ajax.success(function(response){
         $.each(response, function(){

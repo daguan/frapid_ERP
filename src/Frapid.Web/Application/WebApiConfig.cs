@@ -14,29 +14,30 @@ namespace Frapid.Web
             Log.Information("Registering Web API.");
             config.SuppressDefaultHostAuthentication();
             config.MapHttpAttributeRoutes();
-            config.Routes.MapHttpRoute
-                (
-                 "VersionedApi",
-                 "api/v1.0/{schema}/{controller}/{action}/{id}",
-                 new
-                 {
-                     id = RouteParameter.Optional
-                 });
-            config.Routes.MapHttpRoute
-                (
-                 "DefaultApi",
-                 "api/{schema}/{controller}/{action}/{id}",
-                 new
-                 {
-                     id = RouteParameter.Optional
-                 });
 
-            if(FrapidApiController.GetMembers() != null)
+            config.Routes.MapHttpRoute
+                (
+                    "VersionedApi",
+                    "api/v1.0/{schema}/{controller}/{action}/{id}",
+                    new
+                    {
+                        id = RouteParameter.Optional
+                    });
+
+            config.Routes.MapHttpRoute
+                (
+                    "DefaultApi",
+                    "api/{schema}/{controller}/{action}/{id}",
+                    new
+                    {
+                        id = RouteParameter.Optional
+                    });
+
+            if (FrapidApiController.GetMembers() != null)
             {
                 var version = HttpRuntime.IISVersion;
 
-                if(version != null &&
-                   version < new Version("8.0.0.0"))
+                if (version != null && version < new Version("8.0.0.0"))
                 {
                     config.Services.Replace(typeof(IAssembliesResolver), new ClassicAssemblyResolver());
                 }

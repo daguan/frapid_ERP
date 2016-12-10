@@ -1,9 +1,7 @@
 ﻿using System.IO;
-using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
-using Frapid.Framework.Extensions;
 
 namespace Frapid.Dashboard.Controllers
 {

@@ -90,28 +90,20 @@ WriteLiteral("></script>\r\n    <script");
 
 WriteLiteral(" src=\"/Scripts/jssha1.5/src/sha.js\"");
 
-WriteLiteral("></script>\r\n    <script");
-
-WriteLiteral(" src=\"/Scripts/frapid/utilities/form.js\"");
-
-WriteLiteral("></script>\r\n    <script");
-
-WriteLiteral(" src=\"/Scripts/frapid/utilities/validator.js\"");
-
 WriteLiteral("></script>\r\n    <title>\r\n");
 
 WriteLiteral("        ");
 
             
-            #line 18 "..\..\Views\SignOut\Index.cshtml"
+            #line 16 "..\..\Views\SignOut\Index.cshtml"
    Write(Titles.SignIn);
 
             
             #line default
             #line hidden
 WriteLiteral("\r\n    </title>\r\n</head>\r\n<body>\r\nPlease wait\r\n\r\n<script>\r\n    localStorage.remove" +
-"Item(\"access_token\");\r\n    document.location = \"/account/sign-in\";\r\n</script>\r\n<" +
-"/body>\r\n</html>");
+"Item(\"access_token\");\r\n    document.location = \"/account/sign-in\";\r\n    localSto" +
+"rage.removeItem(\"haveWeMet\");\r\n</script>\r\n</body>\r\n</html>");
 
         }
     }
