@@ -33,7 +33,6 @@
 <body>
     <div class="background slider active"></div>
     <div class="background slider"></div>
-
     <div class="ui flowing notification popup top left transition hidden">
         <div class="heading">
             <div class="title">Notifications</div>
@@ -54,6 +53,11 @@
 
         </div>
         <div class="right menu">
+            <div class="search item">
+                <div class="ui input">
+                    <input type="text" data-feature-search placeholder="CONTROL + F" />
+                </div>
+            </div>
             <a class="notification item" href="javascript:void(0)" title="Notifications">
                 <i class="alarm icon"></i>
             </a>
@@ -69,6 +73,22 @@
             </a>
         </div>
     </div>
+    <div class="ui find feature" style="display: none;">
+        <div class="close">
+            <div class="left">
+                Search Results
+            </div>
+            <div class="right">
+                <a href="javascript:void(0)" onclick="$('.ui.find.feature').fadeOut(500);">
+                    <i class="delete icon"></i>
+                </a>
+            </div>
+        </div>
+        <div class="results">
+
+        </div>
+    </div>
+
     <div id="dashboard-container" class="ui basic attached segment" style="height: 100%;">
         <div data-ng-view>
             @RenderBody()

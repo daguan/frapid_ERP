@@ -108,6 +108,8 @@ html, body, .jstree {
 #dashboard-container {
     height: 100% !important;
     border: none !important;
+    margin-top: 3.5em;
+    z-index: 1;
 }
 
 #editor {
@@ -202,10 +204,6 @@ label, .ui.toggle.checkbox label {
     cursor: pointer;
 }
 
-.dashboard.menu {
-    height: 4em;
-}
-
 input[readonly], input[disabled], textarea[readonly], textarea[disabled], select[readonly], select[disabled], .dropdown.disabled {
     background-color: #f0f0f0 !important;
     cursor: not-allowed;
@@ -234,15 +232,29 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
 }
 
 .dashboard.menu {
-    background-color: transparent;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4em;
+    background: #3a3a3a !important;
     border-style: none !important;
-    background-image: url('/Static/images/transparent50.png') !important;
-    background-repeat: repeat;
+    z-index: 3;
 }
 
-    .dashboard.menu .item {
+    .dashboard.menu>.item,
+    .dashboard.menu>.menu>.item
+     {
         color: #f0f0f0 !important;
+        border-right: 1px solid #444 !important;
+        cursor: pointer;
     }
+
+        .dashboard.menu>.item,
+        .dashboard.menu>.menu>.item:not(.search):hover
+         {
+            background: #333 !important;
+        }
+
 
 #PhoneMenu {
     padding: 0.5em;
@@ -256,7 +268,11 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
     text-align: center;
 }
 
-.dashboard.menu .item, .dashboard.menu .item span {
+.dashboard.menu>.item, 
+.dashboard.menu>.menu>.item,
+.dashboard.menu>.item span,
+.dashboard.menu>.menu>.item span
+ {
     text-transform: uppercase !important;
     font-size: 0.9em;
     letter-spacing: 0.09em;
@@ -348,9 +364,9 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
         border-bottom: 1px solid #ccc;
     }
 
-    .notification.popup > .heading a:hover{
-        color: #E74C3C;
-    }
+        .notification.popup > .heading a:hover {
+            color: #E74C3C;
+        }
 
         .notification.popup > .heading .title,
         .notification.popup > .heading .mark.all.as.read {
@@ -362,47 +378,47 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
             text-align: right !important;
         }
 
-        .notification.popup .items .item {
-            display: inline-flex;
-            padding: 1em;
-            width: 100%;
+    .notification.popup .items .item {
+        display: inline-flex;
+        padding: 1em;
+        width: 100%;
+    }
+
+        .notification.popup .items .item:nth-child(even) {
+            background: #f5f5f5;
         }
 
-            .notification.popup .items .item:nth-child(even) {
-                background: #f5f5f5;
-            }
-
-            .notification.popup .items .item:nth-child(odd) {
-                background: #efefef;
-            }
-
-            .notification.popup .items .item:not(:last-of-type) {
-                border-bottom: 1px solid #ccc;
-            }
-
-        .notification.popup .items .app {
-            font-size: 1.4em;
-            color: #eee;
-            margin-right: 0.5em;
+        .notification.popup .items .item:nth-child(odd) {
+            background: #efefef;
         }
 
-            .notification.popup .items .app .icon {
-                width: 2em;
-                height: 2em;
-                padding: 0.3em 0em;
-                background: #777;
-            }
-
-        .notification.popup .items .timestamp {
-            font-size: 0.7em;
-            color: #888;
-            text-transform: uppercase;
-            display: block;
+        .notification.popup .items .item:not(:last-of-type) {
+            border-bottom: 1px solid #ccc;
         }
 
-        .notification.popup .items .message {
-            display: block;
+    .notification.popup .items .app {
+        font-size: 1.4em;
+        color: #eee;
+        margin-right: 0.5em;
+    }
+
+        .notification.popup .items .app .icon {
+            width: 2em;
+            height: 2em;
+            padding: 0.3em 0em;
+            background: #777;
         }
+
+    .notification.popup .items .timestamp {
+        font-size: 0.7em;
+        color: #888;
+        text-transform: uppercase;
+        display: block;
+    }
+
+    .notification.popup .items .message {
+        display: block;
+    }
 
     .notification.popup a {
         color: #444;
@@ -412,3 +428,96 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
         .notification.popup a:hover {
             color: #222;
         }
+
+.find {
+    position: fixed;
+    top: 5em;
+    right: 0.8em;
+    color: #eee;
+    text-transform: uppercase;
+    font-size: 0.78em;
+    z-index: 2000 !important;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+    .find .results {
+        max-height: 500px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .find .result {
+        width: 460px;
+        background: #333;
+        display: flex;
+        border-bottom: 1px solid #444;
+        cursor: pointer;
+        padding: 1.2em;
+    }
+
+        .find .result.active,
+        .find .result:hover {
+            background: #222;
+        }
+
+            .find .result.active .description,
+            .find .result:hover .description {
+                color: #ddd !important;
+            }
+
+        .find .result .feature {
+            padding-left: 1em;
+            font-size: 1.1em;
+            color: #eee !important;
+        }
+
+            .find .result .feature .breadcrumb {
+                color: #aaa;
+                font-weight: 400;
+                letter-spacing: 0;
+                font-size: 0.9em;
+                display: block;
+            }
+
+
+        .find .result .icon {
+            font-size: 1.2em;
+        }
+
+    .find .close {
+        background: #2a2a2a !important;
+        padding: 1em;
+        border-bottom: 1px solid #444;
+        border-radius: 0.5em 0.5em 0 0;
+        letter-spacing: 0.02em;
+        font-size: 1.3em;
+    }
+
+        .find .close .left {
+            display: inline-block;
+            width: 50%;
+            text-align: left;
+        }
+
+        .find .close .right {
+            display: inline-block;
+            width: 50%;
+            text-align: right;
+            font-size: 0.7em;
+        }
+
+        .find .close a {
+            color: #eee !important;
+        }
+
+input[data-feature-search] {
+    background: #444 !important;
+    border: none !important;
+    color: #eee !important;
+    padding: 1em !important;
+    text-transform: uppercase;
+    font-size: 0.87em !important;
+    width: 220px;
+    letter-spacing: 1px;
+}

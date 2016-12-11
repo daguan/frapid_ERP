@@ -35,17 +35,6 @@ namespace Frapid.Dashboard.Hubs
             return base.OnConnected();
         }
 
-        public override Task OnDisconnected(bool stopCalled)
-        {
-            string connectionId = this.Context.ConnectionId;
-
-            UserInfo info;
-
-            Connections.TryRemove(connectionId, out info);
-
-            return base.OnDisconnected(stopCalled);
-        }
-
         public static void Send(string tenant, Notification message)
         {
             var users = GetAllRecipients(tenant);
