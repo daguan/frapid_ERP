@@ -24,7 +24,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         [MenuPolicy(OverridePath = "/dashboard/website/contents")]
         public async Task<ActionResult> ManageAsync(int contentId = 0)
         {
-            var model = await Contents.GetAsync(this.Tenant, contentId).ConfigureAwait(false) ?? new Content();
+            var model = await Contents.GetAsync(this.Tenant, contentId).ConfigureAwait(true) ?? new Content();
             return this.FrapidView(this.GetRazorView<AreaRegistration>("Content/Manage.cshtml", this.Tenant), model);
         }
     }

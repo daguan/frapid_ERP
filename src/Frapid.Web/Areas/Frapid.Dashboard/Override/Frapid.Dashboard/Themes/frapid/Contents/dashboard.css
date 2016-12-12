@@ -148,28 +148,22 @@ html, body, .jstree {
         }
 
             .apps > .item > .app > div.icon i {
-                text-shadow: 0.3em 0.2em 3.5em rgba(0, 0, 0, 0.7) !important;
+                text-shadow: 0.1em 0.1em 0.2em rgba(0, 0, 0, 0.4) !important;
             }
 
             .apps > .item > .app > div.icon .circular.icon {
                 border-radius: 0.5em !important;
-                box-shadow: 0.3em 0.3em 0.7em #555;
                 margin-bottom: 0.2em;
             }
 
 
         .apps > .item > .app > span {
-            color: #000;
-            text-shadow: 0 0 0.6em white;
+            color: #fff;
+            text-shadow: 1px 1px 0.5em #000;
             text-transform: uppercase;
             font-size: 0.87em;
+            font-weight: normal;
         }
-
-#PhoneMenu .item:hover, #PhoneMenu .item:active, #PhoneMenu .item:focus {
-    box-shadow: inset 0 0 9em 9em rgba(255, 255, 255, 0.3);
-    border: 1px solid rgba(150, 150, 150, 0.1);
-    outline: none;
-}
 
     #PhoneMenu .item:hover i {
         transition: all 0.3s ease;
@@ -222,6 +216,7 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
 }
 
 .background.slider {
+    filter: grayscale(70%);
     position: fixed;
     top: 0;
     left: 0;
@@ -241,17 +236,15 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
     z-index: 3;
 }
 
-    .dashboard.menu>.item,
-    .dashboard.menu>.menu>.item
-     {
+    .dashboard.menu > .item,
+    .dashboard.menu > .menu > .item {
         color: #f0f0f0 !important;
         border-right: 1px solid #444 !important;
         cursor: pointer;
     }
 
-        .dashboard.menu>.item,
-        .dashboard.menu>.menu>.item:not(.search):hover
-         {
+        .dashboard.menu > .item,
+        .dashboard.menu > .menu > .item:not(.search):hover {
             background: #333 !important;
         }
 
@@ -268,11 +261,10 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
     text-align: center;
 }
 
-.dashboard.menu>.item, 
-.dashboard.menu>.menu>.item,
-.dashboard.menu>.item span,
-.dashboard.menu>.menu>.item span
- {
+.dashboard.menu > .item,
+.dashboard.menu > .menu > .item,
+.dashboard.menu > .item span,
+.dashboard.menu > .menu > .item span {
     text-transform: uppercase !important;
     font-size: 0.9em;
     letter-spacing: 0.09em;

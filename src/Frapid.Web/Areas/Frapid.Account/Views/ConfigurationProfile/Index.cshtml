@@ -53,6 +53,14 @@
             $.cachedScript("/assets/js/scrudfactory-form.js");
         });
     });
+
+    $(document).on("viewready", function() {
+        const rows = $("#ScrudView tbody tr").length;
+
+        if (rows) {
+            $("#AddNewButton").remove();
+        };
+    });
 </script>
 
 <div id="ScrudFactoryForm"></div>

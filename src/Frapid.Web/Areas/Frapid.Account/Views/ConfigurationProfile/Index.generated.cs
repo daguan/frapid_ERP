@@ -54,18 +54,21 @@ WriteLiteral("\r\n<script>\r\n    var scrudFactory = new Object();\r\n\r\n    sc
 "files\";\r\n\r\n    scrudFactory.excludedColumns = [\"audit_user_id\", \"audit_ts\"];\r\n\r\n" +
 "    scrudFactory.allowDelete = true;\r\n    scrudFactory.allowEdit = true;\r\n\r\n    " +
 "scrudFactory.live = \"ProfileName\";\r\n\r\n    scrudFactory.card = {\r\n        header:" +
-" \"profile_name\",\r\n        meta: \"defult_role\",\r\n        description: \"default_of" +
-"fice\"\r\n    };\r\n\r\n    scrudFactory.keys = [\r\n        {\r\n            property: \"Re" +
-"gistrationOfficeId\",\r\n            url: \'/api/forms/core/offices/display-fields\'," +
-"\r\n            data: null,\r\n            valueField: \"Key\",\r\n            textField" +
-": \"Value\"\r\n        },\r\n        {\r\n            property: \"RegistrationRoleId\",\r\n " +
-"           url: \'/api/forms/account/roles/display-fields\',\r\n            data: nu" +
-"ll,\r\n            valueField: \"Key\",\r\n            textField: \"Value\"\r\n        }\r\n" +
-"    ];\r\n\r\n    $.get(\'/ScrudFactory/View.html\', function (view) {\r\n        $.get(" +
-"\'/ScrudFactory/Form.html\', function (form) {\r\n            $(\"#ScrudFactoryView\")" +
-".html(view);\r\n            $(\"#ScrudFactoryForm\").html(form);\r\n            $.cach" +
-"edScript(\"/assets/js/scrudfactory-view.js\");\r\n            $.cachedScript(\"/asset" +
-"s/js/scrudfactory-form.js\");\r\n        });\r\n    });\r\n</script>\r\n\r\n<div");
+" \"ProfileName\",\r\n        meta: \"DefultRole\",\r\n        description: \"DefaultOffic" +
+"e\"\r\n    };\r\n\r\n    scrudFactory.keys = [\r\n        {\r\n            property: \"Regis" +
+"trationOfficeId\",\r\n            url: \'/api/forms/core/offices/display-fields\',\r\n " +
+"           data: null,\r\n            valueField: \"Key\",\r\n            textField: \"" +
+"Value\"\r\n        },\r\n        {\r\n            property: \"RegistrationRoleId\",\r\n    " +
+"        url: \'/api/forms/account/roles/display-fields\',\r\n            data: null," +
+"\r\n            valueField: \"Key\",\r\n            textField: \"Value\"\r\n        }\r\n   " +
+" ];\r\n\r\n    $.get(\'/ScrudFactory/View.html\', function (view) {\r\n        $.get(\'/S" +
+"crudFactory/Form.html\', function (form) {\r\n            $(\"#ScrudFactoryView\").ht" +
+"ml(view);\r\n            $(\"#ScrudFactoryForm\").html(form);\r\n            $.cachedS" +
+"cript(\"/assets/js/scrudfactory-view.js\");\r\n            $.cachedScript(\"/assets/j" +
+"s/scrudfactory-form.js\");\r\n        });\r\n    });\r\n\r\n    $(document).on(\"viewready" +
+"\", function() {\r\n        const rows = $(\"#ScrudView tbody tr\").length;\r\n\r\n      " +
+"  if (rows) {\r\n            $(\"#AddNewButton\").remove();\r\n        };\r\n    });\r\n</" +
+"script>\r\n\r\n<div");
 
 WriteLiteral(" id=\"ScrudFactoryForm\"");
 

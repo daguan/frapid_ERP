@@ -404,7 +404,7 @@ namespace Frapid.WebApi.DataAccess
                 return null;
             }
 
-            var primaryKeyValue = item[this.PrimaryKey.ToPascalCase()];
+            var primaryKeyValue = item.FirstOrDefault(x => x.Key.ToPascalCase().Equals(this.PrimaryKey.ToPascalCase())).Value;
 
             if (primaryKeyValue != null)
             {
