@@ -42,7 +42,7 @@ namespace Frapid.Reports.Helpers
                     {
                         if (dataSource.Data.Columns.Contains(column))
                         {
-                            string value = dataSource.Data.Rows[0][column].ToString();
+                            string value = FormattingHelper.GetFormattedValue(dataSource.Data.Rows[0][column]);
                             expression = expression.Replace(word, value);
                         }
                     }
@@ -67,7 +67,7 @@ namespace Frapid.Reports.Helpers
                 var cache = new DefaultCacheFactory();
                 var dictionary = cache.Get<Dictionary<string, object>>(cacheKey);
 
-                if (dictionary !=null && dictionary.ContainsKey(key))
+                if (dictionary != null && dictionary.ContainsKey(key))
                 {
                     var value = dictionary?[key];
 

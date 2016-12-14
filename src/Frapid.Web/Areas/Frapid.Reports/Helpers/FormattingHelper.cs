@@ -31,6 +31,5 @@ namespace Frapid.Reports.Helpers
 
             return HttpUtility.HtmlEncode(cellValue);
         }
-
     }
 }

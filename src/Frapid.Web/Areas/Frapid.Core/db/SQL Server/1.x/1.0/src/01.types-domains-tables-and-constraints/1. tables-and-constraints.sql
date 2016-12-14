@@ -78,6 +78,19 @@ CREATE TABLE core.currencies
 	deleted										bit DEFAULT(0)	
 );
 
+CREATE TABLE core.currencies
+(
+	currency_id									int IDENTITY,
+    currency_code                           	national character varying(12) PRIMARY KEY,
+    currency_symbol                         	national character varying(12) NOT NULL,
+    currency_name                           	national character varying(48) NOT NULL UNIQUE,
+    hundredth_name                          	national character varying(48) NOT NULL,
+    audit_user_id                           	integer,
+    audit_ts                                	DATETIMEOFFSET DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
+);
+
+
 CREATE TABLE core.offices
 (
     office_id                                   int IDENTITY PRIMARY KEY,

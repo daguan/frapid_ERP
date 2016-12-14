@@ -496,6 +496,13 @@ BEGIN
              AND schema_id = schema_id(@name)
 
       INSERT INTO @commands
+      SELECT '    DROP TYPE [' + @name + '].['
+             + sys.types.NAME + '];'
+      FROM   sys.types
+      WHERE  sys.types.is_user_defined =1
+             AND sys.types.schema_id = schema_id(@name)
+
+      INSERT INTO @commands
       SELECT '    DROP SYNONYM [' + @name + '].['
              + sys.objects.NAME + '];'
       FROM   sys.objects
@@ -538,7 +545,7 @@ BEGIN
 
       INSERT INTO @commands
       SELECT
-'         SELECT error_message() as errormessage, error_number() as erronumber, error_state() as errorstate, error_procedure() as errorprocedure, error_line() as errorline;'
+		'SELECT error_message() as errormessage, error_number() as erronumber, error_state() as errorstate, error_procedure() as errorprocedure, error_line() as errorline;'
     ;
 
     INSERT INTO @commands
@@ -613,6 +620,58 @@ BEGIN
 END
 
 GO
+
+IF OBJECT_ID('core.generate_series') IS NOT NULL
+DROP FUNCTION core.generate_series;
+
+GO
+
+CREATE FUNCTION core.generate_series(@start bigint, @end bigint)
+RETURNS @result TABLE
+(
+	generate_series					bigint
+)
+AS
+BEGIN
+	IF(@end >= @start)
+	BEGIN
+		WITH generate_series(generate_series) AS 
+		(
+			SELECT @start AS ROW_NUM
+			UNION ALL
+			SELECT generate_series+1 FROM generate_series
+			WHERE generate_series<@end
+		)
+
+		INSERT INTO @result
+		SELECT * FROM generate_series;
+	END;
+
+	RETURN;
+END;
+
+GO
+
+--SELECT * FROM core.generate_series(100, 200);
+
+-- IF OBJECT_ID('dbo.RAISERROR') IS NOT NULL
+-- DROP FUNCTION dbo."RAISERROR";
+
+-- GO
+
+-- CREATE FUNCTION dbo."RAISERROR"
+-- (
+    -- @message NVARCHAR(MAX),
+	-- @severity int,
+	-- @stat int
+-- )
+-- RETURNS BIT
+-- AS
+-- BEGIN
+    -- RETURN CAST(@message AS INT)
+-- END
+
+-- GO
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/1. tables-and-constraints.sql --<--<--
@@ -695,6 +754,19 @@ CREATE TABLE core.currencies
     audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
 	deleted										bit DEFAULT(0)	
 );
+
+CREATE TABLE core.currencies
+(
+	currency_id									int IDENTITY,
+    currency_code                           	national character varying(12) PRIMARY KEY,
+    currency_symbol                         	national character varying(12) NOT NULL,
+    currency_name                           	national character varying(48) NOT NULL UNIQUE,
+    hundredth_name                          	national character varying(48) NOT NULL,
+    audit_user_id                           	integer,
+    audit_ts                                	DATETIMEOFFSET DEFAULT(GETDATE()),
+	deleted										bit DEFAULT(0)
+);
+
 
 CREATE TABLE core.offices
 (
