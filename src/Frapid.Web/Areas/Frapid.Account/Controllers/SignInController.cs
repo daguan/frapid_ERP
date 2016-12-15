@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Data.Common;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using Frapid.Configuration;
 using Frapid.Framework.Extensions;
 using Mapster;
 using Npgsql;
+using Serilog;
 using SignIn = Frapid.Account.ViewModels.SignIn;
 
 namespace Frapid.Account.Controllers
@@ -45,7 +47,7 @@ namespace Frapid.Account.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                return this.InvalidModelState(this.ModelState);
             }
 
             try
@@ -67,8 +69,9 @@ namespace Frapid.Account.Controllers
 
                 return await this.OnAuthenticatedAsync(result, model).ConfigureAwait(true);
             }
-            catch (NpgsqlException)
+            catch (DbException ex)
             {
+                Log.Information(ex.Message);
                 return this.AccessDenied();
             }
         }

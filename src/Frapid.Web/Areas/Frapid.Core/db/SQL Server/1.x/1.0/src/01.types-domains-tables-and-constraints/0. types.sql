@@ -9,13 +9,13 @@ GO
 IF TYPE_ID(N'dbo.money_strict') IS NULL
 BEGIN
 	CREATE TYPE dbo.money_strict
-	FROM DECIMAL(24, 4);
+	FROM numeric(30, 6);
 END;
 
 IF TYPE_ID(N'dbo.money_strict2') IS NULL
 BEGIN
 	CREATE TYPE dbo.money_strict2
-	FROM DECIMAL(24, 4);
+	FROM numeric(30, 6);
 END;
 
 IF TYPE_ID(N'dbo.integer_strict') IS NULL
@@ -45,13 +45,13 @@ END;
 IF TYPE_ID(N'dbo.decimal_strict') IS NULL
 BEGIN
 	CREATE TYPE dbo.decimal_strict
-	FROM decimal;
+	FROM decimal(30, 6);
 END;
 
 IF TYPE_ID(N'dbo.decimal_strict2') IS NULL
 BEGIN
 	CREATE TYPE dbo.decimal_strict2
-	FROM decimal;
+	FROM decimal(30, 6);
 END;
 
 IF TYPE_ID(N'dbo.color') IS NULL

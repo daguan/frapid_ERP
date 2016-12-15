@@ -453,7 +453,7 @@ LANGUAGE sql;
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/01.types-domains-tables-and-constraints/domains.sql --<--<--
 DROP DOMAIN IF EXISTS public.money_strict CASCADE;
 CREATE DOMAIN public.money_strict
-AS DECIMAL(24, 4)
+AS numeric(30, 6)
 CHECK
 (
     VALUE > 0
@@ -462,7 +462,7 @@ CHECK
 
 DROP DOMAIN IF EXISTS public.money_strict2 CASCADE;
 CREATE DOMAIN public.money_strict2
-AS DECIMAL(24, 4)
+AS numeric(30, 6)
 CHECK
 (
     VALUE >= 0
@@ -502,7 +502,7 @@ CHECK
 
 DROP DOMAIN IF EXISTS public.decimal_strict CASCADE;
 CREATE DOMAIN public.decimal_strict
-AS decimal
+AS decimal(30, 6)
 CHECK
 (
     VALUE > 0
@@ -510,7 +510,7 @@ CHECK
 
 DROP DOMAIN IF EXISTS public.decimal_strict2 CASCADE;
 CREATE DOMAIN public.decimal_strict2
-AS decimal
+AS decimal(30, 6)
 CHECK
 (
     VALUE >= 0

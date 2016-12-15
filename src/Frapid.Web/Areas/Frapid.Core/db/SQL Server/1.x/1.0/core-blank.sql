@@ -277,13 +277,13 @@ GO
 IF TYPE_ID(N'dbo.money_strict') IS NULL
 BEGIN
 	CREATE TYPE dbo.money_strict
-	FROM DECIMAL(24, 4);
+	FROM numeric(30, 6);
 END;
 
 IF TYPE_ID(N'dbo.money_strict2') IS NULL
 BEGIN
 	CREATE TYPE dbo.money_strict2
-	FROM DECIMAL(24, 4);
+	FROM numeric(30, 6);
 END;
 
 IF TYPE_ID(N'dbo.integer_strict') IS NULL
@@ -313,13 +313,13 @@ END;
 IF TYPE_ID(N'dbo.decimal_strict') IS NULL
 BEGIN
 	CREATE TYPE dbo.decimal_strict
-	FROM decimal;
+	FROM decimal(30, 6);
 END;
 
 IF TYPE_ID(N'dbo.decimal_strict2') IS NULL
 BEGIN
 	CREATE TYPE dbo.decimal_strict2
-	FROM decimal;
+	FROM decimal(30, 6);
 END;
 
 IF TYPE_ID(N'dbo.color') IS NULL
@@ -745,18 +745,6 @@ CREATE TABLE core.menu_locale
 
 CREATE TABLE core.currencies
 (
-	currency_id									int identity NOT NULL,
-    currency_code                           	national character varying(12) PRIMARY KEY,
-    currency_symbol                         	national character varying(12) NOT NULL,
-    currency_name                           	national character varying(48) NOT NULL UNIQUE,
-    hundredth_name                          	national character varying(48) NOT NULL,
-    audit_user_id                           	integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
-	deleted										bit DEFAULT(0)	
-);
-
-CREATE TABLE core.currencies
-(
 	currency_id									int IDENTITY,
     currency_code                           	national character varying(12) PRIMARY KEY,
     currency_symbol                         	national character varying(12) NOT NULL,
@@ -884,8 +872,8 @@ GO
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/04.default-values/01.default-values.sql --<--<--
-INSERT INTO core.offices(office_code, office_name)
-SELECT 'DEF', 'Default';
+INSERT INTO core.offices(office_code, office_name, currency_code, nick_name, po_box, address_line_1, address_line_2, street, city, state, country, phone, fax, email, url)
+SELECT 'DEF', 'Default', 'USD', 'MixERP', '3415', 'Lobortis. Avenue', '', '', 'Rocky Mount', 'WA', 'United States', '(213) 3640-6139', '', 'info@mixerp.com', 'http://mixerp.com';
 
 INSERT INTO core.genders(gender_code, gender_name)
 SELECT 'M', 'Male' UNION ALL
@@ -1083,6 +1071,27 @@ END;
 
 GO
 
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.get_currency_code_by_office_id.sql --<--<--
+IF OBJECT_ID('core.get_currency_code_by_office_id') IS NOT NULL
+DROP FUNCTION core.get_currency_code_by_office_id;
+
+GO
+
+CREATE FUNCTION core.get_currency_code_by_office_id(@office_id integer)
+RETURNS national character varying(50)
+AS
+BEGIN
+    RETURN 
+	(
+		SELECT currency_code 
+		FROM core.offices
+		WHERE core.offices.office_id = @office_id
+		AND core.offices.deleted = 0
+	);
+END;
+
+GO
+
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.get_office_code_by_office_id.sql --<--<--
 IF OBJECT_ID('core.get_office_code_by_office_id') IS NOT NULL
 DROP FUNCTION core.get_office_code_by_office_id;
@@ -1160,6 +1169,28 @@ BEGIN
 END;
 
 GO
+
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.get_office_name_by_office_id.sql --<--<--
+IF OBJECT_ID('core.get_office_name_by_office_id') IS NOT NULL
+DROP FUNCTION core.get_office_name_by_office_id;
+
+GO
+
+CREATE FUNCTION core.get_office_name_by_office_id(@office_id integer)
+RETURNS national character varying(500)
+AS
+BEGIN
+    RETURN 
+	(
+		SELECT core.offices.office_name
+		FROM core.offices
+		WHERE core.offices.office_id = @office_id
+		AND core.offices.deleted = 0
+	);
+END;
+
+GO
+
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.is_valid_office_id.sql --<--<--
 IF OBJECT_ID('core.is_valid_office_id') IS NOT NULL

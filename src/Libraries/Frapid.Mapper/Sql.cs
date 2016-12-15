@@ -64,9 +64,20 @@ namespace Frapid.Mapper
                 offset++;
             }
 
-            var matchList = (from Match match in matches select int.Parse(match.Value.Replace("@", ""))).OrderByDescending(x=>x).ToList();
 
-            foreach (int index in matchList)
+            var matchList = new List<int>();
+            foreach (Match match in matches)
+            {
+                string matchValue = match.Value.Replace("@", "");
+                int value;
+
+                if (int.TryParse(matchValue, out value))
+                {
+                    matchList.Add(value);
+                }
+            }
+
+            foreach (int index in matchList.OrderByDescending(x => x))
             {
                 int newIndex = offset + index;
                 token = ReplaceWord(token, "@" + index, "@" + newIndex);
