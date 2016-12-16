@@ -30,15 +30,18 @@ namespace Frapid.DataAccess.Models
             set
             {
                 this._value = value;
-                if (value.StartsWith("nextval"))
+
+                if (!value.StartsWith("nextval"))
                 {
-                    this.IsSerial = true;
-                    this._value = string.Empty;
+                    return;
                 }
+
+                this.IsSerial = true;
+                this._value = string.Empty;
             }
         }
 
-        public int MaxLength { get; set; }
+        public int? MaxLength { get; set; }
         public bool IsSerial { get; set; }
         public string PropertyName { get; set; }
         public string DataType { get; set; }

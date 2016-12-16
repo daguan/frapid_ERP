@@ -159,25 +159,25 @@ DROP PROCEDURE dbo.poco_get_table_function_definition;
 
 GO
 
-CREATE PROCEDURE dbo.poco_get_table_function_definition(@schema national character varying(100), @name national character varying(100))
+CREATE PROCEDURE dbo.poco_get_table_function_definition(@schema national character varying(128), @name national character varying(128))
 AS
 BEGIN
 	DECLARE @total_rows			int;
 	DECLARE @this_row			int = 0;
-	DECLARE @default			national character varying(100);
-	DECLARE @parsed				national character varying(100);
+	DECLARE @default			national character varying(128);
+	DECLARE @parsed				national character varying(128);
 
 	DECLARE @result TABLE
 	(
 		row_id					int IDENTITY,
 		id                      int,
-		column_name             national character varying(100),
+		column_name             national character varying(128),
 		nullable				national character varying(100),
 		db_data_type            national character varying(100),
 		value					national character varying(100),
 		max_length              national character varying(100),
-		primary_key				national character varying(100),
-		data_type               national character varying(100),
+		primary_key				national character varying(128),
+		data_type               national character varying(128),
 		is_serial				bit DEFAULT(0)
 	);
 

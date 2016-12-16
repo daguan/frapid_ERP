@@ -2,10 +2,23 @@ using System.ComponentModel;
 
 namespace Frapid.Mapper.Helpers
 {
-    public sealed class Castable 
+    public sealed class Castable
     {
         public T To<T>(string input)
         {
+            if (typeof(T) == typeof(bool))
+            {
+                if (input == "1")
+                {
+                    input = "true";
+                }
+
+                if (input == "0")
+                {
+                    input = "false";
+                }
+            }
+
             var d = default(T);
 
             if (string.IsNullOrWhiteSpace(input))
@@ -17,7 +30,7 @@ namespace Frapid.Mapper.Helpers
 
             try
             {
-                return (T)converter.ConvertFromString(input);
+                return (T) converter.ConvertFromString(input);
             }
             catch
             {

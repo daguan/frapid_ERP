@@ -185,25 +185,25 @@ DROP PROCEDURE dbo.poco_get_table_function_definition;
 
 GO
 
-CREATE PROCEDURE dbo.poco_get_table_function_definition(@schema national character varying(100), @name national character varying(100))
+CREATE PROCEDURE dbo.poco_get_table_function_definition(@schema national character varying(128), @name national character varying(128))
 AS
 BEGIN
 	DECLARE @total_rows			int;
 	DECLARE @this_row			int = 0;
-	DECLARE @default			national character varying(100);
-	DECLARE @parsed				national character varying(100);
+	DECLARE @default			national character varying(128);
+	DECLARE @parsed				national character varying(128);
 
 	DECLARE @result TABLE
 	(
 		row_id					int IDENTITY,
 		id                      int,
-		column_name             national character varying(100),
+		column_name             national character varying(128),
 		nullable				national character varying(100),
 		db_data_type            national character varying(100),
 		value					national character varying(100),
 		max_length              national character varying(100),
-		primary_key				national character varying(100),
-		data_type               national character varying(100),
+		primary_key				national character varying(128),
+		data_type               national character varying(128),
 		is_serial				bit DEFAULT(0)
 	);
 
@@ -274,64 +274,16 @@ CREATE SCHEMA core;
 
 GO
 
-IF TYPE_ID(N'dbo.money_strict') IS NULL
-BEGIN
-	CREATE TYPE dbo.money_strict
-	FROM numeric(30, 6);
-END;
-
-IF TYPE_ID(N'dbo.money_strict2') IS NULL
-BEGIN
-	CREATE TYPE dbo.money_strict2
-	FROM numeric(30, 6);
-END;
-
-IF TYPE_ID(N'dbo.integer_strict') IS NULL
-BEGIN
-	CREATE TYPE dbo.integer_strict
-	FROM integer;
-END;
-
-IF TYPE_ID(N'dbo.integer_strict2') IS NULL
-BEGIN
-	CREATE TYPE dbo.integer_strict2
-	FROM integer;
-END;
-
-IF TYPE_ID(N'dbo.smallint_strict') IS NULL
-BEGIN
-	CREATE TYPE dbo.smallint_strict
-	FROM smallint;
-END;
-
-IF TYPE_ID(N'dbo.smallint_strict2') IS NULL
-BEGIN
-	CREATE TYPE dbo.smallint_strict2
-	FROM smallint;
-END;
-
-IF TYPE_ID(N'dbo.decimal_strict') IS NULL
-BEGIN
-	CREATE TYPE dbo.decimal_strict
-	FROM decimal(30, 6);
-END;
-
-IF TYPE_ID(N'dbo.decimal_strict2') IS NULL
-BEGIN
-	CREATE TYPE dbo.decimal_strict2
-	FROM decimal(30, 6);
-END;
-
 IF TYPE_ID(N'dbo.color') IS NULL
 BEGIN
 	CREATE TYPE dbo.color
-	FROM national character varying(50);
+	FROM character varying(50);
 END;
 
 IF TYPE_ID(N'dbo.photo') IS NULL
 BEGIN
 	CREATE TYPE dbo.photo
-	FROM national character varying(MAX);
+	FROM national character varying(4000);
 END;
 
 
@@ -345,8 +297,9 @@ END;
 IF TYPE_ID(N'dbo.password') IS NULL
 BEGIN
 	CREATE TYPE dbo.password
-	FROM national character varying(MAX);
+	FROM national character varying(4000);
 END;
+
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/0.utilities.sql --<--<--

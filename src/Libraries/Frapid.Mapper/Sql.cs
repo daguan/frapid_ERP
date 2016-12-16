@@ -45,11 +45,8 @@ namespace Frapid.Mapper
         public IEnumerable<int> GetParameters()
         {
             var matches = ParameterPattern.Matches(this.GetQuery());
-
-            foreach (Match match in matches)
-            {
-                yield return int.Parse(match.Value.Replace("@", ""));
-            }
+            var parameters = (from Match match in matches select int.Parse(match.Value.Replace("@", ""))).ToList();
+            return parameters.Distinct();
         }
 
         private string ProcessToken(string token)
@@ -77,7 +74,7 @@ namespace Frapid.Mapper
                 }
             }
 
-            foreach (int index in matchList.OrderByDescending(x => x))
+            foreach (int index in matchList.Distinct().OrderByDescending(x => x))
             {
                 int newIndex = offset + index;
                 token = ReplaceWord(token, "@" + index, "@" + newIndex);

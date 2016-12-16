@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using Frapid.Mapper.Extensions;
 
@@ -12,6 +13,7 @@ namespace Frapid.Mapper.Helpers
             {
                 return value.ToString();
             }
+
 
             if (destType == typeof(bool))
             {
@@ -49,6 +51,17 @@ namespace Frapid.Mapper.Helpers
                 }
 
                 return value.To<DateTime>();
+            }
+
+            var converter = TypeDescriptor.GetConverter(destType);
+
+            try
+            {
+                return converter.ConvertFromInvariantString(value.ToString());
+            }
+            catch
+            {
+                //swallow
             }
 
             return value;

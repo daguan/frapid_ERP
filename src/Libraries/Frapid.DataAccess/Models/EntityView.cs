@@ -15,21 +15,8 @@ namespace Frapid.DataAccess.Models
         {
             var db = FrapidDbServer.GetServer(database);
 
-            string sql = @"SELECT 
-                    column_name, 
-                    nullable,
-                    udt_name as db_data_type,
-                    column_default as value,
-                    max_length,
-                    primary_key,
-                    data_type
-                FROM public.poco_get_table_function_definition(@0::text, @1::text);";
-
-            if (!db.ProviderName.ToUpperInvariant().Equals("NPGSQL"))
-            {
-                string procedure = FrapidDbServer.DefaultSchemaQualify(database, "poco_get_table_function_definition");
-                sql = db.GetProcedureCommand(procedure, new[] {"@0", "@1"});
-            }
+            string procedure = FrapidDbServer.DefaultSchemaQualify(database, "poco_get_table_function_definition");
+            string sql = db.GetProcedureCommand(procedure, new[] {"@0", "@1"});
 
             var columns =
                 await Factory.GetAsync<EntityColumn>(database, sql, schemaName, tableName).ConfigureAwait(false);

@@ -171,9 +171,9 @@ $$
 LANGUAGE plpgsql;
 
 
-DROP FUNCTION IF EXISTS public.poco_get_table_function_definition(_schema text, _name text);
+DROP FUNCTION IF EXISTS public.poco_get_table_function_definition(_schema national character varying(63), _name national character varying(63));
 
-CREATE FUNCTION public.poco_get_table_function_definition(_schema text, _name text)
+CREATE FUNCTION public.poco_get_table_function_definition(_schema national character varying(63), _name  national character varying(63))
 RETURNS TABLE
 (
     id                      bigint,
