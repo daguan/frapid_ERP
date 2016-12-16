@@ -53,8 +53,8 @@ RETURNS TABLE
     id                      integer, 
     column_name             text, 
     nullable                text, 
-    udt_name                text, 
-    column_default          text, 
+    db_data_type            text, 
+    value                   text, 
     max_length              integer, 
     primary_key             text
 ) AS
@@ -68,8 +68,8 @@ BEGIN
         id                      SERIAL,
         column_name             text,
         is_nullable             text DEFAULT('NO'),
-        udt_name                text,
-        column_default          text,
+        db_data_type            text,
+        value                   text,
         max_length              integer DEFAULT(0),
         is_primary_key          text DEFAULT('NO')
     ) ON COMMIT DROP;
@@ -90,11 +90,11 @@ BEGIN
     AND pg_namespace.nspname = _schema_name
     AND proname::text = _table_name;
 
-    INSERT INTO temp_annonation(column_name, udt_name)
+    INSERT INTO temp_annonation(column_name, db_data_type)
     SELECT split_part(trim(unnest(regexp_split_to_array(_args, ','))), ' ', 1), trim(unnest(regexp_split_to_array(_args, ',')));
 
     UPDATE temp_annonation
-    SET udt_name = TRIM(REPLACE(temp_annonation.udt_name, temp_annonation.column_name, ''));
+    SET db_data_type = TRIM(REPLACE(temp_annonation.db_data_type, temp_annonation.column_name, ''));
 
     
     RETURN QUERY
@@ -142,8 +142,8 @@ RETURNS TABLE
     id                      bigint,
     column_name             text,
     nullable                text,
-    udt_name                text,
-    column_default          text,
+    db_data_type            text,
+    value                   text,
     max_length              integer,
     primary_key             text,
     data_type               text
@@ -158,8 +158,8 @@ BEGIN
         id                      bigint,
         column_name             text,
         is_nullable             text,
-        udt_name                text,
-        column_default          text,
+        db_data_type            text,
+        value                   text,
         max_length              integer default(0),
         is_primary_key          text,
         data_type               text
@@ -212,7 +212,7 @@ BEGIN
         ORDER  BY attnum;
 
         UPDATE temp_poco
-        SET data_type = public.get_app_data_type(temp_poco.udt_name);
+        SET data_type = public.get_app_data_type(temp_poco.db_data_type);
         
         RETURN QUERY
         SELECT * FROM temp_poco;
@@ -226,8 +226,8 @@ BEGIN
             row_number() OVER(ORDER BY attnum),
             attname::text               AS column_name,
             'NO'::text                  AS is_nullable, 
-            format_type(t.oid,NULL)     AS udt_name,
-            ''::text                    AS column_default
+            format_type(t.oid,NULL)     AS db_data_type,
+            ''::text                    AS value
         FROM pg_attribute att
         JOIN pg_type t ON t.oid=atttypid
         JOIN pg_namespace nsp ON t.typnamespace=nsp.oid
@@ -239,7 +239,7 @@ BEGIN
         ORDER by attnum;
 
         UPDATE temp_poco
-        SET data_type = public.get_app_data_type(temp_poco.udt_name);
+        SET data_type = public.get_app_data_type(temp_poco.db_data_type);
 
         RETURN QUERY
         SELECT * FROM temp_poco;
@@ -263,13 +263,13 @@ BEGIN
             row_number() OVER(ORDER BY 1),
             procs.column_name::text,
             'NO'::text AS is_nullable, 
-            format_type(procs.argument_type, null) as udt_name,
-            ''::text AS column_default
+            format_type(procs.argument_type, null) as db_data_type,
+            ''::text AS value
         FROM procs
         WHERE column_mode=ANY(ARRAY['t', 'o']);
 
         UPDATE temp_poco
-        SET data_type = public.get_app_data_type(temp_poco.udt_name);
+        SET data_type = public.get_app_data_type(temp_poco.db_data_type);
 
         RETURN QUERY
         SELECT * FROM temp_poco;
@@ -281,8 +281,8 @@ BEGIN
         row_number() OVER(ORDER BY attnum),
         attname::text               AS column_name,
         'NO'::text                  AS is_nullable, 
-        format_type(t.oid,NULL)     AS udt_name,
-        ''::text                    AS column_default
+        format_type(t.oid,NULL)     AS db_data_type,
+        ''::text                    AS value
     FROM pg_attribute att
     JOIN pg_type t ON t.oid=atttypid
     JOIN pg_namespace nsp ON t.typnamespace=nsp.oid
@@ -302,7 +302,7 @@ BEGIN
     ORDER by attnum;
 
     UPDATE temp_poco
-    SET data_type = public.get_app_data_type(temp_poco.udt_name);
+    SET data_type = public.get_app_data_type(temp_poco.db_data_type);
 
     RETURN QUERY
     SELECT * FROM temp_poco;
@@ -412,3 +412,4 @@ $$
     SELECT ($1)[s] FROM generate_series(1,array_upper($1, 1)) AS s;
 $$
 LANGUAGE sql;
+

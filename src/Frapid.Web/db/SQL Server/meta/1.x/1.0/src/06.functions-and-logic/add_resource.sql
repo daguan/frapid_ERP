@@ -12,6 +12,8 @@ CREATE PROCEDURE i18n.add_resource
 )
 AS
 BEGIN
+    SET NOCOUNT ON;
+
     IF NOT EXISTS
     (
 		SELECT 1 

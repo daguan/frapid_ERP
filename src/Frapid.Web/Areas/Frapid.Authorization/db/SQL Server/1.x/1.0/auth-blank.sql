@@ -538,6 +538,7 @@ CREATE PROCEDURE auth.has_access(@login_id integer, @entity national character v
 AS
 BEGIN    
     SET NOCOUNT ON;
+
 	DECLARE @user_id									integer = account.get_user_id_by_login_id(@login_id);
     DECLARE @role_id                                    integer;
     DECLARE @group_all_policy                           bit;

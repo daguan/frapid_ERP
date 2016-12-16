@@ -162,6 +162,8 @@ GO
 CREATE PROCEDURE dbo.poco_get_table_function_definition(@schema national character varying(128), @name national character varying(128))
 AS
 BEGIN
+    SET NOCOUNT ON;
+
 	DECLARE @total_rows			int;
 	DECLARE @this_row			int = 0;
 	DECLARE @default			national character varying(128);
@@ -175,7 +177,7 @@ BEGIN
 		nullable				national character varying(100),
 		db_data_type            national character varying(100),
 		value					national character varying(100),
-		max_length              national character varying(100),
+		max_length              integer,
 		primary_key				national character varying(128),
 		data_type               national character varying(128),
 		is_serial				bit DEFAULT(0)
