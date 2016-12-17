@@ -61,74 +61,20 @@ WriteLiteral(">\r\n<head>\r\n    <meta");
 
 WriteLiteral(" charset=\"utf-8\"");
 
-WriteLiteral(@">
-    <title>Frapid Report</title>
-    <style>
-        html, body {
-            font-family: ""Segoe UI"", ""Helvetica Neue"", Arial, sans-serif;
-            font-size: 12px;
-            color: #444;
-            cursor: default;
-        }
+WriteLiteral(">\r\n    <title>Frapid Report</title>\r\n    <link");
 
-        .report.title {
-            font-size: 3em;
-            text-transform: fullsize-kana;
-            letter-spacing: 2px;
-            text-align: center;
-            font-weight: 100;
-        }
+WriteLiteral(" rel=\"stylesheet\"");
 
-        h1,h2,h3,h4,h5,h6 {
-            letter-spacing: 0.1em;
-            font-weight: 400;            
-        }
+WriteLiteral(" type=\"text/css\"");
 
-        .gridviews table {
-            width: 100%;
-        }
+WriteLiteral(" href=\"/Areas/Frapid.Reports/reports.css\"");
 
-        table {
-            border: 1px solid #ddd;
-            border-collapse: collapse;
-        }
-
-        table td {
-            border: 1px solid #ddd;
-            padding: 0.5em;
-        }
-
-        table thead tr,table tfoot tr  {
-            background-color: #efefef;
-            text-transform: uppercase;
-            font-size: 0.87em;
-        }
-
-        table thead tr th, table tfoot tr th {
-            padding: 1em;
-            border: 1px solid #ddd;
-        }
-
-        table tbody tr:nth-child(odd) {
-            background-color: #fafafa;
-        }
-
-        .right.aligned {
-            text-align: right;
-        }
-
-        .center.aligned {
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-");
+WriteLiteral("/>\r\n</head>\r\n<body>\r\n");
 
 WriteLiteral("    ");
 
             
-            #line 71 "..\..\Views\Source.cshtml"
+            #line 14 "..\..\Views\Source.cshtml"
 Write(Html.Action("ReportMarkup", new { path = Model }));
 
             

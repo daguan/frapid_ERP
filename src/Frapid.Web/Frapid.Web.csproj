@@ -300,7 +300,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\PublishProfiles\frapid-publish-profile.pubxml" />
-    <Content Include="Scripts\date.js" />
     <Content Include="Resources\Configs\DomainsApproved.json" />
     <Content Include="Resources\Configs\DomainsInstalled.json" />
     <Content Include="Resources\Configs\JwtConfig.json" />
@@ -308,6 +307,36 @@
     <Content Include="Resources\Configs\web.config" />
     <Content Include="Resources\web.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\frapid\core\array.js" />
+    <Content Include="Scripts\frapid\core\browser.js" />
+    <Content Include="Scripts\frapid\core\conversion.js" />
+    <Content Include="Scripts\frapid\core\date-expressions.js" />
+    <Content Include="Scripts\frapid\core\dom\checkable.js" />
+    <Content Include="Scripts\frapid\core\dom\document.js" />
+    <Content Include="Scripts\frapid\core\dom\events.js" />
+    <Content Include="Scripts\frapid\core\dom\frame.js" />
+    <Content Include="Scripts\frapid\core\dom\popunder.js" />
+    <Content Include="Scripts\frapid\core\dom\select.js" />
+    <Content Include="Scripts\frapid\core\dom\uploader.js" />
+    <Content Include="Scripts\frapid\core\enums.js" />
+    <Content Include="Scripts\frapid\core\frapid-ajax.js" />
+    <Content Include="Scripts\frapid\core\grid\cell.js" />
+    <Content Include="Scripts\frapid\core\grid\print-grid.js" />
+    <Content Include="Scripts\frapid\core\json.js" />
+    <Content Include="Scripts\frapid\core\libraries\chartjs.js" />
+    <Content Include="Scripts\frapid\core\libraries\colorbox.js" />
+    <Content Include="Scripts\frapid\core\libraries\notify.js" />
+    <Content Include="Scripts\frapid\core\libraries\semantic-ui.js" />
+    <Content Include="Scripts\frapid\core\localization.js" />
+    <Content Include="Scripts\frapid\core\location.js" />
+    <Content Include="Scripts\frapid\core\prototype\string.js" />
+    <Content Include="Scripts\frapid\core\validation.js" />
+    <Content Include="Scripts\frapid\core\window.js" />
+    <Content Include="Scripts\frapid\utilities\countries.js" />
+    <Content Include="Scripts\frapid\utilities\country-codes.js" />
+    <Content Include="Scripts\frapid\utilities\form.js" />
+    <Content Include="Scripts\frapid\utilities\localizable.js" />
+    <Content Include="Scripts\frapid\utilities\validator.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <None Include="Scripts\jquery-2.2.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.4.js" />

@@ -3,10 +3,10 @@ using System.Configuration;
 using System.Globalization;
 using System.Resources;
 using System.Runtime.Caching;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Frapid.i18n.DAL;
 using Frapid.i18n.Helpers;
-using Frapid.Mapper.Extensions;
 using Frapid.Mapper.Helpers;
 
 namespace Frapid.i18n
@@ -29,31 +29,35 @@ namespace Frapid.i18n
         /// <exception cref="MissingManifestResourceException">Thrown when the resource key is not found on the specified class.</exception>
         public static string GetString(string tenant, string resourceClass, string resourceKey, string cultureCode = null)
         {
-            if(string.IsNullOrWhiteSpace(resourceClass))
+            if (string.IsNullOrWhiteSpace(resourceClass))
             {
                 return resourceKey;
             }
 
             string result = TryGetResourceFromCache(tenant, resourceClass, resourceKey, cultureCode);
 
-            if(result != null)
+            if (result != null)
             {
                 return result;
             }
 
-            if(SuppressException)
+            if (!SuppressException)
             {
-                return new TitleCaseConverter().Convert(resourceKey.Replace("_", " "));
+                throw new MissingManifestResourceException("Resource " + resourceClass + "." + resourceKey + " was not found.");
             }
 
-            throw new MissingManifestResourceException("Resource " + resourceClass + "." + resourceKey + " was not found.");
+
+            resourceKey = resourceKey.Replace("_", " ");
+            resourceKey = Regex.Replace(resourceKey, "([A-Z])", " $1", RegexOptions.Compiled).Trim();
+
+            return new TitleCaseConverter().Convert(resourceKey);
         }
 
         private static CultureInfo GetCulture(string cultureCode)
         {
             var culture = CultureManager.GetCurrent();
 
-            if(!string.IsNullOrWhiteSpace(cultureCode))
+            if (!string.IsNullOrWhiteSpace(cultureCode))
             {
                 culture = new CultureInfo(cultureCode);
             }
@@ -67,19 +71,19 @@ namespace Frapid.i18n
             var cacheItem = MemoryCache.Default.Get("Resources");
 
             // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
-            if(cacheItem is CacheItem)
+            if (cacheItem is CacheItem)
             {
-                var item = (CacheItem)cacheItem;
-                cache = (IDictionary<string, string>)item.Value;
+                var item = (CacheItem) cacheItem;
+                cache = (IDictionary<string, string>) item.Value;
             }
             else
             {
-                cache = (IDictionary<string, string>)cacheItem;
+                cache = (IDictionary<string, string>) cacheItem;
             }
 
 
-            if(cache != null &&
-               cache.Count > 0)
+            if (cache != null &&
+                cache.Count > 0)
             {
                 return cache;
             }
@@ -101,7 +105,7 @@ namespace Frapid.i18n
         /// <returns></returns>
         public static string TryGetResourceFromCache(string tenant, string resourceClass, string resourceKey, string cultureCode = null)
         {
-            while(true)
+            while (true)
             {
                 var culture = GetCulture(cultureCode);
                 var cache = GetCache(tenant);
@@ -110,20 +114,20 @@ namespace Frapid.i18n
                 string result;
                 cache.TryGetValue(cacheKey, out result);
 
-                if(result != null)
+                if (result != null)
                 {
                     return result;
                 }
 
                 //Fall back to parent culture
-                while(true)
+                while (true)
                 {
-                    if(!string.IsNullOrWhiteSpace(culture.Parent.Name))
+                    if (!string.IsNullOrWhiteSpace(culture.Parent.Name))
                     {
                         cacheKey = resourceClass + "." + culture.Parent.Name + "." + resourceKey;
                         cache.TryGetValue(cacheKey, out result);
 
-                        if(result != null)
+                        if (result != null)
                         {
                             return result;
                         }

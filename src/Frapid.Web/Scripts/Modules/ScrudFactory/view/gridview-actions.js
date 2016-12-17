@@ -83,15 +83,15 @@ function loadActions() {
     grid.find("tbody tr").each(function () {
         var el = $(this);
         var value = el.find("td:first-child").html();
-        var template = actionTemplate.replace(/{id}/g, value);
+        var template = actionTemplate.replace(/{Id}/g, value);
 
-        var titleSuffix = actionTemplate.match("TitleSuffix={col:(.*)}");
+        var titleSuffix = actionTemplate.match("TitleSuffix={Col:(.*)}");
 
         if(titleSuffix){
             var position = parseInt(titleSuffix.pop() || 0);
             var selector = "td:nth-child(" + (position - 2) + ")";
             var suffix = el.find(selector).html();
-            var find = "TitleSuffix={col:" + position + "}";
+            var find = "TitleSuffix={Col:" + position + "}";
             var replace = "TitleSuffix=" + suffix;
 
             template = template.replace(find, replace);

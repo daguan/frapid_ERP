@@ -1,10 +1,10 @@
 ﻿var candidates = {
-    primary: ["code", "number", "name"],
+    primary: ["Code", "Number", "Name"],
     secondary: [
-        "party", "party_name", "item", "item_name",
-        "employee",
-        "employee_name", "employee_code", "office", "currency_code",
-        "reason", "notice_date", "approved_on"
+        "Customer", "Supplier", "CustomerName", "SupplierName", "Item", "ItemName",
+        "Employee", "EmployeeName", "EmployeeCode", "Office", "OfficeName",
+        "CurrencyCode",
+        "Reason", "NoticeDate", "ApprovedOn"
     ]
 };
 
@@ -25,13 +25,13 @@ function getQualified(dynamic, prefix, suffixes) {
     return qualified;
 };
 
-function getExtraContent(key) {
+function getExtraContent(id) {
     var extraContent = $('<div class="extra center content" />');
 
     var buttons = $('<div class="ui small basic buttons" />');
 
     if (window.scrudFactory.viewUrl) {
-        var url = window.scrudFactory.viewUrl.replace("{Key}", key);
+        var url = window.scrudFactory.viewUrl.replace("{Id}", id);
         var viewButton = $('<a class="ui basic button" />');
         viewButton.attr("href", url);
         viewButton.text(window.Resources.Titles.View());
@@ -135,7 +135,7 @@ function getCardKey(dynamic) {
 };
 
 function getImageField(entity) {
-    if (!entity || !entity.length) {
+    if (!entity) {
         return "";
     };
 
@@ -194,6 +194,7 @@ function createCard(dynamic, key, kanbanDetail) {
 
     var text;
     var imageField = (window.scrudFactory.card.image || getImageField(dynamic));
+
     var headerField = (window.scrudFactory.card.header || getHeaderField(dynamic));
     var metaField = (window.scrudFactory.card.meta || getMetaField(dynamic, headerField));
     var descriptionField = (window.scrudFactory.card.description || getDescriptionField(dynamic));

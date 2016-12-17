@@ -21,6 +21,8 @@ namespace Frapid.WebApi.DataAccess
 {
     public class FormRepository : DbAccess, IFormRepository
     {
+        private const int PageSize = 10;
+
         public FormRepository(string schemaName, string tableName, string database, long loginId, int userId)
         {
             var me = AppUsers.GetCurrentAsync().Result;
@@ -615,7 +617,7 @@ namespace Frapid.WebApi.DataAccess
             var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0", false);
             sql.OrderBy(this.PrimaryKey);
             sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
-            sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
+            sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), PageSize);
 
             return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
         }
@@ -641,11 +643,11 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            long offset = (pageNumber - 1) * 50;
+            long offset = (pageNumber - 1) * PageSize;
             string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0 ORDER BY {this.PrimaryKey}";
 
             sql += FrapidDbServer.AddOffset(this.Database, "@1");
-            sql += FrapidDbServer.AddLimit(this.Database, "50");
+            sql += FrapidDbServer.AddLimit(this.Database, PageSize.ToString());
 
             return await Factory.GetAsync<dynamic>(this.Database, sql, false, offset).ConfigureAwait(false);
         }
@@ -710,7 +712,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            long offset = (pageNumber - 1) * 50;
+            long offset = (pageNumber - 1) * PageSize;
             var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
 
             FilterManager.AddFilters(ref sql, filters);
@@ -723,7 +725,7 @@ namespace Frapid.WebApi.DataAccess
             if (pageNumber > 0)
             {
                 sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), offset);
-                sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
+                sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), PageSize);
             }
 
             return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
@@ -780,7 +782,7 @@ namespace Frapid.WebApi.DataAccess
 
             var filters = await this.GetFiltersAsync(this.Database, filterName).ConfigureAwait(false);
 
-            long offset = (pageNumber - 1) * 50;
+            long offset = (pageNumber - 1) * PageSize;
             var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
 
             FilterManager.AddFilters(ref sql, filters.ToList());
@@ -793,7 +795,7 @@ namespace Frapid.WebApi.DataAccess
             if (pageNumber > 0)
             {
                 sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), offset);
-                sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
+                sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), PageSize);
             }
 
             return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);

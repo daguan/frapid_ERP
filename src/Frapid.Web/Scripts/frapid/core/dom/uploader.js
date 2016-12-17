@@ -119,7 +119,7 @@
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
-            console.log(imageEl.length);
+            //console.log(imageEl.length);
             reader.onload = function (e) {
                 var image = imageEl;
 				image.removeAttr('src');

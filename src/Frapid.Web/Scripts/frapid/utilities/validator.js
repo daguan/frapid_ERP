@@ -55,7 +55,7 @@
     };
 
     this.validate = function (el, oninvalid, log) {
-        var required = el.find(".image.form-field, [required]:not(:disabled):not([readonly]):visible");
+        var required = el.find(".image.form-field, [required]:not(:disabled):not([readonly]):visible, .dropdown>select[required]");
         required.trigger("blur");
 
         if (jQuery().timepicker) {

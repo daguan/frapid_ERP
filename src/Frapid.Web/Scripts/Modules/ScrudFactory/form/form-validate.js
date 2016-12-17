@@ -1,9 +1,8 @@
 ﻿function appendError(message) {
     var item = $("<li/>");
     item.html(message);
-    console.log(message);
     
-    if(window.scrudFactory.tabs.length > 1){
+    if (window.scrudFactory.tabs.length > 1) {
         $("#ScrudFormErrorModal .error-list").append(item);
     };
 };
@@ -15,15 +14,18 @@ function resetError() {
 
 function validate() {
     resetError();
-    var result = validator.validate($(".form.factory"), function (el) {
-        var label = $(el).closest(".field").find("label");
-        var message = label.html() + " : " + window.Resources.Labels.ThisFieldIsRequired();
-        appendError(message);
-    }, true);
+
+    var result = validator.validate($(".form.factory"), function (errorFields) {
+        $.each(errorFields, function(i, el) {
+            var label = $(el).closest(".field").find("label");
+            var message = label.html() + " : " + window.Resources.Labels.ThisFieldIsRequired();
+            appendError(message);
+        });
+    }, false);
 
     if (!result) {
         if (window.scrudFactory.tabs.length > 1) {
-            $("#ScrudFormErrorModal").modal({ blurring: true }).modal("show");
+            $("#ScrudFormErrorModal").modal("show");
         };
 
         return false;
