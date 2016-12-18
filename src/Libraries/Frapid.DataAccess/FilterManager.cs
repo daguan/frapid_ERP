@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using Frapid.Configuration.Db;
 using Frapid.DataAccess.Models;
 using Frapid.Framework.Extensions;
 using Frapid.i18n;
 using Frapid.Mapper;
 using Frapid.Mapper.Extensions;
+using Frapid.Mapper.Helpers;
 
 namespace Frapid.DataAccess
 {
@@ -80,7 +79,7 @@ namespace Frapid.DataAccess
 
         private static object GetValue(Type type, string value)
         {
-            return Mapper.Helpers.TypeConverter.Convert(value, type);
+            return TypeConverter.Convert(value, type);
         }
 
         public static void AddFilters<T>(ref Sql sql, T poco, List<Filter> filters)

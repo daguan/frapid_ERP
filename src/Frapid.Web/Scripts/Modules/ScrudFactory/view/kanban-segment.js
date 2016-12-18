@@ -23,6 +23,19 @@ function createKanbanSegment(kanban) {
     $("#kanban").append(el);
 };
 
+function initializeKanbanUI(){
+    var totalKanbans = $("#kanban .ui.segment").length;
+
+    if(totalKanbans === 1){
+        $("#kanban").css("width", "100%");
+        $("#kanban0").attr("style", "max-width:100%!important;width:100%!important;");
+        $("<style id='emptykanbanStyle' type='text/css'>.kanban.holder .card{ display: inline-flex; margin: 1em;}</style>").appendTo("head");
+        return;
+    };
+
+    $("#emptykanbanStyle").remove();
+};
+
 function createKanbans(kanbans) {
     $("#kanban").html("");
 
@@ -36,6 +49,7 @@ function createKanbans(kanbans) {
     });
 
     createCards();
+    initializeKanbanUI();
 };
 
 function getKanbans() {

@@ -298,7 +298,7 @@ namespace Frapid.WebApi.DataAccess
             sql.In("\"{this.PrimaryKey}\" IN (@0)", primaryKeys);
 
 
-            return await Factory.GetAsync<dynamic>(this.Database,sql).ConfigureAwait(false);
+            return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<CustomField>> GetCustomFieldsAsync(string resourceId)
@@ -643,7 +643,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            long offset = (pageNumber - 1) * PageSize;
+            long offset = (pageNumber - 1)*PageSize;
             string sql = $"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0 ORDER BY {this.PrimaryKey}";
 
             sql += FrapidDbServer.AddOffset(this.Database, "@1");
@@ -712,7 +712,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            long offset = (pageNumber - 1) * PageSize;
+            long offset = (pageNumber - 1)*PageSize;
             var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
 
             FilterManager.AddFilters(ref sql, filters);
@@ -782,7 +782,7 @@ namespace Frapid.WebApi.DataAccess
 
             var filters = await this.GetFiltersAsync(this.Database, filterName).ConfigureAwait(false);
 
-            long offset = (pageNumber - 1) * PageSize;
+            long offset = (pageNumber - 1)*PageSize;
             var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted = @0", false);
 
             FilterManager.AddFilters(ref sql, filters.ToList());
@@ -843,7 +843,7 @@ namespace Frapid.WebApi.DataAccess
 
                 var arguments = skipPrimaryKey
                     ? item.Where(x => !x.Key.ToUnderscoreLowerCase().Equals(this.PrimaryKey))
-                    .Select(x => x.Value).ToArray()
+                        .Select(x => x.Value).ToArray()
                     : item.Select(x => x.Value).ToArray();
 
                 var sql = new Sql("INSERT INTO " + this.FullyQualifiedObjectName + "(" + columns + ")");

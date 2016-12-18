@@ -165,10 +165,10 @@ html, body, .jstree {
             font-weight: normal;
         }
 
-    #PhoneMenu .item:hover i {
-        transition: all 0.3s ease;
-        transform: scale(1.2);
-    }
+#PhoneMenu .item:hover i {
+    transition: all 0.3s ease;
+    transform: scale(1.2);
+}
 
 .large.icon {
     font-size: 3em !important;
@@ -254,6 +254,7 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
     border-radius: 1em;
     background-color: transparent;
     background-repeat: repeat;
+    background: rgba(255, 255, 255, 0.3) !important;
 }
 
 .powered.by {

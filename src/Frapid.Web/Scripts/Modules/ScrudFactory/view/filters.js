@@ -67,23 +67,23 @@ var getQuerystringFilters = function () {
 
     var filters = [];
     var queryStrings = getQueryStrings();
-
     $.each(queryStrings, function (index, item) {
-
         if (ignoredQueryStrings.indexOf(item.key) === -1) {
             var key = toUnderscoreCase(item.key);
             var value = parseValue(item.key, item.value);
             var type = getFilterType(key);
 
-            var targetEl = $("#filter_" + key);
-            if (targetEl.length) {
-                targetEl.val(value);
-            };
+            if (type) {
+                var targetEl = $("#filter_" + key);
+                if (targetEl.length) {
+                    targetEl.val(value);
+                };
 
-            if (isString(item.key)) {
-                filters.push(getAjaxColumnFilter("WHERE", key, type, FilterConditions.IsLike, value));
-            } else {
-                filters.push(getAjaxColumnFilter("WHERE", key, type, FilterConditions.IsEqualTo, value));
+                if (isString(item.key)) {
+                    filters.push(getAjaxColumnFilter("WHERE", key, type, FilterConditions.IsLike, value));
+                } else {
+                    filters.push(getAjaxColumnFilter("WHERE", key, type, FilterConditions.IsEqualTo, value));
+                };
             };
         };
     });
@@ -91,6 +91,7 @@ var getQuerystringFilters = function () {
     return filters;
 };
 
+getQuerystringFilters();
 
 function loadFilterConditions() {
     var el = $('[data-scope="filter-condition"]');
@@ -302,7 +303,6 @@ function getSelectedFilter() {
 
     var qs = getQuerystringFilters();
     filters = filters.concat(qs);
-
 
     return filters;
 };
