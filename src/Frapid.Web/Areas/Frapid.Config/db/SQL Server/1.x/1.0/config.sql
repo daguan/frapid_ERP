@@ -487,7 +487,7 @@ CREATE FUNCTION config.get_custom_field_form_name
 (
     @table_name character varying
 )
-RETURNS character varying
+RETURNS national character varying
 BEGIN
     RETURN 
     (

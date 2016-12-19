@@ -30,13 +30,13 @@ BEGIN
 
     IF(@menu_names = '{*}')
     BEGIN
-        SELECT @menu_ids = COALESCE(@menu_ids + ',', '') + CONVERT(national character varying, menu_id)
+        SELECT @menu_ids = COALESCE(@menu_ids + ',', '') + CONVERT(national character varying(500), menu_id)
         FROM core.menus
         WHERE app_name = @app_name;
     END
     ELSE
     BEGIN
-        SELECT @menu_ids = COALESCE(@menu_ids + ',', '') + CONVERT(national character varying, menu_id)
+        SELECT @menu_ids = COALESCE(@menu_ids + ',', '') + CONVERT(national character varying(500), menu_id)
         FROM core.menus
         WHERE app_name = @app_name
         AND menu_name IN (SELECT * FROM @menus);

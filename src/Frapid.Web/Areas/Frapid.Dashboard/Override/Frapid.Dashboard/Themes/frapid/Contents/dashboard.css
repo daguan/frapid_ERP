@@ -314,14 +314,13 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
         font-size: 0.89em;
     }
 
-
-.notifyjs-corner {
-    z-index: 1001 !important;
-    -webkit-filter: blur(0) !important;
-    -moz-filter: blur(0) !important;
-    -o-filter: blur(0) !important;
-    -ms-filter: blur(0) !important;
-    filter: blur(0) !important;
+.notify{
+	z-index: 19999!important;
+	-webkit-filter: blur(0)!important;
+	-moz-filter: blur(0)!important;
+	-o-filter: blur(0)!important;
+	-ms-filter: blur(0)!important;
+	filter: blur(0)!important;
 }
 
 .menu .item .sticker {

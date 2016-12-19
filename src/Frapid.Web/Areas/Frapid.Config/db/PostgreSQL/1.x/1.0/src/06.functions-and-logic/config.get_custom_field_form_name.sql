@@ -7,7 +7,7 @@ CREATE FUNCTION config.get_custom_field_form_name
 (
     _table_name character varying
 )
-RETURNS character varying
+RETURNS national character varying(500)
 STABLE
 AS
 $$
