@@ -128,7 +128,7 @@ namespace Frapid.Dashboard.Hubs
         {
             return from connection in Connections
                 where connection.Value.Tenant.ToUpperInvariant() == tenant.ToUpperInvariant()
-                where connection.Value.RoleId == userId
+                where connection.Value.UserId == userId
                 select connection.Key;
         }
 
@@ -137,7 +137,7 @@ namespace Frapid.Dashboard.Hubs
             return from connection in Connections
                 where connection.Value.Tenant.ToUpperInvariant() == tenant.ToUpperInvariant()
                 where connection.Value.OfficeId == officeId
-                where connection.Value.RoleId == userId
+                where connection.Value.UserId == userId
                 select connection.Key;
         }
 

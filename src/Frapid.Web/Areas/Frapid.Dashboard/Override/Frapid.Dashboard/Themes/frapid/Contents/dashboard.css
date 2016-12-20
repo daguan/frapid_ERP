@@ -136,15 +136,15 @@ html, body, .jstree {
     .apps > .item {
         display: inline-flex;
         flex-direction: column;
-        padding: 0.5em 1em 0 1em;
+        padding: 0.2em 0em 0 0em;
         border: 1px solid transparent;
-        width: 10em;
+        width: 8em;
         position: relative;
     }
 
         .apps > .item > .app > div.icon {
             padding-top: 0.2em;
-            font-size: 3em;
+            font-size: 2.4em;
         }
 
             .apps > .item > .app > div.icon i {
