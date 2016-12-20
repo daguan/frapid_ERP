@@ -14,6 +14,7 @@ CREATE PROCEDURE auth.create_app_menu_policy
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @role_id                integer;
     DECLARE @menus					TABLE(menu_name national character varying(100));

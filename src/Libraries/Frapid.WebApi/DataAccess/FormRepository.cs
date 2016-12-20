@@ -367,8 +367,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            string sql =
-                $"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName} WHERE deleted=@0;";
+            string sql = $"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName} WHERE deleted=@0 ORDER BY 1;";
             return await Factory.GetAsync<DisplayField>(this.Database, sql, false).ConfigureAwait(false);
         }
 
@@ -394,8 +393,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            string sql =
-                $"SELECT {this.LookupField} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName} WHERE deleted=@0;";
+            string sql = $"SELECT {this.LookupField} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName} WHERE deleted=@0 ORDER BY 1;";
             return await Factory.GetAsync<DisplayField>(this.Database, sql, false).ConfigureAwait(false);
         }
 
@@ -996,7 +994,7 @@ namespace Frapid.WebApi.DataAccess
                 candidateKey += "_code";
             }
 
-            candidateKey = candidateKey ?? "";
+            candidateKey = candidateKey?.Replace("_code_code", "_code") ?? "";
 
             return Sanitizer.SanitizeIdentifierName(candidateKey);
         }
@@ -1010,7 +1008,7 @@ namespace Frapid.WebApi.DataAccess
                 nameKey += "_name";
             }
 
-            return nameKey ?? "";
+            return nameKey?.Replace("_name_name", "_name") ?? "";
         }
 
         public async Task<EntityView> GetMetaAsync()

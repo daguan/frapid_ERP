@@ -191,6 +191,10 @@ function initializeFlag() {
     function displayFlags() {
         var ids = getAllKeys();
 
+        if(!ids.length){
+            return;
+        };
+
         var getFlagViewAjax = getFlagView(window.scrudFactory.viewTableName, window.userId, ids);
 
         getFlagViewAjax.success(function (msg) {

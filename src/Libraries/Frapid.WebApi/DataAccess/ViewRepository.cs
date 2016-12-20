@@ -7,6 +7,7 @@ using Frapid.Configuration.Db;
 using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.DbPolicy;
+using Frapid.Framework.Extensions;
 using Frapid.Mapper;
 using Frapid.Mapper.Database;
 using Serilog;
@@ -121,7 +122,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            string sql = $"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName};";
+            string sql = $"SELECT {this.PrimaryKey} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName} ORDER BY 1;";
             return await Factory.GetAsync<DisplayField>(this.Database, sql).ConfigureAwait(false);
         }
 
@@ -145,7 +146,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            string sql = $"SELECT {this.LookupField} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName};";
+            string sql = $"SELECT {this.LookupField} AS \"key\", {this.NameColumn} as \"value\" FROM {this.FullyQualifiedObjectName} ORDER BY 1;";
             return await Factory.GetAsync<DisplayField>(this.Database, sql).ConfigureAwait(false);
         }
 
@@ -440,7 +441,7 @@ namespace Frapid.WebApi.DataAccess
                 candidateKey += "_code";
             }
 
-            candidateKey = candidateKey ?? "";
+            candidateKey = candidateKey?.Replace("_code_code", "_code") ?? "";
 
             return Sanitizer.SanitizeIdentifierName(candidateKey);
         }
@@ -454,7 +455,7 @@ namespace Frapid.WebApi.DataAccess
                 nameKey += "_name";
             }
 
-            return nameKey ?? "";
+            return nameKey?.Replace("_name_name", "_name") ?? "";
         }
 
         #endregion

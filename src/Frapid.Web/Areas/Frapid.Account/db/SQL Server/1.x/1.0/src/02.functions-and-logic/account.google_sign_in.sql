@@ -17,6 +17,7 @@ CREATE PROCEDURE account.google_sign_in
 AS
 BEGIN    
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @user_id                        integer;
     DECLARE @login_id                       bigint;

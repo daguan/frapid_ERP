@@ -11,6 +11,7 @@ CREATE PROCEDURE account.add_installed_domain
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     IF EXISTS
     (

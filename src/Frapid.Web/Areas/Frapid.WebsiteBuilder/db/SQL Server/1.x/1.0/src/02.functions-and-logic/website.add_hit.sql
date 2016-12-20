@@ -7,6 +7,7 @@ CREATE PROCEDURE website.add_hit(@category_alias national character varying(250)
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	IF(COALESCE(@alias, '') = '' AND COALESCE(@category_alias, '') = '')
 	BEGIN

@@ -26,6 +26,11 @@ namespace Frapid.Mapper.Helpers
                         "T"
                     }.Contains(value.ToString().ToUpperInvariant());
                 }
+
+                if (value is short || value is int || value is long)
+                {
+                    return (long)value == 1;
+                }
             }
 
             if (destType == typeof(object))

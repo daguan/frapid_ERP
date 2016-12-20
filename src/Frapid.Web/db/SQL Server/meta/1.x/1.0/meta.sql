@@ -123,6 +123,7 @@ CREATE PROCEDURE i18n.add_localized_resource
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @resource_id    integer;
 
@@ -177,6 +178,7 @@ CREATE PROCEDURE i18n.add_resource
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     IF NOT EXISTS
     (

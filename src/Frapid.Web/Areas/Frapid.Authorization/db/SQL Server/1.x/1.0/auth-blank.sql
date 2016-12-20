@@ -100,6 +100,7 @@ CREATE PROCEDURE auth.create_api_access_policy
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @role_id                integer;
     
@@ -176,6 +177,7 @@ CREATE PROCEDURE auth.create_app_menu_policy
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @role_id                integer;
     DECLARE @menus					TABLE(menu_name national character varying(100));
@@ -270,6 +272,7 @@ CREATE PROCEDURE auth.get_group_menu_policy
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	DECLARE @result TABLE
 	(
@@ -440,6 +443,7 @@ CREATE PROCEDURE auth.get_user_menu_policy
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	DECLARE @result TABLE
 	(
@@ -538,6 +542,7 @@ CREATE PROCEDURE auth.has_access(@login_id integer, @entity national character v
 AS
 BEGIN    
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	DECLARE @user_id									integer = account.get_user_id_by_login_id(@login_id);
     DECLARE @role_id                                    integer;
@@ -657,6 +662,7 @@ CREATE PROCEDURE auth.save_api_group_policy
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     IF(@role_id IS NULL OR @office_id IS NULL)
     BEGIN
@@ -727,6 +733,7 @@ CREATE PROCEDURE auth.save_group_menu_policy
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	DECLARE @menus	TABLE(menu_id integer);
 
@@ -788,6 +795,7 @@ CREATE PROCEDURE auth.save_user_menu_policy
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	DECLARE @allowed_menus			TABLE(menu_id integer);
 	DECLARE @disallowed_menus		TABLE(menu_id integer);

@@ -9,6 +9,7 @@ INSTEAD OF INSERT
 AS
 BEGIN
 	SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 	
 	DECLARE @ip_address national character varying(100);
 	DECLARE @user_agent national character varying(500);

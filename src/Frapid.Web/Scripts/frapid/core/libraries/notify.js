@@ -49,7 +49,7 @@ function displayNotification(message, type, alwaysDisplay){
 		message: message,
 		position: {
 			x: "right", //right | left | center
-			y: "bottom" //top | bottom | center
+			y: "top" //top | bottom | center
 		},
 		size: "normal", //normal | full | small
 		overlay: false, //true | false

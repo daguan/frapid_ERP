@@ -17,6 +17,7 @@ CREATE PROCEDURE account.fb_sign_in
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	DECLARE @result TABLE
 	(

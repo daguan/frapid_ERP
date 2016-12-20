@@ -8,6 +8,7 @@ CREATE PROCEDURE account.confirm_registration(@token uniqueidentifier)
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @can_confirm        bit;
     DECLARE @office_id          integer;

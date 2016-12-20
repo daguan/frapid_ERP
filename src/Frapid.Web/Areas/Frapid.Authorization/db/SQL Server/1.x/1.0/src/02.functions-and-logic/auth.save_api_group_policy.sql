@@ -14,6 +14,7 @@ CREATE PROCEDURE auth.save_api_group_policy
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     IF(@role_id IS NULL OR @office_id IS NULL)
     BEGIN

@@ -15,6 +15,7 @@ CREATE PROCEDURE core.create_menu2
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @menu_id                            integer;
     

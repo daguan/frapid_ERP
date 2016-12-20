@@ -144,6 +144,7 @@ CREATE PROCEDURE website.add_email_subscription
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     IF NOT EXISTS
     (
@@ -174,6 +175,7 @@ CREATE PROCEDURE website.add_hit(@category_alias national character varying(250)
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	IF(COALESCE(@alias, '') = '' AND COALESCE(@category_alias, '') = '')
 	BEGIN
@@ -252,6 +254,7 @@ CREATE PROCEDURE website.remove_email_subscription
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     IF EXISTS
     (
@@ -403,6 +406,7 @@ AFTER UPDATE
 AS
 BEGIN
 	SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 	
 	IF @@NESTLEVEL > 1
 	BEGIN
@@ -452,6 +456,7 @@ INSTEAD OF INSERT
 AS
 BEGIN
 	SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 	
 	INSERT INTO website.email_subscriptions
 	(

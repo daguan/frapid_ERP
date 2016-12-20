@@ -17,6 +17,7 @@ CREATE PROCEDURE core.create_app
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     IF EXISTS
     (

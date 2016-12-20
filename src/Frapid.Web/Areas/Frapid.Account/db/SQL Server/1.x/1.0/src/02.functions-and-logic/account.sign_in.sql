@@ -15,6 +15,7 @@ CREATE PROCEDURE account.sign_in
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @login_id                       bigint;
     DECLARE @user_id                        integer;

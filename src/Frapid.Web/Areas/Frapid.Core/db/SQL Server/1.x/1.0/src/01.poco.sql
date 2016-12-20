@@ -163,6 +163,7 @@ CREATE PROCEDURE dbo.poco_get_table_function_definition(@schema national charact
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	DECLARE @total_rows			int;
 	DECLARE @this_row			int = 0;

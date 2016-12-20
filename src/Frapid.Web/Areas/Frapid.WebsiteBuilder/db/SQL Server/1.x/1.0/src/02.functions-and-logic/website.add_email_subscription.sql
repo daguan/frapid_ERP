@@ -12,6 +12,7 @@ CREATE PROCEDURE website.add_email_subscription
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     IF NOT EXISTS
     (

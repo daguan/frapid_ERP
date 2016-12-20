@@ -22,6 +22,10 @@
     var resourceIds = Enumerable.From(window.scrudjson).Select(function (x) { return x[toProperCase(keyField)]; }).ToArray();
     var kanbanIds = Enumerable.From(window.kanbans).Select(function (x) { return x.KanbanId; }).ToArray();
 
+    if(!window.kanbans.length || !window.scrudjson.length){
+        return;
+    };
+
     var ajax = request(kanbanIds, resourceIds);
 
     ajax.success(function (response) {

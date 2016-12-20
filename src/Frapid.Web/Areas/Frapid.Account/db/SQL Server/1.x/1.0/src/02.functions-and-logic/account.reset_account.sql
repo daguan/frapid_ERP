@@ -13,6 +13,7 @@ CREATE PROCEDURE account.reset_account
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	DECLARE @request_table_variable			TABLE(request_id uniqueidentifier);
     DECLARE @user_id                        integer;

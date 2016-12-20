@@ -37,8 +37,8 @@ GO
 CREATE PROCEDURE dbo.drop_schema(@name nvarchar(500), @showsql bit = 0)
 AS
 BEGIN
-	SET XACT_ABORT ON;
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
       DECLARE @sql nvarchar(max);
       DECLARE @commands TABLE

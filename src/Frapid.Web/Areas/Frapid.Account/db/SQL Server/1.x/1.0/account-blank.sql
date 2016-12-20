@@ -228,6 +228,7 @@ CREATE PROCEDURE account.add_installed_domain
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     IF EXISTS
     (
@@ -351,6 +352,7 @@ CREATE PROCEDURE account.complete_reset
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @user_id                integer;
     DECLARE @email                  national character varying(500);
@@ -389,6 +391,7 @@ CREATE PROCEDURE account.confirm_registration(@token uniqueidentifier)
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @can_confirm        bit;
     DECLARE @office_id          integer;
@@ -482,6 +485,7 @@ CREATE PROCEDURE account.fb_sign_in
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	DECLARE @result TABLE
 	(
@@ -776,6 +780,7 @@ CREATE PROCEDURE account.google_sign_in
 AS
 BEGIN    
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @user_id                        integer;
     DECLARE @login_id                       bigint;
@@ -1076,6 +1081,7 @@ CREATE PROCEDURE account.reset_account
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	DECLARE @request_table_variable			TABLE(request_id uniqueidentifier);
     DECLARE @user_id                        integer;
@@ -1144,6 +1150,7 @@ CREATE PROCEDURE account.sign_in
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @login_id                       bigint;
     DECLARE @user_id                        integer;
@@ -1245,6 +1252,7 @@ INSTEAD OF INSERT
 AS
 BEGIN
 	SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 	
 	DECLARE @ip_address national character varying(100);
 	DECLARE @user_agent national character varying(500);

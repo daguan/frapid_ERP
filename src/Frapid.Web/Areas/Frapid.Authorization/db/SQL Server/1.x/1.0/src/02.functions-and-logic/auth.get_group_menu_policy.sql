@@ -13,6 +13,7 @@ CREATE PROCEDURE auth.get_group_menu_policy
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	DECLARE @result TABLE
 	(

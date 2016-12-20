@@ -189,6 +189,7 @@ CREATE PROCEDURE dbo.poco_get_table_function_definition(@schema national charact
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	DECLARE @total_rows			int;
 	DECLARE @this_row			int = 0;
@@ -344,8 +345,8 @@ GO
 CREATE PROCEDURE dbo.drop_schema(@name nvarchar(500), @showsql bit = 0)
 AS
 BEGIN
-	SET XACT_ABORT ON;
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
       DECLARE @sql nvarchar(max);
       DECLARE @commands TABLE
@@ -857,6 +858,15 @@ SELECT 'INR', '₹',      'Indian Rupees',        'paise'     UNION ALL
 SELECT 'SEK', 'kr',     'Swedish Krona',        'öre'       UNION ALL
 SELECT 'NZD', 'NZ$',    'New Zealand Dollar',   'cent';
 
+INSERT INTO core.verification_statuses(verification_status_id, verification_status_name)
+SELECT -3,  'Rejected'                              UNION ALL
+SELECT -2,  'Closed'                                UNION ALL
+SELECT -1,  'Withdrawn'                             UNION ALL
+SELECT 0,   'Unverified'                            UNION ALL
+SELECT 1,   'Automatically Approved by Workflow'    UNION ALL
+SELECT 2,   'Approved';
+
+
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/05.scrud-views/core.office_scrud_view.sql --<--<--
 IF OBJECT_ID('core.office_scrud_view') IS NOT NULL
@@ -899,6 +909,7 @@ CREATE PROCEDURE core.create_app
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     IF EXISTS
     (
@@ -955,6 +966,7 @@ CREATE PROCEDURE core.create_menu2
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @menu_id                            integer;
     

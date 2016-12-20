@@ -12,6 +12,7 @@ CREATE PROCEDURE account.complete_reset
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @user_id                integer;
     DECLARE @email                  national character varying(500);

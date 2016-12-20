@@ -15,6 +15,7 @@ INSTEAD OF INSERT
 AS
 BEGIN
 	SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 	
 	INSERT INTO website.email_subscriptions
 	(

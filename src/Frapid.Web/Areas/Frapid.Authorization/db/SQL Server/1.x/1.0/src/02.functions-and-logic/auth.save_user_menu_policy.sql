@@ -14,6 +14,7 @@ CREATE PROCEDURE auth.save_user_menu_policy
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	DECLARE @allowed_menus			TABLE(menu_id integer);
 	DECLARE @disallowed_menus		TABLE(menu_id integer);

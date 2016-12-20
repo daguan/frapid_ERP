@@ -14,6 +14,7 @@ CREATE PROCEDURE auth.save_group_menu_policy
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	DECLARE @menus	TABLE(menu_id integer);
 

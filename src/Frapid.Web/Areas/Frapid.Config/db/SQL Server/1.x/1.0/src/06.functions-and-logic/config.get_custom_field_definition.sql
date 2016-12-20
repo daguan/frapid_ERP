@@ -13,6 +13,7 @@ CREATE PROCEDURE config.get_custom_field_definition
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
 	DECLARE @result TABLE
 	(

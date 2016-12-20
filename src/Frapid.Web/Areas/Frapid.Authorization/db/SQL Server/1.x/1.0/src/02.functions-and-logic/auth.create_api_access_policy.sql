@@ -14,6 +14,7 @@ CREATE PROCEDURE auth.create_api_access_policy
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @role_id                integer;
     

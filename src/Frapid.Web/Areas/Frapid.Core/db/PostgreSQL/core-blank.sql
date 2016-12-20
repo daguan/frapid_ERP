@@ -781,6 +781,15 @@ SELECT 'SEK', 'kr',     'Swedish Krona',        'öre'       UNION ALL
 SELECT 'NZD', 'NZ$',    'New Zealand Dollar',   'cent';
 
 
+INSERT INTO core.verification_statuses
+SELECT -3,  'Rejected'                              UNION ALL
+SELECT -2,  'Closed'                                UNION ALL
+SELECT -1,  'Withdrawn'                             UNION ALL
+SELECT 0,   'Unverified'                            UNION ALL
+SELECT 1,   'Automatically Approved by Workflow'    UNION ALL
+SELECT 2,   'Approved';
+
+
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/05.scrud-views/core.office_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS core.office_scrud_view;
 

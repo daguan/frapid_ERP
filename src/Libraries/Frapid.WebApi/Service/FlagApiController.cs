@@ -14,6 +14,11 @@ namespace Frapid.WebApi.Service
         [Route("~/api/flags/get/{resource}/{userId}")]
         public async Task<IEnumerable<dynamic>> GetAsync(string resource, int userId, [FromUri] object[] resourceIds)
         {
+            if (resourceIds == null)
+            {
+                return null;
+            }
+
             try
             {
                 var repository = new FlagRepository(this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);

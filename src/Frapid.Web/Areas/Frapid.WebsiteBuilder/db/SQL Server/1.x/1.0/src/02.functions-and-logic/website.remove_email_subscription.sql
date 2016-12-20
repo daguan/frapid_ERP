@@ -11,6 +11,7 @@ CREATE PROCEDURE website.remove_email_subscription
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     IF EXISTS
     (

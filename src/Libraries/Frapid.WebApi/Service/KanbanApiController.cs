@@ -14,6 +14,11 @@ namespace Frapid.WebApi.Service
         [Route("~/api/kanbans/get-by-resources")]
         public async Task<IEnumerable<dynamic>> GetAsync([FromUri] long[] kanbanIds, [FromUri] object[] resourceIds)
         {
+            if (kanbanIds == null || resourceIds == null)
+            {
+                return null;
+            }
+
             try
             {
                 var repository = new KanbanRepository(this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
