@@ -292,7 +292,7 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
         padding: 4em;
     }
 
-    .area {
+    .area:not(.icon) {
         padding-top: 2em;
     }
 }

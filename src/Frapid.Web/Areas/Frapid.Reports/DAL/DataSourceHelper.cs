@@ -14,13 +14,13 @@ namespace Frapid.Reports.DAL
         public static DataTable GetDataTable(string tenant, string sql, ParameterInfo parameters)
         {
             /**************************************************************************************
-            A MixERP report is a developer-only feature.
+            A Frapid report is a developer-only feature.
             But, that does not guarantee that there will be no misuse.
             So, the possible risk factor cannot be ignored altogether in this context.
             Therefore, a review for defense against possible
             SQL Injection Attacks is absolutely required here.
 
-            Although, we connect to PostgreSQL Database Server using a login "report_user"
+            Please do note that you should connect to Database Server using a login "report_user"
             which has a read-only access for executing the SQL statements to produce the report.
 
             The SQL query is expected to have only the SELECT statement, but there is no

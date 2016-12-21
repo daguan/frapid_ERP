@@ -3,7 +3,13 @@
 
     function getType() {
         function skipPrimaryKey() {
-            return $("[data-primarykey]").is("[readonly]");
+            var skip = scrudFactory.skipPrimaryKey;
+
+            if(skip === undefined){
+                skip = $("[data-primarykey]").is("[readonly]");                
+            };
+
+            return skip;
         };
 
         var type = "add";

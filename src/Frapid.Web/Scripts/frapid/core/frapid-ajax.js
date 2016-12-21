@@ -147,7 +147,7 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, keyField
     });
 };
 
-var ajaxDataBind = function (url, targetControl, data, selectedValue, associatedControl, callback, keyField, valueField, isArray) {
+var ajaxDataBind = function(url, targetControl, data, selectedValue, associatedControl, callback, keyField, valueField, isArray) {
     function appendItem(dropDownList, value, text, selected) {
         var option = $("<option></option>");
         option.val(value).html(text).trigger('change');

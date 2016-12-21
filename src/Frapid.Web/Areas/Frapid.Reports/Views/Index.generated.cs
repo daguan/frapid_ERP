@@ -58,13 +58,21 @@ WriteLiteral(@"
 
 
 <style>
-    #dashboard-container { padding: 1em 0 !important; }
+    #dashboard-container {
+        padding: 1em 0 !important;
+    }
 
-    .padded.container { padding: 2em !important; }
+    .padded.container {
+        padding: 2em !important;
+    }
 
-    .collapsed.column { padding: 0 !important; }
+    .collapsed.column {
+        padding: 0 !important;
+    }
 
-    .pusher, .ng-scope { height: 100% !important; }
+    .pusher, .ng-scope {
+        height: 100% !important;
+    }
 
     .report-panel {
         background-color: #949596;
@@ -78,19 +86,21 @@ WriteLiteral(@"
         text-align: left;
     }
 
-    .toolbar .button {
-        color: #dadada;
-        cursor: pointer;
-        display: inline-flex;
-        font-size: 0.8em;
-        height: 3.5em;
-        margin: 2px;
-        padding: 0.8em;
-        text-shadow: 2px 2px 20px white;
-        width: 2.5em;
-    }
+        .toolbar .button {
+            color: #dadada;
+            cursor: pointer;
+            display: inline-flex;
+            font-size: 0.8em;
+            height: 3.5em;
+            margin: 2px;
+            padding: 0.8em;
+            text-shadow: 2px 2px 20px white;
+            width: 2.5em;
+        }
 
-    .toolbar .button:hover { background-color: green; }
+            .toolbar .button:hover {
+                background-color: green;
+            }
 
     iframe {
         background-color: #fafafa;
@@ -103,11 +113,21 @@ WriteLiteral(@"
         width: 1000px;
     }
 
-    .vertically.very.relaxed { padding: 3em 0; }
+    .vertically.very.relaxed {
+        padding: 3em 0;
+    }
 
-    .header { font-weight: 100 !important; }
+    .filter.container {
+        padding: 1em;
+    }
 
-    .filter.container { padding: 1em; }
+    .report.title {
+        font-size: 1.2em !important;
+        padding: 0 0 1em 0;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #666;
+    }
 </style>
 <div");
 
@@ -239,13 +259,13 @@ WriteLiteral(" style=\"background-color: #efefef; height: 100%;\"");
 
 WriteLiteral(">\r\n                <div");
 
-WriteLiteral(" class=\"ui huge header\"");
+WriteLiteral(" class=\"report title\"");
 
 WriteLiteral(">");
 
             
-            #line 97 "..\..\Views\Index.cshtml"
-                                       Write(Model.ReportTitle);
+            #line 117 "..\..\Views\Index.cshtml"
+                                     Write(Model.ReportTitle);
 
             
             #line default
@@ -257,13 +277,13 @@ WriteLiteral(" class=\"ui small parameter form\"");
 WriteLiteral(">\r\n");
 
             
-            #line 100 "..\..\Views\Index.cshtml"
+            #line 120 "..\..\Views\Index.cshtml"
                     
             
             #line default
             #line hidden
             
-            #line 100 "..\..\Views\Index.cshtml"
+            #line 120 "..\..\Views\Index.cshtml"
                      foreach (var parameter in Model.Parameters)
                     {
                         string name = parameter.Name.Replace("@", "");
@@ -279,7 +299,7 @@ WriteLiteral(" class=\"field\"");
 WriteLiteral(">\r\n                            <label>");
 
             
-            #line 105 "..\..\Views\Index.cshtml"
+            #line 125 "..\..\Views\Index.cshtml"
                               Write(parameter.FieldLabel);
 
             
@@ -288,13 +308,13 @@ WriteLiteral(">\r\n                            <label>");
 WriteLiteral("</label>\r\n\r\n");
 
             
-            #line 107 "..\..\Views\Index.cshtml"
+            #line 127 "..\..\Views\Index.cshtml"
                             
             
             #line default
             #line hidden
             
-            #line 107 "..\..\Views\Index.cshtml"
+            #line 127 "..\..\Views\Index.cshtml"
                              if (!string.IsNullOrWhiteSpace(parameter.PopulateFrom))
                             {
 
@@ -306,7 +326,7 @@ WriteLiteral("                                <select");
 WriteLiteral(" data-paramter=\"");
 
             
-            #line 109 "..\..\Views\Index.cshtml"
+            #line 129 "..\..\Views\Index.cshtml"
                                                   Write(name);
 
             
@@ -314,15 +334,15 @@ WriteLiteral(" data-paramter=\"");
             #line hidden
 WriteLiteral("\"");
 
-WriteAttribute("id", Tuple.Create(" id=\"", 3714), Tuple.Create("\"", 3732)
+WriteAttribute("id", Tuple.Create(" id=\"", 4012), Tuple.Create("\"", 4030)
             
-            #line 109 "..\..\Views\Index.cshtml"
-, Tuple.Create(Tuple.Create("", 3719), Tuple.Create<System.Object, System.Int32>(name
+            #line 129 "..\..\Views\Index.cshtml"
+, Tuple.Create(Tuple.Create("", 4017), Tuple.Create<System.Object, System.Int32>(name
             
             #line default
             #line hidden
-, 3719), false)
-, Tuple.Create(Tuple.Create("", 3726), Tuple.Create("Select", 3726), true)
+, 4017), false)
+, Tuple.Create(Tuple.Create("", 4024), Tuple.Create("Select", 4024), true)
 );
 
 WriteLiteral("\r\n                                        class=\"ui search dropdown\"");
@@ -330,7 +350,7 @@ WriteLiteral("\r\n                                        class=\"ui search drop
 WriteLiteral("\r\n                                        data-key-field=\"");
 
             
-            #line 111 "..\..\Views\Index.cshtml"
+            #line 131 "..\..\Views\Index.cshtml"
                                                    Write(parameter.KeyField);
 
             
@@ -341,7 +361,7 @@ WriteLiteral("\"");
 WriteLiteral("\r\n                                        data-value-field=\"");
 
             
-            #line 112 "..\..\Views\Index.cshtml"
+            #line 132 "..\..\Views\Index.cshtml"
                                                      Write(parameter.ValueField);
 
             
@@ -352,7 +372,7 @@ WriteLiteral("\"");
 WriteLiteral("\r\n                                        data-default-value=\"");
 
             
-            #line 113 "..\..\Views\Index.cshtml"
+            #line 133 "..\..\Views\Index.cshtml"
                                                        Write(parameter.DefaultValue);
 
             
@@ -363,7 +383,7 @@ WriteLiteral("\"");
 WriteLiteral("\r\n                                        data-url=\"");
 
             
-            #line 114 "..\..\Views\Index.cshtml"
+            #line 134 "..\..\Views\Index.cshtml"
                                              Write(parameter.PopulateFrom);
 
             
@@ -371,10 +391,21 @@ WriteLiteral("\r\n                                        data-url=\"");
             #line hidden
 WriteLiteral("\"");
 
-WriteLiteral(">\r\n                                </select>\r\n");
+WriteLiteral(" data-optional=\"");
 
             
-            #line 116 "..\..\Views\Index.cshtml"
+            #line 134 "..\..\Views\Index.cshtml"
+                                                                                     Write(parameter.Optional.ToString().ToLowerInvariant());
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\"");
+
+WriteLiteral("></select>\r\n");
+
+            
+            #line 135 "..\..\Views\Index.cshtml"
                             }
                             else
                             {
@@ -390,7 +421,7 @@ WriteLiteral("                                        <input");
 WriteLiteral(" data-paramter=\"");
 
             
-            #line 122 "..\..\Views\Index.cshtml"
+            #line 141 "..\..\Views\Index.cshtml"
                                                          Write(name);
 
             
@@ -398,35 +429,35 @@ WriteLiteral(" data-paramter=\"");
             #line hidden
 WriteLiteral("\"");
 
-WriteAttribute("id", Tuple.Create(" id=\"", 4505), Tuple.Create("\"", 4526)
+WriteAttribute("id", Tuple.Create(" id=\"", 4835), Tuple.Create("\"", 4856)
             
-            #line 122 "..\..\Views\Index.cshtml"
-, Tuple.Create(Tuple.Create("", 4510), Tuple.Create<System.Object, System.Int32>(name
+            #line 141 "..\..\Views\Index.cshtml"
+, Tuple.Create(Tuple.Create("", 4840), Tuple.Create<System.Object, System.Int32>(name
             
             #line default
             #line hidden
-, 4510), false)
-, Tuple.Create(Tuple.Create("", 4517), Tuple.Create("InputDate", 4517), true)
+, 4840), false)
+, Tuple.Create(Tuple.Create("", 4847), Tuple.Create("InputDate", 4847), true)
 );
 
-WriteAttribute("value", Tuple.Create(" value=\"", 4527), Tuple.Create("\"", 4558)
+WriteAttribute("value", Tuple.Create(" value=\"", 4857), Tuple.Create("\"", 4888)
             
-            #line 122 "..\..\Views\Index.cshtml"
-                  , Tuple.Create(Tuple.Create("", 4535), Tuple.Create<System.Object, System.Int32>(parameter.DefaultValue
+            #line 141 "..\..\Views\Index.cshtml"
+                  , Tuple.Create(Tuple.Create("", 4865), Tuple.Create<System.Object, System.Int32>(parameter.DefaultValue
             
             #line default
             #line hidden
-, 4535), false)
+, 4865), false)
 );
 
 WriteLiteral(" class=\"date\"");
 
 WriteLiteral(" type=\"date\"");
 
-WriteLiteral("/>\r\n");
+WriteLiteral(" />\r\n");
 
             
-            #line 123 "..\..\Views\Index.cshtml"
+            #line 142 "..\..\Views\Index.cshtml"
                                         break;
                                     case "BOOL":
                                     case "BOOLEAN":
@@ -443,7 +474,7 @@ WriteLiteral(">\r\n                                            <input");
 WriteLiteral(" data-paramter=\"");
 
             
-            #line 127 "..\..\Views\Index.cshtml"
+            #line 146 "..\..\Views\Index.cshtml"
                                                              Write(name);
 
             
@@ -451,25 +482,25 @@ WriteLiteral(" data-paramter=\"");
             #line hidden
 WriteLiteral("\"");
 
-WriteAttribute("id", Tuple.Create(" id=\"", 4885), Tuple.Create("\"", 4906)
+WriteAttribute("id", Tuple.Create(" id=\"", 5216), Tuple.Create("\"", 5237)
             
-            #line 127 "..\..\Views\Index.cshtml"
-, Tuple.Create(Tuple.Create("", 4890), Tuple.Create<System.Object, System.Int32>(name
+            #line 146 "..\..\Views\Index.cshtml"
+, Tuple.Create(Tuple.Create("", 5221), Tuple.Create<System.Object, System.Int32>(name
             
             #line default
             #line hidden
-, 4890), false)
-, Tuple.Create(Tuple.Create("", 4897), Tuple.Create("InputDate", 4897), true)
+, 5221), false)
+, Tuple.Create(Tuple.Create("", 5228), Tuple.Create("InputDate", 5228), true)
 );
 
-WriteAttribute("value", Tuple.Create(" value=\"", 4907), Tuple.Create("\"", 4938)
+WriteAttribute("value", Tuple.Create(" value=\"", 5238), Tuple.Create("\"", 5269)
             
-            #line 127 "..\..\Views\Index.cshtml"
-                      , Tuple.Create(Tuple.Create("", 4915), Tuple.Create<System.Object, System.Int32>(parameter.DefaultValue
+            #line 146 "..\..\Views\Index.cshtml"
+                      , Tuple.Create(Tuple.Create("", 5246), Tuple.Create<System.Object, System.Int32>(parameter.DefaultValue
             
             #line default
             #line hidden
-, 4915), false)
+, 5246), false)
 );
 
 WriteLiteral(" type=\"checkbox\"");
@@ -478,7 +509,7 @@ WriteLiteral(">\r\n                                            <label>Yes</label
 "                          </div>\r\n");
 
             
-            #line 130 "..\..\Views\Index.cshtml"
+            #line 149 "..\..\Views\Index.cshtml"
                                         break;
                                     case "DECIMAL":
                                     case "DOUBLE":
@@ -491,7 +522,7 @@ WriteLiteral("                                        <input");
 WriteLiteral(" data-paramter=\"");
 
             
-            #line 133 "..\..\Views\Index.cshtml"
+            #line 152 "..\..\Views\Index.cshtml"
                                                          Write(name);
 
             
@@ -499,25 +530,25 @@ WriteLiteral(" data-paramter=\"");
             #line hidden
 WriteLiteral("\"");
 
-WriteAttribute("id", Tuple.Create(" id=\"", 5291), Tuple.Create("\"", 5312)
+WriteAttribute("id", Tuple.Create(" id=\"", 5622), Tuple.Create("\"", 5643)
             
-            #line 133 "..\..\Views\Index.cshtml"
-, Tuple.Create(Tuple.Create("", 5296), Tuple.Create<System.Object, System.Int32>(name
+            #line 152 "..\..\Views\Index.cshtml"
+, Tuple.Create(Tuple.Create("", 5627), Tuple.Create<System.Object, System.Int32>(name
             
             #line default
             #line hidden
-, 5296), false)
-, Tuple.Create(Tuple.Create("", 5303), Tuple.Create("InputText", 5303), true)
+, 5627), false)
+, Tuple.Create(Tuple.Create("", 5634), Tuple.Create("InputText", 5634), true)
 );
 
-WriteAttribute("value", Tuple.Create(" value=\"", 5313), Tuple.Create("\"", 5344)
+WriteAttribute("value", Tuple.Create(" value=\"", 5644), Tuple.Create("\"", 5675)
             
-            #line 133 "..\..\Views\Index.cshtml"
-                  , Tuple.Create(Tuple.Create("", 5321), Tuple.Create<System.Object, System.Int32>(parameter.DefaultValue
+            #line 152 "..\..\Views\Index.cshtml"
+                  , Tuple.Create(Tuple.Create("", 5652), Tuple.Create<System.Object, System.Int32>(parameter.DefaultValue
             
             #line default
             #line hidden
-, 5321), false)
+, 5652), false)
 );
 
 WriteLiteral(" type=\"text\"");
@@ -526,10 +557,10 @@ WriteLiteral(" class=\"decimal\"");
 
 WriteLiteral(" data-number=\"\"");
 
-WriteLiteral("/>\r\n");
+WriteLiteral(" />\r\n");
 
             
-            #line 134 "..\..\Views\Index.cshtml"
+            #line 153 "..\..\Views\Index.cshtml"
                                         break;
                                     case "INT":
                                     case "LONG":
@@ -542,7 +573,7 @@ WriteLiteral("                                        <input");
 WriteLiteral(" data-paramter=\"");
 
             
-            #line 137 "..\..\Views\Index.cshtml"
+            #line 156 "..\..\Views\Index.cshtml"
                                                          Write(name);
 
             
@@ -550,25 +581,25 @@ WriteLiteral(" data-paramter=\"");
             #line hidden
 WriteLiteral("\"");
 
-WriteAttribute("id", Tuple.Create(" id=\"", 5607), Tuple.Create("\"", 5628)
+WriteAttribute("id", Tuple.Create(" id=\"", 5939), Tuple.Create("\"", 5960)
             
-            #line 137 "..\..\Views\Index.cshtml"
-, Tuple.Create(Tuple.Create("", 5612), Tuple.Create<System.Object, System.Int32>(name
+            #line 156 "..\..\Views\Index.cshtml"
+, Tuple.Create(Tuple.Create("", 5944), Tuple.Create<System.Object, System.Int32>(name
             
             #line default
             #line hidden
-, 5612), false)
-, Tuple.Create(Tuple.Create("", 5619), Tuple.Create("InputText", 5619), true)
+, 5944), false)
+, Tuple.Create(Tuple.Create("", 5951), Tuple.Create("InputText", 5951), true)
 );
 
-WriteAttribute("value", Tuple.Create(" value=\"", 5629), Tuple.Create("\"", 5660)
+WriteAttribute("value", Tuple.Create(" value=\"", 5961), Tuple.Create("\"", 5992)
             
-            #line 137 "..\..\Views\Index.cshtml"
-                  , Tuple.Create(Tuple.Create("", 5637), Tuple.Create<System.Object, System.Int32>(parameter.DefaultValue
+            #line 156 "..\..\Views\Index.cshtml"
+                  , Tuple.Create(Tuple.Create("", 5969), Tuple.Create<System.Object, System.Int32>(parameter.DefaultValue
             
             #line default
             #line hidden
-, 5637), false)
+, 5969), false)
 );
 
 WriteLiteral(" type=\"text\"");
@@ -577,10 +608,10 @@ WriteLiteral(" class=\"integer\"");
 
 WriteLiteral(" data-number=\"\"");
 
-WriteLiteral("/>\r\n");
+WriteLiteral(" />\r\n");
 
             
-            #line 138 "..\..\Views\Index.cshtml"
+            #line 157 "..\..\Views\Index.cshtml"
                                         break;
                                     default:
 
@@ -592,7 +623,7 @@ WriteLiteral("                                        <input");
 WriteLiteral(" data-paramter=\"");
 
             
-            #line 140 "..\..\Views\Index.cshtml"
+            #line 159 "..\..\Views\Index.cshtml"
                                                          Write(name);
 
             
@@ -600,33 +631,33 @@ WriteLiteral(" data-paramter=\"");
             #line hidden
 WriteLiteral("\"");
 
-WriteAttribute("id", Tuple.Create(" id=\"", 5870), Tuple.Create("\"", 5891)
+WriteAttribute("id", Tuple.Create(" id=\"", 6203), Tuple.Create("\"", 6224)
             
-            #line 140 "..\..\Views\Index.cshtml"
-, Tuple.Create(Tuple.Create("", 5875), Tuple.Create<System.Object, System.Int32>(name
+            #line 159 "..\..\Views\Index.cshtml"
+, Tuple.Create(Tuple.Create("", 6208), Tuple.Create<System.Object, System.Int32>(name
             
             #line default
             #line hidden
-, 5875), false)
-, Tuple.Create(Tuple.Create("", 5882), Tuple.Create("InputText", 5882), true)
+, 6208), false)
+, Tuple.Create(Tuple.Create("", 6215), Tuple.Create("InputText", 6215), true)
 );
 
-WriteAttribute("value", Tuple.Create(" value=\"", 5892), Tuple.Create("\"", 5923)
+WriteAttribute("value", Tuple.Create(" value=\"", 6225), Tuple.Create("\"", 6256)
             
-            #line 140 "..\..\Views\Index.cshtml"
-                  , Tuple.Create(Tuple.Create("", 5900), Tuple.Create<System.Object, System.Int32>(parameter.DefaultValue
+            #line 159 "..\..\Views\Index.cshtml"
+                  , Tuple.Create(Tuple.Create("", 6233), Tuple.Create<System.Object, System.Int32>(parameter.DefaultValue
             
             #line default
             #line hidden
-, 5900), false)
+, 6233), false)
 );
 
 WriteLiteral(" type=\"text\"");
 
-WriteLiteral("/>\r\n");
+WriteLiteral(" />\r\n");
 
             
-            #line 141 "..\..\Views\Index.cshtml"
+            #line 160 "..\..\Views\Index.cshtml"
                                         break;
                                 }
                             }
@@ -637,7 +668,7 @@ WriteLiteral("/>\r\n");
 WriteLiteral("                        </div>\r\n");
 
             
-            #line 145 "..\..\Views\Index.cshtml"
+            #line 164 "..\..\Views\Index.cshtml"
                     }
 
             
@@ -656,65 +687,62 @@ WriteLiteral(" class=\"thirteen wide column\"");
 
 WriteLiteral(">\r\n            <iframe");
 
-WriteAttribute("src", Tuple.Create(" src=\"", 6318), Tuple.Create("\"", 6347)
+WriteAttribute("src", Tuple.Create(" src=\"", 6652), Tuple.Create("\"", 6681)
             
-            #line 151 "..\..\Views\Index.cshtml"
-, Tuple.Create(Tuple.Create("", 6324), Tuple.Create<System.Object, System.Int32>(Model.ReportSourcePath
+            #line 170 "..\..\Views\Index.cshtml"
+, Tuple.Create(Tuple.Create("", 6658), Tuple.Create<System.Object, System.Int32>(Model.ReportSourcePath
             
             #line default
             #line hidden
-, 6324), false)
+, 6658), false)
 );
 
-WriteLiteral("></iframe>\r\n        </div>\r\n    </div>\r\n</div>\r\n<script");
-
-WriteLiteral(" src=\"/Scripts/frapid/utilities/form.js\"");
-
-WriteLiteral("></script>\r\n<script>\r\n    $(\".dropdown\").dropdown();\r\n    loadDatepicker();\r\n    " +
-"(function() {\r\n\r\n        const persist = JSON.parse(localStorage.getItem(documen" +
-"t.location.pathname));\r\n\r\n        if (persist) {\r\n            $.each(persist, fu" +
-"nction() {\r\n                const el = $(`#${this.id}`);\r\n                const " +
-"value = this.value;\r\n                var defaultValue;\r\n\r\n                if (el" +
-".is(\"select\")) {\r\n                    defaultValue = el.attr(\"data-default-value" +
-"\");\r\n                    if (!defaultValue) {\r\n                        el.attr(\"" +
-"data-default-value\", value);\r\n                    };\r\n                } else {\r\n" +
-"                    defaultValue = el.val();\r\n                    if (!defaultVa" +
-"lue) {\r\n\r\n                        if (el.is(\".date\")) {\r\n                       " +
-"     const date = new Date(value);\r\n\r\n                            el.datepicker(" +
-"\"setDate\", date);\r\n                        } else {\r\n                           " +
-" el.val(value);\r\n                        };\r\n                    };\r\n           " +
-"     };\r\n\r\n            });\r\n        };\r\n\r\n        const candidates = $(\"select[d" +
-"ata-url]\");\r\n\r\n        $.each(candidates, function() {\r\n            var el = $(t" +
-"his);\r\n            const url = el.attr(\"data-url\");\r\n            const keyField " +
-"= el.attr(\"data-key-field\");\r\n            const valueField = el.attr(\"data-value" +
-"-field\");\r\n            var defaultValue = el.attr(\"data-default-value\");\r\n\r\n\r\n  " +
-"          window.ajaxDataBind(url, el, null, defaultValue, null, function() {\r\n " +
-"               setTimeout(function() {\r\n                        el.dropdown(\"set" +
-" selected\", defaultValue);\r\n                    },\r\n                    100);\r\n " +
-"           }, keyField, valueField, false);\r\n        });\r\n    })();\r\n\r\n    $(\"#S" +
-"howButton\")\r\n        .unbind(\"click\")\r\n        .bind(\"click\",\r\n            funct" +
-"ion() {\r\n                var persist = [];\r\n\r\n                var query = [];\r\n\r" +
-"\n                const dateEls = $(\".parameter.form .field input.date\");\r\n\r\n    " +
-"            $.each(dateEls,\r\n                    function() {\r\n                 " +
-"       const el = $(this);\r\n                        const parameter = el.attr(\"d" +
-"ata-paramter\");\r\n                        const value = el.datepicker(\"getDate\")." +
-"valueOf();\r\n                        const id = el.attr(\"id\");\r\n\r\n               " +
-"         persist.push({\r\n                            id: id,\r\n                  " +
-"          value: value\r\n                        });\r\n\r\n                        i" +
-"f (parameter) {\r\n                            query.push(parameter + \"=\" + value)" +
-";\r\n                        };\r\n                    });\r\n\r\n                const " +
-"otherEls = $(\".parameter.form .field input:not(.date), .parameter.form .field se" +
-"lect\");\r\n\r\n                $.each(otherEls,\r\n                    function() {\r\n " +
-"                       const el = $(this);\r\n                        const parame" +
-"ter = el.attr(\"data-paramter\");\r\n                        const value = el.val();" +
-"\r\n\r\n                        const id = el.attr(\"id\");\r\n\r\n                       " +
-" persist.push({\r\n                            id: id,\r\n                          " +
-"  value: value\r\n                        });\r\n\r\n                        if (param" +
-"eter) {\r\n                            query.push(parameter + \"=\" + value);\r\n     " +
-"                   };\r\n                    });\r\n\r\n                localStorage.s" +
-"etItem(document.location.pathname, JSON.stringify(persist));\r\n\r\n                " +
-"const location = document.location.pathname + \"?\" + query.join(\"&\");\r\n          " +
-"      document.location = location;\r\n            });\r\n</script>");
+WriteLiteral("></iframe>\r\n        </div>\r\n    </div>\r\n</div>\r\n<script>\r\n    $(\".dropdown\").drop" +
+"down();\r\n    loadDatepicker();\r\n\r\n    (function () {\r\n        const persist = JS" +
+"ON.parse(localStorage.getItem(document.location.pathname));\r\n\r\n        if (persi" +
+"st) {\r\n            $.each(persist, function () {\r\n                const el = $(`" +
+"#${this.id}`);\r\n                const value = this.value;\r\n                var d" +
+"efaultValue;\r\n\r\n                if (el.is(\"select\")) {\r\n                    defa" +
+"ultValue = el.attr(\"data-default-value\");\r\n\r\n                    if (!defaultVal" +
+"ue) {\r\n                        el.attr(\"data-default-value\", value);\r\n          " +
+"          };\r\n                } else {\r\n                    defaultValue = el.va" +
+"l();\r\n                    if (!defaultValue) {\r\n\r\n                        if (el" +
+".is(\".date\")) {\r\n                            const date = new Date(value);\r\n\r\n  " +
+"                          el.datepicker(\"setDate\", date);\r\n                     " +
+"   } else {\r\n                            el.val(value);\r\n                       " +
+" };\r\n                    };\r\n                };\r\n\r\n            });\r\n        };\r\n" +
+"\r\n        const candidates = $(\"select[data-url]\");\r\n\r\n        $.each(candidates" +
+", function () {\r\n            var el = $(this);\r\n            const url = el.attr(" +
+"\"data-url\");\r\n            const keyField = el.attr(\"data-key-field\");\r\n         " +
+"   const valueField = el.attr(\"data-value-field\");\r\n            var defaultValue" +
+" = el.attr(\"data-default-value\");\r\n            const optional = el.attr(\"data-op" +
+"tional\").toLowerCase().indexOf(\"t\") > -1;\r\n\r\n\r\n            window.ajaxDataBind(u" +
+"rl, el, null, defaultValue, null, function () {\r\n                setTimeout(func" +
+"tion () {\r\n\r\n                    if (defaultValue) {\r\n                        el" +
+".dropdown(\"set selected\", defaultValue);\r\n                    };\r\n\r\n            " +
+"        if (optional) {\r\n                        el.prepend(\"<option value=\'null" +
+"\'>Select</option>\");\r\n\r\n                        if (defaultValue === \"0\") {\r\n   " +
+"                         el.dropdown(\"set text\", \"Select\");\r\n                   " +
+"     };\r\n                    };\r\n                }, 100);\r\n\r\n            }, keyF" +
+"ield, valueField, false);\r\n        });\r\n    })();\r\n\r\n    $(\"#ShowButton\").unbind" +
+"(\"click\").bind(\"click\", function () {\r\n        var persist = [];\r\n\r\n        var " +
+"query = [];\r\n\r\n        const dateEls = $(\".parameter.form .field input.date\");\r\n" +
+"\r\n        $.each(dateEls, function () {\r\n            const el = $(this);\r\n      " +
+"      const parameter = el.attr(\"data-paramter\");\r\n            const value = el." +
+"datepicker(\"getDate\").valueOf();\r\n            const id = el.attr(\"id\");\r\n\r\n     " +
+"       persist.push({\r\n                id: id,\r\n                value: value\r\n  " +
+"          });\r\n\r\n            if (parameter) {\r\n                query.push(parame" +
+"ter + \"=\" + value);\r\n            };\r\n        });\r\n\r\n        const otherEls = $(\"" +
+".parameter.form .field input:not(.date), .parameter.form .field select\");\r\n\r\n   " +
+"     $.each(otherEls, function () {\r\n            const el = $(this);\r\n          " +
+"  const parameter = el.attr(\"data-paramter\");\r\n            const value = el.val(" +
+");\r\n\r\n            const id = el.attr(\"id\");\r\n\r\n            persist.push({\r\n     " +
+"           id: id,\r\n                value: value\r\n            });\r\n\r\n           " +
+" if (parameter) {\r\n                query.push(parameter + \"=\" + value);\r\n       " +
+"     };\r\n        });\r\n\r\n        localStorage.setItem(document.location.pathname," +
+" JSON.stringify(persist));\r\n\r\n        const location = document.location.pathnam" +
+"e + \"?\" + query.join(\"&\");\r\n        document.location = location;\r\n    });\r\n</sc" +
+"ript>");
 
         }
     }

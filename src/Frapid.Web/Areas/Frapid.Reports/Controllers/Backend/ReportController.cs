@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web.Mvc;
-using Frapid.Configuration;
+using Frapid.Dashboard;
 using Frapid.Framework.Extensions;
 using Frapid.Reports.Engine;
 using Frapid.Reports.Engine.Model;
@@ -15,6 +14,7 @@ namespace Frapid.Reports.Controllers.Backend
     public class ReportController : BackendReportController
     {
         [Route("dashboard/reports/view/{*path}")]
+        [MenuPolicy]
         public ActionResult Index(string path)
         {
             string query = this.Request?.Url?.Query.Or("");

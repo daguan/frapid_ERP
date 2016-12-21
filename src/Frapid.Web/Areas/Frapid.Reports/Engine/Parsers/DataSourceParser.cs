@@ -83,6 +83,7 @@ namespace Frapid.Reports.Engine.Parsers
                         string keyField = this.GetAttributeValue(current, "KeyField")?.ToString();
                         string valueField = this.GetAttributeValue(current, "ValueField")?.ToString();
                         string fieldLabel = this.GetAttributeValue(current, "FieldLabel")?.ToString();
+                        var optional = this.GetAttributeValue(current, "Optional")?.ToString().ToUpperInvariant().StartsWith("T");
 
                         fieldLabel = ExpressionHelper.ParseExpression(report.Tenant, fieldLabel, report.DataSources, ParameterHelper.GetPraParameterInfo(report));
 
@@ -95,7 +96,8 @@ namespace Frapid.Reports.Engine.Parsers
                             PopulateFrom = populateFrom,
                             KeyField = keyField,
                             ValueField = valueField,
-                            FieldLabel = fieldLabel
+                            FieldLabel = fieldLabel,
+                            Optional = optional ?? false
                         });
                     }
                 }
@@ -109,7 +111,7 @@ namespace Frapid.Reports.Engine.Parsers
             var candidate =
                 node.ChildNodes.Cast<XmlNode>().FirstOrDefault(x => x.Name.Equals("RunningTotalFieldIndices"));
 
-            if (candidate != null)
+            if (!string.IsNullOrWhiteSpace(candidate?.InnerText))
             {
                 var value = candidate.InnerText.Split(',').Select(int.Parse).ToList();
                 return value;
