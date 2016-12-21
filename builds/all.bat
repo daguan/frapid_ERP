@@ -86,6 +86,11 @@ if exist "../src/Frapid.Web/Areas/MixERP.Sales/MixERP.Sales.sln" (
 	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/MixERP.Sales/MixERP.Sales.sln /p:VisualStudioVersion=14.0
 )
 
+if exist "../src/Frapid.Web/Areas/MixERP.Production/MixERP.Production.sln" (
+	@echo Building Production Module
+	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/MixERP.Production/MixERP.Production.sln /p:VisualStudioVersion=14.0
+)
+
 if exist "../src/Frapid.Web/Areas/CineSys/CineSys.sln" (
 	@echo Building CineSys Module
 	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/CineSys/CineSys.sln /p:VisualStudioVersion=14.0

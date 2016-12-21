@@ -291,10 +291,6 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
     #PhoneMenu {
         padding: 4em;
     }
-
-    .area:not(.icon) {
-        padding-top: 2em;
-    }
 }
 
 
@@ -512,4 +508,16 @@ input[data-feature-search] {
     font-size: 0.87em !important;
     width: 220px;
     letter-spacing: 1px;
+}
+
+.adjacent.button{
+	margin:0.25em!important;
+}
+
+.fluid.width{
+    width:100%;
+}
+
+.overflown{
+    overflow: auto;
 }
