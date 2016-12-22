@@ -7,11 +7,11 @@ INSERT INTO website.menus(menu_name)
 SELECT 'Default';
 
 
-INSERT INTO website.menu_items(menu_id, title, url, target)
-SELECT (SELECT menu_id FROM website.menus), 'Home', '/', '' UNION ALL
-SELECT (SELECT menu_id FROM website.menus), 'Sign Up', '/account/sign-up', '_parent' UNION ALL
-SELECT (SELECT menu_id FROM website.menus), 'Admin Area', '/dashboard', '_parent' UNION ALL
-SELECT (SELECT menu_id FROM website.menus), 'Contact Us', '/contact-us', '';
+INSERT INTO website.menu_items(menu_id, sort, title, url, target)
+SELECT (SELECT menu_id FROM website.menus), 1,		'Home', '/', '' UNION ALL
+SELECT (SELECT menu_id FROM website.menus), 100,	'Sign Up', '/account/sign-up', '_parent' UNION ALL
+SELECT (SELECT menu_id FROM website.menus), 1000,	'Admin Area', '/dashboard', '_parent' UNION ALL
+SELECT (SELECT menu_id FROM website.menus), 10000,	'Contact Us', '/contact-us', '';
 
 INSERT INTO website.categories(category_name, alias, seo_description)
 SELECT 'Default', 'default', '';

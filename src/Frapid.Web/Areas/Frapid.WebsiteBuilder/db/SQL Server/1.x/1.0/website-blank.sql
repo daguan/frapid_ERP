@@ -15,7 +15,7 @@ CREATE TABLE website.configurations
 	blog_description							    national character varying(500),	
 	is_default                                      bit NOT NULL DEFAULT(1),
     audit_user_id                                   integer REFERENCES account.users,
-    audit_ts                                		DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                		DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted											bit DEFAULT(0)
 );
 
@@ -37,7 +37,7 @@ CREATE TABLE website.email_subscriptions
     subscribed_on                               datetimeoffset DEFAULT(getutcdate()),    
     unsubscribed_on                             datetimeoffset,
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -49,7 +49,7 @@ CREATE TABLE website.categories
     seo_description                             national character varying(100),
 	is_blog										bit NOT NULL DEFAULT(0),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)    
 );
 
@@ -72,7 +72,7 @@ CREATE TABLE website.contents
     seo_description                             national character varying(1000) NOT NULL DEFAULT(''),
     is_homepage                                 bit NOT NULL DEFAULT(0),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)    
 );
 
@@ -82,7 +82,7 @@ CREATE TABLE website.menus
     menu_name                                   national character varying(100),
     description                                 national character varying(500),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -101,7 +101,7 @@ CREATE TABLE website.menu_items
     content_id                                  integer REFERENCES website.contents,
 	parent_menu_item_id							integer REFERENCES website.menu_items,
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0));
 
 
@@ -125,7 +125,7 @@ CREATE TABLE website.contacts
     sort                                        integer NOT NULL DEFAULT(0),
     status                                      bit NOT NULL DEFAULT(1),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)    
 );
 
@@ -134,8 +134,6 @@ IF OBJECT_ID('website.add_email_subscription') IS NOT NULL
 DROP PROCEDURE website.add_email_subscription;
 
 GO
-
-
 
 CREATE PROCEDURE website.add_email_subscription
 (
@@ -186,8 +184,7 @@ BEGIN
 	END;
 
 	UPDATE website.contents SET hits = COALESCE(website.contents.hits, 0) + 1 
-	WHERE website.contents.content_id
-	=
+	WHERE website.contents.content_id =
 	(
 		SELECT website.published_content_view.content_id 
 		FROM website.published_content_view
@@ -238,6 +235,30 @@ BEGIN
 END;
 
 GO
+
+
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/02.functions-and-logic/website.get_menu_id_by_menu_name.sql --<--<--
+IF OBJECT_ID('website.get_menu_id_by_menu_name') IS NOT NULL
+DROP FUNCTION website.get_menu_id_by_menu_name;
+
+GO
+
+CREATE FUNCTION website.get_menu_id_by_menu_name(@menu_name national character varying(500))
+RETURNS integer
+AS
+BEGIN
+    RETURN
+    (
+		SELECT menu_id
+		FROM website.menus
+		WHERE menu_name = @menu_name
+		AND website.menus.deleted = 0
+	);
+END;
+
+GO
+
+--SELECT website.get_menu_id_by_menu_name('Default');
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/02.functions-and-logic/website.remove_email_subscription.sql --<--<--

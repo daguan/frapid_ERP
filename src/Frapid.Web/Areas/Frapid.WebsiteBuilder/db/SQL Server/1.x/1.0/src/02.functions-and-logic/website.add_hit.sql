@@ -18,8 +18,7 @@ BEGIN
 	END;
 
 	UPDATE website.contents SET hits = COALESCE(website.contents.hits, 0) + 1 
-	WHERE website.contents.content_id
-	=
+	WHERE website.contents.content_id =
 	(
 		SELECT website.published_content_view.content_id 
 		FROM website.published_content_view

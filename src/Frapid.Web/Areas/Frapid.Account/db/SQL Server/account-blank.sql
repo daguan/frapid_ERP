@@ -11,7 +11,7 @@ CREATE TABLE account.roles
     role_name									national character varying(100) NOT NULL UNIQUE,
     is_administrator							bit NOT NULL DEFAULT(0),
     audit_user_id								integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -21,7 +21,7 @@ CREATE TABLE account.installed_domains
     domain_name									national character varying(500),
     admin_email									national character varying(500),
     audit_user_id                           	integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -45,7 +45,7 @@ CREATE TABLE account.configuration_profiles
     facebook_app_id								national character varying(500),
     facebook_scope								national character varying(500),
     audit_user_id								integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -68,7 +68,7 @@ CREATE TABLE account.registrations
     confirmed									bit DEFAULT(0),
     confirmed_on								datetimeoffset,
     audit_user_id                           	integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -91,7 +91,7 @@ CREATE TABLE account.users
 	last_ip										national character varying(500),
 	last_browser								national character varying(500),
     audit_user_id								integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -119,7 +119,7 @@ CREATE TABLE account.reset_requests
     confirmed									bit DEFAULT(0),
     confirmed_on								datetimeoffset,
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -132,7 +132,7 @@ CREATE TABLE account.fb_access_tokens
     fb_user_id									national character varying(500),
     token										national character varying(MAX),
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -142,7 +142,7 @@ CREATE TABLE account.google_access_tokens
     user_id										integer PRIMARY KEY REFERENCES account.users,
     token										national character varying(MAX),
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -157,7 +157,7 @@ CREATE TABLE account.logins
     login_timestamp								datetimeoffset NOT NULL DEFAULT(getutcdate()),
     culture										national character varying(12) NOT NULL,
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -180,7 +180,7 @@ CREATE TABLE account.applications
     redirect_url                                national character varying(500),
     app_secret                                  national character varying(500) UNIQUE,
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -208,7 +208,7 @@ CREATE TABLE account.access_tokens
     revoked_by                                  integer REFERENCES account.users,
     revoked_on                                  datetimeoffset,
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -343,7 +343,6 @@ DROP PROCEDURE account.complete_reset;
 
 GO
 
-
 CREATE PROCEDURE account.complete_reset
 (
     @request_id                     uniqueidentifier,
@@ -357,24 +356,49 @@ BEGIN
     DECLARE @user_id                integer;
     DECLARE @email                  national character varying(500);
 
-    SELECT
-        @user_id = account.users.user_id,
-        @email = account.users.email
-    FROM account.reset_requests
-    INNER JOIN account.users
-    ON account.users.user_id = account.reset_requests.user_id
-    WHERE account.reset_requests.request_id = @request_id
-    AND expires_on >= getutcdate()
-	AND account.reset_requests.deleted = 0;
+    BEGIN TRY
+        DECLARE @tran_count int = @@TRANCOUNT;
+        
+        IF(@tran_count= 0)
+        BEGIN
+            BEGIN TRANSACTION
+        END;
 
-    
-    UPDATE account.users
-    SET
-        password = @password
-    WHERE user_id = @user_id;
+        SELECT
+            @user_id = account.users.user_id,
+            @email = account.users.email
+        FROM account.reset_requests
+        INNER JOIN account.users
+        ON account.users.user_id = account.reset_requests.user_id
+        WHERE account.reset_requests.request_id = @request_id
+        AND expires_on >= getutcdate()
+    	AND account.reset_requests.deleted = 0;
 
-    UPDATE account.reset_requests
-    SET confirmed = 1, confirmed_on = getutcdate();
+        
+        UPDATE account.users
+        SET
+            password = @password
+        WHERE user_id = @user_id;
+
+        UPDATE account.reset_requests
+        SET confirmed = 1, confirmed_on = getutcdate();
+
+        IF(@tran_count = 0)
+        BEGIN
+            COMMIT TRANSACTION;
+        END;
+    END TRY
+    BEGIN CATCH
+        IF(XACT_STATE() <> 0 AND @tran_count = 0) 
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
+
+        DECLARE @ErrorMessage national character varying(4000)  = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity int                              = ERROR_SEVERITY();
+        DECLARE @ErrorState int                                 = ERROR_STATE();
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
 END;
 
 
@@ -386,7 +410,6 @@ DROP PROCEDURE account.confirm_registration;
 
 GO
 
-
 CREATE PROCEDURE account.confirm_registration(@token uniqueidentifier)
 AS
 BEGIN
@@ -397,36 +420,63 @@ BEGIN
     DECLARE @office_id          integer;
     DECLARE @role_id            integer;
 
-    SET @can_confirm = account.can_confirm_registration(@token);
+    BEGIN TRY
+        DECLARE @tran_count int = @@TRANCOUNT;
+        
+        IF(@tran_count= 0)
+        BEGIN
+            BEGIN TRANSACTION
+        END;
+        
+        SET @can_confirm = account.can_confirm_registration(@token);
 
-    IF(@can_confirm = 0)
-    BEGIN
-        SELECT 0;
-        RETURN;
-    END;
+        IF(@can_confirm = 0)
+        BEGIN
+            SELECT 0;
+            RETURN;
+        END;
 
-    SELECT
-    TOP 1
-        @office_id = registration_office_id        
-    FROM account.configuration_profiles
-    WHERE is_active = 1;
+        SELECT
+        TOP 1
+            @office_id = registration_office_id        
+        FROM account.configuration_profiles
+        WHERE is_active = 1;
 
-    INSERT INTO account.users(email, password, office_id, role_id, name, phone)
-    SELECT email, password, @office_id, account.get_registration_role_id(email), name, phone
-    FROM account.registrations
-    WHERE registration_id = @token
-	AND confirmed = 0;
+        INSERT INTO account.users(email, password, office_id, role_id, name, phone)
+        SELECT email, password, @office_id, account.get_registration_role_id(email), name, phone
+        FROM account.registrations
+        WHERE registration_id = @token
+    	AND confirmed = 0;
 
-    UPDATE account.registrations
-    SET 
-        confirmed = 1, 
-        confirmed_on = getutcdate()
-    WHERE registration_id = @token;
+        UPDATE account.registrations
+        SET 
+            confirmed = 1, 
+            confirmed_on = getutcdate()
+        WHERE registration_id = @token;
     
-    SELECT 1;
+
+        IF(@tran_count = 0)
+        BEGIN
+            COMMIT TRANSACTION;
+        END;
+
+        SELECT 1;
+    END TRY
+    BEGIN CATCH
+        IF(XACT_STATE() <> 0 AND @tran_count = 0) 
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
+
+        DECLARE @ErrorMessage national character varying(4000)  = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity int                              = ERROR_SEVERITY();
+        DECLARE @ErrorState int                                 = ERROR_STATE();
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
 END;
 
 GO
+
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.email_exists.sql --<--<--
 IF OBJECT_ID('account.email_exists') IS NOT NULL
@@ -486,89 +536,114 @@ AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
-
-	DECLARE @result TABLE
-	(
-		login_id                                bigint,
-		status                                  bit,
-		message                                 national character varying(500)
-	);
 	
     DECLARE @user_id                        integer;
     DECLARE @login_id                       bigint;
     DECLARE @auto_register                  bit = 0;
 
-    IF(COALESCE(@office_id, 0) = 0)
-    BEGIN
-        IF(SELECT COUNT(*) FROM core.offices) = 1
-        BEGIN
-            SELECT @office_id = office_id
-            FROM core.offices;
-        END;
-    END;
+    DECLARE @result TABLE
+    (
+        login_id                            bigint,
+        status                              bit,
+        message                             national character varying(500)
+    );
 
-    IF account.is_restricted_user(@email) = 1
-    BEGIN
-        --LOGIN IS RESTRICTED TO THIS USER
-        INSERT INTO @result
-        SELECT CAST(NULL AS bigint), 0, 'Access is denied';
-		
-		SELECT * FROM @result;
-        RETURN;
-    END;
-
-    SELECT @user_id = user_id
-    FROM account.users
-    WHERE account.users.email = @email;
-
-    IF account.user_exists(@email) = 0 AND account.can_register_with_facebook() = 1
-    BEGIN
-        INSERT INTO account.users(role_id, office_id, email, name)
-        SELECT account.get_registration_role_id(@email), account.get_registration_office_id(), @email, @name;
+    BEGIN TRY
+        DECLARE @tran_count int = @@TRANCOUNT;
         
-        SET @user_id = SCOPE_IDENTITY();
-    END;
+        IF(@tran_count= 0)
+        BEGIN
+            BEGIN TRANSACTION
+        END;
+        
+        IF(COALESCE(@office_id, 0) = 0)
+        BEGIN
+            IF(SELECT COUNT(*) FROM core.offices) = 1
+            BEGIN
+                SELECT @office_id = office_id
+                FROM core.offices;
+            END;
+        END;
 
-    IF account.fb_user_exists(@user_id) = 0
-    BEGIN
-        INSERT INTO account.fb_access_tokens(user_id, fb_user_id, token)
-        SELECT COALESCE(@user_id, account.get_user_id_by_email(@email)), @fb_user_id, @token;
-    END
-    ELSE
-    BEGIN
-        UPDATE account.fb_access_tokens
-        SET token = @token
-        WHERE user_id = @user_id;    
-    END;
+        IF account.is_restricted_user(@email) = 1
+        BEGIN
+            --LOGIN IS RESTRICTED TO THIS USER
+            INSERT INTO @result
+            SELECT CAST(NULL AS bigint), 0, 'Access is denied';
+    		
+    		SELECT * FROM @result;
+            RETURN;
+        END;
 
-    IF(@user_id IS NULL)
-    BEGIN
         SELECT @user_id = user_id
         FROM account.users
         WHERE account.users.email = @email;
-    END;
-    
-	UPDATE account.logins 
-	SET is_active = 0 
-	WHERE user_id=@user_id 
-	AND office_id = @office_id 
-	AND browser = @browser
-	AND ip_address = @ip_address;
 
-    INSERT INTO account.logins(user_id, office_id, browser, ip_address, login_timestamp, culture)
-    SELECT @user_id, @office_id, @browser, @ip_address, getutcdate(), COALESCE(@culture, '');
+        IF account.user_exists(@email) = 0 AND account.can_register_with_facebook() = 1
+        BEGIN
+            INSERT INTO account.users(role_id, office_id, email, name)
+            SELECT account.get_registration_role_id(@email), account.get_registration_office_id(), @email, @name;
+            
+            SET @user_id = SCOPE_IDENTITY();
+        END;
 
-    SET @login_id = SCOPE_IDENTITY();
-	
-    INSERT INTO @result
-    SELECT @login_id, 1, 'Welcome';
+        IF account.fb_user_exists(@user_id) = 0
+        BEGIN
+            INSERT INTO account.fb_access_tokens(user_id, fb_user_id, token)
+            SELECT COALESCE(@user_id, account.get_user_id_by_email(@email)), @fb_user_id, @token;
+        END
+        ELSE
+        BEGIN
+            UPDATE account.fb_access_tokens
+            SET token = @token
+            WHERE user_id = @user_id;    
+        END;
 
-	SELECT * FROM @result;
-    RETURN;    
+        IF(@user_id IS NULL)
+        BEGIN
+            SELECT @user_id = user_id
+            FROM account.users
+            WHERE account.users.email = @email;
+        END;
+        
+    	UPDATE account.logins 
+    	SET is_active = 0 
+    	WHERE user_id=@user_id 
+    	AND office_id = @office_id 
+    	AND browser = @browser
+    	AND ip_address = @ip_address;
+
+        INSERT INTO account.logins(user_id, office_id, browser, ip_address, login_timestamp, culture)
+        SELECT @user_id, @office_id, @browser, @ip_address, getutcdate(), COALESCE(@culture, '');
+
+        SET @login_id = SCOPE_IDENTITY();
+    	
+        INSERT INTO @result
+        SELECT @login_id, 1, 'Welcome';
+
+    	SELECT * FROM @result;
+                
+        IF(@tran_count = 0)
+        BEGIN
+            COMMIT TRANSACTION;
+        END;
+    END TRY
+    BEGIN CATCH
+        IF(XACT_STATE() <> 0 AND @tran_count = 0) 
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
+
+        DECLARE @ErrorMessage national character varying(4000)  = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity int                              = ERROR_SEVERITY();
+        DECLARE @ErrorState int                                 = ERROR_STATE();
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
 END;
 
 
 GO
+
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.fb_user_exists.sql --<--<--
 IF OBJECT_ID('account.fb_user_exists') IS NOT NULL
@@ -784,75 +859,98 @@ BEGIN
 
     DECLARE @user_id                        integer;
     DECLARE @login_id                       bigint;
-
 	DECLARE @result TABLE
 	(
-		login_id                                bigint,
-		status                                  bit,
-		message                                 text
+		login_id                            bigint,
+		status                              bit,
+		message                             text
 	);
 
 
-    IF(COALESCE(@office_id, 0) = 0)
-    BEGIN
-        IF(SELECT COUNT(*) FROM core.offices) = 1
+    BEGIN TRY
+        DECLARE @tran_count int = @@TRANCOUNT;
+        
+        IF(@tran_count= 0)
         BEGIN
-            SELECT @office_id = office_id
-            FROM core.offices;
+            BEGIN TRANSACTION
         END;
-    END;
 
-    IF account.is_restricted_user(@email) = 1
-    BEGIN
-        --LOGIN IS RESTRICTED TO THIS USER
+        IF(COALESCE(@office_id, 0) = 0)
+        BEGIN
+            IF(SELECT COUNT(*) FROM core.offices) = 1
+            BEGIN
+                SELECT @office_id = office_id
+                FROM core.offices;
+            END;
+        END;
+
+        IF account.is_restricted_user(@email) = 1
+        BEGIN
+            --LOGIN IS RESTRICTED TO THIS USER
+            INSERT INTO @result
+            SELECT CAST(NULL AS bigint), 0, 'Access is denied';
+    		
+    		SELECT * FROM @result;
+            RETURN;
+        END;
+
+        IF account.user_exists(@email) = 0 AND account.can_register_with_google() = 1
+        BEGIN
+            INSERT INTO account.users(role_id, office_id, email, name)
+            SELECT account.get_registration_role_id(@email), account.get_registration_office_id(), @email, @name;
+
+            SET @user_id = SCOPE_IDENTITY();
+        END;
+
+        SELECT @user_id = user_id
+        FROM account.users
+        WHERE account.users.email = @email;
+
+        IF account.google_user_exists(@user_id) = 0
+        BEGIN
+            INSERT INTO account.google_access_tokens(user_id, token)
+            SELECT COALESCE(@user_id, account.get_user_id_by_email(@email)), @token;
+    	END
+        ELSE
+        BEGIN
+            UPDATE account.google_access_tokens
+            SET token = @token
+            WHERE user_id = @user_id;    
+        END;
+
+    	UPDATE account.logins 
+    	SET is_active = 0 
+    	WHERE user_id=@user_id 
+    	AND office_id = @office_id 
+    	AND browser = @browser
+    	AND ip_address = @ip_address;
+
+        INSERT INTO account.logins(user_id, office_id, browser, ip_address, login_timestamp, culture)
+        SELECT @user_id, @office_id, @browser, @ip_address, getutcdate(), COALESCE(@culture, '');
+
+        SET @login_id = SCOPE_IDENTITY();
+
         INSERT INTO @result
-        SELECT CAST(NULL AS bigint), 0, 'Access is denied';
-		
-		SELECT * FROM @result;
-        RETURN;
-    END;
+        SELECT @login_id, 1, 'Welcome';
 
-    IF account.user_exists(@email) = 0 AND account.can_register_with_google() = 1
-    BEGIN
-        INSERT INTO account.users(role_id, office_id, email, name)
-        SELECT account.get_registration_role_id(@email), account.get_registration_office_id(), @email, @name;
+    	SELECT * FROM @result;
+                
+        IF(@tran_count = 0)
+        BEGIN
+            COMMIT TRANSACTION;
+        END;
+    END TRY
+    BEGIN CATCH
+        IF(XACT_STATE() <> 0 AND @tran_count = 0) 
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
 
-        SET @user_id = SCOPE_IDENTITY();
-    END;
-
-    SELECT @user_id = user_id
-    FROM account.users
-    WHERE account.users.email = @email;
-
-    IF account.google_user_exists(@user_id) = 0
-    BEGIN
-        INSERT INTO account.google_access_tokens(user_id, token)
-        SELECT COALESCE(@user_id, account.get_user_id_by_email(@email)), @token;
-	END
-    ELSE
-    BEGIN
-        UPDATE account.google_access_tokens
-        SET token = @token
-        WHERE user_id = @user_id;    
-    END;
-
-	UPDATE account.logins 
-	SET is_active = 0 
-	WHERE user_id=@user_id 
-	AND office_id = @office_id 
-	AND browser = @browser
-	AND ip_address = @ip_address;
-
-    INSERT INTO account.logins(user_id, office_id, browser, ip_address, login_timestamp, culture)
-    SELECT @user_id, @office_id, @browser, @ip_address, getutcdate(), COALESCE(@culture, '');
-
-    SET @login_id = SCOPE_IDENTITY();
-
-    INSERT INTO @result
-    SELECT @login_id, 1, 'Welcome';
-
-	SELECT * FROM @result;
-    RETURN;    
+        DECLARE @ErrorMessage national character varying(4000)  = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity int                              = ERROR_SEVERITY();
+        DECLARE @ErrorState int                                 = ERROR_STATE();
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
 END;
 
 GO
@@ -1088,44 +1186,67 @@ BEGIN
     DECLARE @name                           national character varying(500);
     DECLARE @expires_on                     datetimeoffset = dateadd(d, 1, getutcdate());
 
-    IF(account.user_exists(@email) = 0 OR account.is_restricted_user(@email) = 1)
-    BEGIN
-        RETURN;
-    END;
-
-    SELECT
-        @user_id = user_id,
-        @name = name
-    FROM account.users
-    WHERE email = @email
-	AND account.users.deleted = 0;
-
-    IF account.has_active_reset_request(@email) = 1
-    BEGIN
-        SELECT 
-        TOP 1
-        * FROM account.reset_requests
-        WHERE email = @email
-        AND expires_on <= @expires_on
-		AND account.reset_requests.deleted = 0;
+    BEGIN TRY
+        DECLARE @tran_count int = @@TRANCOUNT;
         
-        RETURN;
-    END;
+        IF(@tran_count= 0)
+        BEGIN
+            BEGIN TRANSACTION
+        END;
 
-    INSERT INTO account.reset_requests(user_id, email, name, browser, ip_address, expires_on)
-    OUTPUT INSERTED.request_id INTO @request_table_variable
-    SELECT @user_id, @email, @name, @browser, @ip_address, @expires_on
+        IF(account.user_exists(@email) = 0 OR account.is_restricted_user(@email) = 1)
+        BEGIN
+            RETURN;
+        END;
+
+        SELECT
+            @user_id = user_id,
+            @name = name
+        FROM account.users
+        WHERE email = @email
+    	AND account.users.deleted = 0;
+
+        IF account.has_active_reset_request(@email) = 1
+        BEGIN
+            SELECT 
+            TOP 1
+            * FROM account.reset_requests
+            WHERE email = @email
+            AND expires_on <= @expires_on
+    		AND account.reset_requests.deleted = 0;
+            
+            RETURN;
+        END;
+
+        INSERT INTO account.reset_requests(user_id, email, name, browser, ip_address, expires_on)
+        OUTPUT INSERTED.request_id INTO @request_table_variable
+        SELECT @user_id, @email, @name, @browser, @ip_address, @expires_on
 
 
-    SELECT *
-    FROM account.reset_requests
-    WHERE request_id = 
-    (
-		SELECT request_id 
-		FROM @request_table_variable
-	);
+        SELECT *
+        FROM account.reset_requests
+        WHERE request_id = 
+        (
+    		SELECT request_id 
+    		FROM @request_table_variable
+    	);
 
-    RETURN;
+        IF(@tran_count = 0)
+        BEGIN
+            COMMIT TRANSACTION;
+        END;
+    END TRY
+    BEGIN CATCH
+        IF(XACT_STATE() <> 0 AND @tran_count = 0) 
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
+
+        DECLARE @ErrorMessage national character varying(4000)  = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity int                              = ERROR_SEVERITY();
+        DECLARE @ErrorState int                                 = ERROR_STATE();
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
 END;
 
 
@@ -1157,55 +1278,79 @@ BEGIN
 
 	DECLARE @result TABLE
 	(
-		login_id                                bigint,
-		status                                  bit,
-		message                                 national character varying(100)
+		login_id                            bigint,
+		status                              bit,
+		message                             national character varying(100)
 	);
 
 
-    IF(COALESCE(@office_id, 0) = 0)
-    BEGIN
-        IF(SELECT COUNT(*) FROM core.offices) = 1
+    BEGIN TRY
+        DECLARE @tran_count int = @@TRANCOUNT;
+        
+        IF(@tran_count= 0)
         BEGIN
-            SELECT @office_id = office_id
-            FROM core.offices;
+            BEGIN TRANSACTION
         END;
-    END;
+        
+        IF(COALESCE(@office_id, 0) = 0)
+        BEGIN
+            IF(SELECT COUNT(*) FROM core.offices) = 1
+            BEGIN
+                SELECT @office_id = office_id
+                FROM core.offices;
+            END;
+        END;
 
-    IF account.is_restricted_user(@email) = 1
-    BEGIN
-		INSERT INTO @result
-        SELECT CAST(NULL AS bigint), 0, 'Access is denied';
+        IF account.is_restricted_user(@email) = 1
+        BEGIN
+    		INSERT INTO @result
+            SELECT CAST(NULL AS bigint), 0, 'Access is denied';
 
-		SELECT * FROM @result;
-        RETURN;
-    END;
+    		SELECT * FROM @result;
+            RETURN;
+        END;
 
-    SELECT @user_id = user_id 
-    FROM account.users
-    WHERE email = @email;
+        SELECT @user_id = user_id 
+        FROM account.users
+        WHERE email = @email;
 
-	UPDATE account.logins 
-	SET is_active = 0 
-	WHERE user_id=@user_id 
-	AND office_id = @office_id 
-	AND browser = @browser
-	AND ip_address = @ip_address;
+    	UPDATE account.logins 
+    	SET is_active = 0 
+    	WHERE user_id=@user_id 
+    	AND office_id = @office_id 
+    	AND browser = @browser
+    	AND ip_address = @ip_address;
 
-    INSERT INTO account.logins(user_id, office_id, browser, ip_address, login_timestamp, culture)
-    SELECT @user_id, @office_id, @browser, @ip_address, getutcdate(), COALESCE(@culture, '');
+        INSERT INTO account.logins(user_id, office_id, browser, ip_address, login_timestamp, culture)
+        SELECT @user_id, @office_id, @browser, @ip_address, getutcdate(), COALESCE(@culture, '');
 
-    SET @login_id = SCOPE_IDENTITY();
-    
-	INSERT INTO @result
-    SELECT @login_id, 1, 'Welcome';
+        SET @login_id = SCOPE_IDENTITY();
+        
+    	INSERT INTO @result
+        SELECT @login_id, 1, 'Welcome';
 
-	SELECT * FROM @result;
-    RETURN;    
+    	SELECT * FROM @result;
+
+        IF(@tran_count = 0)
+        BEGIN
+            COMMIT TRANSACTION;
+        END;
+    END TRY
+    BEGIN CATCH
+        IF(XACT_STATE() <> 0 AND @tran_count = 0) 
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
+
+        DECLARE @ErrorMessage national character varying(4000)  = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity int                              = ERROR_SEVERITY();
+        DECLARE @ErrorState int                                 = ERROR_STATE();
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
 END;
 
-
 GO
+
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.user_exists.sql --<--<--
 IF OBJECT_ID('account.user_exists') IS NOT NULL

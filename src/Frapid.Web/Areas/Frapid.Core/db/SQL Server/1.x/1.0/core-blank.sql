@@ -636,7 +636,7 @@ CREATE TABLE core.countries
     country_code                            	national character varying(12) PRIMARY KEY,
     country_name                            	national character varying(100) NOT NULL,
     audit_user_id                           	integer,
-	audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -651,7 +651,7 @@ CREATE TABLE core.apps
     icon                                        national character varying(100),
     landing_url                                 national character varying(500),
     audit_user_id                           	integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -665,7 +665,7 @@ CREATE TABLE core.app_dependencies
     app_name                                    national character varying(100) REFERENCES core.apps,
     depends_on                                  national character varying(100) REFERENCES core.apps,
     audit_user_id                           	integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -680,7 +680,7 @@ CREATE TABLE core.menus
     icon                                        national character varying(100),
     parent_menu_id                              integer REFERENCES core.menus,
     audit_user_id                           	integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -695,7 +695,7 @@ CREATE TABLE core.menu_locale
     culture                                     national character varying(12) NOT NULL,
     menu_text                                   national character varying(250) NOT NULL,
     audit_user_id                           	integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)	
 );
 
@@ -707,7 +707,7 @@ CREATE TABLE core.currencies
     currency_name                           	national character varying(48) NOT NULL UNIQUE,
     hundredth_name                          	national character varying(48) NOT NULL,
     audit_user_id                           	integer,
-    audit_ts                                	DATETIMEOFFSET DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -739,7 +739,7 @@ CREATE TABLE core.offices
 	has_vat										bit NOT NULL DEFAULT(0),
 	allow_transaction_posting					bit NOT NULL DEFAULT(0),
     audit_user_id                               integer NULL,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -749,7 +749,7 @@ CREATE TABLE core.frequencies
     frequency_code								national character varying(12) NOT NULL,
     frequency_name								national character varying(50) NOT NULL,
     audit_user_id                           	integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -768,7 +768,7 @@ CREATE TABLE core.verification_statuses
     verification_status_id						smallint PRIMARY KEY,
     verification_status_name					national character varying(128) NOT NULL,
     audit_user_id                           	integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -779,7 +779,7 @@ CREATE TABLE core.week_days
 	week_day_code								national character varying(12) NOT NULL UNIQUE,
 	week_day_name								national character varying(50) NOT NULL UNIQUE,
     audit_user_id                           	integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -788,7 +788,7 @@ CREATE TABLE core.genders
 	gender_code									national character varying(4) NOT NULL PRIMARY KEY,
 	gender_name									national character varying(50) NOT NULL UNIQUE,
 	audit_user_id								integer NULL,
-	audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)    
 );
 
@@ -799,14 +799,14 @@ CREATE TABLE core.marital_statuses
 	marital_status_name							national character varying(128) NOT NULL,
 	is_legally_recognized_marriage				bit NOT NULL DEFAULT(0),
 	audit_user_id								integer NULL,    
-	audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+	audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
 CREATE TABLE core.notifications
 (
     notification_id                             uniqueidentifier PRIMARY KEY DEFAULT(NEWID()),
-    event_timestamp                             DATETIMEOFFSET NOT NULL DEFAULT(GETDATE()),
+    event_timestamp                             DATETIMEOFFSET NOT NULL DEFAULT(GETUTCDATE()),
 	associated_app								national character varying(100) NOT NULL REFERENCES core.apps,
     associated_menu_id                          integer REFERENCES core.menus,
     private_notification                        bit NOT NULL DEFAULT(0),
@@ -820,7 +820,7 @@ CREATE TABLE core.notification_statuses
 (
     notification_status_id                      uniqueidentifier PRIMARY KEY DEFAULT(NEWID()),
     notification_id                             uniqueidentifier NOT NULL REFERENCES core.notifications,
-    last_seen_on                                DATETIMEOFFSET NOT NULL DEFAULT(GETDATE()),
+    last_seen_on                                DATETIMEOFFSET NOT NULL DEFAULT(GETUTCDATE()),
     seen_by                                     integer NOT NULL
 );
 

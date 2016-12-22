@@ -3,7 +3,6 @@ DROP PROCEDURE auth.get_user_menu_policy;
 
 GO
 
-
 CREATE PROCEDURE auth.get_user_menu_policy
 (
     @user_id        integer,
@@ -97,6 +96,6 @@ BEGIN
     ORDER BY app_name, sort, menu_id;
 END;
 
---EXECUTE auth.get_user_menu_policy 1, 1, '';
-
 GO
+
+--EXECUTE auth.get_user_menu_policy 1, 1, '';

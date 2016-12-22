@@ -10,7 +10,7 @@ CREATE TABLE auth.access_types
     access_type_id                          integer PRIMARY KEY,
     access_type_name                        national character varying(48) NOT NULL,
     audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted									bit DEFAULT(0)
 );
 
@@ -28,7 +28,7 @@ CREATE TABLE auth.group_entity_access_policy
     access_type_id                          integer NULL REFERENCES auth.access_types,
     allow_access                            bit NOT NULL,
     audit_user_id                           integer NULL REFERENCES account.users,
-    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted									bit DEFAULT(0)
 );
 
@@ -41,7 +41,7 @@ CREATE TABLE auth.entity_access_policy
     access_type_id                          integer NULL REFERENCES auth.access_types,
     allow_access                            bit NOT NULL,
     audit_user_id                           integer NULL REFERENCES account.users,
-    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted									bit DEFAULT(0)
 );
 
@@ -52,7 +52,7 @@ CREATE TABLE auth.group_menu_access_policy
     menu_id                                 integer NOT NULL REFERENCES core.menus,
     role_id                                 integer REFERENCES account.roles,
     audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted									bit DEFAULT(0)
 );
 
@@ -69,7 +69,7 @@ CREATE TABLE auth.menu_access_policy
     allow_access                            bit,
     disallow_access                         bit,
     audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted									bit DEFAULT(0),
 											CONSTRAINT menu_access_policy_access_chk CHECK(NOT(allow_access= 1 AND disallow_access = 1))
 );
@@ -102,59 +102,82 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    DECLARE @role_id                integer;
-    
+    DECLARE @role_id                integer;    
     DECLARE @access_types			TABLE(access_type_name national character varying(100));
     DECLARE @roles					TABLE(role_name national character varying(100));
-
     DECLARE @access_type_ids        national character varying(MAX);
     DECLARE @role_ids               TABLE(role_id integer);
 	
-	INSERT INTO @access_types
-	SELECT 
-        CONVERT(integer, LTRIM(RTRIM(member)))	
-	FROM core.array_split(REPLACE(@access_type_names, '*', ''));
-	
-	INSERT INTO @roles
-	SELECT
-	*
-	FROM core.array_split(REPLACE(@role_names, '*', ''));
-	
-    IF(@role_names = '{*}')
-    BEGIN
-		INSERT INTO @role_ids
-        SELECT role_id
-        FROM account.roles;
-    END
-    ELSE
-    BEGIN
-		INSERT INTO @role_ids
-        SELECT role_id
-        FROM account.roles
-        WHERE role_name IN (SELECT * from @roles);
-    END;
+    BEGIN TRY
+        DECLARE @tran_count int = @@TRANCOUNT;
+        
+        IF(@tran_count= 0)
+        BEGIN
+            BEGIN TRANSACTION
+        END;
 
-    IF(@access_type_names = '{*}')
-    BEGIN
-        SELECT @access_type_ids = COALESCE(@access_type_ids + ',', '') + CONVERT(varchar, access_type_id)
-        FROM auth.access_types;
-    END
-    ELSE
-    BEGIN
-        SELECT @access_type_ids = COALESCE(@access_type_ids + ',', '') + CONVERT(varchar, access_type_id)
-        FROM auth.access_types
-        WHERE access_type_name IN (SELECT * FROM @access_types);
-    END;
+    	INSERT INTO @access_types
+    	SELECT 
+            CONVERT(integer, LTRIM(RTRIM(member)))	
+    	FROM core.array_split(REPLACE(@access_type_names, '*', ''));
+    	
+    	INSERT INTO @roles
+    	SELECT
+    	*
+    	FROM core.array_split(REPLACE(@role_names, '*', ''));
+    	
+        IF(@role_names = '{*}')
+        BEGIN
+    		INSERT INTO @role_ids
+            SELECT role_id
+            FROM account.roles;
+        END
+        ELSE
+        BEGIN
+    		INSERT INTO @role_ids
+            SELECT role_id
+            FROM account.roles
+            WHERE role_name IN (SELECT * from @roles);
+        END;
+
+        IF(@access_type_names = '{*}')
+        BEGIN
+            SELECT @access_type_ids = COALESCE(@access_type_ids + ',', '') + CONVERT(varchar, access_type_id)
+            FROM auth.access_types;
+        END
+        ELSE
+        BEGIN
+            SELECT @access_type_ids = COALESCE(@access_type_ids + ',', '') + CONVERT(varchar, access_type_id)
+            FROM auth.access_types
+            WHERE access_type_name IN (SELECT * FROM @access_types);
+        END;
 
 
-	DECLARE curse CURSOR FOR SELECT role_id FROM @role_ids
-	OPEN curse
-	FETCH NEXT FROM curse INTO @role_id
-	WHILE @@Fetch_Status=0
-	BEGIN
-        EXECUTE auth.save_api_group_policy @role_id, @entity_name, @office_id, @access_type_ids, @allow_access;
-		FETCH NEXT FROM curse INTO @role_id
-	END;		
+    	DECLARE curse CURSOR FOR SELECT role_id FROM @role_ids
+    	OPEN curse
+    	FETCH NEXT FROM curse INTO @role_id
+    	WHILE @@Fetch_Status=0
+    	BEGIN
+            EXECUTE auth.save_api_group_policy @role_id, @entity_name, @office_id, @access_type_ids, @allow_access;
+    		FETCH NEXT FROM curse INTO @role_id
+    	END;
+                
+        IF(@tran_count = 0)
+        BEGIN
+            COMMIT TRANSACTION;
+        END;
+    END TRY
+    BEGIN CATCH
+        IF(XACT_STATE() <> 0 AND @tran_count = 0) 
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
+
+        DECLARE @ErrorMessage national character varying(4000)  = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity int                              = ERROR_SEVERITY();
+        DECLARE @ErrorState int                                 = ERROR_STATE();
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
 END;
 
 GO
@@ -183,30 +206,56 @@ BEGIN
     DECLARE @menus					TABLE(menu_name national character varying(100));
     DECLARE @menu_ids               national character varying(MAX);
 
-	INSERT INTO @menus
-    SELECT member
-    FROM core.split(@menu_names);
+    BEGIN TRY
+        DECLARE @tran_count int = @@TRANCOUNT;
+        
+        IF(@tran_count= 0)
+        BEGIN
+            BEGIN TRANSACTION
+        END;
 
-    SELECT
-        @role_id = role_id        
-    FROM account.roles
-    WHERE role_name = @role_name;
+    	INSERT INTO @menus
+        SELECT member
+        FROM core.split(@menu_names);
 
-    IF(@menu_names = '{*}')
-    BEGIN
-        SELECT @menu_ids = COALESCE(@menu_ids + ',', '') + CONVERT(national character varying(500), menu_id)
-        FROM core.menus
-        WHERE app_name = @app_name;
-    END
-    ELSE
-    BEGIN
-        SELECT @menu_ids = COALESCE(@menu_ids + ',', '') + CONVERT(national character varying(500), menu_id)
-        FROM core.menus
-        WHERE app_name = @app_name
-        AND menu_name IN (SELECT * FROM @menus);
-    END;
-    
-    EXECUTE auth.save_group_menu_policy @role_id, @office_id, @menu_ids, @app_name;    
+        SELECT
+            @role_id = role_id        
+        FROM account.roles
+        WHERE role_name = @role_name;
+
+        IF(@menu_names = '{*}')
+        BEGIN
+            SELECT @menu_ids = COALESCE(@menu_ids + ',', '') + CONVERT(national character varying(500), menu_id)
+            FROM core.menus
+            WHERE app_name = @app_name;
+        END
+        ELSE
+        BEGIN
+            SELECT @menu_ids = COALESCE(@menu_ids + ',', '') + CONVERT(national character varying(500), menu_id)
+            FROM core.menus
+            WHERE app_name = @app_name
+            AND menu_name IN (SELECT * FROM @menus);
+        END;
+        
+        EXECUTE auth.save_group_menu_policy @role_id, @office_id, @menu_ids, @app_name;    
+
+                
+        IF(@tran_count = 0)
+        BEGIN
+            COMMIT TRANSACTION;
+        END;
+    END TRY
+    BEGIN CATCH
+        IF(XACT_STATE() <> 0 AND @tran_count = 0) 
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
+
+        DECLARE @ErrorMessage national character varying(4000)  = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity int                              = ERROR_SEVERITY();
+        DECLARE @ErrorState int                                 = ERROR_STATE();
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
 END;
 
 GO
@@ -327,8 +376,10 @@ BEGIN
     ORDER BY app_name, sort, menu_id;
 END;
 
---EXECUTE auth.get_group_menu_policy 1, 1, '';
 GO
+
+--EXECUTE auth.get_group_menu_policy 1, 1, '';
+
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.get_menu.sql --<--<--
 IF OBJECT_ID('auth.get_menu') IS NOT NULL
@@ -433,7 +484,6 @@ DROP PROCEDURE auth.get_user_menu_policy;
 
 GO
 
-
 CREATE PROCEDURE auth.get_user_menu_policy
 (
     @user_id        integer,
@@ -527,9 +577,9 @@ BEGIN
     ORDER BY app_name, sort, menu_id;
 END;
 
---EXECUTE auth.get_user_menu_policy 1, 1, '';
-
 GO
+
+--EXECUTE auth.get_user_menu_policy 1, 1, '';
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Authorization/db/SQL Server/1.x/1.0/src/02.functions-and-logic/auth.has_access.sql --<--<--
@@ -664,48 +714,71 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    IF(@role_id IS NULL OR @office_id IS NULL)
-    BEGIN
-        RETURN;
-    END;
-    
-    DELETE FROM auth.group_entity_access_policy
-    WHERE auth.group_entity_access_policy.access_type_id 
-    NOT IN
-    (
-        SELECT 
-        CONVERT(integer, LTRIM(RTRIM(member)))
-        FROM core.split(@access_type_ids)
-    )
-    AND role_id = @role_id
-    AND office_id = @office_id
-    AND entity_name = @entity_name
-    AND access_type_id IN
-    (
-        SELECT access_type_id
-        FROM auth.access_types
-    );
+    BEGIN TRY
+        DECLARE @tran_count int = @@TRANCOUNT;
+        
+        IF(@tran_count= 0)
+        BEGIN
+            BEGIN TRANSACTION
+        END;
 
-    WITH access_types
-    AS
-    (
-        SELECT 
-        CONVERT(integer, LTRIM(RTRIM(member))) AS access_type_id
-        FROM core.split(@access_type_ids)
-    )
-    
-    INSERT INTO auth.group_entity_access_policy(role_id, office_id, entity_name, access_type_id, allow_access)
-    SELECT @role_id, @office_id, @entity_name, access_type_id, @allow_access
-    FROM access_types
-    WHERE access_type_id NOT IN
-    (
-        SELECT access_type_id
-        FROM auth.group_entity_access_policy
-        WHERE auth.group_entity_access_policy.role_id = @role_id
-        AND auth.group_entity_access_policy.office_id = @office_id
-    );
+        IF(@role_id IS NULL OR @office_id IS NULL)
+        BEGIN
+            RETURN;
+        END;
+        
+        DELETE FROM auth.group_entity_access_policy
+        WHERE auth.group_entity_access_policy.access_type_id 
+        NOT IN
+        (
+            SELECT 
+            CONVERT(integer, LTRIM(RTRIM(member)))
+            FROM core.split(@access_type_ids)
+        )
+        AND role_id = @role_id
+        AND office_id = @office_id
+        AND entity_name = @entity_name
+        AND access_type_id IN
+        (
+            SELECT access_type_id
+            FROM auth.access_types
+        );
 
-    RETURN;
+        WITH access_types
+        AS
+        (
+            SELECT 
+            CONVERT(integer, LTRIM(RTRIM(member))) AS access_type_id
+            FROM core.split(@access_type_ids)
+        )
+        
+        INSERT INTO auth.group_entity_access_policy(role_id, office_id, entity_name, access_type_id, allow_access)
+        SELECT @role_id, @office_id, @entity_name, access_type_id, @allow_access
+        FROM access_types
+        WHERE access_type_id NOT IN
+        (
+            SELECT access_type_id
+            FROM auth.group_entity_access_policy
+            WHERE auth.group_entity_access_policy.role_id = @role_id
+            AND auth.group_entity_access_policy.office_id = @office_id
+        );
+
+        IF(@tran_count = 0)
+        BEGIN
+            COMMIT TRANSACTION;
+        END;
+    END TRY
+    BEGIN CATCH
+        IF(XACT_STATE() <> 0 AND @tran_count = 0) 
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
+
+        DECLARE @ErrorMessage national character varying(4000)  = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity int                              = ERROR_SEVERITY();
+        DECLARE @ErrorState int                                 = ERROR_STATE();
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
 END;
 
 GO
@@ -737,41 +810,62 @@ BEGIN
 
 	DECLARE @menus	TABLE(menu_id integer);
 
-	INSERT INTO @menus
-    SELECT 
-    CONVERT(integer, LTRIM(RTRIM(member)))
-    FROM core.split(@menu_ids);
-	
-	
-    IF(@role_id IS NULL OR @office_id IS NULL)
-    BEGIN
-        RETURN;
-    END;
-    
-    DELETE FROM auth.group_menu_access_policy
-    WHERE auth.group_menu_access_policy.menu_id NOT IN(SELECT * from @menus)
-    AND role_id = @role_id
-    AND office_id = @office_id
-    AND menu_id IN
-    (
-        SELECT menu_id
-        FROM core.menus
-        WHERE @app_name = ''
-        OR app_name = @app_name
-    );
-    
-    INSERT INTO auth.group_menu_access_policy(role_id, office_id, menu_id)
-    SELECT @role_id, @office_id, menu_id
-    FROM @menus
-    WHERE menu_id NOT IN
-    (
-        SELECT menu_id
-        FROM auth.group_menu_access_policy
-        WHERE auth.group_menu_access_policy.role_id = @role_id
-        AND auth.group_menu_access_policy.office_id = @office_id
-    );
+    BEGIN TRY
+        DECLARE @tran_count int = @@TRANCOUNT;
+        
+        IF(@tran_count= 0)
+        BEGIN
+            BEGIN TRANSACTION
+        END;
 
-    RETURN;
+    	INSERT INTO @menus
+        SELECT CONVERT(integer, LTRIM(RTRIM(member)))
+        FROM core.split(@menu_ids);    	
+    	
+        IF(@role_id IS NULL OR @office_id IS NULL)
+        BEGIN
+            RETURN;
+        END;
+        
+        DELETE FROM auth.group_menu_access_policy
+        WHERE auth.group_menu_access_policy.menu_id NOT IN(SELECT * from @menus)
+        AND role_id = @role_id
+        AND office_id = @office_id
+        AND menu_id IN
+        (
+            SELECT menu_id
+            FROM core.menus
+            WHERE @app_name = ''
+            OR app_name = @app_name
+        );
+        
+        INSERT INTO auth.group_menu_access_policy(role_id, office_id, menu_id)
+        SELECT @role_id, @office_id, menu_id
+        FROM @menus
+        WHERE menu_id NOT IN
+        (
+            SELECT menu_id
+            FROM auth.group_menu_access_policy
+            WHERE auth.group_menu_access_policy.role_id = @role_id
+            AND auth.group_menu_access_policy.office_id = @office_id
+        );
+
+        IF(@tran_count = 0)
+        BEGIN
+            COMMIT TRANSACTION;
+        END;
+    END TRY
+    BEGIN CATCH
+        IF(XACT_STATE() <> 0 AND @tran_count = 0) 
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
+
+        DECLARE @ErrorMessage national character varying(4000)  = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity int                              = ERROR_SEVERITY();
+        DECLARE @ErrorState int                                 = ERROR_STATE();
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
 END;
 
 
@@ -800,42 +894,64 @@ BEGIN
 	DECLARE @allowed_menus			TABLE(menu_id integer);
 	DECLARE @disallowed_menus		TABLE(menu_id integer);
 
-	INSERT INTO @allowed_menus
-    SELECT  CONVERT(integer, LTRIM(RTRIM(member))) FROM core.split(@allowed_menu_ids);
+    BEGIN TRY
+        DECLARE @tran_count int = @@TRANCOUNT;
+        
+        IF(@tran_count= 0)
+        BEGIN
+            BEGIN TRANSACTION
+        END;
+        
+    	INSERT INTO @allowed_menus
+        SELECT  CONVERT(integer, LTRIM(RTRIM(member))) FROM core.split(@allowed_menu_ids);
 
-	INSERT INTO @disallowed_menus
-    SELECT  CONVERT(integer, LTRIM(RTRIM(member))) FROM core.split(@disallowed_menu_ids);
+    	INSERT INTO @disallowed_menus
+        SELECT  CONVERT(integer, LTRIM(RTRIM(member))) FROM core.split(@disallowed_menu_ids);
 
-    INSERT INTO auth.menu_access_policy(office_id, user_id, menu_id)
-    SELECT @office_id, @user_id, core.menus.menu_id
-    FROM core.menus
-    WHERE core.menus.menu_id NOT IN
-    (
-        SELECT auth.menu_access_policy.menu_id
-        FROM auth.menu_access_policy
+        INSERT INTO auth.menu_access_policy(office_id, user_id, menu_id)
+        SELECT @office_id, @user_id, core.menus.menu_id
+        FROM core.menus
+        WHERE core.menus.menu_id NOT IN
+        (
+            SELECT auth.menu_access_policy.menu_id
+            FROM auth.menu_access_policy
+            WHERE user_id = @user_id
+            AND office_id = @office_id
+        );
+
+        UPDATE auth.menu_access_policy
+        SET allow_access = NULL, disallow_access = NULL
+        WHERE user_id = @user_id
+        AND office_id = @office_id;
+
+        UPDATE auth.menu_access_policy
+        SET allow_access = 1
         WHERE user_id = @user_id
         AND office_id = @office_id
-    );
+        AND menu_id IN(SELECT * from @allowed_menus);
 
-    UPDATE auth.menu_access_policy
-    SET allow_access = NULL, disallow_access = NULL
-    WHERE user_id = @user_id
-    AND office_id = @office_id;
+        UPDATE auth.menu_access_policy
+        SET disallow_access = 1
+        WHERE user_id = @user_id
+        AND office_id = @office_id
+        AND menu_id IN(SELECT * from @disallowed_menus);
 
-    UPDATE auth.menu_access_policy
-    SET allow_access = 1
-    WHERE user_id = @user_id
-    AND office_id = @office_id
-    AND menu_id IN(SELECT * from @allowed_menus);
+        IF(@tran_count = 0)
+        BEGIN
+            COMMIT TRANSACTION;
+        END;
+    END TRY
+    BEGIN CATCH
+        IF(XACT_STATE() <> 0 AND @tran_count = 0) 
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
 
-    UPDATE auth.menu_access_policy
-    SET disallow_access = 1
-    WHERE user_id = @user_id
-    AND office_id = @office_id
-    AND menu_id IN(SELECT * from @disallowed_menus);
-
-    
-    RETURN;
+        DECLARE @ErrorMessage national character varying(4000)  = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity int                              = ERROR_SEVERITY();
+        DECLARE @ErrorState int                                 = ERROR_STATE();
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
 END;
 
 GO

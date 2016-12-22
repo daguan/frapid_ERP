@@ -10,7 +10,7 @@ CREATE TABLE account.roles
     role_name									national character varying(100) NOT NULL UNIQUE,
     is_administrator							bit NOT NULL DEFAULT(0),
     audit_user_id								integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -20,7 +20,7 @@ CREATE TABLE account.installed_domains
     domain_name									national character varying(500),
     admin_email									national character varying(500),
     audit_user_id                           	integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -44,7 +44,7 @@ CREATE TABLE account.configuration_profiles
     facebook_app_id								national character varying(500),
     facebook_scope								national character varying(500),
     audit_user_id								integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -67,7 +67,7 @@ CREATE TABLE account.registrations
     confirmed									bit DEFAULT(0),
     confirmed_on								datetimeoffset,
     audit_user_id                           	integer,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -90,7 +90,7 @@ CREATE TABLE account.users
 	last_ip										national character varying(500),
 	last_browser								national character varying(500),
     audit_user_id								integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -118,7 +118,7 @@ CREATE TABLE account.reset_requests
     confirmed									bit DEFAULT(0),
     confirmed_on								datetimeoffset,
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -131,7 +131,7 @@ CREATE TABLE account.fb_access_tokens
     fb_user_id									national character varying(500),
     token										national character varying(MAX),
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -141,7 +141,7 @@ CREATE TABLE account.google_access_tokens
     user_id										integer PRIMARY KEY REFERENCES account.users,
     token										national character varying(MAX),
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -156,7 +156,7 @@ CREATE TABLE account.logins
     login_timestamp								datetimeoffset NOT NULL DEFAULT(getutcdate()),
     culture										national character varying(12) NOT NULL,
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -179,7 +179,7 @@ CREATE TABLE account.applications
     redirect_url                                national character varying(500),
     app_secret                                  national character varying(500) UNIQUE,
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -207,7 +207,7 @@ CREATE TABLE account.access_tokens
     revoked_by                                  integer REFERENCES account.users,
     revoked_on                                  datetimeoffset,
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 

@@ -3,8 +3,6 @@ DROP PROCEDURE website.add_email_subscription;
 
 GO
 
-
-
 CREATE PROCEDURE website.add_email_subscription
 (
     @email                                  national character varying(500)

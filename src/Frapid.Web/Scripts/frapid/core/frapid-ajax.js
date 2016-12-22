@@ -68,17 +68,6 @@ var getAjaxRequest = function (url, type, data) {
 
 jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, keyField, valueField, isArray) {
     "use strict";
-    function appendItem(dropDownList, value, text, selected) {
-        var option = $("<option></option>");
-        option.val(value).html(text).trigger('change');
-
-        if (selected) {
-            option.attr("selected", true);
-        };
-
-        dropDownList.append(option);
-    };
-
     var selected;
 
     var targetControl = $(this);
@@ -86,12 +75,12 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, keyField
 
 
     if (ajaxData.length === 0) {
-        appendItem(targetControl, "", window.Resources.Titles.None());
+        appendOption(targetControl, "", window.Resources.Titles.None());
         return;
     };
 
     if (!skipSelect) {
-        appendItem(targetControl, "", window.Resources.Titles.Select());
+        appendOption(targetControl, "", window.Resources.Titles.Select());
     };
 
     if (!keyField) {
@@ -143,22 +132,22 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, keyField
             };
         };
 
-        appendItem(targetControl, value, text, selected);
+        appendOption(targetControl, value, text, selected);
     });
 };
 
+function appendOption(selectEl, value, text, selected) {
+	var option = $("<option></option>");
+	option.val(value).html(text).trigger('change');
+
+	if (selected) {
+		option.attr("selected", true);
+	};
+
+	selectEl.append(option);
+};
+
 var ajaxDataBind = function(url, targetControl, data, selectedValue, associatedControl, callback, keyField, valueField, isArray) {
-    function appendItem(dropDownList, value, text, selected) {
-        var option = $("<option></option>");
-        option.val(value).html(text).trigger('change');
-
-        if (selected) {
-            option.attr("selected", true);
-        };
-
-        dropDownList.append(option);
-    };
-
     var isWebApiRequest = url.substring(5, 0) === "/api/";
     var isProcedure = url.slice(-7) === "execute";
 
@@ -217,7 +206,7 @@ var ajaxDataBind = function(url, targetControl, data, selectedValue, associatedC
         };
 
         var err = $.parseJSON(xhr.responseText);
-        appendItem(targetControl, 0, err.Message);
+        appendOption(targetControl, 0, err.Message);
     });
 };
 

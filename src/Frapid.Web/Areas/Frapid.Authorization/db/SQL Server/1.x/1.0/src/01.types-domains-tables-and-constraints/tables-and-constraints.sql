@@ -9,7 +9,7 @@ CREATE TABLE auth.access_types
     access_type_id                          integer PRIMARY KEY,
     access_type_name                        national character varying(48) NOT NULL,
     audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted									bit DEFAULT(0)
 );
 
@@ -27,7 +27,7 @@ CREATE TABLE auth.group_entity_access_policy
     access_type_id                          integer NULL REFERENCES auth.access_types,
     allow_access                            bit NOT NULL,
     audit_user_id                           integer NULL REFERENCES account.users,
-    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted									bit DEFAULT(0)
 );
 
@@ -40,7 +40,7 @@ CREATE TABLE auth.entity_access_policy
     access_type_id                          integer NULL REFERENCES auth.access_types,
     allow_access                            bit NOT NULL,
     audit_user_id                           integer NULL REFERENCES account.users,
-    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted									bit DEFAULT(0)
 );
 
@@ -51,7 +51,7 @@ CREATE TABLE auth.group_menu_access_policy
     menu_id                                 integer NOT NULL REFERENCES core.menus,
     role_id                                 integer REFERENCES account.roles,
     audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted									bit DEFAULT(0)
 );
 
@@ -68,7 +68,7 @@ CREATE TABLE auth.menu_access_policy
     allow_access                            bit,
     disallow_access                         bit,
     audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted									bit DEFAULT(0),
 											CONSTRAINT menu_access_policy_access_chk CHECK(NOT(allow_access= 1 AND disallow_access = 1))
 );

@@ -15,7 +15,8 @@ Include the localizable.js utility on your View.
 The localizable.js investigates html controls having the following attributes:
 
 * data-localize
-* data-localized-resource
+* data-localized-placeholder
+* data-localized-title
 
 ### data-localize
 **This**
@@ -26,46 +27,64 @@ The localizable.js investigates html controls having the following attributes:
 </div>
 ```
 
-** will be converted to (English) **
+**will be converted to (English)**
 
 ```html
 <div class="ui message">
-    Company Name
+    <span>Company Name</span>
 </div>
 ```
 
-** or (German) **
+**or (German)**
 
 
 ```html
 <div class="ui message">
-    Firmenname
+    <span>Firmenname</span>
 </div>
 ```
 
-Note that the existing node (span) is replaced by the translated literal.
-
-
-### data-localized-resource
-
+### data-localized-placeholder
 **This**
 
 ```html
-<input data-localized-resource="Titles.CompanyName" data-localization-target="value" />
+<input data-localized-placeholder="Titles.Customer" />
 ```
 
-** will be converted to (English) **
+**will be converted to (English)**
 
 ```html
-<input data-localized-resource="Titles.CompanyName" data-localization-target="value"
-    value="Company Name" />
+<input placeholder="Customer" />
 ```
 
-** or (German) **
+**or (German)**
+
 
 ```html
-<input data-localized-resource="Titles.CompanyName" data-localization-target="value"
-    value="Firmenname" />
+<input placeholder="Kunde" />
 ```
+
+
+### data-localized-title
+**This**
+
+```html
+<input data-localized-title="Titles.Customer" />
+```
+
+**will be converted to (English)**
+
+```html
+<input title="Customer" />
+```
+
+**or (German)**
+
+
+```html
+<input title="Kunde" />
+```
+
 
 [Back to Internationalization](i18n.md)
+

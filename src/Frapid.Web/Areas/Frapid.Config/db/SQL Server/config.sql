@@ -13,7 +13,7 @@ CREATE TABLE config.kanbans
     kanban_name                                 national character varying(128) NOT NULL,
     description                                 national character varying(500),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 CREATE TABLE config.kanban_details
@@ -23,7 +23,7 @@ CREATE TABLE config.kanban_details
     rating                                      smallint CHECK(rating>=0 AND rating<=5),
     resource_id                                 national character varying(128) NOT NULL,
     audit_user_id                               integer NULL REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)    
 );
 
@@ -46,7 +46,7 @@ CREATE TABLE config.smtp_configs
     smtp_password                               national character varying(256) NOT NULL,
     smtp_port                                   integer NOT NULL DEFAULT(587),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -70,7 +70,7 @@ CREATE TABLE config.email_queue
     canceled_on                                 datetimeoffset,
 	is_test										bit NOT NULL DEFAULT(0),
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -89,7 +89,7 @@ CREATE TABLE config.filters
     filter_value                                national character varying(500),
     filter_and_value                            national character varying(500),
     audit_user_id                               integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -102,7 +102,7 @@ CREATE TABLE config.custom_field_data_types
     data_type                                   national character varying(50) NOT NULL PRIMARY KEY,
 	underlying_type								national character varying(500) NOT NULL,
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -112,7 +112,7 @@ CREATE TABLE config.custom_field_forms
     table_name                                  national character varying(500) NOT NULL UNIQUE,
     key_name                                    national character varying(500) NOT NULL,
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -131,7 +131,7 @@ CREATE TABLE config.custom_field_setup
                                                 REFERENCES config.custom_field_data_types,
     description                                 national character varying(500) NOT NULL,
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -143,7 +143,7 @@ CREATE TABLE config.custom_fields
     resource_id                                 national character varying(500) NOT NULL,
     value                                       national character varying(MAX),
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -155,7 +155,7 @@ CREATE TABLE config.flag_types
     background_color                            color NOT NULL,
     foreground_color                            color NOT NULL,
     audit_user_id                               integer NULL REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -171,7 +171,7 @@ CREATE TABLE config.flags
     flagged_on                                  datetimeoffset NULL 
                                                 DEFAULT(getutcdate()),
     audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETDATE()),
+    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
 	deleted										bit DEFAULT(0)
 );
 
@@ -372,7 +372,6 @@ DROP PROCEDURE config.create_flag;
 
 GO
 
-
 CREATE PROCEDURE config.create_flag
 (
     @user_id            integer,
@@ -403,20 +402,13 @@ BEGIN
     ELSE
     BEGIN
         UPDATE config.flags
-        SET
-            flag_type_id=@flag_type_id
-        WHERE 
-            user_id=@user_id 
-        AND 
-            resource=@resource 
-        AND 
-            resource_key=@resource_key 
-        AND 
-            resource_id=@resource_id;
+        SET flag_type_id=@flag_type_id
+        WHERE user_id=@user_id 
+        AND resource=@resource 
+        AND resource_key=@resource_key 
+        AND resource_id=@resource_id;
     END;
 END;
-
-
 
 GO
 

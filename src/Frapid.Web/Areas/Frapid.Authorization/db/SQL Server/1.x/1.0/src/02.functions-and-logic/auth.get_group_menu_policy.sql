@@ -68,5 +68,6 @@ BEGIN
     ORDER BY app_name, sort, menu_id;
 END;
 
---EXECUTE auth.get_group_menu_policy 1, 1, '';
 GO
+
+--EXECUTE auth.get_group_menu_policy 1, 1, '';

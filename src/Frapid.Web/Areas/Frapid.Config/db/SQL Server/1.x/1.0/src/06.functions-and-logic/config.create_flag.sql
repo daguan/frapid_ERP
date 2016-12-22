@@ -3,7 +3,6 @@ DROP PROCEDURE config.create_flag;
 
 GO
 
-
 CREATE PROCEDURE config.create_flag
 (
     @user_id            integer,
@@ -34,19 +33,12 @@ BEGIN
     ELSE
     BEGIN
         UPDATE config.flags
-        SET
-            flag_type_id=@flag_type_id
-        WHERE 
-            user_id=@user_id 
-        AND 
-            resource=@resource 
-        AND 
-            resource_key=@resource_key 
-        AND 
-            resource_id=@resource_id;
+        SET flag_type_id=@flag_type_id
+        WHERE user_id=@user_id 
+        AND resource=@resource 
+        AND resource_key=@resource_key 
+        AND resource_id=@resource_id;
     END;
 END;
-
-
 
 GO
