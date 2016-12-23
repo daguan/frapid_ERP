@@ -137,7 +137,9 @@
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="DAL\Notifications.cs" />
+    <Compile Include="DTO\MyNotifcation.cs" />
     <Compile Include="DTO\Notification.cs" />
     <Compile Include="DTO\NotificationStatus.cs" />
     <Compile Include="Helpers\FrapidViewHelper.cs" />

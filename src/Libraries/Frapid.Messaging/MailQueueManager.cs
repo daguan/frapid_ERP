@@ -103,20 +103,16 @@ namespace Frapid.Messaging
         {
             var queue = await MailQueue.GetMailInQueueAsync(this.Database).ConfigureAwait(false);
             var config = new Config(this.Database, this.Processor);
+            this.Processor = processor;
 
-            if(this.IsEnabled())
+            if (this.IsEnabled())
             {
-                foreach(var mail in queue)
+                foreach (var mail in queue)
                 {
                     var message = EmailHelper.GetMessage(config, mail);
                     var attachments = mail.Attachments?.Split(',').ToArray();
 
-                    bool success = await processor.SendAsync(message, false, attachments).ConfigureAwait(false);
-
-                    if(!success)
-                    {
-                        continue;
-                    }
+                    await processor.SendAsync(message, false, attachments).ConfigureAwait(false);
 
                     mail.Delivered = true;
                     mail.DeliveredOn = DateTimeOffset.UtcNow;

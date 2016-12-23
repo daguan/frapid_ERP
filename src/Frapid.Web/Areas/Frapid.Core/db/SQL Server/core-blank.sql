@@ -807,10 +807,13 @@ CREATE TABLE core.notifications
 (
     notification_id                             uniqueidentifier PRIMARY KEY DEFAULT(NEWID()),
     event_timestamp                             DATETIMEOFFSET NOT NULL DEFAULT(GETUTCDATE()),
+	tenant										national character varying(1000),
+	office_id									integer REFERENCES core.offices,
 	associated_app								national character varying(100) NOT NULL REFERENCES core.apps,
     associated_menu_id                          integer REFERENCES core.menus,
-    private_notification                        bit NOT NULL DEFAULT(0),
     to_user_id                                  integer,
+    to_role_id                                  integer,
+	to_login_id									bigint,
     url                                         national character varying(2000),
     formatted_text                              national character varying(4000),
     icon                                        national character varying(100)    
@@ -1059,6 +1062,141 @@ END;
 
 GO
 
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.get_my_notifications.sql --<--<--
+IF OBJECT_ID('core.get_my_notifications') IS NOT NULL
+DROP FUNCTION core.get_my_notifications;
+
+GO
+
+CREATE FUNCTION core.get_my_notifications(@login_id bigint)
+RETURNS @result TABLE
+(
+	notification_id								uniqueidentifier,
+	associated_app								national character varying(100),
+	associated_menu_id							integer,
+	url											national character varying(2000),
+	formatted_text								national character varying(4000),
+	icon										national character varying(100),
+	seen										bit,
+	event_date									DATETIMEOFFSET
+)
+AS
+BEGIN
+	DECLARE @user_id							integer;
+	DECLARE @office_id							integer;
+	DECLARE @role_id							integer;
+	
+	SELECT 
+		@user_id = account.sign_in_view."user_id",
+		@office_id = account.sign_in_view.office_id,
+		@role_id = account.sign_in_view.role_id
+	FROM account.sign_in_view
+	WHERE account.sign_in_view.login_id = @login_id;
+
+	--UNSEEN NOTIFICATIONS
+	INSERT INTO @result(notification_id, associated_app, associated_menu_id, url, formatted_text, icon, seen, event_date)
+	SELECT notification_id, associated_app, associated_menu_id, url, formatted_text, icon, 0, event_timestamp
+	FROM core.notifications
+	WHERE core.notifications.to_login_id = @login_id
+	AND notification_id NOT IN
+	(
+		SELECT notification_id
+		FROM core.notification_statuses
+		WHERE seen_by = @user_id
+	);
+	
+	INSERT INTO @result(notification_id, associated_app, associated_menu_id, url, formatted_text, icon, seen, event_date)
+	SELECT notification_id, associated_app, associated_menu_id, url, formatted_text, icon, 0, event_timestamp
+	FROM core.notifications
+	WHERE core.notifications.to_user_id = @user_id
+	AND core.notifications.to_login_id IS NULL
+	AND notification_id NOT IN
+	(
+		SELECT notification_id
+		FROM core.notification_statuses
+		WHERE seen_by = @user_id
+	);
+	
+	INSERT INTO @result(notification_id, associated_app, associated_menu_id, url, formatted_text, icon, seen, event_date)
+	SELECT notification_id, associated_app, associated_menu_id, url, formatted_text, icon, 0, event_timestamp
+	FROM core.notifications
+	WHERE core.notifications.to_role_id = @role_id
+	AND core.notifications.to_user_id IS NULL
+	AND core.notifications.to_login_id IS NULL
+	AND notification_id NOT IN
+	(
+		SELECT notification_id
+		FROM core.notification_statuses
+		WHERE seen_by = @user_id
+	);
+
+	INSERT INTO @result(notification_id, associated_app, associated_menu_id, url, formatted_text, icon, seen, event_date)
+	SELECT notification_id, associated_app, associated_menu_id, url, formatted_text, icon, 0, event_timestamp
+	FROM core.notifications
+	WHERE core.notifications.office_id = @office_id
+	AND core.notifications.to_role_id IS NULL
+	AND core.notifications.to_user_id IS NULL
+	AND core.notifications.to_login_id IS NULL
+	AND notification_id NOT IN
+	(
+		SELECT notification_id
+		FROM core.notification_statuses
+		WHERE seen_by = @user_id
+	);
+
+
+	--SEEN NOTIFICATIONS
+	WITH seen_notifications
+	AS
+	(
+		SELECT core.notification_statuses.notification_id, associated_app, associated_menu_id, url, formatted_text, icon, event_timestamp
+		FROM core.notifications
+		INNER JOIN core.notification_statuses
+		ON core.notification_statuses.notification_id = core.notifications.notification_id
+		WHERE core.notifications.to_login_id = @login_id
+
+		UNION ALL
+
+		SELECT core.notification_statuses.notification_id, associated_app, associated_menu_id, url, formatted_text, icon, event_timestamp
+		FROM core.notifications
+		INNER JOIN core.notification_statuses
+		ON core.notification_statuses.notification_id = core.notifications.notification_id
+		WHERE core.notifications.to_user_id = @user_id
+		AND core.notifications.to_login_id IS NULL
+
+		UNION ALL
+
+		SELECT core.notification_statuses.notification_id, associated_app, associated_menu_id, url, formatted_text, icon, event_timestamp
+		FROM core.notifications
+		INNER JOIN core.notification_statuses
+		ON core.notification_statuses.notification_id = core.notifications.notification_id
+		WHERE core.notifications.to_role_id = @role_id
+		AND core.notifications.to_user_id IS NULL
+		AND core.notifications.to_login_id IS NULL
+
+		UNION ALL
+
+		SELECT core.notification_statuses.notification_id, associated_app, associated_menu_id, url, formatted_text, icon, event_timestamp
+		FROM core.notifications
+		INNER JOIN core.notification_statuses
+		ON core.notification_statuses.notification_id = core.notifications.notification_id
+		WHERE core.notifications.office_id = @office_id
+		AND core.notifications.to_role_id IS NULL
+		AND core.notifications.to_user_id IS NULL
+		AND core.notifications.to_login_id IS NULL
+	)
+
+	INSERT INTO @result(notification_id, associated_app, associated_menu_id, url, formatted_text, icon, seen, event_date)
+	SELECT TOP 10 notification_id, associated_app, associated_menu_id, url, formatted_text, icon, 1, event_timestamp
+	FROM seen_notifications
+	ORDER BY event_timestamp DESC;
+
+	RETURN;
+END;
+
+GO
+
+
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.get_office_code_by_office_id.sql --<--<--
 IF OBJECT_ID('core.get_office_code_by_office_id') IS NOT NULL
 DROP FUNCTION core.get_office_code_by_office_id;
@@ -1180,6 +1318,40 @@ END;
 GO
 
 --SELECT core.is_valid_office_id(1);
+
+-->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.mark_notification_as_seen.sql --<--<--
+IF OBJECT_ID('core.mark_notification_as_seen') IS NOT NULL
+DROP PROCEDURE core.mark_notification_as_seen;
+
+GO
+
+CREATE PROCEDURE core.mark_notification_as_seen(@notification_id uniqueidentifier, @user_id integer)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
+
+	IF EXISTS
+	(
+		SELECT TOP 1 0 FROM core.notification_statuses
+		WHERE notification_id = @notification_id
+		AND seen_by = @user_id
+	)
+	BEGIN
+		UPDATE core.notification_statuses
+		SET last_seen_on = GETUTCDATE()
+		WHERE notification_id = @notification_id
+		AND seen_by = @user_id;
+
+		RETURN;
+	END;
+
+	INSERT INTO core.notification_statuses(notification_id, last_seen_on, seen_by)
+	SELECT @notification_id, GETUTCDATE(), @user_id;
+END;
+
+GO
+
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/10.policy/access_policy.sql --<--<--
 

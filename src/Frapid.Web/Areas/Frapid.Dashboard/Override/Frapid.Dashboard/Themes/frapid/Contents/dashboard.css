@@ -310,13 +310,13 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
         font-size: 0.89em;
     }
 
-.notify{
-	z-index: 19999!important;
-	-webkit-filter: blur(0)!important;
-	-moz-filter: blur(0)!important;
-	-o-filter: blur(0)!important;
-	-ms-filter: blur(0)!important;
-	filter: blur(0)!important;
+.notify {
+    z-index: 19999 !important;
+    -webkit-filter: blur(0) !important;
+    -moz-filter: blur(0) !important;
+    -o-filter: blur(0) !important;
+    -ms-filter: blur(0) !important;
+    filter: blur(0) !important;
 }
 
 .menu .item .sticker {
@@ -402,6 +402,7 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
         color: #888;
         text-transform: uppercase;
         display: block;
+        padding-top: 0.7em;
     }
 
     .notification.popup .items .message {
@@ -510,14 +511,18 @@ input[data-feature-search] {
     letter-spacing: 1px;
 }
 
-.adjacent.button{
-	margin:0.25em!important;
+.adjacent.button {
+    margin: 0.25em !important;
 }
 
-.fluid.width{
-    width:100%;
+.fluid.width {
+    width: 100%;
 }
 
-.overflown{
+.overflown {
     overflow: auto;
+}
+
+.notification .unseen {
+    font-weight: 600 !important;
 }

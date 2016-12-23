@@ -1,3 +1,26 @@
+function setMoments() {
+    const els = $(".refreshing.moment");
+
+    $.each(els, function () {
+        const el = $(this);
+        var val = el.attr("data-time");
+
+        if (!val) {
+            val = parseInt(el.attr("data-server-time"));
+        };
+
+        const time = new Date(val);
+
+        if (!isNaN(time)) {
+            el.text(window.moment(time).fromNow());
+        };
+    });
+
+    setTimeout(function () {
+        setMoments();
+    }, 5000);
+};
+
 $.getJSON("/dashboard/meta", function (response) {
     window.meta = response;
     window.culture = meta.Culture;
@@ -268,26 +291,44 @@ $('.notification.item').popup({
     position: 'bottom left',
     popup: $('.notification.popup'),
     on: 'click',
-    closable: false,
+    closable: true,
     delay: {
         show: 300,
         hide: 800
     }
 });
 
-function addNotification(model) {
+function addNotification(model, supressMessage) {
     function getIcon(icon, fromApp) {
-        return "user";
+        return icon || fromApp;
+    };
+
+    function updateTotal() {
+        const totalItems = $(".notification.popup .items").find(".notification.item.unseen").length;
+
+        if (totalItems) {
+            const sticker = $("<div class='sticker' />");
+            sticker.html(totalItems);
+            $(".right.menu .notification.item").append(sticker);
+        } else {
+            $(".right.menu .notification.item .sticker").remove();
+        };
     };
 
     function getEl() {
-        const el = $("<div class='notification item' />");
+        const el = $("<div class='notification unseen item' />");
         el.attr("data-notification-id", model.NotificationId);
         el.attr("event-timestamp", model.EventTimestampOffset);
         el.attr("data-associated-app", model.AssociatedApp);
         el.attr("data-associated-menu-id", model.AssociatedMenuId);
-        el.attr("data-private", model.PrivateNotification);
+
         el.attr("data-url", model.Url);
+
+        if (model.hasOwnProperty("Seen")) {
+            if (model.Seen) {
+                el.removeClass("unseen").addClass("seen");
+            };
+        };
 
         const appIcon = getIcon(model.Icon, model.AssociatedApp);
 
@@ -303,12 +344,35 @@ function addNotification(model) {
         message.attr("href", model.Url);
         message.html(model.FormattedText);
 
-        const timestamp = $("<span class='timestamp'>Just Now</span>");
-        timestamp.attr("data-date", model.EventTimestampOffset);
+        const timestamp = $("<span class='refreshing timestamp moment'></span>");
+        timestamp.attr("data-time", model.EventTimestampOffset);
+        timestamp.html(model.EventTimestampOffset);
+        timestamp.attr("title", new Date(model.EventTimestampOffset).toLocaleFormat());
 
         timestamp.appendTo(message);
 
         message.appendTo(el);
+
+        el.off("click").on("click", function (e) {
+            function request(notificationId) {
+                var url = "/dashboard/my/notifications/set-seen/{notificationId}";
+                url = url.replace("{notificationId}", notificationId);
+                return window.getAjaxRequest(url, "POST");
+            };
+
+            e.preventDefault();
+
+            const el = $(this);
+            const notificationId = el.attr("data-notification-id");
+
+            const ajax = request(notificationId);
+
+            ajax.success(function () {
+                el.removeClass("unseen").addClass("seen");
+                updateTotal();
+                document.location = el.attr("data-url");
+            });
+        });
 
         return el;
     };
@@ -316,28 +380,23 @@ function addNotification(model) {
     const target = $(".notification.popup .items");
     target.find(".placeholder").remove();
 
-
-    window.displayNotification(model.FormattedText, "info");
+    if (!supressMessage) {
+        window.displayMessage(model.FormattedText, "info");
+    };
 
     const el = getEl();
 
     target.prepend(el);
 
-    const totalItems = target.find(".notification.item").length;
 
-    if (totalItems) {
-        const sticker = $("<div class='sticker' />");
-        sticker.html(totalItems);
-        $(".right.menu .notification.item").append(sticker);
-    } else {
-        $(".right.menu .notification.item .sticker").remove();
-    };
+    updateTotal();
 };
 
 const notifcationHub = $.connection.notificationHub;
 
 $(function () {
     notifcationHub.client.notificationReceived = function (message) {
+        message.EventTimestampOffset = new Date();
         addNotification(message);
     };
 
@@ -646,3 +705,32 @@ $("[data-feature-search]").on("keyup", function (e) {
         target.fadeIn(500);
     };
 });
+
+
+function showNotifications() {
+    function request() {
+        const url = "/dashboard/my/notifications";
+        return window.getAjaxRequest(url);
+    };
+
+    const ajax = request();
+
+    ajax.success(function (response) {
+        const ordered = window.Enumerable.From(response).OrderByDescending(function(x) {
+            return x.EventDate;
+        }).ToArray();
+
+
+        $.each(ordered, function () {
+            this.EventTimestampOffset = this.EventDate;
+            addNotification(this, true);
+        });
+
+        setMoments();
+    });
+
+};
+
+showNotifications();
+setMoments();
+

@@ -74,8 +74,17 @@
                         };
 
                         title = ' title ="' + val.toFormattedDate() + '"';
-                        var d = new Date(removeTimezone(val));
-                        val = moment(d).fromNow();
+                        var d = getTimestampWithoutTimeZone(val);
+
+                        var date = new Date();
+                        var timestamp = getTimestampWithoutTimeZone(new Date(date.getFullYear(), date.getMonth(), date.getDate()));
+
+                        if(timestamp.valueOf() === d.valueOf()){
+                            //the timestamp object does not have time
+                            val = "Today";
+                        }else{
+                            val = moment(d).fromNow();
+                        };
                     };
 
                     if (dataType === "time") {

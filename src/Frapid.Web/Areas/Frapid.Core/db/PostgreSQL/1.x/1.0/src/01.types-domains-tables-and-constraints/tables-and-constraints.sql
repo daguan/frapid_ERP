@@ -193,13 +193,16 @@ CREATE TABLE core.notifications
 (
     notification_id                             uuid PRIMARY KEY DEFAULT(gen_random_uuid()),
     event_timestamp                             TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
-	associated_app							    national character varying(100) NOT NULL REFERENCES core.apps,
+	tenant										national character varying(1000),
+	office_id									integer REFERENCES core.offices,
+	associated_app								national character varying(100) NOT NULL REFERENCES core.apps,
     associated_menu_id                          integer REFERENCES core.menus,
-    private_notification                        boolean NOT NULL DEFAULT(false),
     to_user_id                                  integer,
+    to_role_id                                  integer,
+	to_login_id									bigint,
     url                                         national character varying(2000),
     formatted_text                              national character varying(4000),
-    icon                                        national character varying(100)
+    icon                                        national character varying(100)    
 );
 
 CREATE TABLE core.notification_statuses

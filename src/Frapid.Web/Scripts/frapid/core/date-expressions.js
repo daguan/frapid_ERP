@@ -7,6 +7,12 @@ function convertDate(d) {
     };
 };
 
+function getTimestampWithoutTimeZone(string){
+    var date = new Date(string)
+    var userTimezoneOffset = new Date().getTimezoneOffset()*60000;
+    return new Date(date.getTime() - userTimezoneOffset);
+};
+
 function parseLocalizedDate(dateString) {
     if (!dateString) {
         return "";
@@ -16,19 +22,14 @@ function parseLocalizedDate(dateString) {
 
     if (date) {
         const offset = date.getTimezoneOffset() * 60000;
-
-        return removeTimezone(new Date(date.getTime() - offset).toISOString());
-    }
+        return new Date(date.getTime() - offset).toISOString();
+    };
 
     return dateString;
 };
 
-function removeTimezone(dateTime) {
-    return dateTime.toString().replace("Z", "");
-};
-
-function getTime(dateTime) {
-    if (!dateTime) {
+function getTime(date) {
+    if (!date) {
         return "";
     };
 
@@ -40,9 +41,7 @@ function getTime(dateTime) {
         return minutes;
     };
 
-    var value = removeTimezone(dateTime);
-    const d = new Date(value);
-    value = d.getHours() + ":" + padMinutes(d.getMinutes());
+    value = date.getHours() + ":" + padMinutes(date.getMinutes());
 
     return value;
 };
