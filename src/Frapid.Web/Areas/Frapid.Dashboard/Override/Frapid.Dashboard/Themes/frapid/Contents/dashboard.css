@@ -526,3 +526,7 @@ input[data-feature-search] {
 .notification .unseen {
     font-weight: 600 !important;
 }
+
+.ui-timepicker-wrapper {
+    width: 10em!important;
+}

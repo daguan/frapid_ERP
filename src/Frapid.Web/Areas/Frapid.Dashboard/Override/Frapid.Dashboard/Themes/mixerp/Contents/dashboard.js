@@ -23,6 +23,8 @@ if (!window.meta) {
         window.datepickerShowWeekNumber = meta.DatepickerShowWeekNumber;
         window.datepickerWeekStartDay = meta.DatepickerWeekStartDay;
         window.datepickerNumberOfMonths = meta.DatepickerNumberOfMonths;
+
+        $(document).trigger("metaready");
     });
 };
 

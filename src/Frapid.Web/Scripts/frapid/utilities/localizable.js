@@ -111,9 +111,3 @@
         };
     });
 };
-
-$(document).ready(function(){
-	setTimeout(function(){
-		localize();
-	}, 1000);	
-});

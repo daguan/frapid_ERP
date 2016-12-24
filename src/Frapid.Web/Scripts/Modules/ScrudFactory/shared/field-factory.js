@@ -17,6 +17,9 @@
     switch (dataType) {
         case "photo":
             return $("<input type='text' class='image' />");
+        case "bigint":
+        case "integer":
+        case "int":
         case "int4":
         case "int8":
         case "integer_strict":

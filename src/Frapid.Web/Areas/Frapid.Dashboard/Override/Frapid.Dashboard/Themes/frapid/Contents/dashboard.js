@@ -43,6 +43,8 @@ $.getJSON("/dashboard/meta", function (response) {
     window.datepickerShowWeekNumber = meta.DatepickerShowWeekNumber;
     window.datepickerWeekStartDay = meta.DatepickerWeekStartDay;
     window.datepickerNumberOfMonths = meta.DatepickerNumberOfMonths;
+
+    $(document).trigger("metaready");
 });
 
 $.getJSON("/dashboard/custom-variables", function (response) {
@@ -98,6 +100,13 @@ frapidApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
         });
 });
 
+function loadUI(){
+    window.localize();
+    
+    window.loadDatepicker();
+    window.setNumberFormat();
+};
+
 frapidApp.run(function ($rootScope, $location) {
     $rootScope.$on('$locationChangeStart', function (e, n, o) {
         window.overridePath = null;
@@ -110,6 +119,7 @@ frapidApp.run(function ($rootScope, $location) {
     $rootScope.$on('$routeChangeSuccess', function () {
         $("#dashboard-container").removeClass("loading");
         buildMenus();
+        loadUI();
     });
 
     $rootScope.toogleDashboard = function () {
@@ -394,16 +404,18 @@ function addNotification(model, supressMessage) {
 
 const notifcationHub = $.connection.notificationHub;
 
-$(function () {
-    notifcationHub.client.notificationReceived = function (message) {
-        message.EventTimestampOffset = new Date();
-        addNotification(message);
-    };
+if (notifcationHub) {
+    $(function () {
+        notifcationHub.client.notificationReceived = function (message) {
+            message.EventTimestampOffset = new Date();
+            addNotification(message);
+        };
 
-    $.connection.hub.start().done(function () {
+        $.connection.hub.start().done(function () {
 
+        });
     });
-});
+};
 
 function sayHi() {
     const greetings =
