@@ -263,71 +263,6 @@
     <Compile Include="ViewModels\SearchResultContent.cs" />
     <Compile Include="ViewModels\Subscribe.cs" />
     <Compile Include="ViewModels\Template.cs" />
-    <Compile Include="Views\Blog\Home.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Home.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Blog\Post.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Post.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Category\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Configuration\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ContactUs\ContactForm.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ContactForm.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ContactUs\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Contact\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Content\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Content\Manage.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Manage.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\DashboardSubscription\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ErrorHandlers\404.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>404.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Index\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Layout\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Layout\Shared\DeleteThemeModal.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -353,36 +288,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UploadModal.cshtml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MenuItem\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Menu\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SubscriptionEmailTemplate\Shared\Editor.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Editor.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SubscriptionEmailTemplate\SubscriptionRemoved.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SubscriptionRemoved.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SubscriptionEmailTemplate\Welcome.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Welcome.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Subscription\Remove.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Remove.cshtml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Layout\Index.css" />
@@ -399,74 +304,32 @@
     <Content Include="Views\web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Index\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
+    <Content Include="Views\Index\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Content\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
+    <Content Include="Views\Content\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Views\ContactUs\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\ContactUs\ContactForm.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>ContactForm.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\Menu\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
+    <Content Include="Views\ContactUs\Index.cshtml" />
+    <Content Include="Views\ContactUs\ContactForm.cshtml" />
+    <Content Include="Views\Menu\Index.cshtml" />
     <Content Include="AppInfo.json" />
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\frapid-publish-profile.pubxml" />
-    <Content Include="Views\Category\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\Content\Manage.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Manage.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\Contact\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\MenuItem\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
+    <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\Content\Manage.cshtml" />
+    <Content Include="Views\Contact\Index.cshtml" />
+    <Content Include="Views\MenuItem\Index.cshtml" />
     <Content Include="Views\Layout\Shared\UploadModal.cshtml">
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>UploadModal.generated.cs</LastGenOutput>
     </Content>
-    <Content Include="Views\Layout\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\Subscription\Remove.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Remove.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\SubscriptionEmailTemplate\SubscriptionRemoved.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>SubscriptionRemoved.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\SubscriptionEmailTemplate\Shared\Editor.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Editor.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\DashboardSubscription\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
+    <Content Include="Views\Layout\Index.cshtml" />
+    <Content Include="Views\Subscription\Remove.cshtml" />
+    <Content Include="Views\SubscriptionEmailTemplate\SubscriptionRemoved.cshtml" />
+    <Content Include="Views\SubscriptionEmailTemplate\Shared\Editor.cshtml" />
+    <Content Include="Views\DashboardSubscription\Index.cshtml" />
     <Content Include="Views\Layout\Shared\FileModal.cshtml">
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>FileModal.generated.cs</LastGenOutput>
@@ -483,27 +346,12 @@
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>DeleteThemeModal.generated.cs</LastGenOutput>
     </Content>
-    <Content Include="Views\SubscriptionEmailTemplate\Welcome.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Welcome.generated.cs</LastGenOutput>
-    </Content>
+    <Content Include="Views\SubscriptionEmailTemplate\Welcome.cshtml" />
     <Content Include="web.config" />
-    <Content Include="Views\Blog\Home.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Home.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\Configuration\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\Blog\Post.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Post.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\ErrorHandlers\404.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>404.generated.cs</LastGenOutput>
-    </Content>
+    <Content Include="Views\Blog\Home.cshtml" />
+    <Content Include="Views\Configuration\Index.cshtml" />
+    <Content Include="Views\Blog\Post.cshtml" />
+    <Content Include="Views\ErrorHandlers\404.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

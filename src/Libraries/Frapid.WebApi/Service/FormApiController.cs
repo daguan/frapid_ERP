@@ -825,8 +825,7 @@ namespace Frapid.WebApi.Service
         {
             var items = this.ParseCollection(collection);
 
-            if(items == null ||
-               items.Count.Equals(0))
+            if(items == null || items.Count.Equals(0))
             {
                 return null;
             }

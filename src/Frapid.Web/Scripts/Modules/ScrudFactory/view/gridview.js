@@ -74,7 +74,7 @@
                         };
 
                         title = ' title ="' + val.toFormattedDate() + '"';
-                        var d = getTimestampWithoutTimeZone(val);
+                        var d = new Date(val);
 
                         var date = new Date();
                         var timestamp = getTimestampWithoutTimeZone(new Date(date.getFullYear(), date.getMonth(), date.getDate()));

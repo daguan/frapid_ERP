@@ -14,11 +14,11 @@
     $("#ExportDropDown").dropdown();
 
     if (window.scrudFactory.title) {
-        $(".title").html(window.scrudFactory.title);
+        $(".scrud.title").html(window.scrudFactory.title);
 
         var titleSuffix = getQueryStringByName("TitleSuffix");
         if(titleSuffix){
-            $(".title").append(" / " + titleSuffix);
+            $(".scrud.title").append(" / " + titleSuffix);
         };
     };
     if (window.scrudFactory.description) {

@@ -118,21 +118,6 @@
     <Compile Include="Models\ResourceUploader.cs" />
     <Compile Include="Models\ResourceUploadException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\ApiAccess\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Currency\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\FileManager\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
     <Compile Include="Views\FileManager\Shared\FileModal.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -148,26 +133,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UploadModal.cshtml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Flag\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MenuAccess\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Office\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Smtp\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\FileManager\Index.css" />
@@ -178,42 +143,21 @@
     <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Currency\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
+    <Content Include="Views\Currency\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Office\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\Flag\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\Smtp\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\ApiAccess\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\MenuAccess\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
+    <Content Include="Views\Office\Index.cshtml" />
+    <Content Include="Views\Flag\Index.cshtml" />
+    <Content Include="Views\Smtp\Index.cshtml" />
+    <Content Include="Views\ApiAccess\Index.cshtml" />
+    <Content Include="Views\MenuAccess\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="web.config" />
     <Content Include="AppInfo.json" />
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\frapid-publish-profile.pubxml" />
-    <Content Include="Views\FileManager\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
+    <Content Include="Views\FileManager\Index.cshtml" />
     <Content Include="Views\FileManager\Shared\FileModal.cshtml">
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>FileModal.generated.cs</LastGenOutput>

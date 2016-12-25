@@ -1,4 +1,5 @@
-﻿using Frapid.TokenManager;
+﻿using System;
+using Frapid.TokenManager;
 
 namespace Frapid.Dashboard.ViewModels
 {
@@ -8,8 +9,8 @@ namespace Frapid.Dashboard.ViewModels
         public string Tenant { get; set; }
         public string Language { get; set; }
         public string JqueryUIi18NPath { get; set; }
-        public string Today { get; set; }
-        public string Now { get; set; }
+        public DateTime Today { get; set; }
+        public DateTimeOffset Now { get; set; }
         public int? UserId { get; set; }
         public string User { get; set; }
         public string Office { get; set; }

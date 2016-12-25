@@ -1,21 +1,31 @@
-﻿function localize() {
-	function humanize(key){
-		var items = key.split('.');
-		
-		if(!items){
-			return key;
-		};
-		
-		var text = items[items.length -1];
-		
-		if(text){
-			text = text.replace(/([A-Z])/g, ' $1').trim();
-			return text;
-		};
-
+﻿function humanize(key){
+	var items = key.split('.');
+	
+	if(!items){
 		return key;
 	};
+	
+	var text = items[items.length -1];
+	
+	if(text){
+		text = text.replace(/([A-Z])/g, ' $1').trim();
+		return text;
+	};
 
+	return key;
+};
+
+function translate(key){
+	var localized = executeFunctionByName(key, window);
+
+	if (!localized) {
+		localized = humanize(key);
+	};
+	
+	return localized;
+};
+
+function localize() {
     /*
     The HTML nodes having the data-localize attribute 
     will be localized with their respective culture values.

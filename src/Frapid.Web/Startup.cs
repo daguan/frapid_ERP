@@ -1,6 +1,7 @@
 ﻿using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Frapid.Areas;
 using Frapid.Framework;
 using Frapid.Web;
 using Microsoft.AspNet.SignalR;
@@ -17,6 +18,8 @@ namespace Frapid.Web
     {
         public void Configuration(IAppBuilder app)
         {
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings = JsonHelper.GetJsonSerializerSettings();
+
             app.Map
                 (
                     "/signalr",
@@ -34,9 +37,9 @@ namespace Frapid.Web
                         GlobalHost.HubPipeline.AddModule(module);
                     });
 
+
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new FrapidRazorViewEngine());
-
             LogManager.InternalizeLogger();
             AreaRegistration.RegisterAllAreas();
             WebApiConfig.Register(GlobalConfiguration.Configuration);

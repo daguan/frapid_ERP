@@ -480,14 +480,11 @@ namespace Frapid.WebApi.DataAccess
                         }
                         else
                         {
-                            string columns = string.Join(",",
-                                item.Where(x => !x.Key.Equals(this.PrimaryKey))
+                            string columns = string.Join(",", item.Where(x => !x.Key.Equals(this.PrimaryKey))
                                     .Select(x => Sanitizer.SanitizeIdentifierName(x.Key)));
 
-                            string parameters = string.Join(",",
-                                Enumerable.Range(0, item.Count - 1).Select(x => "@" + x));
-                            var arguments =
-                                item.Where(x => !x.Key.Equals(this.PrimaryKey)).Select(x => x.Value).ToArray();
+                            string parameters = string.Join(",", Enumerable.Range(0, item.Count - 1).Select(x => "@" + x));
+                            var arguments = item.Where(x => !x.Key.Equals(this.PrimaryKey)).Select(x => x.Value).ToArray();
 
                             var sql = new Sql("INSERT INTO " + this.FullyQualifiedObjectName + "(" + columns + ")");
                             sql.Append("SELECT " + parameters, arguments);
@@ -511,8 +508,7 @@ namespace Frapid.WebApi.DataAccess
             }
         }
 
-        public async Task UpdateAsync(Dictionary<string, object> item, object primaryKeyValue,
-            List<CustomField> customFields)
+        public async Task UpdateAsync(Dictionary<string, object> item, object primaryKeyValue, List<CustomField> customFields)
         {
             if (string.IsNullOrWhiteSpace(this.Database))
             {
@@ -799,8 +795,7 @@ namespace Frapid.WebApi.DataAccess
             return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
         }
 
-        public async Task<object> AddAsync(Dictionary<string, object> item, List<CustomField> customFields,
-            bool skipPrimaryKey)
+        public async Task<object> AddAsync(Dictionary<string, object> item, List<CustomField> customFields, bool skipPrimaryKey)
         {
             if (string.IsNullOrWhiteSpace(this.Database))
             {

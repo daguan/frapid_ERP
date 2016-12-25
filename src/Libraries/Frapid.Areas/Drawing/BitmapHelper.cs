@@ -8,10 +8,9 @@ namespace Frapid.Areas.Drawing
 {
     public static class BitmapHelper
     {
-        public static Image Resize(this Image img, int srcX, int srcY, int srcWidth, int srcHeight, int dstWidth,
-            int dstHeight)
+        public static Image Resize(this Image img, int x, int y, int sourceWidth, int sourceHeight, int destinationWidth, int destinationHeight)
         {
-            var bmp = new Bitmap(dstWidth, dstHeight);
+            var bmp = new Bitmap(destinationWidth, destinationHeight);
             {
                 using (var graphics = Graphics.FromImage(bmp))
                 {
@@ -22,8 +21,8 @@ namespace Frapid.Areas.Drawing
                     using (var wrapMode = new ImageAttributes())
                     {
                         wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                        var destRect = new Rectangle(0, 0, dstWidth, dstHeight);
-                        graphics.DrawImage(img, destRect, srcX, srcY, srcWidth, srcHeight, GraphicsUnit.Pixel, wrapMode);
+                        var destRect = new Rectangle(0, 0, destinationWidth, destinationHeight);
+                        graphics.DrawImage(img, destRect, x, y, sourceWidth, sourceHeight, GraphicsUnit.Pixel, wrapMode);
                     }
                 }
 
@@ -34,15 +33,16 @@ namespace Frapid.Areas.Drawing
         public static Image ResizeProportional(this Image img, int width, int height, bool enlarge = false)
         {
             double ratio = Math.Max(img.Width / (double)width, img.Height / (double)height);
+
             if (ratio < 1 && !enlarge)
             {
                 return img;
             }
-            return img.Resize(0, 0, img.Width, img.Height, (int)Math.Round(img.Width / ratio),
-                (int)Math.Round(img.Height / ratio));
+
+            return img.Resize(0, 0, img.Width, img.Height, (int)Math.Round(img.Width / ratio), (int)Math.Round(img.Height / ratio));
         }
 
-        public static byte[] ResizeCropExcess(string path, int dstWidth = 0, int dstHeight = 0)
+        public static byte[] ResizeCropExcess(string path, int destinationWidth = 0, int destinationHeight = 0)
         {
             if (!File.Exists(path))
             {
@@ -51,37 +51,37 @@ namespace Frapid.Areas.Drawing
 
             using (var img = new Bitmap(path))
             {
-                if (dstWidth == 0)
+                if (destinationWidth == 0)
                 {
-                    dstWidth = img.Width;
+                    destinationWidth = img.Width;
                 }
-                if (dstHeight == 0)
+                if (destinationHeight == 0)
                 {
-                    dstHeight = img.Height;
+                    destinationHeight = img.Height;
                 }
 
-                double srcRatio = img.Width / (double)img.Height;
-                double dstRatio = dstWidth / (double)dstHeight;
-                int srcX, srcY, cropWidth, cropHeight;
+                double sourceRatio = img.Width / (double)img.Height;
+                double destinationRatio = destinationWidth / (double)destinationHeight;
+                int x, y, croppedWidth, croppedHeight;
 
-                if (srcRatio < dstRatio) // trim top and bottom
+                if (sourceRatio < destinationRatio) // trim top and bottom
                 {
-                    cropHeight = dstHeight * img.Width / dstWidth;
-                    srcY = (img.Height - cropHeight) / 2;
-                    cropWidth = img.Width;
-                    srcX = 0;
+                    croppedHeight = destinationHeight * img.Width / destinationWidth;
+                    y = (img.Height - croppedHeight) / 2;
+                    croppedWidth = img.Width;
+                    x = 0;
                 }
                 else // trim left and right
                 {
-                    cropWidth = dstWidth * img.Height / dstHeight;
-                    srcX = (img.Width - cropWidth) / 2;
-                    cropHeight = img.Height;
-                    srcY = 0;
+                    croppedWidth = destinationWidth * img.Height / destinationHeight;
+                    x = (img.Width - croppedWidth) / 2;
+                    croppedHeight = img.Height;
+                    y = 0;
                 }
 
                 using (var stream = new MemoryStream())
                 {
-                    var image = Resize(img, srcX, srcY, cropWidth, cropHeight, dstWidth, dstHeight);
+                    var image = Resize(img, x, y, croppedWidth, croppedHeight, destinationWidth, destinationHeight);
                     image.Save(stream, ImageFormat.Png);
                     return stream.ToArray();
                 }

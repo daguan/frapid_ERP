@@ -1,5 +1,4 @@
-﻿using System;
-using System.Dynamic;
+﻿using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -11,6 +10,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
+using Frapid.Framework;
 using Frapid.Framework.Extensions;
 using Frapid.TokenManager;
 using Frapid.TokenManager.DAL;
@@ -89,7 +89,7 @@ namespace Frapid.Areas
             if (token != null)
             {
                 bool isValid = AccessTokens.IsValidAsync(tenant, token.ClientToken, context.HttpContext.GetClientIpAddress(),
-                            context.HttpContext.GetUserAgent()).Result;
+                    context.HttpContext.GetUserAgent()).Result;
 
                 if (isValid)
                 {
@@ -149,13 +149,14 @@ namespace Frapid.Areas
             }
 
             this.Response.StatusCode = 200;
-            string json = JsonConvert.SerializeObject(model);
+
+            string json = JsonConvert.SerializeObject(model, JsonHelper.GetJsonSerializerSettings());
             return this.Content(json, "application/json");
         }
 
         protected ActionResult Failed(string message, HttpStatusCode statusCode)
         {
-            this.Response.StatusCode = (int)statusCode;
+            this.Response.StatusCode = (int) statusCode;
             return this.Content(message, MediaTypeNames.Text.Plain, Encoding.UTF8);
         }
 

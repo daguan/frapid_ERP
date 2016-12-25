@@ -31,8 +31,8 @@ namespace Frapid.Dashboard.Controllers
                         Tenant = this.Tenant,
                         Language = CultureManager.GetCurrent().TwoLetterISOLanguageName,
                         JqueryUIi18NPath = "/Scripts/jquery-ui/i18n/",
-                        Today = DateTime.Today.Date.ToString("O"),
-                        Now = DateTimeOffset.UtcNow.ToString("O"),
+                        Today = DateTime.Today,
+                        Now = DateTimeOffset.UtcNow,
                         UserId = this.AppUser.UserId,
                         User = this.AppUser.Email,
                         Office = this.AppUser.OfficeName,
@@ -45,7 +45,7 @@ namespace Frapid.Dashboard.Controllers
                         CurrencySymbol = CultureManager.GetCurrencySymbol(),
                         DatepickerFormat = CultureManager.GetCurrent().DateTimeFormat.ShortDatePattern,
                         DatepickerShowWeekNumber = true,
-                        DatepickerWeekStartDay = (int) CultureManager.GetCurrent().DateTimeFormat.FirstDayOfWeek,
+                        DatepickerWeekStartDay = (int)CultureManager.GetCurrent().DateTimeFormat.FirstDayOfWeek,
                         DatepickerNumberOfMonths = "[2, 3]"
                     });
         }

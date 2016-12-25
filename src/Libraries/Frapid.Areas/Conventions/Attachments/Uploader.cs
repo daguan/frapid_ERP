@@ -10,8 +10,7 @@ namespace Frapid.Areas.Conventions.Attachments
 {
     public class Uploader
     {
-        public Uploader(ILogger logger, AreaRegistration area, HttpFileCollectionBase files, string tenant,
-            string[] allowedExtensions)
+        public Uploader(ILogger logger, AreaRegistration area, HttpFileCollectionBase files, string tenant, string[] allowedExtensions)
         {
             this.Logger = logger;
             this.Area = area;
@@ -79,6 +78,11 @@ namespace Frapid.Areas.Conventions.Attachments
             var stream = file.InputStream;
 
             fileName = Guid.NewGuid() + extension;
+
+            if (path == null)
+            {
+                return fileName;
+            }
 
             path = Path.Combine(path, fileName);
 
