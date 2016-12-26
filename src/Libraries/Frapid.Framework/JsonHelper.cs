@@ -18,7 +18,7 @@ namespace Frapid.Framework
             {
                 Culture = CultureInfo.DefaultThreadCurrentCulture,
                 MissingMemberHandling = MissingMemberHandling.Ignore,
-                NullValueHandling = NullValueHandling.Ignore,
+                NullValueHandling = NullValueHandling.Include,
                 ObjectCreationHandling = ObjectCreationHandling.Auto,
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                 DateParseHandling = DateParseHandling.DateTime,

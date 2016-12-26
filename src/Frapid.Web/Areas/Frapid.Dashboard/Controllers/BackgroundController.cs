@@ -35,9 +35,7 @@ namespace Frapid.Dashboard.Controllers
             return this.Ok(images);
         }
 
-        public static IEnumerable<T> Shuffle<T>(
-            IEnumerable<T> source,
-            Random generator = null)
+        public static IEnumerable<T> Shuffle<T>(IEnumerable<T> source, Random generator = null)
         {
             if (generator == null)
             {

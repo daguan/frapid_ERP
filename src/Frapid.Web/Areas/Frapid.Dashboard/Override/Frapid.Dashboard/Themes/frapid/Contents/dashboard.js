@@ -142,6 +142,7 @@ var menuBuilder = {
             .OrderBy(function (x) { return x.Sort; })
             .ToArray();
 
+
         var isSubMenu = menuId != null && myMenus.length > 0;
 
         if (isSubMenu) {
@@ -214,7 +215,7 @@ function buildMenus() {
         const ajax = request();
 
         ajax.success(function (response) {
-            window.appMenus = response.Result;
+            window.appMenus = response;
             buildMenus();
         });
     };

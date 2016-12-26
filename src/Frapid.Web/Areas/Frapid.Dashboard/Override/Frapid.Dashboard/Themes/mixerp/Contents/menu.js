@@ -119,7 +119,7 @@ function loadMenus() {
     var ajax = request();
 
     ajax.success(function (response) {
-        window.appMenus = response.Result;
+        window.appMenus = response;
 
         loadApplications();
     });
