@@ -84,10 +84,10 @@ namespace Frapid.Mapper.Query.Select
 
             using (var reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
             {
-                if (!reader.HasRows)
-                {
-                    return new List<T>();
-                }
+                //if (!reader.HasRows)
+                //{
+                //    return new List<T>();
+                //}
 
                 var mapped = new Collection<ICollection<KeyValuePair<string, object>>>();
                 var properties = Enumerable.Range(0, reader.FieldCount).Select(reader.GetName).ToList();

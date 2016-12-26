@@ -79,7 +79,8 @@ namespace Frapid.DataAccess
 
         private static object GetValue(Type type, string value)
         {
-            return TypeConverter.Convert(value, type);
+            var converted = TypeConverter.Convert(value, type);
+            return converted;
         }
 
         public static void AddFilters<T>(ref Sql sql, T poco, List<Filter> filters)

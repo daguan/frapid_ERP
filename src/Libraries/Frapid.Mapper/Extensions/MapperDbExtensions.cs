@@ -30,8 +30,10 @@ namespace Frapid.Mapper.Extensions
                     throw new MapperException("Could not create database command.");
                 }
 
+                var value = parameters[arg] ?? DBNull.Value;
+
                 parameter.ParameterName = "@" + arg;
-                parameter.Value = parameters[arg] ?? DBNull.Value;
+                parameter.Value = value;
                 command.Parameters.Add(parameter);
             }
 

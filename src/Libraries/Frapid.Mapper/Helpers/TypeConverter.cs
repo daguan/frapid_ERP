@@ -42,20 +42,20 @@ namespace Frapid.Mapper.Helpers
             {
                 if (value is DateTime)
                 {
-                    return new DateTimeOffset((DateTime) value);
+                    return new DateTimeOffset((DateTime) value).ToUniversalTime();
                 }
 
-                return value.To<DateTimeOffset>();
+                return value.To<DateTimeOffset>().ToUniversalTime();
             }
 
             if (destType == typeof(DateTime) || destType == typeof(DateTime?))
             {
                 if (value is DateTimeOffset)
                 {
-                    return ((DateTimeOffset) value).DateTime;
+                    return ((DateTimeOffset) value).DateTime.ToUniversalTime();
                 }
 
-                return value.To<DateTime>();
+                return value.To<DateTime>().ToUniversalTime();
             }
 
             var converter = TypeDescriptor.GetConverter(destType);

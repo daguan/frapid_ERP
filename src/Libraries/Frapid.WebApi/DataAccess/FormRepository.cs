@@ -722,7 +722,8 @@ namespace Frapid.WebApi.DataAccess
                 sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), PageSize);
             }
 
-            return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
+            var result = await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
+            return result;
         }
 
         public async Task<long> CountFilteredAsync(string filterName)
