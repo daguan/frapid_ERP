@@ -88,7 +88,7 @@ namespace Frapid.Reports.Engine.Generators
         {
             var html = new StringBuilder();
 
-            html.Append("<table ");
+            html.Append("<table id='GridView" + dataSource.Index + "' ");
 
             if (!string.IsNullOrWhiteSpace(grid.CssStyle))
             {

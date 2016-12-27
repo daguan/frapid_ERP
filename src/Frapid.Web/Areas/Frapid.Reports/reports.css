@@ -151,3 +151,16 @@ table {
 .center.aligned {
     text-align: center;
 }
+
+.legend {
+    width: 100%;
+    text-align: center;
+}
+
+    .legend > .legend-title {
+        display: inline-flex;
+        margin: 0.5em;
+        border-style: solid;
+        border-width: 0 0 0 1em;
+        padding: 0 0.3em;
+    }
