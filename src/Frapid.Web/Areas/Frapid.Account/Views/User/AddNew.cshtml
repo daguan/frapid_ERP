@@ -107,7 +107,7 @@
     bindRoles();
     bindOffices();
 
-    $("#CreateButton").unbind("click").bind("click", function() {
+    $("#CreateButton").off("click").on("click", function() {
         function request(model) {
             var url = "/dashboard/account/user/add";
             var data = JSON.stringify(model);

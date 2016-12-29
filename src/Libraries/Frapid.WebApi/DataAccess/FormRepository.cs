@@ -196,9 +196,9 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-
+            
             var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0", false);
-            sql.Where($"{this.PrimaryKey} < @0", primaryKey);
+            sql.And($"{this.PrimaryKey} < @0", primaryKey);
             sql.Append($"ORDER BY {this.PrimaryKey} DESC");
             sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
             sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 1);
@@ -231,7 +231,7 @@ namespace Frapid.WebApi.DataAccess
             //ORDER BY {this.PrimaryKey} LIMIT 1;";
 
             var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0", false);
-            sql.Where($"{this.PrimaryKey} > @0", primaryKey);
+            sql.And($"{this.PrimaryKey} > @0", primaryKey);
             sql.OrderBy(this.PrimaryKey);
             sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
             sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 1);
@@ -449,11 +449,11 @@ namespace Frapid.WebApi.DataAccess
                     {
                         line++;
 
-                        item["audit_user_id"] = this.UserId;
-                        item["audit_ts"] = DateTimeOffset.UtcNow;
-                        item["deleted"] = false;
+                        item["AuditUserId"] = this.UserId;
+                        item["AuditTs"] = DateTimeOffset.UtcNow;
+                        item["Deleted"] = false;
 
-                        var primaryKeyValue = item[this.PrimaryKey];
+                        var primaryKeyValue = item[this.PrimaryKey.ToPascalCase()];
 
                         if (primaryKeyValue != null)
                         {
@@ -462,14 +462,14 @@ namespace Frapid.WebApi.DataAccess
 
                             int index = 0;
 
-                            foreach (var prop in item.Where(x => !x.Key.Equals(this.PrimaryKey)))
+                            foreach (var prop in item.Where(x => !x.Key.Equals(this.PrimaryKey.ToPascalCase())))
                             {
                                 if (index > 0)
                                 {
                                     sql.Append(",");
                                 }
 
-                                sql.Append(Sanitizer.SanitizeIdentifierName(prop.Key) + "=@0", prop.Value);
+                                sql.Append(Sanitizer.SanitizeIdentifierName(prop.Key.ToUnderscoreLowerCase()) + "=@0", prop.Value);
                                 index++;
                             }
 
@@ -480,11 +480,12 @@ namespace Frapid.WebApi.DataAccess
                         }
                         else
                         {
-                            string columns = string.Join(",", item.Where(x => !x.Key.Equals(this.PrimaryKey))
-                                    .Select(x => Sanitizer.SanitizeIdentifierName(x.Key)));
+                            string columns = string.Join(",", item.Where(x => !x.Key.Equals(this.PrimaryKey.ToPascalCase()))
+                                    .Select(x => Sanitizer.SanitizeIdentifierName(x.Key.ToUnderscoreLowerCase())));
 
                             string parameters = string.Join(",", Enumerable.Range(0, item.Count - 1).Select(x => "@" + x));
-                            var arguments = item.Where(x => !x.Key.Equals(this.PrimaryKey)).Select(x => x.Value).ToArray();
+                            var arguments = item.Where(x => !x.Key.Equals(this.PrimaryKey.ToPascalCase()))
+                                            .Select(x => x.Value).ToArray();
 
                             var sql = new Sql("INSERT INTO " + this.FullyQualifiedObjectName + "(" + columns + ")");
                             sql.Append("SELECT " + parameters, arguments);
@@ -531,9 +532,9 @@ namespace Frapid.WebApi.DataAccess
 
             item = this.Crypt(item);
 
-            item["audit_user_id"] = this.UserId;
-            item["audit_ts"] = DateTimeOffset.UtcNow;
-            item["deleted"] = false;
+            item["AuditUserId"] = this.UserId;
+            item["AuditTs"] = DateTimeOffset.UtcNow;
+            item["Deleted"] = false;
 
             using (var db = DbProvider.GetDatabase(this.Database))
             {
@@ -541,14 +542,14 @@ namespace Frapid.WebApi.DataAccess
 
                 int index = 0;
 
-                foreach (var prop in item.Where(x => !x.Key.Equals(this.PrimaryKey)))
+                foreach (var prop in item.Where(x => !x.Key.Equals(this.PrimaryKey.ToPascalCase())))
                 {
                     if (index > 0)
                     {
                         sql.Append(",");
                     }
 
-                    sql.Append(Sanitizer.SanitizeIdentifierName(prop.Key) + "=@0", prop.Value);
+                    sql.Append(Sanitizer.SanitizeIdentifierName(prop.Key.ToUnderscoreLowerCase()) + "=@0", prop.Value);
                     index++;
                 }
 
@@ -819,9 +820,9 @@ namespace Frapid.WebApi.DataAccess
 
             item = this.Crypt(item);
 
-            item["audit_user_id"] = this.UserId;
-            item["audit_ts"] = DateTimeOffset.UtcNow;
-            item["deleted"] = false;
+            item["AuditUserId"] = this.UserId;
+            item["AuditTs"] = DateTimeOffset.UtcNow;
+            item["Deleted"] = false;
 
             using (var db = DbProvider.GetDatabase(this.Database))
             {

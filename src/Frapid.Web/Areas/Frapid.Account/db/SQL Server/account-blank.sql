@@ -788,6 +788,28 @@ END;
 
 GO
 
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_role_name_by_role_id.sql --<--<--
+IF OBJECT_ID('account.get_role_name_by_role_id') IS NOT NULL
+DROP FUNCTION account.get_role_name_by_role_id;
+
+GO
+
+CREATE FUNCTION account.get_role_name_by_role_id(@role_id integer)
+RETURNS national character varying(100)
+AS
+BEGIN
+    RETURN
+    (
+        SELECT account.roles.role_name
+        FROM account.roles
+        WHERE account.roles.role_id = @role_id
+    );
+END
+
+GO
+
+--SELECT account.get_role_name_by_role_id(9999);
+
 -->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_user_id_by_email.sql --<--<--
 IF OBJECT_ID('account.get_user_id_by_email') IS NOT NULL
 DROP FUNCTION account.get_user_id_by_email;

@@ -471,7 +471,7 @@ function scrollToElement(container, el) {
 };
 
 window.addEventListener("keydown", function (e) {
-    if (e.keyCode === 114 || (e.ctrlKey && e.keyCode === 70)) {
+    if (e.keyCode === 114 || (e.ctrlKey && e.shiftKey && e.keyCode === 70)) {
         $("[data-feature-search]").focus();
 
         e.stopPropagation();

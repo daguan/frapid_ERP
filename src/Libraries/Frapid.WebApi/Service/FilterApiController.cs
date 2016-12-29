@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Frapid.DataAccess;
+using Frapid.DataAccess.Models;
 using Frapid.WebApi.DataAccess;
 
 namespace Frapid.WebApi.Service
@@ -106,7 +107,7 @@ namespace Frapid.WebApi.Service
 
         [AcceptVerbs("PUT")]
         [Route("~/api/filters/recreate/{objectName}/{filterName}")]
-        public async Task RecreateFiltersAsync(string objectName, string filterName, [FromBody] List<ExpandoObject> collection)
+        public async Task RecreateFiltersAsync(string objectName, string filterName, [FromBody] List<Filter> collection)
         {
             try
             {

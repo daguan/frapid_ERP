@@ -10,7 +10,7 @@ function getFilterType(columnName) {
         return type.DataType;
     };
 
-    return "";
+    return "string";
 };
 
 
@@ -252,24 +252,24 @@ $("#SaveFilterButton").click(function () {
 
         var filter = new Object();
 
-        filter.filter_id = window.filterId;
-        filter.filter_statement = "AND";
-        filter.object_name = window.scrudFactory.viewTableName;
-        filter.filter_name = filterNameInputText.val();
+        filter.FilterId = window.filterId;
+        filter.FilterStatement = "AND";
+        filter.ObjectName = window.scrudFactory.viewTableName;
+        filter.FilterName = filterNameInputText.val();
 
-        filter.column_name = Enumerable.From(localizedHeaders)
+        filter.ColumnName = Enumerable.From(localizedHeaders)
             .Where(function (x) { return x.localized === columnName }).ToArray()[0].columnName;
 
-        filter.data_type = getFilterType(filter.column_name);
+        filter.DataType = getFilterType(filter.ColumnName);
 
-        filter.filter_condition = parseInt(
+        filter.FilterCondition = parseInt(
             Enumerable.From(filterConditions)
             .Where(function (x) { return x.text === condition })
             .ToArray()[0].value
             || 0);
 
-        filter.filter_value = el.find("td:nth-child(4)").text();
-        filter.filter_and_value = el.find("td:nth-child(5)").text();
+        filter.FilterValue = el.find("td:nth-child(4)").text();
+        filter.FilterAndValue = el.find("td:nth-child(5)").text();
         filters.push(filter);
     });
 
@@ -314,24 +314,24 @@ function showFilters(filters) {
 
     $.each(filters, function(i, filter) {
         var label = $("<a class='ui filter member label'>");
-        label.attr("data-column-name", filter.column_name);
-        label.attr("data-type", filter.data_type);
-        label.attr("data-filter-condition", filter.filter_condition);
-        label.attr("data-filter-value", filter.filter_value);
-        label.attr("data-filter-and-value", filter.filter_and_value);
+        label.attr("data-column-name", filter.ColumnName);
+        label.attr("data-type", filter.DataType);
+        label.attr("data-filter-condition", filter.FilterCondition);
+        label.attr("data-filter-value", filter.FilterValue);
+        label.attr("data-filter-and-value", filter.FilterAndValue);
 
         var filterCondition = Enumerable.From(filterConditions)
-            .Where(function (x) { return x.value === filter.filter_condition.toString() })
+            .Where(function (x) { return x.value === filter.FilterCondition.toString() })
             .Select(function (x) { return x.operator }).ToArray()[0];
 
         var span = $("<span>");
-        var text = filter.column_name.replace(/_/g, " ");
+        var text = filter.ColumnName.replace(/_/g, " ");
         text = toPascalCase(text);
 
-        text = text + " " + filterCondition + " " + filter.filter_value;
+        text = text + " " + filterCondition + " " + filter.FilterValue;
 
-        if (filter.filter_and_value) {
-            text = text + " AND " + filter.filter_and_value;
+        if (filter.FilterAndValue) {
+            text = text + " AND " + filter.FilterAndValue;
         };
 
         span.text(text);
@@ -354,10 +354,10 @@ function createFilters(filters) {
     $("#FilterTable").find("tbody").html("");
 
     $.each(filters, function (i, filter) {
-        var selectedColumn = filter.column_name;
-        var filterCondition = filter.filter_condition;
-        var value = filter.filter_value;
-        var and = (filter.filter_and_value || "");
+        var selectedColumn = filter.ColumnName;
+        var filterCondition = filter.FilterCondition;
+        var value = filter.FilterValue;
+        var and = (filter.FilterAndValue || "");
 
         var css = "";
 

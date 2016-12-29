@@ -105,7 +105,7 @@
             };
         };
 
-        entity[v.ColumnName] = value;
+        entity[v.PropertyName] = value;
     });
 
     if (window.metaCustomFields) {

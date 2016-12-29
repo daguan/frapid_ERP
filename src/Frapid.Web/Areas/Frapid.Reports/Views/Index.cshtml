@@ -238,7 +238,7 @@
         });
     })();
 
-    $("#ShowButton").unbind("click").bind("click", function () {
+    $("#ShowButton").off("click").on("click", function () {
         var persist = [];
 
         var query = [];

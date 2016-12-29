@@ -56,10 +56,10 @@ function loadFilterNames() {
                 </div>";
 
         $.each(response, function () {
-            var isDefault = this.is_default;
+            var isDefault = this.IsDefault;
 
             if (isDefault) {
-                selected = this.filter_name;
+                selected = this.FilterName;
 
                 if (!window.viewReady) {
                     if (getFilterQueryStringCount()) {
@@ -78,8 +78,8 @@ function loadFilterNames() {
 
             };
 
-            option += stringFormat("<option value='{0}'>{0}</option>", this.filter_name);
-            items += stringFormat(itemTemplate, this.filter_name);
+            option += stringFormat("<option value='{0}'>{0}</option>", this.FilterName);
+            items += stringFormat(itemTemplate, this.FilterName);
         });
 
         $("[data-filter-list]").html(items);

@@ -24,6 +24,11 @@ if exist "../src/Frapid.Web/Areas/Frapid.Reports/Frapid.Reports.sln" (
 	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/Frapid.Reports/Frapid.Reports.sln /p:VisualStudioVersion=14.0
 )
 
+if exist "../src/Frapid.Web/Areas/MixERP.Social/MixERP.Social.sln" (
+	@echo Building MixERP.Social Module
+	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/MixERP.Social/MixERP.Social.sln /p:VisualStudioVersion=14.0
+)
+
 
 if exist "../src/Frapid.Web/Areas/Frapid.Authorization/Frapid.Authorization.sln" (
 	@echo Building Frapid Authorization Module

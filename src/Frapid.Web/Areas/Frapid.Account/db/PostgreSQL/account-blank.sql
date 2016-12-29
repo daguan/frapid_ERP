@@ -584,7 +584,7 @@ LANGUAGE plpgsql;
 DROP FUNCTION IF EXISTS account.get_name_by_user_id(_user_id integer);
 
 CREATE FUNCTION account.get_name_by_user_id(_user_id integer)
-RETURNS text
+RETURNS national character varying(100)
 STABLE
 AS
 $$
@@ -597,6 +597,8 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_registration_office_id.sql --<--<--
@@ -659,6 +661,25 @@ BEGIN
 END
 $$
 LANGUAGE plpgsql;
+
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_role_name_by_role_id.sql --<--<--
+DROP FUNCTION IF EXISTS account.get_role_name_by_role_id(_role_id integer);
+
+CREATE FUNCTION account.get_role_name_by_role_id(_role_id integer)
+RETURNS national character varying(100)
+AS
+$$
+BEGIN
+    RETURN
+    (
+        SELECT account.roles.role_name
+        FROM account.roles
+        WHERE account.roles.role_id = _role_id
+    );
+END
+$$
+LANGUAGE plpgsql;
+
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Account/db/PostgreSQL/1.x/1.0/src/02.functions-and-logic/account.get_user_id_by_email.sql --<--<--
 DROP FUNCTION IF EXISTS account.get_user_id_by_email(_email national character varying(100));

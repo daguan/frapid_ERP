@@ -1,4 +1,5 @@
 ﻿function resetForm() {
+    window.editing = false;
     var fields = $(".form-field:not(:hidden), .custom-field:not(:hidden), .form-field[data-primarykey]");
 
     $(".huge.header .sub.header").html("");

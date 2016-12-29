@@ -74,6 +74,9 @@ namespace Frapid.DataAccess.Models
         [Ignore]
         public Type Type { get; set; }
 
+
+        public int? AuditUserId { get; set; }
+        public DateTimeOffset? AuditTs { get; set; }
         #endregion
     }
 }

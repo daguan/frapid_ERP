@@ -4,8 +4,8 @@
     $.each(entities, function (i, v) {
         var entity = new Object();
 
-        $.each(v, function (columnName, val) {
-            var type = Enumerable.From(metaDefinition.Columns).Where(function (x) { return x.ColumnName === columnName }).ToArray()[0].DbDataType;
+        $.each(v, function (propertyName, val) {
+            var type = window.Enumerable.From(metaDefinition.Columns).Where(function (x) { return x.PropertyName === propertyName }).ToArray()[0].DbDataType;
                         
             if (isNullOrWhiteSpace(val)) {
                 val = null;
@@ -22,7 +22,7 @@
             };
 
 
-            entity[columnName] = val;
+            entity[propertyName] = val;
         });
 
         items.push(entity);

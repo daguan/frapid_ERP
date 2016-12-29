@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 using System.Threading.Tasks;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
@@ -35,7 +36,7 @@ namespace Frapid.WebApi.DataAccess
         public long LoginId { get; set; }
         public int OfficeId { get; set; }
 
-        public async Task<IEnumerable<dynamic>> GetWhereAsync(long pageNumber, List<Filter> filters)
+        public async Task<IEnumerable<Filter>> GetWhereAsync(long pageNumber, List<Filter> filters)
         {
             if (string.IsNullOrWhiteSpace(this.Database))
             {
@@ -68,7 +69,7 @@ namespace Frapid.WebApi.DataAccess
                 sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), 50);
             }
 
-            return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
+            return await Factory.GetAsync<Filter>(this.Database, sql).ConfigureAwait(false);
         }
 
         public async Task MakeDefaultAsync(string objectName, string filterName)
@@ -123,7 +124,7 @@ namespace Frapid.WebApi.DataAccess
             await Factory.NonQueryAsync(this.Database, sql, filterName).ConfigureAwait(false);
         }
 
-        public async Task RecreateFiltersAsync(string objectName, string filterName, List<ExpandoObject> filters)
+        public async Task RecreateFiltersAsync(string objectName, string filterName, List<Filter> filters)
         {
             if (!this.SkipValidation)
             {
@@ -166,17 +167,17 @@ namespace Frapid.WebApi.DataAccess
                             }).ConfigureAwait(false);
 
 
-                    foreach (var filterId in toDelete)
+                    foreach (long filterId in toDelete.Select(x=>x.FilterId))
                     {
-                        await DefaultDelete.DeleteAsync(db, filterId, "config.filters", "filter_id").ConfigureAwait(false);
+                        await db.DeleteAsync(filterId, "config.filters", "filter_id").ConfigureAwait(false);
                     }
 
-                    foreach (dynamic filter in filters)
+                    foreach (var filter in filters)
                     {
-                        filter.audit_user_id = this.UserId;
-                        filter.audit_ts = DateTimeOffset.UtcNow;
+                        filter.AuditUserId = this.UserId;
+                        filter.AuditTs = DateTimeOffset.UtcNow;
 
-                        await DefaultInsert.InsertAsync(db, "config.filters", "filter_id", true, filter);
+                        await db.InsertAsync("config.filters", "filter_id", true, filter).ConfigureAwait(false);
                     }
 
                     db.CommitTransaction();
