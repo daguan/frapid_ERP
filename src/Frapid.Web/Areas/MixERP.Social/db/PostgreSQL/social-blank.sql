@@ -291,7 +291,6 @@ SELECT * FROM auth.create_app_menu_policy
     '{*}'::text[]
 );
 
-SELECT * FROM core.menus
 
 -->-->-- src/Frapid.Web/Areas/MixERP.Social/db/PostgreSQL/2.x/2.0/src/04.default-values/01.default-values.sql --<--<--
 

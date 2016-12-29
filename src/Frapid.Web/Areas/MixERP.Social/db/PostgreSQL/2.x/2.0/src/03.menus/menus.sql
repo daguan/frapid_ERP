@@ -33,5 +33,3 @@ SELECT * FROM auth.create_app_menu_policy
     'Social',
     '{*}'::text[]
 );
-
-SELECT * FROM core.menus
