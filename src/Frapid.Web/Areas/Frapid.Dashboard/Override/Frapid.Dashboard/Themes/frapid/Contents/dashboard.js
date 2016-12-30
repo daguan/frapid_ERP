@@ -358,7 +358,7 @@ function addNotification(model, supressMessage) {
         const timestamp = $("<span class='refreshing timestamp moment'></span>");
         timestamp.attr("data-time", model.EventTimestampOffset);
         timestamp.html(model.EventTimestampOffset);
-        timestamp.attr("title", new Date(model.EventTimestampOffset).toLocaleFormat());
+        timestamp.attr("title", model.EventTimestampOffset);
 
         timestamp.appendTo(message);
 

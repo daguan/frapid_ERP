@@ -13,6 +13,11 @@ namespace Frapid.Dashboard.DAL
     {
         public static async Task<Guid> AddAsync(string tenant, Notification notification)
         {
+            if (notification.EventTimestamp == DateTimeOffset.MinValue)
+            {
+                notification.EventTimestamp = DateTimeOffset.UtcNow;
+            }
+
             var id = await Factory.InsertAsync(tenant, notification).ConfigureAwait(false);
             return id.To<Guid>();
         }

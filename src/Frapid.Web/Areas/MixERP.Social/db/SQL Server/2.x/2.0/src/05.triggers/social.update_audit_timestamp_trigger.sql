@@ -1,35 +1,40 @@
-﻿DROP FUNCTION IF EXISTS social.update_audit_timestamp_trigger() CASCADE;
+﻿IF OBJECT_ID('social.update_audit_timestamp_trigger') IS NOT NULL
+DROP TRIGGER social.update_audit_timestamp_trigger;
 
-CREATE FUNCTION social.update_audit_timestamp_trigger()
-RETURNS TRIGGER
+GO
+
+CREATE TRIGGER social.update_audit_timestamp_trigger
+ON social.feeds
+AFTER INSERT
 AS
-$$
 BEGIN
-    WITH RECURSIVE ancestors
+	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
+
+    WITH ancestors
     AS
     (
-        SELECT parent_feed_id from social.feeds where feed_id  = 27
+        SELECT parent_feed_id from social.feeds where feed_id IN
+		(
+			SELECT feed_id
+			FROM INSERTED
+		)
         UNION ALL
         SELECT feeds.parent_feed_id 
         FROM social.feeds AS feeds
-        INNER JOIN ancestors on ancestors.parent_feed_id =feeds.feed_id
+        INNER JOIN ancestors 
+        ON ancestors.parent_feed_id =feeds.feed_id
         WHERE feeds.parent_feed_id IS NOT NULL
     )
 
     UPDATE social.feeds
-    SET social.feeds.audit_ts = NOW()
+    SET audit_ts = getutcdate()
     WHERE social.feeds.feed_id IN
     (
         SELECT * FROM ancestors
     );
 
-    RETURN NEW;
-END
-$$
-LANGUAGE plpgsql;
+	RETURN;
+END;
 
-CREATE TRIGGER update_audit_timestamp_trigger
-AFTER INSERT
-ON social.feeds
-FOR EACH ROW EXECUTE PROCEDURE social.update_audit_timestamp_trigger();
-
+GO

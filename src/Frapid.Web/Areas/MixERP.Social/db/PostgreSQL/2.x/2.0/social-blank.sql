@@ -47,21 +47,6 @@ WHERE role_id IS NOT NULL;
 CREATE INDEX feeds_scope_inx
 ON social.feeds(LOWER(scope));
 
-CREATE TABLE social.feed_followers
-(
-    feed_id                         bigint NOT NULL REFERENCES social.feeds,
-    followed_by                     integer NOT NULL REFERENCES account.users,
-    followed_on                     TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT(NOW()),
-    unfollowed                      boolean NOT NULL DEFAULT(false),
-    unfollowed_on                   TIMESTAMP WITH TIME ZONE
-);
-
-CREATE UNIQUE INDEX feed_followers_uix
-ON social.feed_followers(feed_id, followed_by)
-WHERE NOT unfollowed;
-
-
-
 CREATE TABLE social.liked_by
 (
     feed_id                         bigint NOT NULL REFERENCES social.feeds,
@@ -74,7 +59,6 @@ CREATE TABLE social.liked_by
 CREATE UNIQUE INDEX liked_by_uix
 ON social.liked_by(feed_id, liked_by)
 WHERE NOT unliked;
-
 
 
 -->-->-- src/Frapid.Web/Areas/MixERP.Social/db/PostgreSQL/2.x/2.0/src/02.functions-and-logic/social.count_comments.sql --<--<--
@@ -110,6 +94,56 @@ $$
 LANGUAGE plpgsql;
 
 --SELECT * FROM social.count_comments(87);
+
+
+-->-->-- src/Frapid.Web/Areas/MixERP.Social/db/PostgreSQL/2.x/2.0/src/02.functions-and-logic/social.get_followers.sql --<--<--
+DROP FUNCTION IF EXISTS social.get_followers(_feed_id bigint, _me integer);
+
+CREATE FUNCTION social.get_followers(_feed_id bigint, _me integer)
+RETURNS text
+AS
+$$
+    DECLARE _followers              text;
+    DECLARE _parent                 bigint;
+BEGIN
+    _parent := social.get_root_feed_id(_feed_id);
+    
+    WITH RECURSIVE all_feeds
+    AS
+    (
+        SELECT social.feeds.feed_id 
+        FROM social.feeds 
+        WHERE social.feeds.feed_id = _parent
+
+        UNION ALL
+
+        SELECT feed_comments.feed_id 
+        FROM social.feeds AS feed_comments
+        INNER JOIN all_feeds
+        ON all_feeds.feed_id = feed_comments.parent_feed_id
+    ),
+    feeds
+    AS
+    (
+        SELECT 
+            all_feeds.feed_id,
+            social.feeds.created_by
+        FROM social.feeds
+        INNER JOIN all_feeds
+        ON all_feeds.feed_id = social.feeds.feed_id
+    )
+    
+    SELECT string_agg(DISTINCT feeds.created_by::text, ',')
+    INTO _followers
+    FROM feeds
+    WHERE feeds.created_by != _me;
+
+    RETURN _followers;
+END
+$$
+LANGUAGE plpgsql;
+
+--SELECT social.get_followers(97, 1);
 
 
 -->-->-- src/Frapid.Web/Areas/MixERP.Social/db/PostgreSQL/2.x/2.0/src/02.functions-and-logic/social.get_next_top_feeds.sql --<--<--
@@ -254,6 +288,100 @@ SELECT * FROM social.get_next_top_feeds(1, 0, 0);
 
 
 
+-->-->-- src/Frapid.Web/Areas/MixERP.Social/db/PostgreSQL/2.x/2.0/src/02.functions-and-logic/social.get_root_feed_id.sql --<--<--
+DROP FUNCTION IF EXISTS social.get_root_feed_id(bigint);
+
+CREATE FUNCTION social.get_root_feed_id(_feed_id bigint)
+RETURNS bigint
+AS
+$$
+    DECLARE _parent_feed_id bigint;
+BEGIN
+    SELECT 
+        parent_feed_id
+        INTO _parent_feed_id
+    FROM social.feeds
+    WHERE social.feeds.feed_id=$1
+	AND NOT social.feeds.deleted;
+
+    
+
+    IF(_parent_feed_id IS NULL) THEN
+        RETURN $1;
+    ELSE
+        RETURN social.get_root_feed_id(_parent_feed_id);
+    END IF; 
+END
+$$
+LANGUAGE plpgsql;
+
+--SELECT social.get_root_feed_id(97)
+
+-->-->-- src/Frapid.Web/Areas/MixERP.Social/db/PostgreSQL/2.x/2.0/src/02.functions-and-logic/social.like.sql --<--<--
+DROP FUNCTION IF EXISTS social.like(_user_id integer, _feed_id bigint);
+
+CREATE FUNCTION social.like(_user_id integer, _feed_id bigint)
+RETURNS void
+AS
+$$
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 0 
+        FROM social.liked_by
+        WHERE social.liked_by.feed_id = _feed_id
+        AND social.liked_by.liked_by = _user_id
+    ) THEN
+        INSERT INTO social.liked_by(feed_id, liked_by)
+        SELECT _feed_id, _user_id;
+    END IF;
+
+    IF EXISTS
+    (
+        SELECT 0 
+        FROM social.liked_by
+        WHERE social.liked_by.feed_id = _feed_id
+        AND social.liked_by.liked_by = _user_id
+        AND social.liked_by.unliked
+    ) THEN
+        UPDATE social.liked_by
+        SET
+            unliked     = false,
+            unliked_on  = NULL
+        WHERE social.liked_by.feed_id = _feed_id
+        AND social.liked_by.liked_by = _user_id;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+-->-->-- src/Frapid.Web/Areas/MixERP.Social/db/PostgreSQL/2.x/2.0/src/02.functions-and-logic/social.unlike.sql --<--<--
+DROP FUNCTION IF EXISTS social.unlike(_user_id integer, _feed_id bigint);
+
+CREATE FUNCTION social.unlike(_user_id integer, _feed_id bigint)
+RETURNS void
+AS
+$$
+BEGIN
+    IF EXISTS
+    (
+        SELECT 0 FROM social.liked_by
+        WHERE social.liked_by.feed_id = _feed_id
+        AND  social.liked_by.liked_by = _user_id
+    ) THEN
+        UPDATE social.liked_by
+        SET 
+            unliked     = true,
+            unliked_on  = NOW()
+        WHERE social.liked_by.feed_id = _feed_id
+        AND social.liked_by.liked_by = _user_id;
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
 -->-->-- src/Frapid.Web/Areas/MixERP.Social/db/PostgreSQL/2.x/2.0/src/03.menus/menus.sql --<--<--
 DELETE FROM auth.menu_access_policy
 WHERE menu_id IN
@@ -276,8 +404,7 @@ WHERE app_name = 'Social';
 SELECT * FROM core.create_app('Social', 'Social', '1.0', 'MixERP Inc.', 'December 1, 2015', 'orange users', '/dashboard/social', NULL);
 
 SELECT * FROM core.create_menu('Social', 'Tasks', '', 'lightning', '');
-SELECT * FROM core.create_menu( 'Social', 'Home', '/dashboard/social', 'users', 'Tasks');
-SELECT * FROM core.create_menu( 'Social', 'Edit Profile', '/dashboard/social/edit-profile', 'photo', 'Tasks');
+SELECT * FROM core.create_menu( 'Social', 'Social', '/dashboard/social', 'users', 'Tasks');
 
 
 
@@ -331,6 +458,20 @@ CREATE TRIGGER update_audit_timestamp_trigger
 AFTER INSERT
 ON social.feeds
 FOR EACH ROW EXECUTE PROCEDURE social.update_audit_timestamp_trigger();
+
+
+-->-->-- src/Frapid.Web/Areas/MixERP.Social/db/PostgreSQL/2.x/2.0/src/05.views/social.liked_by_view.sql --<--<--
+DROP VIEW IF EXISTS social.liked_by_view;
+
+CREATE VIEW social.liked_by_view
+AS
+SELECT
+    social.liked_by.feed_id,
+    social.liked_by.liked_by,
+    account.get_name_by_user_id(social.liked_by.liked_by) AS liked_by_name,
+    social.liked_by.liked_on
+FROM social.liked_by
+WHERE NOT social.liked_by.unliked;
 
 
 -->-->-- src/Frapid.Web/Areas/MixERP.Social/db/PostgreSQL/2.x/2.0/src/99.ownership.sql --<--<--

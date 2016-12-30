@@ -61,13 +61,16 @@ $.fn.upload = function (remote, data, successFn, progressFn, failFn) {
 				cache: false,
 				contentType: false,
 				processData: false,
+				error: function(e){
+					if (failFn) failFn(e);
+				},
 				complete: function (res) {
 					var json;
 					try {
 						json = JSON.parse(res.responseText);
 						if (successFn) successFn(json);
 					} catch (e) {
-						if (failFn) failFn(e);
+						//if (failFn) failFn(e);
 					};
 				}
 			});

@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace MixERP.Social.Models
 {
     [Serializable]
-    public sealed class FeedException:Exception
+    public sealed class FeedException : Exception
     {
         public FeedException()
         {

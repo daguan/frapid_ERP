@@ -530,3 +530,14 @@ input[data-feature-search] {
 .ui-timepicker-wrapper {
     width: 10em!important;
 }
+
+.notify blockquote,
+.notification.item .message blockquote {
+    margin: 0 !important;
+    margin-top: 0.5em !important;
+    margin-bottom: 0.5em !important;
+    padding: 0.5em 1em;
+    border-left: 4px solid #E8C29B;
+    font-weight: 400;
+    color: #A67261 !important;
+}

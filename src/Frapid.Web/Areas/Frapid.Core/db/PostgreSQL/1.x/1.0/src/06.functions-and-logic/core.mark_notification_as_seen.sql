@@ -13,7 +13,7 @@ BEGIN
 		LIMIT 1
 	) THEN
 		UPDATE core.notification_statuses
-		SET last_seen_on = GETUTCDATE()
+		SET last_seen_on = NOW()
 		WHERE notification_id = _notification_id
 		AND seen_by = _user_id;
 
@@ -21,7 +21,7 @@ BEGIN
 	END IF;
 
 	INSERT INTO core.notification_statuses(notification_id, last_seen_on, seen_by)
-	SELECT _notification_id, GETUTCDATE(), _user_id;
+	SELECT _notification_id, NOW(), _user_id;
 END
 $$
 LANGUAGE plpgsql;

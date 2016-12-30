@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Frapid.ApplicationState.Models;
 using Frapid.Configuration;
 using Frapid.Configuration.Db;
+using Frapid.Framework.Extensions;
 using Frapid.Mapper;
 using Frapid.Mapper.Database;
 using Frapid.Mapper.Query.Insert;
+using Frapid.Mapper.Query.NonQuery;
 using Frapid.Mapper.Query.Select;
 using Frapid.Mapper.Query.Update;
 using MixERP.Social.DTO;
@@ -55,12 +57,55 @@ namespace MixERP.Social.DAL
         {
             using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
             {
+                db.CacheResults = false;
+
                 var sql = new Sql("SELECT * FROM social.feeds");
                 sql.Where("deleted = @0", false);
                 sql.And("feed_id=@0", feedId);
 
                 var awatier = await db.SelectAsync<Feed>(sql).ConfigureAwait(false);
                 return awatier.FirstOrDefault();
+            }
+        }
+
+        public static async Task LikeAsync(string tenant, long feedId, LoginView meta)
+        {
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
+            {
+                string sql = "SELECT * FROM social.like(@0::integer, @1::bigint);";
+
+                if (db.DatabaseType == DatabaseType.SqlServer)
+                {
+                    sql = "EXECUTE social.like @0, @1;";
+                }
+
+                await db.NonQueryAsync(new Sql(sql, meta.UserId, feedId)).ConfigureAwait(false);
+            }
+        }
+
+        public static async Task UnlikeAsync(string tenant, long feedId, LoginView meta)
+        {
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
+            {
+                string sql = "SELECT * FROM social.unlike(@0::integer, @1::bigint);";
+
+                if (db.DatabaseType == DatabaseType.SqlServer)
+                {
+                    sql = "EXECUTE social.unlike @0, @1;";
+                }
+
+                await db.NonQueryAsync(new Sql(sql, meta.UserId, feedId)).ConfigureAwait(false);
+            }
+        }
+
+
+        public static async Task UpdateAsync(string tenant, Feed feed, LoginView meta)
+        {
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
+            {
+                feed.AuditTs = DateTimeOffset.UtcNow;
+
+                await db.UpdateAsync(feed, feed.FeedId).ConfigureAwait(false);
             }
         }
 
@@ -74,6 +119,34 @@ namespace MixERP.Social.DAL
                 feed.DeletedBy = meta.UserId;
 
                 await db.UpdateAsync(feed, feed.FeedId).ConfigureAwait(false);
+            }
+        }
+
+        public static async Task<List<int>> GetFollowersAsync(string tenant, long feedId, int exceptUserId)
+        {
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
+            {
+                db.CacheResults = false;
+
+                const string sql = "SELECT social.get_followers(@0, @1);";
+
+                string result = await db.ScalarAsync<string>(sql, feedId, exceptUserId).ConfigureAwait(false);
+
+                return string.IsNullOrWhiteSpace(result) ? new List<int>() : result.Split(',').Select(x => x.To<int>()).ToList();
+            }
+        }
+
+        public static async Task<IEnumerable<LikedByView>> GetLikesAsync(string tenant, long[] feedIds)
+        {
+            using (var db = DbProvider.Get(FrapidDbServer.GetConnectionString(tenant), tenant).GetDatabase())
+            {
+                db.CacheResults = false;
+
+                var sql = new Sql("SELECT * FROM social.liked_by_view");
+                sql.Append("WHERE");
+                sql.In("feed_id IN (@0)", feedIds);
+
+                return await db.SelectAsync<LikedByView>(sql).ConfigureAwait(false);
             }
         }
     }

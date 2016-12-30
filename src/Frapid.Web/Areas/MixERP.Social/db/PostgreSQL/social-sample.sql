@@ -1,4 +1,5 @@
 ﻿-->-->-- src/Frapid.Web/Areas/MixERP.Social/db/PostgreSQL/2.x/2.0/src/99.sample-data/social.sample.sql --<--<--
+DELETE FROM social.liked_by;
 DELETE FROM social.feeds;
 
 INSERT INTO social.feeds(audit_ts, event_timestamp, formatted_text, created_by, scope, is_public)

@@ -19,8 +19,7 @@ WHERE app_name = 'Social';
 EXECUTE core.create_app 'Social', 'Social', '1.0', 'MixERP Inc.', 'December 1, 2015', 'orange users', '/dashboard/social', NULL;
 
 EXECUTE core.create_menu 'Social', 'Tasks', '', 'lightning', '';
-EXECUTE core.create_menu 'Social', 'Home', '/dashboard/social', 'users', 'Tasks';
-EXECUTE core.create_menu 'Social', 'Edit Profile', '/dashboard/social/edit-profile', 'photo', 'Tasks';
+EXECUTE core.create_menu 'Social', 'Social', '/dashboard/social', 'users', 'Tasks';
 
 DECLARE @office_id integer = core.get_office_id_by_office_name('Default');
 EXECUTE auth.create_app_menu_policy

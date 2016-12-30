@@ -50,20 +50,6 @@ WHERE role_id IS NOT NULL;
 CREATE INDEX feeds_scope_inx
 ON social.feeds(scope);
 
-CREATE TABLE social.feed_followers
-(
-    feed_id                         bigint NOT NULL REFERENCES social.feeds,
-    followed_by                     integer NOT NULL REFERENCES account.users,
-    followed_on                     DATETIMEOFFSET NOT NULL DEFAULT(GETUTCDATE()),
-    unfollowed                      bit NOT NULL DEFAULT(0),
-    unfollowed_on                   DATETIMEOFFSET
-);
-
-CREATE UNIQUE INDEX feed_followers_uix
-ON social.feed_followers(feed_id, followed_by)
-WHERE unfollowed = 0;
-
-
 
 CREATE TABLE social.liked_by
 (

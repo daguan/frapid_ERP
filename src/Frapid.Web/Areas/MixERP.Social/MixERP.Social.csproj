@@ -148,10 +148,14 @@
     <Compile Include="DAL\Feeds.cs" />
     <Compile Include="DTO\Feed.cs" />
     <Compile Include="DTO\FeedItem.cs" />
+    <Compile Include="DTO\LikedByView.cs" />
     <Compile Include="DTO\UploadedFile.cs" />
-    <Compile Include="Helpers\AvatarHelper.cs" />
+    <Compile Include="Models\Avatars.cs" />
+    <Compile Include="Models\AttachmentException.cs" />
+    <Compile Include="Models\Attachments.cs" />
     <Compile Include="Models\FeedException.cs" />
     <Compile Include="Models\Feeds.cs" />
+    <Compile Include="Models\HtmlToText.cs" />
     <Compile Include="Models\ResourceUploadException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\Attachment.cs" />

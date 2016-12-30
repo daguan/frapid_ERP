@@ -55,7 +55,8 @@ namespace Frapid.Dashboard.Helpers
             message.Tenant = tenant;
             message.ToUserId = userId;
 
-            await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+            var id = await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+            message.NotificationId = id;
             NotificationHub.SendToUsers(tenant, userId, message);
         }
 
