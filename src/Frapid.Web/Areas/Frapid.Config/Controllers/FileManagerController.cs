@@ -11,9 +11,11 @@ using Frapid.Dashboard;
 using Frapid.Dashboard.Controllers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Frapid.Areas.CSRF;
 
 namespace Frapid.Config.Controllers
 {
+    [AntiForgery]
     public class FileManagerController : DashboardController
     {
         [Route("dashboard/config/file-manager")]

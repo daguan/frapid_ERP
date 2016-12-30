@@ -7,9 +7,11 @@ using Frapid.Dashboard;
 using Frapid.Dashboard.Controllers;
 using MixERP.Social.DTO;
 using MixERP.Social.Models;
+using Frapid.Areas.CSRF;
 
 namespace MixERP.Social.Controllers
 {
+    [AntiForgery]
     public sealed class DefaultController : DashboardController
     {
         [Route("dashboard/social")]

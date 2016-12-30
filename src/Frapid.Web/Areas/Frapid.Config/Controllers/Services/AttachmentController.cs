@@ -4,9 +4,11 @@ using Frapid.Areas;
 using Frapid.Areas.Conventions.Attachments;
 using Frapid.Framework.Extensions;
 using Serilog;
+using Frapid.Areas.CSRF;
 
 namespace Frapid.Config.Controllers.Services
 {
+    [AntiForgery]
     public class AttachmentController : FrapidController
     {
         [Route("dashboard/config/services/attachments")]
