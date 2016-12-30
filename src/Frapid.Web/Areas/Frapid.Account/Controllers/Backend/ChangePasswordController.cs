@@ -8,9 +8,11 @@ using Frapid.ApplicationState.Cache;
 using Frapid.Areas.Authorization;
 using Frapid.Dashboard;
 using Frapid.Dashboard.Controllers;
+using Frapid.Areas.CSRF;
 
 namespace Frapid.Account.Controllers.Backend
 {
+    [AntiForgery]
     public class ChangePasswordController : DashboardController
     {
         [Route("dashboard/account/user/change-password")]

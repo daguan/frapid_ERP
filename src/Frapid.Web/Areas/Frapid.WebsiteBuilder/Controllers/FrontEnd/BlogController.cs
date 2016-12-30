@@ -7,9 +7,11 @@ using Frapid.WebsiteBuilder.Models;
 using Frapid.WebsiteBuilder.ViewModels;
 using Npgsql;
 using Serilog;
+using Frapid.Areas.CSRF;
 
 namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 {
+    [AntiForgery]
     public class BlogController : WebsiteBuilderController
     {
         [Route("blog/{categoryAlias}/{alias}/hit")]
