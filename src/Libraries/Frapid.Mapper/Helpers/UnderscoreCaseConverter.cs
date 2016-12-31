@@ -6,7 +6,9 @@ namespace Frapid.Mapper.Helpers
     {
         public string Convert(string name)
         {
-            return string.Concat(name.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x.ToString() : x.ToString()));
+            string result = string.Concat(name.Select((x, i) => i > 0 && (char.IsUpper(x) || char.IsNumber(x)) ? "_" + x.ToString() : x.ToString())).ToLowerInvariant();
+
+            return result;
         }
     }
 }

@@ -76,7 +76,7 @@ namespace MixERP.Social.DAL
 
                 if (db.DatabaseType == DatabaseType.SqlServer)
                 {
-                    sql = "EXECUTE social.like @0, @1;";
+                    sql = "EXECUTE social.\"like\" @0, @1;";
                 }
 
                 await db.NonQueryAsync(new Sql(sql, meta.UserId, feedId)).ConfigureAwait(false);

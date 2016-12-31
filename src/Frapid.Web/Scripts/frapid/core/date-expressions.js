@@ -41,6 +41,8 @@ function getTime(date) {
         return minutes;
     };
 
+    date = new Date(date);
+
     value = date.getHours() + ":" + padMinutes(date.getMinutes());
 
     return value;

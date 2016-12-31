@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using Frapid.Framework;
 using Frapid.Mapper.Decorators;
 
 namespace Frapid.DataAccess.Models
@@ -9,26 +8,6 @@ namespace Frapid.DataAccess.Models
     [PrimaryKey("filter_id", AutoIncrement = true)]
     public sealed class Filter : IPoco
     {
-        private static readonly Dictionary<Type, string> Aliases = new Dictionary<Type, string>
-        {
-            {typeof(byte), "byte"},
-            {typeof(sbyte), "sbyte"},
-            {typeof(short), "short"},
-            {typeof(ushort), "ushort"},
-            {typeof(int), "int"},
-            {typeof(uint), "uint"},
-            {typeof(long), "long"},
-            {typeof(ulong), "ulong"},
-            {typeof(float), "float"},
-            {typeof(double), "double"},
-            {typeof(decimal), "decimal"},
-            {typeof(object), "object"},
-            {typeof(bool), "bool"},
-            {typeof(char), "char"},
-            {typeof(string), "string"},
-            {typeof(void), "void"}
-        };
-
         private string _dataType;
         public long FilterId { get; set; }
         public string ObjectName { get; set; }
@@ -61,7 +40,7 @@ namespace Frapid.DataAccess.Models
 
                 try
                 {
-                    var type = Aliases.FirstOrDefault(x => x.Value.Equals(value)).Key;
+                    var type = value.GetWellKnownType();
                     this.Type = type ?? Type.GetType(value);
                 }
                 catch
@@ -77,6 +56,7 @@ namespace Frapid.DataAccess.Models
 
         public int? AuditUserId { get; set; }
         public DateTimeOffset? AuditTs { get; set; }
+
         #endregion
     }
 }

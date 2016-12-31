@@ -94,11 +94,11 @@
         };
     };
 
-    if (element.attr("data-type") === "time") {
-        if (value) {
-            value = getTime(value);
-        };
-    };
+    //if (element.attr("data-type") === "time") {
+        //if (value) {
+            //value = getTime(value);
+        //};
+    //};
 
     if (column.DbDataType === "bool") {
         value = value === true ? "yes" : "no";

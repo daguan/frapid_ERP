@@ -11,7 +11,7 @@ namespace Frapid.Mapper.Helpers
         {
             if (destType == typeof(string))
             {
-                return value.ToString();
+                return value?.ToString();
             }
 
 
@@ -45,6 +45,11 @@ namespace Frapid.Mapper.Helpers
                     return new DateTimeOffset((DateTime) value).ToUniversalTime();
                 }
 
+                if (value is DateTimeOffset)
+                {
+                    return value;
+                }
+
                 return value.To<DateTimeOffset>().ToUniversalTime();
             }
 
@@ -53,6 +58,11 @@ namespace Frapid.Mapper.Helpers
                 if (value is DateTimeOffset)
                 {
                     return ((DateTimeOffset) value).DateTime.ToUniversalTime();
+                }
+
+                if (value is DateTime)
+                {
+                    return value;
                 }
 
                 return value.To<DateTime>().ToUniversalTime();

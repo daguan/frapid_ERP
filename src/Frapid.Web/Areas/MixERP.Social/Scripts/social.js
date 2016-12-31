@@ -75,6 +75,11 @@ var replyTemplate = `
                 </a>
             </div>
         </div>`;
+
+var showPrevisouAnchorTemplate = `<a class="show previous comments" onclick="showPreivousComments(this);">
+                                          Show Previous Comments
+                                        </a>`;
+
 function displayImage(target, file, fileName) {
     const reader = new FileReader();
 
@@ -119,6 +124,7 @@ function uploadAttachments(el) {
 
     el.upload(handler, null, function (response) {
         el.attr("data-uploaded-files", JSON.stringify(response));
+        $("#PostButton").removeClass("loading");
     }, function (progress, value) {
     }, function (xhr) {
         window.logAjaxErrorMessage(xhr);
@@ -136,8 +142,9 @@ function isImage(fileName) {
     return false;
 };
 
-$("#UploadInputFile").on("change", function () {
+$("#UploadInputFile").off("change").on("change", function () {
     const el = $(this);
+    $("#PostButton").addClass("loading");
     const target = $(".add.a.new.post .ui.gallery").html("");
 
     const files = this.files;
@@ -174,9 +181,6 @@ $("#UploadAvatarInputFile").on("change", function () {
     });
 });
 
-const showPrevisouAnchorTemplate = `<a class="show previous comments" onclick="showPreivousComments(this);">
-                                          Show Previous Comments
-                                        </a>`;
 
 function displayAttachment(el, attachment) {
     var template;

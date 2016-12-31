@@ -104,31 +104,44 @@ $$
 LANGUAGE plpgsql;
 
   
-DROP FUNCTION IF EXISTS get_app_data_type(_db_data_type text);
+DROP FUNCTION IF EXISTS get_app_data_type(_nullable text, _db_data_type text);
 
-CREATE FUNCTION get_app_data_type(_db_data_type text)
+CREATE FUNCTION get_app_data_type(_nullable text, _db_data_type text)
 RETURNS text
 STABLE
 AS
 $$
+    DECLARE _type text;
 BEGIN
     IF(_db_data_type IN('int4', 'int', 'integer')) THEN
-        RETURN 'int';
+        _type := 'int';
     END IF;
 
     IF(_db_data_type IN('varchar', 'character varying', 'text')) THEN
         RETURN 'string';
     END IF;
     
-    IF(_db_data_type IN('date', 'time', 'timestamp', 'timestamptz')) THEN
-        RETURN 'System.DateTime';
+    IF(_db_data_type IN('date')) THEN
+        _type := 'System.DateTime';
+    END IF;
+    	
+    IF(_db_data_type IN('timestamp', 'timestamptz')) THEN
+        _type := 'System.DateTimeOffset';
+    END IF;
+
+    IF(_db_data_type IN('time')) THEN
+        _type := 'System.TimeSpan';
     END IF;
     
     IF(_db_data_type IN('bool', 'boolean')) THEN
-        RETURN 'bool';
+        _type := 'bool';
     END IF;
 
-    RETURN $1;
+    IF(_nullable) THEN
+        _type := _type || '?';
+    END IF;
+    
+    RETURN _type;
 END
 $$
 LANGUAGE plpgsql;
@@ -212,7 +225,7 @@ BEGIN
         ORDER  BY attnum;
 
         UPDATE temp_poco
-        SET data_type = public.get_app_data_type(temp_poco.db_data_type);
+        SET data_type = public.get_app_data_type(temp_poco.is_nullable, temp_poco.db_data_type);
         
         RETURN QUERY
         SELECT * FROM temp_poco;
@@ -239,7 +252,7 @@ BEGIN
         ORDER by attnum;
 
         UPDATE temp_poco
-        SET data_type = public.get_app_data_type(temp_poco.db_data_type);
+        SET data_type = public.get_app_data_type(temp_poco.is_nullable, temp_poco.db_data_type);
 
         RETURN QUERY
         SELECT * FROM temp_poco;
@@ -269,7 +282,7 @@ BEGIN
         WHERE column_mode=ANY(ARRAY['t', 'o']);
 
         UPDATE temp_poco
-        SET data_type = public.get_app_data_type(temp_poco.db_data_type);
+        SET data_type = public.get_app_data_type(temp_poco.is_nullable, temp_poco.db_data_type);
 
         RETURN QUERY
         SELECT * FROM temp_poco;
@@ -302,7 +315,7 @@ BEGIN
     ORDER by attnum;
 
     UPDATE temp_poco
-    SET data_type = public.get_app_data_type(temp_poco.db_data_type);
+    SET data_type = public.get_app_data_type(temp_poco.is_nullable, temp_poco.db_data_type);
 
     RETURN QUERY
     SELECT * FROM temp_poco;
@@ -413,3 +426,5 @@ $$
 $$
 LANGUAGE sql;
 
+
+--SELECT * FROM public.poco_get_table_function_definition('hrm', 'employees');

@@ -51,6 +51,7 @@ function saveOrUpdateKanban() {
         var url = "/api/forms/config/kanbans/add-or-edit";
 
         var form = [];
+        form.push(null);
         form.push(k);
         form.push(null);
 

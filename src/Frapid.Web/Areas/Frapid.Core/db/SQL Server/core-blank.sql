@@ -24,24 +24,24 @@ GO
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.poco.sql --<--<--
-
-
 IF OBJECT_ID('dbo.get_app_data_type') IS NOT NULL
 DROP FUNCTION dbo.get_app_data_type;
 
 GO
 
-CREATE FUNCTION dbo.get_app_data_type(@db_data_type national character varying(100))
+CREATE FUNCTION dbo.get_app_data_type(@is_nullable varchar, @db_data_type national character varying(100))
 RETURNS national character varying(100)
 BEGIN
+	DECLARE @data_type national character varying(100);
+
     IF(@db_data_type IN('smallint', 'tinyint'))
     BEGIN
-        RETURN 'short';
+        SET @data_type = 'short';
     END;
 
     IF(@db_data_type IN('int4', 'int', 'integer'))
     BEGIN
-        RETURN 'int';
+        SET @data_type = 'int';
     END;
 
     IF(@db_data_type IN('varchar', 'nvarchar', 'character varying', 'text'))
@@ -49,17 +49,33 @@ BEGIN
         RETURN 'string';
     END;
     
-    IF(@db_data_type IN('date', 'time', 'datetimeoffset'))
+    IF(@db_data_type IN('date', 'datetime'))
     BEGIN
-        RETURN 'System.DateTime';
+        SET @data_type = 'System.DateTime';
+    END;
+    
+    IF(@db_data_type IN('datetimeoffset'))
+    BEGIN
+        SET @data_type = 'System.DateTimeOffset';
+    END;
+    
+    
+    IF(@db_data_type IN('time'))
+    BEGIN
+        SET @data_type = 'System.TimeSpan';
     END;
     
     IF(@db_data_type IN('bit'))
     BEGIN
-        RETURN 'bool';
+        SET @data_type = 'bool';
     END;
 
-    RETURN @db_data_type;
+	IF(@is_nullable = 'Y')
+	BEGIN
+		SET @data_type = @data_type + '?'
+	END;
+
+    RETURN @data_type;
 END;
 
 GO
@@ -229,7 +245,7 @@ BEGIN
 			information_schema.columns.column_default,
 			information_schema.columns.character_maximum_length,
 			dbo.is_primary_key(@schema, @name, information_schema.columns.column_name),
-			dbo.get_app_data_type(information_schema.columns.data_type)
+			dbo.get_app_data_type(information_schema.columns.is_nullable, information_schema.columns.data_type)
         FROM information_schema.columns
         WHERE 1 = 1
         AND information_schema.columns.table_schema = @schema
@@ -267,6 +283,7 @@ END;
 
 GO
 
+--EXECUTE dbo.poco_get_table_function_definition 'hrm', 'employees';
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/0. types.sql --<--<--
 IF OBJECT_ID('dbo.drop_schema') IS NOT NULL

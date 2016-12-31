@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -6,13 +8,14 @@ using System.Web.Http;
 using Frapid.DataAccess;
 using Frapid.DataAccess.Models;
 using Frapid.Framework;
+using Frapid.Mapper.Helpers;
 using Frapid.WebApi.DataAccess;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Frapid.WebApi.Service
 {
-    public class FormApiController: FrapidApiController
+    public class FormApiController : FrapidApiController
     {
         [AcceptVerbs("GET", "HEAD")]
         [Route("~/api/forms/{schemaName}/{tableName}/meta")]
@@ -24,11 +27,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.GetMetaAsync().ConfigureAwait(true);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -56,11 +59,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.CountAsync().ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -89,11 +92,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.GetAllAsync().ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -121,11 +124,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.GetAsync(primaryKey).ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -153,11 +156,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.GetAsync(primaryKeys).ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -185,11 +188,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.GetFirstAsync().ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -217,11 +220,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.GetPreviousAsync(primaryKey).ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -249,11 +252,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.GetNextAsync(primaryKey).ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -281,11 +284,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.GetLastAsync().ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -313,11 +316,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.GetPaginatedResultAsync().ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -346,11 +349,11 @@ namespace Frapid.WebApi.Service
                 var result = await repository.GetPaginatedResultAsync(pageNumber).ConfigureAwait(false);
                 return result;
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -378,11 +381,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.CountWhereAsync(filters).ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -411,11 +414,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.GetWhereAsync(pageNumber, filters).ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -443,11 +446,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.CountFilteredAsync(filterName).ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -475,11 +478,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.GetFilteredAsync(pageNumber, filterName).ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -637,11 +640,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.GetCustomFieldsAsync(null).ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -669,11 +672,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.GetCustomFieldsAsync(resourceId).ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -696,10 +699,11 @@ namespace Frapid.WebApi.Service
         [RestAuthorize]
         public async Task<object> AddOrEditAsync(string schemaName, string tableName, [FromBody] JArray form)
         {
-            var item = form[0].ToObject<Dictionary<string, object>>();
-            var customFields = form[1].ToObject<List<CustomField>>(JsonHelper.GetJsonSerializer());
+            var meta = form[0].ToObject<EntityView>();
+            var item = this.GetPostedData(meta, form[1].ToObject<Dictionary<string, object>>());
+            var customFields = form[2].ToObject<List<CustomField>>(JsonHelper.GetJsonSerializer());
 
-            if(item == null)
+            if (item == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
             }
@@ -709,11 +713,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.AddOrEditAsync(item, customFields).ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -731,16 +735,39 @@ namespace Frapid.WebApi.Service
 #endif
         }
 
+        public Dictionary<string, object> GetPostedData(EntityView meta, Dictionary<string, object> items)
+        {
+            if (meta == null || !meta.Columns.Any())
+            {
+                return items;
+            }
+
+            var parsed = new Dictionary<string, object>();
+
+            foreach (var item in items)
+            {
+                var column = meta.Columns.FirstOrDefault(x => x.PropertyName == item.Key);
+                var type = column?.DataType.GetWellKnownType();
+                var converted = TypeConverter.Convert(item.Value, type);
+
+
+                parsed.Add(item.Key, converted ?? item.Value);
+            }
+
+            return parsed;
+        }
+
         [AcceptVerbs("POST")]
         [Route("~/api/forms/{schemaName}/{tableName}/add")]
         [Route("~/api/forms/{schemaName}/{tableName}/add/{skipPrimaryKey:bool}")]
         [RestAuthorize]
         public async Task<object> AddAsync(string schemaName, string tableName, [FromBody] JArray form, bool skipPrimaryKey = true)
         {
-            var item = form[0].ToObject<Dictionary<string, object>>();
-            var customFields = form[1].ToObject<List<CustomField>>(JsonHelper.GetJsonSerializer());
+            var meta = form[0].ToObject<EntityView>();
+            var item = this.GetPostedData(meta, form[1].ToObject<Dictionary<string, object>>());
+            var customFields = form[2].ToObject<List<CustomField>>(JsonHelper.GetJsonSerializer());
 
-            if(item == null)
+            if (item == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
             }
@@ -750,11 +777,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.AddAsync(item, customFields, skipPrimaryKey).ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -777,10 +804,11 @@ namespace Frapid.WebApi.Service
         [RestAuthorize]
         public async Task<object> EditAsync(string schemaName, string tableName, string primaryKey, [FromBody] JArray form)
         {
-            var item = form[0].ToObject<Dictionary<string, object>>();
-            var customFields = form[1].ToObject<List<CustomField>>(JsonHelper.GetJsonSerializer());
+            var meta = form[0].ToObject<EntityView>();
+            var item = this.GetPostedData(meta, form[1].ToObject<Dictionary<string, object>>());
+            var customFields = form[2].ToObject<List<CustomField>>(JsonHelper.GetJsonSerializer());
 
-            if(item == null)
+            if (item == null)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
             }
@@ -791,11 +819,11 @@ namespace Frapid.WebApi.Service
                 await repository.UpdateAsync(item, primaryKey, customFields).ConfigureAwait(false);
                 return primaryKey;
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -813,9 +841,17 @@ namespace Frapid.WebApi.Service
 #endif
         }
 
-        private List<Dictionary<string, object>> ParseCollection(JArray collection)
+        private List<Dictionary<string, object>> ParseCollection(EntityView meta, JArray collection)
         {
-            return JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(collection.ToString(), JsonHelper.GetJsonSerializerSettings());
+            var items = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(collection.ToString(), JsonHelper.GetJsonSerializerSettings());
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                var item = this.GetPostedData(meta, items[i]);
+                items[i] = item;
+            }
+
+            return items;
         }
 
         [AcceptVerbs("POST")]
@@ -823,9 +859,10 @@ namespace Frapid.WebApi.Service
         [RestAuthorize]
         public async Task<List<object>> BulkImportAsync(string schemaName, string tableName, [FromBody] JArray collection)
         {
-            var items = this.ParseCollection(collection);
+            var meta = collection[0].ToObject<EntityView>();
+            var items = this.ParseCollection(meta, collection[1].ToObject<JArray>());
 
-            if(items == null || items.Count.Equals(0))
+            if (items == null || items.Count.Equals(0))
             {
                 return null;
             }
@@ -835,11 +872,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 return await repository.BulkImportAsync(items).ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (
@@ -867,11 +904,11 @@ namespace Frapid.WebApi.Service
                 var repository = new FormRepository(schemaName, tableName, this.AppUser.Tenant, this.AppUser.LoginId, this.AppUser.UserId);
                 await repository.DeleteAsync(primaryKey).ConfigureAwait(false);
             }
-            catch(UnauthorizedException)
+            catch (UnauthorizedException)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
-            catch(DataAccessException ex)
+            catch (DataAccessException ex)
             {
                 throw new HttpResponseException
                     (

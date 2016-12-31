@@ -5,6 +5,7 @@
         var url = "/api/forms/config/kanban-detail/add-or-edit";
 
         var form = [];
+        form.push(null);
         form.push(kanbanDetail);
         form.push(null);
 

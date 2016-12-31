@@ -87,9 +87,9 @@
                         };
                     };
 
-                    if (dataType === "time") {
-                        val = getTime(val);
-                    };
+                    //if (dataType === "time") {
+                        //val = getTime(val);
+                    //};
                 };
 
                 row += stringFormat("<td{0}>{1}</td>", title, (val || ""));

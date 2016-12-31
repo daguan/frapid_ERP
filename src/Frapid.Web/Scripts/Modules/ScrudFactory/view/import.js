@@ -34,7 +34,12 @@
 $("#file").change(function () {
     function request(entities) {
         var url = window.scrudFactory.formAPI + "/bulk-import";
-        var data = JSON.stringify(entities);
+        var form = [];
+
+        form.push(window.metaDefinition);
+        form.push(entities);
+
+        var data = JSON.stringify(form);
         return getAjaxRequest(url, "POST", data);
     };
 
@@ -76,6 +81,10 @@ $("#file").change(function () {
             var message = stringFormat(window.Resources.Labels.ImportedNItems(), entities.length);
             showProgress(progress, 100, message);
             el.closest(".segment").find(".button").removeClass("loading");
+
+            setTimeout(function(){
+                window.location = window.location;
+            }, 2000);
         });
 
         ajax.fail(function (xhr) {

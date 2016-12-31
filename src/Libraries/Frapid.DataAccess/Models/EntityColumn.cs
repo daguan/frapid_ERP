@@ -30,6 +30,11 @@ namespace Frapid.DataAccess.Models
             {
                 this._value = value;
 
+                if (value == null)
+                {
+                    return;
+                }
+
                 if (!value.StartsWith("nextval"))
                 {
                     return;
@@ -46,6 +51,7 @@ namespace Frapid.DataAccess.Models
         public string DataType { get; set; }
 
         #region Nullable
+
         [Ignore]
         public bool IsNullable { get; set; }
 
@@ -59,6 +65,7 @@ namespace Frapid.DataAccess.Models
                 this._nullable = value;
             }
         }
+
         #endregion
 
         #region  Primary Key
@@ -76,6 +83,7 @@ namespace Frapid.DataAccess.Models
                 this._primaryKey = value;
             }
         }
+
         #endregion
     }
 }

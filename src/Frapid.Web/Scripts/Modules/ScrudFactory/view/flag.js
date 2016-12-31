@@ -59,7 +59,10 @@ function initializeFlag() {
 
     function addFlag(flag) {
         var url = "/api/forms/config/flags/add-or-edit";
+
         var form = [];
+
+        form.push(null);
         form.push(flag);
         form.push(null);
 

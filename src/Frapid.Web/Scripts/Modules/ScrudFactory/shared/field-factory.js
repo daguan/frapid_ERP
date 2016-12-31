@@ -14,7 +14,7 @@
         return $("<select class='ui search fluid dropdown' />");
     };
 
-    switch (dataType) {
+    switch (dataType.replace("?")) {
         case "photo":
             return $("<input type='text' class='image' />");
         case "bigint":
@@ -77,9 +77,9 @@ function editScrudFormElement(targetEl, value) {
             value = value.toString().toFormattedDate();
         };
 
-        if (targetEl.attr("data-type") === "time") {
-            value = getTime(value);
-        };
+        //if (targetEl.attr("data-type") === "time") {
+            //value = getTime(value);
+        //};
 
         targetEl.val(value);
 
@@ -94,7 +94,7 @@ function editScrudFormElement(targetEl, value) {
         if (targetEl.is("select")) {
             var type = targetEl.attr("data-type");
 
-            if (type === "bool") {
+            if (type.substr(0, 4) === "bool") {
                 value = value ? "yes" : "no";
             };
 

@@ -132,6 +132,7 @@
     <Compile Include="SiteMapGenerator.cs" />
     <Compile Include="SiteMapChangeFrequency.cs" />
     <Compile Include="SiteMapUrl.cs" />
+    <Compile Include="TypeExtensions.cs" />
     <Compile Include="UrlCombiner.cs" />
     <Compile Include="UrlHelper.cs" />
   </ItemGroup>

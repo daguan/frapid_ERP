@@ -32,6 +32,7 @@
 
         var form = [];
 
+        form.push(window.metaDefinition);
         form.push(entity);
         form.push(customFields);
 
