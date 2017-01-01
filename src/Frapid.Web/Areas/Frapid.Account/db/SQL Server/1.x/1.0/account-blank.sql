@@ -718,6 +718,28 @@ END;
 
 GO
 
+-->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_office_id_by_login_id.sql --<--<--
+IF OBJECT_ID('account.get_office_id_by_login_id') IS NOT NULL
+DROP FUNCTION account.get_office_id_by_login_id;
+
+GO
+
+CREATE FUNCTION account.get_office_id_by_login_id(@login_id bigint)
+RETURNS integer
+AS
+BEGIN
+	RETURN
+	(
+		SELECT account.logins.office_id 
+		FROM account.logins
+		WHERE account.logins.login_id = @login_id
+	);
+END;
+
+GO
+
+--SELECT account.get_office_id_by_login_id(1);
+
 -->-->-- src/Frapid.Web/Areas/Frapid.Account/db/SQL Server/1.x/1.0/src/02.functions-and-logic/account.get_registration_office_id.sql --<--<--
 IF OBJECT_ID('account.get_registration_office_id') IS NOT NULL
 DROP FUNCTION account.get_registration_office_id;

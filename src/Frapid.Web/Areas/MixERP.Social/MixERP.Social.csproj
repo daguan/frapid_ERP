@@ -150,6 +150,7 @@
     <Compile Include="DTO\FeedItem.cs" />
     <Compile Include="DTO\LikedByView.cs" />
     <Compile Include="DTO\UploadedFile.cs" />
+    <Compile Include="Helpers\FeedHelper.cs" />
     <Compile Include="Models\Avatars.cs" />
     <Compile Include="Models\AttachmentException.cs" />
     <Compile Include="Models\Attachments.cs" />
