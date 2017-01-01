@@ -18,7 +18,17 @@ BEGIN
         SET @data_type = 'int';
     END;
 
-    IF(@db_data_type IN('varchar', 'nvarchar', 'character varying', 'text'))
+    IF(@db_data_type IN('decimal', 'numeric'))
+    BEGIN
+        SET @data_type = 'decimal';
+    END;
+
+    IF(@db_data_type IN('bigint'))
+    BEGIN
+        SET @data_type = 'long';
+    END;
+
+    IF(@db_data_type IN('varchar', 'nvarchar', 'char', 'character', 'character varying', 'national character varying', 'text'))
     BEGIN
         RETURN 'string';
     END;
@@ -28,6 +38,12 @@ BEGIN
         SET @data_type = 'System.DateTime';
     END;
     
+    IF(@db_data_type IN('uniqueidentifier'))
+    BEGIN
+        SET @data_type = 'System.Guid';
+    END;
+    
+
     IF(@db_data_type IN('datetimeoffset'))
     BEGIN
         SET @data_type = 'System.DateTimeOffset';
@@ -43,6 +59,17 @@ BEGIN
     BEGIN
         SET @data_type = 'bool';
     END;
+
+    IF(@db_data_type IN('varbinary'))
+    BEGIN
+		IF(@is_nullable = 'Y')
+		BEGIN
+			RETURN 'byte?[]'
+		END;
+
+		RETURN 'byte[]'
+    END;
+
 
 	IF(@is_nullable = 'Y')
 	BEGIN
@@ -170,35 +197,36 @@ END
 
 GO
 
-IF OBJECT_ID('dbo.poco_get_table_function_definition') is not null
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID('dbo.poco_get_table_function_definition') AND type in (N'P', N'PC'))
 DROP PROCEDURE dbo.poco_get_table_function_definition;
 
 GO
 
-CREATE PROCEDURE dbo.poco_get_table_function_definition(@schema national character varying(128), @name national character varying(128))
+IF OBJECT_ID('dbo.poco_get_table_function_definition') is not null
+DROP FUNCTION dbo.poco_get_table_function_definition;
+
+GO
+
+CREATE FUNCTION dbo.poco_get_table_function_definition(@schema national character varying(128), @name national character varying(128))
+RETURNS @result TABLE
+(
+	row_id					int IDENTITY,
+	id                      int,
+	column_name             national character varying(128),
+	nullable				national character varying(100),
+	db_data_type            national character varying(100),
+	value					national character varying(100),
+	max_length              integer,
+	primary_key				national character varying(128),
+	data_type               national character varying(128),
+	is_serial				bit DEFAULT(0)
+)
 AS
 BEGIN
-    SET NOCOUNT ON;
-    SET XACT_ABORT ON;
-
 	DECLARE @total_rows			int;
 	DECLARE @this_row			int = 0;
 	DECLARE @default			national character varying(128);
 	DECLARE @parsed				national character varying(128);
-
-	DECLARE @result TABLE
-	(
-		row_id					int IDENTITY,
-		id                      int,
-		column_name             national character varying(128),
-		nullable				national character varying(100),
-		db_data_type            national character varying(100),
-		value					national character varying(100),
-		max_length              integer,
-		primary_key				national character varying(128),
-		data_type               national character varying(128),
-		is_serial				bit DEFAULT(0)
-	);
 
     IF EXISTS
     (
@@ -224,8 +252,6 @@ BEGIN
         WHERE 1 = 1
         AND information_schema.columns.table_schema = @schema
         AND information_schema.columns.table_name = @name;
-
-		SET @total_rows = @@ROWCOUNT;
     END;
 
 
@@ -250,11 +276,9 @@ BEGIN
 	UPDATE @result
 	SET is_serial = COLUMNPROPERTY(OBJECT_ID(@schema + '.' + @name), column_name, 'IsIdentity');
 
-
-	SELECT * FROM @result;
     RETURN;
 END;
 
 GO
 
---EXECUTE dbo.poco_get_table_function_definition 'hrm', 'employees';
+--SELECT * FROM dbo.poco_get_table_function_definition('dbo', 'sysdiagrams')

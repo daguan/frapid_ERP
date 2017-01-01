@@ -6,8 +6,8 @@
     return window.scrudFactory.isProcedure;
 };
 
-function hasVerfication() {
-    if (!window.scrudFactory.hasVerfication) {
+function hasVerification() {
+    if (!window.scrudFactory.hasVerification) {
         return false;
     };
 

@@ -1,11 +1,15 @@
 ﻿function verify(primaryKey, verificationStatusId, reason) {
-    var url = window.scrudFactory.formAPI;
-    url += "/verify/";
-    url += primaryKey + "/";
-    url += verificationStatusId + "/";
-    url += reason;
+    var url = window.scrudFactory.verificationApi;
 
-    return getAjaxRequest(url, "PUT");
+    var model = {
+        PrimaryKeyValue: primaryKey,
+        Reason: reason,
+        VerificationStatusId: verificationStatusId
+    };
+
+    var data = JSON.stringify(model);
+
+    return getAjaxRequest(url, "PUT", data);
 };
 
 function getSelected() {
@@ -23,7 +27,11 @@ function getSelected() {
 $("#ApproveButton").click(function () {
     var primaryKey = getSelected();
 
-    if (!hasVerfication() || !primaryKey) {
+    if (!hasVerification() || !primaryKey) {
+        return;
+    };
+
+    if(!scrudFactory.verificationApi){
         return;
     };
 
@@ -41,7 +49,12 @@ $("#ApproveButton").click(function () {
 $("#RejectButton").click(function () {
     var primaryKey = getSelected();
 
-    if (!hasVerfication() || !primaryKey) {
+    if (!hasVerification() || !primaryKey) {
+        return;
+    };
+
+
+    if(!scrudFactory.verificationApi){
         return;
     };
 

@@ -1,5 +1,5 @@
 ﻿function createVerificationButton() {
-    if (!hasVerfication()) {
+    if (!hasVerification()) {
         return;
     };
 

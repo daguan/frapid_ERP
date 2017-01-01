@@ -50,6 +50,11 @@ namespace Frapid.Mapper.Helpers
                     return value;
                 }
 
+                if (destType == typeof(DateTimeOffset?) && value == null)
+                {
+                    return null;
+                }
+
                 return value.To<DateTimeOffset>().ToUniversalTime();
             }
 
@@ -63,6 +68,11 @@ namespace Frapid.Mapper.Helpers
                 if (value is DateTime)
                 {
                     return value;
+                }
+
+                if (destType == typeof(DateTime?) && value == null)
+                {
+                    return null;
                 }
 
                 return value.To<DateTime>().ToUniversalTime();

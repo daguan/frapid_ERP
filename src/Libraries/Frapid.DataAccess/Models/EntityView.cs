@@ -12,10 +12,8 @@ namespace Frapid.DataAccess.Models
 
         public static async Task<EntityView> GetAsync(string database, string primaryKey, string schemaName, string tableName)
         {
-            var db = FrapidDbServer.GetServer(database);
-
             string procedure = FrapidDbServer.DefaultSchemaQualify(database, "poco_get_table_function_definition");
-            string sql = db.GetProcedureCommand(procedure, new[] {"@0", "@1"});
+            string sql = $"SELECT * FROM {procedure}(@0, @1)";
 
             var columns = await Factory.GetAsync<EntityColumn>(database, sql, schemaName, tableName).ConfigureAwait(false);
 

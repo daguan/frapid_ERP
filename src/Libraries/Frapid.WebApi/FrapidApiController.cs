@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using Frapid.ApplicationState.Cache;
@@ -15,7 +14,7 @@ using Serilog;
 
 namespace Frapid.WebApi
 {
-    public class FrapidApiController: ApiController
+    public class FrapidApiController : ApiController
     {
         public string Tenant { get; set; }
         public AppUser AppUser { get; set; }
@@ -29,7 +28,7 @@ namespace Frapid.WebApi
             var token = provider.GetToken(clientToken);
 
 
-            if(token != null)
+            if (token != null)
             {
                 AppUsers.SetCurrentLoginAsync(this.Tenant, token.LoginId).Wait();
                 var loginView = AppUsers.GetCurrentAsync(this.Tenant, token.LoginId).Result;
@@ -53,12 +52,12 @@ namespace Frapid.WebApi
 
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, token.LoginId.ToString(CultureInfo.InvariantCulture)));
 
-                if(this.AppUser.RoleName != null)
+                if (this.AppUser.RoleName != null)
                 {
                     identity.AddClaim(new Claim(ClaimTypes.Role, this.AppUser.RoleName));
                 }
 
-                if(this.AppUser.Email != null)
+                if (this.AppUser.Email != null)
                 {
                     identity.AddClaim(new Claim(ClaimTypes.Email, this.AppUser.Email));
                 }
@@ -77,7 +76,7 @@ namespace Frapid.WebApi
                 var items = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => p.IsSubclassOf(type)).Select(t => t.Assembly).ToList();
                 return items;
             }
-            catch(ReflectionTypeLoadException ex)
+            catch (ReflectionTypeLoadException ex)
             {
                 Log.Error("Could not register API members. {Exception}", ex);
                 //Swallow the exception

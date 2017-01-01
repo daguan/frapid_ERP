@@ -196,7 +196,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            
+
             var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE deleted=@0", false);
             sql.And($"{this.PrimaryKey} < @0", primaryKey);
             sql.Append($"ORDER BY {this.PrimaryKey} DESC");
@@ -481,11 +481,11 @@ namespace Frapid.WebApi.DataAccess
                         else
                         {
                             string columns = string.Join(",", item.Where(x => !x.Key.Equals(this.PrimaryKey.ToPascalCase()))
-                                    .Select(x => Sanitizer.SanitizeIdentifierName(x.Key.ToUnderscoreLowerCase())));
+                                .Select(x => Sanitizer.SanitizeIdentifierName(x.Key.ToUnderscoreLowerCase())));
 
                             string parameters = string.Join(",", Enumerable.Range(0, item.Count - 1).Select(x => "@" + x));
                             var arguments = item.Where(x => !x.Key.Equals(this.PrimaryKey.ToPascalCase()))
-                                            .Select(x => x.Value).ToArray();
+                                .Select(x => x.Value).ToArray();
 
                             var sql = new Sql("INSERT INTO " + this.FullyQualifiedObjectName + "(" + columns + ")");
                             sql.Append("SELECT " + parameters, arguments);
@@ -1029,10 +1029,37 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            return
-                await
-                    EntityView.GetAsync(this.Database, this.PrimaryKey, this._ObjectNamespace, this.GetTableName())
-                        .ConfigureAwait(false);
+            return await EntityView.GetAsync(this.Database, this.PrimaryKey, this._ObjectNamespace, this.GetTableName()).ConfigureAwait(false);
+        }
+
+        public async Task VerifyAsync(Verification model)
+        {
+            if (!this.SkipValidation)
+            {
+                if (!this.Validated)
+                {
+                    await this.ValidateAsync(AccessTypeEnum.Verify, this.LoginId, this.Database, false).ConfigureAwait(false);
+                }
+                if (!this.HasAccess)
+                {
+                    Log.Information($"Access to verify entity \"{this.FullyQualifiedObjectName}\" with Primary Key {PrimaryKey} was denied to the user with Login ID {LoginId}.", model.PrimaryKeyValue,
+                        this.LoginId);
+                    throw new UnauthorizedException("Access is denied.");
+                }
+            }
+
+            if (model.PrimaryKeyValue != null)
+            {
+                var sql = new Sql($"UPDATE {this.FullyQualifiedObjectName}");
+                sql.Append("SET");
+                sql.Append("verification_status_id=@0, ", model.VerificationStatusId);
+                sql.Append("verified_by_user_id=@0, ", this.UserId);
+                sql.Append("verified_on=@0, ", DateTimeOffset.UtcNow);
+                sql.Append("verification_reason=@0 ", model.Reason);
+                sql.Where($"{this.PrimaryKey}=@0", model.PrimaryKeyValue);
+
+                await Factory.NonQueryAsync(this.Database, sql).ConfigureAwait(false);
+            }
         }
     }
 }

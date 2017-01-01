@@ -15,7 +15,7 @@ $(document).on("viewready", function () {
         popUnder(flagPopUnder, flagButton);
     });
 
-    if (hasVerfication()) {
+    if (hasVerification()) {
         var verifyButton = $("#VerifyButton");
 
         verifyButton.click(function () {
