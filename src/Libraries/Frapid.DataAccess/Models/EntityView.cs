@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Frapid.Configuration;
 
@@ -15,7 +16,14 @@ namespace Frapid.DataAccess.Models
             string procedure = FrapidDbServer.DefaultSchemaQualify(database, "poco_get_table_function_definition");
             string sql = $"SELECT * FROM {procedure}(@0, @1)";
 
-            var columns = await Factory.GetAsync<EntityColumn>(database, sql, schemaName, tableName).ConfigureAwait(false);
+            var columns = (await Factory.GetAsync<EntityColumn>(database, sql, schemaName, tableName).ConfigureAwait(false)).ToList();
+
+            var candidate = columns.FirstOrDefault(x => x.PrimaryKey.ToUpperInvariant().StartsWith("Y"));
+
+            if (candidate != null)
+            {
+                primaryKey = candidate.ColumnName;
+            }
 
             var meta = new EntityView
             {

@@ -51,6 +51,7 @@ namespace Frapid.WebApi.DataAccess
         public sealed override string _ObjectName { get; }
         public string FullyQualifiedObjectName { get; set; }
         public string PrimaryKey { get; set; }
+        public string IdentityColumn { get; set; }
         public string LookupField { get; set; }
         public string NameColumn { get; set; }
         public string Database { get; set; }
@@ -58,6 +59,7 @@ namespace Frapid.WebApi.DataAccess
         public bool IsValid { get; set; }
         public long LoginId { get; set; }
         public int OfficeId { get; set; }
+        
 
         public async Task<long> CountAsync()
         {
@@ -509,6 +511,17 @@ namespace Frapid.WebApi.DataAccess
             }
         }
 
+        public async Task UpdateAsync(Dictionary<string, object> item, object primaryKeyValue, List<CustomField> customFields, EntityView meta)
+        {
+            if (!string.IsNullOrWhiteSpace(meta.PrimaryKey))
+            {
+                this.PrimaryKey = meta.PrimaryKey;
+            }
+
+            this.IdentityColumn = meta.Columns.FirstOrDefault(x => x.IsSerial)?.ColumnName;
+            await this.UpdateAsync(item, primaryKeyValue, customFields).ConfigureAwait(false);
+        }
+
         public async Task UpdateAsync(Dictionary<string, object> item, object primaryKeyValue, List<CustomField> customFields)
         {
             if (string.IsNullOrWhiteSpace(this.Database))
@@ -542,7 +555,7 @@ namespace Frapid.WebApi.DataAccess
 
                 int index = 0;
 
-                foreach (var prop in item.Where(x => !x.Key.Equals(this.PrimaryKey.ToPascalCase())))
+                foreach (var prop in item.Where(x => !x.Key.Equals(this.IdentityColumn.ToPascalCase())))
                 {
                     if (index > 0)
                     {
@@ -795,6 +808,17 @@ namespace Frapid.WebApi.DataAccess
             }
 
             return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
+        }
+
+        public async Task<object> AddAsync(Dictionary<string, object> item, List<CustomField> customFields, bool skipPrimaryKey, EntityView meta)
+        {
+            if (!string.IsNullOrWhiteSpace(meta.PrimaryKey))
+            {
+                this.PrimaryKey = meta.PrimaryKey;
+            }
+
+            this.IdentityColumn = meta.Columns.FirstOrDefault(x => x.IsSerial)?.ColumnName;
+            return await this.AddAsync(item, customFields, skipPrimaryKey).ConfigureAwait(false);
         }
 
         public async Task<object> AddAsync(Dictionary<string, object> item, List<CustomField> customFields, bool skipPrimaryKey)
