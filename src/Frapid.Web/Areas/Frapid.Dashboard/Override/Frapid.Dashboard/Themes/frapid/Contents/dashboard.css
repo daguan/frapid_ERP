@@ -541,3 +541,11 @@ input[data-feature-search] {
     font-weight: 400;
     color: #A67261 !important;
 }
+
+.ui.table a{
+	color:#888!important;
+}
+
+.ui.table a:hover{
+	color:#333!important;
+}
