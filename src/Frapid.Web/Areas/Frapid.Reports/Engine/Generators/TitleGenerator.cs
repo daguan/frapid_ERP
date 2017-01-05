@@ -7,7 +7,7 @@ namespace Frapid.Reports.Engine.Generators
         public int Order { get; } = 2000;
         public string Name => "Report Title";
 
-        public string Generate(Report report)
+        public string Generate(string tenant, Report report)
         {
             if (string.IsNullOrWhiteSpace(report.Title))
             {

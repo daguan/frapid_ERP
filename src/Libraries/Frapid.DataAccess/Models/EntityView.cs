@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Frapid.Configuration;
+using Frapid.Configuration.Db;
+using Frapid.Mapper.Database;
 
 namespace Frapid.DataAccess.Models
 {
@@ -11,12 +12,19 @@ namespace Frapid.DataAccess.Models
         public IEnumerable<EntityColumn> Columns { get; set; }
         public object PrimaryKeyValue { get; set; }
 
-        public static async Task<EntityView> GetAsync(string database, string primaryKey, string schemaName, string tableName)
+        public static async Task<EntityView> GetAsync(string tenant, string primaryKey, string schemaName, string tableName)
         {
-            string procedure = FrapidDbServer.DefaultSchemaQualify(database, "poco_get_table_function_definition");
-            string sql = $"SELECT * FROM {procedure}(@0, @1)";
+            string sql = "SELECT * FROM public.poco_get_table_function_definition(@0, @1)";
 
-            var columns = (await Factory.GetAsync<EntityColumn>(database, sql, schemaName, tableName).ConfigureAwait(false)).ToList();
+            string providerName = DbProvider.GetProviderName(tenant);
+            var type = DbProvider.GetDbType(providerName);
+
+            if (type == DatabaseType.SqlServer)
+            {
+                sql = "EXECUTE dbo.poco_get_table_function_definition @0, @1";
+            }
+
+            var columns = (await Factory.GetAsync<EntityColumn>(tenant, sql, schemaName, tableName).ConfigureAwait(false)).ToList();
 
             var candidate = columns.FirstOrDefault(x => x.PrimaryKey.ToUpperInvariant().StartsWith("Y"));
 

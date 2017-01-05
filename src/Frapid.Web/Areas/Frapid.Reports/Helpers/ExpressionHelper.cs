@@ -83,7 +83,7 @@ namespace Frapid.Reports.Helpers
 
         private static string GetLogo()
         {
-            return AppUsers.GetCurrent().Logo;
+            return AppUsers.GetCurrent().Logo.Or("/Static/images/logo.png");
         }
 
         public static string GetCurrentDomainName()
@@ -113,6 +113,7 @@ namespace Frapid.Reports.Helpers
 
 
             string logo = GetLogo();
+
             if (!string.IsNullOrWhiteSpace(logo))
             {
                 //Or else logo will not be exported into excel.

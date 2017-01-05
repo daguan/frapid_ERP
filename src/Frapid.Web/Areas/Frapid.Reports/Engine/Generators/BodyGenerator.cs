@@ -11,7 +11,7 @@ namespace Frapid.Reports.Engine.Generators
         public int Order { get; } = 4000;
         public string Name => "Body";
 
-        public string Generate(Report report)
+        public string Generate(string tenant, Report report)
         {
             var html = new StringBuilder();
             html.Append("<div class='body'>");

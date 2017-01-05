@@ -22,7 +22,7 @@ namespace Frapid.Reports.Controllers.Backend
 
             using (var generator = new Generator(this.Tenant, path, parameters))
             {
-                string contents = generator.Generate();
+                string contents = generator.Generate(this.Tenant);
                 return this.Content(contents, "text/html");
             }
         }

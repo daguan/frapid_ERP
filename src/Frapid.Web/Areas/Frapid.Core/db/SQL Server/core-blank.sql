@@ -228,27 +228,28 @@ DROP PROCEDURE dbo.poco_get_table_function_definition;
 
 GO
 
-IF OBJECT_ID('dbo.poco_get_table_function_definition') is not null
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID('dbo.poco_get_table_function_definition') AND type in (N'FN'))
 DROP FUNCTION dbo.poco_get_table_function_definition;
 
 GO
 
-CREATE FUNCTION dbo.poco_get_table_function_definition(@schema national character varying(128), @name national character varying(128))
-RETURNS @result TABLE
-(
-	row_id					int IDENTITY,
-	id                      int,
-	column_name             national character varying(128),
-	nullable				national character varying(100),
-	db_data_type            national character varying(100),
-	value					national character varying(100),
-	max_length              integer,
-	primary_key				national character varying(128),
-	data_type               national character varying(128),
-	is_serial				bit DEFAULT(0)
-)
+CREATE PROCEDURE dbo.poco_get_table_function_definition(@schema national character varying(128), @name national character varying(128))
 AS
 BEGIN
+	DECLARE @result TABLE
+	(
+		row_id					int IDENTITY,
+		id                      int,
+		column_name             national character varying(128),
+		nullable				national character varying(100),
+		db_data_type            national character varying(100),
+		value					national character varying(100),
+		max_length              integer,
+		primary_key				national character varying(128),
+		data_type               national character varying(128),
+		is_serial				bit DEFAULT(0)
+	);
+
 	DECLARE @total_rows			int;
 	DECLARE @this_row			int = 0;
 	DECLARE @default			national character varying(128);
@@ -280,7 +281,8 @@ BEGIN
         AND information_schema.columns.table_name = @name;
     END;
 
-
+	SELECT @total_rows = COUNT(*)
+	FROM @result;
 
 	WHILE @this_row<@total_rows
 	BEGIN
@@ -292,6 +294,7 @@ BEGIN
 		WHERE row_id=@this_row;
 
 		EXECUTE dbo.parse_default @default, @parsed = @parsed OUTPUT;
+		
 		UPDATE @result
 		SET value = @parsed
 		WHERE row_id=@this_row;
@@ -302,12 +305,12 @@ BEGIN
 	UPDATE @result
 	SET is_serial = COLUMNPROPERTY(OBJECT_ID(@schema + '.' + @name), column_name, 'IsIdentity');
 
+	SELECT * FROM @result;
     RETURN;
 END;
 
 GO
 
---SELECT * FROM dbo.poco_get_table_function_definition('dbo', 'sysdiagrams')
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/01.types-domains-tables-and-constraints/0. types.sql --<--<--
 IF OBJECT_ID('dbo.drop_schema') IS NOT NULL
@@ -1422,5 +1425,28 @@ END
 GO
 
 EXEC sp_addrolemember  @rolename = 'db_datareader', @membername  = 'report_user'
+GO
+
+
+DECLARE @proc sysname
+DECLARE @cmd varchar(8000)
+
+DECLARE cur CURSOR FOR 
+SELECT '[' + schema_name(schema_id) + '].[' + name + ']' FROM sys.objects
+WHERE type IN('FN')
+AND is_ms_shipped = 0
+ORDER BY 1
+OPEN cur
+FETCH next from cur into @proc
+WHILE @@FETCH_STATUS = 0
+BEGIN
+     SET @cmd = 'GRANT EXEC ON ' + @proc + ' TO report_user';
+     EXEC (@cmd)
+
+     FETCH next from cur into @proc
+END
+CLOSE cur
+DEALLOCATE cur
+
 GO
 

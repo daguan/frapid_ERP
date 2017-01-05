@@ -6,6 +6,6 @@ namespace Frapid.Reports.Engine
     {
         int Order { get; }
         string Name { get; }
-        string Generate(Report report);
+        string Generate(string tenant, Report report);
     }
 }

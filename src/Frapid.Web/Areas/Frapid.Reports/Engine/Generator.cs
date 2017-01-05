@@ -49,7 +49,7 @@ namespace Frapid.Reports.Engine
             return html;
         }
 
-        public string Generate()
+        public string Generate(string tenant)
         {
             var type = typeof(IGenerator);
             var members = type.GetTypeMembers<IGenerator>();
@@ -58,7 +58,7 @@ namespace Frapid.Reports.Engine
 
             foreach (var member in members.OrderBy(x => x.Order).ThenBy(x => x.Name))
             {
-                string markup = member.Generate(this.Report);
+                string markup = member.Generate(tenant, this.Report);
                 source.Append(markup);
             }
 

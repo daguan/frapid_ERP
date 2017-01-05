@@ -9,14 +9,21 @@ namespace Frapid.Reports.Engine.Generators
     {
         public int Order { get; } = 1000;
         public string Name => "Header";
-        public string Generate(Report report)
+
+        public string Generate(string tenant, Report report)
         {
             if (!report.HasHeader)
             {
                 return string.Empty;
             }
 
-            string pathToHeader = PathMapper.MapPath("~/Reports/Assets/Header.html");
+            string pathToHeader = PathMapper.MapPath($"~/Tenants/{tenant}/Areas/Frapid.Reports/Assets/Header.html");
+
+            if (!File.Exists(pathToHeader))
+            {
+                pathToHeader = PathMapper.MapPath("~/Reports/Assets/Header.html");
+            }
+
             return File.ReadAllText(pathToHeader, Encoding.UTF8);
         }
     }
