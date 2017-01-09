@@ -1,3 +1,3 @@
 @echo off
-all.bat
+call all.bat
 pause
