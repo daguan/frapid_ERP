@@ -6,6 +6,8 @@ CREATE CAST (text AS bigint) WITH FUNCTION text_to_bigint(text) AS IMPLICIT;
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/00.db core/extensions.sql --<--<--
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
+CREATE EXTENSION IF NOT EXISTS "hstore";
+
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/PostgreSQL/1.x/1.0/src/00.db core/postgresql-roles.sql --<--<--
 DO
 $$
