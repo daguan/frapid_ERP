@@ -14,11 +14,11 @@ CREATE FUNCTION auth.get_menu
 RETURNS TABLE
 (
     menu_id                             integer,
-    app_name                            character varying,
-    menu_name                           character varying,
+    app_name                            national character varying(100),
+    menu_name                           national character varying(100),
     url                                 text,
     sort                                integer,
-    icon                                character varying,
+    icon                                national character varying(100),
     parent_menu_id                      integer
 )
 AS
@@ -37,11 +37,11 @@ BEGIN
     CREATE TEMPORARY TABLE _temp_menu
     (
         menu_id                         integer,
-        app_name                        character varying,
-        menu_name                       character varying,
+        app_name                        national character varying(100),
+        menu_name                       national character varying(100),
         url                             text,
         sort                            integer,
-        icon                            character varying,
+        icon                            national character varying(100),
         parent_menu_id                  integer
     ) ON COMMIT DROP;
 

@@ -24,7 +24,7 @@ BEGIN
 		allowed                         bit,
 		url                             national character varying(500),
 		sort                            integer,
-		icon                            character varying,
+		icon                            national character varying(100),
 		parent_menu_id                  integer
 	);
 
