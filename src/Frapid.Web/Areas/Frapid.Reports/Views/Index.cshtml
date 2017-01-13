@@ -5,79 +5,8 @@
     Layout = ViewBag.Layout;
 }
 
+<link rel="stylesheet" type="text/css" href="/Areas/Frapid.Reports/Styles/reports.css"/>
 
-<style>
-    #dashboard-container {
-        padding: 1em 0 !important;
-    }
-
-    .padded.container {
-        padding: 2em !important;
-    }
-
-    .collapsed.column {
-        padding: 0 !important;
-    }
-
-    .pusher, .ng-scope {
-        height: 100% !important;
-    }
-
-    .report-panel {
-        background-color: #949596;
-        padding-bottom: 4em;
-    }
-
-    .toolbar {
-        background-color: #444;
-        height: 3em;
-        padding-left: 1em;
-        text-align: left;
-    }
-
-        .toolbar .button {
-            color: #dadada;
-            cursor: pointer;
-            display: inline-flex;
-            font-size: 0.8em;
-            height: 3.5em;
-            margin: 2px;
-            padding: 0.8em;
-            text-shadow: 2px 2px 20px white;
-            width: 2.5em;
-        }
-
-            .toolbar .button:hover {
-                background-color: green;
-            }
-
-    iframe {
-        background-color: #fafafa;
-        border: none;
-        display: block;
-        height: 100%;
-        margin: 0 auto;
-        overflow: auto;
-        padding: 2em 2em 0 2em;
-        width: 1000px;
-    }
-
-    .vertically.very.relaxed {
-        padding: 3em 0;
-    }
-
-    .filter.container {
-        padding: 1em;
-    }
-
-    .report.title {
-        font-size: 1.2em !important;
-        padding: 0 0 1em 0;
-        font-weight: 600;
-        text-transform: uppercase;
-        color: #666;
-    }
-</style>
 <div class="report-panel">
     <div class="ui stackable report grid" style="height: 100%;">
         <div class="three wide collapsed column">
@@ -138,7 +67,7 @@
                                 switch (parameter.Type.ToUpperInvariant())
                                 {
                                     case "SYSTEM.DATETIME":
-                                        <input data-paramter="@name" id="@(name)InputDate" value="@parameter.DefaultValue" class="date" type="date" />
+                                        <input data-paramter="@name" id="@(name)InputDate" value="@parameter.DefaultValue" class="date" type="date"/>
                                         break;
                                     case "BOOL":
                                     case "BOOLEAN":
@@ -149,14 +78,14 @@
                                         break;
                                     case "DECIMAL":
                                     case "DOUBLE":
-                                        <input data-paramter="@name" id="@(name)InputText" value="@parameter.DefaultValue" type="text" class="decimal" data-number="" />
+                                        <input data-paramter="@name" id="@(name)InputText" value="@parameter.DefaultValue" type="text" class="decimal" data-number=""/>
                                         break;
                                     case "INT":
                                     case "LONG":
-                                        <input data-paramter="@name" id="@(name)InputText" value="@parameter.DefaultValue" type="text" class="integer" data-number="" />
+                                        <input data-paramter="@name" id="@(name)InputText" value="@parameter.DefaultValue" type="text" class="integer" data-number=""/>
                                         break;
                                     default:
-                                        <input data-paramter="@name" id="@(name)InputText" value="@parameter.DefaultValue" type="text" />
+                                        <input data-paramter="@name" id="@(name)InputText" value="@parameter.DefaultValue" type="text"/>
                                         break;
                                 }
                             }
@@ -167,10 +96,12 @@
             </div>
         </div>
         <div class="thirteen wide column">
-            <iframe src="@Model.ReportSourcePath"></iframe>
+            <iframe id="ReportIframe" src="@Model.ReportSourcePath"></iframe>
         </div>
     </div>
 </div>
+
+<a id="DownloadAnchor" style="display: none;"></a>
 <script>
     $(".dropdown").dropdown();
     loadDatepicker();
@@ -285,4 +216,204 @@
         const location = document.location.pathname + "?" + query.join("&");
         document.location = location;
     });
+
+    function startDownload(path, fileName) {
+        const anchor = $("#DownloadAnchor");
+        anchor.attr("target", "_self");
+        anchor.attr("href", path);
+        anchor.attr("download", fileName);
+        anchor[0].click();
+    };
+
+    function downloadFile(extension) {
+        function request(model) {
+            const url = "/dashboard/reports/export/" + extension;
+
+            const data = JSON.stringify(model);
+            return window.getAjaxRequest(url, "POST", data);
+        };
+
+        function getModel() {
+            const html = "<!DOCTYPE html>" + $("#ReportIframe").contents().find("html")[0].outerHTML;
+            const documentName = $(".report.title").html();
+
+            return {
+                Html: html,
+                DocumentName: documentName
+            };
+        };
+
+        var model = getModel();
+        const ajax = request(model);
+
+        ajax.success(function (response) {
+            startDownload(response, model.DocumentName);
+        });
+
+        ajax.fail(function (xhr) {
+            window.logAjaxErrorMessage(xhr);
+        });
+    };
+
+    $(".pdf.button").off("click").on("click", function () {
+        downloadFile("pdf");
+    });
+
+    $(".excel.button").off("click").on("click", function () {
+        downloadFile("xls");
+    });
+
+    $(".word.button").off("click").on("click", function () {
+        downloadFile("doc");
+    });
+
+    function getXml(reportTitle) {
+        function normalize(string) {
+            string = string.replace(" ", "");
+            string = string.replace("#", "");
+            return string;
+        };
+
+        function getHeaders(table) {
+            const headerCells = table.find("thead tr th");
+
+            var members = [];
+
+            $.each(headerCells, function () {
+                const cell = $(this).html();
+                members.push(normalize(cell));
+            });
+
+            return members;
+        };
+
+
+        var contents = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
+        contents += "\n";
+        contents += "<Report title=\"" + reportTitle + "\" " +
+                    " exportedOn=\"" + (new Date()).toLocaleFormat() + "\"" +
+                    " exportedBy=\"" + window.metaView.Name + "\"" +
+                    " userId=\"" + window.metaView.UserId + "\"" +
+                    " loginId=\"" + window.metaView.LoginId + "\"" +
+                    " officeId=\"" + window.metaView.OfficeId + "\">";
+
+        const tables = $("#ReportIframe").contents().find(".gridviews table");
+
+        $.each(tables, function () {
+            const table = $(this);
+            const rows = table.find("tbody tr");
+
+            contents += "\n";
+            contents += "\t<Candidates>";
+            contents += "\n";
+            var headers = getHeaders(table);
+
+
+            $.each(rows, function() {
+                const row = $(this);
+                const cells = row.find("td");
+
+                contents += "\t\t<Item>";
+                contents += "\n";
+                $.each(cells, function(i, v) {
+                    const text = $(this).text();
+
+                    const header = headers[i];
+
+                    contents += "\t\t\t<Element id=\"" + header + "\">";
+                    contents += "\n";
+                    contents += "\t\t\t\t";
+                    contents += text;
+                    contents += "\n";
+                    contents += "\t\t\t</Element>";
+                    contents += "\n";
+
+                });
+                contents += "\t\t</Item>";
+                contents += "\n";
+            });
+
+            contents += "\t</Candidates>";
+        });
+
+        contents += "\n";
+        contents += "</Report>";
+        contents += "\n";
+        return contents;
+    };
+
+    function getTableInText() {
+        const headerCells = $("#ReportIframe").contents().find(".gridviews table:first thead tr th");
+        const rows = $("#ReportIframe").contents().find(".gridviews table:first tbody tr");
+
+        var contents = "";
+
+        var members = [];
+
+        $.each(headerCells, function () {
+            const cell = $(this);
+            members.push(cell.html());
+        });
+
+        contents += members.join(",");
+        members = [];
+        contents += "\n";
+
+        $.each(rows, function () {
+            const row = $(this);
+            const cells = row.find("td");
+
+            $.each(cells, function () {
+                const cell = $(this);
+
+                members.push(cell.html());
+            });
+
+            contents += members.join(",");
+            contents += "\n";
+            members = [];
+        });
+
+        return contents;
+    };
+
+
+    $(".xml.button").off("click").on("click", function () {
+        const documentName = $(".report.title").html();
+        const xml = getXml(documentName);
+        const href = "data:text/plain;charset=utf-8," + encodeURIComponent(xml);
+
+        startDownload(href, documentName + ".xml");
+    });
+
+    $(".text.button").off("click").on("click", function () {
+        const documentName = $(".report.title").html();
+        const text = getTableInText(documentName);
+        const href = "data:text/plain;charset=utf-8," + encodeURIComponent(text);
+
+        startDownload(href, documentName + ".txt");
+    });
+
+    var fontSize = 1;
+
+    $(".zoom.in.button").off("click").on("click", function () {
+        fontSize += 0.25;
+
+        if (fontSize > 2) {
+            fontSize = 2;
+        };
+
+        $("#ReportIframe").contents().find("body").css("font-size", fontSize + "em");
+    });
+
+    $(".zoom.out.button").off("click").on("click", function () {
+        fontSize -= 0.25;
+
+        if (fontSize < 0.75) {
+            fontSize = 0.75;
+        };
+
+        $("#ReportIframe").contents().find("body").css("font-size", fontSize + "em");
+    });
+
 </script>

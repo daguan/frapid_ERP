@@ -101,6 +101,13 @@ html, body {
     cursor: default;
 }
 
+body {
+    -webkit-transition: all 0.25s linear;
+    -moz-transition: all 0.25s linear;
+    -o-transition: all 0.25s linear;
+    transition: all 0.25s linear;
+}
+
 .report.title {
     font-size: 2em;
 }

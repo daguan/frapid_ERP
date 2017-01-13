@@ -187,7 +187,9 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="reports.css" />
+    <Content Include="Styles\source.css" />
+    <Content Include="Scripts\reports.js" />
+    <Content Include="Styles\reports.css" />
     <Content Include="Views\web.config" />
   </ItemGroup>
   <ItemGroup>
