@@ -16,7 +16,7 @@ namespace Frapid.Reports.Engine.Generators
             var html = new StringBuilder();
             html.Append("<div class='body'>");
 
-            if (!string.IsNullOrWhiteSpace(report.Body.Content))
+            if (!string.IsNullOrWhiteSpace(report.Body?.Content))
             {
                 html.Append("<div class='body content'>");
                 html.Append(report.Body.Content);
@@ -37,6 +37,11 @@ namespace Frapid.Reports.Engine.Generators
         {
             var html = new StringBuilder();
 
+            if (report?.Body?.GridViews == null)
+            {
+                return string.Empty;
+            }
+
             foreach (var grid in report.Body.GridViews)
             {
                 html.Append(this.GetGridView(report, grid));
@@ -54,7 +59,7 @@ namespace Frapid.Reports.Engine.Generators
                 return null;
             }
 
-            var dataSource = report.DataSources.FirstOrDefault(x => x.Index == index.Value);
+            var dataSource = report?.DataSources?.FirstOrDefault(x => x.Index == index.Value);
 
             if (dataSource == null)
             {

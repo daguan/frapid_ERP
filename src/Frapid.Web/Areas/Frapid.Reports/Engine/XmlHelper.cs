@@ -8,6 +8,11 @@ namespace Frapid.Reports.Engine
     {
         public static XmlNode GetNode(string path, string name)
         {
+            if (string.IsNullOrWhiteSpace(path) || string.IsNullOrWhiteSpace(name))
+            {
+                return null;
+            }
+
             if (!File.Exists(path))
             {
                 return null;
@@ -20,6 +25,11 @@ namespace Frapid.Reports.Engine
 
         public static XmlNodeList GetNodes(string path, string name)
         {
+            if (string.IsNullOrWhiteSpace(path) || string.IsNullOrWhiteSpace(name))
+            {
+                return null;
+            }
+
             var doc = new XmlDocument();
             doc.Load(path);
             return doc.SelectNodes(name);
@@ -49,6 +59,11 @@ namespace Frapid.Reports.Engine
 
         public static string GetNodeText(string path, string name)
         {
+            if (string.IsNullOrWhiteSpace(path) || string.IsNullOrWhiteSpace(name))
+            {
+                return string.Empty;
+            }
+
             var doc = new XmlDocument();
             doc.Load(path);
             var selectSingleNode = doc.SelectSingleNode(name);

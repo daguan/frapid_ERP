@@ -104,7 +104,6 @@
     <Compile Include="Controllers\ApiAccessController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\FileManagerController.cs" />
-    <Compile Include="Controllers\FlagController.cs" />
     <Compile Include="Controllers\MenuAccessController.cs" />
     <Compile Include="Controllers\OfficeController.cs" />
     <Compile Include="Controllers\Services\AttachmentController.cs" />
@@ -147,7 +146,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Office\Index.cshtml" />
-    <Content Include="Views\Flag\Index.cshtml" />
     <Content Include="Views\Smtp\Index.cshtml" />
     <Content Include="Views\ApiAccess\Index.cshtml" />
     <Content Include="Views\MenuAccess\Index.cshtml" />

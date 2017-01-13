@@ -10,11 +10,6 @@
 
 $(document).on("viewready", function () {
     window.localize();
-
-    flagButton.click(function () {
-        popUnder(flagPopUnder, flagButton);
-    });
-
     if (hasVerification()) {
         var verifyButton = $("#VerifyButton");
 

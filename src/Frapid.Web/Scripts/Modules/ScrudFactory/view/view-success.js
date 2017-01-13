@@ -12,7 +12,6 @@
     $(".view.dimmer").removeClass("active");
     createCards();
     $(".view.factory").show();
-    initializeFlag();
     $(document).trigger("viewsuccess");
 };
 

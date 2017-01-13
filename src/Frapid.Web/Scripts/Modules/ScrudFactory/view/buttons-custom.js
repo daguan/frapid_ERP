@@ -24,6 +24,6 @@
             anchor.attr("onclick", v.onclick);
         };
 
-        $("#FlagButton").before(anchor);
+        $("#AddNewButton").after(anchor);
     });
 };

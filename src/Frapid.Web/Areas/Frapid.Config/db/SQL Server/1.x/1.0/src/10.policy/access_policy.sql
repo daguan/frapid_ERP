@@ -7,7 +7,6 @@ EXECUTE auth.create_api_access_policy '{*}', @office_id, 'config.kanbans', '{*}'
 EXECUTE auth.create_api_access_policy '{*}', @office_id, 'config.filter_name_view', '{*}', 1;
 
 EXECUTE auth.create_api_access_policy '{User}', @office_id, 'core.offices', '{*}', 1;
-EXECUTE auth.create_api_access_policy '{User}', @office_id, 'config.flags', '{*}', 1;
 EXECUTE auth.create_api_access_policy '{Admin}', @office_id, '', '{*}', 1;
 
 

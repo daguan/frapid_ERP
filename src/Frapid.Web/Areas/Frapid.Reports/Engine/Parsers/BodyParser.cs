@@ -20,7 +20,7 @@ namespace Frapid.Reports.Engine.Parsers
 
         private string GetContent()
         {
-            return XmlHelper.GetNodeText(this.Path, "/FrapidReport/Body/Content");    
+            return XmlHelper.GetNodeText(this.Path, "/FrapidReport/Body/Content");
         }
 
         private int? GetGridViewDataSourceIndex(XmlNode node)
@@ -32,22 +32,12 @@ namespace Frapid.Reports.Engine.Parsers
         private string GetGridViewCssClass(XmlNode node)
         {
             var attribute = node.Attributes?["Class"];
-            if (attribute != null)
-            {
-                return attribute.Value;
-            }
-
-            return string.Empty;
+            return attribute != null ? attribute.Value : string.Empty;
         }
         private string GetGridViewCssStyle(XmlNode node)
         {
             var attribute = node.Attributes?["Style"];
-            if (attribute != null)
-            {
-                return attribute.Value;
-            }
-
-            return string.Empty;
+            return attribute != null ? attribute.Value : string.Empty;
         }
 
         public ReportBody Get()
@@ -56,15 +46,19 @@ namespace Frapid.Reports.Engine.Parsers
 
 
             var nodes = XmlHelper.GetNodes(this.Path, "//GridViewDataSource");
-            foreach (XmlNode node in nodes)
-            {
-                this.GridViews.Add(new GridView
-                {
-                    DataSourceIndex = this.GetGridViewDataSourceIndex(node),
-                    CssClass = this.GetGridViewCssClass(node),
-                    CssStyle = this.GetGridViewCssStyle(node)
-                });
 
+            if (nodes != null)
+            {
+                foreach (XmlNode node in nodes)
+                {
+                    this.GridViews.Add(new GridView
+                    {
+                        DataSourceIndex = this.GetGridViewDataSourceIndex(node),
+                        CssClass = this.GetGridViewCssClass(node),
+                        CssStyle = this.GetGridViewCssStyle(node)
+                    });
+
+                }
             }
 
             this.Body.GridViews = this.GridViews;

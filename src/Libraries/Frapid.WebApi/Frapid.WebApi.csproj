@@ -108,14 +108,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\FilterRepository.cs" />
-    <Compile Include="DataAccess\FlagRepository.cs" />
     <Compile Include="DataAccess\FormRepository.cs" />
     <Compile Include="DataAccess\IFormRepository.cs" />
     <Compile Include="DataAccess\IViewRepository.cs" />
     <Compile Include="DataAccess\KanbanRepository.cs" />
     <Compile Include="DataAccess\ViewRepository.cs" />
     <Compile Include="Service\FilterApiController.cs" />
-    <Compile Include="Service\FlagApiController.cs" />
     <Compile Include="Service\FormApiController.cs" />
     <Compile Include="FrapidApiController.cs" />
     <Compile Include="RestAuthorizeAttribute.cs" />

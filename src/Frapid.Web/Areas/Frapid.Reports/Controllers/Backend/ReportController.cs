@@ -11,7 +11,7 @@ using Frapid.Reports.ViewModels;
 
 namespace Frapid.Reports.Controllers.Backend
 {
-    public class ReportController : BackendReportController
+    public sealed class ReportController : BackendReportController
     {
         [Route("dashboard/reports/view/{*path}")]
         [MenuPolicy]
@@ -29,37 +29,39 @@ namespace Frapid.Reports.Controllers.Backend
 
             var dbParams = new List<DataSourceParameter>();
 
-            foreach (var dataSource in report.DataSources)
+            if (report.DataSources != null)
             {
-                foreach (var parameter in dataSource.Parameters)
+                foreach (var dataSource in report.DataSources)
                 {
-                    if (dbParams.Any(x => x.Name.ToLower() == parameter.Name.Replace("@", "").ToLower()))
+                    foreach (var parameter in dataSource.Parameters)
                     {
-                        continue;
+                        if (dbParams.Any(x => x.Name.ToLower() == parameter.Name.Replace("@", "").ToLower()))
+                        {
+                            continue;
+                        }
+
+                        if (parameter.HasMetaValue)
+                        {
+                            continue;
+                        }
+
+                        parameter.Name = parameter.Name.Replace("@", "");
+                        var fromQueryString = report.Parameters.FirstOrDefault(x => x.Name.ToLower().Equals(parameter.Name.ToLower()));
+
+                        if (fromQueryString != null)
+                        {
+                            parameter.DefaultValue = DataSourceParameterHelper.CastValue(fromQueryString.Value, parameter.Type);
+                        }
+
+                        if (string.IsNullOrWhiteSpace(parameter.FieldLabel))
+                        {
+                            parameter.FieldLabel = parameter.Name;
+                        }
+
+                        dbParams.Add(parameter);
                     }
-
-                    if (parameter.HasMetaValue)
-                    {
-                        continue;
-                    }
-
-                    parameter.Name = parameter.Name.Replace("@", "");
-                    var fromQueryString = report.Parameters.FirstOrDefault(x => x.Name.ToLower().Equals(parameter.Name.ToLower()));
-
-                    if (fromQueryString != null)
-                    {
-                        parameter.DefaultValue = DataSourceParameterHelper.CastValue(fromQueryString.Value, parameter.Type);
-                    }
-
-                    if (string.IsNullOrWhiteSpace(parameter.FieldLabel))
-                    {
-                        parameter.FieldLabel = parameter.Name;
-                    }
-
-                    dbParams.Add(parameter);
                 }
             }
-
 
             var model = new ParameterMeta
             {

@@ -44,6 +44,7 @@ BEGIN
 	FROM account.sign_in_view
 	WHERE account.sign_in_view.login_id = _login_id;
 
+
 	--UNSEEN NOTIFICATIONS
 	INSERT INTO _result(notification_id, associated_app, associated_menu_id, url, formatted_text, icon, seen, event_date)
 	SELECT core.notifications.notification_id, core.notifications.associated_app, core.notifications.associated_menu_id, core.notifications.url, core.notifications.formatted_text, core.notifications.icon, false, core.notifications.event_timestamp
@@ -84,7 +85,7 @@ BEGIN
 	INSERT INTO _result(notification_id, associated_app, associated_menu_id, url, formatted_text, icon, seen, event_date)
 	SELECT core.notifications.notification_id, core.notifications.associated_app, core.notifications.associated_menu_id, core.notifications.url, core.notifications.formatted_text, core.notifications.icon, false, core.notifications.event_timestamp
 	FROM core.notifications
-	WHERE core.notifications.office_id = _office_id
+	WHERE (core.notifications.office_id IS NULL OR core.notifications.office_id = _office_id)
 	AND core.notifications.to_role_id IS NULL
 	AND core.notifications.to_user_id IS NULL
 	AND core.notifications.to_login_id IS NULL
@@ -131,7 +132,7 @@ BEGIN
 		FROM core.notifications
 		INNER JOIN core.notification_statuses
 		ON core.notification_statuses.notification_id = core.notifications.notification_id
-		WHERE core.notifications.office_id = _office_id
+		WHERE (core.notifications.office_id IS NULL OR core.notifications.office_id = _office_id)
 		AND core.notifications.to_role_id IS NULL
 		AND core.notifications.to_user_id IS NULL
 		AND core.notifications.to_login_id IS NULL

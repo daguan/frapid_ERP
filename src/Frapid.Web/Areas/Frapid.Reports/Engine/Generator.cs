@@ -23,6 +23,11 @@ namespace Frapid.Reports.Engine
             var parser = new ReportParser(this.Path, tenant, parameters);
             this.Report = parser.Get();
 
+            if (this.Report.DataSources == null)
+            {
+                return;
+            }
+
             foreach (var dataSource in this.Report.DataSources)
             {
                 dataSource.Data = this.GetDataSource(this.Report, dataSource);
@@ -31,10 +36,15 @@ namespace Frapid.Reports.Engine
 
         public List<Parameter> Parameters { get; set; }
         public string Path { get; set; }
-        private Report Report { get; }
+        public Report Report { get; set; }
 
         public void Dispose()
         {
+            if (this.Report.DataSources == null)
+            {
+                return;
+            }
+
             foreach (var dataSource in this.Report.DataSources)
             {
                 dataSource.Data?.Dispose();
@@ -43,6 +53,11 @@ namespace Frapid.Reports.Engine
 
         private string ParseExpressions(string html)
         {
+            if (this.Report.DataSources == null)
+            {
+                return string.Empty;
+            }
+
             html = ExpressionHelper.ParseExpression(this.Report.Tenant, html, this.Report.DataSources, ParameterHelper.GetPraParameterInfo(this.Report));
             html = ExpressionHelper.ParseDataSource(html, this.Report.DataSources);
 

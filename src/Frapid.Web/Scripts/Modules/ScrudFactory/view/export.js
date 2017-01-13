@@ -9,25 +9,84 @@
 };
 
 function createPDF() {
-    printGridView(window.reportExportTemplatePath, window.reportHeaderPath, window.scrudFactory.title, "ScrudView", date, window.user, window.office, '', 2, 0, $("#MarkupHidden"), null, downloadPDF);
+    var table = $("#ScrudView").clone();
+    table.find("thead tr:nth-child(2)").remove();
+
+    printGridView(window.scrudFactory.title, table, '', 2, 0, $("#MarkupHidden"), downloadPDF);
 };
 
 function createXls() {
-    printGridView(window.reportExportTemplatePath, window.reportHeaderPath, window.scrudFactory.title, "ScrudView", date, window.user, window.office, '', 2, 0, $("#MarkupHidden"), null, downloadXls);
+    var table = $("#ScrudView").clone();
+    table.find("thead tr:nth-child(2)").remove();
+
+    printGridView(window.scrudFactory.title, table, '', 2, 0, $("#MarkupHidden"), downloadExcel);
 };
 
 function createDoc() {
-    printGridView(window.reportExportTemplatePath, window.reportHeaderPath, window.scrudFactory.title, "ScrudView", date, window.user, window.office, '', 2, 0, $("#MarkupHidden"), null, downloadDoc);
+    var table = $("#ScrudView").clone();
+    table.find("thead tr:nth-child(2)").remove();
+
+    printGridView(window.scrudFactory.title, table, '', 2, 0, $("#MarkupHidden"), downloadWord);
 };
 
 function print() {
-    printGridView(window.reportExportTemplatePath, window.reportHeaderPath, window.scrudFactory.title, "ScrudView", date, window.user, window.office, '', 2, 0);
+    var table = $("#ScrudView").clone();
+    table.find("thead tr:nth-child(2)").remove();
+
+    printGridView(window.scrudFactory.title, table, '', 2, 0);
 };
 
 
-function startDownload(path) {
+function startDownload(path, fileName) {
     var anchor = $("#DownloadAnchor");
+    anchor.attr("target", "_self");
     anchor.attr("href", path);
+    anchor.attr("download", fileName);
     anchor[0].click();
+};
+
+
+function downloadFile(extension) {
+    function request(model) {
+        var url = "/dashboard/reports/export/" + extension;
+        
+        var data = JSON.stringify(model);
+        return window.getAjaxRequest(url, "POST", data);
+    };
+
+    function getModel(){
+        var html = $("#MarkupHidden").val();
+        var fileName = getFileName() + "." + extension;
+        
+        return {
+            Html: html,
+            DocumentName: fileName
+        };      
+    };
+    
+    var model = getModel();
+    var ajax = request(model);
+
+    ajax.success(function (response) {
+        startDownload(response, model.DocumentName);
+    });
+    
+    ajax.fail(function(xhr){
+        window.logAjaxErrorMessage(xhr);
+    });
+};
+
+function downloadPDF() {
+    downloadFile("pdf");
+};
+
+
+function downloadExcel() {
+    downloadFile("xls");
+};
+
+
+function downloadWord() {
+    downloadFile("doc");
 };
 

@@ -10,14 +10,18 @@ namespace Frapid.Dashboard.Helpers
         public static async Task SendAsync(string tenant, Notification message)
         {
             message.Tenant = tenant;
-            await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+            var id = await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+
+            message.NotificationId = id;
             NotificationHub.Send(tenant, message);
         }
 
         public static async Task SendToAdminsAsync(string tenant, Notification message)
         {
             message.Tenant = tenant;
-            await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+            var id  = await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+
+            message.NotificationId = id;
             NotificationHub.SendToAdmins(tenant, message);
         }
 
@@ -26,7 +30,9 @@ namespace Frapid.Dashboard.Helpers
             message.Tenant = tenant;
             message.OfficeId = officeId;
 
-            await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+            var id = await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+
+            message.NotificationId = id;
             NotificationHub.SendToAdmins(tenant, officeId, message);
         }
 
@@ -36,7 +42,9 @@ namespace Frapid.Dashboard.Helpers
             message.Tenant = tenant;
             message.ToRoleId = roleId;
 
-            await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+            var id = await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+
+            message.NotificationId = id;
             NotificationHub.SendToRoles(tenant, roleId, message);
         }
 
@@ -46,7 +54,9 @@ namespace Frapid.Dashboard.Helpers
             message.OfficeId = roleId;
             message.ToRoleId = roleId;
 
-            await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+            var id = await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+
+            message.NotificationId = id;
             NotificationHub.SendToRoles(tenant, roleId, officeId, message);
         }
 
@@ -56,6 +66,7 @@ namespace Frapid.Dashboard.Helpers
             message.ToUserId = userId;
 
             var id = await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+
             message.NotificationId = id;
             NotificationHub.SendToUsers(tenant, userId, message);
         }
@@ -66,7 +77,9 @@ namespace Frapid.Dashboard.Helpers
             message.OfficeId = userId;
             message.ToUserId = userId;
 
-            await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+            var id = await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+
+            message.NotificationId = id;
             NotificationHub.SendToUsers(tenant, userId, officeId, message);
         }
 
@@ -75,7 +88,9 @@ namespace Frapid.Dashboard.Helpers
             message.Tenant = tenant;
             message.ToLoginId = loginId;
 
-            await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+            var id = await Notifications.AddAsync(tenant, message).ConfigureAwait(false);
+
+            message.NotificationId = id;
             NotificationHub.SendToLogin(tenant, loginId, message);
         }
     }

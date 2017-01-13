@@ -396,7 +396,6 @@
     <Content Include="Scripts\Modules\ScrudFactory\view\export.js" />
     <Content Include="Scripts\Modules\ScrudFactory\view\filters-ajax.js" />
     <Content Include="Scripts\Modules\ScrudFactory\view\filters.js" />
-    <Content Include="Scripts\Modules\ScrudFactory\view\flag.js" />
     <Content Include="Scripts\Modules\ScrudFactory\view\gridview-actions-delete.js" />
     <Content Include="Scripts\Modules\ScrudFactory\view\gridview-actions-edit-ajax.js" />
     <Content Include="Scripts\Modules\ScrudFactory\view\gridview-actions-edit.js" />

@@ -10,7 +10,7 @@ EXECUTE auth.create_app_menu_policy
 'User', 
 @office_id, 
 'Frapid.Config',
-'{Offices, Flags}';
+'{Offices}';
 
 EXECUTE auth.create_app_menu_policy
 'Admin', 

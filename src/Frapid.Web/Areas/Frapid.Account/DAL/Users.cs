@@ -72,6 +72,7 @@ namespace Frapid.Account.DAL
                     OfficeId = model.OfficeId,
                     RoleId = model.RoleId,
                     Name = model.Name,
+                    Status = true,
                     Phone = model.Phone,
                     AuditTs = DateTimeOffset.UtcNow,
                     AuditUserId = userId

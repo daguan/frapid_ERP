@@ -51,6 +51,11 @@ namespace Frapid.Reports.Engine.Parsers
                 return null;
             }
 
+            if (report.DataSources == null)
+            {
+                return null;
+            }
+
             value = ExpressionHelper.ParseExpression(report.Tenant, value, report.DataSources, ParameterHelper.GetPraParameterInfo(report));
             return DataSourceParameterHelper.CastValue(value, type);
         }
@@ -111,13 +116,9 @@ namespace Frapid.Reports.Engine.Parsers
             var candidate =
                 node.ChildNodes.Cast<XmlNode>().FirstOrDefault(x => x.Name.Equals("RunningTotalFieldIndices"));
 
-            if (!string.IsNullOrWhiteSpace(candidate?.InnerText))
-            {
-                var value = candidate.InnerText.Split(',').Select(int.Parse).ToList();
-                return value;
-            }
-
-            return new List<int>();
+            if (string.IsNullOrWhiteSpace(candidate?.InnerText)) return new List<int>();
+            var value = candidate.InnerText.Split(',').Select(int.Parse).ToList();
+            return value;
         }
 
         private int? GetRunningTotalTextColumnIndex(XmlNode node)
@@ -131,7 +132,14 @@ namespace Frapid.Reports.Engine.Parsers
         public List<DataSource> Get(Report report)
         {
             var nodes = XmlHelper.GetNodes(this.Path, "//DataSource");
+
+            if (nodes == null)
+            {
+                return this.DataSources;
+            }
+
             int index = 0;
+
             foreach (XmlNode node in nodes)
             {
                 this.DataSources.Add(new DataSource

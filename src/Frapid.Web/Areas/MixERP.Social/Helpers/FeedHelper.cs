@@ -20,7 +20,7 @@ namespace MixERP.Social.Helpers
             }, meta).ConfigureAwait(false);
         }
 
-        public static async Task CreateNotificationFeedAsync(string tenant, string message, string associatedApp, LoginView meta)
+        public static async Task CreateNotificationFeedAsync(string tenant, int officeId, string message, string associatedApp, LoginView meta)
         {
             var feed = await Feeds.PostAsync(tenant, new Feed
             {
@@ -33,6 +33,7 @@ namespace MixERP.Social.Helpers
             await NotificationHelper.SendAsync(tenant, new Notification
             {
                 Tenant = tenant,
+                OfficeId = officeId,
                 AssociatedApp = associatedApp,
                 Url = "/dashboard/social?FeedId=" + feed.FeedId,
                 FormattedText = message

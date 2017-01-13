@@ -45,29 +45,7 @@ namespace Frapid.i18n.Resources
 
 			return ResourceManager.GetString(tenant, "Labels", key);
 		}
-		
-		/// <summary>
-		///   Localized string for Flag was removed.
-		/// </summary>
-		public static string FlagRemoved 
-		{
-			get
-			{
-				return Get("FlagRemoved");
-			}
-		}
-		
-		/// <summary>
-		///   Localized string for Flag was saved.
-		/// </summary>
-		public static string FlagSaved 
-		{
-			get
-			{
-				return Get("FlagSaved");
-			}
-		}
-		
+				
 		/// <summary>
 		///   Localized string for Successfully imported {0} items.
 		/// </summary>
@@ -399,18 +377,7 @@ namespace Frapid.i18n.Resources
 				return Get("Condition");
 			}
 		}
-		
-		/// <summary>
-		///   Localized string for Create a Flag
-		/// </summary>
-		public static string CreateAFlag 
-		{
-			get
-			{
-				return Get("CreateAFlag");
-			}
-		}
-		
+				
 		/// <summary>
 		///   Localized string for Create Duplicate
 		/// </summary>
@@ -619,18 +586,7 @@ namespace Frapid.i18n.Resources
 				return Get("First");
 			}
 		}
-		
-		/// <summary>
-		///   Localized string for Flag
-		/// </summary>
-		public static string Flag 
-		{
-			get
-			{
-				return Get("Flag");
-			}
-		}
-		
+				
 		/// <summary>
 		///   Localized string for Import Data
 		/// </summary>

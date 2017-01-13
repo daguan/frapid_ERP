@@ -13,6 +13,11 @@ namespace Frapid.Reports.Models
 
         public string GetPathToDisk(string tenant, string path)
         {
+            if (string.IsNullOrWhiteSpace(tenant) || string.IsNullOrWhiteSpace(path))
+            {
+                return string.Empty;
+            }
+
             string overridePath = $"Tenant/{tenant}/{path}";
             string suffix = this.GetSuffix(tenant);
             overridePath = overridePath.Replace(".xml", suffix + ".xml");

@@ -115,32 +115,6 @@
             </div>
         </div>
     </div>
-
-    <div id="FlagPopUnder" class="ui initially hidden form popunder segment" style="width:400px;z-index:3; position: absolute;">
-        <div class="ui grey header">
-            <span data-localize="Titles.CreateAFlag"></span>
-        </div>
-        <div>
-            <span data-localize="Labels.FlagDescription"></span>
-        </div>
-        <p>
-            <span data-localize="Labels.SelectAFlag"></span>
-        </p>
-
-        <select id="FlagSelect" class="ui fluid search dropdown selection"></select>
-
-        <p class="ui buttons tpad8">
-            <a href="javascript:void(0);" id="UpdateButton" class="green small ui button">
-                <span data-localize="Titles.Update"></span>
-            </a>
-
-            <a href="javascript:void(0);" onclick="$('#FlagPopUnder').fadeOut(500);" class="red small ui button">
-                <span data-localize="Titles.Close"></span>
-            </a>
-        </p>
-    </div>
-
-
     <div id="VerificationPopUnder" class="ui initially hidden form popunder segment" style="width:400px;z-index:3; position: absolute;">
         <div class="ui grey header">
             <span data-localize="Titles.Verification"></span>
@@ -229,9 +203,6 @@
                     <div class="ui basic buttons">
                         <a id="AddNewButton" class="ui basic button">
                             <span data-localize="Titles.AddNew"></span>
-                        </a>
-                        <a id="FlagButton" class="ui basic button">
-                            <span data-localize="Titles.Flag"></span>
                         </a>
                         <div class="ui icon top left pointing dropdown basic button" id="ExportDropDown">
                             <span>

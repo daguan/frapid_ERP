@@ -1,39 +1,43 @@
-var printGridView = function (templatePath, headerPath, reportTitle, gridViewId, printedDate, user, office, windowName, offset, offsetLast, hiddenFieldToUpdate, triggerControlId, callback) {
+var printGridView = function (reportTitle, table, windowName, offset, offsetLast, hiddenFieldToUpdate, callback) {
+
+    const templatePath = "/Reports/Assets/Print.html?v=2";
+    const headerPath = "/dashboard/reports/header";
+
     //Load report template from the path.
     $.get(templatePath, function () { }).done(function (data) {
         //Load report header template.
         $.get(headerPath, function () { }).done(function (header) {
-            var table = $("#" + gridViewId).clone();
 
             table.find("tr.tableFloatingHeader").remove();
 
-            table.find("th:nth-child(-n" + offset + ")").remove();
-            table.find("td:nth-child(-n" + offset + ")").remove();
 
-            table.find("th:nth-last-child(-n" + offsetLast + ")").remove();
-            table.find("td:nth-last-child(-n" + offsetLast + ")").remove();
+            if(offset){
+                table.find("th:nth-child(-n" + offset + ")").remove();
+                table.find("td:nth-child(-n" + offset + ")").remove();                
+            };
+
+            if(offsetLast){
+                table.find("th:nth-last-child(-n" + offsetLast + ")").remove();
+                table.find("td:nth-last-child(-n" + offsetLast + ")").remove();
+            }
 
             table.find("td").removeAttr("style");
             table.find("tr").removeAttr("style");
 
             table = "<table class='preview'>" + table.html() + "</table>";
 
-            data = data.replace("{Header}", header);
-            data = data.replace("{ReportHeading}", reportTitle);
-            data = data.replace("{PrintDate}", printedDate);
-            data = data.replace("{UserName}", user);
-            data = data.replace("{OfficeCode}", office);
-            data = data.replace("{Table}", table);
+            data = data.replace(/{Header}/g, header);
+            data = data.replace(/{ReportHeading}/g, reportTitle);
+            data = data.replace(/{PrintDate}/g, (new Date()).toLongDateString());
+            data = data.replace(/{UserName}/g, user);
+            data = data.replace(/{OfficeCode}/g, office);
+            data = data.replace(/{Table}/g, table);
 
             if (hiddenFieldToUpdate) {
                 //Update the hidden field with data, but do not print.
                 $(hiddenFieldToUpdate).val(data);
                 if (typeof (callback) === "function") {
                     callback();
-                };
-
-                if (triggerControlId) {
-                    $("#" + triggerControlId).trigger("click");
                 };
 
                 return;

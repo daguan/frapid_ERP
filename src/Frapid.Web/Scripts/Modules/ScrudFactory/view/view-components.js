@@ -24,9 +24,4 @@ function initializeViews() {
         showTarget("grid");
         $('a[data-target="grid"]').remove();
     };
-
-    if (window.scrudFactory.removeFlag) {
-        $("#FlagPopUnder").remove();
-        $("#FlagButton").remove();
-    };
 };

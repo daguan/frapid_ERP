@@ -140,7 +140,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AreaRegistration.cs" />
+    <Compile Include="Controllers\Backend\ExportController.cs" />
+    <Compile Include="ExportHelper.cs" />
+    <Compile Include="HtmlConverters\FakeWordConverter.cs" />
+    <Compile Include="HtmlConverters\FakeExcelConverter.cs" />
+    <Compile Include="HtmlConverters\WkHtmlToPdf.cs" />
+    <Compile Include="HtmlConverters\HtmlWriter.cs" />
+    <Compile Include="IExportTo.cs" />
     <Compile Include="Models\ReportLocator.cs" />
+    <Compile Include="PdfConvert.cs" />
+    <Compile Include="ViewModels\HtmlConverterViewModel.cs" />
     <Compile Include="ViewModels\ParameterMeta.cs" />
     <Compile Include="Controllers\Backend\ReportController.cs" />
     <Compile Include="Controllers\Backend\SourceController.cs" />

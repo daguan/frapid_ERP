@@ -28,7 +28,6 @@
     "~/Scripts/Modules/ScrudFactory/view/gridview.js",
     "~/Scripts/Modules/ScrudFactory/view/import-export.js",
     "~/Scripts/Modules/ScrudFactory/view/import.js",
-    "~/Scripts/Modules/ScrudFactory/view/flag.js",
     "~/Scripts/Modules/ScrudFactory/view/kanban-cards-ajax.js",
     "~/Scripts/Modules/ScrudFactory/view/kanban-cards.js",
     "~/Scripts/Modules/ScrudFactory/view/kanban-ratable.js",

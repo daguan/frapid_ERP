@@ -147,36 +147,4 @@ CREATE TABLE config.custom_fields
 );
 
 
-CREATE TABLE config.flag_types
-(
-    flag_type_id                                integer IDENTITY PRIMARY KEY,
-    flag_type_name                              national character varying(24) NOT NULL,
-    background_color                            color NOT NULL,
-    foreground_color                            color NOT NULL,
-    audit_user_id                               integer NULL REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
-	deleted										bit DEFAULT(0)
-);
-
-
-CREATE TABLE config.flags
-(
-    flag_id                                     bigint IDENTITY PRIMARY KEY,
-    user_id                                     integer NOT NULL REFERENCES account.users,
-    flag_type_id                                integer NOT NULL REFERENCES config.flag_types(flag_type_id),
-    resource                                    national character varying(500), --Fully qualified resource name. Example: transactions.non_gl_stock_master.
-    resource_key                                national character varying(500), --The unique identifier for lookup. Example: non_gl_stock_master_id,
-    resource_id                                 national character varying(500), --The value of the unique identifier to lookup for,
-    flagged_on                                  datetimeoffset NULL 
-                                                DEFAULT(getutcdate()),
-    audit_user_id                           	integer REFERENCES account.users,
-    audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
-	deleted										bit DEFAULT(0)
-);
-
-CREATE UNIQUE INDEX flags_user_id_resource_resource_id_uix
-ON config.flags(user_id, resource, resource_key, resource_id)
-WHERE deleted = 0;
-
-
 GO

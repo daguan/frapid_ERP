@@ -42,6 +42,6 @@
 
         makeSortable();
         makeRatable();
-        displayFlaggedCards();
+        //displayFlaggedCards();
     });
 };

@@ -1137,6 +1137,7 @@ BEGIN
 	FROM account.sign_in_view
 	WHERE account.sign_in_view.login_id = @login_id;
 
+
 	--UNSEEN NOTIFICATIONS
 	INSERT INTO @result(notification_id, associated_app, associated_menu_id, url, formatted_text, icon, seen, event_date)
 	SELECT notification_id, associated_app, associated_menu_id, url, formatted_text, icon, 0, event_timestamp
@@ -1177,7 +1178,7 @@ BEGIN
 	INSERT INTO @result(notification_id, associated_app, associated_menu_id, url, formatted_text, icon, seen, event_date)
 	SELECT notification_id, associated_app, associated_menu_id, url, formatted_text, icon, 0, event_timestamp
 	FROM core.notifications
-	WHERE core.notifications.office_id = @office_id
+	WHERE (core.notifications.office_id IS NULL OR core.notifications.office_id = @office_id)
 	AND core.notifications.to_role_id IS NULL
 	AND core.notifications.to_user_id IS NULL
 	AND core.notifications.to_login_id IS NULL
@@ -1224,7 +1225,7 @@ BEGIN
 		FROM core.notifications
 		INNER JOIN core.notification_statuses
 		ON core.notification_statuses.notification_id = core.notifications.notification_id
-		WHERE core.notifications.office_id = @office_id
+		WHERE (core.notifications.office_id IS NULL OR core.notifications.office_id = @office_id)
 		AND core.notifications.to_role_id IS NULL
 		AND core.notifications.to_user_id IS NULL
 		AND core.notifications.to_login_id IS NULL
@@ -1240,6 +1241,7 @@ END;
 
 GO
 
+--SELECT * FROM core.get_my_notifications(5);
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Core/db/SQL Server/1.x/1.0/src/06.functions-and-logic/core.get_office_code_by_office_id.sql --<--<--
 IF OBJECT_ID('core.get_office_code_by_office_id') IS NOT NULL
