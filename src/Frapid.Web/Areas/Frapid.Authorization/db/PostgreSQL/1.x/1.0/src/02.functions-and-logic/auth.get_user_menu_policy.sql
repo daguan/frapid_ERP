@@ -21,7 +21,7 @@ RETURNS TABLE
     disallowed                      boolean,
     url                             text,
     sort                            integer,
-    icon                            character varying,
+    icon                            national character varying(100),
     parent_menu_id                  integer
 )
 AS
@@ -47,7 +47,7 @@ BEGIN
         disallowed                      boolean,
         url                             text,
         sort                            integer,
-        icon                            character varying,
+        icon                            national character varying(100),
         parent_menu_id                  integer
     ) ON COMMIT DROP;
 
