@@ -49,19 +49,19 @@ else
                                    maxlength="32"
                                    data-validation-expression="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,32}$"
                                    data-validation-message="Password should contain at least 6 characters with one uppercase, lowercase, and a number."
-                                   data-validation-target=".big.error"/>
+                                   data-validation-target=".big.error" />
                         </div>
                         <div class="field">
                             <label for="ConfirmPasswordInputPassword">Confirm Password</label>
-                            <input type="password" id="ConfirmPasswordInputPassword" 
-                                   data-match-target="PasswordInputPassword" required=""/>
+                            <input type="password" id="ConfirmPasswordInputPassword"
+                                   data-match-target="PasswordInputPassword" required="" />
                         </div>
                     </div>
 
 
                     <div class="email address field">
                         <label for="EmailAddressInput">Email</label>
-                        <input type="email" id="EmailAddressInput" required=""/>
+                        <input type="email" id="EmailAddressInput" required="" />
                         <div class="ui pointing label">Please leave this field empty</div>
                     </div>
 
@@ -93,4 +93,6 @@ else
 <script src="/i18n/resources.js"></script>
 <script src="/Scripts/frapid/core/frapid-ajax.js"></script>
 <script src="/Scripts/frapid/core/validation.js"></script>
+<script src="/Scripts/frapid/utilities/validator.js"></script>
+<script src="/Scripts/frapid/utilities/form.js"></script>
 <script src="/Areas/Frapid.Account/Scripts/Account/SignUp/signup.js"></script>
