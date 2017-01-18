@@ -36,3 +36,5 @@ src/Frapid.Web/Areas/MixERP.Inventory/
 src/Frapid.Web/Areas/MixERP.Purchases/
 src/Frapid.Web/Areas/MixERP.Sales/
 src/Frapid.Web/Reports/
+src/Frapid.Web/Areas/Frapid.CafeSys/
+src/Frapid.Web/Areas/MixERP.CountryPacks.Nepal/
