@@ -421,24 +421,24 @@ if (notifcationHub) {
 function sayHi() {
     const greetings =
     [
-        "It's good to see you again, {0}!",
-        "Nice to see you, {0}!",
-        "How was your day, {0}?",
-        "Welcome back {0}.",
-        "Hi!",
-        "There you are!",
-        "We missed you!!!",
-        "You're back with a bang!!!",
-        "You're awesome. ;)"
+        window.i18n.GreetingGoodToSeeYouAgain,
+        window.i18n.GreetingNiceToSeeYou,
+        window.i18n.GreetingHowWasYourDay,
+        window.i18n.GreetingWelcomeBack,
+        window.i18n.GreetingHi,
+        window.i18n.GreetingThereYouAre,
+        window.i18n.GreetingWeMissedYou,
+        window.i18n.GreetingYouAreBackWithABang,
+        window.i18n.GreetingYouAreAwesome
     ];
 
-    const haveWeMet = localStorage.getItem("haveWeMet");
+    const greeted = localStorage.getItem("greeted");
 
-    if (haveWeMet) {
+    if (greeted) {
         return;
     };
 
-    localStorage.setItem("haveWeMet", true);
+    localStorage.setItem("greeted", true);
 
     var name = "";
 
@@ -487,7 +487,7 @@ function getFeatures() {
     features.push({
         MenuId: null,
         AppName: "Frapid",
-        MenuName: "Dashboard",
+        MenuName: window.i18n.Dashboard,
         Sort: 0,
         Url: "/dashboard",
         Icon: "pin"
@@ -496,7 +496,7 @@ function getFeatures() {
     features.push({
         MenuId: null,
         AppName: "Frapid",
-        MenuName: "Show Notifications",
+        MenuName: window.i18n.ShowNotifications,
         Sort: 0,
         Url: "javascript:void(0);",
         Click: function () {
@@ -508,11 +508,11 @@ function getFeatures() {
     features.push({
         MenuId: null,
         AppName: "Frapid",
-        MenuName: "Say Hi",
+        MenuName: window.i18n.SayHi,
         Sort: 0,
         Url: "javascript:void(0);",
         Click: function () {
-            localStorage.removeItem("haveWeMet");
+            localStorage.removeItem("greeted");
             window.sayHi();
         },
         Icon: "smile"
@@ -521,11 +521,11 @@ function getFeatures() {
     features.push({
         MenuId: null,
         AppName: "Frapid",
-        MenuName: "Log Off",
+        MenuName: window.i18n.LogOff,
         Sort: 0,
         Url: "javascript:void(0);",
         Click: function () {
-            window.displayMessage("Hope to see you soon.", "success");
+            window.displayMessage(window.i18n.HopeToSeeYouSoon, "success");
             setTimeout(function () {
                 document.location = "/account/sign-out";
             }, 1000);
@@ -536,11 +536,11 @@ function getFeatures() {
     features.push({
         MenuId: null,
         AppName: "Frapid",
-        MenuName: "Sign Out",
+        MenuName: window.i18n.SignOut,
         Sort: 0,
         Url: "javascript:void(0);",
         Click: function () {
-            window.displayMessage("Hope to see you soon.", "success");
+            window.displayMessage(window.i18n.HopeToSeeYouSoon, "success");
             setTimeout(function () {
                 document.location = "/account/sign-out";
             }, 1000);
@@ -551,7 +551,7 @@ function getFeatures() {
     features.push({
         MenuId: null,
         AppName: "Frapid",
-        MenuName: "Go Back",
+        MenuName: window.i18n.GoBack,
         Sort: 0,
         Url: "javascript:history.go(-1);",
         Icon: "angle double left"
@@ -560,11 +560,11 @@ function getFeatures() {
     features.push({
         MenuId: null,
         AppName: "Frapid",
-        MenuName: "Goodbye",
+        MenuName: window.i18n.Goodbye,
         Sort: 0,
         Url: "javascript:void(0);",
         Click: function () {
-            window.displayMessage("Hope to see you soon.", "success");
+            window.displayMessage(window.i18n.HopeToSeeYouSoon, "success");
             setTimeout(function () {
                 document.location = "/account/sign-out";
             }, 1000);
@@ -747,3 +747,35 @@ function showNotifications() {
 showNotifications();
 setMoments();
 
+$(document).ready(function () {
+    function updateLanguage() {
+        function update(cultureCode) {
+            const expiryDate = new Date();
+            expiryDate.setTime(expiryDate.getTime() + (1 * 24 * 60 * 60 * 1000));
+            const expires = "; expires=" + expiryDate.toGMTString();
+            document.cookie = "culture=" + cultureCode + expires + "; path=/";
+        };
+
+        const el = $(".select.language.dropdown");
+        const language = el.dropdown("get value");
+        update(language);
+
+        window.displaySuccess();
+
+        document.location = document.location;
+    };
+
+    $('.select.language.dropdown .scrolling.menu .item').off("click").on("click", function () {
+        setTimeout(function () {
+            updateLanguage();
+        }, 1000);
+    });
+
+    $("#SearchLanguageButton").off("keyup").on("keyup", function (e) {
+        if (e.keyCode === 13) {
+            setTimeout(function () {
+                updateLanguage();
+            }, 1000);
+        };
+    });
+});

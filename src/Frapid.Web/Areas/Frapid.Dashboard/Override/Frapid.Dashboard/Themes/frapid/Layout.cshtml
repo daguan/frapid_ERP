@@ -2,6 +2,8 @@
 @using Frapid.ApplicationState.Cache
 @using Frapid.i18n
 @using Newtonsoft.Json
+@using Frapid.Dashboard.Helpers
+
 <!DOCTYPE html>
 <html data-ng-app="FrapidApp">
 <head>
@@ -35,13 +37,13 @@
     <div class="background slider"></div>
     <div class="ui flowing notification popup top left transition hidden">
         <div class="heading">
-            <div class="title">Notifications</div>
-            <a class="mark all as read">Mark All as Read</a>
+            <div class="title">@Resources.Notifications</div>
+            <a class="mark all as read">@Resources.MarkAllAsRead</a>
         </div>
         <div class="items">
             <div class="placeholder item">
                 <i class="ui green check circle icon"></i>
-                You don't have any notification.
+                @Resources.YouDontHaveAnyNotification
             </div>
         </div>
     </div>
@@ -56,6 +58,30 @@
             <div class="search item">
                 <div class="ui input">
                     <input type="text" data-feature-search placeholder="CTRL + SHIFT + F" />
+                </div>
+            </div>
+            <div class="ui dropdown select language item">
+                <input name="filters" type="hidden">
+                <i class="world icon"></i>
+                <span class="text">@CultureManager.GetCurrent().NativeName</span>
+                <div class="menu">
+                    <div class="ui icon search input">
+                        <i class="search icon"></i>
+                        <input id="SearchLanguageButton" placeholder="Search" type="text" />
+                    </div>
+                    <div class="divider"></div>
+                    <div class="header">
+                        <i class="world icon"></i>
+                        @Resources.SelectLanguage
+                    </div>
+                    <div class="scrolling menu">
+                        @foreach (var language in LocalizationHelper.GetSupportedLanguages())
+                        {
+                            <div class="item" data-value="@language.CultureCode">
+                                @language.NativeName
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
             <a class="notification item" href="javascript:void(0)" title="Notifications">
@@ -76,7 +102,7 @@
     <div class="ui find feature" style="display: none;">
         <div class="close">
             <div class="left">
-                Search Results
+                @Resources.SearchResults
             </div>
             <div class="right">
                 <a href="javascript:void(0)" onclick="$('.ui.find.feature').fadeOut(500);">

@@ -549,3 +549,7 @@ input[data-feature-search] {
 .ui.table a:hover{
 	color:#333!important;
 }
+
+.dashboard.menu .scrolling.menu .item{
+	letter-spacing: 0;
+}
