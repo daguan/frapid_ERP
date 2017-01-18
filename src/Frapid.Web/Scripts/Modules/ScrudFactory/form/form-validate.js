@@ -18,7 +18,7 @@ function validate() {
     var result = validator.validate($(".form.factory"), function (errorFields) {
         $.each(errorFields, function(i, el) {
             var label = $(el).closest(".field").find("label");
-            var message = label.html() + " : " + window.Resources.Labels.ThisFieldIsRequired();
+            var message = label.html() + " : " + window.i18n.ThisFieldIsRequired;
             appendError(message);
         });
     }, false);

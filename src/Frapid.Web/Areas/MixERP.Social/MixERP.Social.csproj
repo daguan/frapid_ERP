@@ -159,6 +159,7 @@
     <Compile Include="Models\HtmlToText.cs" />
     <Compile Include="Models\ResourceUploadException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources.cs" />
     <Compile Include="ViewModels\Attachment.cs" />
   </ItemGroup>
   <ItemGroup>

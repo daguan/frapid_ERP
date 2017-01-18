@@ -1,7 +1,7 @@
 ﻿@using Frapid.i18n
 
 @{
-    ViewBag.Title = "Email Sent";
+    ViewBag.Title = I18N.ResetEmailSent;
     Layout = ViewBag.LayoutPath + ViewBag.Layout;
 }
 @if (CultureManager.IsRtl())
@@ -15,12 +15,9 @@ else
 
 <div class="ui attached padded signup left aligned segment">
     <div class="ui container">
-        <div class="ui header">Reset Email Sent</div>
+        <div class="ui header">@I18N.ResetEmailSent</div>
         <div class="ui divider"></div>
-        <p>
-            We have sent reset instructions on your email address. Please follow the link on that email
-            to reset your account.
-        </p>
+        @I18N.ResetEmailSentMessage
         <a href="/" class="ui small padded purple button">Return Home</a>
     </div>
 </div>

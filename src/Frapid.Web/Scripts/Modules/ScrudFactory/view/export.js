@@ -5,7 +5,7 @@
         filterName += "-";
     };
 
-    return window.scrudFactory.title + "-" + filterName + stringFormat(window.Resources.Titles.PageN(), getPageNumber());
+    return window.scrudFactory.title + "-" + filterName + stringFormat(window.i18n.PageN, getPageNumber());
 };
 
 function createPDF() {
@@ -87,6 +87,6 @@ function downloadExcel() {
 
 
 function downloadWord() {
-    downloadFile("doc");
+    downloadFile("docx");
 };
 

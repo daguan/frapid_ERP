@@ -38,7 +38,7 @@ uploadButton.click(function () {
 });
 
 function confirmAction() {
-    var areYouSure = window.Resources.Questions.AreYouSure() || "Are you sure?";
+    const areYouSure = window.i18n.AreYouSure || "Are you sure?";
     return confirm(areYouSure);
 };
 
@@ -87,13 +87,13 @@ function deleteItem(el) {
     el = $(el);
     var resource = el.attr("data-path");    
 
-    var message = window.stringFormat('Are you sure you want to delete the following file?\n\n/{0}', resource);
+    const message = window.stringFormat('Are you sure you want to delete the following file?\n\n/{0}', resource);
     if (!confirm(message)) {
         return;
     };
 
 
-    var ajax = request(resource);
+    const ajax = request(resource);
 
     ajax.fail(function (xhr) {
         window.displayMessage(window.getAjaxErrorMessage(xhr));
@@ -110,7 +110,7 @@ function deleteItem(el) {
         });
 
         $("[data-container]").each(function () {
-            var el = $(this);
+            const el = $(this);
 
             if (el.attr("data-container") === resource) {
                 el.attr("data-container", "");
@@ -121,19 +121,19 @@ function deleteItem(el) {
 
 function save() {
     function request(container, file, contents) {
-        var url = "/dashboard/config/file-manager/resources/edit/file";
+        const url = "/dashboard/config/file-manager/resources/edit/file";
 
-        var model = {
+        const model = {
             container: container,
             file: file,
             contents: contents
         };
 
-        var data = JSON.stringify(model);
+        const data = JSON.stringify(model);
 
         return window.getAjaxRequest(url, "PUT", data);
     };
-    var el = saveButton;
+    const el = saveButton;
     var file = el.attr("data-path");
 
     if (!file) {
@@ -146,17 +146,17 @@ function save() {
 
     
     var container = "";
-    var contents = window.ace.edit("editor").getValue();
+    const contents = window.ace.edit("editor").getValue();
 
     if (file.substring(file.length - 5) === ".less") {
         window.less.render(contents, { compress: false }, function (e, output) {
-            var compiled = request(container, file.replace(".less", ".css"), output.css);
+            const compiled = request(container, file.replace(".less", ".css"), output.css);
             compiled.success(function () {
                 window.displayMessage("Successfully saved compiled css file.", "success");
             });
         });
         window.less.render(contents, { compress: true }, function (e, output) {
-            var compiled = request(container, file.replace(".less", ".min.css"), output.css);
+            const compiled = request(container, file.replace(".less", ".min.css"), output.css);
             compiled.success(function () {
                 window.displayMessage("Successfully saved minified css file.", "success");
             });
@@ -164,7 +164,7 @@ function save() {
     };
 
 
-    var ajax = request(container, file, contents);
+    const ajax = request(container, file, contents);
 
     ajax.fail(function (xhr) {
         window.displayMessage(window.getAjaxErrorMessage(xhr));
@@ -191,15 +191,15 @@ $(window).keypress(function (event) {
 
 function createFile(el) {
     function request(container, file, contents) {
-        var url = "/dashboard/config/file-manager/create/file";
+        const url = "/dashboard/config/file-manager/create/file";
 
-        var model = {
+        const model = {
             container: container,
             file: file,
             contents: contents
         };
 
-        var data = JSON.stringify(model);
+        const data = JSON.stringify(model);
 
         return window.getAjaxRequest(url, "PUT", data);
     };
@@ -207,10 +207,10 @@ function createFile(el) {
     el = $(el);
     
 
-    var container = el.parent().find(".container.label").attr("data-container");
-    var file = el.parent().find("input").val();
+    const container = el.parent().find(".container.label").attr("data-container");
+    const file = el.parent().find("input").val();
 
-    var ajax = request(container, file, "");
+    const ajax = request(container, file, "");
 
     ajax.fail(function (xhr) {
         window.displayMessage(window.getAjaxErrorMessage(xhr));
@@ -237,10 +237,10 @@ function createFolder(el) {
     el = $(el);
     
 
-    var container = el.parent().find(".container.label").attr("data-container");
-    var folder = el.parent().find("input").val();
+    const container = el.parent().find(".container.label").attr("data-container");
+    const folder = el.parent().find("input").val();
 
-    var ajax = request(container, folder);
+    const ajax = request(container, folder);
 
     ajax.fail(function (xhr) {
         window.displayMessage(window.getAjaxErrorMessage(xhr));
@@ -254,8 +254,8 @@ function createFolder(el) {
 };
 
 function toggleEditorTheme() {
-    var editor = window.ace.edit("editor");
-    var theme = editor.getTheme();
+    const editor = window.ace.edit("editor");
+    const theme = editor.getTheme();
 
     if (theme === "ace/theme/xcode") {
         editor.setTheme("ace/theme/monokai");
@@ -271,7 +271,7 @@ function displayBlob(path) {
 
     if (isContent(format)) {
         $.get(path, function (response) {
-            var editor = window.ace.edit("editor");
+            const editor = window.ace.edit("editor");
             editor.setValue(response, -1);
             setAceMode(format);
         }, "text");
@@ -280,7 +280,7 @@ function displayBlob(path) {
         $("#editor").fadeIn(300);
         return;
     } else {
-        var editor = window.ace.edit("editor");
+        const editor = window.ace.edit("editor");
         editor.setValue("");
         setAceMode("");
     };
@@ -291,7 +291,7 @@ function displayBlob(path) {
 };
 
 function isContent(extension) {
-    var candidates = ["html", "cshtml", "vbhtml", "xml", "config", "js", "json", "css", "less", "scss", "md"];
+    const candidates = ["html", "cshtml", "vbhtml", "xml", "config", "js", "json", "css", "less", "scss", "md"];
     if (candidates.indexOf(extension) !== -1) {
         return true;
     };
@@ -299,7 +299,7 @@ function isContent(extension) {
 };
 
 function ToWellKnownType(extension) {
-    var candidates = [
+    const candidates = [
         {
             extensions: ["json", "js", "jscript", "jsfile"],
             wellKnownExtension: ["javascript"]
@@ -319,7 +319,7 @@ function ToWellKnownType(extension) {
     ];
 
 
-    var match = window.Enumerable
+    const match = window.Enumerable
         .From(candidates)
         .Where(function (x) {
             return x.extensions.indexOf(extension) !== -1;
@@ -334,7 +334,7 @@ function ToWellKnownType(extension) {
 };
 
 function setAceMode(extension) {
-    var editor = window.ace.edit("editor");
+    const editor = window.ace.edit("editor");
 
     if (!extension) {
         editor.getSession().setMode("ace/mode/html");
@@ -342,12 +342,12 @@ function setAceMode(extension) {
 
     extension = ToWellKnownType(extension);
 
-    var mode = "ace/mode/" + (extension || "html");
+    const mode = "ace/mode/" + (extension || "html");
     editor.getSession().setMode(mode);
 };
 
 function isImage(extension) {
-    var candidates = ["png", "jpg", "jpeg", "tiff", "bmp", "gif"];
+    const candidates = ["png", "jpg", "jpeg", "tiff", "bmp", "gif"];
     if (candidates.indexOf(extension) !== -1) {
         return true;
     };
@@ -355,7 +355,7 @@ function isImage(extension) {
 };
 
 function displayImage(path) {
-    var format = path.split('.').pop().toLowerCase();
+    const format = path.split('.').pop().toLowerCase();
 
     if (!isImage(format)) {
         displayBlob(path);
@@ -380,9 +380,9 @@ function loadTree(model) {
             'data': model
         }
     }).on('changed.jstree', function (e, data) {
-        var parent = data.instance.get_node(data.instance.get_node(data.selected[0]).parent).original;
-        var model = data.instance.get_node(data.selected[0]).original;
-        var path = model.path;
+        const parent = data.instance.get_node(data.instance.get_node(data.selected[0]).parent).original;
+        const model = data.instance.get_node(data.selected[0]).original;
+        const path = model.path;
 
         var container = "";
 
@@ -401,8 +401,8 @@ function loadTree(model) {
         setFileUploadHandler(container);
         displayImage(path);
     }).on('loaded.jstree', function (e, data) {
-        var instance = $(container).jstree(true);
-        for (var i in instance._model.data) {
+        const instance = $(container).jstree(true);
+        for (let i in instance._model.data) {
             if (instance._model.data.hasOwnProperty(i)) {
                 if (i === "#") {
                     continue;
@@ -418,11 +418,11 @@ function loadTree(model) {
 
 function loadResources() {
     function request() {
-        var url = "/dashboard/config/file-manager/resources";
+        const url = "/dashboard/config/file-manager/resources";
         return window.getAjaxRequest(url);
     };
 
-    var ajax = request();
+    const ajax = request();
 
     ajax.fail(function (xhr) {
         window.displayMessage(window.getAjaxErrorMessage(xhr));
@@ -446,7 +446,7 @@ function initializeAceEditor() {
         return;
     };
 
-    var editor = window.ace.edit("editor");
+    const editor = window.ace.edit("editor");
     editor.$blockScrolling = Infinity;
     $("#editor").removeClass("initially, hidden");
     editor.setTheme("ace/theme/xcode");

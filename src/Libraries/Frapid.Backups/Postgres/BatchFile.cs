@@ -51,7 +51,7 @@ namespace Frapid.Backups.Postgres
 
         public void Delete()
         {
-            if(File.Exists(this.FileName))
+            if (File.Exists(this.FileName))
             {
                 File.Delete(this.FileName);
             }

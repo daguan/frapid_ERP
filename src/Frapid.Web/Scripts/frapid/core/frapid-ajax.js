@@ -75,12 +75,12 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, keyField
 
 
     if (ajaxData.length === 0) {
-        appendOption(targetControl, "", window.Resources.Titles.None());
+        appendOption(targetControl, "", window.i18n.None);
         return;
     };
 
     if (!skipSelect) {
-        appendOption(targetControl, "", window.Resources.Titles.Select());
+        appendOption(targetControl, "", window.i18n.Select);
     };
 
     if (!keyField) {

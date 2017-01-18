@@ -2,15 +2,15 @@
 
 $("#LoginForm").submit(function (e) {
     function request(model) {
-        var url = "/account/sign-in";
-        var data = JSON.stringify(model);
+        const url = "/account/sign-in";
+        const data = JSON.stringify(model);
 
         return window.getAjaxRequest(url, "POST", data);
     };
 
     e.preventDefault();
-    var formEl = $("#LoginForm");
-    var isValid = window.validator.validate(formEl);
+    const formEl = $("#LoginForm");
+    const isValid = window.validator.validate(formEl);
 
     if (!isValid) {
         return;
@@ -19,30 +19,30 @@ $("#LoginForm").submit(function (e) {
     bigError.html("");
     var segment = $("#SignInSegment");
     segment.addClass("loading");
-    var model = window.serializeForm(formEl);
+    const model = window.serializeForm(formEl);
 
-    var ajax = request(model);
+    const ajax = request(model);
 
     ajax.success(function (response) {
         if (response) {
             localStorage.setItem("access_token", response);
             window.location = "/dashboard";
         } else {
-            bigError.html("Access is denied.");
+            bigError.html(window.translate("AccessIsDenied"));
         };
 
         segment.removeClass("loading");
     });
 
     ajax.fail(function () {
-        bigError.html("Access is denied.");
+        bigError.html(window.translate("AccessIsDenied"));
         segment.removeClass("loading");
     });
 
 });
 
 $("#SocialLoginCheckbox").change(function () {
-    var checked = $(this).is(":checked");
+    const checked = $(this).is(":checked");
     $(".login.form").hide();
 
     if (checked) {
@@ -54,16 +54,16 @@ $("#SocialLoginCheckbox").change(function () {
 
 function bindOffices() {
     function request() {
-        var url = "/account/sign-in/offices";
+        const url = "/account/sign-in/offices";
         return window.getAjaxRequest(url);
     };
 
-    var ajax = request();
+    const ajax = request();
 
     ajax.success(function (response) {
         $(".office.dropdown select").bindAjaxData(response, false, null, "OfficeId", "OfficeName");
         setTimeout(function () {
-            var selected = response[0].OfficeId;
+            const selected = response[0].OfficeId;
             if ($(".office.dropdown").find('option[value=' + selected + ']').length) {
                 $(".office.dropdown").dropdown("set selected", selected);
             };
@@ -73,17 +73,17 @@ function bindOffices() {
 
 function bindLanguages() {
     function request() {
-        var url = "/account/sign-in/languages";
+        const url = "/account/sign-in/languages";
         return window.getAjaxRequest(url);
     };
 
-    var ajax = request();
+    const ajax = request();
 
     ajax.success(function (response) {
         $(".language.dropdown select").bindAjaxData(response, false, null, "CultureCode", "NativeName");
 
         setTimeout(function () {
-            var userLang = navigator.language || navigator.userLanguage;
+            const userLang = navigator.language || navigator.userLanguage;
             if ($(".language.dropdown").find('option[value=' + userLang + ']').length) {
                 $(".language.dropdown").dropdown("set selected", userLang);
             } else {

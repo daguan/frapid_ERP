@@ -1,8 +1,8 @@
 ﻿@using Frapid.i18n
 @{
-    ViewBag.Title = "Sign Up";
+    ViewBag.Title = I18N.SignUp;
     Layout = ViewBag.LayoutPath + ViewBag.Layout;
-    ViewBag.Description = "Create your account on our site.";
+    ViewBag.Description = I18N.CreateYourAccountOnOurSite;
 }
 @if (CultureManager.IsRtl())
 {
@@ -14,11 +14,9 @@ else
 }
 
 <div class="ui very relaxed tall container">
-    <div class="ui red huge header">Registration Closed</div>
+    <div class="ui red huge header">@I18N.RegistrationClosed</div>
     <div class="ui divider"></div>
     <div>
-        <p>We are sorry but we are not accepting new registration this time.</p>
-
-        <p>Sorry for the inconvenience. Please check back again later.</p>
+        @I18N.RegistrationClosedMessage
     </div>
 </div>

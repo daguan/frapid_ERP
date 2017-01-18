@@ -1,13 +1,13 @@
-$("#SaveButton").click(function () {
+$("#SaveButton").click(function() {
     function request(model) {
-        var url = window.saveUrl;
-        var data = JSON.stringify(model);
+        const url = window.saveUrl;
+        const data = JSON.stringify(model);
         return window.getAjaxRequest(url, "POST", data);
     };
 
     function getModel() {
-        var editor = window.ace.edit("editor");
-        var contents = editor.getSession().getValue();
+        const editor = window.ace.edit("editor");
+        const contents = editor.getSession().getValue();
 
         return {
             Type: window.type,
@@ -15,16 +15,16 @@ $("#SaveButton").click(function () {
         };
     };
 
-    var model = getModel();
-    var ajax = request(model);
+    const model = getModel();
+    const ajax = request(model);
 
-    ajax.success(function () {
+    ajax.success(function() {
         window.displaySuccess();
     });
 });
 
-var stringUnEncode = function (str) {
-    return str.replace(/&amp;/g, '&').replace(/&quot;/g, "\"");
+var stringUnEncode = function(str) {
+    return str.replace(/&amp;/g, "&").replace(/&quot;/g, "\"");
 };
 
 function initializeAceEditor() {
@@ -33,9 +33,9 @@ function initializeAceEditor() {
     };
 
     window.html = stringUnEncode(window.html);
-    var content = window.html;
+    const content = window.html;
 
-    var editor = window.ace.edit("editor");
+    const editor = window.ace.edit("editor");
     editor.$blockScrolling = Infinity;
     $("#editor").removeClass("initially, hidden");
     editor.setTheme("ace/theme/sqlserver");

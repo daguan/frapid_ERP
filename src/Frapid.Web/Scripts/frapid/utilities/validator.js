@@ -18,7 +18,7 @@
     };
     
     var isValid = true;
-    var requiredFieldMessage = window.requiredFieldMessage || "This field is required.";//Fallback to english language.
+    var requiredFieldMessage = translate("ThisFieldIsRequired");
 
     this.logError = function (message) {
         console.log(message);

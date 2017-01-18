@@ -42,7 +42,7 @@ $("#ApproveButton").click(function () {
 
     verifyAjax.success(function () {
         docready();
-        displayMessage(window.Resources.Labels.TaskCompletedSuccessfully(), "success");
+        displayMessage(window.i18n.TaskCompletedSuccessfully, "success");
     });
 });
 
@@ -65,6 +65,6 @@ $("#RejectButton").click(function () {
 
     verifyAjax.success(function () {
         docready();
-        displayMessage(window.Resources.Labels.TaskCompletedSuccessfully(), "success");
+        displayMessage(window.i18n.TaskCompletedSuccessfully, "success");
     });
 });

@@ -34,19 +34,19 @@ function getExtraContent(id) {
         var url = window.scrudFactory.viewUrl.replace("{Id}", id);
         var viewButton = $('<a class="ui basic button" />');
         viewButton.attr("href", url);
-        viewButton.text(window.Resources.Titles.View());
+        viewButton.text(window.i18n.View);
         buttons.append(viewButton);
     };
 
     if (window.scrudFactory.allowEdit) {
         var editButton = $('<a class="ui basic button" href="javascript:void(0);" onclick="editRow(this, true);" />');
-        editButton.text(window.Resources.Titles.Edit());
+        editButton.text(window.i18n.Edit);
         buttons.append(editButton);
     }
 
     if (window.scrudFactory.allowDelete) {
         var deleteButton = $('<a class="ui basic button" href="javascript:void(0);" onclick="deleteRow(this, true);" />');
-        deleteButton.text(window.Resources.Titles.Delete());
+        deleteButton.text(window.i18n.Delete);
         buttons.append(deleteButton);
     };
 
@@ -60,7 +60,7 @@ function getExtra(kanbanDetail) {
     var extra = $('<div class="extra" />');
 
     var text = $("<span />");
-    text.text(window.Resources.Titles.Rating());
+    text.text(window.i18n.Rating);
     extra.append(text);
 
     var dataRating = (kanbanDetail.Rating || 0);

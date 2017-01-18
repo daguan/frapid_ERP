@@ -2,9 +2,9 @@
     $("#SignInSegment").addClass("loading");
 
     function request() {
-        var url = "/account/google/sign-in";
+        const url = "/account/google/sign-in";
 
-        var loginDetails = {
+        const loginDetails = {
             Email: email,
             OfficeId: officeId,
             Name: name,
@@ -12,12 +12,12 @@
             Culture: culture
         };
 
-        var data = JSON.stringify(loginDetails);
+        const data = JSON.stringify(loginDetails);
 
         return window.getAjaxRequest(url, "POST", data);
     };
 
-    var ajax = request();
+    const ajax = request();
 
     ajax.success(function (response) {
         localStorage.setItem("access_token", response);
@@ -25,7 +25,7 @@
         if (response) {
             window.location = "/dashboard";
         } else {
-            alert("Sorry, google registration is not allowed at this time.");
+            alert(window.translate("GoogleRegistrationClosed"));
         };
     });
 
@@ -35,21 +35,21 @@
 };
 
 function onSignIn(googleUser) {
-    var request = googleUser.getBasicProfile();
-    var id = request.getId();
-    var email = request.getEmail();
-    var name = request.getName();
-    var token = googleUser.getAuthResponse().id_token;
+    const request = googleUser.getBasicProfile();
+    const id = request.getId();
+    const email = request.getEmail();
+    const name = request.getName();
+    const token = googleUser.getAuthResponse().id_token;
 
-    var officeId = $("#SocialOfficeSelect").val();
-    var culture = $("#SocialLanguageSelect").val() || "en-US";
+    const officeId = $("#SocialOfficeSelect").val();
+    const culture = $("#SocialLanguageSelect").val() || "en-US";
 
     googleSignIn(id, email, officeId, name, token, culture);
 };
 (function () {
-    var po = document.createElement('script');
+    const po = document.createElement('script');
     po.type = 'text/javascript'; po.async = true;
     po.src = 'https://apis.google.com/js/client:plusone.js?onload=render';
-    var s = document.getElementsByTagName('script')[0];
+    const s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(po, s);
 })();

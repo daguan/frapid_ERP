@@ -13,7 +13,7 @@
     <title data-ng-bind="$root.title">@ViewBag.Title</title>
     <link href="~/Scripts/semantic-ui/semantic.min.css" rel="stylesheet" />
     <link href="~/dashboard/my/template/Contents/mixerp.css" rel="stylesheet" />
-    <script src="~/i18n/resources.js"></script>
+    <script src="/i18n/resources.js?cultureCode=@CultureManager.GetCurrentUiCulture().Name"></script>
     <script src="~/assets/js/backend.js"></script>
     <script src="/Scripts/angular-route.min.js"></script>
     <script src="~/dashboard/my/template/Scripts/vakata-jstree/jstree.min.js"></script>

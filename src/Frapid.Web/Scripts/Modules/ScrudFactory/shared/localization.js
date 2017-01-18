@@ -1,16 +1,17 @@
 ﻿function tryParseLocalizedResource(text) {
-    var localized = executeFunctionByName("Resources.Titles." + text, window);
-
-    if (!localized) {
-        var underscoreCase = toUnderscoreCase(text);
-        localized = executeFunctionByName("Resources.ScrudResource." + underscoreCase, window);
+    function toProperCase(str) {
+        var result = str.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
+        return result.charAt(0).toUpperCase() + result.slice(1);
     };
 
-    if (localized) {
-        return localized;
+    var key = toProperCase(text);
+    var parsed = window.i18n[key];
+
+    if(!parsed){
+        parsed = key;
     };
 
-    return text.split("_").join(" ").toPascalCase();
+    return parsed;
 };
 
 function localizeHeaders(el) {

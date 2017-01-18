@@ -65,7 +65,7 @@ namespace Frapid.Account.Emails
         {
             string template = this.GetTemplate(tenant);
             string parsed = this.ParseTemplate(template);
-            string subject = "Your Password Reset Link for " + HttpContext.Current.Request.Url.Authority;
+            string subject = string.Format(I18N.YourPasswordResetLinkForSite, HttpContext.Current.Request.Url.Authority);
 
             var processor = EmailProcessor.GetDefault(tenant);
 

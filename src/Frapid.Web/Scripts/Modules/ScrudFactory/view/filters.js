@@ -1,6 +1,6 @@
 ﻿var ignoredQueryStrings = ["TitleSuffix", "View", "Page", "Filter", "data-tab", "ReturnUrl"];
 
-$("#FilterName").text(window.Resources.Titles.Untitled());
+$("#FilterName").text(window.i18n.Untitled);
 
 function getFilterType(columnName) {
     var type = window.Enumerable.From(metaDefinition.Columns)
@@ -91,7 +91,6 @@ var getQuerystringFilters = function () {
     return filters;
 };
 
-getQuerystringFilters();
 
 function loadFilterConditions() {
     var el = $('[data-scope="filter-condition"]');
@@ -107,7 +106,7 @@ function loadColumns() {
 };
 
 $("#FilterNameInputText").keyup(function () {
-    $("#FilterName").html(window.Resources.Titles.Untitled());
+    $("#FilterName").html(window.i18n.Untitled);
     if ($(this).val()) {
         var filterName = $(this).val();
         $("#FilterName").html(filterName);
@@ -235,7 +234,7 @@ $("#SaveFilterButton").click(function () {
     var error = table.find("tr.error td:nth-child(2)").text();
 
     if (error.length) {
-        var message = window.Resources.Questions.ColumnInvalidAreYouSure();
+        var message = window.i18n.ColumnInvalidAreYouSure;
 
         var confirmed = confirm(stringFormat(message, error));
         if (!confirmed) {
@@ -277,7 +276,7 @@ $("#SaveFilterButton").click(function () {
 
     ajax.success(function () {
         window.filterId = 0;
-        displayMessage(window.Resources.Labels.TaskCompletedSuccessfully(), "success");
+        displayMessage(window.i18n.TaskCompletedSuccessfully, "success");
     });
 
     ajax.fail(function (xhr) {
@@ -395,7 +394,7 @@ $("#RemoveDefaultFilterButton").click(function () {
     var ajax = request();
 
     ajax.success(function () {
-        displayMessage(window.Resources.Labels.TaskCompletedSuccessfully(), "success");
+        displayMessage(window.i18n.TaskCompletedSuccessfully, "success");
 
         $(".filter.modal").modal("close");
     });
@@ -414,7 +413,7 @@ $("#MakeUserDefaultFilterButton").click(function () {
     var ajax = request(filterName);
 
     ajax.success(function () {
-        displayMessage(window.Resources.Labels.TaskCompletedSuccessfully(), "success");
+        displayMessage(window.i18n.TaskCompletedSuccessfully, "success");
 
         $(".filter.modal").modal("close");
     });

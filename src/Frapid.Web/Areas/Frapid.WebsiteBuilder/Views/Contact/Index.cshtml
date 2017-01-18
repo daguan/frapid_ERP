@@ -1,7 +1,8 @@
-﻿@model dynamic
+﻿@using Frapid.WebsiteBuilder
+@model dynamic
 
 @{
-    ViewBag.Title = "Contacts";
+    ViewBag.Title = @Resources.Contacts;
     Layout = ViewBag.Layout;
 }
 
@@ -65,8 +66,8 @@
                 return title.toLowerCase().replace(/ +(?= )/g, '').replace(/ /g, '-').replace(/[^\w-]+/g, '');
             };
 
-            var category = $(this).val();
-            var alias = getAlias(category);
+            const category = $(this).val();
+            const alias = getAlias(category);
 
             $("#alias").val(alias);
 

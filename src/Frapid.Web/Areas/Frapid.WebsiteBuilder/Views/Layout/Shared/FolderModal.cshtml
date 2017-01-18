@@ -1,19 +1,20 @@
-﻿<div class="ui small modal" id="FolderModal">
+﻿@using Frapid.WebsiteBuilder
+<div class="ui small modal" id="FolderModal">
     <i class="close icon"></i>
     <div class="header">
-        Create a New Folder
+        @Resources.CreateANewFolder
     </div>
     <div class="content">
         <div class="ui padded form">
             <div class="field">
-                <label>Location</label>
+                <label>@Resources.Location</label>
                 <div class="ui container label" data-container=""></div>
             </div>
             <div class="field">
-                <label>Folder Name</label>
+                <label>@Resources.FolderName</label>
                 <input type="text" />
             </div>
-            <button class="ui button" onclick="createFolder(this);">Create</button>
+            <button class="ui button" onclick="createFolder(this);">@Resources.Create</button>
         </div>
     </div>
 </div>

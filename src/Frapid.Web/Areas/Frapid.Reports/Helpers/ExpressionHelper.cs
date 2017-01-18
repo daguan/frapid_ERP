@@ -10,6 +10,7 @@ using Frapid.ApplicationState.CacheFactory;
 using Frapid.Framework.Extensions;
 using Frapid.i18n;
 using Frapid.Reports.Engine.Model;
+using CastExtensions = Frapid.Framework.Extensions.CastExtensions;
 
 namespace Frapid.Reports.Helpers
 {
@@ -33,7 +34,7 @@ namespace Frapid.Reports.Helpers
 
                 if (word.StartsWith("{DataSource", StringComparison.OrdinalIgnoreCase))
                 {
-                    int index = word.Split('.').First().Replace("{DataSource[", "").Replace("]", "").To<int>();
+                    int index = CastExtensions.To<int>(word.Split('.').First().Replace("{DataSource[", "").Replace("]", ""));
                     string column = word.Split('.').Last().Replace("}", "");
 
                     var dataSource = dataSources.FirstOrDefault(x => x.Index.Equals(index));
@@ -83,7 +84,7 @@ namespace Frapid.Reports.Helpers
 
         private static string GetLogo()
         {
-            return AppUsers.GetCurrent().Logo.Or("/Static/images/logo.png");
+            return AppUsers.GetCurrent().Logo.Or("/Static/images/logo-sm.png");
         }
 
         public static string GetCurrentDomainName()
@@ -160,14 +161,14 @@ namespace Frapid.Reports.Helpers
                         expression = expression.Replace(word, value);
                     }
                 }
-                else if (word.StartsWith("{Resources.", StringComparison.OrdinalIgnoreCase))
+                else if (word.StartsWith("{i18n.", StringComparison.OrdinalIgnoreCase))
                 {
                     string res = RemoveBraces(word);
                     var resource = res.Split('.');
 
-                    string key = resource[2];
+                    string key = resource[1];
 
-                    expression = expression.Replace(word, ResourceManager.GetString(tenant, resource[1], key));
+                    expression = expression.Replace(word, LocalizationHelper.Localize(key, false));
                 }
                 else if (word.StartsWith("{DataSource", StringComparison.OrdinalIgnoreCase) &&
                          word.ToLower(CultureInfo.InvariantCulture).Contains("runningtotalfieldvalue"))
@@ -176,15 +177,15 @@ namespace Frapid.Reports.Helpers
                     var resource = res.Split('.');
 
                     int dataSourceIndex =
-                        resource[0].ToLower(CultureInfo.InvariantCulture)
-                            .Replace("datasource", "")
-                            .Replace("[", "")
-                            .Replace("]", "").To<int>();
+                        CastExtensions.To<int>(resource[0].ToLower(CultureInfo.InvariantCulture)
+                                .Replace("datasource", "")
+                                .Replace("[", "")
+                                .Replace("]", ""));
                     int index =
-                        resource[1].ToLower(CultureInfo.InvariantCulture)
-                            .Replace("runningtotalfieldvalue", "")
-                            .Replace("[", "")
-                            .Replace("]", "").To<int>();
+                        CastExtensions.To<int>(resource[1].ToLower(CultureInfo.InvariantCulture)
+                                .Replace("runningtotalfieldvalue", "")
+                                .Replace("[", "")
+                                .Replace("]", ""));
 
                     if (dataSourceIndex >= 0 && index >= 0)
                     {
@@ -269,7 +270,7 @@ namespace Frapid.Reports.Helpers
             if (table != null && table.Rows.Count > 0)
             {
                 string expression = "SUM(" + table.Columns[index].ColumnName + ")";
-                return table.Compute(expression, "").To<decimal>();
+                return CastExtensions.To<decimal>(table.Compute(expression, ""));
             }
 
             return 0;

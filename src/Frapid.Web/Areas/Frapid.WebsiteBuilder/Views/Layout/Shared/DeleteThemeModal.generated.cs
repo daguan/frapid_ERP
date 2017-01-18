@@ -29,6 +29,12 @@ namespace ASP
     using DevTrends.MvcDonutCaching;
     using Frapid.Web;
     
+    #line 1 "..\..\Views\Layout\Shared\DeleteThemeModal.cshtml"
+    using Frapid.WebsiteBuilder;
+    
+    #line default
+    #line hidden
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
     [System.Web.WebPages.PageVirtualPathAttribute("~/Views/Layout/Shared/DeleteThemeModal.cshtml")]
     public partial class _Views_Layout_Shared_DeleteThemeModal_cshtml : System.Web.Mvc.WebViewPage<dynamic>
@@ -52,7 +58,18 @@ WriteLiteral("></i>\r\n    <div");
 
 WriteLiteral(" class=\"ui red large header\"");
 
-WriteLiteral(">\r\n        Proceed with Caution!\r\n    </div>\r\n    <div");
+WriteLiteral(">\r\n");
+
+WriteLiteral("        ");
+
+            
+            #line 5 "..\..\Views\Layout\Shared\DeleteThemeModal.cshtml"
+   Write(Resources.ProceedWithCaution);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\r\n    </div>\r\n    <div");
 
 WriteLiteral(" class=\"content\"");
 
@@ -60,13 +77,27 @@ WriteLiteral(">\r\n        <div");
 
 WriteLiteral(" class=\"ui large header\"");
 
-WriteLiteral(">Are you sure you want to delete the \"<span");
+WriteLiteral(">");
 
-WriteLiteral(" class=\"theme name text\"");
+            
+            #line 8 "..\..\Views\Layout\Shared\DeleteThemeModal.cshtml"
+                                Write(Resources.ConfirmThemeDelete);
 
-WriteLiteral("></span>\" theme?</div>\r\n        <p>\r\n            You are about to delete the sele" +
-"cted theme.            \r\n            Doing this will permanently delete the them" +
-"e and associated files.\r\n        </p>\r\n\r\n        <div");
+            
+            #line default
+            #line hidden
+WriteLiteral("</div>\r\n        <p>\r\n");
+
+WriteLiteral("            ");
+
+            
+            #line 10 "..\..\Views\Layout\Shared\DeleteThemeModal.cshtml"
+       Write(Resources.ThemeDeleteWarning);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\r\n        </p>\r\n\r\n        <div");
 
 WriteLiteral(" class=\"ui negative message\"");
 
@@ -76,8 +107,16 @@ WriteLiteral(">\r\n            <div");
 
 WriteLiteral(" class=\"ui small exception header\"");
 
-WriteLiteral(">Cannot delete this theme because of xyz.</div>\r\n        </div>\r\n\r\n    </div>\r\n  " +
-"  <div");
+WriteLiteral(">");
+
+            
+            #line 14 "..\..\Views\Layout\Shared\DeleteThemeModal.cshtml"
+                                              Write(Resources.CannotDeleteThemeBecauseOfError);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("</div>\r\n        </div>\r\n\r\n    </div>\r\n    <div");
 
 WriteLiteral(" class=\"ui content attached segment\"");
 
@@ -91,14 +130,35 @@ WriteLiteral(" class=\"ui green button\"");
 
 WriteLiteral(" onclick=\"showDeleteThemeModal();\"");
 
-WriteLiteral(">\r\n                No, Don\'t Delete This Theme\r\n            </div>\r\n            <" +
-"div");
+WriteLiteral(">\r\n");
+
+WriteLiteral("                ");
+
+            
+            #line 21 "..\..\Views\Layout\Shared\DeleteThemeModal.cshtml"
+           Write(Resources.NoDontDeleteThisTheme);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\r\n            </div>\r\n            <div");
 
 WriteLiteral(" class=\"ui red button\"");
 
 WriteLiteral(" id=\"DeleteThemeButton\"");
 
-WriteLiteral(">\r\n                Yes\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>");
+WriteLiteral(">\r\n");
+
+WriteLiteral("                ");
+
+            
+            #line 24 "..\..\Views\Layout\Shared\DeleteThemeModal.cshtml"
+           Write(Resources.Yes);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>");
 
         }
     }

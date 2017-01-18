@@ -1,33 +1,35 @@
-﻿@model  Frapid.WebsiteBuilder.ViewModels.ContactForm
+﻿@using Frapid.i18n
+@using Frapid.WebsiteBuilder
+@model  Frapid.WebsiteBuilder.ViewModels.ContactForm
 <div class="ui contact form" style="display: none;">
     <div class="big error"></div>
     <div class="field">
         <label>
-            Your Name
+            @Resources.YourName
         </label>
         <input type="text" name="NameInputText" required="" />
     </div>
     <div class="field">
         <label>
-            Email
+            @Resources.Email
         </label>
         <input type="email" name="EmailInputEmail" required="" />
     </div>
     <div class="field">
         <label>
-            Subject
+            @Resources.Subject
         </label>
         <input type="text" name="SubjectInputText" required="" />
     </div>
     <div class="phone number field">
         <label>
-            Phone
+            @Resources.Phone
         </label>
         <input type="tel" name="PhoneInputTel" required="" value=""/>
     </div>
     <div class="field">
         <label>
-            Message
+            @Resources.Message
         </label>
         <textarea type="text" name="MessageTextArea" required="" maxlength="1000"></textarea>
     </div>
@@ -36,11 +38,11 @@
         <input type="hidden" name="ContactIdInputHidden" required="" value="@Model.ContactId" />
         <input type="hidden" name="TokenInputHidden" required="" value="@ViewBag.Token" />
     </div>
-    <button class="ui teal send email button" onclick="sendEmail(this)">Send Email</button>
+    <button class="ui teal send email button" onclick="sendEmail(this)">@Resources.SendEmail</button>
 </div>
 
 
-<script src="/i18n/resources.js"></script>
+<script src="/i18n/resources.js?cultureCode=@CultureManager.GetCurrentUiCulture().Name"></script>
 <script src="/assets/js/backend.js"></script>
 <script src="/Scripts/jssha1.5/src/sha.js"></script>
 <script src="~/Areas/Frapid.WebsiteBuilder/Scripts/ContactUs/ContactForm.js"></script>

@@ -1,6 +1,5 @@
 ﻿@using Frapid.Areas
 @using Frapid.i18n
-@using Frapid.i18n.Resources
 @model Frapid.Account.ViewModels.SignIn
 
 <html>
@@ -11,7 +10,7 @@
     <meta name="description" content="Frapid Framework" />
     <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet" type="text/css" />
     <title>
-        @Titles.SignIn
+        @Resources.SignIn
     </title>
     @if (CultureManager.IsRtl())
     {
@@ -31,7 +30,7 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>   
     }
     
-    <script src="/i18n/resources.js"></script>
+    <script src="/i18n/resources.js?cultureCode=@CultureManager.GetCurrentUiCulture().Name"></script>
     <script src="/assets/js/backend.js"></script>
     <script src="/Scripts/jssha1.5/src/sha.js"></script>
 </head>

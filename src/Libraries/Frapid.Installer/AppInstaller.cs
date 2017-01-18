@@ -3,11 +3,11 @@ using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using Frapid.Configuration;
+using Frapid.Configuration.Models;
 using Frapid.DataAccess;
 using Frapid.Framework;
 using Frapid.Installer.DAL;
 using Frapid.Installer.Helpers;
-using Frapid.Installer.Models;
 
 namespace Frapid.Installer
 {

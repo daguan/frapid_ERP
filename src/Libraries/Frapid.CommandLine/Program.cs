@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using frapid.Commands;
+using Frapid.Configuration;
 
 namespace frapid
 {
@@ -8,6 +9,8 @@ namespace frapid
     {
         private static void Main(string[] args)
         {
+            ConsolePathMapper.SetPathToRoot();
+
             var loader = new AssemblyLoader();
             loader.PreLoad();
 

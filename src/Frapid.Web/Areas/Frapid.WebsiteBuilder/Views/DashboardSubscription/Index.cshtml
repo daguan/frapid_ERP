@@ -1,7 +1,8 @@
-﻿@model dynamic
+﻿@using Frapid.WebsiteBuilder
+@model dynamic
 
 @{
-    ViewBag.Title = "View Subscriptions";
+    ViewBag.Title = Resources.ViewSubscriptions;
     Layout = ViewBag.Layout;
 }
 
@@ -25,7 +26,7 @@
         meta: "SubscribedOn"
     };
 
-    $.get('/ScrudFactory/View.html', function (view) {
+    $.get('/ScrudFactory/View.html', function(view) {
         $("#ScrudFactoryView").html(view);
         $.cachedScript("/assets/js/scrudfactory-view.js");
     });

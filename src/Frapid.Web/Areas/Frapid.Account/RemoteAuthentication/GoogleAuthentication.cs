@@ -8,6 +8,7 @@ using Frapid.Account.Emails;
 using Frapid.Account.InputModels;
 using Frapid.Account.ViewModels;
 using Frapid.Areas;
+using Frapid.i18n;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -15,15 +16,16 @@ namespace Frapid.Account.RemoteAuthentication
 {
     public class GoogleAuthentication
     {
-        public string Tenant { get; }
         private const string ProviderName = "Google";
 
         public GoogleAuthentication(string tenant)
         {
             this.Tenant = tenant;
             var profile = ConfigurationProfiles.GetActiveProfileAsync(tenant).Result;
-            ClientId = profile.GoogleSigninClientId;
+            this.ClientId = profile.GoogleSigninClientId;
         }
+
+        public string Tenant { get; }
 
         public string ClientId { get; set; }
         //https://developers.google.com/identity/sign-in/web/backend-auth
@@ -47,7 +49,7 @@ namespace Frapid.Account.RemoteAuthentication
                     var result = JsonConvert.DeserializeObject<JObject>(response.Content.ReadAsStringAsync().Result);
                     string aud = result["aud"].ToString();
 
-                    if (aud == ClientId)
+                    if (aud == this.ClientId)
                     {
                         return true;
                     }
@@ -58,14 +60,14 @@ namespace Frapid.Account.RemoteAuthentication
 
         public async Task<LoginResult> AuthenticateAsync(GoogleAccount account, RemoteUser user)
         {
-            bool validationResult = Task.Run(() => ValidateAsync(account.Token)).Result;
+            bool validationResult = Task.Run(() => this.ValidateAsync(account.Token)).Result;
 
             if (!validationResult)
             {
                 return new LoginResult
                 {
                     Status = false,
-                    Message = "Access is denied"
+                    Message = Resources.AccessIsDenied
                 };
             }
 
@@ -75,11 +77,7 @@ namespace Frapid.Account.RemoteAuthentication
                 Name = account.Name
             };
 
-            var result =
-                await
-                    GoogleSignIn.SignInAsync(this.Tenant, account.Email, account.OfficeId, account.Name, account.Token,
-                        user.Browser,
-                        user.IpAddress, account.Culture).ConfigureAwait(false);
+            var result = await GoogleSignIn.SignInAsync(this.Tenant, account.Email, account.OfficeId, account.Name, account.Token, user.Browser, user.IpAddress, account.Culture).ConfigureAwait(false);
 
             if (result.Status)
             {

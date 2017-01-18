@@ -6,11 +6,11 @@ using Frapid.Messaging.DTO;
 
 namespace Frapid.Messaging.Smtp
 {
-    public class Config: IEmailConfig
+    public class Config : IEmailConfig
     {
         public Config(string tenant, IEmailProcessor processor)
         {
-            if(processor != null)
+            if (processor != null)
             {
                 this.Tenant = tenant;
                 this.Enabled = processor.IsEnabled;
@@ -26,7 +26,7 @@ namespace Frapid.Messaging.Smtp
 
             var smtp = GetSmtpConfigAsync(tenant).Result;
 
-            if(smtp == null)
+            if (smtp == null)
             {
                 return;
             }
@@ -57,7 +57,7 @@ namespace Frapid.Messaging.Smtp
         {
             var smtp = await GetSmtpConfigAsync(database).ConfigureAwait(false);
 
-            if(smtp == null)
+            if (smtp == null)
             {
                 return false;
             }
@@ -72,7 +72,7 @@ namespace Frapid.Messaging.Smtp
 
         private SecureString GetSmtpUserPassword(string password)
         {
-            if(string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(password))
             {
                 return new SecureString();
             }
@@ -80,7 +80,7 @@ namespace Frapid.Messaging.Smtp
             var data = Encoding.UTF8.GetBytes(password);
             var unsecure = MachineKey.Unprotect(data, "ScrudFactory");
 
-            if(unsecure == null)
+            if (unsecure == null)
             {
                 return new SecureString();
             }
@@ -88,7 +88,7 @@ namespace Frapid.Messaging.Smtp
             password = Encoding.UTF8.GetString(unsecure);
 
             var secureString = new SecureString();
-            foreach(char c in password)
+            foreach (char c in password)
             {
                 secureString.AppendChar(c);
             }

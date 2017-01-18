@@ -1,14 +1,14 @@
 ﻿$(".selector.table tbody tr").click(function() {
-    var el = $(this);
-    var selector = el.find("input[type=checkbox]");
+    const el = $(this);
+    const selector = el.find("input[type=checkbox]");
     selector.prop("checked", !(selector.prop("checked")));
 });
 
 $("[data-toggle-all]").click(function() {
-    var el = $(this);
+    const el = $(this);
 
-    var state = el.prop("checked");
-    var table = el.closest("table");
+    const state = el.prop("checked");
+    const table = el.closest("table");
 
     if (!state) {
         $("[data-menu-id]").removeAttr("checked");
@@ -27,34 +27,34 @@ $(window).keypress(function(event) {
 
 function save() {
     function request(model) {
-        var url = "/dashboard/authorization/menu-access/group-policy";
-        var data = JSON.stringify(model);
+        const url = "/dashboard/authorization/menu-access/group-policy";
+        const data = JSON.stringify(model);
         return window.getAjaxRequest(url, "PUT", data);
     };
 
-    var confirmed = window.confirmAction();
+    const confirmed = window.confirmAction();
     if (!confirmed) {
         return;
     };
 
-    var roleId = parseInt($("#RoleDropdown").val() || 0);
-    var officeId = parseInt($("#OfficeDropdown").val() || 0);
+    const roleId = parseInt($("#RoleDropdown").val() || 0);
+    const officeId = parseInt($("#OfficeDropdown").val() || 0);
 
     if (!roleId || !officeId) {
         return;
     };
 
-    var menuIds = $("[data-menu-id]:checked").map(function() {
+    const menuIds = $("[data-menu-id]:checked").map(function() {
         return $(this).attr("data-menu-id");
     }).get();
 
-    var model = {
+    const model = {
         RoleId: roleId,
         OfficeId: officeId,
         MenuIds: menuIds
     };
 
-    var ajax = request(model);
+    const ajax = request(model);
 
     ajax.success(function() {
         window.displaySuccess();
@@ -78,14 +78,14 @@ $("[data-get-menu-policy-button]").off("click").on("click", function() {
         return window.getAjaxRequest(url);
     };
 
-    var roleId = parseInt($("#RoleDropdown").val() || 0);
-    var officeId = parseInt($("#OfficeDropdown").val() || 0);
+    const roleId = parseInt($("#RoleDropdown").val() || 0);
+    const officeId = parseInt($("#OfficeDropdown").val() || 0);
 
     if (!roleId || !officeId) {
         return;
     };
 
-    var ajax = request(officeId, roleId);
+    const ajax = request(officeId, roleId);
 
     ajax.success(function(response) {
         $("[data-toggle-all]").removeAttr("checked");
@@ -98,5 +98,4 @@ $("[data-get-menu-policy-button]").off("click").on("click", function() {
             $(selector).prop("checked", true);
         });
     });
-
 });

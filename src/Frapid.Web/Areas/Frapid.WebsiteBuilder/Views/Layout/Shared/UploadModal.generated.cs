@@ -29,6 +29,12 @@ namespace ASP
     using DevTrends.MvcDonutCaching;
     using Frapid.Web;
     
+    #line 1 "..\..\Views\Layout\Shared\UploadModal.cshtml"
+    using Frapid.WebsiteBuilder;
+    
+    #line default
+    #line hidden
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
     [System.Web.WebPages.PageVirtualPathAttribute("~/Views/Layout/Shared/UploadModal.cshtml")]
     public partial class _Views_Layout_Shared_UploadModal_cshtml : System.Web.Mvc.WebViewPage<dynamic>
@@ -52,7 +58,18 @@ WriteLiteral("></i>\r\n    <div");
 
 WriteLiteral(" class=\"header\"");
 
-WriteLiteral(">\r\n        Upload a File\r\n    </div>\r\n    <div");
+WriteLiteral(">\r\n");
+
+WriteLiteral("        ");
+
+            
+            #line 5 "..\..\Views\Layout\Shared\UploadModal.cshtml"
+   Write(Resources.UploadAFile);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\r\n    </div>\r\n    <div");
 
 WriteLiteral(" class=\"content\"");
 
@@ -72,7 +89,16 @@ WriteLiteral(">\r\n                <div");
 
 WriteLiteral(" class=\"ui small header\"");
 
-WriteLiteral(">Awesome! Upload another file.</div>\r\n            </div>\r\n            <img");
+WriteLiteral(">");
+
+            
+            #line 10 "..\..\Views\Layout\Shared\UploadModal.cshtml"
+                                        Write(Resources.UploadAnotherFile);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("</div>\r\n            </div>\r\n            <img");
 
 WriteLiteral(" class=\"ui preview image vpad8\"");
 
@@ -86,13 +112,31 @@ WriteLiteral(" for=\"FileInputFile\"");
 
 WriteLiteral(" class=\"ui positive button\"");
 
-WriteLiteral(">Upload</label>\r\n                <button");
+WriteLiteral(">");
+
+            
+            #line 14 "..\..\Views\Layout\Shared\UploadModal.cshtml"
+                                                                 Write(Resources.Upload);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("</label>\r\n                <button");
 
 WriteLiteral(" class=\"ui negative close button\"");
 
 WriteLiteral(" onclick=\"$(\'#UploadModal\').modal(\'hide\');\"");
 
-WriteLiteral(">Close</button>\r\n                <input");
+WriteLiteral(">");
+
+            
+            #line 15 "..\..\Views\Layout\Shared\UploadModal.cshtml"
+                                                                                               Write(Resources.Close);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("</button>\r\n                <input");
 
 WriteLiteral(" id=\"FileInputFile\"");
 
@@ -100,7 +144,7 @@ WriteLiteral(" data-handler=\"\"");
 
 WriteLiteral(" data-loader-id=\"UploaderSegment\"");
 
-WriteLiteral("\r\n                       class=\"file\"");
+WriteLiteral(" class=\"file\"");
 
 WriteLiteral(" style=\"display: none\"");
 

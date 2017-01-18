@@ -9,7 +9,7 @@ using Frapid.WebsiteBuilder.ViewModels;
 namespace Frapid.WebsiteBuilder.Controllers.Backend
 {
     [AntiForgery]
-    public class SubscriptionEmailTemplateController: DashboardController
+    public class SubscriptionEmailTemplateController : DashboardController
     {
         [Route("dashboard/website/subscription/welcome")]
         [RestrictAnonymous]
@@ -63,7 +63,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
 
         private Template GetModel(string path)
         {
-            if(!System.IO.File.Exists(path))
+            if (!System.IO.File.Exists(path))
             {
                 return new Template();
             }
@@ -71,9 +71,9 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
             string contents = System.IO.File.ReadAllText(path, Encoding.UTF8);
 
             return new Template
-                   {
-                       Contents = contents
-                   };
+            {
+                Contents = contents
+            };
         }
     }
 }

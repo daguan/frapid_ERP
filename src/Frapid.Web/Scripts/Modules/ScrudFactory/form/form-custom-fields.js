@@ -43,7 +43,7 @@ function createCustomFields(customFields) {
 
     if (customFields.length) {
         var active = window.scrudFactory.tabs.length === 0;
-        createTabEls("custom", window.Resources.Titles.CustomFields(), active);
+        createTabEls("custom", window.i18n.CustomFields, active);
     } else {
         if (!$("#scrud-tab-menus .item").length) {
             $("#scrud-tabs").remove();

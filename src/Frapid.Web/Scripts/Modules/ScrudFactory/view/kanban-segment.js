@@ -14,9 +14,9 @@ function createKanbanSegment(kanban) {
     local = local.replace(/{KanbanId}/g, kanban.KanbanId);
     local = local.replace(/{KanbanName}/g, kanban.KanbanName);
     local = local.replace(/{Description}/g, kanban.Description);
-    local = local.replace("{AddNewCheckListLocalized}", window.Resources.Titles.AddNewChecklist());
-    local = local.replace("{EditThisCheckListLocalized}", window.Resources.Titles.EditThisChecklist());
-    local = local.replace("{DeleteThisCheckListLocalized}", window.Resources.Titles.DeleteThisChecklist());
+    local = local.replace("{AddNewCheckListLocalized}", window.i18n.AddNewChecklist);
+    local = local.replace("{EditThisCheckListLocalized}", window.i18n.EditThisChecklist);
+    local = local.replace("{DeleteThisCheckListLocalized}", window.i18n.DeleteThisChecklist);
 
     var el = $(local);
 
@@ -41,7 +41,7 @@ function createKanbans(kanbans) {
 
     var kanban = new Object();
     kanban.KanbanId = "0";
-    kanban.KanbanName = window.Resources.Titles.Untitled();
+    kanban.KanbanName = window.i18n.Untitled;
     createKanbanSegment(kanban);
 
     $.each(kanbans, function (i, kanban) {

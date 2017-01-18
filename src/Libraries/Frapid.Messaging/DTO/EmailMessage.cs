@@ -2,7 +2,7 @@
 
 namespace Frapid.Messaging.DTO
 {
-    public sealed class EmailMessage: IMessage
+    public sealed class EmailMessage : IMessage
     {
         public string ReplyToEmail { get; set; }
         public string ReplyToName { get; set; }

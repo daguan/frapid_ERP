@@ -70,7 +70,7 @@ namespace Frapid.Account.Emails
         {
             string template = this.GetTemplate(tenant);
             string parsed = this.ParseTemplate(template);
-            string subject = "Welcome to " + HttpContext.Current.Request.Url.Authority;
+            string subject = string.Format(I18N.WelcometToSite, HttpContext.Current.Request.Url.Authority);
 
             var processor = EmailProcessor.GetDefault(tenant);
 

@@ -33,7 +33,7 @@ namespace Frapid.AssetBundling
 
         public void Resiter()
         {
-            var file= new FileInfo(Path.Combine(this.AssetDirectory, this.Asset.BundleName + ".json"));
+            var file = new FileInfo(Path.Combine(this.AssetDirectory, this.Asset.BundleName + ".json"));
             string contents = JsonConvert.SerializeObject(this.Asset, Formatting.Indented);
 
             this.EnsureDirectoryExists(file.DirectoryName);

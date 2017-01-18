@@ -25,15 +25,14 @@ namespace Frapid.WebsiteBuilder.Models.Themes
 
             if (path == null || !Directory.Exists(path))
             {
-                throw new ResourceCreateException(
-                    "Could not create the file or directory because the theme directory was not found.");
+                throw new ResourceCreateException(Resources.CouldNotCreateFileOrDirectoryMissingThemeDirectory);
             }
 
             path = Path.Combine(path, this.Container);
 
             if (!Directory.Exists(path))
             {
-                throw new ResourceCreateException("Could not create the file or directory is an invalid directory path.");
+                throw new ResourceCreateException(Resources.CouldNotCreateFileOrDirectoryInvalidDestination);
             }
 
             path = Path.Combine(path, this.File);

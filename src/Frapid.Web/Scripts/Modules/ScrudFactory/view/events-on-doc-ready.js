@@ -33,7 +33,7 @@
 
         var anchor = $("<a/>");
         anchor.addClass("ui basic button");
-        anchor.attr("title", window.Resources.Titles.Back());
+        anchor.attr("title", window.i18n.Back);
         anchor.attr("href", url);
         anchor.text(title);
 

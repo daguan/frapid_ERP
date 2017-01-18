@@ -1,38 +1,38 @@
 ﻿$("#ConfirmEmailInputEmail").hide();
 $(document).ready(function () {
-    window.validator.initialize($(".reset.plainPassword.segment"));
+    window.validator.initialize($(".reset.password.segment"));
 });
 
 
 $("#SetPasswordButton").click(function () {
     function request(token, password) {
         var url = "/account/reset/confirm?token=" + token;
-        url += "&plainPassword=" + password;
+        url += "&password=" + password;
 
         return window.getAjaxRequest(url, "POST");
     };
 
     function validate() {
         $(".big.error").html("");
-        var formEl = $(".reset.plainPassword.segment");
-        var isValid = window.validator.validate(formEl);
+        const formEl = $(".reset.password.segment");
+        const isValid = window.validator.validate(formEl);
         return isValid;
     };
 
     $(".big.error").html("");
 
-    var isValid = validate();
+    const isValid = validate();
     if (!isValid) {
         return;
     };
 
 
-    var formEl = $(".reset.plainPassword.segment");
+    const formEl = $(".reset.password.segment");
     formEl.addClass("loading");
-    var model = window.serializeForm(formEl);
-    var token = window.getQueryStringByName("token");
+    const model = window.serializeForm(formEl);
+    const token = window.getQueryStringByName("token");
 
-    var ajax = request(token, model.Password);
+    const ajax = request(token, model.Password);
 
     ajax.success(function (response) {
         if (response) {

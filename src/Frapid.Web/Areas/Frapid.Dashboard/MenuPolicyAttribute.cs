@@ -1,9 +1,10 @@
 using System.Linq;
 using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
+using Frapid.Configuration;
 using Frapid.Dashboard.DAL;
 using Frapid.Framework.Extensions;
-using Frapid.Configuration;
+using Frapid.i18n;
 
 namespace Frapid.Dashboard
 {
@@ -29,7 +30,7 @@ namespace Frapid.Dashboard
             {
                 if (this.StatusResponse)
                 {
-                    filterContext.Result = new HttpUnauthorizedResult("Access is denied.");
+                    filterContext.Result = new HttpUnauthorizedResult(Resources.AccessIsDenied);
                 }
                 else
                 {

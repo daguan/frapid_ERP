@@ -31,7 +31,7 @@
     };
 
     if (window.scrudForm === "undefined") {
-        displayMessage(window.Resources.Labels.NoFormFound());
+        displayMessage(window.i18n.NoFormFound);
         return;
     };
 

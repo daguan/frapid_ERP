@@ -1,7 +1,7 @@
 ﻿function facebookSignIn(userId, email, officeId, token, culture) {
     function request() {
-        var url = "/account/facebook/sign-in";
-        var loginDetails = {
+        const url = "/account/facebook/sign-in";
+        const loginDetails = {
             FacebookUserId: userId,
             Email: email,
             OfficeId: officeId,
@@ -9,11 +9,11 @@
             Culture: culture
         };
 
-        var data = JSON.stringify(loginDetails);
+        const data = JSON.stringify(loginDetails);
         return window.getAjaxRequest(url, "POST", data);
     };
 
-    var ajax = request();
+    const ajax = request();
 
     ajax.success(function (response) {
         localStorage.setItem("access_token", response);
@@ -21,7 +21,7 @@
         if (response) {
             window.location = "/dashboard";
         } else {
-            alert("Sorry, facebook registration is not allowed at this time.");
+            alert(window.translate("FacebookRegistrationClosed"));
         };
     });
 
@@ -44,7 +44,7 @@ $("#FacebookButton").click(function () {
             }
             );
         } else {
-            alert("Please authorize us to use your facebook information in order to sign in.");
+            alert(window.translate("AuthorizeAppOnFacebook"));
             $("#SignInSegment").removeClass("loading");
         }
     },
@@ -65,11 +65,12 @@ window.fbAsyncInit = function () {
 
 // Load the SDK Asynchronously
 (function (d) {
-    var id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+    const id = 'facebook-jssdk';
+    const ref = d.getElementsByTagName('script')[0];
     if (d.getElementById(id)) {
         return;
     }
-    var js = d.createElement('script');
+    const js = d.createElement('script');
     js.id = id;
     js.async = true;
     js.src = "//connect.facebook.net/en_US/all.js";

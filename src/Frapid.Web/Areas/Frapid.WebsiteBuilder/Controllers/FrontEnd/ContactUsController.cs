@@ -26,7 +26,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
         [HttpPost]
         public async Task<ActionResult> SendEmailAsync(ContactForm model)
         {
-            model.Subject = "Contact Form : " + model.Subject;
+            model.Subject = string.Format(Resources.ContactFormSubject, model.Subject);
 
             await new ContactUsEmail().SendAsync(this.Tenant, model).ConfigureAwait(false);
             await Task.Delay(1000).ConfigureAwait(false);

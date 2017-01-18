@@ -1,7 +1,7 @@
 var entityParser = {
     attribute: "data-entity",
     validationSummary: ".error .bulleted.list",
-    getValue: function (el, raw) {
+    getValue: function(el, raw) {
         function parseValue(value, typeClass) {
             if (!typeClass) {
                 return value;
@@ -23,73 +23,73 @@ var entityParser = {
         };
 
         var value = null;
-        var required = el.attr("required");
-        var tag = el.prop("tagName").toLowerCase();
+        const required = el.attr("required");
+        const tag = el.prop("tagName").toLowerCase();
 
         switch (tag) {
-            case "h1":
-            case "h2":
-            case "h3":
-            case "h4":
-            case "h5":
-            case "span":
-            case "p":
-            case "div":
-                if (raw) {
-                    value = el.html().trim();
-                } else {
-                    value = el.text().trim();
+        case "h1":
+        case "h2":
+        case "h3":
+        case "h4":
+        case "h5":
+        case "span":
+        case "p":
+        case "div":
+            if (raw) {
+                value = el.html().trim();
+            } else {
+                value = el.text().trim();
+            };
+
+            break;
+        case "input":
+            if (el.is(":checkbox")) {
+                value = el.is(":checked");
+            } else {
+                value = parseValue(el.val(), el.attr("class"));
+                el.closest(".field").removeClass("error");
+
+                if (!value && required) {
+                    el.closest(".field").addClass("error");
                 };
+            };
 
-                break;
-            case "input":
-                if (el.is(":checkbox")) {
-                    value = el.is(":checked");
-                } else {
-                    value = parseValue(el.val(), el.attr("class"));
-                    el.closest(".field").removeClass("error");
-
-                    if (!value && required) {
-                        el.closest(".field").addClass("error");
-                    };
+            break;
+        case "select":
+            if (el.attr("multiple")) {
+                const items = el.val();
+                if (items) {
+                    value = el.val().join(",");
                 };
+            } else {
+                value = el.val();
+                value = parseValue(value, el.parent().attr("class"));
+            };
 
-                break;
-            case "select":
-                if (el.attr("multiple")) {
-                    var items = el.val();
-                    if (items) {
-                        value = el.val().join(",");
-                    };
-                } else {
-                    value = el.val();
-                    value = parseValue(value, el.parent().attr("class"));
-                };
-
-                break;
+            break;
         };
 
         return value;
     },
-    getModel: function (attribute, validationEl, validationSummary) {
-        var dataEntities = $("[" + attribute + "]");
+    getModel: function(attribute, validationEl, validationSummary) {
+        const dataEntities = $(`[${attribute}]`);
 
         var model = {};
         var valid = true;
         var invalidItems = [];
 
-        dataEntities.each(function () {
-            var el = $(this);
+        dataEntities.each(function() {
+            const el = $(this);
             var label = el.siblings("label").text();
 
             if (el.is("select")) {
                 label = el.parent().parent().find("label").text();
             };
 
-            var name = el.attr(attribute);
-            var raw = el.attr("data-raw");
-            var val = entityParser.getValue(el, raw);
-            var required = el.attr("required");
+            const name = el.attr(attribute);
+            const raw = el.attr("data-raw");
+            const val = entityParser.getValue(el, raw);
+            const required = el.attr("required");
 
             model[name] = val;
 
@@ -104,8 +104,8 @@ var entityParser = {
             $(validationEl).removeClass("initially, hidden");
             list.html("");
 
-            $.each(invalidItems, function () {
-                var item = $("<div class='item' />");
+            $.each(invalidItems, function() {
+                const item = $("<div class='item' />");
                 item.html(this + " is required");
                 list.append(item);
             });

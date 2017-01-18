@@ -11,7 +11,7 @@ using Serilog;
 namespace Frapid.Web.Controllers
 {
     [Route("assets")]
-    public sealed class AssetsController : FrapidController
+    public sealed class AssetsController : BaseController
     {
         public AssetsController()
         {

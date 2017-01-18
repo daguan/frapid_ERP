@@ -1,27 +1,27 @@
-﻿<div class="ui small modal" id="DeleteThemeModal">
+﻿@using Frapid.WebsiteBuilder
+<div class="ui small modal" id="DeleteThemeModal">
     <i class="close icon"></i>
     <div class="ui red large header">
-        Proceed with Caution!
+        @Resources.ProceedWithCaution
     </div>
     <div class="content">
-        <div class="ui large header">Are you sure you want to delete the "<span class="theme name text"></span>" theme?</div>
+        <div class="ui large header">@Resources.ConfirmThemeDelete</div>
         <p>
-            You are about to delete the selected theme.            
-            Doing this will permanently delete the theme and associated files.
+            @Resources.ThemeDeleteWarning
         </p>
 
         <div class="ui negative message" style="display: none;">
-            <div class="ui small exception header">Cannot delete this theme because of xyz.</div>
+            <div class="ui small exception header">@Resources.CannotDeleteThemeBecauseOfError</div>
         </div>
 
     </div>
     <div class="ui content attached segment">
         <div class="ui buttons">
             <div class="ui green button" onclick="showDeleteThemeModal();">
-                No, Don't Delete This Theme
+                @Resources.NoDontDeleteThisTheme
             </div>
             <div class="ui red button" id="DeleteThemeButton">
-                Yes
+                @Resources.Yes
             </div>
         </div>
     </div>

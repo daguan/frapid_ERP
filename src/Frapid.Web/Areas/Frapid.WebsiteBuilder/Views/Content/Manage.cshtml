@@ -1,4 +1,5 @@
-﻿@model Frapid.WebsiteBuilder.DTO.Content
+﻿@using Frapid.WebsiteBuilder
+@model Frapid.WebsiteBuilder.DTO.Content
 
 @{
     bool isMarkDown = !string.IsNullOrWhiteSpace(Model.Markdown);
@@ -10,11 +11,11 @@
 <script src="/Scripts/marked-0.3.5/lib/marked.js"></script>
 <style>
     #editor {
-        position: absolute;
-        top: 0;
-        right: 0;
         bottom: 0;
         left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
     }
 </style>
 <div class="ui attached segment" style="height: 100%;">
@@ -31,23 +32,23 @@
                 </div>
             </div>
             <div class="column">
-                <div class="ui violet header">Save This Page</div>
+                <div class="ui violet header">@Resources.SaveThisPage</div>
             </div>
             <div class="ui divider"></div>
             <div wi class="ui form">
-                <input type="hidden" data-entity="content_id" class="integer" value="@Model.ContentId" />
-                <input type="hidden" data-entity="markdown" value="@Model.Markdown" />
+                <input type="hidden" data-entity="content_id" class="integer" value="@Model.ContentId"/>
+                <input type="hidden" data-entity="markdown" value="@Model.Markdown"/>
                 <div class="">
                     <div class="field">
-                        <label>Title</label>
-                        <input type="text" data-entity="title" value="@Model.Title" required="" />
+                        <label>@Resources.Title</label>
+                        <input type="text" data-entity="title" value="@Model.Title" required=""/>
                     </div>
                     <div class="field">
-                        <label>Alias</label>
-                        <input type="text" data-entity="alias" value="@Model.Alias" required="" />
+                        <label>@Resources.Alias</label>
+                        <input type="text" data-entity="alias" value="@Model.Alias" required=""/>
                     </div>
                     <div class="field">
-                        <label>Category</label>
+                        <label>@Resources.Category</label>
                         <select id="CategorySelect" class="ui search integer dropdown"
                                 data-entity="category_id"
                                 required=""
@@ -55,51 +56,53 @@
                                 data-api="/api/forms/website/categories/display-fields"
                                 data-api-value-field="Value"
                                 data-api-key-field="Key"
-                                data-api-selected-value="@Model.CategoryId"></select>
+                                data-api-selected-value="@Model.CategoryId">
+                        </select>
                     </div>
                     <div class="field">
-                        <label>Tags</label>
+                        <label>@Resources.Tags</label>
                         <select id="TagsSelect" class="ui fluid multiple search selection tag dropdown"
                                 data-entity="tags"
                                 data-api="/api/views/website/tag-view/all"
                                 data-api-value-field="Tag"
                                 data-api-key-field="Tag"
                                 data-api-selected-values="@Model.Tags"
-                                multiple=""></select>
+                                multiple="">
+                        </select>
                     </div>
                     <div class="field">
-                        <label>Publish On</label>
-                        <input type="date" class="date" data-entity="publish_on" value="@Model.PublishOn.ToString("d")" required="" />
+                        <label>@Resources.PublishOn</label>
+                        <input type="date" class="date" data-entity="publish_on" value="@Model.PublishOn.ToString("d")" required=""/>
                     </div>
                     <div class="field">
-                        <label>Seo Description</label>
-                        <input type="text" data-entity="seo_description" value="@Model.SeoDescription" required="" />
+                        <label>@Resources.SeoDescription</label>
+                        <input type="text" data-entity="seo_description" value="@Model.SeoDescription" required=""/>
                     </div>
                 </div>
                 <div class="field">
                     <label>&nbsp;</label>
                     <div class="ui checkbox">
-                        @Html.CheckBox("IsDraftInputCheckbox", Model.IsDraft, new { @id = "IsDraftInputCheckbox", @data_entity = "is_draft" })
-                        <label for="IsDraftInputCheckbox">Draft</label>
+                        @Html.CheckBox("IsDraftInputCheckbox", Model.IsDraft, new {id = "IsDraftInputCheckbox", data_entity = "is_draft"})
+                        <label for="IsDraftInputCheckbox">@Resources.Draft</label>
                     </div>
                     <div class="ui checkbox">
-                        @Html.CheckBox("IsHomePageInputCheckbox", Model.IsHomepage, new { @id = "IsHomePageInputCheckbox", @data_entity = "is_homepage" })
-                        <label for="IsHomePageInputCheckbox">Home Page</label>
+                        @Html.CheckBox("IsHomePageInputCheckbox", Model.IsHomepage, new {id = "IsHomePageInputCheckbox", data_entity = "is_homepage"})
+                        <label for="IsHomePageInputCheckbox">@Resources.HomePage</label>
                     </div>
                     <div class="ui checkbox">
-                        @Html.CheckBox("IsMarkdownInputCheckbox", isMarkDown, new { @id = "IsMarkdownInputCheckbox" })
-                        <label for="IsMarkdownInputCheckbox">Is Markdown</label>
+                        @Html.CheckBox("IsMarkdownInputCheckbox", isMarkDown, new {id = "IsMarkdownInputCheckbox"})
+                        <label for="IsMarkdownInputCheckbox">@Resources.IsMarkdown</label>
                     </div>
                 </div>
                 <div class="ui basic buttons">
-                    <button class="ui basic button" id="SaveButton">Save</button>
-                    <a class="ui basic button" id="CancelButton">Cancel</a>
+                    <button class="ui basic button" id="SaveButton">@Resources.Save</button>
+                    <a class="ui basic button" id="CancelButton">@Resources.Cancel</a>
                 </div>
             </div>
 
             <div class="ui container">
                 <div class="error vpad8 initially hidden">
-                    <div class="ui brown header">Error</div>
+                    <div class="ui brown header">@Resources.Error</div>
                     <div class="ui red bulleted list">
                     </div>
                     <div class="ui divider"></div>

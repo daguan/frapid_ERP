@@ -190,6 +190,7 @@
     <Compile Include="Controllers\FrontEnd\ErrorController.cs" />
     <Compile Include="Models\ErrorModel.cs" />
     <Compile Include="Models\MenuService.cs" />
+    <Compile Include="Resources.cs" />
     <Compile Include="Syndication\Rss\RssChannel.cs" />
     <Compile Include="Controllers\FrontEnd\RssController.cs" />
     <Compile Include="Syndication\Rss\RssItem.cs" />

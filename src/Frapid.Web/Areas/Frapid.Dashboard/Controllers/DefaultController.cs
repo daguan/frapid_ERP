@@ -45,7 +45,7 @@ namespace Frapid.Dashboard.Controllers
                         CurrencySymbol = CultureManager.GetCurrencySymbol(),
                         DatepickerFormat = CultureManager.GetCurrent().DateTimeFormat.ShortDatePattern,
                         DatepickerShowWeekNumber = true,
-                        DatepickerWeekStartDay = (int)CultureManager.GetCurrent().DateTimeFormat.FirstDayOfWeek,
+                        DatepickerWeekStartDay = (int) CultureManager.GetCurrent().DateTimeFormat.FirstDayOfWeek,
                         DatepickerNumberOfMonths = "[2, 3]"
                     });
         }

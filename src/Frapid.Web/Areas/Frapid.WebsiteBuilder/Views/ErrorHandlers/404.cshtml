@@ -1,8 +1,9 @@
-﻿@model Frapid.WebsiteBuilder.ViewModels.SearchResult
+﻿@using Frapid.WebsiteBuilder
+@model Frapid.WebsiteBuilder.ViewModels.SearchResult
 
 @{
     ViewBag.Description = "";
-    ViewBag.Title = "Content Not Found";
+    ViewBag.Title = @Resources.ContentNotFound;
     Layout = Model.LayoutPath + Model.Layout;
     ViewBag.LayoutPath = Model.LayoutPath;
     ViewBag.NoIndex = true;
@@ -23,8 +24,8 @@
 </style>
 <div class="ui attached http not found segment">
     <div class="ui very relaxed container">
-        <div class="ui section red header">Content Not Found</div>
-        <p class="ui negative message">The page or resource you are looking for does not exist or has been deleted.</p>
+        <div class="ui section red header">@Resources.ContentNotFound</div>
+        <p class="ui negative message">@Resources.ContentNotFoundMessage</p>
         <div class="ui horizontal divider divider">
             <i class="search icon"></i>            
         </div>

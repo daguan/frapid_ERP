@@ -138,6 +138,7 @@
     <Compile Include="DTO\Office.cs" />
     <Compile Include="DTO\Role.cs" />
     <Compile Include="DTO\User.cs" />
+    <Compile Include="I18N.cs" />
     <Compile Include="Models\EntityAccessPolicyModel.cs" />
     <Compile Include="Models\GroupEntityAccessPolicyModel.cs" />
     <Compile Include="Models\GroupMenuPolicyModel.cs" />

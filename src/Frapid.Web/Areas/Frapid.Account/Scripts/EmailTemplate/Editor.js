@@ -1,13 +1,13 @@
 $("#SaveButton").click(function () {
     function request(model) {
-        var url = "/dashboard/account/email-templates";
-        var data = JSON.stringify(model);
+        const url = "/dashboard/account/email-templates";
+        const data = JSON.stringify(model);
         return window.getAjaxRequest(url, "POST", data);
     };
 
     function getModel() {
-        var editor = window.ace.edit("editor");
-        var contents = editor.getSession().getValue();
+        const editor = window.ace.edit("editor");
+        const contents = editor.getSession().getValue();
 
         return {
             Title: window.title,
@@ -15,8 +15,8 @@ $("#SaveButton").click(function () {
         };
     };
 
-    var model = getModel();
-    var ajax = request(model);
+    const model = getModel();
+    const ajax = request(model);
 
     ajax.success(function () {
         window.displaySuccess();
@@ -33,9 +33,9 @@ function initializeAceEditor() {
     };
 
     window.html = stringUnEncode(window.html);
-    var content = window.html;
+    const content = window.html;
 
-    var editor = window.ace.edit("editor");
+    const editor = window.ace.edit("editor");
     editor.renderer.setScrollMargin(10, 10);
     editor.$blockScrolling = Infinity;
     $("#editor").removeClass("initially, hidden");

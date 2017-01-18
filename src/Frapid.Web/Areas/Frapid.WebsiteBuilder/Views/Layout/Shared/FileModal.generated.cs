@@ -29,6 +29,12 @@ namespace ASP
     using DevTrends.MvcDonutCaching;
     using Frapid.Web;
     
+    #line 1 "..\..\Views\Layout\Shared\FileModal.cshtml"
+    using Frapid.WebsiteBuilder;
+    
+    #line default
+    #line hidden
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
     [System.Web.WebPages.PageVirtualPathAttribute("~/Views/Layout/Shared/FileModal.cshtml")]
     public partial class _Views_Layout_Shared_FileModal_cshtml : System.Web.Mvc.WebViewPage<dynamic>
@@ -52,7 +58,18 @@ WriteLiteral("></i>\r\n    <div");
 
 WriteLiteral(" class=\"header\"");
 
-WriteLiteral(">\r\n        Create a New File\r\n    </div>\r\n    <div");
+WriteLiteral(">\r\n");
+
+WriteLiteral("        ");
+
+            
+            #line 5 "..\..\Views\Layout\Shared\FileModal.cshtml"
+   Write(Resources.CreateANewFile);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\r\n    </div>\r\n    <div");
 
 WriteLiteral(" class=\"content\"");
 
@@ -64,7 +81,16 @@ WriteLiteral(">\r\n            <div");
 
 WriteLiteral(" class=\"field\"");
 
-WriteLiteral(">\r\n                <label>Location</label>\r\n                <div");
+WriteLiteral(">\r\n                <label>");
+
+            
+            #line 10 "..\..\Views\Layout\Shared\FileModal.cshtml"
+                  Write(Resources.Location);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("</label>\r\n                <div");
 
 WriteLiteral(" class=\"ui container label\"");
 
@@ -74,7 +100,16 @@ WriteLiteral("></div>\r\n            </div>\r\n            <div");
 
 WriteLiteral(" class=\"field\"");
 
-WriteLiteral(">\r\n                <label>File Name</label>\r\n                <input");
+WriteLiteral(">\r\n                <label>");
+
+            
+            #line 14 "..\..\Views\Layout\Shared\FileModal.cshtml"
+                  Write(Resources.FileName);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("</label>\r\n                <input");
 
 WriteLiteral(" type=\"text\"");
 
@@ -84,7 +119,16 @@ WriteLiteral(" class=\"ui button\"");
 
 WriteLiteral(" onclick=\"createFile(this);\"");
 
-WriteLiteral(">Create</button>\r\n        </div>\r\n    </div>\r\n</div>");
+WriteLiteral(">");
+
+            
+            #line 17 "..\..\Views\Layout\Shared\FileModal.cshtml"
+                                                             Write(Resources.Create);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("</button>\r\n        </div>\r\n    </div>\r\n</div>");
 
         }
     }

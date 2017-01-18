@@ -55,11 +55,11 @@
             if (excludedColumnIndices.indexOf(index) === -1) {
                 var title = "";
                 if (val === false) {
-                    val = window.Resources.Titles.No();
+                    val = window.i18n.No;
                 };
 
                 if (val === true) {
-                    val = window.Resources.Titles.Yes();
+                    val = window.i18n.Yes;
                 };
 
                 var column = Enumerable.From(metaDefinition.Columns)

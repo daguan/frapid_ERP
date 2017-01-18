@@ -2,11 +2,11 @@ window.overridePath = "/dashboard/website/contents";
 $(".dropdown").dropdown();
 
 function appendTag(select, text, value, selected) {
-    if (select.find("option[value='" + value + "']").length) {
+    if (select.find(`option[value='${value}']`).length) {
         return;
     };
 
-    var option = $("<option />");
+    const option = $("<option />");
     if (selected) {
         option.attr("selected", "selected");
     };
@@ -18,18 +18,18 @@ function appendTag(select, text, value, selected) {
     select.append(option);
 };
 
-$(".tag.dropdown input.search").keyup(function (e) {
+$(".tag.dropdown input.search").keyup(function(e) {
     if (e.keyCode === 188) {
-        var val = $(this).val();
+        const val = $(this).val();
 
         appendTag($("#TagsSelect"), val, val, true);
     };
 });
 
 
-$('[data-entity="title"]').keyup(function () {
+$('[data-entity="title"]').keyup(function() {
     function getAlias(title) {
-        return title.toLowerCase().replace(/ +(?= )/g, '').replace(/ /g, '-').replace(/[^\w-]+/g, '');
+        return title.toLowerCase().replace(/ +(?= )/g, "").replace(/ /g, "-").replace(/[^\w-]+/g, "");
     };
 
     $('[data-entity="alias"]').val(getAlias($(this).val()));
@@ -38,29 +38,29 @@ $('[data-entity="title"]').keyup(function () {
 
 function save() {
     function request(model) {
-        var url = "/api/forms/website/contents/add-or-edit";
-        var form = [];
+        const url = "/api/forms/website/contents/add-or-edit";
+        const form = [];
         form.push(model);
         form.push(null);
-        
-        var data = JSON.stringify(form);
+
+        const data = JSON.stringify(form);
 
         return window.getAjaxRequest(url, "POST", data);
     };
 
-    var attribute = "data-entity";
-    var validationEl = ".error";
-    var validationSummary = ".error .bulleted.list";
+    const attribute = "data-entity";
+    const validationEl = ".error";
+    const validationSummary = ".error .bulleted.list";
 
-    var model = window.entityParser.getModel(attribute, validationEl, validationSummary);
+    const model = window.entityParser.getModel(attribute, validationEl, validationSummary);
     if (!model) {
         return;
     };
 
-    var ajax = request(model);
+    const ajax = request(model);
 
 
-    ajax.success(function (response) {
+    ajax.success(function(response) {
         window.displaySuccess();
         var target;
 
@@ -71,17 +71,17 @@ function save() {
     });
 };
 
-$("#CancelButton").click(function () {
-    var target = decodeURIComponent(window.getQueryStringByName("ReturnUrl")) || "../contents";
+$("#CancelButton").click(function() {
+    const target = decodeURIComponent(window.getQueryStringByName("ReturnUrl")) || "../contents";
 
     location.href = target;
 });
 
-$("#SaveButton").click(function () {
+$("#SaveButton").click(function() {
     save();
 });
 
-$(window).keypress(function (event) {
+$(window).keypress(function(event) {
     if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) return true;
     save();
     event.preventDefault();
@@ -89,9 +89,9 @@ $(window).keypress(function (event) {
 });
 
 function displayContent() {
-    var editor = window.ace.edit("editor");
-    var isMarkdown = $("#IsMarkdownInputCheckbox").is(":checked");
-    var contents = editor.getSession().getValue();
+    const editor = window.ace.edit("editor");
+    const isMarkdown = $("#IsMarkdownInputCheckbox").is(":checked");
+    const contents = editor.getSession().getValue();
 
     if (isMarkdown) {
         $("input[data-entity='markdown']").val(contents);
@@ -114,8 +114,8 @@ function displayContent() {
     $("#content").html(html);
 };
 
-var stringUnEncode = function (str) {
-    return str.replace(/&amp;/g, '&').replace(/&quot;/g, "\"");
+var stringUnEncode = function(str) {
+    return str.replace(/&amp;/g, "&").replace(/&quot;/g, "\"");
 };
 
 function initializeAceEditor() {
@@ -131,11 +131,11 @@ function initializeAceEditor() {
         content = html;
     };
 
-    var editor = window.ace.edit("editor");
-    var contents = editor.getSession().getValue();
+    const editor = window.ace.edit("editor");
+    const contents = editor.getSession().getValue();
 
     if (contents) {
-        return;//Do not load editor more than once.
+        return; //Do not load editor more than once.
     };
 
     editor.$blockScrolling = Infinity;
@@ -144,20 +144,20 @@ function initializeAceEditor() {
     editor.getSession().setMode("ace/mode/html");
     editor.setValue(content, -1);
 
-    editor.on('input', function () {
+    editor.on("input", function() {
         displayContent();
     });
 };
 
 
-$(document).ready(function () {
+$(document).ready(function() {
     window.initalizeSelectApis();
-    var target = window.localStorage.getItem("autoOpenTarget");
+    const target = window.localStorage.getItem("autoOpenTarget");
     if (target) {
         maximize(target);
     };
 
-    setTimeout(function () {
+    setTimeout(function() {
         initializeAceEditor();
     }, 2000);
 });
@@ -165,20 +165,20 @@ $(document).ready(function () {
 function maximize(target, width) {
     window.localStorage.setItem("autoOpenTarget", target);
 
-    var items = $("[data-target]");
-    var el = $("[data-target=" + target + "]");
+    const items = $("[data-target]");
+    const el = $(`[data-target=${target}]`);
     items.hide();
 
-    if (!el.hasClass('sixteen wide')) {
-        el.removeClass(width).addClass('sixteen wide');
+    if (!el.hasClass("sixteen wide")) {
+        el.removeClass(width).addClass("sixteen wide");
         el.fadeIn();
         return;
     };
 
-    el.removeClass('sixteen wide').addClass(width);
+    el.removeClass("sixteen wide").addClass(width);
     items.fadeIn();
 };
 
-setTimeout(function () {
+setTimeout(function() {
     initializeAceEditor();
 }, 2000);

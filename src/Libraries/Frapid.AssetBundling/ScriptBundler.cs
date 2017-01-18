@@ -7,7 +7,7 @@ namespace Frapid.AssetBundling
 {
     public class ScriptBundler : Bundler
     {
-        public ScriptBundler(ILogger logger, Asset asset): base(logger, asset)
+        public ScriptBundler(ILogger logger, Asset asset) : base(logger, asset)
         {
         }
 
@@ -20,8 +20,7 @@ namespace Frapid.AssetBundling
             catch (Exception ex)
             {
                 //Swallow   
-                this.Logger.Error("The file \"{file}\" could not be minified due to error. {Message}", file,
-                    ex.Message);
+                this.Logger.Error("The file \"{file}\" could not be minified due to error. {Message}", file, ex.Message);
             }
 
             //Fallback to original content.

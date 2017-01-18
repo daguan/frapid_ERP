@@ -10,7 +10,7 @@
     padding: 0 !important;
 }
 
-.pusher, .ng-scope {
+.pusher, .report-panel, [data-ng-view] {
     height: 100% !important;
 }
 

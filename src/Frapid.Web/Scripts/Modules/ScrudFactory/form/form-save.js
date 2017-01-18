@@ -133,7 +133,7 @@
 			return;
 		};
 		
-        var confirmed = confirm(window.Resources.Questions.TaskCompletedSuccessfullyReturnToView());
+        var confirmed = confirm(window.i18n.TaskCompletedSuccessfullyReturnToView);
 
         resetForm();
 

@@ -1,7 +1,8 @@
-﻿@model dynamic
+﻿@using Frapid.WebsiteBuilder
+@model dynamic
 
 @{
-    ViewBag.Title = "Menus";
+    ViewBag.Title = Resources.Menus;
     Layout = ViewBag.Layout;
 }
 
@@ -42,7 +43,6 @@
 
     scrudFactory.customActions = [
         {
-
             title: "Menu Items",
             href: "/dashboard/website/menus/items?MenuId={Id}&TitleSuffix={Col:4}",
             icon: "list icon",
@@ -50,8 +50,8 @@
         }
     ];
 
-    $.get('/ScrudFactory/View.html', function (view) {
-        $.get('/ScrudFactory/Form.html', function (form) {
+    $.get('/ScrudFactory/View.html', function(view) {
+        $.get('/ScrudFactory/Form.html', function(form) {
             $("#ScrudFactoryView").html(view);
             $("#ScrudFactoryForm").html(form);
             $.cachedScript("/assets/js/scrudfactory-view.js");
@@ -66,8 +66,8 @@
                 return title.toLowerCase().replace(/ +(?= )/g, '').replace(/ /g, '-').replace(/[^\w-]+/g, '');
             };
 
-            var category = $(this).val();
-            var alias = getAlias(category);
+            const category = $(this).val();
+            const alias = getAlias(category);
 
             $("#alias").val(alias);
 

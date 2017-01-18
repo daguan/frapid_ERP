@@ -1,5 +1,4 @@
-﻿
-function selectFilter(filterName) {
+﻿function selectFilter(filterName) {
     function request(filterName) {
         var url = "/api/forms/config/filters/get-where/-1";
         var where = [];
@@ -45,7 +44,7 @@ function loadFilterNames() {
         var selected = "";
 
         var option = "<option value=''>";
-        option += window.Resources.Titles.SelectAFilter();
+        option += window.i18n.SelectAFilter;
         option += "</option>";
 
         var items = "";
@@ -143,7 +142,7 @@ function deleteSavedFilter() {
         var ajax = request(filterName);
         ajax.success(function () {
             loadFilterNames();
-            displayMessage(window.Resources.Labels.TaskCompletedSuccessfully(), "success");
+            displayMessage(window.i18n.TaskCompletedSuccessfully, "success");
         });
     };
 };
