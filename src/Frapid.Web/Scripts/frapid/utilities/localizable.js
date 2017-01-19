@@ -1,39 +1,34 @@
-﻿function tryParseLocalizedResource(text) {
-	function toProperCase(str) {
-	    var result = str.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
-	    return result.charAt(0).toUpperCase() + result.slice(1);
-	};
+﻿function translate(key){
+	function humanize(key){
+		var items = key.split('.');
+		
+		if(!items){
+			return key;
+		};
+		
+		var text = items[items.length -1];
+		
+		if(text){
+			text = text.replace(/([A-Z])/g, ' $1').trim();
+			return text;
+		};
 
-    var key = toProperCase(text);
-    var parsed = window.i18n[key];
-
-    if(!parsed){
-        parsed = key;
-    };
-
-    return parsed;
-};
-
-
-function humanize(key){
-	var items = key.split('.');
-	
-	if(!items){
 		return key;
 	};
-	
-	var text = items[items.length -1];
-	
-	if(text){
-		text = text.replace(/([A-Z])/g, ' $1').trim();
-		return text;
+
+	function getLocalizedResource(text) {
+		function toProperCase(str) {
+		    var result = str.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
+		    return result.charAt(0).toUpperCase() + result.slice(1);
+		};
+
+	    var key = toProperCase(text);
+	    var parsed = window.i18n[key];
+
+	    return parsed;
 	};
 
-	return key;
-};
-
-function translate(key){
-	var localized = tryParseLocalizedResource(key);
+	var localized = getLocalizedResource(key);
 
 	if (!localized) {
 		localized = humanize(key);
@@ -62,12 +57,8 @@ function localize() {
 		var el = $(this);
 		
         var key = el.attr("data-localize");
-        var localized = window.tryParseLocalizedResource(key);
+        var localized = window.translate(key);
 
-        if (!localized) {
-			localized = humanize(key);
-        };
-		
 		var tag = el.prop("tagName").toLowerCase();
 		
 		switch(tag){
@@ -86,11 +77,7 @@ function localize() {
 		var el = $(this);
 		
         var key = el.attr("data-localized-placeholder");
-        var localized = tryParseLocalizedResource(key);
-
-        if (!localized) {
-			localized = humanize(key);
-        };
+        var localized = window.translate(key);
 		
 		el.attr("placeholder", localized);
 	});
@@ -102,11 +89,7 @@ function localize() {
 		var el = $(this);
 		
         var key = el.attr("data-localized-title");
-        var localized = tryParseLocalizedResource(key);
-
-        if (!localized) {
-			localized = humanize(key);
-        };
+        var localized = window.translate(key);
 		
 		el.attr("title", localized);
 	});
@@ -130,7 +113,7 @@ function localize() {
     $("[data-localized-resource]").each(function () {
         var el = $(this);
         var key = el.attr("data-localized-resource");
-        var localized = tryParseLocalizedResource(key);
+        var localized = window.translate(key);
 
         if (localized) {
             var target = el.attr("data-localization-target");

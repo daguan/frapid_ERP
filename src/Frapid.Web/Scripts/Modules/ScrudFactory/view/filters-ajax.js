@@ -44,7 +44,7 @@ function loadFilterNames() {
         var selected = "";
 
         var option = "<option value=''>";
-        option += window.i18n.SelectAFilter;
+        option += window.translate("SelectAFilter");
         option += "</option>";
 
         var items = "";
@@ -142,7 +142,7 @@ function deleteSavedFilter() {
         var ajax = request(filterName);
         ajax.success(function () {
             loadFilterNames();
-            displayMessage(window.i18n.TaskCompletedSuccessfully, "success");
+            displayMessage(window.translate("TaskCompletedSuccessfully"), "success");
         });
     };
 };

@@ -133,7 +133,7 @@
 			return;
 		};
 		
-        var confirmed = confirm(window.i18n.TaskCompletedSuccessfullyReturnToView);
+        var confirmed = confirm(window.translate("TaskCompletedSuccessfullyReturnToView"));
 
         resetForm();
 

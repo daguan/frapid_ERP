@@ -633,5 +633,20 @@ namespace Frapid.i18n
 		/// </summary>
 		public static string CouldNotCreateBackup => I18NResource.GetString(ResourceDirectory, "CouldNotCreateBackup");
 
+		/// <summary>
+		///Go to Website
+		/// </summary>
+		public static string GoToWebsite => I18NResource.GetString(ResourceDirectory, "GoToWebsite");
+
+		/// <summary>
+		///Search ...
+		/// </summary>
+		public static string Search => I18NResource.GetString(ResourceDirectory, "Search");
+
+		/// <summary>
+		///CTRL + SHIFT + F
+		/// </summary>
+		public static string CtrlShiftF => I18NResource.GetString(ResourceDirectory, "CtrlShiftF");
+
 	}
 }

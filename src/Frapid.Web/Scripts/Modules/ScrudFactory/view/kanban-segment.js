@@ -14,9 +14,9 @@ function createKanbanSegment(kanban) {
     local = local.replace(/{KanbanId}/g, kanban.KanbanId);
     local = local.replace(/{KanbanName}/g, kanban.KanbanName);
     local = local.replace(/{Description}/g, kanban.Description);
-    local = local.replace("{AddNewCheckListLocalized}", window.i18n.AddNewChecklist);
-    local = local.replace("{EditThisCheckListLocalized}", window.i18n.EditThisChecklist);
-    local = local.replace("{DeleteThisCheckListLocalized}", window.i18n.DeleteThisChecklist);
+    local = local.replace("{AddNewCheckListLocalized}", window.translate("AddNewChecklist"));
+    local = local.replace("{EditThisCheckListLocalized}", window.translate("EditThisChecklist"));
+    local = local.replace("{DeleteThisCheckListLocalized}", window.translate("DeleteThisChecklist"));
 
     var el = $(local);
 

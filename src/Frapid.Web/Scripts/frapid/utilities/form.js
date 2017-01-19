@@ -38,6 +38,10 @@ function serializeForm(el) {
         if(!type){
             return val;
         };
+		
+		if(el.hasClass("date")){
+			type = "date";
+		};
         
         switch(type){
             case "date":

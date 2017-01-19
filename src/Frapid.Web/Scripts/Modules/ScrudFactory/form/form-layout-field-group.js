@@ -1,6 +1,6 @@
 ﻿function createFieldGroup(el, column, cssClass) {
     function getLabel(columnName) {
-        return tryParseLocalizedResource(columnName);
+        return window.translate(columnName);
     };
 
     if (typeof (column) === "undefined") {
@@ -16,11 +16,7 @@
 
     var label = $("<label/>");
 
-    if (column.FieldLabel) {
-        label.text(column.FieldLabel);
-    } else {
-        label.text(getLabel(column.ColumnName));
-    };
+    label.text(window.translate(column.PropertyName));
 
     label.attr("for", column.ColumnName);
 

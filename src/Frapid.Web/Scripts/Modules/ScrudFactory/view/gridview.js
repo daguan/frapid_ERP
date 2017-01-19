@@ -41,8 +41,6 @@
 
     header += "</tr></thead>";
 
-
-
     $(header).appendTo(el);
 
     var body = $("<tbody />");
@@ -55,11 +53,11 @@
             if (excludedColumnIndices.indexOf(index) === -1) {
                 var title = "";
                 if (val === false) {
-                    val = window.i18n.No;
+                    val = window.translate("No");
                 };
 
                 if (val === true) {
-                    val = window.i18n.Yes;
+                    val = window.translate("Yes");
                 };
 
                 var column = Enumerable.From(metaDefinition.Columns)

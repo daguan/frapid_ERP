@@ -1,6 +1,6 @@
 ﻿var ignoredQueryStrings = ["TitleSuffix", "View", "Page", "Filter", "data-tab", "ReturnUrl"];
 
-$("#FilterName").text(window.i18n.Untitled);
+$("#FilterName").text(window.translate("Untitled"));
 
 function getFilterType(columnName) {
     var type = window.Enumerable.From(metaDefinition.Columns)
@@ -106,7 +106,7 @@ function loadColumns() {
 };
 
 $("#FilterNameInputText").keyup(function () {
-    $("#FilterName").html(window.i18n.Untitled);
+    $("#FilterName").html(window.translate("Untitled"));
     if ($(this).val()) {
         var filterName = $(this).val();
         $("#FilterName").html(filterName);
@@ -234,7 +234,7 @@ $("#SaveFilterButton").click(function () {
     var error = table.find("tr.error td:nth-child(2)").text();
 
     if (error.length) {
-        var message = window.i18n.ColumnInvalidAreYouSure;
+        var message = window.translate("ColumnInvalidAreYouSure");
 
         var confirmed = confirm(stringFormat(message, error));
         if (!confirmed) {
@@ -276,7 +276,7 @@ $("#SaveFilterButton").click(function () {
 
     ajax.success(function () {
         window.filterId = 0;
-        displayMessage(window.i18n.TaskCompletedSuccessfully, "success");
+        displayMessage(window.translate("TaskCompletedSuccessfully"), "success");
     });
 
     ajax.fail(function (xhr) {
@@ -394,7 +394,7 @@ $("#RemoveDefaultFilterButton").click(function () {
     var ajax = request();
 
     ajax.success(function () {
-        displayMessage(window.i18n.TaskCompletedSuccessfully, "success");
+        displayMessage(window.translate("TaskCompletedSuccessfully"), "success");
 
         $(".filter.modal").modal("close");
     });
@@ -413,7 +413,7 @@ $("#MakeUserDefaultFilterButton").click(function () {
     var ajax = request(filterName);
 
     ajax.success(function () {
-        displayMessage(window.i18n.TaskCompletedSuccessfully, "success");
+        displayMessage(window.translate("TaskCompletedSuccessfully"), "success");
 
         $(".filter.modal").modal("close");
     });

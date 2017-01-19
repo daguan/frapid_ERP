@@ -496,6 +496,14 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
             font-size: 0.7em;
         }
 
+        .rtl .find .close .right {
+            text-align: left;            
+        }
+
+        .rtl .find .close .left {
+            text-align: right;            
+        }
+
         .find .close a {
             color: #eee !important;
         }

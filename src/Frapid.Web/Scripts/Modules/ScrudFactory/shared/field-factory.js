@@ -58,9 +58,9 @@
                 option += " value=''>";
             };
 
-            option += window.i18n.Select + "</option>";
-            option += "<option value='yes'>" + window.i18n.Yes + "</option>";
-            option += "<option value='no'>" + window.i18n.No + "</option>";
+            option += window.translate("Select") + "</option>";
+            option += "<option value='yes'>" + window.translate("Yes") + "</option>";
+            option += "<option value='no'>" + window.translate("No") + "</option>";
 
             el.append(option);
 

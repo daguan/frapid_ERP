@@ -1,24 +1,8 @@
-﻿function tryParseLocalizedResource(text) {
-    function toProperCase(str) {
-        var result = str.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
-        return result.charAt(0).toUpperCase() + result.slice(1);
-    };
-
-    var key = toProperCase(text);
-    var parsed = window.i18n[key];
-
-    if(!parsed){
-        parsed = key;
-    };
-
-    return parsed;
-};
-
-function localizeHeaders(el) {
+﻿function localizeHeaders(el) {
     el.find("thead tr:first-child th").each(function () {
         var cell = $(this);
-        var name = toUnderscoreCase(cell.text());
-        var text = tryParseLocalizedResource(name);
+        var key = cell.text();
+        var text = translate(key);
         cell.text(text);
 
         var column = new Object();

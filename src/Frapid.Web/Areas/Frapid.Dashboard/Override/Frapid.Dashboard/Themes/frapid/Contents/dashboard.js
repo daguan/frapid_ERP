@@ -299,7 +299,7 @@ function setBackground(image) {
 $('.notification.item').popup({
     inline: true,
     hoverable: false,
-    position: 'bottom left',
+    position: 'bottom right',
     popup: $('.notification.popup'),
     on: 'click',
     closable: true,
@@ -626,8 +626,6 @@ $("[data-feature-search]").on("keyup", function (e) {
         };
 
         if (key === enter && active.length) {
-            target.fadeOut(500);
-            el.val("");
             active.find("a").trigger("click");
         };
     };
@@ -704,7 +702,8 @@ $("[data-feature-search]").on("keyup", function (e) {
         };
 
         feature.on("click", function () {
-            //todo: count hits for analytics
+            $("[data-feature-search]").val("");
+            target.fadeOut(500);
         });
 
         const breadcrumb = $("<span class='breadcrumb' />");
@@ -715,6 +714,17 @@ $("[data-feature-search]").on("keyup", function (e) {
     });
 
     if (matches.length) {
+        const left = $(".search.item").offset().left;
+        const offset = $(".search.item").width();
+        const width = target.width();
+        const padding = 20;
+
+        if ($("body").is(".rtl")) {
+            target.css("right", "auto").css("left", (left + offset - width + padding) + "px");
+        } else {
+            target.css("right", "auto").css("left", left + "px");
+        };
+
         target.fadeIn(500);
     };
 });

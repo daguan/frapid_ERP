@@ -4,7 +4,7 @@
     if (id) {
         $(".form.factory").hide();
         $("[data-primarykey]").val("");
-        window.displayMessage(window.i18n.ItemDuplicated, "success");
+        window.displayMessage(window.translate("ItemDuplicated"), "success");
         $(".form.factory").show();
     };
 });

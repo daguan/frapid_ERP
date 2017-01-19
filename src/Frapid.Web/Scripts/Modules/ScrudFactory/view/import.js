@@ -54,31 +54,31 @@ $("#file").change(function () {
     var supportedFileTypes = ["text/csv", "application/csv", "text/comma-separated-values", "application/vnd.ms-excel"];
 
     if (supportedFileTypes.indexOf(file.type) === -1) {
-        $(".big.error").addClass("vpad8").html(stringFormat(window.i18n.UploadInvalidTryAgain, file.type));
+        $(".big.error").addClass("vpad8").html(stringFormat(window.translate("UploadInvalidTryAgain"), file.type));
         return;
     };
 
     $("#ProgressBar").show();
     var progress = $(".progress");
 
-    showProgress(progress, 25, window.i18n.ProcessingYourCSVFile);
+    showProgress(progress, 25, window.translate("ProcessingYourCSVFile"));
 
     var reader = new FileReader();
 
     reader.onload = function () {
         var result = reader.result;
-        showProgress(progress, 50, window.i18n.SuccessfullyProcessedYourFile);
+        showProgress(progress, 50, window.translate("SuccessfullyProcessedYourFile"));
         var entities = Papa.parse(result, { "header": true, skipEmptyLines: true }).data;
         entities = prepEntities(entities);
 
-        showProgress(progress, 50, window.i18n.RequestingImport);
+        showProgress(progress, 50, window.translate("RequestingImport"));
 
         el.closest(".segment").find(".button").addClass("loading");
 
         var ajax = request(entities);
 
         ajax.success(function () {
-            var message = stringFormat(window.i18n.ImportedNItems, entities.length);
+            var message = stringFormat(window.translate("ImportedNItems"), entities.length);
             showProgress(progress, 100, message);
             el.closest(".segment").find(".button").removeClass("loading");
 
@@ -90,7 +90,7 @@ $("#file").change(function () {
         ajax.fail(function (xhr) {
             $(".big.error").addClass("vpad8").html(getAjaxErrorMessage(xhr));
             el.closest(".segment").find(".button").removeClass("loading");
-            showProgress(progress, 0, window.i18n.RollingBackChanges);
+            showProgress(progress, 0, window.translate("RollingBackChanges"));
             $("#ProgressBar").fadeOut(2000);
         });
     };
