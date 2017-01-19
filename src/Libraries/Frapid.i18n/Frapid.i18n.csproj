@@ -53,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\Createi18N.cs" />
+    <Compile Include="Command\PackResources.cs" />
+    <Compile Include="Command\ResourceSerializer.cs" />
     <Compile Include="Command\ResourceWriter.cs" />
     <Compile Include="CultureManager.cs" />
     <Compile Include="I18NResource.cs" />

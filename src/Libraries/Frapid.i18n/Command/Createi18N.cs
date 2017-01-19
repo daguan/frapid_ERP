@@ -45,7 +45,7 @@ namespace Frapid.i18n.Command
             string path = @"{0}\Areas\{1}\AppInfo.json";
             string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..");
 
-            if (this.AppName == "Frapid")
+            if (this.AppName.ToUpperInvariant() == "FRAPID")
             {
                 this.IsValid = true;
                 return;
@@ -65,6 +65,10 @@ namespace Frapid.i18n.Command
 
         public override async Task ExecuteCommandAsync()
         {
+            if (!this.IsValid)
+            {
+                return;
+            }
             await Task.Delay(0).ConfigureAwait(false);
 
             if (this.Line.CountTokens() > 2)
