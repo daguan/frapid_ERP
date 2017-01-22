@@ -80,7 +80,7 @@ else
                 <div class="ui positive message">
                     <div class="ui header">@I18N.PleaseNote</div>
                     <div class="ui divider"></div>
-                    @I18N.CookieMessage
+                    @Html.Raw(I18N.CookieMessage)
                 </div>
             </div>
         </div>
@@ -89,6 +89,7 @@ else
 </div>
 
 <script src="/i18n/resources.js?cultureCode=@CultureManager.GetCurrentUiCulture().Name"></script>
+<script src="/Scripts/frapid/utilities/localizable.js"></script>
 <script src="/Scripts/frapid/core/frapid-ajax.js"></script>
 <script src="/Scripts/frapid/core/validation.js"></script>
 <script src="/Scripts/frapid/utilities/validator.js"></script>
