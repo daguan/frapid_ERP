@@ -7,7 +7,7 @@ The localizable.js utility automatically translates localization literals depend
 Include the localizable.js utility on your View.
 
 ```html
-<script src="/Scripts/frapid/utilities/localizable.js"></script>
+<script src="/scripts/frapid/utilities/localizable.js"></script>
 ```
 
 ## Example

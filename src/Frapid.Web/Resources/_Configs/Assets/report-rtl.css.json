@@ -3,7 +3,7 @@
   "BundleName": "report-rtl.css",
   "IsDevelopment": true,
   "Files": [
-    "~/Scripts/semantic-ui/components/icon.rtl.css",
+    "/scripts/semantic-ui/components/icon.rtl.css",
     "~/Stylesheets/report.rtl.css"
   ],
   "CacheDurationInMinutes": 10080

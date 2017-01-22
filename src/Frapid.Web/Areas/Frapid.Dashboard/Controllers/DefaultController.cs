@@ -30,7 +30,7 @@ namespace Frapid.Dashboard.Controllers
                         Culture = CultureManager.GetCurrent().Name,
                         Tenant = this.Tenant,
                         Language = CultureManager.GetCurrent().TwoLetterISOLanguageName,
-                        JqueryUIi18NPath = "/Scripts/jquery-ui/i18n/",
+                        JqueryUIi18NPath = "/scripts/jquery-ui/i18n/",
                         Today = DateTime.Today,
                         Now = DateTimeOffset.UtcNow,
                         UserId = this.AppUser.UserId,
