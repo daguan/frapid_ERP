@@ -15,7 +15,7 @@ namespace Frapid.i18n.Command
 {
     public class PackResources : PackCommand
     {
-        public override string Syntax { get; } = "pack resource\r\npack resource [for <Language>]";
+        public override string Syntax { get; } = "pack resource [for <Language>]\r\npack resource";
         public override string Name { get; } = "resource";
 
         public override bool IsValid { get; set; }

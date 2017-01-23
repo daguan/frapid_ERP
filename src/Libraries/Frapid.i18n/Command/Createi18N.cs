@@ -13,7 +13,7 @@ namespace Frapid.i18n.Command
 {
     public class Createi18N : CreateCommand
     {
-        public override string Syntax { get; } = "create resource [on <AppName>]\r\nreate resource";
+        public override string Syntax { get; } = "create resource [on <AppName>]\r\ncreate resource";
         public override string Name { get; } = "resource";
 
         public override bool IsValid { get; set; }

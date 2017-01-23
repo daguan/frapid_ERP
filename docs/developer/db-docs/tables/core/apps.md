@@ -4,13 +4,17 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | app_name | NOT NULL | character varying | 100 |  |
-| 2 | name |  | character varying | 100 |  |
-| 3 | version_number |  | character varying | 100 |  |
-| 4 | publisher |  | character varying | 100 |  |
-| 5 | published_on |  | date | 0 |  |
-| 6 | icon |  | character varying | 100 |  |
-| 7 | landing_url |  | text | 0 |  |
+| 1 | app_id | [ ] | integer | 0 |  |
+| 2 | app_name | [ ] | character varying | 100 |  |
+| 3 | name | [x] | character varying | 100 |  |
+| 4 | version_number | [x] | character varying | 100 |  |
+| 5 | publisher | [x] | character varying | 100 |  |
+| 6 | published_on | [x] | date | 0 |  |
+| 7 | icon | [x] | character varying | 100 |  |
+| 8 | landing_url | [x] | text | 0 |  |
+| 9 | audit_user_id | [x] | integer | 0 |  |
+| 10 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 11 | deleted | [x] | boolean | 0 |  |
 
 
 
@@ -41,6 +45,9 @@
 
 | # | Column Name | Default |
 | --- | --- | --- |
+| 1 | app_id | nextval('core.apps_app_id_seq'::regclass) |
+| 10 | audit_ts | now() |
+| 11 | deleted | false |
 
 
 **Triggers**

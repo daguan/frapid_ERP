@@ -4,10 +4,13 @@
 
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
-| 1 | menu_locale_id | NOT NULL | integer | 0 |  |
-| 2 | menu_id | NOT NULL | integer | 0 |  |
-| 3 | culture | NOT NULL | character varying | 12 |  |
-| 4 | menu_text | NOT NULL | character varying | 250 |  |
+| 1 | menu_locale_id | [ ] | integer | 0 |  |
+| 2 | menu_id | [ ] | integer | 0 |  |
+| 3 | culture | [ ] | character varying | 12 |  |
+| 4 | menu_text | [ ] | character varying | 250 |  |
+| 5 | audit_user_id | [x] | integer | 0 |  |
+| 6 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 7 | deleted | [x] | boolean | 0 |  |
 
 
 
@@ -39,6 +42,8 @@
 | # | Column Name | Default |
 | --- | --- | --- |
 | 1 | menu_locale_id | nextval('core.menu_locale_menu_locale_id_seq'::regclass) |
+| 6 | audit_ts | now() |
+| 7 | deleted | false |
 
 
 **Triggers**
