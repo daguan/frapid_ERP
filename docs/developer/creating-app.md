@@ -34,7 +34,7 @@ The application will created on `/Areas/MyAwesomeApp`. Edit the file [AppInfo.js
 
 **Uncategorized:**
 
-- Decorate your controller with `[Antiforgery]` attribute if your controller contains any action except `GET, HEAD, OPTIONS`. In other words, if your controller allows data to be written or deleted, you must use the `[Antiforgery]` attribute. Remember that you can substitute this attribute with `System.Web.Mvc.ValidateAntiForgeryTokenAttribute`.
+- Decorate your controller with `[Antiforgery]` attribute if your controller contains any action except `GET, HEAD, OPTIONS`. In other words, if your controller allows data to be written or deleted, you must use the `[Antiforgery]` attribute. Remember that you cannot substitute this attribute with `System.Web.Mvc.ValidateAntiForgeryTokenAttribute`.
 - Views can be [overridden on tenants and themes](docs/developer/overrides.md).
 - Decorate your action method with `[RestrictAnonymous]` attribute if you are not inheriting from `DashboardController` or `BackendController` and still want to protect that action from anonymous access. 
 - If you want to execute your custom code [during application start](i-startup-registration.md), implement the interface `IStartupRegistraion`. For example, the account app upserts installed domains [by implementing this interface](https://github.com/frapid/frapid/blob/master/src/Frapid.Web/Areas/Frapid.Account/StartupTask.cs).
