@@ -1,7 +1,7 @@
 # Developer Guide
 
 You need to sign the [contributor license agreement](cla.md) before you contribute to Frapid. Frapid is 
-licensed under MIT license. Please refer to the file contributing.md on the root directory.
+licensed under MIT license. Please refer to the file [contributing.md](../../contributing.md) on the root directory.
 
 
 
