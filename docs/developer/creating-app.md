@@ -16,7 +16,7 @@ and enter the command to create your app:
 create app MyAwesomeApp
 ```
 
-The application will created on `/Areas/MyAwesomeApp`. Edit the file [AppInfo.json](AppInfo.json.md) and open the solution file `MyAwesomeApp.sln` in Visual Studio.
+The application will be created on `/Areas/MyAwesomeApp`. Edit the file [AppInfo.json](AppInfo.json.md) and open the solution file `MyAwesomeApp.sln` in Visual Studio.
 
 
 
