@@ -24,6 +24,7 @@ Frapid uses database first approach. Please follow these documents for more info
 
 - [Database of Frapid](db.md)
 - [Creating Data Transfer Objects](data-access/dto.md)
+- [Restful API](restful-api.md)
 
 
 

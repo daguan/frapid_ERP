@@ -300,7 +300,7 @@ namespace Frapid.WebApi.Service
 #endif
         }
 
-        [AcceptVerbs("GET", "HEAD")]
+        [AcceptVerbs("POST")]
         [Route("~/api/views/{schemaName}/{tableName}/display-fields/get-where")]
         [HttpPost]
         [RestAuthorize]
@@ -365,7 +365,7 @@ namespace Frapid.WebApi.Service
 #endif
         }
 
-        [AcceptVerbs("GET", "HEAD")]
+        [AcceptVerbs("POST")]
         [Route("~/api/views/{schemaName}/{tableName}/lookup-fields/get-where")]
         [HttpPost]
         [RestAuthorize]
