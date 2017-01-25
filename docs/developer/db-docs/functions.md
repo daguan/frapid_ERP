@@ -1,7 +1,7 @@
 # Functions
 
 | # | Function | Owner | Description |
-| - | -------- | ----- | ----------- |
+| ---- | -------- | ----- | ----------- |
 | 1 | [production](schemas/production.md).[abort_manufacturing(_order_id bigint) RETURNS boolean](functions/production/abort_manufacturing-4244906.md) | frapid_db_user |   |
 | 2 | [forums](schemas/forums.md).[about_user(_user_id integer) RETURNS TABLE(user_id integer, name text, created_on date, joined_year integer, total_answers bigint, total_questions bigint, received_thanks bigint, given_thanks bigint, current_rank text, rank_css_color text, next_rank text, remaining_posts integer, last_sign_in_timestamp timestamp with time zone, last_sign_in_browser text, last_sign_in_ip text, profile_hits bigint, post_hits bigint, signature text, website text, blog text, twitter text, linkedin text, facebook text)](functions/forums/about_user-4242481.md) | frapid_db_user |   |
 | 3 | [foodcourt](schemas/foodcourt.md).[add_bod_cash(_user_id integer, _transaction_date date, _amount numeric, _provided_by character varying, _memo character varying) RETURNS void](functions/foodcourt/add_bod_cash-4239438.md) | frapid_db_user |   |

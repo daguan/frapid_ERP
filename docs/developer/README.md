@@ -1,7 +1,7 @@
 # Developer Guide
 
-You need to sign the [contributor license agreement](cla.md) before you contribute to Frapid. Frapid is 
-licensed under MIT license. Please refer to the file contributing.md on the root directory.
+You need to sign the [MixERP Contributor License Agreement](https://github.com/mixerp/mixerp/blob/master/CLA.md) before you contribute to Frapid. Frapid is 
+licensed under Apache v2.0 license. Please refer to the file [contributing.md](../../contributing.md) on the root directory.
 
 
 
@@ -24,6 +24,7 @@ Frapid uses database first approach. Please follow these documents for more info
 
 - [Database of Frapid](db.md)
 - [Creating Data Transfer Objects](data-access/dto.md)
+- [Restful API](restful-api.md)
 
 
 
