@@ -42,7 +42,7 @@
 
 | # | Trigger | Owner | Description |
 | --- | --- | --- | --- |
-| 1 | [disable_update_transaction_log()RETURNS TRIGGER](../functions/audit/disable_update_transaction_log-4238988.md) | frapid_db_user |  |
+| 1 | [disable_update_transaction_log()RETURNS TRIGGER](../functions/audit/disable_update_transaction_log-4458111.md) | frapid_db_user |  |
 
 
 

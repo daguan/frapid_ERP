@@ -10,8 +10,8 @@
 | 2 | quotation_id | [x] | bigint | 0 |  |
 | 2 | office_id | [ ] | integer | 0 |  |
 | 2 | quotation_id | [x] | bigint | 0 |  |
-| 3 | value_date | [ ] | date | 0 |  |
 | 3 | description | [ ] | character varying | 100 |  |
+| 3 | value_date | [ ] | date | 0 |  |
 | 3 | value_date | [ ] | date | 0 |  |
 | 4 | expected_delivery_date | [ ] | date | 0 |  |
 | 4 | expected_delivery_date | [ ] | date | 0 |  |
@@ -23,28 +23,28 @@
 | 6 | due_date | [ ] | date | 0 |  |
 | 6 | customer_id | [ ] | integer | 0 |  |
 | 7 | price_type_id | [ ] | integer | 0 |  |
-| 7 | price_type_id | [ ] | integer | 0 |  |
 | 7 | priority_id | [ ] | integer | 0 |  |
+| 7 | price_type_id | [ ] | integer | 0 |  |
+| 8 | shipper_id | [x] | integer | 0 |  |
 | 8 | order_type_id | [ ] | integer | 0 |  |
 | 8 | shipper_id | [x] | integer | 0 |  |
-| 8 | shipper_id | [x] | integer | 0 |  |
-| 9 | user_id | [ ] | integer | 0 |  |
 | 9 | user_id | [ ] | integer | 0 |  |
 | 9 | reference_number | [ ] | character varying | 24 |  |
-| 10 | office_id | [ ] | integer | 0 |  |
+| 9 | user_id | [ ] | integer | 0 |  |
 | 10 | raw_material_store_id | [ ] | integer | 0 |  |
 | 10 | office_id | [ ] | integer | 0 |  |
+| 10 | office_id | [ ] | integer | 0 |  |
+| 11 | reference_number | [x] | character varying | 24 |  |
 | 11 | reference_number | [x] | character varying | 24 |  |
 | 11 | work_in_progress_store_id | [ ] | integer | 0 |  |
-| 11 | reference_number | [x] | character varying | 24 |  |
-| 12 | terms | [x] | character varying | 500 |  |
 | 12 | wip_account_id | [ ] | integer | 0 |  |
 | 12 | terms | [x] | character varying | 500 |  |
+| 12 | terms | [x] | character varying | 500 |  |
+| 13 | internal_memo | [x] | character varying | 500 |  |
 | 13 | internal_memo | [x] | character varying | 500 |  |
 | 13 | finished_good_store_id | [ ] | integer | 0 |  |
-| 13 | internal_memo | [x] | character varying | 500 |  |
-| 14 | order_action_id | [ ] | integer | 0 |  |
 | 14 | audit_user_id | [x] | integer | 0 |  |
+| 14 | order_action_id | [ ] | integer | 0 |  |
 | 14 | audit_user_id | [x] | integer | 0 |  |
 | 15 | audit_ts | [x] | timestamp with time zone | 0 |  |
 | 15 | bom_id | [ ] | integer | 0 |  |
@@ -112,8 +112,8 @@
 | # | Column Name | Default |
 | --- | --- | --- |
 | 1 | order_id | nextval('production.orders_order_id_seq'::regclass) |
-| 1 | order_id | nextval('purchase.orders_order_id_seq'::regclass) |
 | 1 | order_id | nextval('sales.orders_order_id_seq'::regclass) |
+| 1 | order_id | nextval('purchase.orders_order_id_seq'::regclass) |
 | 3 | description | ''::character varying |
 | 5 | transaction_timestamp | now() |
 | 5 | transaction_timestamp | now() |

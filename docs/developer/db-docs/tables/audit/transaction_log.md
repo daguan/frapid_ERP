@@ -51,8 +51,8 @@
 
 | Trigger Name | Targets | On Event | Timing | Condition | Order | Orientation | Description |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| audit.disable_update_transaction_log | [audit.disable_update_transaction_log](../../functions/audit/disable_update_transaction_log-4238988.md) | UPDATE | AFTER |  | 0 | ROW |  |
-| audit.disable_update_transaction_log | [audit.disable_update_transaction_log](../../functions/audit/disable_update_transaction_log-4238988.md) | DELETE | AFTER |  | 0 | ROW |  |
+| audit.disable_update_transaction_log | [audit.disable_update_transaction_log](../../functions/audit/disable_update_transaction_log-4458111.md) | UPDATE | AFTER |  | 0 | ROW |  |
+| audit.disable_update_transaction_log | [audit.disable_update_transaction_log](../../functions/audit/disable_update_transaction_log-4458111.md) | DELETE | AFTER |  | 0 | ROW |  |
 
 
 ### Related Contents

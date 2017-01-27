@@ -6,15 +6,16 @@
 | --- | --- | --- | --- | --- | --- |
 | 1 | app_id | [ ] | integer | 0 |  |
 | 2 | app_name | [ ] | character varying | 100 |  |
-| 3 | name | [x] | character varying | 100 |  |
-| 4 | version_number | [x] | character varying | 100 |  |
-| 5 | publisher | [x] | character varying | 100 |  |
-| 6 | published_on | [x] | date | 0 |  |
-| 7 | icon | [x] | character varying | 100 |  |
-| 8 | landing_url | [x] | text | 0 |  |
-| 9 | audit_user_id | [x] | integer | 0 |  |
-| 10 | audit_ts | [x] | timestamp with time zone | 0 |  |
-| 11 | deleted | [x] | boolean | 0 |  |
+| 3 | i18n_key | [ ] | character varying | 200 |  |
+| 4 | name | [x] | character varying | 100 |  |
+| 5 | version_number | [x] | character varying | 100 |  |
+| 6 | publisher | [x] | character varying | 100 |  |
+| 7 | published_on | [x] | date | 0 |  |
+| 8 | icon | [x] | character varying | 100 |  |
+| 9 | landing_url | [x] | text | 0 |  |
+| 10 | audit_user_id | [x] | integer | 0 |  |
+| 11 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 12 | deleted | [x] | boolean | 0 |  |
 
 
 
@@ -46,8 +47,8 @@
 | # | Column Name | Default |
 | --- | --- | --- |
 | 1 | app_id | nextval('core.apps_app_id_seq'::regclass) |
-| 10 | audit_ts | now() |
-| 11 | deleted | false |
+| 11 | audit_ts | now() |
+| 12 | deleted | false |
 
 
 **Triggers**

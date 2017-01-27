@@ -12,8 +12,8 @@
 | 3 | expected_delivery_date | [ ] | date | 0 |  |
 | 4 | transaction_timestamp | [ ] | timestamp with time zone | 0 |  |
 | 4 | transaction_timestamp | [ ] | timestamp with time zone | 0 |  |
-| 5 | supplier_id | [ ] | integer | 0 |  |
 | 5 | customer_id | [ ] | integer | 0 |  |
+| 5 | supplier_id | [ ] | integer | 0 |  |
 | 6 | price_type_id | [ ] | integer | 0 |  |
 | 6 | price_type_id | [ ] | integer | 0 |  |
 | 7 | shipper_id | [x] | integer | 0 |  |
@@ -74,8 +74,8 @@
 
 | # | Column Name | Default |
 | --- | --- | --- |
-| 1 | quotation_id | nextval('purchase.quotations_quotation_id_seq'::regclass) |
 | 1 | quotation_id | nextval('sales.quotations_quotation_id_seq'::regclass) |
+| 1 | quotation_id | nextval('purchase.quotations_quotation_id_seq'::regclass) |
 | 4 | transaction_timestamp | now() |
 | 4 | transaction_timestamp | now() |
 | 14 | audit_ts | now() |

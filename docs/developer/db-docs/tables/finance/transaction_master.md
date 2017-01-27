@@ -76,7 +76,7 @@
 
 | Trigger Name | Targets | On Event | Timing | Condition | Order | Orientation | Description |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| finance.update_transaction_meta | [finance.update_transaction_meta](../../functions/finance/update_transaction_meta-4237343.md) | INSERT | AFTER |  | 0 | ROW |  |
+| finance.update_transaction_meta | [finance.update_transaction_meta](../../functions/finance/update_transaction_meta-4456382.md) | INSERT | AFTER |  | 0 | ROW |  |
 
 
 ### Related Contents

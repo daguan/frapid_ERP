@@ -64,9 +64,9 @@
 
 | Trigger Name | Targets | On Event | Timing | Condition | Order | Orientation | Description |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| hrm.dismiss_employee_trigger | [hrm.dismiss_employee](../../functions/hrm/dismiss_employee-4243423.md) | UPDATE | BEFORE |  | 0 | ROW |  |
-| hrm.dismiss_employee_trigger | [hrm.dismiss_employee](../../functions/hrm/dismiss_employee-4243423.md) | INSERT | BEFORE |  | 0 | ROW |  |
-| hrm.undismiss_employee_trigger | [hrm.undismiss_employee](../../functions/hrm/undismiss_employee-4243424.md) | DELETE | BEFORE |  | 0 | ROW |  |
+| hrm.dismiss_employee_trigger | [hrm.dismiss_employee](../../functions/hrm/dismiss_employee-4462574.md) | UPDATE | BEFORE |  | 0 | ROW |  |
+| hrm.dismiss_employee_trigger | [hrm.dismiss_employee](../../functions/hrm/dismiss_employee-4462574.md) | INSERT | BEFORE |  | 0 | ROW |  |
+| hrm.undismiss_employee_trigger | [hrm.undismiss_employee](../../functions/hrm/undismiss_employee-4462575.md) | DELETE | BEFORE |  | 0 | ROW |  |
 
 
 ### Related Contents

@@ -14,8 +14,8 @@
 | 3 | counter_name | [ ] | character varying | 100 |  |
 | 3 | counter_name | [ ] | character varying | 100 |  |
 | 4 | associated_screen_id | [ ] | integer | 0 |  |
-| 4 | store_id | [ ] | integer | 0 |  |
 | 4 | pos_area_id | [ ] | integer | 0 |  |
+| 4 | store_id | [ ] | integer | 0 |  |
 | 5 | audit_user_id | [x] | integer | 0 |  |
 | 5 | audit_user_id | [x] | integer | 0 |  |
 | 5 | audit_user_id | [x] | integer | 0 |  |

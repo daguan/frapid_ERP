@@ -105,9 +105,9 @@
 
 | # | Function | Owner | Description |
 | --- | --- | --- | --- |
-| 1 | [get_employee_by_employee_id(_employee_id integer)RETURNS text](../functions/hrm/get_employee_by_employee_id-4243420.md) | frapid_db_user |  |
-| 2 | [get_employee_code_by_employee_id(_employee_id integer)RETURNS text](../functions/hrm/get_employee_code_by_employee_id-4243421.md) | frapid_db_user |  |
-| 3 | [get_employee_name_by_employee_id(_employee_id integer)RETURNS text](../functions/hrm/get_employee_name_by_employee_id-4243422.md) | frapid_db_user |  |
+| 1 | [get_employee_by_employee_id(_employee_id integer)RETURNS text](../functions/hrm/get_employee_by_employee_id-4462571.md) | frapid_db_user |  |
+| 2 | [get_employee_code_by_employee_id(_employee_id integer)RETURNS text](../functions/hrm/get_employee_code_by_employee_id-4462572.md) | frapid_db_user |  |
+| 3 | [get_employee_name_by_employee_id(_employee_id integer)RETURNS text](../functions/hrm/get_employee_name_by_employee_id-4462573.md) | frapid_db_user |  |
 
 
 
@@ -115,8 +115,8 @@
 
 | # | Trigger | Owner | Description |
 | --- | --- | --- | --- |
-| 1 | [dismiss_employee()RETURNS TRIGGER](../functions/hrm/dismiss_employee-4243423.md) | frapid_db_user |  |
-| 2 | [undismiss_employee()RETURNS TRIGGER](../functions/hrm/undismiss_employee-4243424.md) | frapid_db_user |  |
+| 1 | [dismiss_employee()RETURNS TRIGGER](../functions/hrm/dismiss_employee-4462574.md) | frapid_db_user |  |
+| 2 | [undismiss_employee()RETURNS TRIGGER](../functions/hrm/undismiss_employee-4462575.md) | frapid_db_user |  |
 
 
 

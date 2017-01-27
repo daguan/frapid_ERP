@@ -69,7 +69,7 @@
 
 | Trigger Name | Targets | On Event | Timing | Condition | Order | Orientation | Description |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| account.account_token_auto_expiry_trigger | [account.token_auto_expiry_trigger](../../functions/account/token_auto_expiry_trigger-4235970.md) | INSERT | BEFORE |  | 0 | ROW |  |
+| account.account_token_auto_expiry_trigger | [account.token_auto_expiry_trigger](../../functions/account/token_auto_expiry_trigger-4455007.md) | INSERT | BEFORE |  | 0 | ROW |  |
 
 
 ### Related Contents

@@ -61,7 +61,7 @@
 
 | Trigger Name | Targets | On Event | Timing | Condition | Order | Orientation | Description |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| website.email_subscription_confirmation_trigger | [website.email_subscription_confirmation_trigger](../../functions/website/email_subscription_confirmation_trigger-4236566.md) | UPDATE | BEFORE |  | 0 | ROW |  |
+| website.email_subscription_confirmation_trigger | [website.email_subscription_confirmation_trigger](../../functions/website/email_subscription_confirmation_trigger-4455603.md) | UPDATE | BEFORE |  | 0 | ROW |  |
 
 
 ### Related Contents

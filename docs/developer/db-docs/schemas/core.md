@@ -11,12 +11,11 @@
 | 5 | [frequencies](../tables/core/frequencies.md) | frapid_db_user | DEFAULT |  |
 | 6 | [genders](../tables/core/genders.md) | frapid_db_user | DEFAULT |  |
 | 7 | [marital_statuses](../tables/core/marital_statuses.md) | frapid_db_user | DEFAULT |  |
-| 8 | [menu_locale](../tables/core/menu_locale.md) | frapid_db_user | DEFAULT |  |
-| 9 | [menus](../tables/core/menus.md) | frapid_db_user | DEFAULT |  |
-| 10 | [notification_statuses](../tables/core/notification_statuses.md) | frapid_db_user | DEFAULT |  |
-| 11 | [notifications](../tables/core/notifications.md) | frapid_db_user | DEFAULT |  |
-| 12 | [offices](../tables/core/offices.md) | frapid_db_user | DEFAULT |  |
-| 13 | [verification_statuses](../tables/core/verification_statuses.md) | frapid_db_user | DEFAULT | Verification statuses are integer values used to represent the state of a transaction.
+| 8 | [menus](../tables/core/menus.md) | frapid_db_user | DEFAULT |  |
+| 9 | [notification_statuses](../tables/core/notification_statuses.md) | frapid_db_user | DEFAULT |  |
+| 10 | [notifications](../tables/core/notifications.md) | frapid_db_user | DEFAULT |  |
+| 11 | [offices](../tables/core/offices.md) | frapid_db_user | DEFAULT |  |
+| 12 | [verification_statuses](../tables/core/verification_statuses.md) | frapid_db_user | DEFAULT | Verification statuses are integer values used to represent the state of a transaction.
 For example, a verification status of value "0" would mean that the transaction has not yet been verified.
 A negative value indicates that the transaction was rejected, whereas a positive value means approved.
 
@@ -32,7 +31,7 @@ Remember:
    It should however be noted that the cash repository balance might be less than the total cash shown on your balance sheet,
    if you have pending transactions to verify. You cannot perform EOD operation if you have pending verifications.
  |
-| 14 | [week_days](../tables/core/week_days.md) | frapid_db_user | DEFAULT |  |
+| 13 | [week_days](../tables/core/week_days.md) | frapid_db_user | DEFAULT |  |
 
 
 
@@ -45,9 +44,8 @@ Remember:
 | 3 | currencies_currency_id_seq | frapid_db_user | bigint | 1 | 1 |  |
 | 4 | frequencies_frequency_id_seq | frapid_db_user | bigint | 1 | 1 |  |
 | 5 | marital_statuses_marital_status_id_seq | frapid_db_user | bigint | 1 | 1 |  |
-| 6 | menu_locale_menu_locale_id_seq | frapid_db_user | bigint | 1 | 1 |  |
-| 7 | menus_menu_id_seq | frapid_db_user | bigint | 1 | 1 |  |
-| 8 | offices_office_id_seq | frapid_db_user | bigint | 1 | 1 |  |
+| 6 | menus_menu_id_seq | frapid_db_user | bigint | 1 | 1 |  |
+| 7 | offices_office_id_seq | frapid_db_user | bigint | 1 | 1 |  |
 
 
 **Views**
@@ -69,19 +67,19 @@ Remember:
 
 | # | Function | Owner | Description |
 | --- | --- | --- | --- |
-| 1 | [create_app(_app_name text, _name text, _version_number text, _publisher text, _published_on date, _icon text, _landing_url text, _dependencies text[])RETURNS void](../functions/core/create_app-4235661.md) | frapid_db_user |  |
-| 2 | [create_menu(_sort integer, _app_name text, _menu_name text, _url text, _icon text, _parent_menu_name text)RETURNS integer](../functions/core/create_menu-4235663.md) | frapid_db_user |  |
-| 3 | [create_menu(_app_name text, _menu_name text, _url text, _icon text, _parent_menu_name text)RETURNS integer](../functions/core/create_menu-4235664.md) | frapid_db_user |  |
-| 4 | [create_menu(_sort integer, _app_name text, _menu_name text, _url text, _icon text, _parent_menu_id integer)RETURNS integer](../functions/core/create_menu-4235662.md) | frapid_db_user |  |
-| 5 | [get_currency_code_by_office_id(_office_id integer)RETURNS character varying](../functions/core/get_currency_code_by_office_id-4235665.md) | frapid_db_user |  |
-| 6 | [get_hstore_field(_hstore hstore, _column_name text)RETURNS text](../functions/core/get_hstore_field-4235666.md) | frapid_db_user |  |
-| 7 | [get_my_notifications(_login_id bigint)RETURNS TABLE(notification_id uuid, associated_app character varying, associated_menu_id integer, url character varying, formatted_text character varying, icon character varying, seen boolean, event_date timestamp with time zone)](../functions/core/get_my_notifications-4235667.md) | frapid_db_user |  |
-| 8 | [get_office_code_by_office_id(_office_id integer)RETURNS character varying](../functions/core/get_office_code_by_office_id-4235668.md) | frapid_db_user |  |
-| 9 | [get_office_id_by_office_name(_office_name text)RETURNS integer](../functions/core/get_office_id_by_office_name-4235669.md) | frapid_db_user |  |
-| 10 | [get_office_ids(root_office_id integer)RETURNS SETOF integer](../functions/core/get_office_ids-4235670.md) | frapid_db_user |  |
-| 11 | [get_office_name_by_office_id(_office_id integer)RETURNS text](../functions/core/get_office_name_by_office_id-4235671.md) | frapid_db_user |  |
-| 12 | [is_valid_office_id(integer)RETURNS boolean](../functions/core/is_valid_office_id-4235672.md) | frapid_db_user |  |
-| 13 | [mark_notification_as_seen(_notification_id uuid, _user_id integer)RETURNS void](../functions/core/mark_notification_as_seen-4235673.md) | frapid_db_user |  |
+| 1 | [create_app(_app_name text, _i18n_key character varying, _name text, _version_number text, _publisher text, _published_on date, _icon text, _landing_url text, _dependencies text[])RETURNS void](../functions/core/create_app-4454698.md) | frapid_db_user |  |
+| 2 | [create_menu(_app_name text, _i18n_key character varying, _menu_name text, _url text, _icon text, _parent_menu_name text)RETURNS integer](../functions/core/create_menu-4454701.md) | frapid_db_user |  |
+| 3 | [create_menu(_sort integer, _app_name text, _i18n_key character varying, _menu_name text, _url text, _icon text, _parent_menu_name text)RETURNS integer](../functions/core/create_menu-4454700.md) | frapid_db_user |  |
+| 4 | [create_menu(_sort integer, _app_name text, _i18n_key character varying, _menu_name text, _url text, _icon text, _parent_menu_id integer)RETURNS integer](../functions/core/create_menu-4454699.md) | frapid_db_user |  |
+| 5 | [get_currency_code_by_office_id(_office_id integer)RETURNS character varying](../functions/core/get_currency_code_by_office_id-4454702.md) | frapid_db_user |  |
+| 6 | [get_hstore_field(_hstore hstore, _column_name text)RETURNS text](../functions/core/get_hstore_field-4454703.md) | frapid_db_user |  |
+| 7 | [get_my_notifications(_login_id bigint)RETURNS TABLE(notification_id uuid, associated_app character varying, associated_menu_id integer, url character varying, formatted_text character varying, icon character varying, seen boolean, event_date timestamp with time zone)](../functions/core/get_my_notifications-4454704.md) | frapid_db_user |  |
+| 8 | [get_office_code_by_office_id(_office_id integer)RETURNS character varying](../functions/core/get_office_code_by_office_id-4454705.md) | frapid_db_user |  |
+| 9 | [get_office_id_by_office_name(_office_name text)RETURNS integer](../functions/core/get_office_id_by_office_name-4454706.md) | frapid_db_user |  |
+| 10 | [get_office_ids(root_office_id integer)RETURNS SETOF integer](../functions/core/get_office_ids-4454707.md) | frapid_db_user |  |
+| 11 | [get_office_name_by_office_id(_office_id integer)RETURNS text](../functions/core/get_office_name_by_office_id-4454708.md) | frapid_db_user |  |
+| 12 | [is_valid_office_id(integer)RETURNS boolean](../functions/core/is_valid_office_id-4454709.md) | frapid_db_user |  |
+| 13 | [mark_notification_as_seen(_notification_id uuid, _user_id integer)RETURNS void](../functions/core/mark_notification_as_seen-4454710.md) | frapid_db_user |  |
 
 
 

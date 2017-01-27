@@ -59,8 +59,8 @@
 
 | # | Column Name | Default |
 | --- | --- | --- |
-| 1 | quotation_detail_id | nextval('sales.quotation_details_quotation_detail_id_seq'::regclass) |
 | 1 | quotation_detail_id | nextval('purchase.quotation_details_quotation_detail_id_seq'::regclass) |
+| 1 | quotation_detail_id | nextval('sales.quotation_details_quotation_detail_id_seq'::regclass) |
 | 6 | discount_rate | 0 |
 | 6 | discount_rate | 0 |
 | 7 | tax | 0 |
