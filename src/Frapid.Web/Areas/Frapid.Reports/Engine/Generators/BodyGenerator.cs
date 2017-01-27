@@ -1,7 +1,5 @@
 using System.Linq;
 using System.Text;
-using Frapid.i18n;
-using Frapid.Mapper.Extensions;
 using Frapid.Reports.Engine.Model;
 using Frapid.Reports.Helpers;
 

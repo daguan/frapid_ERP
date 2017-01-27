@@ -14,7 +14,7 @@ function loadIcons(apps) {
 		icon.attr("class", (app.Icon || "user") + " inverted circular icon");
 		iContainer.append(icon);
 
-		span.text(app.Name);
+		span.text(window.translate(app.I18nKey));
 
 		anchor.append(iContainer);
 		anchor.append(span);

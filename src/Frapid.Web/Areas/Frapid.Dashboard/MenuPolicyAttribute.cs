@@ -20,11 +20,10 @@ namespace Frapid.Dashboard
             var my = AppUsers.GetCurrentAsync().Result;
             int userId = my.UserId;
             int officeId = my.OfficeId;
-            string culture = my.Culture;
 
             string tenant = TenantConvention.GetTenant();
 
-            var policy = Menus.GetAsync(tenant, userId, officeId, culture).Result;
+            var policy = Menus.GetAsync(tenant, userId, officeId).Result;
 
             if (!policy.Any(x => x.Url.Equals(path)))
             {

@@ -162,7 +162,7 @@ var menuBuilder = {
             anchor.attr("data-parent-menu-id", this.ParentMenuId);
             anchor.attr("href", this.Url || "javascript:void(0);");
 
-            span.html(this.MenuName);
+            span.text(window.translate(this.I18nKey));
 
             if (this.Icon) {
                 const i = $("<i/>");
