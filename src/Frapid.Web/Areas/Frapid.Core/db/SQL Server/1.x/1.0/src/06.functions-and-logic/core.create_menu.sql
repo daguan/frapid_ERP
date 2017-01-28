@@ -65,8 +65,8 @@ GO
 CREATE PROCEDURE core.create_menu
 (
     @app_name                                   national character varying(100),
-    @menu_name                                  national character varying(100),
 	@i18n_key									national character varying(200),
+    @menu_name                                  national character varying(100),
     @url                                        national character varying(100),
     @icon                                       national character varying(100),
     @parent_menu_name                           national character varying(100)
