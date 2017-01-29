@@ -8,46 +8,46 @@
 | 1 | order_id | [ ] | bigint | 0 |  |
 | 1 | order_id | [ ] | bigint | 0 |  |
 | 2 | quotation_id | [x] | bigint | 0 |  |
-| 2 | office_id | [ ] | integer | 0 |  |
 | 2 | quotation_id | [x] | bigint | 0 |  |
-| 3 | value_date | [ ] | date | 0 |  |
+| 2 | office_id | [ ] | integer | 0 |  |
 | 3 | description | [ ] | character varying | 100 |  |
 | 3 | value_date | [ ] | date | 0 |  |
-| 4 | order_date | [ ] | date | 0 |  |
+| 3 | value_date | [ ] | date | 0 |  |
 | 4 | expected_delivery_date | [ ] | date | 0 |  |
+| 4 | order_date | [ ] | date | 0 |  |
 | 4 | expected_delivery_date | [ ] | date | 0 |  |
 | 5 | transaction_timestamp | [ ] | timestamp with time zone | 0 |  |
 | 5 | scheduled_on | [x] | timestamp without time zone | 0 |  |
 | 5 | transaction_timestamp | [ ] | timestamp with time zone | 0 |  |
-| 6 | due_date | [ ] | date | 0 |  |
-| 6 | supplier_id | [ ] | integer | 0 |  |
 | 6 | customer_id | [ ] | integer | 0 |  |
-| 7 | price_type_id | [ ] | integer | 0 |  |
+| 6 | supplier_id | [ ] | integer | 0 |  |
+| 6 | due_date | [ ] | date | 0 |  |
 | 7 | price_type_id | [ ] | integer | 0 |  |
 | 7 | priority_id | [ ] | integer | 0 |  |
+| 7 | price_type_id | [ ] | integer | 0 |  |
+| 8 | shipper_id | [x] | integer | 0 |  |
 | 8 | shipper_id | [x] | integer | 0 |  |
 | 8 | order_type_id | [ ] | integer | 0 |  |
-| 8 | shipper_id | [x] | integer | 0 |  |
 | 9 | user_id | [ ] | integer | 0 |  |
 | 9 | user_id | [ ] | integer | 0 |  |
 | 9 | reference_number | [ ] | character varying | 24 |  |
-| 10 | office_id | [ ] | integer | 0 |  |
-| 10 | office_id | [ ] | integer | 0 |  |
 | 10 | raw_material_store_id | [ ] | integer | 0 |  |
-| 11 | reference_number | [x] | character varying | 24 |  |
+| 10 | office_id | [ ] | integer | 0 |  |
+| 10 | office_id | [ ] | integer | 0 |  |
 | 11 | work_in_progress_store_id | [ ] | integer | 0 |  |
+| 11 | reference_number | [x] | character varying | 24 |  |
 | 11 | reference_number | [x] | character varying | 24 |  |
 | 12 | wip_account_id | [ ] | integer | 0 |  |
 | 12 | terms | [x] | character varying | 500 |  |
 | 12 | terms | [x] | character varying | 500 |  |
 | 13 | internal_memo | [x] | character varying | 500 |  |
-| 13 | internal_memo | [x] | character varying | 500 |  |
 | 13 | finished_good_store_id | [ ] | integer | 0 |  |
-| 14 | audit_user_id | [x] | integer | 0 |  |
+| 13 | internal_memo | [x] | character varying | 500 |  |
 | 14 | audit_user_id | [x] | integer | 0 |  |
 | 14 | order_action_id | [ ] | integer | 0 |  |
-| 15 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 14 | audit_user_id | [x] | integer | 0 |  |
 | 15 | bom_id | [ ] | integer | 0 |  |
+| 15 | audit_ts | [x] | timestamp with time zone | 0 |  |
 | 15 | audit_ts | [x] | timestamp with time zone | 0 |  |
 | 16 | routing_id | [x] | integer | 0 |  |
 | 16 | deleted | [x] | boolean | 0 |  |
@@ -74,8 +74,8 @@
 | # | Column Name | Key Name | References |
 | --- | --- | --- | --- |
 | 2 | [quotation_id](../purchase/quotations.md) | orders_quotation_id_fkey | purchase.quotations.quotation_id |
-| 2 | [office_id](../core/offices.md) | orders_office_id_fkey | core.offices.office_id |
 | 2 | [quotation_id](../purchase/quotations.md) | orders_quotation_id_fkey | purchase.quotations.quotation_id |
+| 2 | [office_id](../core/offices.md) | orders_office_id_fkey | core.offices.office_id |
 | 6 | [supplier_id](../inventory/suppliers.md) | orders_supplier_id_fkey | inventory.suppliers.supplier_id |
 | 7 | [price_type_id](../purchase/price_types.md) | orders_price_type_id_fkey | purchase.price_types.price_type_id |
 | 7 | [price_type_id](../purchase/price_types.md) | orders_price_type_id_fkey | purchase.price_types.price_type_id |
@@ -110,9 +110,9 @@
 
 | # | Column Name | Default |
 | --- | --- | --- |
-| 1 | order_id | nextval('sales.orders_order_id_seq'::regclass) |
-| 1 | order_id | nextval('purchase.orders_order_id_seq'::regclass) |
 | 1 | order_id | nextval('production.orders_order_id_seq'::regclass) |
+| 1 | order_id | nextval('purchase.orders_order_id_seq'::regclass) |
+| 1 | order_id | nextval('sales.orders_order_id_seq'::regclass) |
 | 3 | description | ''::character varying |
 | 5 | transaction_timestamp | now() |
 | 5 | transaction_timestamp | now() |

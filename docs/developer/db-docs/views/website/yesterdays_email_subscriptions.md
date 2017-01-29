@@ -17,21 +17,21 @@
     email_subscriptions.last_name,
     'subscribed'::text AS subscription_type
    FROM website.email_subscriptions
-  WHERE email_subscriptions.subscribed_on::date = '2017-01-21'::date AND NOT email_subscriptions.confirmed_on::date = '2017-01-21'::date AND NOT email_subscriptions.deleted
+  WHERE email_subscriptions.subscribed_on::date = '2017-01-27'::date AND NOT email_subscriptions.confirmed_on::date = '2017-01-27'::date AND NOT email_subscriptions.deleted
 UNION ALL
  SELECT email_subscriptions.email,
     email_subscriptions.first_name,
     email_subscriptions.last_name,
     'unsubscribed'::text AS subscription_type
    FROM website.email_subscriptions
-  WHERE email_subscriptions.unsubscribed_on::date = '2017-01-21'::date AND NOT email_subscriptions.deleted
+  WHERE email_subscriptions.unsubscribed_on::date = '2017-01-27'::date AND NOT email_subscriptions.deleted
 UNION ALL
  SELECT email_subscriptions.email,
     email_subscriptions.first_name,
     email_subscriptions.last_name,
     'confirmed'::text AS subscription_type
    FROM website.email_subscriptions
-  WHERE email_subscriptions.confirmed_on::date = '2017-01-21'::date AND NOT email_subscriptions.deleted;
+  WHERE email_subscriptions.confirmed_on::date = '2017-01-27'::date AND NOT email_subscriptions.deleted;
 ```
 
 

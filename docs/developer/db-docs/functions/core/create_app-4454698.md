@@ -1,12 +1,12 @@
 # core.create_app function:
 
 ```plpgsql
-CREATE OR REPLACE FUNCTION core.create_app(_app_name text, _name text, _version_number text, _publisher text, _published_on date, _icon text, _landing_url text, _dependencies text[])
+CREATE OR REPLACE FUNCTION core.create_app(_app_name text, _i18n_key character varying, _name text, _version_number text, _publisher text, _published_on date, _icon text, _landing_url text, _dependencies text[])
 RETURNS void
 ```
 * Schema : [core](../../schemas/core.md)
 * Function Name : create_app
-* Arguments : _app_name text, _name text, _version_number text, _publisher text, _published_on date, _icon text, _landing_url text, _dependencies text[]
+* Arguments : _app_name text, _i18n_key character varying, _name text, _version_number text, _publisher text, _published_on date, _icon text, _landing_url text, _dependencies text[]
 * Owner : frapid_db_user
 * Result Type : void
 * Description : 
@@ -14,7 +14,7 @@ RETURNS void
 
 **Source:**
 ```sql
-CREATE OR REPLACE FUNCTION core.create_app(_app_name text, _name text, _version_number text, _publisher text, _published_on date, _icon text, _landing_url text, _dependencies text[])
+CREATE OR REPLACE FUNCTION core.create_app(_app_name text, _i18n_key character varying, _name text, _version_number text, _publisher text, _published_on date, _icon text, _landing_url text, _dependencies text[])
  RETURNS void
  LANGUAGE plpgsql
 AS $function$
@@ -27,6 +27,7 @@ BEGIN
     ) THEN
         UPDATE core.apps
         SET
+			i18n_key = _i18n_key,
             name = _name,
             version_number = _version_number,
             publisher = _publisher,
@@ -36,8 +37,8 @@ BEGIN
         WHERE
             app_name = _app_name;
     ELSE
-        INSERT INTO core.apps(app_name, name, version_number, publisher, published_on, icon, landing_url)
-        SELECT _app_name, _name, _version_number, _publisher, _published_on, _icon, _landing_url;
+        INSERT INTO core.apps(app_name, i18n_key, name, version_number, publisher, published_on, icon, landing_url)
+        SELECT _app_name, _i18n_key, _name, _version_number, _publisher, _published_on, _icon, _landing_url;
     END IF;
 
     DELETE FROM core.app_dependencies

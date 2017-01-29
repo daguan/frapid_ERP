@@ -33,8 +33,8 @@
 
 | Constraint Name | Description |
 | --- | --- |
-| inventory_setup_cogs_calculation_method_check CHECK (cogs_calculation_method::text = ANY (ARRAY['FIFO'::character varying, 'LIFO'::character varying, 'MAVCO'::character varying]::text[])) |  |
 | inventory_setup_inventory_system_check CHECK (inventory_system::text = ANY (ARRAY['Periodic'::character varying, 'Perpetual'::character varying]::text[])) |  |
+| inventory_setup_cogs_calculation_method_check CHECK (cogs_calculation_method::text = ANY (ARRAY['FIFO'::character varying, 'LIFO'::character varying, 'MAVCO'::character varying]::text[])) |  |
 
 
 

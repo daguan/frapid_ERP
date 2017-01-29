@@ -22,15 +22,15 @@
 | 6 | attempted_by | [ ] | integer | 0 |  |
 | 6 | attempted_by | [ ] | integer | 0 |  |
 | 6 | attempted_by | [ ] | integer | 0 |  |
+| 7 | browser | [x] | text | 0 |  |
 | 7 | browser | [x] | character varying | 1000 |  |
 | 7 | browser | [x] | text | 0 |  |
-| 7 | browser | [x] | text | 0 |  |
+| 8 | ip_address | [x] | text | 0 |  |
+| 8 | ip_address | [x] | text | 0 |  |
 | 8 | ip_address | [x] | character varying | 1000 |  |
-| 8 | ip_address | [x] | text | 0 |  |
-| 8 | ip_address | [x] | text | 0 |  |
-| 9 | user_agent | [x] | text | 0 |  |
 | 9 | user_agent | [x] | text | 0 |  |
 | 9 | user_agent | [x] | character varying | 1000 |  |
+| 9 | user_agent | [x] | text | 0 |  |
 | 10 | audit_user_id | [x] | integer | 0 |  |
 | 10 | audit_user_id | [x] | integer | 0 |  |
 | 10 | audit_user_id | [x] | integer | 0 |  |

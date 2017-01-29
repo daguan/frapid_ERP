@@ -10,12 +10,12 @@
 | 2 | item_group_code | [ ] | character varying | 12 |  |
 | 3 | item_group_name | [ ] | character varying | 100 |  |
 | 3 | item_group_name | [ ] | character varying | 500 |  |
-| 4 | audit_user_id | [x] | integer | 0 |  |
 | 4 | exclude_from_purchase | [ ] | boolean | 0 |  |
-| 5 | exclude_from_sales | [ ] | boolean | 0 |  |
+| 4 | audit_user_id | [x] | integer | 0 |  |
 | 5 | audit_ts | [x] | timestamp with time zone | 0 |  |
-| 6 | deleted | [x] | boolean | 0 |  |
+| 5 | exclude_from_sales | [ ] | boolean | 0 |  |
 | 6 | sales_account_id | [ ] | integer | 0 |  |
+| 6 | deleted | [x] | boolean | 0 |  |
 | 7 | sales_discount_account_id | [ ] | integer | 0 |  |
 | 8 | sales_return_account_id | [ ] | integer | 0 |  |
 | 9 | purchase_account_id | [ ] | integer | 0 |  |
@@ -70,8 +70,8 @@
 | 1 | item_group_id | nextval('inventory.item_groups_item_group_id_seq'::regclass) |
 | 1 | item_group_id | nextval('foodcourt.item_groups_item_group_id_seq'::regclass) |
 | 4 | exclude_from_purchase | false |
-| 5 | exclude_from_sales | false |
 | 5 | audit_ts | now() |
+| 5 | exclude_from_sales | false |
 | 6 | deleted | false |
 | 15 | audit_ts | now() |
 | 16 | deleted | false |

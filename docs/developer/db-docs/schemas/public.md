@@ -31,14 +31,14 @@
 
 | # | Function | Owner | Description |
 | --- | --- | --- | --- |
-| 1 | [explode_array(in_array anyarray)RETURNS SETOF anyelement](../functions/public/explode_array-4235432.md) | frapid_db_user |  |
-| 2 | [get_app_data_type(_nullable text, _db_data_type text)RETURNS text](../functions/public/get_app_data_type-4235428.md) | frapid_db_user |  |
-| 3 | [parse_default(text)RETURNS text](../functions/public/parse_default-4235431.md) | frapid_db_user |  |
-| 4 | [poco_get_table_function_annotation(_schema_name text, _table_name text)RETURNS TABLE(id integer, column_name text, nullable text, db_data_type text, value text, max_length integer, primary_key text)](../functions/public/poco_get_table_function_annotation-4235427.md) | frapid_db_user |  |
-| 5 | [poco_get_table_function_definition(_schema character varying, _name character varying)RETURNS TABLE(id bigint, column_name text, nullable text, db_data_type text, value text, max_length integer, primary_key text, data_type text)](../functions/public/poco_get_table_function_definition-4235429.md) | frapid_db_user |  |
-| 6 | [poco_get_tables(_schema text)RETURNS TABLE(table_schema name, table_name name, table_type text, has_duplicate boolean)](../functions/public/poco_get_tables-4235430.md) | frapid_db_user |  |
-| 7 | [text_to_bigint(text)RETURNS bigint](../functions/public/text_to_bigint-4235424.md) | frapid_db_user |  |
-| 8 | [text_to_int_array(_input text, _remove_nulls boolean DEFAULT true)RETURNS integer[]](../functions/public/text_to_int_array-4235426.md) | frapid_db_user |  |
+| 1 | [explode_array(in_array anyarray)RETURNS SETOF anyelement](../functions/public/explode_array-4454484.md) | frapid_db_user |  |
+| 2 | [get_app_data_type(_nullable text, _db_data_type text)RETURNS text](../functions/public/get_app_data_type-4454480.md) | frapid_db_user |  |
+| 3 | [parse_default(text)RETURNS text](../functions/public/parse_default-4454483.md) | frapid_db_user |  |
+| 4 | [poco_get_table_function_annotation(_schema_name text, _table_name text)RETURNS TABLE(id integer, column_name text, nullable text, db_data_type text, value text, max_length integer, primary_key text)](../functions/public/poco_get_table_function_annotation-4454479.md) | frapid_db_user |  |
+| 5 | [poco_get_table_function_definition(_schema character varying, _name character varying)RETURNS TABLE(id bigint, column_name text, nullable text, db_data_type text, value text, max_length integer, primary_key text, data_type text)](../functions/public/poco_get_table_function_definition-4454481.md) | frapid_db_user |  |
+| 6 | [poco_get_tables(_schema text)RETURNS TABLE(table_schema name, table_name name, table_type text, has_duplicate boolean)](../functions/public/poco_get_tables-4454482.md) | frapid_db_user |  |
+| 7 | [text_to_bigint(text)RETURNS bigint](../functions/public/text_to_bigint-4454476.md) | frapid_db_user |  |
+| 8 | [text_to_int_array(_input text, _remove_nulls boolean DEFAULT true)RETURNS integer[]](../functions/public/text_to_int_array-4454478.md) | frapid_db_user |  |
 
 
 

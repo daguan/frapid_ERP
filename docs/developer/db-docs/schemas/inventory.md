@@ -86,74 +86,78 @@
 
 | # | Function | Owner | Description |
 | --- | --- | --- | --- |
-| 1 | [convert_unit(from_unit integer, to_unit integer)RETURNS numeric](../functions/inventory/convert_unit-4240437.md) | frapid_db_user |  |
-| 2 | [count_item_in_stock(_item_id integer, _unit_id integer, _store_id integer)RETURNS numeric](../functions/inventory/count_item_in_stock-4240438.md) | frapid_db_user |  |
-| 3 | [count_purchases(_item_id integer, _unit_id integer, _store_id integer)RETURNS numeric](../functions/inventory/count_purchases-4240439.md) | frapid_db_user |  |
-| 4 | [count_sales(_item_id integer, _unit_id integer, _store_id integer)RETURNS numeric](../functions/inventory/count_sales-4240440.md) | frapid_db_user |  |
-| 5 | [create_item_variant(_variant_of integer, _item_id integer, _item_code character varying, _item_name character varying, _variants text, _user_id integer)RETURNS integer](../functions/inventory/create_item_variant-4240441.md) | frapid_db_user |  |
-| 6 | [delete_variant_item(_item_id integer)RETURNS boolean](../functions/inventory/delete_variant_item-4240442.md) | frapid_db_user |  |
-| 7 | [get_account_id_by_customer_id(_customer_id integer)RETURNS integer](../functions/inventory/get_account_id_by_customer_id-4240443.md) | frapid_db_user |  |
-| 8 | [get_account_id_by_shipper_id(_shipper_id integer)RETURNS integer](../functions/inventory/get_account_id_by_shipper_id-4240444.md) | frapid_db_user |  |
-| 9 | [get_account_id_by_supplier_id(_supplier_id integer)RETURNS integer](../functions/inventory/get_account_id_by_supplier_id-4240445.md) | frapid_db_user |  |
-| 10 | [get_account_statement(_value_date_from date, _value_date_to date, _user_id integer, _item_id integer, _store_id integer)RETURNS TABLE(id integer, value_date date, book_date date, store_name text, tran_code text, statement_reference text, debit numeric, credit numeric, balance numeric, book text, item_id integer, item_code text, item_name text, posted_on timestamp with time zone, posted_by text, approved_by text, verification_status integer)](../functions/inventory/get_account_statement-4240446.md) | frapid_db_user |  |
-| 11 | [get_associated_unit_list(_any_unit_id integer)RETURNS integer[]](../functions/inventory/get_associated_unit_list-4240447.md) | frapid_db_user |  |
-| 12 | [get_associated_units(_any_unit_id integer)RETURNS TABLE(unit_id integer, unit_code text, unit_name text)](../functions/inventory/get_associated_units-4240448.md) | frapid_db_user |  |
-| 13 | [get_associated_units_by_item_code(_item_code text)RETURNS TABLE(unit_id integer, unit_code text, unit_name text)](../functions/inventory/get_associated_units_by_item_code-4240450.md) | frapid_db_user |  |
-| 14 | [get_associated_units_by_item_id(_item_id integer)RETURNS TABLE(unit_id integer, unit_code text, unit_name text)](../functions/inventory/get_associated_units_by_item_id-4240449.md) | frapid_db_user |  |
-| 15 | [get_base_quantity_by_unit_id(integer, numeric)RETURNS numeric](../functions/inventory/get_base_quantity_by_unit_id-4240452.md) | frapid_db_user |  |
-| 16 | [get_base_quantity_by_unit_name(text, numeric)RETURNS numeric](../functions/inventory/get_base_quantity_by_unit_name-4240451.md) | frapid_db_user |  |
-| 17 | [get_base_unit_id_by_unit_name(text)RETURNS integer](../functions/inventory/get_base_unit_id_by_unit_name-4240453.md) | frapid_db_user |  |
-| 18 | [get_brand_id_by_brand_code(text)RETURNS integer](../functions/inventory/get_brand_id_by_brand_code-4240454.md) | frapid_db_user |  |
-| 19 | [get_cash_account_id_by_store_id(_store_id integer)RETURNS bigint](../functions/inventory/get_cash_account_id_by_store_id-4240455.md) | frapid_db_user |  |
-| 20 | [get_cash_repository_id_by_store_id(_store_id integer)RETURNS bigint](../functions/inventory/get_cash_repository_id_by_store_id-4240456.md) | frapid_db_user |  |
-| 21 | [get_checkout_id_by_transaction_master_id(_checkout_id bigint)RETURNS bigint](../functions/inventory/get_checkout_id_by_transaction_master_id-4240457.md) | frapid_db_user |  |
-| 22 | [get_cost_of_good_method(_office_id integer)RETURNS text](../functions/inventory/get_cost_of_good_method-4240458.md) | frapid_db_user |  |
-| 23 | [get_cost_of_goods_sold(_item_id integer, _unit_id integer, _store_id integer, _quantity numeric)RETURNS money_strict](../functions/inventory/get_cost_of_goods_sold-4240459.md) | frapid_db_user |  |
-| 24 | [get_cost_of_goods_sold_account_id(_item_id integer)RETURNS integer](../functions/inventory/get_cost_of_goods_sold_account_id-4240460.md) | frapid_db_user |  |
-| 25 | [get_currency_code_by_customer_id(_customer_id integer)RETURNS character varying](../functions/inventory/get_currency_code_by_customer_id-4240461.md) | frapid_db_user |  |
-| 26 | [get_currency_code_by_supplier_id(_supplier_id integer)RETURNS character varying](../functions/inventory/get_currency_code_by_supplier_id-4240462.md) | frapid_db_user |  |
-| 27 | [get_customer_code_by_customer_id(_customer_id integer)RETURNS character varying](../functions/inventory/get_customer_code_by_customer_id-4240463.md) | frapid_db_user |  |
-| 28 | [get_customer_id_by_customer_code(text)RETURNS integer](../functions/inventory/get_customer_id_by_customer_code-4240464.md) | frapid_db_user |  |
-| 29 | [get_customer_name_by_customer_id(_customer_id integer)RETURNS character varying](../functions/inventory/get_customer_name_by_customer_id-4240465.md) | frapid_db_user |  |
-| 30 | [get_customer_type_id_by_customer_id(_customer_id integer)RETURNS integer](../functions/inventory/get_customer_type_id_by_customer_id-4240466.md) | frapid_db_user |  |
-| 31 | [get_customer_type_id_by_customer_type_code(text)RETURNS integer](../functions/inventory/get_customer_type_id_by_customer_type_code-4240467.md) | frapid_db_user |  |
-| 32 | [get_inventory_account_id(_item_id integer)RETURNS integer](../functions/inventory/get_inventory_account_id-4240468.md) | frapid_db_user |  |
-| 33 | [get_item_code_by_item_id(item_id_ integer)RETURNS character varying](../functions/inventory/get_item_code_by_item_id-4240469.md) | frapid_db_user |  |
-| 34 | [get_item_cost_price(_item_id integer, _unit_id integer)RETURNS money_strict2](../functions/inventory/get_item_cost_price-4240470.md) | frapid_db_user |  |
-| 35 | [get_item_group_id_by_item_group_code(text)RETURNS integer](../functions/inventory/get_item_group_id_by_item_group_code-4240471.md) | frapid_db_user |  |
-| 36 | [get_item_id_by_item_code(_item_code text)RETURNS integer](../functions/inventory/get_item_id_by_item_code-4240472.md) | frapid_db_user |  |
-| 37 | [get_item_name_by_item_id(item_id_ integer)RETURNS character varying](../functions/inventory/get_item_name_by_item_id-4240473.md) | frapid_db_user |  |
-| 38 | [get_item_type_id_by_item_type_code(text)RETURNS integer](../functions/inventory/get_item_type_id_by_item_type_code-4240474.md) | frapid_db_user |  |
-| 39 | [get_mavcogs(_item_id integer, _store_id integer, _base_quantity numeric, _factor numeric)RETURNS numeric](../functions/inventory/get_mavcogs-4240475.md) | frapid_db_user |  |
-| 40 | [get_office_id_by_store_id(integer)RETURNS integer](../functions/inventory/get_office_id_by_store_id-4240476.md) | frapid_db_user |  |
-| 41 | [get_opening_inventory_status(_office_id integer)RETURNS TABLE(office_id integer, multiple_inventory_allowed boolean, has_opening_inventory boolean)](../functions/inventory/get_opening_inventory_status-4240477.md) | frapid_db_user |  |
-| 42 | [get_purchase_account_id(_item_id integer)RETURNS integer](../functions/inventory/get_purchase_account_id-4240478.md) | frapid_db_user |  |
-| 43 | [get_purchase_discount_account_id(_item_id integer)RETURNS integer](../functions/inventory/get_purchase_discount_account_id-4240479.md) | frapid_db_user |  |
-| 44 | [get_root_unit_id(_any_unit_id integer)RETURNS integer](../functions/inventory/get_root_unit_id-4240480.md) | frapid_db_user |  |
-| 45 | [get_sales_account_id(_item_id integer)RETURNS integer](../functions/inventory/get_sales_account_id-4240481.md) | frapid_db_user |  |
-| 46 | [get_sales_discount_account_id(_item_id integer)RETURNS integer](../functions/inventory/get_sales_discount_account_id-4240482.md) | frapid_db_user |  |
-| 47 | [get_sales_return_account_id(_item_id integer)RETURNS integer](../functions/inventory/get_sales_return_account_id-4240483.md) | frapid_db_user |  |
-| 48 | [get_shipper_id_by_shipper_code(_shipper_code character varying)RETURNS integer](../functions/inventory/get_shipper_id_by_shipper_code-4240484.md) | frapid_db_user |  |
-| 49 | [get_shipper_id_by_shipper_name(_shipper_name character varying)RETURNS integer](../functions/inventory/get_shipper_id_by_shipper_name-4240485.md) | frapid_db_user |  |
-| 50 | [get_store_id_by_store_code(_store_code text)RETURNS integer](../functions/inventory/get_store_id_by_store_code-4240486.md) | frapid_db_user |  |
-| 51 | [get_store_id_by_store_name(_store_name text)RETURNS integer](../functions/inventory/get_store_id_by_store_name-4240487.md) | frapid_db_user |  |
-| 52 | [get_store_name_by_store_id(integer)RETURNS text](../functions/inventory/get_store_name_by_store_id-4240488.md) | frapid_db_user |  |
-| 53 | [get_store_type_id_by_store_type_code(text)RETURNS integer](../functions/inventory/get_store_type_id_by_store_type_code-4240489.md) | frapid_db_user |  |
-| 54 | [get_supplier_id_by_supplier_code(text)RETURNS integer](../functions/inventory/get_supplier_id_by_supplier_code-4240490.md) | frapid_db_user |  |
-| 55 | [get_supplier_name_by_supplier_id(_supplier_id integer)RETURNS character varying](../functions/inventory/get_supplier_name_by_supplier_id-4240491.md) | frapid_db_user |  |
-| 56 | [get_supplier_type_id_by_supplier_type_code(text)RETURNS integer](../functions/inventory/get_supplier_type_id_by_supplier_type_code-4240492.md) | frapid_db_user |  |
-| 57 | [get_unit_id_by_unit_code(text)RETURNS integer](../functions/inventory/get_unit_id_by_unit_code-4240493.md) | frapid_db_user |  |
-| 58 | [get_unit_id_by_unit_name(_unit_name text)RETURNS integer](../functions/inventory/get_unit_id_by_unit_name-4240494.md) | frapid_db_user |  |
-| 59 | [get_unit_name_by_unit_id(_unit_id integer)RETURNS character varying](../functions/inventory/get_unit_name_by_unit_id-4240495.md) | frapid_db_user |  |
-| 60 | [get_write_off_cost_of_goods_sold(_checkout_id bigint, _item_id integer, _unit_id integer, _quantity integer)RETURNS money_strict2](../functions/inventory/get_write_off_cost_of_goods_sold-4240496.md) | frapid_db_user |  |
-| 61 | [is_parent_unit(parent integer, child integer)RETURNS boolean](../functions/inventory/is_parent_unit-4240497.md) | frapid_db_user |  |
-| 62 | [is_periodic_inventory(_office_id integer)RETURNS boolean](../functions/inventory/is_periodic_inventory-4240498.md) | frapid_db_user |  |
-| 63 | [is_purchase(_transaction_master_id bigint)RETURNS boolean](../functions/inventory/is_purchase-4240499.md) | frapid_db_user |  |
-| 64 | [is_valid_unit_id(_unit_id integer, _item_id integer)RETURNS boolean](../functions/inventory/is_valid_unit_id-4240500.md) | frapid_db_user |  |
-| 65 | [list_closing_stock(_store_id integer)RETURNS TABLE(item_id integer, item_code text, item_name text, unit_id integer, unit_name text, quantity numeric)](../functions/inventory/list_closing_stock-4240501.md) | frapid_db_user |  |
-| 66 | [post_adjustment(_office_id integer, _user_id integer, _login_id bigint, _store_id integer, _value_date date, _book_date date, _reference_number character varying, _statement_reference text, _details inventory.adjustment_type[])RETURNS bigint](../functions/inventory/post_adjustment-4240502.md) | frapid_db_user |  |
-| 67 | [post_opening_inventory(_office_id integer, _user_id integer, _login_id bigint, _value_date date, _book_date date, _reference_number character varying, _statement_reference text, _details inventory.opening_stock_type[])RETURNS bigint](../functions/inventory/post_opening_inventory-4240504.md) | frapid_db_user |  |
-| 68 | [post_transfer(_office_id integer, _user_id integer, _login_id bigint, _value_date date, _book_date date, _reference_number character varying, _statement_reference text, _details inventory.transfer_type[])RETURNS bigint](../functions/inventory/post_transfer-4240505.md) | frapid_db_user |  |
+| 1 | [convert_unit(from_unit integer, to_unit integer)RETURNS numeric](../functions/inventory/convert_unit-4459564.md) | frapid_db_user |  |
+| 2 | [count_item_in_stock(_item_id integer, _unit_id integer, _store_id integer)RETURNS numeric](../functions/inventory/count_item_in_stock-4459565.md) | frapid_db_user |  |
+| 3 | [count_purchases(_item_id integer, _unit_id integer, _store_id integer)RETURNS numeric](../functions/inventory/count_purchases-4459566.md) | frapid_db_user |  |
+| 4 | [count_sales(_item_id integer, _unit_id integer, _store_id integer)RETURNS numeric](../functions/inventory/count_sales-4459567.md) | frapid_db_user |  |
+| 5 | [create_item_variant(_variant_of integer, _item_id integer, _item_code character varying, _item_name character varying, _variants text, _user_id integer)RETURNS integer](../functions/inventory/create_item_variant-4459568.md) | frapid_db_user |  |
+| 6 | [delete_variant_item(_item_id integer)RETURNS boolean](../functions/inventory/delete_variant_item-4459569.md) | frapid_db_user |  |
+| 7 | [get_account_id_by_customer_id(_customer_id integer)RETURNS integer](../functions/inventory/get_account_id_by_customer_id-4459570.md) | frapid_db_user |  |
+| 8 | [get_account_id_by_customer_type_id(_customer_type_id integer)RETURNS integer](../functions/inventory/get_account_id_by_customer_type_id-4459571.md) | frapid_db_user |  |
+| 9 | [get_account_id_by_shipper_id(_shipper_id integer)RETURNS integer](../functions/inventory/get_account_id_by_shipper_id-4459572.md) | frapid_db_user |  |
+| 10 | [get_account_id_by_supplier_id(_supplier_id integer)RETURNS integer](../functions/inventory/get_account_id_by_supplier_id-4459573.md) | frapid_db_user |  |
+| 11 | [get_account_id_by_supplier_type_id(_supplier_type_id integer)RETURNS integer](../functions/inventory/get_account_id_by_supplier_type_id-4459574.md) | frapid_db_user |  |
+| 12 | [get_account_statement(_value_date_from date, _value_date_to date, _user_id integer, _item_id integer, _store_id integer)RETURNS TABLE(id integer, value_date date, book_date date, store_name text, tran_code text, statement_reference text, debit numeric, credit numeric, balance numeric, book text, item_id integer, item_code text, item_name text, posted_on timestamp with time zone, posted_by text, approved_by text, verification_status integer)](../functions/inventory/get_account_statement-4459575.md) | frapid_db_user |  |
+| 13 | [get_associated_unit_list(_any_unit_id integer)RETURNS integer[]](../functions/inventory/get_associated_unit_list-4459576.md) | frapid_db_user |  |
+| 14 | [get_associated_units(_any_unit_id integer)RETURNS TABLE(unit_id integer, unit_code text, unit_name text)](../functions/inventory/get_associated_units-4459577.md) | frapid_db_user |  |
+| 15 | [get_associated_units_by_item_code(_item_code text)RETURNS TABLE(unit_id integer, unit_code text, unit_name text)](../functions/inventory/get_associated_units_by_item_code-4459579.md) | frapid_db_user |  |
+| 16 | [get_associated_units_by_item_id(_item_id integer)RETURNS TABLE(unit_id integer, unit_code text, unit_name text)](../functions/inventory/get_associated_units_by_item_id-4459578.md) | frapid_db_user |  |
+| 17 | [get_base_quantity_by_unit_id(integer, numeric)RETURNS numeric](../functions/inventory/get_base_quantity_by_unit_id-4459580.md) | frapid_db_user |  |
+| 18 | [get_base_quantity_by_unit_name(text, numeric)RETURNS numeric](../functions/inventory/get_base_quantity_by_unit_name-4459581.md) | frapid_db_user |  |
+| 19 | [get_base_unit_id_by_unit_name(text)RETURNS integer](../functions/inventory/get_base_unit_id_by_unit_name-4459582.md) | frapid_db_user |  |
+| 20 | [get_brand_id_by_brand_code(text)RETURNS integer](../functions/inventory/get_brand_id_by_brand_code-4459583.md) | frapid_db_user |  |
+| 21 | [get_cash_account_id_by_store_id(_store_id integer)RETURNS bigint](../functions/inventory/get_cash_account_id_by_store_id-4459584.md) | frapid_db_user |  |
+| 22 | [get_cash_repository_id_by_store_id(_store_id integer)RETURNS bigint](../functions/inventory/get_cash_repository_id_by_store_id-4459585.md) | frapid_db_user |  |
+| 23 | [get_checkout_id_by_transaction_master_id(_checkout_id bigint)RETURNS bigint](../functions/inventory/get_checkout_id_by_transaction_master_id-4459586.md) | frapid_db_user |  |
+| 24 | [get_cost_of_good_method(_office_id integer)RETURNS text](../functions/inventory/get_cost_of_good_method-4459587.md) | frapid_db_user |  |
+| 25 | [get_cost_of_goods_sold(_item_id integer, _unit_id integer, _store_id integer, _quantity numeric)RETURNS money_strict](../functions/inventory/get_cost_of_goods_sold-4459588.md) | frapid_db_user |  |
+| 26 | [get_cost_of_goods_sold_account_id(_item_id integer)RETURNS integer](../functions/inventory/get_cost_of_goods_sold_account_id-4459589.md) | frapid_db_user |  |
+| 27 | [get_currency_code_by_customer_id(_customer_id integer)RETURNS character varying](../functions/inventory/get_currency_code_by_customer_id-4459590.md) | frapid_db_user |  |
+| 28 | [get_currency_code_by_supplier_id(_supplier_id integer)RETURNS character varying](../functions/inventory/get_currency_code_by_supplier_id-4459591.md) | frapid_db_user |  |
+| 29 | [get_customer_code_by_customer_id(_customer_id integer)RETURNS character varying](../functions/inventory/get_customer_code_by_customer_id-4459592.md) | frapid_db_user |  |
+| 30 | [get_customer_id_by_customer_code(text)RETURNS integer](../functions/inventory/get_customer_id_by_customer_code-4459593.md) | frapid_db_user |  |
+| 31 | [get_customer_name_by_customer_id(_customer_id integer)RETURNS character varying](../functions/inventory/get_customer_name_by_customer_id-4459594.md) | frapid_db_user |  |
+| 32 | [get_customer_transaction_summary(office_id integer, customer_id integer)RETURNS TABLE(currency_code character varying, currency_symbol character varying, total_due_amount numeric, office_due_amount numeric)](../functions/inventory/get_customer_transaction_summary-4459595.md) | frapid_db_user |  |
+| 33 | [get_customer_type_id_by_customer_id(_customer_id integer)RETURNS integer](../functions/inventory/get_customer_type_id_by_customer_id-4459596.md) | frapid_db_user |  |
+| 34 | [get_customer_type_id_by_customer_type_code(text)RETURNS integer](../functions/inventory/get_customer_type_id_by_customer_type_code-4459597.md) | frapid_db_user |  |
+| 35 | [get_inventory_account_id(_item_id integer)RETURNS integer](../functions/inventory/get_inventory_account_id-4459598.md) | frapid_db_user |  |
+| 36 | [get_item_code_by_item_id(item_id_ integer)RETURNS character varying](../functions/inventory/get_item_code_by_item_id-4459599.md) | frapid_db_user |  |
+| 37 | [get_item_cost_price(_item_id integer, _unit_id integer)RETURNS money_strict2](../functions/inventory/get_item_cost_price-4459600.md) | frapid_db_user |  |
+| 38 | [get_item_group_id_by_item_group_code(text)RETURNS integer](../functions/inventory/get_item_group_id_by_item_group_code-4459601.md) | frapid_db_user |  |
+| 39 | [get_item_id_by_item_code(_item_code text)RETURNS integer](../functions/inventory/get_item_id_by_item_code-4459602.md) | frapid_db_user |  |
+| 40 | [get_item_name_by_item_id(item_id_ integer)RETURNS character varying](../functions/inventory/get_item_name_by_item_id-4459603.md) | frapid_db_user |  |
+| 41 | [get_item_type_id_by_item_type_code(text)RETURNS integer](../functions/inventory/get_item_type_id_by_item_type_code-4459604.md) | frapid_db_user |  |
+| 42 | [get_mavcogs(_item_id integer, _store_id integer, _base_quantity numeric, _factor numeric)RETURNS numeric](../functions/inventory/get_mavcogs-4459605.md) | frapid_db_user |  |
+| 43 | [get_office_id_by_store_id(integer)RETURNS integer](../functions/inventory/get_office_id_by_store_id-4459606.md) | frapid_db_user |  |
+| 44 | [get_opening_inventory_status(_office_id integer)RETURNS TABLE(office_id integer, multiple_inventory_allowed boolean, has_opening_inventory boolean)](../functions/inventory/get_opening_inventory_status-4459607.md) | frapid_db_user |  |
+| 45 | [get_purchase_account_id(_item_id integer)RETURNS integer](../functions/inventory/get_purchase_account_id-4459608.md) | frapid_db_user |  |
+| 46 | [get_purchase_discount_account_id(_item_id integer)RETURNS integer](../functions/inventory/get_purchase_discount_account_id-4459609.md) | frapid_db_user |  |
+| 47 | [get_root_unit_id(_any_unit_id integer)RETURNS integer](../functions/inventory/get_root_unit_id-4459610.md) | frapid_db_user |  |
+| 48 | [get_sales_account_id(_item_id integer)RETURNS integer](../functions/inventory/get_sales_account_id-4459611.md) | frapid_db_user |  |
+| 49 | [get_sales_discount_account_id(_item_id integer)RETURNS integer](../functions/inventory/get_sales_discount_account_id-4459612.md) | frapid_db_user |  |
+| 50 | [get_sales_return_account_id(_item_id integer)RETURNS integer](../functions/inventory/get_sales_return_account_id-4459613.md) | frapid_db_user |  |
+| 51 | [get_shipper_id_by_shipper_code(_shipper_code character varying)RETURNS integer](../functions/inventory/get_shipper_id_by_shipper_code-4459614.md) | frapid_db_user |  |
+| 52 | [get_shipper_id_by_shipper_name(_shipper_name character varying)RETURNS integer](../functions/inventory/get_shipper_id_by_shipper_name-4459615.md) | frapid_db_user |  |
+| 53 | [get_store_id_by_store_code(_store_code text)RETURNS integer](../functions/inventory/get_store_id_by_store_code-4459616.md) | frapid_db_user |  |
+| 54 | [get_store_id_by_store_name(_store_name text)RETURNS integer](../functions/inventory/get_store_id_by_store_name-4459617.md) | frapid_db_user |  |
+| 55 | [get_store_name_by_store_id(integer)RETURNS text](../functions/inventory/get_store_name_by_store_id-4459618.md) | frapid_db_user |  |
+| 56 | [get_store_type_id_by_store_type_code(text)RETURNS integer](../functions/inventory/get_store_type_id_by_store_type_code-4459619.md) | frapid_db_user |  |
+| 57 | [get_supplier_id_by_supplier_code(text)RETURNS integer](../functions/inventory/get_supplier_id_by_supplier_code-4459620.md) | frapid_db_user |  |
+| 58 | [get_supplier_name_by_supplier_id(_supplier_id integer)RETURNS character varying](../functions/inventory/get_supplier_name_by_supplier_id-4459621.md) | frapid_db_user |  |
+| 59 | [get_supplier_type_id_by_supplier_type_code(text)RETURNS integer](../functions/inventory/get_supplier_type_id_by_supplier_type_code-4459622.md) | frapid_db_user |  |
+| 60 | [get_total_customer_due(office_id integer, customer_id integer)RETURNS numeric](../functions/inventory/get_total_customer_due-4459623.md) | frapid_db_user |  |
+| 61 | [get_unit_id_by_unit_code(text)RETURNS integer](../functions/inventory/get_unit_id_by_unit_code-4459624.md) | frapid_db_user |  |
+| 62 | [get_unit_id_by_unit_name(_unit_name text)RETURNS integer](../functions/inventory/get_unit_id_by_unit_name-4459625.md) | frapid_db_user |  |
+| 63 | [get_unit_name_by_unit_id(_unit_id integer)RETURNS character varying](../functions/inventory/get_unit_name_by_unit_id-4459626.md) | frapid_db_user |  |
+| 64 | [get_write_off_cost_of_goods_sold(_checkout_id bigint, _item_id integer, _unit_id integer, _quantity integer)RETURNS money_strict2](../functions/inventory/get_write_off_cost_of_goods_sold-4459627.md) | frapid_db_user |  |
+| 65 | [is_parent_unit(parent integer, child integer)RETURNS boolean](../functions/inventory/is_parent_unit-4459628.md) | frapid_db_user |  |
+| 66 | [is_periodic_inventory(_office_id integer)RETURNS boolean](../functions/inventory/is_periodic_inventory-4459629.md) | frapid_db_user |  |
+| 67 | [is_purchase(_transaction_master_id bigint)RETURNS boolean](../functions/inventory/is_purchase-4459630.md) | frapid_db_user |  |
+| 68 | [is_valid_unit_id(_unit_id integer, _item_id integer)RETURNS boolean](../functions/inventory/is_valid_unit_id-4459631.md) | frapid_db_user |  |
+| 69 | [list_closing_stock(_store_id integer)RETURNS TABLE(item_id integer, item_code text, item_name text, unit_id integer, unit_name text, quantity numeric)](../functions/inventory/list_closing_stock-4459632.md) | frapid_db_user |  |
+| 70 | [post_adjustment(_office_id integer, _user_id integer, _login_id bigint, _store_id integer, _value_date date, _book_date date, _reference_number character varying, _statement_reference text, _details inventory.adjustment_type[])RETURNS bigint](../functions/inventory/post_adjustment-4459633.md) | frapid_db_user |  |
+| 71 | [post_opening_inventory(_office_id integer, _user_id integer, _login_id bigint, _value_date date, _book_date date, _reference_number character varying, _statement_reference text, _details inventory.opening_stock_type[])RETURNS bigint](../functions/inventory/post_opening_inventory-4459635.md) | frapid_db_user |  |
+| 72 | [post_transfer(_office_id integer, _user_id integer, _login_id bigint, _value_date date, _book_date date, _reference_number character varying, _statement_reference text, _details inventory.transfer_type[])RETURNS bigint](../functions/inventory/post_transfer-4459636.md) | frapid_db_user |  |
 
 
 
@@ -161,6 +165,9 @@
 
 | # | Trigger | Owner | Description |
 | --- | --- | --- | --- |
+| 1 | [customer_after_insert_trigger()RETURNS TRIGGER](../functions/inventory/customer_after_insert_trigger-4459684.md) | frapid_db_user |  |
+| 2 | [items_unit_check_trigger()RETURNS TRIGGER](../functions/inventory/items_unit_check_trigger-4459686.md) | frapid_db_user |  |
+| 3 | [supplier_after_insert_trigger()RETURNS TRIGGER](../functions/inventory/supplier_after_insert_trigger-4459688.md) | frapid_db_user |  |
 
 
 

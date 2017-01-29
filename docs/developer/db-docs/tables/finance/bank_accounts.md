@@ -5,27 +5,28 @@
 | # | Column Name | Nullable | Data Type | Max Length | Description |
 | --- | --- | --- | --- | --- | --- |
 | 1 | bank_account_id | [ ] | integer | 0 |  |
-| 2 | account_id | [x] | integer | 0 |  |
-| 3 | maintained_by_user_id | [ ] | integer | 0 |  |
-| 4 | is_merchant_account | [ ] | boolean | 0 |  |
-| 5 | office_id | [ ] | integer | 0 |  |
-| 6 | bank_name | [ ] | character varying | 128 |  |
-| 7 | bank_branch | [ ] | character varying | 128 |  |
-| 8 | bank_contact_number | [x] | character varying | 128 |  |
-| 9 | bank_account_number | [x] | character varying | 128 |  |
-| 10 | bank_account_type | [x] | character varying | 128 |  |
-| 11 | street | [x] | character varying | 50 |  |
-| 12 | city | [x] | character varying | 50 |  |
-| 13 | state | [x] | character varying | 50 |  |
-| 14 | country | [x] | character varying | 50 |  |
-| 15 | phone | [x] | character varying | 50 |  |
-| 16 | fax | [x] | character varying | 50 |  |
-| 17 | cell | [x] | character varying | 50 |  |
-| 18 | relationship_officer_name | [x] | character varying | 128 |  |
-| 19 | relationship_officer_contact_number | [x] | character varying | 128 |  |
-| 20 | audit_user_id | [x] | integer | 0 |  |
-| 21 | audit_ts | [x] | timestamp with time zone | 0 |  |
-| 22 | deleted | [x] | boolean | 0 |  |
+| 2 | bank_account_name | [ ] | character varying | 1000 |  |
+| 3 | account_id | [x] | integer | 0 |  |
+| 4 | maintained_by_user_id | [ ] | integer | 0 |  |
+| 5 | is_merchant_account | [ ] | boolean | 0 |  |
+| 6 | office_id | [ ] | integer | 0 |  |
+| 7 | bank_name | [ ] | character varying | 128 |  |
+| 8 | bank_branch | [ ] | character varying | 128 |  |
+| 9 | bank_contact_number | [x] | character varying | 128 |  |
+| 10 | bank_account_number | [x] | character varying | 128 |  |
+| 11 | bank_account_type | [x] | character varying | 128 |  |
+| 12 | street | [x] | character varying | 50 |  |
+| 13 | city | [x] | character varying | 50 |  |
+| 14 | state | [x] | character varying | 50 |  |
+| 15 | country | [x] | character varying | 50 |  |
+| 16 | phone | [x] | character varying | 50 |  |
+| 17 | fax | [x] | character varying | 50 |  |
+| 18 | cell | [x] | character varying | 50 |  |
+| 19 | relationship_officer_name | [x] | character varying | 128 |  |
+| 20 | relationship_officer_contact_number | [x] | character varying | 128 |  |
+| 21 | audit_user_id | [x] | integer | 0 |  |
+| 22 | audit_ts | [x] | timestamp with time zone | 0 |  |
+| 23 | deleted | [x] | boolean | 0 |  |
 
 
 
@@ -33,10 +34,10 @@
 
 | # | Column Name | Key Name | References |
 | --- | --- | --- | --- |
-| 2 | [account_id](../finance/accounts.md) | bank_accounts_account_id_fkey | finance.accounts.account_id |
-| 3 | [maintained_by_user_id](../account/users.md) | bank_accounts_maintained_by_user_id_fkey | account.users.user_id |
-| 5 | [office_id](../core/offices.md) | bank_accounts_office_id_fkey | core.offices.office_id |
-| 20 | [audit_user_id](../account/users.md) | bank_accounts_audit_user_id_fkey | account.users.user_id |
+| 3 | [account_id](../finance/accounts.md) | bank_accounts_account_id_fkey | finance.accounts.account_id |
+| 4 | [maintained_by_user_id](../account/users.md) | bank_accounts_maintained_by_user_id_fkey | account.users.user_id |
+| 6 | [office_id](../core/offices.md) | bank_accounts_office_id_fkey | core.offices.office_id |
+| 21 | [audit_user_id](../account/users.md) | bank_accounts_audit_user_id_fkey | account.users.user_id |
 
 
 
@@ -61,9 +62,9 @@
 | # | Column Name | Default |
 | --- | --- | --- |
 | 1 | bank_account_id | nextval('finance.bank_accounts_bank_account_id_seq'::regclass) |
-| 4 | is_merchant_account | false |
-| 21 | audit_ts | now() |
-| 22 | deleted | false |
+| 5 | is_merchant_account | false |
+| 22 | audit_ts | now() |
+| 23 | deleted | false |
 
 
 **Triggers**

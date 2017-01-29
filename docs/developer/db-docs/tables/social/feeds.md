@@ -60,7 +60,7 @@
 
 | Trigger Name | Targets | On Event | Timing | Condition | Order | Orientation | Description |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| social.update_audit_timestamp_trigger | [social.update_audit_timestamp_trigger](../../functions/social/update_audit_timestamp_trigger-4245166.md) | INSERT | AFTER |  | 0 | ROW |  |
+| social.update_audit_timestamp_trigger | [social.update_audit_timestamp_trigger](../../functions/social/update_audit_timestamp_trigger-4464330.md) | INSERT | AFTER |  | 0 | ROW |  |
 
 
 ### Related Contents

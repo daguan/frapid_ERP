@@ -22,7 +22,7 @@ namespace Frapid.Reports.Helpers
                 return item.Value;
             }
 
-            return text.ToTitleCase();
+            return text.ToTitleCaseSentence();
         }
     }
 }

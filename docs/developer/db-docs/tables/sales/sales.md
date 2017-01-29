@@ -10,12 +10,12 @@
 | 2 | sold_on | [ ] | timestamp with time zone | 0 |  |
 | 3 | fiscal_year_code | [ ] | character varying | 12 |  |
 | 3 | customer_id | [ ] | integer | 0 |  |
-| 4 | product_id | [ ] | bigint | 0 |  |
 | 4 | cash_repository_id | [x] | integer | 0 |  |
+| 4 | product_id | [ ] | bigint | 0 |  |
 | 5 | domain_prefix | [x] | character varying | 100 |  |
 | 5 | price_type_id | [ ] | integer | 0 |  |
-| 6 | sales_order_id | [x] | bigint | 0 |  |
 | 6 | coupon_code | [x] | character varying | 100 |  |
+| 6 | sales_order_id | [x] | bigint | 0 |  |
 | 7 | initial_amount | [x] | money_strict2 | 0 |  |
 | 7 | sales_quotation_id | [x] | bigint | 0 |  |
 | 8 | recurring_amount | [x] | money_strict | 0 |  |
@@ -24,8 +24,8 @@
 | 9 | receipt_transaction_master_id | [x] | bigint | 0 |  |
 | 10 | cancelled | [ ] | boolean | 0 |  |
 | 10 | checkout_id | [ ] | bigint | 0 |  |
-| 11 | counter_id | [ ] | integer | 0 |  |
 | 11 | audit_user_id | [x] | integer | 0 |  |
+| 11 | counter_id | [ ] | integer | 0 |  |
 | 12 | audit_ts | [x] | timestamp with time zone | 0 |  |
 | 12 | customer_id | [x] | integer | 0 |  |
 | 13 | deleted | [x] | boolean | 0 |  |

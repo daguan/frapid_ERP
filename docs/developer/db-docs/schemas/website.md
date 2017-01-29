@@ -52,12 +52,12 @@
 
 | # | Function | Owner | Description |
 | --- | --- | --- | --- |
-| 1 | [add_email_subscription(_email text)RETURNS boolean](../functions/website/add_email_subscription-4236548.md) | frapid_db_user |  |
-| 2 | [add_hit(_category_alias character varying, _alias character varying)RETURNS void](../functions/website/add_hit-4236549.md) | frapid_db_user |  |
-| 3 | [get_category_id_by_category_alias(_alias text)RETURNS integer](../functions/website/get_category_id_by_category_alias-4236551.md) | frapid_db_user |  |
-| 4 | [get_category_id_by_category_name(_category_name text)RETURNS integer](../functions/website/get_category_id_by_category_name-4236550.md) | frapid_db_user |  |
-| 5 | [get_menu_id_by_menu_name(_menu_name character varying)RETURNS integer](../functions/website/get_menu_id_by_menu_name-4236552.md) | frapid_db_user |  |
-| 6 | [remove_email_subscription(_email text)RETURNS boolean](../functions/website/remove_email_subscription-4236553.md) | frapid_db_user |  |
+| 1 | [add_email_subscription(_email text)RETURNS boolean](../functions/website/add_email_subscription-4455585.md) | frapid_db_user |  |
+| 2 | [add_hit(_category_alias character varying, _alias character varying)RETURNS void](../functions/website/add_hit-4455586.md) | frapid_db_user |  |
+| 3 | [get_category_id_by_category_alias(_alias text)RETURNS integer](../functions/website/get_category_id_by_category_alias-4455588.md) | frapid_db_user |  |
+| 4 | [get_category_id_by_category_name(_category_name text)RETURNS integer](../functions/website/get_category_id_by_category_name-4455587.md) | frapid_db_user |  |
+| 5 | [get_menu_id_by_menu_name(_menu_name character varying)RETURNS integer](../functions/website/get_menu_id_by_menu_name-4455589.md) | frapid_db_user |  |
+| 6 | [remove_email_subscription(_email text)RETURNS boolean](../functions/website/remove_email_subscription-4455590.md) | frapid_db_user |  |
 
 
 
@@ -65,7 +65,7 @@
 
 | # | Trigger | Owner | Description |
 | --- | --- | --- | --- |
-| 1 | [email_subscription_confirmation_trigger()RETURNS TRIGGER](../functions/website/email_subscription_confirmation_trigger-4236566.md) | frapid_db_user |  |
+| 1 | [email_subscription_confirmation_trigger()RETURNS TRIGGER](../functions/website/email_subscription_confirmation_trigger-4455603.md) | frapid_db_user |  |
 
 
 

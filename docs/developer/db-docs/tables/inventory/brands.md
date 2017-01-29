@@ -6,10 +6,10 @@
 | --- | --- | --- | --- | --- | --- |
 | 1 | brand_id | [ ] | integer | 0 |  |
 | 1 | brand_id | [ ] | integer | 0 |  |
-| 2 | brand_code | [ ] | character varying | 12 |  |
 | 2 | brand_code | [ ] | character varying | 24 |  |
-| 3 | brand_name | [ ] | character varying | 500 |  |
+| 2 | brand_code | [ ] | character varying | 12 |  |
 | 3 | brand_name | [ ] | character varying | 100 |  |
+| 3 | brand_name | [ ] | character varying | 500 |  |
 | 4 | audit_user_id | [x] | integer | 0 |  |
 | 4 | audit_user_id | [x] | integer | 0 |  |
 | 5 | audit_ts | [x] | timestamp with time zone | 0 |  |
