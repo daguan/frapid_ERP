@@ -1,0 +1,522 @@
+﻿@model dynamic
+
+@{
+    Layout = ViewBag.Layout;
+}
+
+<style>
+    #dashboard-container {
+        padding: 0;
+    }
+</style>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css" />
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.print.css" media="print" />
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.6/calendar.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.6/calendar.min.js"></script>
+
+<style>
+    #calendar {
+        padding: 2em;
+        color: #777;
+        font-size: 0.87em;
+    }
+
+        #calendar * {
+            font-family: "Roboto" !important;
+        }
+
+    .ui.calendar:not(.app) {
+        margin: 0.5em !important;
+        border: 1px solid #555 !important;
+    }
+
+    .ui.calendar .calendar tr,
+    .ui.calendar .calendar td,
+    .ui.calendar .calendar th {
+        background: #444 !important;
+        color: #aaa;
+        border-color: transparent !important;
+        border-bottom-color: #555 !important;
+    }
+
+        .ui.calendar .calendar td.disabled {
+            color: #666 !important;
+        }
+
+    .ui.calendar:not(.app) .calendar table {
+        border: none !important;
+    }
+
+        .ui.calendar:not(.app) .calendar table th .link:not(.prev):not(.next) {
+            font-size: 2em;
+            font-weight: 300;
+            color: #ccc;
+        }
+
+
+        .ui.calendar:not(.app) .calendar table td.link.today,
+        .ui.calendar:not(.app) .calendar table td.link.active,
+        .ui.calendar:not(.app) .calendar table td:hover {
+            background: #2474AD !important;
+            color: #fff !important;
+            font-weight: 800;
+            border-color: #2474AD !important;
+        }
+
+
+    .frapid.calendar.app {
+        display: flex;
+        padding: 0 !important;
+    }
+
+    .document.title {
+        font-size: 1.4em;
+        color: #ccc;
+        font-weight: 600;
+    }
+
+    .left.panel {
+        width: 400px;
+        background: #444;
+    }
+
+    .right.panel {
+        width: calc(100% - 410px);
+    }
+
+    #calendar h2 {
+        color: #2474AD;
+        font-weight: 400 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em;
+        font-size: 2em;
+    }
+
+    #calendar td,
+    .fc-list-item td {
+        border-color: #efefef !important;
+    }
+
+    .fc-view-container {
+        border: 1px solid #eee !important;
+    }
+
+
+    #calendar th {
+        border-color: #5a5a5a !important;
+    }
+
+        #calendar th,
+        #calendar th a,
+        .fc-widget-header,
+        .fc-widget-header a {
+            color: #fff !important;
+        }
+
+            #calendar th:hover {
+                background-color: #444 !important;
+            }
+
+    .fc-day-number {
+        font-size: 2em;
+        color: #777 !important;
+        padding: 0.5em !important;
+        font-weight: 300;
+        width: 1.2em;
+        height: 1.2em;
+        padding-top: 0.8em !important;
+        padding-bottom: 0.3em !important;
+        margin: 0.1em;
+        border-radius: 3em;
+        text-align: center;
+        text-decoration: none !important;
+    }
+
+        .fc-day-number:hover {
+            background: #eee;
+        }
+
+
+    .fc-head,
+    .fc-event-dot,
+    .fc-list-heading,
+    .fc-widget-header {
+        background: #555 !important;
+        background-image: none !important;
+    }
+
+    .fc-state-default {
+        background-image: none !important;
+    }
+
+    .fc button {
+        background-color: #2474AD !important;
+        border: none;
+        color: #fff;
+        text-shadow: none !important;
+        margin-right: 1px !important;
+        text-transform: uppercase;
+        font-size: 0.87em !important;
+        letter-spacing: 0.02em;
+        font-weight: 500;
+        padding: 0.5em 1em !important;
+        height: auto !important;
+    }
+
+
+
+        .fc button.fc-state-hover,
+        .fc button.fc-state-active {
+            background-color: #333 !important;
+        }
+
+
+
+    .fc-head th {
+        padding: 0.78em !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #fff;
+    }
+
+    td.fc-day:hover,
+    .fc-slats tr:hover,
+    .fc-list-table tr:hover,
+    .fc-list-item:hover > td {
+        background: #fafafa !important;
+        background-color: #fafafa !important;
+        background-image: none !important;
+    }
+
+    .fc-event {
+        padding: 0.5em 1em !important;
+        background: #E1F1FC !important;
+        border-color: #CFDEE8 !important;
+        color: #1D6599 !important;
+        font-weight: 800;
+    }
+
+    .fc-axis {
+        width: 80px !important;
+    }
+
+        .fc-axis.fc-widget-content {
+            text-transform: uppercase;
+        }
+
+    .action .button {
+        margin: 0 0.5em !important;
+        background: #333 !important;
+        border: 1px solid #222 !important;
+    }
+
+        .action .button:hover {
+            background: #2474AD !important;
+            border-color: transparent !important;
+        }
+
+    .calendar .top.section {
+        display: flex;
+        padding: 1em;
+    }
+
+        .calendar .top.section .document.title {
+            padding: 0.3em 0;
+            width: 300px;
+        }
+
+        .calendar .top.section .action {
+            text-align: right;
+            width: 80px;
+        }
+
+
+    .ui.agendas {
+        color: #aaa;
+        padding: 1em;
+    }
+
+        .ui.agendas .ui.agenda,
+        .ui.agendas .list {
+            padding: 0.25em;
+        }
+
+
+            .ui.agendas .ui.agenda.title {
+                font-size: 1.2em;
+                padding: 0.5em 0;
+                color: #ccc;
+                text-transform: uppercase;
+                letter-spacing: 0.02em;
+            }
+
+                .ui.agendas .ui.agenda.title span.day {
+                    padding-right: 0.2em;
+                    color: #7DADFA;
+                }
+
+        .ui.agendas .events .event {
+            display: flex;
+            padding: 0.7em 0.5em;
+            position: relative;
+        }
+
+            .ui.agendas .events .active.event .dot,
+            .ui.agendas .events .event:hover .dot {
+                background: #7DADFA;
+            }
+
+            .ui.agendas .events .event:not(:first-of-type) {
+                border-top: 1px solid #555;
+            }
+
+            .ui.agendas .events .event .dot {
+                margin: 0.3em 0;
+                width: 1em;
+                height: 1em;
+                background: #666;
+                border-radius: 1em;
+            }
+
+            .ui.agendas .events .event .info {
+                padding-left: 1em;
+                padding-top: -1em !important;
+                width: 100%;
+            }
+
+                .ui.agendas .events .event .info .task {
+                    display: flex;
+                }
+
+                .ui.agendas .events .event .info .title {
+                    width: 280px;
+                    color: #ccc;
+                    font-weight: 600;
+                }
+
+                .ui.agendas .events .event .info .time {
+                    text-align: right;
+                    width: calc(100% - 280px);
+                    font-size: 0.87em;
+                    text-transform: uppercase;
+                }
+
+    .tags {
+        display: flex;
+        flex-direction: row-reverse;
+    }
+
+        .tags div {
+            margin: 2px;
+            padding: 0.3em 0.8em;
+            border-radius: 0.3em;
+            color: #fff;
+            font-size: 0.87em;
+        }
+
+            .tags div.type {
+                background: #487399;
+            }
+
+            .tags div.reminder {
+                background: #48996B;
+            }
+            .tags div.repeat {
+                background: #555;
+            }
+</style>
+<div class="ui frapid calendar app attached segment">
+    <div class="left panel">
+        <div class="top section">
+            <div class="document title">
+                Calendar & Schedules
+            </div>
+            <div class="action">
+                <div class="ui grey icon button">
+                    <i class="plus icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui calendar" id="example15">
+        </div>
+
+        <div class="ui agendas">
+            <div class="ui agenda title">
+                <span class="day">Monday</span>
+                <span class="date">1/1/2017</span>
+            </div>
+
+            <div class="events">
+                <div class="event">
+                    <div class="dot"></div>
+                    <div class="info">
+                        <div class="task">
+                            <div class="title">Coffee with Mike</div>
+                            <div class="time">09:00 AM</div>
+                        </div>
+                        <div class="location">Starbucks</div>
+                        <div class="tags">
+                            <div class="type">private</div>
+                            <div class="reminder">2h</div>
+                            <div class="repeat">repeat</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="event">
+                    <div class="dot"></div>
+                    <div class="info">
+                        <div class="task">
+                            <div class="title">Call Susan Regarding Contract</div>
+                            <div class="time">11:15 AM</div>
+                        </div>
+                        <div class="location">Office</div>
+                    </div>
+                </div>
+                <div class="event">
+                    <div class="dot"></div>
+                    <div class="info">
+                        <div class="task">
+                            <div class="title">Meeting with the Dentist</div>
+                            <div class="time">02:00 PM</div>
+                        </div>
+                        <div class="location">Queensway</div>
+                        <div class="tags">
+                            <div class="type">private</div>
+                            <div class="repeat">repeat</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="event">
+                    <div class="dot"></div>
+                    <div class="info">
+                        <div class="task">
+                            <div class="title">Go to the Gym</div>
+                            <div class="time">06:00 PM</div>
+                        </div>
+                        <div class="location">Wellness Center</div>
+                        <div class="tags">
+                            <div class="type">private</div>
+                            <div class="repeat">repeat</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="event">
+                    <div class="dot"></div>
+                    <div class="info">
+                        <div class="task">
+                            <div class="title">Dinner with Courtney</div>
+                            <div class="time">08:15 PM</div>
+                        </div>
+                        <div class="location">The Ledbury</div>
+                        <div class="tags">
+                            <div class="type">private</div>
+                            <div class="reminder">1h</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right panel">
+        <div id="calendar"></div>
+    </div>
+</div>
+
+<script>
+    function displayCalendar() {
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'month,agendaWeek,agendaDay,listWeek',
+                center: 'title',
+                right: 'prev,next today'
+            },
+            defaultDate: '2017-01-30',
+            navLinks: true, // can click day/week names to navigate views
+            editable: true,
+            eventLimit: true, // allow "more" link when too many events
+            events: [
+                {
+                    title: 'All Day Event',
+                    start: '2017-01-01'
+                },
+                {
+                    title: 'Long Event',
+                    start: '2017-01-07',
+                    end: '2017-01-10'
+                },
+                {
+                    id: 999,
+                    title: 'Repeating Event',
+                    start: '2017-01-09T16:00:00'
+                },
+                {
+                    id: 999,
+                    title: 'Repeating Event',
+                    start: '2017-01-16T16:00:00'
+                },
+                {
+                    title: 'Conference',
+                    start: '2016-12-11',
+                    end: '2017-01-13'
+                },
+                {
+                    title: 'Meeting',
+                    start: '2016-12-12T10:30:00',
+                    end: '2017-01-12T12:30:00'
+                },
+                {
+                    title: 'Lunch',
+                    start: '2017-01-12T12:00:00'
+                },
+                {
+                    title: 'Meeting',
+                    start: '2017-01-12T14:30:00'
+                },
+                {
+                    title: 'Happy Hour',
+                    start: '2017-01-12T17:30:00'
+                },
+                {
+                    title: 'Dinner',
+                    start: '2017-01-12T20:00:00'
+                },
+                {
+                    title: 'Birthday Party',
+                    start: '2017-01-13T07:00:00'
+                },
+                {
+                    title: 'Click for Google',
+                    url: 'http://google.com/',
+                    start: '2017-01-28'
+                }
+            ]
+        });
+    };
+
+    $(document).ready(function () {
+        setTimeout(function () {
+            displayCalendar();
+            $('#example15').calendar({
+                type: 'date'
+            });
+        }, 1000);
+
+    });
+
+</script>
+<style>
+    /*body {
+        margin: 40px 10px;
+        padding: 0;
+        font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+        font-size: 14px;
+    }
+
+    #calendar {
+        max-width: 900px;
+        margin: 0 auto;
+    }*/
+</style>
