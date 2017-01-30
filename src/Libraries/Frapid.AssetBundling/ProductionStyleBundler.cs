@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using Frapid.Framework.StaticContent;
 using Serilog;
 
 namespace Frapid.AssetBundling
 {
-    public class StyleBundler : Bundler
+    public class ProductionStyleBundler : Bundler
     {
-        public StyleBundler(ILogger logger, Asset asset) : base(logger, asset)
+        public ProductionStyleBundler(ILogger logger, Asset asset) : base(logger, asset)
         {
         }
 
@@ -14,7 +14,12 @@ namespace Frapid.AssetBundling
         {
             try
             {
-                return this.Minifier.MinifyStyleSheet(contents);
+                string compressed = this.Compressor.MinifyStyleSheet(contents);
+
+                if (this.Compressor.Errors.Count == 0)
+                {
+                    return compressed;
+                }
             }
             catch (Exception ex)
             {

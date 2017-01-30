@@ -1,13 +1,12 @@
 using System;
 using Frapid.Framework.StaticContent;
-using Microsoft.Ajax.Utilities;
 using Serilog;
 
 namespace Frapid.AssetBundling
 {
-    public class ScriptBundler : Bundler
+    public class ProductionScriptBundler : Bundler
     {
-        public ScriptBundler(ILogger logger, Asset asset) : base(logger, asset)
+        public ProductionScriptBundler(ILogger logger, Asset asset) : base(logger, asset)
         {
         }
 
@@ -15,7 +14,12 @@ namespace Frapid.AssetBundling
         {
             try
             {
-                return this.Minifier.MinifyJavaScript(contents, new CodeSettings());
+                string compressed = this.Compressor.MinifyJavaScript(contents);
+
+                if (this.Compressor.Errors.Count == 0)
+                {
+                    return compressed + ";";
+                }
             }
             catch (Exception ex)
             {
