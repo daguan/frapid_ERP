@@ -92,22 +92,22 @@ function convertNetDateFormat(format) {
     if (format.indexOf("MMMM") !== -1) {
         format = format.replace("MMMM", "MM");
     }
-
-    if (format.indexOf("MMM") !== -1) {
+    else if (format.indexOf("MMM") !== -1) {
         format = format.replace("MMM", "M");
     }
-
-    if (format.indexOf("MM") !== -1) {
+    else if (format.indexOf("MM") !== -1) {
         format = format.replace("MM", "mm");
     }
+    else{
+        format = format.replace("M", "m");        
+    }
 
-    format = format.replace("M", "m");
 
     //Convert year
     format = format.indexOf("yyyy") >= 0 ? format.replace("yyyy", "yy") : format.replace("yy", "y");
 
     return format;
-}
+};
 
 function loadDatepicker() {
     loadPersister();

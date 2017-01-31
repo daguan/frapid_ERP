@@ -27,38 +27,43 @@
             font-family: "Roboto" !important;
         }
 
-    .ui.calendar:not(.app) {
+
+    .ui.calendar table {
+        min-width: 272px !important;
+    }
+
+    .ui.inverted.calendar:not(.app) {
         margin: 0.5em !important;
         border: 1px solid #555 !important;
     }
 
-    .ui.calendar .calendar tr,
-    .ui.calendar .calendar td,
-    .ui.calendar .calendar th {
+    .ui.inverted.calendar .calendar tr,
+    .ui.inverted.calendar .calendar td,
+    .ui.inverted.calendar .calendar th {
         background: #444 !important;
         color: #aaa;
         border-color: transparent !important;
         border-bottom-color: #555 !important;
     }
 
-        .ui.calendar .calendar td.disabled {
+        .ui.inverted.calendar .calendar td.disabled {
             color: #666 !important;
         }
 
-    .ui.calendar:not(.app) .calendar table {
+    .ui.inverted.calendar:not(.app) .calendar table {
         border: none !important;
     }
 
-        .ui.calendar:not(.app) .calendar table th .link:not(.prev):not(.next) {
+        .ui.inverted.calendar:not(.app) .calendar table th .link:not(.prev):not(.next) {
             font-size: 2em;
             font-weight: 300;
             color: #ccc;
         }
 
 
-        .ui.calendar:not(.app) .calendar table td.link.today,
-        .ui.calendar:not(.app) .calendar table td.link.active,
-        .ui.calendar:not(.app) .calendar table td:hover {
+        .ui.inverted.calendar:not(.app) .calendar table td.link.today,
+        .ui.inverted.calendar:not(.app) .calendar table td.link.active,
+        .ui.inverted.calendar:not(.app) .calendar table td:hover {
             background: #2474AD !important;
             color: #fff !important;
             font-weight: 800;
@@ -323,15 +328,78 @@
             .tags div.reminder {
                 background: #48996B;
             }
+
             .tags div.repeat {
                 background: #555;
             }
+.new.event{
+	padding:1em;
+	height:800px;
+	border:1px solid #ddd;
+}
+
+.new.event .dropdown > .menu > .input {
+	width: 90%!important;
+}
+
+
+.mixerp.form .field{
+	padding: 0.25em!important;
+	margin:0!important;
+}
+
+.mixerp.form .ui.dropdown{
+  border:none!important;	
+}
+
+.mixerp.form label{
+	color:#777!important;
+}
+
+.mixerp.form .ui.dropdown .dropdown.icon{
+	padding:4px!important;
+}
+
+.mixerp.form input,
+.mixerp.form .ui.search.dropdown input,
+.mixerp.form .ui.dropdown:not(.search) 
+{
+  border:none!important;
+	border-radius: 0!important;
+	padding:4px!important; 
+	color:#777!important;
+	border-bottom:1px solid #eee!important;
+	min-height: auto!important;
+}
+
+.mixerp.form .ui.search.dropdown
+{
+	padding:4px!important;
+	
+}
+
+.mixerp.form .ui.search.dropdown .menu
+{
+	margin:-0.6em -0.05em!important;
+	
+}
+
+.mixerp.form .title input {
+	color:#2474AD!important;
+	font-size: 1.5em!important;
+}
+
+.ui.calendar:not(.inverted) .ui.table td{
+	font-size: 0.9em;
+	padding:0.5em;
+}
+
 </style>
 <div class="ui frapid calendar app attached segment">
     <div class="left panel">
         <div class="top section">
             <div class="document title">
-                Calendar & Schedules
+                Events & Schedules
             </div>
             <div class="action">
                 <div class="ui grey icon button">
@@ -340,7 +408,7 @@
             </div>
         </div>
 
-        <div class="ui calendar" id="example15">
+        <div class="ui inverted date only picker calendar">
         </div>
 
         <div class="ui agendas">
@@ -425,13 +493,130 @@
     </div>
 </div>
 
+<div class="new event ui right wide sidebar segment">
+    <div class="ui mixerp form">
+        <div class="title field">
+            <input type="text" placeholder="Enter Event Title" value="Dinner with Courtney"/>
+        </div>
+        <div class="category field">
+            <div class="ui floating fluid dropdown">
+                <div class="text">
+                    <div class="ui red empty circular label"></div>
+                    Personal
+                </div>
+                <div class="menu">
+                    <div class="ui icon search input">
+                        <i class="search icon"></i>
+                        <input placeholder="Search Category" type="text">
+                    </div>
+                    <div class="divider"></div>
+                    <div class="header">
+                        <i class="calendar icon"></i>
+                        Select Category
+                    </div>
+                    <div class="scrolling menu">
+                        <div class="item">
+                            <div class="ui red empty circular label"></div>
+                            Personal
+                        </div>
+                        <div class="item">
+                            <div class="ui blue empty circular label"></div>
+                            Work
+                        </div>
+                        <div class="item">
+                            <div class="ui black empty circular label"></div>
+                            Organization
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="location field">
+            <label>Location</label>
+            <input type="text" placeholder="Enter Location" value="The Ledbury" />
+        </div>
+        <div class="vpad8"></div>
+        <div class="location map">
+            <img src="http://d32ogoqmya1dw8.cloudfront.net/images/sp/library/google_earth/google_maps_hello_world.jpg"/>
+        </div>
+        <div class="field">
+            <label>Starts At</label>
+            <div class="ui date time picker calendar">
+                <input type="text" placeholder="Date & Time" value="2017-01-20T09:10:00.000Z" />
+            </div>
+        </div>
+        <div class="field">
+            <label>Ends On</label>
+            <div class="ui date time picker calendar">
+                <input type="text" placeholder="Ends On" value="2017-01-20T09:10:00.000Z" />
+            </div>
+        </div>
+        <div class="field">
+            <label>Timing</label>
+            <div class="ui slider checkbox">
+                <input name="example" type="checkbox">
+                <label>All day</label>
+            </div>
+        </div>
+        <div class="vpad8"></div>
+        <div class="field">
+            <label>Repeat</label>
+            <div class="ui selection dropdown">
+                <input name="gender" type="hidden">
+                <i class="dropdown icon"></i>
+                <div class="default text">None</div>
+                <div class="menu">
+                    <div class="item" data-value="1">None</div>
+                    <div class="item" data-value="0">Every Day</div>
+                    <div class="item" data-value="0">Every Week</div>
+                    <div class="item" data-value="0">Every Month</div>
+                    <div class="item" data-value="0">Every Year</div>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label>Notify Me</label>
+            <div class="ui selection dropdown">
+                <input name="gender" type="hidden">
+                <i class="dropdown icon"></i>
+                <div class="default text">None</div>
+                <div class="menu">
+                    <div class="item" data-value="1">None</div>
+                    <div class="item" data-value="0">On Time</div>
+                    <div class="item" data-value="0">5 Minutes Before</div>
+                    <div class="item" data-value="0">10 Minutes Before</div>
+                    <div class="item" data-value="0">15 Minutes Before</div>
+                    <div class="item" data-value="0">30 Minutes Before</div>
+                    <div class="item" data-value="0">1 Hour Before</div>
+                    <div class="item" data-value="0">2 Hours Before</div>
+                    <div class="item" data-value="0">1 Day Before</div>
+                    <div class="item" data-value="0">2 Days Before</div>
+                    <div class="item" data-value="0">Custom</div>
+                </div>
+            </div>
+        </div>
+        <div class="vpad8"></div>
+        <div class="location field">
+            <label>Note</label>
+            <input type="text" placeholder="Enter Note"  />
+        </div>
+        <div class="location field">
+            <label>Url</label>
+            <input type="text" placeholder="Enter Url"/>
+        </div>
+        <div class="vpad8"></div>
+        <button class="ui positive circular button">OK</button>
+        <button class="ui basic circular button">Close</button>
+    </div>
+</div>
+
 <script>
     function displayCalendar() {
         $('#calendar').fullCalendar({
             header: {
-                left: 'month,agendaWeek,agendaDay,listWeek',
-                center: 'title',
-                right: 'prev,next today'
+                left: 'prev,next today',
+                center: 'agendaDay,agendaWeek,month,listMonth',
+                right: 'title'
             },
             defaultDate: '2017-01-30',
             navLinks: true, // can click day/week names to navigate views
@@ -499,13 +684,37 @@
     $(document).ready(function () {
         setTimeout(function () {
             displayCalendar();
-            $('#example15').calendar({
-                type: 'date'
-            });
+
+            function getDatePickerOptions(dateOnly) {
+                const options = {
+                    parser: {
+                        date: function (text) {
+                            return new Date(text);
+                        }
+                    },
+                    formatter: {
+                        date: function (date) {
+                            if (!date) return '';
+                            return $.datepicker.formatDate(window.convertNetDateFormat(window.longDateFormat), date);
+                        }
+                    }
+                };
+
+                if (dateOnly) {
+                    options.type = 'date';
+                };
+
+                return options;
+            };
+
+            $('.ui.date.only.picker').calendar(getDatePickerOptions(true));
+
+            $('.ui.date.time.picker').calendar(getDatePickerOptions(false));
         }, 1000);
 
     });
-
+    $(".dropdown").dropdown({ placeholder: false });
+    $(".sidebar").sidebar("show");
 </script>
 <style>
     /*body {
