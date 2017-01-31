@@ -85,7 +85,7 @@ function getDate() {
 
 function convertNetDateFormat(format) {
     //Convert the date
-    format = format.replace("dddd", "DD");
+    format = (format || "M/d/yyyy").replace("dddd", "DD");
     format = format.replace("ddd", "D");
 
     //Convert month
