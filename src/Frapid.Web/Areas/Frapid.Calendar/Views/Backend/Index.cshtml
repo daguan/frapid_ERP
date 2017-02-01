@@ -10,34 +10,56 @@
     }
 </style>
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.js"></script>
-<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css" />
-<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.print.css" media="print" />
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.6/calendar.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.6/calendar.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/scripts/semantic-ui-calendar-0.0.6/dist/calendar.min.css" />
+<link rel="stylesheet" href="/scripts/nanoscrollerjs-0.8.6/nanoscroller.min.css" />
+<link rel="stylesheet" type="text/css" href="/scripts/fullcalendar-3.1.0/fullcalendar.min.css" />
+<link rel="stylesheet" type="text/css" href="/scripts/fullcalendar-3.1.0/fullcalendar.print.css" media="print" />
+
+<script src="/scripts/semantic-ui-calendar-0.0.6/dist/calendar.min.js"></script>
+<script src="/scripts/nanoscrollerjs-0.8.6/jquery.nanoscroller.min.js"></script>
+<script src="/scripts/fullcalendar-3.1.0/fullcalendar.min.js"></script>
 
 <style>
-    #calendar {
-        font-size: .87em;
-        padding: 2em;
-        color: #777;
+    .frapid.calendar.app {
+        display: flex;
+        padding: 0 !important;
     }
 
-        #calendar * {
-            font-family: 'Roboto' !important;
+        .frapid.calendar.app .left.panel {
+            width: 400px;
+            background: #383E49;
+            color: #ccc;
         }
 
-    .fc-toolbar .search.input {
-        width: 300px;
-    }
+            .frapid.calendar.app .left.panel .document.title {
+                font-size: 1.4em;
+                font-weight: 600;
+                color: #ccc;
+            }
 
-    .ui.calendar table {
-        min-width: 272px !important;
-    }
+            .frapid.calendar.app .left.panel .top.section {
+                display: flex;
+                padding: 1em;
+            }
 
-    .ui.inverted.calendar:not(.app) {
-        margin: .5em !important;
-        border: 1px solid #555 !important;
+                .frapid.calendar.app .left.panel .top.section .document.title {
+                    width: 300px;
+                    padding: .3em 0;
+                }
+
+                .frapid.calendar.app .left.panel .top.section .action {
+                    width: 80px;
+                    text-align: right;
+                }
+
+
+            .frapid.calendar.app .left.panel .ui.inverted.calendar:not(.app) {
+                margin: .5em !important;
+                border: 1px solid transparent !important;
+            }
+
+    .ui.inverted.calendar table {
+        background: #383E49 !important;
     }
 
     .ui.inverted.calendar .calendar tr,
@@ -45,8 +67,10 @@
     .ui.inverted.calendar .calendar th {
         color: #aaa;
         border-color: transparent !important;
-        border-bottom-color: #555 !important;
-        background: #444 !important;
+        background: #383E49 !important;
+        padding: 1.5em !important;
+        border-radius: 4em;
+        font-weight: 300;
     }
 
         .ui.inverted.calendar .calendar td.disabled {
@@ -63,180 +87,102 @@
             color: #ccc;
         }
 
-
+        .ui.inverted.calendar:not(.app) .calendar table td.link.focus,
+        .ui.inverted.calendar:not(.app) .calendar table td.link.active.foucs,
         .ui.inverted.calendar:not(.app) .calendar table td.link.active,
         .ui.inverted.calendar:not(.app) .calendar table td:hover {
             font-weight: 800;
             color: #fff !important;
-            border-color: #2474ad !important;
-            background: #2474ad !important;
+            border-color: transparent !important;
+            border: none !important;
         }
 
+        .ui.inverted.calendar:not(.app) .calendar table td.link.active {
+            background: #D62D57 !important;
+        }
 
-    .frapid.calendar.app {
-        display: flex;
-        padding: 0 !important;
+            .ui.inverted.calendar:not(.app) .calendar table td.link.focus,
+            .ui.inverted.calendar:not(.app) .calendar table td.link.active.foucs,
+            .ui.inverted.calendar:not(.app) .calendar table td:hover {
+                background: #303642 !important;
+                border-color: transparent !important;
+                -webkit-box-shadow: none !important;
+                box-shadow: none !important;
+            }
+
+    .ui.calendar table {
+        min-width: 272px !important;
     }
 
-    .document.title {
-        font-size: 1.4em;
-        font-weight: 600;
-        color: #ccc;
-    }
-
-    .left.panel {
-        width: 400px;
-        background: #444;
-    }
-
-    .right.panel {
+    .frapid.calendar.app .right.panel {
         width: calc(100% - 410px);
     }
 
-    #calendar h2 {
-        font-size: 2em;
-        font-weight: 400 !important;
-        letter-spacing: .05em;
-        text-transform: uppercase !important;
-        color: #888;
-    }
 
     #calendar td,
     .fc-list-item td {
-        border-color: #efefef !important;
-    }
-
-    .fc-view-container {
-        border: 1px solid #eee !important;
+        border-color: #E9EEF1 !important;
     }
 
 
+    #calendar .fc-list-heading .fc-widget-header,
     #calendar th {
         border-color: transparent !important;
-    }
-
-        #calendar th,
-        #calendar th a,
-        .fc-widget-header,
-        .fc-widget-header a {
-            color: #555 !important;
-        }
-
-            #calendar th:hover {
-                background-color: #dfdfdf !important;
-            }
-
-    .fc-day-number {
-        font-size: 2em;
+        padding: 1em !important;
+        font-size: 1.5em;
         font-weight: 300;
-        width: 1.2em;
-        height: 1.2em;
-        margin: .1em;
-        padding: .5em !important;
-        padding-top: .8em !important;
-        padding-bottom: .3em !important;
-        text-align: center;
-        text-decoration: none !important;
-        color: #777 !important;
-        border-radius: 3em;
     }
 
-        .fc-day-number:hover {
-            background: #fafafa;
+        #calendar .fc-list-heading,
+        #calendar .fc-list-heading a,
+        #calendar th,
+        #calendar th a {
+            color: #383E49;
+            font-weight: 300;
+            text-decoration: none;
         }
 
-
-    .fc-head,
-    .fc-event-dot,
-    .fc-list-heading,
-    .fc-widget-header {
-        background: #eee !important;
-        background-image: none !important;
-    }
-
-    .fc-state-default {
-        background-image: none !important;
-    }
-
-    .fc button {
-        font-size: .87em !important;
-        font-weight: 500;
-        height: auto !important;
-        margin-right: 1px !important;
-        padding: .5em 1em !important;
-        letter-spacing: .02em;
-        text-transform: uppercase;
+    #calendar .fc-day-grid-event,
+    #calendar .fc-time-grid-event {
         color: #fff;
-        border: none;
-        background-color: #777 !important;
-        text-shadow: none !important;
+        background: #636B7A !important;
+        border: 1px solid #ddd !important;
+        margin: 0.25em 0.5em;
+        font-weight: bold;
+        padding: 0.5em 1em;
     }
 
 
-
-        .fc button.fc-state-hover,
-        .fc button.fc-state-active {
-            background-color: #555 !important;
+        #calendar .fc-day-grid-event .fc-content .fc-time::after {
+            content: " — ";
         }
 
-
-
-    .fc-head th {
-        padding: .78em !important;
-        letter-spacing: .05em;
-        text-transform: uppercase;
-        color: #333;
+    #calendar .fc-day-number {
+        font-size: 1.5em;
+        font-weight: 300;
+        padding: .5em !important;
+        text-decoration: none !important;
+        color: #383E49 !important;
     }
-
-    td.fc-day:hover,
-    .fc-slats tr:hover,
-    .fc-list-table tr:hover,
-    .fc-list-item:hover > td {
-        
-    }
-
-    .fc-event {
-        font-weight: 800;
-        padding: .5em!important;
-        color: #555 !important;
-        border-color: transparent !important;
-        background: #D5DEDC !important;
-    }
-
-    .fc-axis {
-        width: 80px !important;
-    }
-
-        .fc-axis.fc-widget-content {
-            text-transform: uppercase;
-        }
 
     .action .button {
         margin: 0 .5em !important;
         border: 1px solid #222 !important;
-        background: #333 !important;
+        background: #D62D57 !important;
     }
 
         .action .button:hover {
             border-color: transparent !important;
-            background: #2474ad !important;
+            background: #D62D57 !important;
         }
 
-    .calendar .top.section {
-        display: flex;
-        padding: 1em;
+    .fc-highlight {
+        background: #E6EEFC !important;
     }
 
-        .calendar .top.section .document.title {
-            width: 300px;
-            padding: .3em 0;
-        }
-
-        .calendar .top.section .action {
-            width: 80px;
-            text-align: right;
-        }
-
+    .fc-state-highlight {
+        background: #F5F8FF !important;
+    }
 
     .ui.agendas {
         padding: 1em;
@@ -259,8 +205,17 @@
 
                 .ui.agendas .ui.agenda.title span.day {
                     padding-right: .2em;
-                    color: #7dadfa;
+                    color: #D62D57;
+                    font-weight: bold;
                 }
+
+        .ui.agendas .nano {
+            max-height: calc(100vh - 400px);
+        }
+
+            .ui.agendas .nano .events {
+                padding-right: 1em;
+            }
 
         .ui.agendas .events .event {
             position: relative;
@@ -333,15 +288,54 @@
                 background: #555;
             }
 
-    .new.event {
-        padding: 1em;
-        border: 1px solid #ddd;
+
+    #calendar .fc-toolbar.fc-header-toolbar {
+        display: none;
     }
 
-        .new.event .dropdown > .menu > .input {
-            width: 90% !important;
+
+    .fc-axis {
+        width: 80px !important;
+    }
+
+        .fc-axis.fc-widget-content,
+        .fc-list-item-time {
+            text-transform: uppercase;
+            font-size: 0.78em;
+            color: #888;
+            font-weight: bold;
+            letter-spacing: 0.05em;
         }
 
+            .fc-axis.fc-widget-content span {
+                padding-top: 1.5em;
+                display: inline-block;
+            }
+
+    .organizer .title {
+        font-size: 1.9em;
+        padding: 0.4em;
+        font-weight: 300;
+        text-align: center;
+        color: #ccc;
+        cursor: pointer;
+    }
+
+        .organizer .title span {
+            color: #383E49;
+        }
+
+    .fc-event-dot {
+        background: #dedede !important;
+    }
+
+    .organizer .title i:hover {
+        color: #FF644A !important;
+    }
+
+    .organizer {
+        border-color: transparent !important;
+    }
 
     .mixerp.form .field {
         margin: 0 !important;
@@ -384,11 +378,86 @@
         color: #2474ad !important;
     }
 
-    .ui.calendar:not(.inverted) .ui.table td {
-        font-size: .9em;
-        padding: .5em;
+    #map {
+        height: 300px;
     }
+
+    #infowindow-content .title {
+        font-weight: bold;
+    }
+
+    #infowindow-content {
+        display: none;
+    }
+
+    #map #infowindow-content {
+        display: inline;
+    }
+
+    .pac-container {
+        z-index: 9999 !important;
+    }
+
+    .new.event .dropdown > .menu > .input {
+        width: 90% !important;
+    }
+
+    #toolbar {
+        padding: 0.5em;
+        background: #fafafa;
+        border: 1px solid #eee;
+        display: flex;
+    }
+
+        #toolbar .left,
+        #toolbar .right {
+            width: 50%;
+        }
+
+        #toolbar .left {
+            text-align: left;
+        }
+
+            #toolbar .left .input {
+                width: 400px;
+            }
+
+        #toolbar .right {
+            text-align: right;
+        }
+
+        #toolbar .button,
+        .fc button {
+            background: #eaeaea;
+            border: 1px solid #dedede;
+            color: #777;
+        }
+
+    .fc button {
+        font-size: .87em !important;
+        font-weight: 500;
+        height: auto !important;
+        margin-right: 1px !important;
+        padding: .5em 1em !important;
+        letter-spacing: .02em;
+        text-transform: uppercase;
+        text-shadow: none !important;
+    }
+
+
+        #toolbar .button:hover,
+        .fc button.fc-state-hover,
+        .fc button.fc-state-active {
+            text-shadow: none !important;
+            background-image: none !important;
+            border: 1px solid #ccc;
+            color: #222 !important;
+            box-shadow: none !important;
+            background: #ddd;
+        }
 </style>
+
+
 <div class="ui frapid calendar app attached segment">
     <div class="left panel">
         <div class="top section">
@@ -401,7 +470,7 @@
                 </button>
             </div>
         </div>
-
+        <div class="ui inverted divider"></div>
         <div class="ui inverted date only picker calendar">
         </div>
 
@@ -410,226 +479,989 @@
                 <span class="day">Monday</span>
                 <span class="date">1/1/2017</span>
             </div>
-
-            <div class="events">
-                <div class="event">
-                    <div class="dot"></div>
-                    <div class="info">
-                        <div class="task">
-                            <div class="title">Coffee with Mike</div>
-                            <div class="time">09:00 AM</div>
+            <div class="nano">
+                <div class="nano-content">
+                    <div data-simplebar class="events">
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Coffee with Mike</div>
+                                    <div class="time">09:00 AM</div>
+                                </div>
+                                <div class="location">Starbucks</div>
+                                <div class="tags">
+                                    <div class="type">personal</div>
+                                    <div class="reminder">2h</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="location">Starbucks</div>
-                        <div class="tags">
-                            <div class="type">private</div>
-                            <div class="reminder">2h</div>
-                            <div class="repeat">repeat</div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Call Susan Regarding Contract</div>
+                                    <div class="time">11:15 AM</div>
+                                </div>
+                                <div class="location">Office</div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="event">
-                    <div class="dot"></div>
-                    <div class="info">
-                        <div class="task">
-                            <div class="title">Call Susan Regarding Contract</div>
-                            <div class="time">11:15 AM</div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Meeting with the Dentist</div>
+                                    <div class="time">02:00 PM</div>
+                                </div>
+                                <div class="location">Queensway</div>
+                                <div class="tags">
+                                    <div class="type">company</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="location">Office</div>
-                    </div>
-                </div>
-                <div class="event">
-                    <div class="dot"></div>
-                    <div class="info">
-                        <div class="task">
-                            <div class="title">Meeting with the Dentist</div>
-                            <div class="time">02:00 PM</div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Go to the Gym</div>
+                                    <div class="time">06:00 PM</div>
+                                </div>
+                                <div class="location">Wellness Center</div>
+                                <div class="tags">
+                                    <div class="type">school</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="location">Queensway</div>
-                        <div class="tags">
-                            <div class="type">private</div>
-                            <div class="repeat">repeat</div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Dinner with Courtney</div>
+                                    <div class="time">08:15 PM</div>
+                                </div>
+                                <div class="location">The Ledbury</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">1h</div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="event">
-                    <div class="dot"></div>
-                    <div class="info">
-                        <div class="task">
-                            <div class="title">Go to the Gym</div>
-                            <div class="time">06:00 PM</div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Coffee with Mike</div>
+                                    <div class="time">09:00 AM</div>
+                                </div>
+                                <div class="location">Starbucks</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">2h</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="location">Wellness Center</div>
-                        <div class="tags">
-                            <div class="type">private</div>
-                            <div class="repeat">repeat</div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Call Susan Regarding Contract</div>
+                                    <div class="time">11:15 AM</div>
+                                </div>
+                                <div class="location">Office</div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="event">
-                    <div class="dot"></div>
-                    <div class="info">
-                        <div class="task">
-                            <div class="title">Dinner with Courtney</div>
-                            <div class="time">08:15 PM</div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Meeting with the Dentist</div>
+                                    <div class="time">02:00 PM</div>
+                                </div>
+                                <div class="location">Queensway</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="location">The Ledbury</div>
-                        <div class="tags">
-                            <div class="type">private</div>
-                            <div class="reminder">1h</div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Go to the Gym</div>
+                                    <div class="time">06:00 PM</div>
+                                </div>
+                                <div class="location">Wellness Center</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Dinner with Courtney</div>
+                                    <div class="time">08:15 PM</div>
+                                </div>
+                                <div class="location">The Ledbury</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">1h</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Coffee with Mike</div>
+                                    <div class="time">09:00 AM</div>
+                                </div>
+                                <div class="location">Starbucks</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">2h</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Call Susan Regarding Contract</div>
+                                    <div class="time">11:15 AM</div>
+                                </div>
+                                <div class="location">Office</div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Meeting with the Dentist</div>
+                                    <div class="time">02:00 PM</div>
+                                </div>
+                                <div class="location">Queensway</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Go to the Gym</div>
+                                    <div class="time">06:00 PM</div>
+                                </div>
+                                <div class="location">Wellness Center</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Dinner with Courtney</div>
+                                    <div class="time">08:15 PM</div>
+                                </div>
+                                <div class="location">The Ledbury</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">1h</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Coffee with Mike</div>
+                                    <div class="time">09:00 AM</div>
+                                </div>
+                                <div class="location">Starbucks</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">2h</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Call Susan Regarding Contract</div>
+                                    <div class="time">11:15 AM</div>
+                                </div>
+                                <div class="location">Office</div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Meeting with the Dentist</div>
+                                    <div class="time">02:00 PM</div>
+                                </div>
+                                <div class="location">Queensway</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Go to the Gym</div>
+                                    <div class="time">06:00 PM</div>
+                                </div>
+                                <div class="location">Wellness Center</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Dinner with Courtney</div>
+                                    <div class="time">08:15 PM</div>
+                                </div>
+                                <div class="location">The Ledbury</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">1h</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Coffee with Mike</div>
+                                    <div class="time">09:00 AM</div>
+                                </div>
+                                <div class="location">Starbucks</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">2h</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Call Susan Regarding Contract</div>
+                                    <div class="time">11:15 AM</div>
+                                </div>
+                                <div class="location">Office</div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Meeting with the Dentist</div>
+                                    <div class="time">02:00 PM</div>
+                                </div>
+                                <div class="location">Queensway</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Go to the Gym</div>
+                                    <div class="time">06:00 PM</div>
+                                </div>
+                                <div class="location">Wellness Center</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Dinner with Courtney</div>
+                                    <div class="time">08:15 PM</div>
+                                </div>
+                                <div class="location">The Ledbury</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">1h</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Coffee with Mike</div>
+                                    <div class="time">09:00 AM</div>
+                                </div>
+                                <div class="location">Starbucks</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">2h</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Call Susan Regarding Contract</div>
+                                    <div class="time">11:15 AM</div>
+                                </div>
+                                <div class="location">Office</div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Meeting with the Dentist</div>
+                                    <div class="time">02:00 PM</div>
+                                </div>
+                                <div class="location">Queensway</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Go to the Gym</div>
+                                    <div class="time">06:00 PM</div>
+                                </div>
+                                <div class="location">Wellness Center</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Dinner with Courtney</div>
+                                    <div class="time">08:15 PM</div>
+                                </div>
+                                <div class="location">The Ledbury</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">1h</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Coffee with Mike</div>
+                                    <div class="time">09:00 AM</div>
+                                </div>
+                                <div class="location">Starbucks</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">2h</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Call Susan Regarding Contract</div>
+                                    <div class="time">11:15 AM</div>
+                                </div>
+                                <div class="location">Office</div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Meeting with the Dentist</div>
+                                    <div class="time">02:00 PM</div>
+                                </div>
+                                <div class="location">Queensway</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Go to the Gym</div>
+                                    <div class="time">06:00 PM</div>
+                                </div>
+                                <div class="location">Wellness Center</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Dinner with Courtney</div>
+                                    <div class="time">08:15 PM</div>
+                                </div>
+                                <div class="location">The Ledbury</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">1h</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Coffee with Mike</div>
+                                    <div class="time">09:00 AM</div>
+                                </div>
+                                <div class="location">Starbucks</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">2h</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Call Susan Regarding Contract</div>
+                                    <div class="time">11:15 AM</div>
+                                </div>
+                                <div class="location">Office</div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Meeting with the Dentist</div>
+                                    <div class="time">02:00 PM</div>
+                                </div>
+                                <div class="location">Queensway</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Go to the Gym</div>
+                                    <div class="time">06:00 PM</div>
+                                </div>
+                                <div class="location">Wellness Center</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Dinner with Courtney</div>
+                                    <div class="time">08:15 PM</div>
+                                </div>
+                                <div class="location">The Ledbury</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">1h</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Coffee with Mike</div>
+                                    <div class="time">09:00 AM</div>
+                                </div>
+                                <div class="location">Starbucks</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">2h</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Call Susan Regarding Contract</div>
+                                    <div class="time">11:15 AM</div>
+                                </div>
+                                <div class="location">Office</div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Meeting with the Dentist</div>
+                                    <div class="time">02:00 PM</div>
+                                </div>
+                                <div class="location">Queensway</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Go to the Gym</div>
+                                    <div class="time">06:00 PM</div>
+                                </div>
+                                <div class="location">Wellness Center</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Dinner with Courtney</div>
+                                    <div class="time">08:15 PM</div>
+                                </div>
+                                <div class="location">The Ledbury</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">1h</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Coffee with Mike</div>
+                                    <div class="time">09:00 AM</div>
+                                </div>
+                                <div class="location">Starbucks</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">2h</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Call Susan Regarding Contract</div>
+                                    <div class="time">11:15 AM</div>
+                                </div>
+                                <div class="location">Office</div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Meeting with the Dentist</div>
+                                    <div class="time">02:00 PM</div>
+                                </div>
+                                <div class="location">Queensway</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Go to the Gym</div>
+                                    <div class="time">06:00 PM</div>
+                                </div>
+                                <div class="location">Wellness Center</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="repeat">repeat</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event">
+                            <div class="dot"></div>
+                            <div class="info">
+                                <div class="task">
+                                    <div class="title">Dinner with Courtney</div>
+                                    <div class="time">08:15 PM</div>
+                                </div>
+                                <div class="location">The Ledbury</div>
+                                <div class="tags">
+                                    <div class="type">private</div>
+                                    <div class="reminder">1h</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
     <div class="right panel">
-        <div id="calendar"></div>
-    </div>
-</div>
-
-<div class="new event ui small modal segment">
-    <div class="ui mixerp form">
-        <div class="title field">
-            <input type="text" placeholder="Enter Event Title" value="Dinner with Courtney" />
-        </div>
-        <div class="category field">
-            <div class="ui floating fluid dropdown">
-                <div class="text">
-                    <div class="ui red empty circular label"></div>
-                    Personal
+        <div id="toolbar" class="ui attached segment">
+            <div class="left">
+                <div class="ui input">
+                    <input id="NaturalLanguageInputText" type="text" placeholder="Dinner with Kathey tonight at York & Albany" />
                 </div>
-                <div class="menu">
-                    <div class="ui icon search input">
-                        <i class="search icon"></i>
-                        <input placeholder="Search Category" type="text">
-                    </div>
-                    <div class="divider"></div>
-                    <div class="header">
-                        <i class="calendar icon"></i>
-                        Select Category
-                    </div>
-                    <div class="scrolling menu">
-                        <div class="item">
+            </div>
+            <div class="right">
+                <div class="ui icon buttons">
+                    <button class="ui grey icon button" title="Export">
+                        <i class="cloud download icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="newevent" class="new event ui small attached segment" style="display: none;">
+            <div class="ui mixerp form">
+                <div class="title field">
+                    <input id="TitleInputText" type="text" placeholder="Enter Event Title" value="" />
+                </div>
+                <div class="category field">
+                    <div id="CategoryDropdown" class="ui floating fluid dropdown">
+                        <div class="text">
                             <div class="ui red empty circular label"></div>
                             Personal
                         </div>
-                        <div class="item">
-                            <div class="ui blue empty circular label"></div>
-                            Work
+                        <div class="menu">
+                            <div class="ui icon search input">
+                                <i class="search icon"></i>
+                                <input placeholder="Search Category" type="text">
+                            </div>
+                            <div class="divider"></div>
+                            <div class="header">
+                                <i class="calendar icon"></i>
+                                Select Category
+                            </div>
+                            <div class="scrolling menu">
+                                <div class="item">
+                                    <div class="ui red empty circular label"></div>
+                                    Personal
+                                </div>
+                                <div class="item">
+                                    <div class="ui blue empty circular label"></div>
+                                    Work
+                                </div>
+                                <div class="item">
+                                    <div class="ui black empty circular label"></div>
+                                    Organization
+                                </div>
+                            </div>
                         </div>
-                        <div class="item">
-                            <div class="ui black empty circular label"></div>
-                            Organization
+                    </div>
+                </div>
+                <div class="location field">
+                    <label>Location</label>
+                    <input id="LocationInputText" type="text" placeholder="Enter Location" />
+                </div>
+                <div class="location map">
+                    <div id="map"></div>
+                    <div id="infowindow-content">
+                        <img src="" width="16" height="16" id="place-icon">
+                        <span id="place-name" class="title"></span><br>
+                        <span id="place-address"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui form">
+                <div class="field">
+                    <label>Starts At</label>
+                    <div id="StartsAtCalendar" class="ui date time picker calendar">
+                        <input type="text" placeholder="Starts At" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Ends On</label>
+                    <div id="EndsOnCalendar" class="ui date time picker calendar">
+                        <input type="text" placeholder="Ends On" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Timing</label>
+                    <div id="AllDayCheckbox" class="ui slider checkbox">
+                        <input name="example" type="checkbox">
+                        <label>All day</label>
+                    </div>
+                </div>
+                <div class="vpad8"></div>
+                <div class="field">
+                    <label>Repeat</label>
+                    <div id="RepeatDropdown" class="ui selection dropdown">
+                        <input name="repeat" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">None</div>
+                        <div class="menu">
+                            <div class="item" data-value="1">None</div>
+                            <div class="item" data-value="0">Every Day</div>
+                            <div class="item" data-value="0">Every Week</div>
+                            <div class="item" data-value="0">Every Month</div>
+                            <div class="item" data-value="0">Every Year</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Notify Me</label>
+                    <div id="NotifyMeDropdown" class="ui selection dropdown">
+                        <input name="gender" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">None</div>
+                        <div class="menu">
+                            <div class="item" data-value="1">None</div>
+                            <div class="item" data-value="0">On Time</div>
+                            <div class="item" data-value="0">5 Minutes Before</div>
+                            <div class="item" data-value="0">10 Minutes Before</div>
+                            <div class="item" data-value="0">15 Minutes Before</div>
+                            <div class="item" data-value="0">30 Minutes Before</div>
+                            <div class="item" data-value="0">1 Hour Before</div>
+                            <div class="item" data-value="0">2 Hours Before</div>
+                            <div class="item" data-value="0">1 Day Before</div>
+                            <div class="item" data-value="0">2 Days Before</div>
+                            <div class="item" data-value="0">Custom</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="vpad8"></div>
+                <div class="location field">
+                    <label>Note</label>
+                    <input id="NoteInputText" type="text" placeholder="Enter Note" />
+                </div>
+                <div class="location field">
+                    <label>Url</label>
+                    <input id="UrlInputUrl" type="url" placeholder="Enter Url" />
+                </div>
+                <div class="vpad8"></div>
+                <button class="ui positive button">OK</button>
+                <button id="CloseNewEventButton" class="ui basic button">Close</button>
+            </div>
+        </div>
+
+        <div id="scheduler">
+            <div class="ui organizer attached segment">
+                <div class="ui three column stackable grid">
+                    <div class="column">
+                        <div class="ui basic buttons">
+                            <button class="ui button" onclick='showOrganizerEvent("today")'>Today</button>
+                            <button class="ui button" onclick='showOrganizerEvent("day")'>Day</button>
+                            <button class="ui button" onclick='showOrganizerEvent("week")'>Week</button>
+                            <button class="ui button" onclick='showOrganizerEvent("month")'>Month</button>
+                            <button class="ui button" onclick='showOrganizerEvent("list")'>Agendas</button>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="title">
+                            <i class="angle left icon" onclick='showOrganizerEvent("previous")'></i>
+                            <span></span>
+                            <i class="angle right icon" onclick='showOrganizerEvent("next")'></i>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="ui search fluid input">
+                            <input type="search" placeholder="Search ..." />
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="location field">
-            <label>Location</label>
-            <input type="text" placeholder="Enter Location" value="The Ledbury" />
-        </div>
-        <div class="location map">
-            <img class="ui image" src="/Areas/Frapid.Calendar/images/map.png" />
-        </div>
-        <div class="vpad8"></div>
-        <div class="field">
-            <label>Starts At</label>
-            <div class="ui date time picker calendar">
-                <input type="text" placeholder="Starts At" value="2017-01-20T09:10:00.000Z" />
+            <div class="ui attached segment">
+                <div id="calendar"></div>
             </div>
         </div>
-        <div class="field">
-            <label>Ends On</label>
-            <div class="ui date time picker calendar">
-                <input type="text" placeholder="Ends On" value="2017-01-20T09:10:00.000Z" />
-            </div>
-        </div>
-        <div class="field">
-            <label>Timing</label>
-            <div class="ui slider checkbox">
-                <input name="example" type="checkbox">
-                <label>All day</label>
-            </div>
-        </div>
-        <div class="vpad8"></div>
-        <div class="field">
-            <label>Repeat</label>
-            <div class="ui selection dropdown">
-                <input name="gender" type="hidden">
-                <i class="dropdown icon"></i>
-                <div class="default text">None</div>
-                <div class="menu">
-                    <div class="item" data-value="1">None</div>
-                    <div class="item" data-value="0">Every Day</div>
-                    <div class="item" data-value="0">Every Week</div>
-                    <div class="item" data-value="0">Every Month</div>
-                    <div class="item" data-value="0">Every Year</div>
-                </div>
-            </div>
-        </div>
-        <div class="field">
-            <label>Notify Me</label>
-            <div class="ui selection dropdown">
-                <input name="gender" type="hidden">
-                <i class="dropdown icon"></i>
-                <div class="default text">None</div>
-                <div class="menu">
-                    <div class="item" data-value="1">None</div>
-                    <div class="item" data-value="0">On Time</div>
-                    <div class="item" data-value="0">5 Minutes Before</div>
-                    <div class="item" data-value="0">10 Minutes Before</div>
-                    <div class="item" data-value="0">15 Minutes Before</div>
-                    <div class="item" data-value="0">30 Minutes Before</div>
-                    <div class="item" data-value="0">1 Hour Before</div>
-                    <div class="item" data-value="0">2 Hours Before</div>
-                    <div class="item" data-value="0">1 Day Before</div>
-                    <div class="item" data-value="0">2 Days Before</div>
-                    <div class="item" data-value="0">Custom</div>
-                </div>
-            </div>
-        </div>
-        <div class="vpad8"></div>
-        <div class="location field">
-            <label>Note</label>
-            <input type="text" placeholder="Enter Note" />
-        </div>
-        <div class="location field">
-            <label>Url</label>
-            <input type="text" placeholder="Enter Url" />
-        </div>
-        <div class="vpad8"></div>
-        <button class="ui positive circular button">OK</button>
-        <button class="ui basic circular button">Close</button>
     </div>
 </div>
 
 <script>
+    var autocomplete;
+
+    function initMap() {
+        var map = new window.google.maps.Map(document.getElementById('map'));
+        const input = document.getElementById('LocationInputText');
+
+        autocomplete = new window.google.maps.places.Autocomplete(input);
+        autocomplete.setTypes([]);
+        autocomplete.setOptions({ strictBounds: false });
+
+        // Bind the map's bounds (viewport) property to the autocomplete object,
+        // so that the autocomplete requests use the current map bounds for the
+        // bounds option in the request.
+        autocomplete.bindTo('bounds', map);
+
+        var infowindow = new window.google.maps.InfoWindow();
+        var infowindowContent = document.getElementById('infowindow-content');
+        infowindow.setContent(infowindowContent);
+        var marker = new window.google.maps.Marker({
+            map: map,
+            anchorPoint: new window.google.maps.Point(0, -29)
+        });
+
+        autocomplete.addListener('place_changed', function () {
+            infowindow.close();
+            marker.setVisible(false);
+            const place = autocomplete.getPlace();
+            if (!(place && place.geometry)) {
+                // User entered the name of a Place that was not suggested and
+                // pressed the Enter key, or the Place Details request failed.
+                return;
+            }
+
+            $("#LocationInputText").attr("data-geometry", JSON.stringify(place.geometry));
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(12);  // Why 17? Because it looks good.
+            }
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+
+            var address = '';
+            if (place.address_components) {
+                address = [
+                  (place.address_components[0] && place.address_components[0].short_name || ''),
+                  (place.address_components[1] && place.address_components[1].short_name || ''),
+                  (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            infowindowContent.children['place-icon'].src = place.icon;
+            infowindowContent.children['place-name'].textContent = place.name;
+            infowindowContent.children['place-address'].textContent = address;
+            infowindow.open(map, marker);
+        });
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=@Configs.GoogleApiKey&libraries=places&callback=initMap" async defer></script>
+
+<script>
     window.today = (new Date()).addDays(-10).toISOString();
+    function updateTitle() {
+        const view = $('#calendar').fullCalendar('getView');
+        $(".organizer .title span").html(view.title);
+    };
+
+    function showOrganizerEvent(name) {
+        var target = null;
+
+        switch (name) {
+            case "previous":
+                target = $(".fc-prev-button");
+                break;
+            case "next":
+                target = $(".fc-next-button");
+                break;
+            case "today":
+                target = $(".fc-today-button");
+                break;
+            case "day":
+                target = $(".fc-agendaDay-button");
+                break;
+            case "week":
+                target = $(".fc-agendaWeek-button");
+                break;
+            case "month":
+                target = $(".fc-month-button");
+                break;
+            case "list":
+                target = $(".fc-listYear-button");
+                break;
+            default:
+        };
+
+        if (!target) {
+            return;
+        };
+
+
+        target.trigger("click");
+        updateTitle();
+    };
+
+
     function displayCalendar() {
-        $('#calendar').fullCalendar({
+        const el = $('#calendar');
+        el.fullCalendar({
             eventAfterAllRender: function () {
-                const target = $(".fc-toolbar .fc-right");
-                const hasSearch = $(".fc-toolbar .fc-right .search.input").length;
-
-                if (hasSearch) {
-                    return;
-                };
-
-                const search = $("<div id='SearchInput' class='ui search input' />");
-                const el = $("<input type='text' placeholder='Search ...' />");
-                el.appendTo(search);
-                search.appendTo(target);
             },
             header: {
-                right: '',
-                left: 'title',
-                center: 'prev,next today agendaDay,agendaWeek,month,listMonth,listYear'
+                left: '',
+                center: 'prev title next',
+                right: 'today year agendaDay,agendaWeek,month,listMonth,listYear'
+            },
+            defaultView: "basicWeek",
+            select: function (start, end, allDay) {
+            },
+            dayClick: function (date, allDay, jsEvent, view) {
             },
             defaultDate: window.today ? new Date(window.today) : new Date(),
             navLinks: true, // can click day/week names to navigate views
             editable: true,
+            selectable: true,
+            selectHelper: true,
             eventLimit: true, // allow "more" link when too many events
+            eventRender: function (event, element) {
+                updateTitle();
+            },
             events: [
                 {
                     title: 'All Day Event',
@@ -637,8 +1469,7 @@
                 },
                 {
                     title: 'Long Event',
-                    start: '2017-01-07',
-                    end: '2017-01-10'
+                    start: '2017-01-07'
                 },
                 {
                     id: 999,
@@ -689,61 +1520,228 @@
         });
     };
 
-    $(document).ready(function () {
-        setTimeout(function () {
-            displayCalendar();
-
-            function getDatePickerOptions(dateOnly) {
-                const options = {
-                    parser: {
-                        date: function (text) {
-                            return new Date(text);
-                        }
-                    },
-                    formatter: {
-                        date: function (date) {
-                            if (!date) return '';
-                            return $.datepicker.formatDate(window.convertNetDateFormat(window.longDateFormat), date);
-                        }
-                    },
-                    initialDate: window.today ? new Date(window.today) : new Date()
-                };
-
-                if (dateOnly) {
-                    options.type = 'date';
-                };
-
-                return options;
+    function initializeDatePicker() {
+        function getDatePickerOptions(dateOnly) {
+            const options = {
+                parser: {
+                    date: function (text) {
+                        return new Date(text);
+                    }
+                },
+                formatter: {
+                    date: function (date) {
+                        if (!date) return '';
+                        return $.datepicker.formatDate(window.convertNetDateFormat(window.longDateFormat), date);
+                    }
+                },
+                initialDate: window.today ? new Date(window.today) : new Date()
             };
 
-            $('.ui.date.only.picker').calendar(getDatePickerOptions(true));
-            $('.ui.date.only.picker').calendar("setting", "onChange", function (date) {
-                $('#calendar').fullCalendar('gotoDate', date);
-            });
+            if (dateOnly) {
+                options.type = 'date';
+            };
 
-            $('.ui.date.only.picker').calendar("set date", new Date(window.today), false, false);
+            return options;
+        };
 
-            $('.ui.date.time.picker').calendar(getDatePickerOptions(false));
-        }, 1000);
+        $('.ui.date.only.picker').calendar(getDatePickerOptions(true));
 
-    });
+        $('.ui.date.only.picker').calendar("setting", "onChange", function (date) {
+            $('#calendar').fullCalendar('gotoDate', date);
+        });
+
+        $('.ui.date.only.picker').calendar("set date", new Date(window.today), false, false);
+
+        $('.ui.date.time.picker').calendar(getDatePickerOptions(false));
+    };
+
+
     $(".dropdown").dropdown({ placeholder: false });
 
+    $("#NaturalLanguageInputText").keyup(function (e) {
+        function show() {
+            $("#newevent").show();
+            $("#scheduler").hide();
+        };
+
+        function hide() {
+            $("#newevent").hide();
+            $("#scheduler").show();
+        };
+
+
+        const el = $(this);
+        const input = el.val();
+
+        if (!input.trim()) {
+            hide();
+            return false;
+        };
+
+        show();
+
+
+        const parsed = parseTokens(input);
+
+        $("#TitleInputText").val(parsed.Title.trim()).trigger("change");
+        $("#LocationInputText").val(parsed.Location.trim()).trigger("change");
+
+        $("#StartsAtCalendar").calendar("set date", parsed.StartsFrom);
+        $("#EndsOnCalendar").calendar("set date", parsed.EndsOn);
+
+        if (e.which === 13) {
+            const locationInput = $("#LocationInputText");
+            locationInput.focus();
+            window.google.maps.event.trigger(autocomplete, 'place_changed');
+            return false;
+        };
+    });
 
     $("#AddEventButton").off("click").on("click", function () {
-        $(".modal").modal("show");
+        $("#newevent").fadeToggle(1000);
+        $("#scheduler").fadeToggle();
+    });
+
+    $("#CloseNewEventButton").off("click").on("click", function () {
+        $("#newevent").hide();
+        $("#scheduler").fadeIn(1000);
+    });
+
+    function pad(num, size) {
+        var s = num + "";
+        while (s.length < size) s = "0" + s;
+        return s;
+    };
+
+    function parseTime(text, hasPrimeMeridian) {
+        const time = text.match(/(\d?\d):?(\d?\d?)/);
+        var hours = parseInt(time[1], 10);
+        const minutes = parseInt(time[2], 10) || 0;
+
+        if (hasPrimeMeridian) {
+            hours += 12;
+        };
+
+        if (hours >= 24) {
+            return null;
+        };
+
+
+
+        const date = new Date();
+        date.setHours(hours);
+        date.setMinutes(minutes);
+
+        return date;
+    };
+
+    function parseTokens(input) {
+        function getTime(token) {
+            const hasSeparator = token.indexOf(":") > -1;
+            const hasAmplitudeMeridian = token.toLowerCase().indexOf("am") > -1;
+            const hasPrimeMeridian = token.toLowerCase().indexOf("pm") > -1;
+
+            if (hasSeparator) {
+                token = token.replace(":", "");
+            };
+
+            if (hasAmplitudeMeridian) {
+                token = token.replace(/am/i, "");
+            };
+
+            if (hasPrimeMeridian) {
+                token = token.replace(/pm/i, "");
+            };
+
+            var timeValue = parseInt(token) || 0;
+
+            if (timeValue > 0 && timeValue < 2400) {
+                if (timeValue < 10) {
+                    timeValue *= 100;
+                } else if (timeValue < 24) {
+                    timeValue *= 100;
+                };
+
+                const parsed = parseTime(pad(timeValue, 4), hasPrimeMeridian);
+                return parsed;
+            };
+
+            return null;
+        };
+
+        if (!input) {
+            return null;
+        };
+
+        var startsFrom = undefined;
+        var endsOn = undefined;
+        var title = "";
+        var location = "";
+
+        input = input.trim();
+
+        if (input.toLocaleLowerCase().indexOf(" tonight") > -1) {
+            startsFrom = parseTime("7", true);
+            endsOn = parseTime("10", true);
+            input = input.replace(/tonight/i, "");
+        };
+
+        const candidates = input.split(/\Wat\W/i);;
+        if (candidates.length) {
+            title = candidates[0];
+            candidates.shift();
+        };
+
+        for (let i = 0; i < candidates.length; i++) {
+            const token = candidates[i];
+            const time = getTime(token);
+
+            if (!startsFrom && time) {
+                startsFrom = time;
+            };
+
+            if (!time) {
+                location = token;
+            };
+        };
+
+        return {
+            Title: title || "",
+            Location: location || "",
+            StartsFrom: startsFrom,
+            EndsOn: endsOn
+        };
+    };
+
+
+
+    $(document).ready(function () {
+        var initialized = false;
+
+        function intializeUi() {
+            if (initialized) {
+                return;
+            };
+
+            try {
+                if (!(window.jQuery().fullCalendar && typeof ($('#calendar').fullCalendar) === "function")) {
+                    setTimeout(function () {
+                        intializeUi();
+                        return;
+                    }, 100);
+                };
+
+
+                displayCalendar();
+                initializeDatePicker();
+                $(".nano").nanoScroller();
+                initialized = true;
+            } catch (e) {
+                console.log(e.message);
+            }
+
+        };
+
+        intializeUi();
     });
 </script>
-<style>
-    /*body {
-        margin: 40px 10px;
-        padding: 0;
-        font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-        font-size: 14px;
-    }
-
-    #calendar {
-        max-width: 900px;
-        margin: 0 auto;
-    }*/
-</style>

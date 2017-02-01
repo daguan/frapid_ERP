@@ -47,6 +47,10 @@
       <HintPath>packages\Ical.Net.2.2.31\lib\net46\antlr.runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Frapid.ApplicationState, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Frapid.ApplicationState.dll</HintPath>
+    </Reference>
     <Reference Include="Frapid.Areas, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.Areas.dll</HintPath>
@@ -142,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AreaRegistration.cs" />
+    <Compile Include="Configs.cs" />
     <Compile Include="Controllers\Backend\CalendarController.cs" />
     <Compile Include="Controllers\CalendarBackendController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
