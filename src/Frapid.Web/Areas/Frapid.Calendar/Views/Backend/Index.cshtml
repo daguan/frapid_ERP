@@ -25,10 +25,18 @@
         padding: 0 !important;
     }
 
-        .frapid.calendar.app .left.panel {
-            width: 400px;
+        .frapid.calendar.app .left.panel,
+        .frapid.calendar.app .display.toggler {
             background: #383E49;
             color: #ccc;
+        }
+
+        .frapid.calendar.app .display.toggler {
+            padding: 1em 0.25em;
+        }
+
+        .frapid.calendar.app .left.panel {
+            width: 400px;
         }
 
             .frapid.calendar.app .left.panel .document.title {
@@ -48,7 +56,7 @@
                 }
 
                 .frapid.calendar.app .left.panel .top.section .action {
-                    width: 80px;
+                    width: 120px;
                     text-align: right;
                 }
 
@@ -114,8 +122,12 @@
         min-width: 272px !important;
     }
 
-    .frapid.calendar.app .right.panel {
+    .frapid.calendar.app .right.panel:not(.full.width) {
         width: calc(100% - 410px);
+    }
+
+    .frapid.calendar.app .right.panel.full.width {
+        width: calc(100% - 50px);
     }
 
 
@@ -166,15 +178,19 @@
     }
 
     .action .button {
-        margin: 0 .5em !important;
         border: 1px solid #222 !important;
         background: #D62D57 !important;
+        color: #fff !important;
     }
 
-        .action .button:hover {
-            border-color: transparent !important;
-            background: #D62D57 !important;
-        }
+    .toggler {
+        padding: 0.5em !important;
+    }
+
+    .action .button:hover {
+        border-color: transparent !important;
+        background: #D62D57 !important;
+    }
 
     .fc-highlight {
         background: #E6EEFC !important;
@@ -183,111 +199,6 @@
     .fc-state-highlight {
         background: #F5F8FF !important;
     }
-
-    .ui.agendas {
-        padding: 1em;
-        color: #aaa;
-    }
-
-        .ui.agendas .ui.agenda,
-        .ui.agendas .list {
-            padding: .25em;
-        }
-
-
-            .ui.agendas .ui.agenda.title {
-                font-size: 1.2em;
-                padding: .5em 0;
-                letter-spacing: .02em;
-                text-transform: uppercase;
-                color: #ccc;
-            }
-
-                .ui.agendas .ui.agenda.title span.day {
-                    padding-right: .2em;
-                    color: #D62D57;
-                    font-weight: bold;
-                }
-
-        .ui.agendas .nano {
-            max-height: calc(100vh - 400px);
-        }
-
-            .ui.agendas .nano .events {
-                padding-right: 1em;
-            }
-
-        .ui.agendas .events .event {
-            position: relative;
-            display: flex;
-            padding: .7em .5em;
-        }
-
-            .ui.agendas .events .active.event .dot,
-            .ui.agendas .events .event:hover .dot {
-                background: #7dadfa;
-            }
-
-            .ui.agendas .events .event:not(:first-of-type) {
-                border-top: 1px solid #555;
-            }
-
-            .ui.agendas .events .event .dot {
-                width: 1em;
-                height: 1em;
-                margin: .3em 0;
-                border-radius: 1em;
-                background: #666;
-            }
-
-            .ui.agendas .events .event .info {
-                width: 100%;
-                padding-top: -1em !important;
-                padding-left: 1em;
-            }
-
-                .ui.agendas .events .event .info .task {
-                    display: flex;
-                }
-
-                .ui.agendas .events .event .info .title {
-                    font-weight: 600;
-                    width: 280px;
-                    color: #ccc;
-                }
-
-                .ui.agendas .events .event .info .time {
-                    font-size: .87em;
-                    width: calc(100% - 280px);
-                    text-align: right;
-                    text-transform: uppercase;
-                }
-
-    .tags {
-        display: flex;
-        flex-direction: row-reverse;
-    }
-
-        .tags div {
-            font-size: .87em;
-            margin: 2px;
-            padding: .3em .8em;
-            color: #fff;
-            border-radius: .3em;
-        }
-
-            .tags div.type {
-                background: #487399;
-            }
-
-            .tags div.reminder {
-                background: #48996b;
-            }
-
-            .tags div.repeat {
-                background: #555;
-            }
-
 
     #calendar .fc-toolbar.fc-header-toolbar {
         display: none;
@@ -398,9 +309,33 @@
         z-index: 9999 !important;
     }
 
-    .new.event .dropdown > .menu > .input {
-        width: 90% !important;
+    .new.event {
+        width: 600px;
+        border: 1px solid #ccc;
+        padding: 1em;
+        position: fixed;
+        z-index: 2;
+        background: #fff;
+        top: 86px;
+        left: 406px;
+        box-shadow: 20px 20px 50px #444;
     }
+
+        .new.event .nano {
+            height: 672px;
+        }
+
+        .new.event .ui.form {
+            padding-right: 2em;
+        }
+
+            .new.event .ui.form:last-of-type {
+                padding-bottom: 2em;
+            }
+
+        .new.event .dropdown > .menu > .input {
+            width: 90% !important;
+        }
 
     #toolbar {
         padding: 0.5em;
@@ -455,708 +390,247 @@
             box-shadow: none !important;
             background: #ddd;
         }
+
+    .calendar.categories {
+        padding: 1em;
+    }
+
+        .calendar.categories .nano {
+            height: 200px;
+        }
+
+        .calendar.categories .category {
+            display: flex;
+            padding: 0.25em 2em 0.5em 1em;
+        }
+
+
+        .calendar.categories .name {
+            width: calc(100% - 2em);
+        }
+
+        .calendar.categories .ui.toggle.checkbox label,
+        .calendar.categories .ui.toggle.checkbox input:checked ~ .box,
+        .calendar.categories .ui.toggle.checkbox input:checked ~ label,
+        .calendar.categories .ui.toggle.checkbox input:focus:checked ~ .box,
+        .calendar.categories .ui.toggle.checkbox input:focus:checked ~ label {
+            color: inherit !important;
+        }
+
+            .calendar.categories .ui.toggle.checkbox input:checked ~ .box:before,
+            .calendar.categories .ui.toggle.checkbox input:checked ~ label:before,
+            .calendar.categories .ui.toggle.checkbox input:focus:checked ~ .box:before,
+            .calendar.categories .ui.toggle.checkbox input:focus:checked ~ label:before {
+                background-color: #4F825F !important;
+            }
+
+            .calendar.categories .ui.toggle.checkbox .box:after,
+            .calendar.categories .ui.toggle.checkbox label:after {
+                background: #91A397;
+            }
+
+
+        .calendar.categories .color {
+            width: 1em;
+            height: 1.2em;
+        }
+
+
+
+    .color1.category.color {
+        background-color: #BD5769 !important;
+    }
+
+    .color2.category.color {
+        background-color: #85A168 !important;
+    }
+
+    .color3.category.color {
+        background-color: #5083AD !important;
+    }
+
+    .color4.category.color {
+        background-color: #8550AD !important;
+    }
+
+    .color5.category.color {
+        background-color: #44B300 !important;
+    }
+
+    .color6.category.color {
+        background-color: #27B0B3 !important;
+    }
+
+    .color7.category.color {
+        background-color: #C96144 !important;
+    }
+
+    .color8.category.color {
+        background-color: #8F854A !important;
+    }
+
+    .color9.category.color {
+        background-color: #13B077 !important;
+    }
+
+    .color10.category.color {
+        background-color: #B354AC !important;
+    }
+
+    .color11.category.color {
+        background-color: #B36E00 !important;
+    }
+
+    .color12.category.color {
+        background-color: #917E5E !important;
+    }
 </style>
 
 
 <div class="ui frapid calendar app attached segment">
+    <div class="display toggler" style="display: none;">
+        <div class="action">
+            <div class="ui vertical buttons">
+                <button class="ui grey icon button" onclick="toggleDisplay(true);">
+                    <i class="sidebar icon"></i>
+                </button>
+                <button class="ui icon button" onclick="addCategory();" title="Add Category">
+                    <i class="tags icon"></i>
+                </button>
+                <button class="ui icon button" onclick="showEventModal();" title="Add Event">
+                    <i class="large icons">
+                        <i class="calendar icon"></i>
+                        <i class="inverted corner add icon"></i>
+                    </i>
+                </button>
+            </div>
+        </div>
+    </div>
     <div class="left panel">
         <div class="top section">
             <div class="document title">
                 Events & Schedules
             </div>
             <div class="action">
-                <button id="AddEventButton" class="ui grey icon button">
-                    <i class="plus icon"></i>
-                </button>
+                <div class="ui buttons">
+                    <button class="ui icon button" onclick="showEventModal();" title="Add Event">
+                        <i class="large icons">
+                            <i class="calendar icon"></i>
+                            <i class="inverted corner add icon"></i>
+                        </i>
+                    </button>
+                    <button class="ui icon button" onclick="addCategory();" title="Add Category">
+                        <i class="tags icon"></i>
+                    </button>
+                    <button class="ui icon button" onclick="toggleDisplay(false);">
+                        <i class="sidebar icon"></i>
+                    </button>
+                </div>
             </div>
-        </div>
-        <div class="ui inverted divider"></div>
-        <div class="ui inverted date only picker calendar">
         </div>
 
-        <div class="ui agendas">
-            <div class="ui agenda title">
-                <span class="day">Monday</span>
-                <span class="date">1/1/2017</span>
-            </div>
+
+        <div class="ui calendar categories">
             <div class="nano">
                 <div class="nano-content">
-                    <div data-simplebar class="events">
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Coffee with Mike</div>
-                                    <div class="time">09:00 AM</div>
-                                </div>
-                                <div class="location">Starbucks</div>
-                                <div class="tags">
-                                    <div class="type">personal</div>
-                                    <div class="reminder">2h</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Personal</label>
                         </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Call Susan Regarding Contract</div>
-                                    <div class="time">11:15 AM</div>
-                                </div>
-                                <div class="location">Office</div>
-                            </div>
+                        <div class="color1 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Company</label>
                         </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Meeting with the Dentist</div>
-                                    <div class="time">02:00 PM</div>
-                                </div>
-                                <div class="location">Queensway</div>
-                                <div class="tags">
-                                    <div class="type">company</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
+                        <div class="color2 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>School</label>
                         </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Go to the Gym</div>
-                                    <div class="time">06:00 PM</div>
-                                </div>
-                                <div class="location">Wellness Center</div>
-                                <div class="tags">
-                                    <div class="type">school</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
+                        <div class="color3 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Personal</label>
                         </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Dinner with Courtney</div>
-                                    <div class="time">08:15 PM</div>
-                                </div>
-                                <div class="location">The Ledbury</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">1h</div>
-                                </div>
-                            </div>
+                        <div class="color4 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Company</label>
                         </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Coffee with Mike</div>
-                                    <div class="time">09:00 AM</div>
-                                </div>
-                                <div class="location">Starbucks</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">2h</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
+                        <div class="color5 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>School</label>
                         </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Call Susan Regarding Contract</div>
-                                    <div class="time">11:15 AM</div>
-                                </div>
-                                <div class="location">Office</div>
-                            </div>
+                        <div class="color6 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Personal</label>
                         </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Meeting with the Dentist</div>
-                                    <div class="time">02:00 PM</div>
-                                </div>
-                                <div class="location">Queensway</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
+                        <div class="color7 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Company</label>
                         </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Go to the Gym</div>
-                                    <div class="time">06:00 PM</div>
-                                </div>
-                                <div class="location">Wellness Center</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
+                        <div class="color8 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>School</label>
                         </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Dinner with Courtney</div>
-                                    <div class="time">08:15 PM</div>
-                                </div>
-                                <div class="location">The Ledbury</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">1h</div>
-                                </div>
-                            </div>
+                        <div class="color9 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Personal</label>
                         </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Coffee with Mike</div>
-                                    <div class="time">09:00 AM</div>
-                                </div>
-                                <div class="location">Starbucks</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">2h</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
+                        <div class="color10 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Company</label>
                         </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Call Susan Regarding Contract</div>
-                                    <div class="time">11:15 AM</div>
-                                </div>
-                                <div class="location">Office</div>
-                            </div>
+                        <div class="color11 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>School</label>
                         </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Meeting with the Dentist</div>
-                                    <div class="time">02:00 PM</div>
-                                </div>
-                                <div class="location">Queensway</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Go to the Gym</div>
-                                    <div class="time">06:00 PM</div>
-                                </div>
-                                <div class="location">Wellness Center</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Dinner with Courtney</div>
-                                    <div class="time">08:15 PM</div>
-                                </div>
-                                <div class="location">The Ledbury</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">1h</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Coffee with Mike</div>
-                                    <div class="time">09:00 AM</div>
-                                </div>
-                                <div class="location">Starbucks</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">2h</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Call Susan Regarding Contract</div>
-                                    <div class="time">11:15 AM</div>
-                                </div>
-                                <div class="location">Office</div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Meeting with the Dentist</div>
-                                    <div class="time">02:00 PM</div>
-                                </div>
-                                <div class="location">Queensway</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Go to the Gym</div>
-                                    <div class="time">06:00 PM</div>
-                                </div>
-                                <div class="location">Wellness Center</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Dinner with Courtney</div>
-                                    <div class="time">08:15 PM</div>
-                                </div>
-                                <div class="location">The Ledbury</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">1h</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Coffee with Mike</div>
-                                    <div class="time">09:00 AM</div>
-                                </div>
-                                <div class="location">Starbucks</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">2h</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Call Susan Regarding Contract</div>
-                                    <div class="time">11:15 AM</div>
-                                </div>
-                                <div class="location">Office</div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Meeting with the Dentist</div>
-                                    <div class="time">02:00 PM</div>
-                                </div>
-                                <div class="location">Queensway</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Go to the Gym</div>
-                                    <div class="time">06:00 PM</div>
-                                </div>
-                                <div class="location">Wellness Center</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Dinner with Courtney</div>
-                                    <div class="time">08:15 PM</div>
-                                </div>
-                                <div class="location">The Ledbury</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">1h</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Coffee with Mike</div>
-                                    <div class="time">09:00 AM</div>
-                                </div>
-                                <div class="location">Starbucks</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">2h</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Call Susan Regarding Contract</div>
-                                    <div class="time">11:15 AM</div>
-                                </div>
-                                <div class="location">Office</div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Meeting with the Dentist</div>
-                                    <div class="time">02:00 PM</div>
-                                </div>
-                                <div class="location">Queensway</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Go to the Gym</div>
-                                    <div class="time">06:00 PM</div>
-                                </div>
-                                <div class="location">Wellness Center</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Dinner with Courtney</div>
-                                    <div class="time">08:15 PM</div>
-                                </div>
-                                <div class="location">The Ledbury</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">1h</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Coffee with Mike</div>
-                                    <div class="time">09:00 AM</div>
-                                </div>
-                                <div class="location">Starbucks</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">2h</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Call Susan Regarding Contract</div>
-                                    <div class="time">11:15 AM</div>
-                                </div>
-                                <div class="location">Office</div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Meeting with the Dentist</div>
-                                    <div class="time">02:00 PM</div>
-                                </div>
-                                <div class="location">Queensway</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Go to the Gym</div>
-                                    <div class="time">06:00 PM</div>
-                                </div>
-                                <div class="location">Wellness Center</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Dinner with Courtney</div>
-                                    <div class="time">08:15 PM</div>
-                                </div>
-                                <div class="location">The Ledbury</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">1h</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Coffee with Mike</div>
-                                    <div class="time">09:00 AM</div>
-                                </div>
-                                <div class="location">Starbucks</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">2h</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Call Susan Regarding Contract</div>
-                                    <div class="time">11:15 AM</div>
-                                </div>
-                                <div class="location">Office</div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Meeting with the Dentist</div>
-                                    <div class="time">02:00 PM</div>
-                                </div>
-                                <div class="location">Queensway</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Go to the Gym</div>
-                                    <div class="time">06:00 PM</div>
-                                </div>
-                                <div class="location">Wellness Center</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Dinner with Courtney</div>
-                                    <div class="time">08:15 PM</div>
-                                </div>
-                                <div class="location">The Ledbury</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">1h</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Coffee with Mike</div>
-                                    <div class="time">09:00 AM</div>
-                                </div>
-                                <div class="location">Starbucks</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">2h</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Call Susan Regarding Contract</div>
-                                    <div class="time">11:15 AM</div>
-                                </div>
-                                <div class="location">Office</div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Meeting with the Dentist</div>
-                                    <div class="time">02:00 PM</div>
-                                </div>
-                                <div class="location">Queensway</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Go to the Gym</div>
-                                    <div class="time">06:00 PM</div>
-                                </div>
-                                <div class="location">Wellness Center</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Dinner with Courtney</div>
-                                    <div class="time">08:15 PM</div>
-                                </div>
-                                <div class="location">The Ledbury</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">1h</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Coffee with Mike</div>
-                                    <div class="time">09:00 AM</div>
-                                </div>
-                                <div class="location">Starbucks</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">2h</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Call Susan Regarding Contract</div>
-                                    <div class="time">11:15 AM</div>
-                                </div>
-                                <div class="location">Office</div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Meeting with the Dentist</div>
-                                    <div class="time">02:00 PM</div>
-                                </div>
-                                <div class="location">Queensway</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Go to the Gym</div>
-                                    <div class="time">06:00 PM</div>
-                                </div>
-                                <div class="location">Wellness Center</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="repeat">repeat</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="event">
-                            <div class="dot"></div>
-                            <div class="info">
-                                <div class="task">
-                                    <div class="title">Dinner with Courtney</div>
-                                    <div class="time">08:15 PM</div>
-                                </div>
-                                <div class="location">The Ledbury</div>
-                                <div class="tags">
-                                    <div class="type">private</div>
-                                    <div class="reminder">1h</div>
-                                </div>
-                            </div>
+                        <div class="color12 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Private Only</label>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
+
+        <div class="ui inverted divider"></div>
+        <div class="ui inverted date only picker calendar">
+        </div>
+
     </div>
     <div class="right panel">
         <div id="toolbar" class="ui attached segment">
@@ -1166,14 +640,50 @@
                 </div>
             </div>
             <div class="right">
-                <div class="ui icon buttons">
-                    <button class="ui grey icon button" title="Export">
+                <div class="ui initially hidden icon buttons">
+                    <button class="ui grey icon button" title="Integrations">
                         <i class="cloud download icon"></i>
                     </button>
                 </div>
             </div>
         </div>
-        <div id="newevent" class="new event ui small attached segment" style="display: none;">
+
+        <div id="scheduler">
+            <div class="ui organizer attached segment">
+                <div class="ui three column stackable grid">
+                    <div class="column">
+                        <div class="ui basic buttons">
+                            <button class="ui button" onclick='showOrganizerEvent("today")'>Today</button>
+                            <button class="ui button" onclick='showOrganizerEvent("day")'>Day</button>
+                            <button class="ui button" onclick='showOrganizerEvent("week")'>Week</button>
+                            <button class="ui button" onclick='showOrganizerEvent("month")'>Month</button>
+                            <button class="ui button" onclick='showOrganizerEvent("list")'>Agendas</button>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="title">
+                            <i class="angle left icon" onclick='showOrganizerEvent("previous")'></i>
+                            <span></span>
+                            <i class="angle right icon" onclick='showOrganizerEvent("next")'></i>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="ui search fluid input">
+                            <input type="search" placeholder="Search ..." />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui attached segment">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="EventModal" class="new event" style="display: none;">
+    <div class="nano">
+        <div class="nano-content">
             <div class="ui mixerp form">
                 <div class="title field">
                     <input id="TitleInputText" type="text" placeholder="Enter Event Title" value="" />
@@ -1223,8 +733,7 @@
                         <span id="place-address"></span>
                     </div>
                 </div>
-            </div>
-            <div class="ui form">
+                <div class="vpad8"></div>
                 <div class="field">
                     <label>Starts At</label>
                     <div id="StartsAtCalendar" class="ui date time picker calendar">
@@ -1237,13 +746,26 @@
                         <input type="text" placeholder="Ends On" />
                     </div>
                 </div>
-                <div class="field">
-                    <label>Timing</label>
-                    <div id="AllDayCheckbox" class="ui slider checkbox">
-                        <input name="example" type="checkbox">
-                        <label>All day</label>
+                <div class="inline fields">
+                    <label>Options</label>
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input id="AllDayCheckbox" type="checkbox">
+                            <label for="AllDayCheckbox">All day</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui green toggle checkbox">
+                            <input id="PrivateCheckbox" type="checkbox" checked="checked">
+                            <label for="PrivateCheckbox">Private</label>
+                        </div>
                     </div>
                 </div>
+                <div class="field">
+                    <a href="javascript:void(0)" onclick="toggleMore()">More</a>
+                </div>
+            </div>
+            <div class="ui show more form" style="display: none;">
                 <div class="vpad8"></div>
                 <div class="field">
                     <label>Repeat</label>
@@ -1290,40 +812,11 @@
                     <label>Url</label>
                     <input id="UrlInputUrl" type="url" placeholder="Enter Url" />
                 </div>
+            </div>
+            <div class="ui form">
                 <div class="vpad8"></div>
                 <button class="ui positive button">OK</button>
-                <button id="CloseNewEventButton" class="ui basic button">Close</button>
-            </div>
-        </div>
-
-        <div id="scheduler">
-            <div class="ui organizer attached segment">
-                <div class="ui three column stackable grid">
-                    <div class="column">
-                        <div class="ui basic buttons">
-                            <button class="ui button" onclick='showOrganizerEvent("today")'>Today</button>
-                            <button class="ui button" onclick='showOrganizerEvent("day")'>Day</button>
-                            <button class="ui button" onclick='showOrganizerEvent("week")'>Week</button>
-                            <button class="ui button" onclick='showOrganizerEvent("month")'>Month</button>
-                            <button class="ui button" onclick='showOrganizerEvent("list")'>Agendas</button>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="title">
-                            <i class="angle left icon" onclick='showOrganizerEvent("previous")'></i>
-                            <span></span>
-                            <i class="angle right icon" onclick='showOrganizerEvent("next")'></i>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="ui search fluid input">
-                            <input type="search" placeholder="Search ..." />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="ui attached segment">
-                <div id="calendar"></div>
+                <button id="CloseEventModalButton" class="ui basic button">Close</button>
             </div>
         </div>
     </div>
@@ -1331,6 +824,10 @@
 
 <script>
     var autocomplete;
+
+    function removeTime(date) {
+        return new Date(date.setHours(0, 0, 0, 0));
+    };
 
     function initMap() {
         var map = new window.google.maps.Map(document.getElementById('map'));
@@ -1437,6 +934,18 @@
         updateTitle();
     };
 
+    function createEvent(start, end, allDay) {
+        $("#AllDayCheckbox").prop("checked", allDay).trigger("change");
+
+        if (start) {
+            $("#StartsAtCalendar").calendar("set date", start.local().toDate());
+        };
+
+        if (end) {
+            $("#EndsOnCalendar").calendar("set date", end.local().toDate());
+        };
+
+    };
 
     function displayCalendar() {
         const el = $('#calendar');
@@ -1448,14 +957,21 @@
                 center: 'prev title next',
                 right: 'today year agendaDay,agendaWeek,month,listMonth,listYear'
             },
-            defaultView: "basicWeek",
-            select: function (start, end, allDay) {
+            defaultView: "agendaWeek",
+            select: function (start, end) {
+                createEvent(start, end, false);
+                showEventModal();
             },
-            dayClick: function (date, allDay, jsEvent, view) {
+            unselect: function () {
+                //const input = $("#NaturalLanguageInputText").val().trim();
+                //if (!input) {
+                //    hideEventModal();
+                //};
             },
             defaultDate: window.today ? new Date(window.today) : new Date(),
             navLinks: true, // can click day/week names to navigate views
             editable: true,
+            unselectAuto: false,
             selectable: true,
             selectHelper: true,
             eventLimit: true, // allow "more" link when too many events
@@ -1558,27 +1074,28 @@
 
     $(".dropdown").dropdown({ placeholder: false });
 
+    function showEventModal() {
+        const left = $("#NaturalLanguageInputText").offset().left;
+        $("#EventModal").css("left", left + "px");
+        $("#EventModal").show();
+        $("#EventModal .nano-content").animate({ scrollTop: 0 }, "fast");
+    };
+
+    function hideEventModal() {
+        $("#EventModal").hide();
+    };
+
+
     $("#NaturalLanguageInputText").keyup(function (e) {
-        function show() {
-            $("#newevent").show();
-            $("#scheduler").hide();
-        };
-
-        function hide() {
-            $("#newevent").hide();
-            $("#scheduler").show();
-        };
-
-
         const el = $(this);
         const input = el.val();
 
         if (!input.trim()) {
-            hide();
+            hideEventModal();
             return false;
         };
 
-        show();
+        showEventModal();
 
 
         const parsed = parseTokens(input);
@@ -1597,14 +1114,8 @@
         };
     });
 
-    $("#AddEventButton").off("click").on("click", function () {
-        $("#newevent").fadeToggle(1000);
-        $("#scheduler").fadeToggle();
-    });
-
-    $("#CloseNewEventButton").off("click").on("click", function () {
-        $("#newevent").hide();
-        $("#scheduler").fadeIn(1000);
+    $("#CloseEventModalButton").off("click").on("click", function () {
+        $("#EventModal").hide();
     });
 
     function pad(num, size) {
@@ -1744,4 +1255,80 @@
 
         intializeUi();
     });
+
+    function toggleMore() {
+        $('.show.more.form').fadeToggle(500);
+        setTimeout(function () {
+            $(".nano").nanoScroller();
+        }, 1000);
+    };
+
+    $("#AllDayCheckbox").off("change").on("change", function () {
+
+        const el = $(this);
+        const allDay = el.is(":checked");
+
+        if (allDay) {
+            $("#StartsAtCalendar").removeClass("time").calendar("setting", "type", "date").calendar("refresh");
+            $("#EndsOnCalendar").removeClass("time").calendar("setting", "type", "date").calendar("refresh");
+
+            let start = $("#StartsAtCalendar").calendar("get date");
+
+            if (start) {
+                start = removeTime(start);
+                $("#StartsAtCalendar").calendar("set date", start);
+            };
+
+            let end = $("#EndsOnCalendar").calendar("get date");
+
+            if (end) {
+                end = removeTime(end);
+                $("#EndsOnCalendar").calendar("set date", end);
+            };
+
+            return;
+        };
+
+        $("#StartsAtCalendar").addClass("time").calendar("setting", "type", "datetime").calendar("refresh");
+        $("#EndsOnCalendar").addClass("time").calendar("setting", "type", "datetime").calendar("refresh");
+    });
+
+    function toggleDisplay(state) {
+        function refreshUi() {
+            const modal = $("#EventModal");
+            if (!modal.is(":visible")) {
+                return;
+            }
+
+            const left = $("#NaturalLanguageInputText").offset().left;
+            modal.css("left", left + "px");
+        };
+
+        window.localStorage.setItem("calendarToggleState", state);
+
+        if (state) {
+            $(".right.panel").removeClass("full width");
+            $(".left.panel").fadeIn();
+            $(".display.toggler").hide();
+
+            refreshUi();
+            return;
+        };
+
+        $(".right.panel").addClass("full width");
+        $(".left.panel").hide();
+        $(".display.toggler").fadeIn();
+
+
+        refreshUi();
+    };
+
+    function loadState() {
+        const state = window.localStorage.getItem("calendarToggleState");
+        toggleDisplay(state === "true");
+    };
+
+    loadState();
+
+    $(".ui.checkbox").checkbox();
 </script>
