@@ -19,7 +19,7 @@ if (!window.meta) {
         window.decimalSeparator = meta.DecimalSeparator;
         window.currencyDecimalPlaces = meta.CurrencyDecimalPlaces;
         window.currencySymbol = meta.CurrencySymbol;
-        window.datepickerFormat = window.convertNetDateFormat(meta.DatepickerFormat);
+        window.datepickerFormat = window.convertNetDateFormat(meta.ShortDateFormat);
         window.datepickerShowWeekNumber = meta.DatepickerShowWeekNumber;
         window.datepickerWeekStartDay = meta.DatepickerWeekStartDay;
         window.datepickerNumberOfMonths = meta.DatepickerNumberOfMonths;

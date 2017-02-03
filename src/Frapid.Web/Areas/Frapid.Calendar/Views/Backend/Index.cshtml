@@ -10,433 +10,974 @@
     }
 </style>
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.js"></script>
-<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css" />
-<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.print.css" media="print" />
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.6/calendar.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.6/calendar.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/scripts/semantic-ui-calendar-0.0.6/dist/calendar.min.css" />
+<link rel="stylesheet" href="/scripts/nanoscrollerjs-0.8.6/nanoscroller.min.css" />
+<link rel="stylesheet" type="text/css" href="/scripts/fullcalendar-3.1.0/fullcalendar.min.css" />
+<link rel="stylesheet" type="text/css" href="/scripts/fullcalendar-3.1.0/fullcalendar.print.css" media="print" />
+
+<script src="/scripts/semantic-ui-calendar-0.0.6/dist/calendar.min.js"></script>
+<script src="/scripts/nanoscrollerjs-0.8.6/jquery.nanoscroller.min.js"></script>
+<script src="/scripts/fullcalendar-3.1.0/fullcalendar.min.js"></script>
 
 <style>
-    #calendar {
-        padding: 2em;
-        color: #777;
-        font-size: 0.87em;
-    }
-
-        #calendar * {
-            font-family: "Roboto" !important;
-        }
-
-    .ui.calendar:not(.app) {
-        margin: 0.5em !important;
-        border: 1px solid #555 !important;
-    }
-
-    .ui.calendar .calendar tr,
-    .ui.calendar .calendar td,
-    .ui.calendar .calendar th {
-        background: #444 !important;
-        color: #aaa;
-        border-color: transparent !important;
-        border-bottom-color: #555 !important;
-    }
-
-        .ui.calendar .calendar td.disabled {
-            color: #666 !important;
-        }
-
-    .ui.calendar:not(.app) .calendar table {
-        border: none !important;
-    }
-
-        .ui.calendar:not(.app) .calendar table th .link:not(.prev):not(.next) {
-            font-size: 2em;
-            font-weight: 300;
-            color: #ccc;
-        }
-
-
-        .ui.calendar:not(.app) .calendar table td.link.today,
-        .ui.calendar:not(.app) .calendar table td.link.active,
-        .ui.calendar:not(.app) .calendar table td:hover {
-            background: #2474AD !important;
-            color: #fff !important;
-            font-weight: 800;
-            border-color: #2474AD !important;
-        }
-
-
     .frapid.calendar.app {
         display: flex;
         padding: 0 !important;
     }
 
-    .document.title {
-        font-size: 1.4em;
-        color: #ccc;
-        font-weight: 600;
+        .frapid.calendar.app .left.panel,
+        .frapid.calendar.app .display.toggler {
+            background: #383E49;
+            color: #ccc;
+        }
+
+        .frapid.calendar.app .display.toggler {
+            padding: 1em 0.25em;
+        }
+
+        .frapid.calendar.app .left.panel {
+            width: 400px;
+        }
+
+            .frapid.calendar.app .left.panel .document.title {
+                font-size: 1.4em;
+                font-weight: 600;
+                color: #ccc;
+            }
+
+            .frapid.calendar.app .left.panel .top.section {
+                display: flex;
+                padding: 1em;
+            }
+
+                .frapid.calendar.app .left.panel .top.section .document.title {
+                    width: 300px;
+                    padding: .3em 0;
+                }
+
+                .frapid.calendar.app .left.panel .top.section .action {
+                    width: 120px;
+                    text-align: right;
+                }
+
+
+            .frapid.calendar.app .left.panel .ui.inverted.calendar:not(.app) {
+                margin: .5em !important;
+                border: 1px solid transparent !important;
+            }
+
+    .ui.inverted.calendar table {
+        background: #383E49 !important;
     }
 
-    .left.panel {
-        width: 400px;
-        background: #444;
+    .ui.inverted.calendar .calendar tr,
+    .ui.inverted.calendar .calendar td,
+    .ui.inverted.calendar .calendar th {
+        color: #aaa;
+        border-color: transparent !important;
+        background: #383E49 !important;
+        padding: 1.5em !important;
+        border-radius: 4em;
+        font-weight: 300;
     }
 
-    .right.panel {
+        .ui.inverted.calendar .calendar td.disabled {
+            color: #666 !important;
+        }
+
+    .ui.inverted.calendar:not(.app) .calendar table {
+        border: none !important;
+    }
+
+        .ui.inverted.calendar:not(.app) .calendar table th .link:not(.prev):not(.next) {
+            font-size: 2em;
+            font-weight: 300;
+            color: #ccc;
+        }
+
+        .ui.inverted.calendar:not(.app) .calendar table td.link.focus,
+        .ui.inverted.calendar:not(.app) .calendar table td.link.active.foucs,
+        .ui.inverted.calendar:not(.app) .calendar table td.link.active,
+        .ui.inverted.calendar:not(.app) .calendar table td:hover {
+            font-weight: 800;
+            color: #fff !important;
+            border-color: transparent !important;
+            border: none !important;
+        }
+
+        .ui.inverted.calendar:not(.app) .calendar table td.link.active {
+            background: #D62D57 !important;
+        }
+
+            .ui.inverted.calendar:not(.app) .calendar table td.link.focus,
+            .ui.inverted.calendar:not(.app) .calendar table td.link.active.foucs,
+            .ui.inverted.calendar:not(.app) .calendar table td:hover {
+                background: #303642 !important;
+                border-color: transparent !important;
+                -webkit-box-shadow: none !important;
+                box-shadow: none !important;
+            }
+
+    .ui.calendar table {
+        min-width: 272px !important;
+    }
+
+    .frapid.calendar.app .right.panel:not(.full.width) {
         width: calc(100% - 410px);
     }
 
-    #calendar h2 {
-        color: #2474AD;
-        font-weight: 400 !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.05em;
-        font-size: 2em;
+    .frapid.calendar.app .right.panel.full.width {
+        width: calc(100% - 50px);
     }
+
 
     #calendar td,
     .fc-list-item td {
-        border-color: #efefef !important;
-    }
-
-    .fc-view-container {
-        border: 1px solid #eee !important;
+        border-color: #E9EEF1 !important;
     }
 
 
+    #calendar .fc-list-heading .fc-widget-header,
     #calendar th {
-        border-color: #5a5a5a !important;
-    }
-
-        #calendar th,
-        #calendar th a,
-        .fc-widget-header,
-        .fc-widget-header a {
-            color: #fff !important;
-        }
-
-            #calendar th:hover {
-                background-color: #444 !important;
-            }
-
-    .fc-day-number {
-        font-size: 2em;
-        color: #777 !important;
-        padding: 0.5em !important;
+        border-color: transparent !important;
+        padding: 1em !important;
+        font-size: 1.5em;
         font-weight: 300;
-        width: 1.2em;
-        height: 1.2em;
-        padding-top: 0.8em !important;
-        padding-bottom: 0.3em !important;
-        margin: 0.1em;
-        border-radius: 3em;
-        text-align: center;
+    }
+
+        #calendar .fc-list-heading,
+        #calendar .fc-list-heading a,
+        #calendar th,
+        #calendar th a {
+            color: #383E49;
+            font-weight: 300;
+            text-decoration: none;
+        }
+
+    #calendar .fc-day-grid-event,
+    #calendar .fc-time-grid-event {
+        color: #fff;
+        background: #636B7A !important;
+        border: 1px solid #ddd !important;
+        margin: 0.25em 0.5em;
+        font-weight: bold;
+        padding: 0.5em 1em;
+    }
+
+
+        #calendar .fc-day-grid-event .fc-content .fc-time::after {
+            content: " — ";
+        }
+
+    #calendar .fc-day-number {
+        font-size: 1.5em;
+        font-weight: 300;
+        padding: .5em !important;
         text-decoration: none !important;
+        color: #383E49 !important;
     }
 
-        .fc-day-number:hover {
-            background: #eee;
-        }
-
-
-    .fc-head,
-    .fc-event-dot,
-    .fc-list-heading,
-    .fc-widget-header {
-        background: #555 !important;
-        background-image: none !important;
+    .action .button {
+        border: 1px solid #222 !important;
+        background: #D62D57 !important;
+        color: #fff !important;
     }
 
-    .fc-state-default {
-        background-image: none !important;
+    .toggler {
+        padding: 0.5em !important;
     }
 
-    .fc button {
-        background-color: #2474AD !important;
-        border: none;
-        color: #fff;
-        text-shadow: none !important;
-        margin-right: 1px !important;
-        text-transform: uppercase;
-        font-size: 0.87em !important;
-        letter-spacing: 0.02em;
-        font-weight: 500;
-        padding: 0.5em 1em !important;
-        height: auto !important;
+    .action .button:hover {
+        border-color: transparent !important;
+        background: #D62D57 !important;
     }
 
-
-
-        .fc button.fc-state-hover,
-        .fc button.fc-state-active {
-            background-color: #333 !important;
-        }
-
-
-
-    .fc-head th {
-        padding: 0.78em !important;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: #fff;
+    .fc-highlight {
+        background: #E6EEFC !important;
     }
 
-    td.fc-day:hover,
-    .fc-slats tr:hover,
-    .fc-list-table tr:hover,
-    .fc-list-item:hover > td {
-        background: #fafafa !important;
-        background-color: #fafafa !important;
-        background-image: none !important;
+    .fc-state-highlight {
+        background: #F5F8FF !important;
     }
 
-    .fc-event {
-        padding: 0.5em 1em !important;
-        background: #E1F1FC !important;
-        border-color: #CFDEE8 !important;
-        color: #1D6599 !important;
-        font-weight: 800;
+    #calendar .fc-toolbar.fc-header-toolbar {
+        display: none;
     }
+
 
     .fc-axis {
         width: 80px !important;
     }
 
-        .fc-axis.fc-widget-content {
+        .fc-axis.fc-widget-content,
+        .fc-list-item-time {
             text-transform: uppercase;
+            font-size: 0.78em;
+            color: #888;
+            font-weight: bold;
+            letter-spacing: 0.05em;
         }
 
-    .action .button {
-        margin: 0 0.5em !important;
-        background: #333 !important;
-        border: 1px solid #222 !important;
+            .fc-axis.fc-widget-content span {
+                padding-top: 1.5em;
+                display: inline-block;
+            }
+
+    .organizer .title {
+        font-size: 1.9em;
+        padding: 0.4em;
+        font-weight: 300;
+        text-align: center;
+        color: #ccc;
+        cursor: pointer;
     }
 
-        .action .button:hover {
-            background: #2474AD !important;
-            border-color: transparent !important;
+        .organizer .title span {
+            color: #383E49;
         }
 
-    .calendar .top.section {
-        display: flex;
+    .fc-event-dot {
+        background: #dedede !important;
+    }
+
+    .organizer .title i:hover {
+        color: #FF644A !important;
+    }
+
+    .organizer {
+        border-color: transparent !important;
+    }
+
+    .mixerp.form .field {
+        margin: 0 !important;
+        padding: .25em !important;
+    }
+
+    .mixerp.form .ui.dropdown {
+        border: none !important;
+    }
+
+    .mixerp.form label {
+        color: #777 !important;
+    }
+
+    .mixerp.form .ui.dropdown .dropdown.icon {
+        padding: 4px !important;
+    }
+
+    .mixerp.form input,
+    .mixerp.form .ui.search.dropdown input,
+    .mixerp.form .ui.dropdown:not(.search) {
+        min-height: auto !important;
+        padding: 4px !important;
+        color: #777 !important;
+        border: none !important;
+        border-bottom: 1px solid #eee !important;
+        border-radius: 0 !important;
+    }
+
+    .mixerp.form .ui.search.dropdown {
+        padding: 4px !important;
+    }
+
+        .mixerp.form .ui.search.dropdown .menu {
+            margin: -.6em -.05em !important;
+        }
+
+    .mixerp.form .title input {
+        font-size: 1.5em !important;
+        color: #2474ad !important;
+    }
+
+    #map {
+        height: 300px;
+    }
+
+    #infowindow-content .title {
+        font-weight: bold;
+    }
+
+    #infowindow-content {
+        display: none;
+    }
+
+    #map #infowindow-content {
+        display: inline;
+    }
+
+    .pac-container {
+        z-index: 9999 !important;
+    }
+
+    .new.event {
+        width: 600px;
+        border: 1px solid #ccc;
         padding: 1em;
+        position: fixed;
+        z-index: 2;
+        background: #fff;
+        top: 86px;
+        left: 406px;
+        box-shadow: 20px 20px 50px #444;
     }
 
-        .calendar .top.section .document.title {
-            padding: 0.3em 0;
-            width: 300px;
+        .new.event .nano {
+            height: 672px;
         }
 
-        .calendar .top.section .action {
+        .new.event .ui.form {
+            padding-right: 2em;
+        }
+
+            .new.event .ui.form:last-of-type {
+                padding-bottom: 2em;
+            }
+
+        .new.event .dropdown > .menu > .input {
+            width: 90% !important;
+        }
+
+    #toolbar {
+        padding: 0.5em;
+        background: #fafafa;
+        border: 1px solid #eee;
+        display: flex;
+    }
+
+        #toolbar .left,
+        #toolbar .right {
+            width: 50%;
+        }
+
+        #toolbar .left {
+            text-align: left;
+        }
+
+            #toolbar .left .input {
+                width: 400px;
+            }
+
+        #toolbar .right {
             text-align: right;
-            width: 80px;
         }
 
+        #toolbar .button,
+        .fc button {
+            background: #eaeaea;
+            border: 1px solid #dedede;
+            color: #777;
+        }
 
-    .ui.agendas {
-        color: #aaa;
+    .fc button {
+        font-size: .87em !important;
+        font-weight: 500;
+        height: auto !important;
+        margin-right: 1px !important;
+        padding: .5em 1em !important;
+        letter-spacing: .02em;
+        text-transform: uppercase;
+        text-shadow: none !important;
+    }
+
+
+        #toolbar .button:hover,
+        .fc button.fc-state-hover,
+        .fc button.fc-state-active {
+            text-shadow: none !important;
+            background-image: none !important;
+            border: 1px solid #ccc;
+            color: #222 !important;
+            box-shadow: none !important;
+            background: #ddd;
+        }
+
+    .calendar.categories {
         padding: 1em;
     }
 
-        .ui.agendas .ui.agenda,
-        .ui.agendas .list {
-            padding: 0.25em;
+        .calendar.categories .nano {
+            height: 200px;
         }
 
-
-            .ui.agendas .ui.agenda.title {
-                font-size: 1.2em;
-                padding: 0.5em 0;
-                color: #ccc;
-                text-transform: uppercase;
-                letter-spacing: 0.02em;
-            }
-
-                .ui.agendas .ui.agenda.title span.day {
-                    padding-right: 0.2em;
-                    color: #7DADFA;
-                }
-
-        .ui.agendas .events .event {
+        .calendar.categories .category {
             display: flex;
-            padding: 0.7em 0.5em;
-            position: relative;
+            padding: 0.25em 2em 0.5em 1em;
         }
 
-            .ui.agendas .events .active.event .dot,
-            .ui.agendas .events .event:hover .dot {
-                background: #7DADFA;
+
+        .calendar.categories .name {
+            width: calc(100% - 2em);
+        }
+
+        .calendar.categories .ui.toggle.checkbox label,
+        .calendar.categories .ui.toggle.checkbox input:checked ~ .box,
+        .calendar.categories .ui.toggle.checkbox input:checked ~ label,
+        .calendar.categories .ui.toggle.checkbox input:focus:checked ~ .box,
+        .calendar.categories .ui.toggle.checkbox input:focus:checked ~ label {
+            color: inherit !important;
+        }
+
+            .calendar.categories .ui.toggle.checkbox input:checked ~ .box:before,
+            .calendar.categories .ui.toggle.checkbox input:checked ~ label:before,
+            .calendar.categories .ui.toggle.checkbox input:focus:checked ~ .box:before,
+            .calendar.categories .ui.toggle.checkbox input:focus:checked ~ label:before {
+                background-color: #4F825F !important;
             }
 
-            .ui.agendas .events .event:not(:first-of-type) {
-                border-top: 1px solid #555;
+            .calendar.categories .ui.toggle.checkbox .box:after,
+            .calendar.categories .ui.toggle.checkbox label:after {
+                background: #91A397;
             }
 
-            .ui.agendas .events .event .dot {
-                margin: 0.3em 0;
-                width: 1em;
-                height: 1em;
-                background: #666;
-                border-radius: 1em;
-            }
 
-            .ui.agendas .events .event .info {
-                padding-left: 1em;
-                padding-top: -1em !important;
-                width: 100%;
-            }
+        .calendar.categories .color {
+            width: 1em;
+            height: 1.2em;
+        }
 
-                .ui.agendas .events .event .info .task {
-                    display: flex;
-                }
 
-                .ui.agendas .events .event .info .title {
-                    width: 280px;
-                    color: #ccc;
-                    font-weight: 600;
-                }
 
-                .ui.agendas .events .event .info .time {
-                    text-align: right;
-                    width: calc(100% - 280px);
-                    font-size: 0.87em;
-                    text-transform: uppercase;
-                }
-
-    .tags {
-        display: flex;
-        flex-direction: row-reverse;
+    .color1.category.color {
+        background-color: #BD5769 !important;
     }
 
-        .tags div {
-            margin: 2px;
-            padding: 0.3em 0.8em;
-            border-radius: 0.3em;
-            color: #fff;
-            font-size: 0.87em;
-        }
+    .color2.category.color {
+        background-color: #85A168 !important;
+    }
 
-            .tags div.type {
-                background: #487399;
-            }
+    .color3.category.color {
+        background-color: #5083AD !important;
+    }
 
-            .tags div.reminder {
-                background: #48996B;
-            }
-            .tags div.repeat {
-                background: #555;
-            }
+    .color4.category.color {
+        background-color: #8550AD !important;
+    }
+
+    .color5.category.color {
+        background-color: #44B300 !important;
+    }
+
+    .color6.category.color {
+        background-color: #27B0B3 !important;
+    }
+
+    .color7.category.color {
+        background-color: #C96144 !important;
+    }
+
+    .color8.category.color {
+        background-color: #8F854A !important;
+    }
+
+    .color9.category.color {
+        background-color: #13B077 !important;
+    }
+
+    .color10.category.color {
+        background-color: #B354AC !important;
+    }
+
+    .color11.category.color {
+        background-color: #B36E00 !important;
+    }
+
+    .color12.category.color {
+        background-color: #917E5E !important;
+    }
 </style>
+
+
 <div class="ui frapid calendar app attached segment">
-    <div class="left panel">
-        <div class="top section">
-            <div class="document title">
-                Calendar & Schedules
-            </div>
-            <div class="action">
-                <div class="ui grey icon button">
-                    <i class="plus icon"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="ui calendar" id="example15">
-        </div>
-
-        <div class="ui agendas">
-            <div class="ui agenda title">
-                <span class="day">Monday</span>
-                <span class="date">1/1/2017</span>
-            </div>
-
-            <div class="events">
-                <div class="event">
-                    <div class="dot"></div>
-                    <div class="info">
-                        <div class="task">
-                            <div class="title">Coffee with Mike</div>
-                            <div class="time">09:00 AM</div>
-                        </div>
-                        <div class="location">Starbucks</div>
-                        <div class="tags">
-                            <div class="type">private</div>
-                            <div class="reminder">2h</div>
-                            <div class="repeat">repeat</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="event">
-                    <div class="dot"></div>
-                    <div class="info">
-                        <div class="task">
-                            <div class="title">Call Susan Regarding Contract</div>
-                            <div class="time">11:15 AM</div>
-                        </div>
-                        <div class="location">Office</div>
-                    </div>
-                </div>
-                <div class="event">
-                    <div class="dot"></div>
-                    <div class="info">
-                        <div class="task">
-                            <div class="title">Meeting with the Dentist</div>
-                            <div class="time">02:00 PM</div>
-                        </div>
-                        <div class="location">Queensway</div>
-                        <div class="tags">
-                            <div class="type">private</div>
-                            <div class="repeat">repeat</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="event">
-                    <div class="dot"></div>
-                    <div class="info">
-                        <div class="task">
-                            <div class="title">Go to the Gym</div>
-                            <div class="time">06:00 PM</div>
-                        </div>
-                        <div class="location">Wellness Center</div>
-                        <div class="tags">
-                            <div class="type">private</div>
-                            <div class="repeat">repeat</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="event">
-                    <div class="dot"></div>
-                    <div class="info">
-                        <div class="task">
-                            <div class="title">Dinner with Courtney</div>
-                            <div class="time">08:15 PM</div>
-                        </div>
-                        <div class="location">The Ledbury</div>
-                        <div class="tags">
-                            <div class="type">private</div>
-                            <div class="reminder">1h</div>
-                        </div>
-                    </div>
-                </div>
+    <div class="display toggler" style="display: none;">
+        <div class="action">
+            <div class="ui vertical buttons">
+                <button class="ui grey icon button" onclick="toggleDisplay(true);">
+                    <i class="sidebar icon"></i>
+                </button>
+                <button class="ui icon button" onclick="addCategory();" title="Add Category">
+                    <i class="tags icon"></i>
+                </button>
+                <button class="ui icon button" onclick="showEventModal();" title="Add Event">
+                    <i class="large icons">
+                        <i class="calendar icon"></i>
+                        <i class="inverted corner add icon"></i>
+                    </i>
+                </button>
             </div>
         </div>
     </div>
+    <div class="left panel">
+        <div class="top section">
+            <div class="document title">
+                Events & Schedules
+            </div>
+            <div class="action">
+                <div class="ui buttons">
+                    <button class="ui icon button" onclick="showEventModal();" title="Add Event">
+                        <i class="large icons">
+                            <i class="calendar icon"></i>
+                            <i class="inverted corner add icon"></i>
+                        </i>
+                    </button>
+                    <button class="ui icon button" onclick="addCategory();" title="Add Category">
+                        <i class="tags icon"></i>
+                    </button>
+                    <button class="ui icon button" onclick="toggleDisplay(false);">
+                        <i class="sidebar icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="ui calendar categories">
+            <div class="nano">
+                <div class="nano-content">
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Personal</label>
+                        </div>
+                        <div class="color1 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Company</label>
+                        </div>
+                        <div class="color2 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>School</label>
+                        </div>
+                        <div class="color3 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Personal</label>
+                        </div>
+                        <div class="color4 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Company</label>
+                        </div>
+                        <div class="color5 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>School</label>
+                        </div>
+                        <div class="color6 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Personal</label>
+                        </div>
+                        <div class="color7 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Company</label>
+                        </div>
+                        <div class="color8 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>School</label>
+                        </div>
+                        <div class="color9 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Personal</label>
+                        </div>
+                        <div class="color10 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Company</label>
+                        </div>
+                        <div class="color11 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>School</label>
+                        </div>
+                        <div class="color12 category color"></div>
+                    </div>
+                    <div class="category">
+                        <div class="ui toggle checkbox name">
+                            <input name="example" type="checkbox">
+                            <label>Private Only</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui inverted divider"></div>
+        <div class="ui inverted date only picker calendar">
+        </div>
+
+    </div>
     <div class="right panel">
-        <div id="calendar"></div>
+        <div id="toolbar" class="ui attached segment">
+            <div class="left">
+                <div class="ui input">
+                    <input id="NaturalLanguageInputText" type="text" placeholder="Dinner with Kathey tonight at York & Albany" />
+                </div>
+            </div>
+            <div class="right">
+                <div class="ui initially hidden icon buttons">
+                    <button class="ui grey icon button" title="Integrations">
+                        <i class="cloud download icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="scheduler">
+            <div class="ui organizer attached segment">
+                <div class="ui three column stackable grid">
+                    <div class="column">
+                        <div class="ui basic buttons">
+                            <button class="ui button" onclick='showOrganizerEvent("today")'>Today</button>
+                            <button class="ui button" onclick='showOrganizerEvent("day")'>Day</button>
+                            <button class="ui button" onclick='showOrganizerEvent("week")'>Week</button>
+                            <button class="ui button" onclick='showOrganizerEvent("month")'>Month</button>
+                            <button class="ui button" onclick='showOrganizerEvent("list")'>Agendas</button>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="title">
+                            <i class="angle left icon" onclick='showOrganizerEvent("previous")'></i>
+                            <span></span>
+                            <i class="angle right icon" onclick='showOrganizerEvent("next")'></i>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="ui search fluid input">
+                            <input type="search" placeholder="Search ..." />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui attached segment">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="EventModal" class="new event" style="display: none;">
+    <div class="nano">
+        <div class="nano-content">
+            <div class="ui mixerp form">
+                <div class="title field">
+                    <input id="TitleInputText" type="text" placeholder="Enter Event Title" value="" />
+                </div>
+                <div class="category field">
+                    <div id="CategoryDropdown" class="ui floating fluid dropdown">
+                        <div class="text">
+                            <div class="ui red empty circular label"></div>
+                            Personal
+                        </div>
+                        <div class="menu">
+                            <div class="ui icon search input">
+                                <i class="search icon"></i>
+                                <input placeholder="Search Category" type="text">
+                            </div>
+                            <div class="divider"></div>
+                            <div class="header">
+                                <i class="calendar icon"></i>
+                                Select Category
+                            </div>
+                            <div class="scrolling menu">
+                                <div class="item">
+                                    <div class="ui red empty circular label"></div>
+                                    Personal
+                                </div>
+                                <div class="item">
+                                    <div class="ui blue empty circular label"></div>
+                                    Work
+                                </div>
+                                <div class="item">
+                                    <div class="ui black empty circular label"></div>
+                                    Organization
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="location field">
+                    <label>Location</label>
+                    <input id="LocationInputText" type="text" placeholder="Enter Location" />
+                </div>
+                <div class="location map">
+                    <div id="map"></div>
+                    <div id="infowindow-content">
+                        <img src="" width="16" height="16" id="place-icon">
+                        <span id="place-name" class="title"></span><br>
+                        <span id="place-address"></span>
+                    </div>
+                </div>
+                <div class="vpad8"></div>
+                <div class="field">
+                    <label>Starts At</label>
+                    <div id="StartsAtCalendar" class="ui date time picker calendar">
+                        <input type="text" placeholder="Starts At" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Ends On</label>
+                    <div id="EndsOnCalendar" class="ui date time picker calendar">
+                        <input type="text" placeholder="Ends On" />
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <label>Options</label>
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input id="AllDayCheckbox" type="checkbox">
+                            <label for="AllDayCheckbox">All day</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui green toggle checkbox">
+                            <input id="PrivateCheckbox" type="checkbox" checked="checked">
+                            <label for="PrivateCheckbox">Private</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <a href="javascript:void(0)" onclick="toggleMore()">More</a>
+                </div>
+            </div>
+            <div class="ui show more form" style="display: none;">
+                <div class="vpad8"></div>
+                <div class="field">
+                    <label>Repeat</label>
+                    <div id="RepeatDropdown" class="ui selection dropdown">
+                        <input name="repeat" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">None</div>
+                        <div class="menu">
+                            <div class="item" data-value="1">None</div>
+                            <div class="item" data-value="0">Every Day</div>
+                            <div class="item" data-value="0">Every Week</div>
+                            <div class="item" data-value="0">Every Month</div>
+                            <div class="item" data-value="0">Every Year</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Notify Me</label>
+                    <div id="NotifyMeDropdown" class="ui selection dropdown">
+                        <input name="gender" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">None</div>
+                        <div class="menu">
+                            <div class="item" data-value="1">None</div>
+                            <div class="item" data-value="0">On Time</div>
+                            <div class="item" data-value="0">5 Minutes Before</div>
+                            <div class="item" data-value="0">10 Minutes Before</div>
+                            <div class="item" data-value="0">15 Minutes Before</div>
+                            <div class="item" data-value="0">30 Minutes Before</div>
+                            <div class="item" data-value="0">1 Hour Before</div>
+                            <div class="item" data-value="0">2 Hours Before</div>
+                            <div class="item" data-value="0">1 Day Before</div>
+                            <div class="item" data-value="0">2 Days Before</div>
+                            <div class="item" data-value="0">Custom</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="vpad8"></div>
+                <div class="location field">
+                    <label>Note</label>
+                    <input id="NoteInputText" type="text" placeholder="Enter Note" />
+                </div>
+                <div class="location field">
+                    <label>Url</label>
+                    <input id="UrlInputUrl" type="url" placeholder="Enter Url" />
+                </div>
+            </div>
+            <div class="ui form">
+                <div class="vpad8"></div>
+                <button class="ui positive button">OK</button>
+                <button id="CloseEventModalButton" class="ui basic button">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
+    var autocomplete;
+
+    function removeTime(date) {
+        return new Date(date.setHours(0, 0, 0, 0));
+    };
+
+    function initMap() {
+        var map = new window.google.maps.Map(document.getElementById('map'));
+        const input = document.getElementById('LocationInputText');
+
+        autocomplete = new window.google.maps.places.Autocomplete(input);
+        autocomplete.setTypes([]);
+        autocomplete.setOptions({ strictBounds: false });
+
+        // Bind the map's bounds (viewport) property to the autocomplete object,
+        // so that the autocomplete requests use the current map bounds for the
+        // bounds option in the request.
+        autocomplete.bindTo('bounds', map);
+
+        var infowindow = new window.google.maps.InfoWindow();
+        var infowindowContent = document.getElementById('infowindow-content');
+        infowindow.setContent(infowindowContent);
+        var marker = new window.google.maps.Marker({
+            map: map,
+            anchorPoint: new window.google.maps.Point(0, -29)
+        });
+
+        autocomplete.addListener('place_changed', function () {
+            infowindow.close();
+            marker.setVisible(false);
+            const place = autocomplete.getPlace();
+            if (!(place && place.geometry)) {
+                // User entered the name of a Place that was not suggested and
+                // pressed the Enter key, or the Place Details request failed.
+                return;
+            }
+
+            $("#LocationInputText").attr("data-geometry", JSON.stringify(place.geometry));
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(12);  // Why 17? Because it looks good.
+            }
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+
+            var address = '';
+            if (place.address_components) {
+                address = [
+                  (place.address_components[0] && place.address_components[0].short_name || ''),
+                  (place.address_components[1] && place.address_components[1].short_name || ''),
+                  (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            infowindowContent.children['place-icon'].src = place.icon;
+            infowindowContent.children['place-name'].textContent = place.name;
+            infowindowContent.children['place-address'].textContent = address;
+            infowindow.open(map, marker);
+        });
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=@Configs.GoogleApiKey&libraries=places&callback=initMap" async defer></script>
+
+<script>
+    window.today = (new Date()).addDays(-10).toISOString();
+    function updateTitle() {
+        const view = $('#calendar').fullCalendar('getView');
+        $(".organizer .title span").html(view.title);
+    };
+
+    function showOrganizerEvent(name) {
+        var target = null;
+
+        switch (name) {
+            case "previous":
+                target = $(".fc-prev-button");
+                break;
+            case "next":
+                target = $(".fc-next-button");
+                break;
+            case "today":
+                target = $(".fc-today-button");
+                break;
+            case "day":
+                target = $(".fc-agendaDay-button");
+                break;
+            case "week":
+                target = $(".fc-agendaWeek-button");
+                break;
+            case "month":
+                target = $(".fc-month-button");
+                break;
+            case "list":
+                target = $(".fc-listYear-button");
+                break;
+            default:
+        };
+
+        if (!target) {
+            return;
+        };
+
+
+        target.trigger("click");
+        updateTitle();
+    };
+
+    function createEvent(start, end, allDay) {
+        $("#AllDayCheckbox").prop("checked", allDay).trigger("change");
+
+        if (start) {
+            $("#StartsAtCalendar").calendar("set date", start.local().toDate());
+        };
+
+        if (end) {
+            $("#EndsOnCalendar").calendar("set date", end.local().toDate());
+        };
+
+    };
+
     function displayCalendar() {
-        $('#calendar').fullCalendar({
-            header: {
-                left: 'month,agendaWeek,agendaDay,listWeek',
-                center: 'title',
-                right: 'prev,next today'
+        const el = $('#calendar');
+        el.fullCalendar({
+            eventAfterAllRender: function () {
             },
-            defaultDate: '2017-01-30',
+            header: {
+                left: '',
+                center: 'prev title next',
+                right: 'today year agendaDay,agendaWeek,month,listMonth,listYear'
+            },
+            defaultView: "agendaWeek",
+            select: function (start, end) {
+                createEvent(start, end, false);
+                showEventModal();
+            },
+            unselect: function () {
+                //const input = $("#NaturalLanguageInputText").val().trim();
+                //if (!input) {
+                //    hideEventModal();
+                //};
+            },
+            defaultDate: window.today ? new Date(window.today) : new Date(),
             navLinks: true, // can click day/week names to navigate views
             editable: true,
+            unselectAuto: false,
+            selectable: true,
+            selectHelper: true,
             eventLimit: true, // allow "more" link when too many events
+            eventRender: function (event, element) {
+                updateTitle();
+            },
             events: [
                 {
                     title: 'All Day Event',
@@ -444,8 +985,7 @@
                 },
                 {
                     title: 'Long Event',
-                    start: '2017-01-07',
-                    end: '2017-01-10'
+                    start: '2017-01-07'
                 },
                 {
                     id: 999,
@@ -496,27 +1036,299 @@
         });
     };
 
-    $(document).ready(function () {
-        setTimeout(function () {
-            displayCalendar();
-            $('#example15').calendar({
-                type: 'date'
-            });
-        }, 1000);
+    function initializeDatePicker() {
+        function getDatePickerOptions(dateOnly) {
+            const options = {
+                parser: {
+                    date: function (text) {
+                        return new Date(text);
+                    }
+                },
+                formatter: {
+                    date: function (date) {
+                        if (!date) return '';
+                        return $.datepicker.formatDate(window.convertNetDateFormat(window.longDateFormat), date);
+                    }
+                },
+                initialDate: window.today ? new Date(window.today) : new Date()
+            };
 
+            if (dateOnly) {
+                options.type = 'date';
+            };
+
+            return options;
+        };
+
+        $('.ui.date.only.picker').calendar(getDatePickerOptions(true));
+
+        $('.ui.date.only.picker').calendar("setting", "onChange", function (date) {
+            $('#calendar').fullCalendar('gotoDate', date);
+        });
+
+        $('.ui.date.only.picker').calendar("set date", new Date(window.today), false, false);
+
+        $('.ui.date.time.picker').calendar(getDatePickerOptions(false));
+    };
+
+
+    $(".dropdown").dropdown({ placeholder: false });
+
+    function showEventModal() {
+        const left = $("#NaturalLanguageInputText").offset().left;
+        $("#EventModal").css("left", left + "px");
+        $("#EventModal").show();
+        $("#EventModal .nano-content").animate({ scrollTop: 0 }, "fast");
+    };
+
+    function hideEventModal() {
+        $("#EventModal").hide();
+    };
+
+
+    $("#NaturalLanguageInputText").keyup(function (e) {
+        const el = $(this);
+        const input = el.val();
+
+        if (!input.trim()) {
+            hideEventModal();
+            return false;
+        };
+
+        showEventModal();
+
+
+        const parsed = parseTokens(input);
+
+        $("#TitleInputText").val(parsed.Title.trim()).trigger("change");
+        $("#LocationInputText").val(parsed.Location.trim()).trigger("change");
+
+        $("#StartsAtCalendar").calendar("set date", parsed.StartsFrom);
+        $("#EndsOnCalendar").calendar("set date", parsed.EndsOn);
+
+        if (e.which === 13) {
+            const locationInput = $("#LocationInputText");
+            locationInput.focus();
+            window.google.maps.event.trigger(autocomplete, 'place_changed');
+            return false;
+        };
     });
 
-</script>
-<style>
-    /*body {
-        margin: 40px 10px;
-        padding: 0;
-        font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-        font-size: 14px;
-    }
+    $("#CloseEventModalButton").off("click").on("click", function () {
+        $("#EventModal").hide();
+    });
 
-    #calendar {
-        max-width: 900px;
-        margin: 0 auto;
-    }*/
-</style>
+    function pad(num, size) {
+        var s = num + "";
+        while (s.length < size) s = "0" + s;
+        return s;
+    };
+
+    function parseTime(text, hasPrimeMeridian) {
+        const time = text.match(/(\d?\d):?(\d?\d?)/);
+        var hours = parseInt(time[1], 10);
+        const minutes = parseInt(time[2], 10) || 0;
+
+        if (hasPrimeMeridian) {
+            hours += 12;
+        };
+
+        if (hours >= 24) {
+            return null;
+        };
+
+
+
+        const date = new Date();
+        date.setHours(hours);
+        date.setMinutes(minutes);
+
+        return date;
+    };
+
+    function parseTokens(input) {
+        function getTime(token) {
+            const hasSeparator = token.indexOf(":") > -1;
+            const hasAmplitudeMeridian = token.toLowerCase().indexOf("am") > -1;
+            const hasPrimeMeridian = token.toLowerCase().indexOf("pm") > -1;
+
+            if (hasSeparator) {
+                token = token.replace(":", "");
+            };
+
+            if (hasAmplitudeMeridian) {
+                token = token.replace(/am/i, "");
+            };
+
+            if (hasPrimeMeridian) {
+                token = token.replace(/pm/i, "");
+            };
+
+            var timeValue = parseInt(token) || 0;
+
+            if (timeValue > 0 && timeValue < 2400) {
+                if (timeValue < 10) {
+                    timeValue *= 100;
+                } else if (timeValue < 24) {
+                    timeValue *= 100;
+                };
+
+                const parsed = parseTime(pad(timeValue, 4), hasPrimeMeridian);
+                return parsed;
+            };
+
+            return null;
+        };
+
+        if (!input) {
+            return null;
+        };
+
+        var startsFrom = undefined;
+        var endsOn = undefined;
+        var title = "";
+        var location = "";
+
+        input = input.trim();
+
+        if (input.toLocaleLowerCase().indexOf(" tonight") > -1) {
+            startsFrom = parseTime("7", true);
+            endsOn = parseTime("10", true);
+            input = input.replace(/tonight/i, "");
+        };
+
+        const candidates = input.split(/\Wat\W/i);;
+        if (candidates.length) {
+            title = candidates[0];
+            candidates.shift();
+        };
+
+        for (let i = 0; i < candidates.length; i++) {
+            const token = candidates[i];
+            const time = getTime(token);
+
+            if (!startsFrom && time) {
+                startsFrom = time;
+            };
+
+            if (!time) {
+                location = token;
+            };
+        };
+
+        return {
+            Title: title || "",
+            Location: location || "",
+            StartsFrom: startsFrom,
+            EndsOn: endsOn
+        };
+    };
+
+
+
+    $(document).ready(function () {
+        var initialized = false;
+
+        function intializeUi() {
+            if (initialized) {
+                return;
+            };
+
+            try {
+                if (!(window.jQuery().fullCalendar && typeof ($('#calendar').fullCalendar) === "function")) {
+                    setTimeout(function () {
+                        intializeUi();
+                        return;
+                    }, 100);
+                };
+
+
+                displayCalendar();
+                initializeDatePicker();
+                $(".nano").nanoScroller();
+                initialized = true;
+            } catch (e) {
+                console.log(e.message);
+            }
+
+        };
+
+        intializeUi();
+    });
+
+    function toggleMore() {
+        $('.show.more.form').fadeToggle(500);
+        setTimeout(function () {
+            $(".nano").nanoScroller();
+        }, 1000);
+    };
+
+    $("#AllDayCheckbox").off("change").on("change", function () {
+
+        const el = $(this);
+        const allDay = el.is(":checked");
+
+        if (allDay) {
+            $("#StartsAtCalendar").removeClass("time").calendar("setting", "type", "date").calendar("refresh");
+            $("#EndsOnCalendar").removeClass("time").calendar("setting", "type", "date").calendar("refresh");
+
+            let start = $("#StartsAtCalendar").calendar("get date");
+
+            if (start) {
+                start = removeTime(start);
+                $("#StartsAtCalendar").calendar("set date", start);
+            };
+
+            let end = $("#EndsOnCalendar").calendar("get date");
+
+            if (end) {
+                end = removeTime(end);
+                $("#EndsOnCalendar").calendar("set date", end);
+            };
+
+            return;
+        };
+
+        $("#StartsAtCalendar").addClass("time").calendar("setting", "type", "datetime").calendar("refresh");
+        $("#EndsOnCalendar").addClass("time").calendar("setting", "type", "datetime").calendar("refresh");
+    });
+
+    function toggleDisplay(state) {
+        function refreshUi() {
+            const modal = $("#EventModal");
+            if (!modal.is(":visible")) {
+                return;
+            }
+
+            const left = $("#NaturalLanguageInputText").offset().left;
+            modal.css("left", left + "px");
+        };
+
+        window.localStorage.setItem("calendarToggleState", state);
+
+        if (state) {
+            $(".right.panel").removeClass("full width");
+            $(".left.panel").fadeIn();
+            $(".display.toggler").hide();
+
+            refreshUi();
+            return;
+        };
+
+        $(".right.panel").addClass("full width");
+        $(".left.panel").hide();
+        $(".display.toggler").fadeIn();
+
+
+        refreshUi();
+    };
+
+    function loadState() {
+        const state = window.localStorage.getItem("calendarToggleState");
+        toggleDisplay(state === "true");
+    };
+
+    loadState();
+
+    $(".ui.checkbox").checkbox();
+</script>
