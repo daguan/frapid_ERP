@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
 
@@ -12,6 +13,19 @@ namespace Frapid.Calendar
         {
             string tenant = AppUsers.GetTenant();
             return Get(tenant, key);
+        }
+
+        public static string GetNotificationEmailTemplate(string tenant)
+        {
+            string file = $"/Tenants/{tenant}/Areas/Frapid.Calendar/Templates/Email.html";
+            file = PathMapper.MapPath(file);
+
+            if (!File.Exists(file))
+            {
+                return string.Empty;
+            }
+
+            return File.ReadAllText(file, Encoding.UTF8);
         }
 
         public static string Get(string tenant, string key)

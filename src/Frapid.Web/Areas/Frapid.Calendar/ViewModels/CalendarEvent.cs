@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Ical.Net;
-using Ical.Net.DataTypes;
 
 namespace Frapid.Calendar.ViewModels
 {
@@ -9,6 +8,10 @@ namespace Frapid.Calendar.ViewModels
     {
         public Guid? EventId { get; set; }
         public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public string ColorCode { get; set; }
+        public bool? IsLocalCalendar { get; set; }
+        public int? CategoryOrder { get; set; }
         public int? UserId { get; set; }
 
         [Required]
@@ -17,20 +20,21 @@ namespace Frapid.Calendar.ViewModels
         [Required]
         public string Location { get; set; }
 
-        public GeographicLocation GeoLocation { get; set; }
-
         [Required]
-        public DateTime StartsAt { get; set; }
+        public DateTimeOffset StartsAt { get; set; }
 
-        public DateTime? EndsOn { get; set; }
+        public DateTimeOffset EndsOn { get; set; }
 
         public bool? AllDay { get; set; }
 
-        public RecurrencePattern Recurrence { get; set; }
-        public Alarm Alarm { get; set; }
+        public Recurrence Recurrence { get; set; }
+        public DateTimeOffset? Until { get; set; }
+
+        public int? RemindBeforeInMinutes { get; set; }
+        public List<string> ReminderTypes { get; set; }
+        public bool IsPrivate { get; set; }
         public string Url { get; set; }
         public string Note { get; set; }
-        public int? AuditUserId { get; set; }
-        public DateTimeOffset? AuditTs { get; set; }
+        public IEnumerable<DateTime> Occurences { get; set; }
     }
 }

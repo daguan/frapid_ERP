@@ -1,10 +1,115 @@
 ﻿-->-->-- src/Frapid.Web/Areas/Frapid.Calendar/db/PostgreSQL/2.x/2.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
+DROP SCHEMA IF EXISTS calendar CASCADE;
+CREATE SCHEMA calendar;
+
+CREATE TABLE calendar.categories
+(
+	category_id								SERIAL PRIMARY KEY,
+	user_id									integer NOT NULL REFERENCES account.users,
+	category_name							national character varying(200) NOT NULL,
+	color_code								national character varying(50) NOT NULL,
+	is_local								boolean NOT NULL DEFAULT(true),
+	category_order							smallint,
+    audit_user_id                           integer REFERENCES account.users,
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    deleted                                 boolean DEFAULT(false)  
+);
+
+CREATE UNIQUE INDEX categories_user_id_category_name_uix
+ON calendar.categories(user_id, UPPER(category_name));
+
+CREATE TABLE calendar.events
+(
+	event_id								uuid PRIMARY KEY DEFAULT(gen_random_uuid()),
+	category_id								integer NOT NULL REFERENCES calendar.categories,
+	user_id									integer NOT NULL REFERENCES account.users,
+	name									national character varying(500) NOT NULL,
+	location								national character varying(2000),
+	starts_at								TIMESTAMP WITH TIME ZONE NOT NULL,
+	ends_on									TIMESTAMP WITH TIME ZONE NOT NULL,
+	all_day									boolean NOT NULL DEFAULT(false),
+	recurrence								text,--JSON data
+	until									TIMESTAMP WITH TIME ZONE,
+	alarm									integer,--minutes before
+	reminder_types							text,--JSON data
+	is_private								boolean,
+	url										national character varying(500),
+	note									text,
+    audit_user_id                           integer REFERENCES account.users,
+    audit_ts                                TIMESTAMP WITH TIME ZONE NULL DEFAULT(NOW()),
+    deleted                                 boolean DEFAULT(false)
+);
+
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Calendar/db/PostgreSQL/2.x/2.0/src/03.menus/menus.sql --<--<--
+DELETE FROM auth.menu_access_policy
+WHERE menu_id IN
+(
+ SELECT menu_id FROM core.menus
+ WHERE app_name = 'Calendar'
+);
+
+DELETE FROM auth.group_menu_access_policy
+WHERE menu_id IN
+(
+ SELECT menu_id FROM core.menus
+ WHERE app_name = 'Calendar'
+);
+
+DELETE FROM core.menus
+WHERE app_name = 'Calendar';
+
+
+SELECT * FROM core.create_app('Calendar', 'Calendar', 'Calendar', '1.0', 'MixERP Inc.', 'December 1, 2015', 'violet calendar', '/dashboard/calendar', NULL);
+
+SELECT * FROM core.create_menu('Calendar', 'Tasks', 'Tasks', '', 'lightning', '');
+SELECT * FROM core.create_menu('Calendar', 'Calendar', 'Calendar', '/dashboard/calendar', 'calendar', 'Tasks');
+
+
+SELECT * FROM auth.create_app_menu_policy
+(
+	'Admin', 
+	core.get_office_id_by_office_name('Default'), 
+	'Calendar',
+	'{*}'
+);
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Calendar/db/PostgreSQL/2.x/2.0/src/04.default-values/01.default-values.sql --<--<--
+
+
+-->-->-- src/Frapid.Web/Areas/Frapid.Calendar/db/PostgreSQL/2.x/2.0/src/05.views/calendar.event_view.sql --<--<--
+DROP VIEW IF EXISTS calendar.event_view;
+
+CREATE VIEW calendar.event_view
+AS
+SELECT
+    calendar.events.event_id,
+    calendar.events.category_id,
+    calendar.categories.category_name,
+    calendar.categories.color_code,
+    calendar.categories.is_local AS is_local_calendar,
+    calendar.categories.category_order,
+    calendar.events.user_id,
+    calendar.events.name,
+    calendar.events.location,
+    calendar.events.starts_at,
+    calendar.events.ends_on,
+    calendar.events.all_day,
+    calendar.events.recurrence,
+    calendar.events.alarm,
+    calendar.events.url,
+    calendar.events.note,
+    calendar.events.reminder_types,
+    calendar.events.is_private,
+    calendar.events.until
+FROM calendar.events
+INNER JOIN calendar.categories
+ON calendar.categories.category_id = calendar.events.category_id
+WHERE NOT calendar.events.deleted
+AND NOT calendar.categories.deleted;
+
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.Calendar/db/PostgreSQL/2.x/2.0/src/99.ownership.sql --<--<--
