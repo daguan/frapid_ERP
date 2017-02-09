@@ -30,3 +30,4 @@ ON calendar.categories.category_id = calendar.events.category_id
 WHERE calendar.events.deleted = 0
 AND calendar.categories.deleted = 0;
 
+GO
