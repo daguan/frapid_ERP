@@ -14,6 +14,7 @@ SELECT
     calendar.events.location,
     calendar.events.starts_at,
     calendar.events.ends_on,
+    calendar.events.time_zone,
     calendar.events.all_day,
     calendar.events.recurrence,
     calendar.events.alarm,

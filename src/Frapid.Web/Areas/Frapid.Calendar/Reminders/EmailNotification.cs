@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Frapid.Calendar.Contracts;
+using Frapid.Framework.Extensions;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;
 
@@ -12,10 +13,13 @@ namespace Frapid.Calendar.Reminders
         public string LocalizedName { get; set; } = I18N.EmailNotification;
         public bool Enabled { get; set; } = true;
 
+
         public async Task<bool> RemindAsync(string tenant, ReminderMessage message)
         {
             await Task.Delay(0).ConfigureAwait(false);
             string sendTo = message.Contact.EmailAddresses;
+            string timezone = message.Contact.TimeZone.Or(message.Event.TimeZone);
+
             if (string.IsNullOrWhiteSpace(sendTo))
             {
                 return false;
@@ -29,9 +33,9 @@ namespace Frapid.Calendar.Reminders
             }
 
             string template = Configs.GetNotificationEmailTemplate(tenant);
-            string eventDate = DateTime.UtcNow.AddMinutes(alarm).Date.ToString("D");
-            string startTime = message.Event.StartsAt.ToString("HH:m:s tt zzz");
-            string endTime = message.Event.EndsOn.ToString("HH:m:s tt zzz");
+            string eventDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow.AddMinutes(alarm), TimeZoneInfo.FindSystemTimeZoneById(timezone)).Date.ToString("D");
+            string startTime = TimeZoneInfo.ConvertTime(message.Event.StartsAt, TimeZoneInfo.FindSystemTimeZoneById(timezone)).ToString("t");
+            string endTime = TimeZoneInfo.ConvertTime(message.Event.EndsOn, TimeZoneInfo.FindSystemTimeZoneById(timezone)).ToString("t");
 
             template = template.Replace("{Name}", message.Event.Name);
             template = template.Replace("{StartTime}", startTime);

@@ -47,7 +47,7 @@ namespace Frapid.Calendar.Controllers.Backend
             }
         }
 
-        [Route("dashboard/calendar/{eventId}")]
+        [Route("dashboard/calendar/{eventId:guid}")]
         [HttpDelete]
         [MenuPolicy(OverridePath = "/dashboard/calendar")]
         public async Task<ActionResult> DeleteAsync(Guid eventId)

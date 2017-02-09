@@ -24,6 +24,7 @@ namespace Frapid.Calendar.ViewModels
         public DateTimeOffset StartsAt { get; set; }
 
         public DateTimeOffset EndsOn { get; set; }
+        public string TimeZone { get; set; }
 
         public bool? AllDay { get; set; }
 

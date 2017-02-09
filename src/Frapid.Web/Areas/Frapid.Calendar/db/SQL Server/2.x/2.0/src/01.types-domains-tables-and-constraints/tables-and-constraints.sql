@@ -17,7 +17,8 @@ CREATE TABLE calendar.categories
 );
 
 CREATE UNIQUE INDEX categories_user_id_category_name_uix
-ON calendar.categories(user_id, category_name);
+ON calendar.categories(user_id, category_name)
+WHERE deleted = 0;
 
 CREATE TABLE calendar.events
 (
@@ -28,6 +29,7 @@ CREATE TABLE calendar.events
 	location								national character varying(2000),
 	starts_at								DATETIMEOFFSET NOT NULL,
 	ends_on									DATETIMEOFFSET NOT NULL,
+	time_zone								national character varying(200) NOT NULL,
 	all_day									bit NOT NULL DEFAULT(0),
 	recurrence								national character varying(MAX),--JSON data
 	until									DATETIMEOFFSET,

@@ -238,7 +238,7 @@ function parseTokens(input) {
 };
 
 
-$(document).ready(function () {
+function initializeCalendar() {
     var initialized = false;
 
     function initializeUi() {
@@ -311,7 +311,9 @@ $(document).ready(function () {
     };
 
     initializeUi();
-});
+};
+
+window.initializeCalendar();
 
 function toggleMore() {
     $('.show.more.form').fadeToggle(500);

@@ -14,6 +14,7 @@ namespace Frapid.Calendar.DTO
         public string Location { get; set; }
         public DateTimeOffset StartsAt { get; set; }
         public DateTimeOffset EndsOn { get; set; }
+        public string TimeZone { get; set; }
         public bool AllDay { get; set; }
         public string Recurrence { get; set; }
         public DateTimeOffset? Until { get; set; }

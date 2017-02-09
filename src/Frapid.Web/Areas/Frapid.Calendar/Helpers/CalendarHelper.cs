@@ -32,6 +32,11 @@ namespace Frapid.Calendar.Helpers
 
         public static RecurrencePattern ToPattern(this Recurrence recurrence)
         {
+            if (recurrence == null)
+            {
+                return null;
+            }
+            
             var pattern = new RecurrencePattern
             {
                 Until = recurrence.Until,
@@ -46,6 +51,11 @@ namespace Frapid.Calendar.Helpers
 
         public static Recurrence ToRecurrence(this RecurrencePattern pattern)
         {
+            if (pattern == null)
+            {
+                return new Recurrence();
+            }
+
             var reucrrence = new Recurrence
             {
                 Until = pattern.Until,
@@ -86,6 +96,7 @@ namespace Frapid.Calendar.Helpers
                 Location = dto.Location,
                 StartsAt = dto.StartsAt,
                 EndsOn = dto.EndsOn,
+                TimeZone = dto.TimeZone,
                 AllDay = dto.AllDay,
                 Recurrence = recurrence,
                 Until = dto.Until,
@@ -107,6 +118,7 @@ namespace Frapid.Calendar.Helpers
                 UserId = calendarEvent.UserId ?? 0,
                 EndsOn = calendarEvent.EndsOn,
                 StartsAt = calendarEvent.StartsAt,
+                TimeZone = calendarEvent.TimeZone,
                 Recurrence = JsonConvert.SerializeObject(calendarEvent.Recurrence),
                 Until = calendarEvent.Until,
                 AllDay = calendarEvent.AllDay ?? false,

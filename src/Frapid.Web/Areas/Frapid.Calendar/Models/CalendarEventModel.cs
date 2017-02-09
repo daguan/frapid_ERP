@@ -36,6 +36,7 @@ namespace Frapid.Calendar.Models
             candidate.AuditUserId = meta.UserId;
             candidate.UserId = meta.UserId;
             candidate.AuditTs = DateTimeOffset.UtcNow;
+            candidate.TimeZone = TimeZone.CurrentTimeZone.StandardName;
 
             if (calendarEvent.EventId == null)
             {
