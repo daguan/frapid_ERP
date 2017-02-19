@@ -1,0 +1,356 @@
+﻿@model dynamic
+
+@{
+    Layout = ViewBag.Layout;
+}
+<style>
+    #dashboard-container {
+        padding: 0;
+    }
+
+    .address.book {
+        display: flex;
+        height: 100%;
+        padding: 0 !important;
+    }
+
+        .address.book .left.panel {
+            width: 300px;
+            border-right: 1px solid #ddd;
+            padding: 1em;
+        }
+
+            .address.book .left.panel .title {
+                font-weight: bold;
+                font-size: 1.2em;
+                padding: 0.25em 0;
+            }
+
+            .address.book .left.panel .ui.checkbox {
+                display: block !important;
+                margin: 0.5em;
+            }
+
+
+
+        .address.book .middle.panel {
+            width: 300px;
+            border-right: 1px solid #ddd;
+            padding: 1em;
+        }
+
+        .address.book .right.panel {
+            width: calc(100% - 612px);
+            padding: 1em;
+        }
+
+    .not.padded {
+        padding: 0 !important;
+    }
+
+    .borderless {
+        border: none !important;
+    }
+
+    .address.book .middle.panel .entry {
+        display: flex;
+        padding: 0.5em;
+        margin: 0.2em 0;
+        cursor: pointer;
+        border: 1px solid transparent;
+    }
+
+
+        .address.book .middle.panel .entry:hover,
+        .address.book .middle.panel .selected.entry {
+            border-color: #C1D4C1;
+            background-color: #EBF2EB;
+        }
+
+        .address.book .middle.panel .entry .photo {
+            width: 3.5em;
+            height: 3.5em;
+        }
+
+            .address.book .middle.panel .entry .photo span {
+                width: 3em;
+                height: 3em;
+                border-radius: 3em;
+                background: #7A997B;
+                display: inline-block;
+                color: #eee;
+                text-align: center;
+                padding-top: 0.75em;
+                font-weight: bold;
+            }
+
+        .address.book .middle.panel .entry .info .name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .address.book .middle.panel .entry .info .detail {
+            color: #888;
+        }
+
+    .address.book .right.panel .title {
+        color: #7A997B;
+        font-size: 4em;
+        font-weight: 100;
+        padding: 0.5em 0;
+    }
+
+    .address.book .right.panel .form {
+        padding: 1em;
+    }
+</style>
+<style>
+    .mixerp.form .field {
+        margin: 0 !important;
+        padding: .25em !important;
+    }
+
+    .mixerp.form .ui.dropdown {
+        border: none !important;
+    }
+
+    .mixerp.form label {
+        color: #777 !important;
+    }
+
+    .mixerp.form .ui.dropdown .dropdown.icon {
+        padding: 4px !important;
+    }
+
+    .mixerp.form input,
+    .mixerp.form textarea,
+    .mixerp.form .ui.search.dropdown input,
+    .mixerp.form .ui.dropdown:not(.search) {
+        border: none !important;
+        border-bottom: 1px solid #eee !important;
+        border-radius: 0 !important;
+        color: #777 !important;
+        min-height: auto !important;
+        padding: 4px !important;
+    }
+
+    .mixerp.form .ui.search.dropdown {
+        padding: 4px !important;
+    }
+
+        .mixerp.form .ui.search.dropdown .menu {
+            margin: -.6em -.05em !important;
+        }
+
+    .mixerp.form .title input {
+        color: #2474ad !important;
+        font-size: 1.5em !important;
+    }
+</style>
+<div class="ui frapid address book app attached segment">
+    <div class="left panel">
+        <div class="title">Select Type</div>
+        <div class="ui form">
+            <div class="grouped fields">
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input name="contact-type" checked="checked" type="radio">
+                        <label>Private</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input name="contact-type" type="radio">
+                        <label>Public</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input name="contact-type" type="radio">
+                        <label>Both</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="title">Tags</div>
+        <div class="tags">
+            <div class="ui checked checkbox">
+                <input checked type="checkbox">
+                <label>
+                    Friend
+                </label>
+            </div>
+            <div class="ui checked checkbox">
+                <input checked type="checkbox">
+                <label>
+                    Family
+                </label>
+            </div>
+        </div>
+        <div class="ui form">
+            <div class="ui fluid input">
+                <input placeholder="Type and hit enter to create a new tag." />
+            </div>
+        </div>
+    </div>
+    <div class="middle panel">
+        <div class="ui entries attached borderless not padded segment">
+            <div class="ui fluid action input">
+                <input placeholder="Search ..." />
+                <button class="ui icon basic button">
+                    <i class="search icon"></i>
+                </button>
+                <button class="ui icon basic button">
+                    <i class="plus icon"></i>
+                </button>
+            </div>
+            <div class="entry">
+                <div class="photo">
+                    <span>JM</span>
+                </div>
+                <div class="info">
+                    <div class="name">James Morgan</div>
+                    <div class="detail">james@example.com</div>
+                </div>
+            </div>
+            <div class="entry">
+                <div class="photo">
+                    <span>SM</span>
+                </div>
+                <div class="info">
+                    <div class="name">Steve Muller</div>
+                    <div class="detail">1234567890</div>
+                </div>
+            </div>
+            <div class="entry">
+                <div class="photo">
+                    <span>AT</span>
+                </div>
+                <div class="info">
+                    <div class="name">Augustin Thomas</div>
+                    <div class="detail">www.example.com</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right panel">
+        <div class="title">James Morgan</div>
+        <div class="ui mixerp form">
+            <div class="five fields">
+                <div class="field">
+                    <label>Prefix</label>
+                    <select id="PrefixSelect" class="ui search fluid dropdown">
+                        <option>None</option>
+                        <option>Mr.</option>
+                        <option>Miss.</option>
+                        <option>Mrs.</option>
+                        <option>Dr.</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>First Name</label>
+                    <input id="FirstNameInputText" type="text" />
+                </div>
+                <div class="field">
+                    <label>Middle Name</label>
+                    <input id="MiddleNameInputText" type="text" />
+                </div>
+                <div class="field">
+                    <label>Last Name</label>
+                    <input id="LastNameInputText" type="text" />
+                </div>
+                <div class="field">
+                    <label>Suffix</label>
+                    <select id="SuffixSelect" class="ui search fluid dropdown">
+                        <option>None</option>
+                    </select>
+                </div>
+            </div>
+            <div class="three fields">
+                <div class="field">
+                    <label>Mobile Number(s)</label>
+                    <input id="MobileNumbersInputTel" type="tel" />
+                </div>
+                <div class="field">
+                    <label>Telephone Number(s)</label>
+                    <input id="TelephoneNumbersInputTel" type="tel" />
+                </div>
+                <div class="field">
+                    <label>Fax Number(s)</label>
+                    <input id="FaxNumbersInputTel" type="tel" />
+                </div>
+            </div>
+            <div class="three fields">
+                <div class="field">
+                    <label>Email Address(es)</label>
+                    <input id="EmailAddressInputEmail" type="email" />
+                </div>
+                <div class="field">
+                    <label>Website(s)</label>
+                    <input id="WebsitesInputUrl" type="url" />
+                </div>
+                <div class="field">
+                    <label>Time Zone</label>
+                    <select id="TimeZoneSelect" class="ui search dropdown"></select>
+                </div>
+            </div>
+            <div class="field">
+                <label>Address Line 1</label>
+                <textarea id="AddressLine1TextArea" rows="2"></textarea>
+            </div>
+            <div class="field">
+                <label>Address Line 2</label>
+                <textarea id="AddressLine2TextArea" rows="2"></textarea>
+            </div>
+            <div class="two fields">
+                <div class="field">
+                    <label>Postal Code</label>
+                    <input id="PostalCodeInputText" type="text" />
+                </div>
+                <div class="field">
+                    <label>Street</label>
+                    <input id="StreetInputText" type="text" />
+                </div>
+            </div>
+            <div class="three fields">
+                <div class="field">
+                    <label>City</label>
+                    <input id="CityInputText" type="text" />
+                </div>
+                <div class="field">
+                    <label>State</label>
+                    <input id="StateInputText" type="text" />
+                </div>
+                <div class="field">
+                    <label>Country</label>
+                    <input id="CountryInputText" type="text" />
+                </div>
+            </div>
+            <div class="three fields">
+                <div class="field">
+                    <label>Title</label>
+                    <input id="TitleInputText" type="text"/>
+                </div>
+                <div class="field">
+                    <label>Department</label>
+                    <input id="DepartmentInputText" type="text"/>
+                </div>
+                <div class="field">
+                    <label>Organization</label>
+                    <input id="OrganizationInputText" type="text"/>
+                </div>
+            </div>
+            <div class="field">
+                <label>Notes</label>
+                <textarea id="NotesInputTextArea" rows="2"></textarea>
+            </div>
+
+            <button class="ui save positive button">Save</button>
+        </div>
+    </div>
+</div>
+<script>
+    $(".ui.checkbox").checkbox();
+    $(".ui.dropdown").dropdown();
+</script>
