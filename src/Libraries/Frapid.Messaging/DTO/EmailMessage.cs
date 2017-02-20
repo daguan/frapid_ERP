@@ -11,8 +11,8 @@ namespace Frapid.Messaging.DTO
         public DateTimeOffset EventDateUtc { get; set; }
         public Status Status { get; set; }
         public string FromName { get; set; }
-        public string FromEmail { get; set; }
-        public string SentTo { get; set; }
+        public string FromIdentifier { get; set; }
+        public string SendTo { get; set; }
         public string Message { get; set; }
         public bool IsBodyHtml { get; set; } = true;
     }

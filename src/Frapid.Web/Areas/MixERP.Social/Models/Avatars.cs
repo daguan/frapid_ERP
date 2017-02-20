@@ -38,7 +38,7 @@ namespace MixERP.Social.Models
 
             var candidate = files.FirstOrDefault(
                 f => Path.GetFileNameWithoutExtension(f.Name) == userId
-                     && extensions.Contains(f.Extension.ToLower())
+                     && extensions.Select(x=>x.ToLower()).Contains(f.Extension.ToLower())
                 );
 
             return candidate?.FullName ?? string.Empty;

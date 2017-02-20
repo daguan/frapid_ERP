@@ -1,4 +1,5 @@
-$(".dropdown").dropdown();
+//Todo: Remove Semantic UI Dropdown dependency 
+//$(".dropdown").dropdown({placeholder: false, forceSelection: false});
 
 var container = $("#container");
 var closeButton = $("#CloseButton");

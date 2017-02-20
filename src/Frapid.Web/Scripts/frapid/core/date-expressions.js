@@ -267,6 +267,37 @@ function loadDatepicker() {
     candidates.trigger("blur");
 };
 
+function initializeCalendar() {	
+    function getDatePickerOptions(dateOnly) {
+        const options = {
+            parser: {
+                date: function (text) {
+                    return new Date(text);
+                }
+            },
+            formatter: {
+                date: function (date) {
+                    if (!date) return '';
+                    return $.datepicker.formatDate(window.convertNetDateFormat(window.longDateFormat), date);
+                }
+            },
+            initialDate: window.today ? new Date(window.today) : new Date()
+        };
+
+        if (dateOnly) {
+            options.type = 'date';
+        };
+
+        return options;
+    };
+
+    $('.ui.date.only.picker').calendar(getDatePickerOptions(true));
+
+    $('.ui.date.only.picker').calendar("set date", new Date(window.today), false, false);
+
+    $('.ui.date.time.picker').calendar(getDatePickerOptions(false));
+};
+
 $(document).ready(function () {
     loadDatepicker();
 });

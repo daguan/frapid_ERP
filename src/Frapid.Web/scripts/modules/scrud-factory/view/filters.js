@@ -95,14 +95,18 @@ var getQuerystringFilters = function () {
 function loadFilterConditions() {
     var el = $('[data-scope="filter-condition"]');
     bindSelect(el, filterConditions, "value", "text");
-    el.dropdown();
+
+    //Todo: Remove Semantic UI Dropdown dependency 
+    //el.dropdown({placeholder: false, forceSelection: false});
 };
 
 function loadColumns() {
     var el = $('[data-scope="column"]');
     el.html("");
     bindSelect(el, localizedHeaders, "columnName", "localized");
-    el.dropdown();
+
+    //Todo: Remove Semantic UI Dropdown dependency 
+    //el.dropdown({placeholder: false, forceSelection: false});
 };
 
 $("#FilterNameInputText").keyup(function () {

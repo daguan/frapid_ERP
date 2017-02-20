@@ -124,7 +124,7 @@ var invalidFileExtensionLocalized = translate("InvalidFileExtension");
                 var image = imageEl;
 				image.removeAttr('src');
                 image.attr('src', e.target.result).fadeIn(1000);
-                $(input).trigger("readComplete");
+                $(input).trigger("readComplete", [{ e: e }]);
             };
 
             reader.readAsDataURL(input.files[0]);

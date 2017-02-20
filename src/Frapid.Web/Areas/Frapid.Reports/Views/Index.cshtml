@@ -121,7 +121,7 @@
             </div>
             <div class="field">
                 <label>@I18N.Message</label>
-                <textarea id="MessageTextArea" placeholder="Enter Your Message" rows="10">Please find the attached document.</textarea>
+                <textarea id="MessageTextArea" placeholder="Enter Your Message" rows="10">@I18N.PleaseFindAttachedDocument</textarea>
             </div>
             <div class="attachment vpad8 field">
                 <label>@I18N.Attachments</label>
@@ -137,7 +137,8 @@
 <script>
 
 
-    $(".dropdown").dropdown();
+    //Todo: Remove Semantic UI Dropdown dependency 
+    //$(".dropdown").dropdown({forceSelection: false});
     loadDatepicker();
 
     (function() {
@@ -187,14 +188,19 @@
                 setTimeout(function() {
 
                     if (defaultValue) {
-                        el.dropdown("set selected", defaultValue);
+                        //Todo: Remove Semantic UI Dropdown dependency 
+                        //el.dropdown("set selected", defaultValue);
+                        el.val(defaultValue);
                     };
 
                     if (optional) {
                         el.prepend("<option value='null'>Select</option>");
 
                         if (defaultValue === "0") {
-                            el.dropdown("set text", "Select");
+                            //Todo: Remove Semantic UI Dropdown dependency 
+                            //el.dropdown("set text", "Select");
+                            el.find(":selected").removeAttr("selected");
+                            el.find("option:first-child").prop("selected", true);
                         };
                     };
                 }, 100);

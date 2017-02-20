@@ -20,7 +20,7 @@
     "PatchFilePath" : null,
 	"InstallSample": true,
 	"My": null,
-	"OverrideTemplatePath": "~/Areas/Frapid.Calendar",
+	"OverrideTemplatePath": "~/Areas/Frapid.Calendar/Overrides",
     "OverrideDestination":"~/Tenants/{0}/Areas",
 	"DependsOn": ["Frapid", "Frapid.Account"]
 }

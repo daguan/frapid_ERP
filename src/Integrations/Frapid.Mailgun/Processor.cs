@@ -64,10 +64,10 @@ namespace Frapid.Mailgun
                 };
 
                 request.AddParameter("domain", config.DomainName, ParameterType.UrlSegment);
-                request.AddParameter("from", this.GetEmailAccount(email.FromEmail, email.FromName));
+                request.AddParameter("from", this.GetEmailAccount(email.FromIdentifier, email.FromName));
                 request.AddParameter("reply-to", this.GetEmailAccount(email.ReplyToEmail, email.ReplyToName));
 
-                foreach (string recipient in email.SentTo.Split(','))
+                foreach (string recipient in email.SendTo.Split(','))
                 {
                     request.AddParameter("to", recipient.Trim());
                 }
@@ -83,7 +83,7 @@ namespace Frapid.Mailgun
             catch (Exception ex)
             {
                 email.Status = Status.Failed;
-                Log.Warning(@"Could not send email to {To} using Mailgun API. {Ex}. ", email.SentTo, ex);
+                Log.Warning(@"Could not send email to {To} using Mailgun API. {Ex}. ", email.SendTo, ex);
             }
             finally
             {

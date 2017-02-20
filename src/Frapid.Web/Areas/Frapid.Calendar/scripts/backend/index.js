@@ -257,11 +257,10 @@ function initializeCalendar() {
 
             initializeDatePicker();
             $(".nano").nanoScroller();
+            $(".dropdown").dropdown();
 
-            $(".dropdown").dropdown({ placeholder: false });
-
-            $("#RemindMeDropdown").dropdown("setting", "onChange", function () {
-                const selected = parseInt($("#RemindMeDropdown").dropdown("get value"));
+            $("#RemindMeDropdown").off("change").on("change", function () {
+                const selected = parseInt($("#RemindMeDropdown").val());
 
                 if (!selected) {
                     $("#ReminderTypePanel").hide();
@@ -271,8 +270,8 @@ function initializeCalendar() {
                 $("#ReminderTypePanel").show();
             });
 
-            $("#RepeatDropdown").dropdown("setting", "onChange", function () {
-                const selected = $("#RepeatDropdown").dropdown("get value");
+            $("#RepeatDropdown").off("change").on("change", function () {
+                const selected = $("#RepeatDropdown").val();
                 const repeatValueInputText = $("#RepeatEveryInputText");
                 $(".toggle.group.item").hide();
                 $(`.toggle.group.item[data-value='${selected}']`).show();
@@ -291,8 +290,8 @@ function initializeCalendar() {
                 };
             });
 
-            $("#CategoryDropdown").dropdown("setting", "onChange", function () {
-                const selected = parseInt($("#CategoryDropdown").dropdown("get value"));
+            $("#CategoryDropdown").off("change").on("change", function () {
+                const selected = parseInt($("#CategoryDropdown").val());
 
                 if (!selected) {
                     return;
@@ -312,8 +311,6 @@ function initializeCalendar() {
 
     initializeUi();
 };
-
-window.initializeCalendar();
 
 function toggleMore() {
     $('.show.more.form').fadeToggle(500);
@@ -437,7 +434,7 @@ function loadState() {
     const defaultCategoryId = window.localStorage.getItem(window.metaView.Tenant + "_calendar_selected_category");
 
     if (defaultCategoryId) {
-        $("#CategoryDropdown").dropdown("set selected", defaultCategoryId);
+        $("#CategoryDropdown").val(defaultCategoryId);
     };
 
     var categories = window.localStorage.getItem(window.metaView.Tenant + "_calendar_selected_categories");
@@ -711,10 +708,10 @@ $("#EditEventButton").off("click").on("click", function () {
 
     $("#EventModal").attr("data-event-id", eventId);
     $("#NameInputText").val(event.Name);
-    $("#CategoryDropdown").dropdown("set selected", event.CategoryId);
+    $("#CategoryDropdown").val(event.CategoryId);
     $("#LocationInputText").val(event.Location);
-    $("#RemindMeDropdown").dropdown("set selected", event.RemindBeforeInMinutes);
-    $("#ReminderTypesSelect").dropdown("set selected", event.ReminderTypes);
+    $("#RemindMeDropdown").val(event.RemindBeforeInMinutes);
+    $("#ReminderTypesSelect").val(event.ReminderTypes);
 
     $("#UrlInputUrl").val(event.Url);
     $("#NoteInputText").val(event.Note);
@@ -733,7 +730,7 @@ $("#EditEventButton").off("click").on("click", function () {
     };
 
     if (event.Recurrence.Frequency && event.Recurrence.ByMonthDay) {
-        $("#RepeatDropdown").dropdown("set selected", getRecurrencyType(event.Recurrence.Frequency, event.Recurrence
+        $("#RepeatDropdown").val(getRecurrencyType(event.Recurrence.Frequency, event.Recurrence
             .ByMonthDay));
     };
 
@@ -743,15 +740,15 @@ $("#EditEventButton").off("click").on("click", function () {
 
 
     if (event.Recurrence.ByDay && daysOfWeek.length === 1) {
-        $("#DayOfMonthSelect").dropdown("set selected", daysOfWeek[0]);
+        $("#DayOfMonthSelect").val(daysOfWeek[0]);
     };
 
     if (event.Recurrence.ByDay && event.Recurrence.ByDay.Offset) {
-        $("#DayOfMonthTypeSelect").dropdown("set selected", event.Recurrence.ByDay.Offset);
+        $("#DayOfMonthTypeSelect").val(event.Recurrence.ByDay.Offset);
     };
 
     if (event.Recurrence.ByDay && daysOfWeek.length) {
-        $("#DayOfWeekSelect").dropdown("set selected", daysOfWeek);
+        $("#DayOfWeekSelect").val(daysOfWeek);
     };
 });
 
@@ -770,9 +767,15 @@ $("#OkButton").off("click").on("click", function () {
                 return null;
             };
 
+            const frequency = getIcalNetFrequencyType(model.RepeatType);
+
+            if (frequency === "None") {
+                return null;
+            };
+
             const recurrence = {
                 Interval: model.RepeatEvery,
-                Frequency: getIcalNetFrequencyType(model.RepeatType),
+                Frequency: frequency,
                 Until: model.Until
             };
 
@@ -1029,3 +1032,6 @@ function parseToFullCalendarEvents(data) {
 };
 
 $(".sortable").sortable();
+
+
+window.initializeCalendar();

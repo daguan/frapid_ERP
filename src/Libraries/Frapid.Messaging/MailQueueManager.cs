@@ -9,7 +9,7 @@ using Frapid.Messaging.Smtp;
 
 namespace Frapid.Messaging
 {
-    public class MailQueueManager
+    public sealed class MailQueueManager
     {
         public MailQueueManager()
         {
@@ -34,7 +34,7 @@ namespace Frapid.Messaging
                 return;
             }
 
-            var config = new Config(this.Database, this.Processor);
+            var config = new EmailConfig(this.Database, this.Processor);
 
             this.Email.ReplyTo = this.Email.ReplyTo.Or("");
             this.Email.ReplyToName = this.Email.ReplyToName.Or("");
@@ -102,7 +102,7 @@ namespace Frapid.Messaging
         public async Task ProcessMailQueueAsync(IEmailProcessor processor, bool deleteAttachments = false)
         {
             var queue = await MailQueue.GetMailInQueueAsync(this.Database).ConfigureAwait(false);
-            var config = new Config(this.Database, this.Processor);
+            var config = new EmailConfig(this.Database, this.Processor);
             this.Processor = processor;
 
             if (this.IsEnabled())

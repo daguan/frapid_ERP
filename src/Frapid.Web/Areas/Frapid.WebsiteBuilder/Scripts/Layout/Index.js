@@ -1,4 +1,5 @@
-$(".dropdown").dropdown();
+//Todo: Remove Semantic UI Dropdown dependency 
+//$(".dropdown").dropdown({placeholder: false, forceSelection: false});
 
 var container = $("#container");
 var closeButton = $("#CloseButton");
@@ -677,7 +678,10 @@ deleteThemeButton.click(function() {
     ajax.success(function() {
         deleteThemeModal.modal("hide");
         loadThemes();
-        themeDropdown.dropdown("clear");
+        //Todo: Remove Semantic UI Dropdown dependency 
+        // themeDropdown.dropdown("clear");
+        themeDropdown.find(":selected").removeAttr("selected");
+
         window.displaySuccess();
     });
 

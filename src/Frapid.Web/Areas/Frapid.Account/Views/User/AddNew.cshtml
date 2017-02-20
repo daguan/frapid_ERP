@@ -48,7 +48,8 @@
 
 <script>
     $(".form").addClass("loading");
-    //$(".dropdown").dropdown();
+    //Todo: Remove Semantic UI Dropdown dependency 
+    //$(".dropdown").dropdown({forceSelection: false});
     window.validator.initialize($(".ui.form"));
 
     function bindOffices() {

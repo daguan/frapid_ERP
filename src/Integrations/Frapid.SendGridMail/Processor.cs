@@ -60,7 +60,7 @@ namespace Frapid.SendGridMail
 
                 var message = new Mail
                 {
-                    From = new Email(email.FromEmail, email.FromName),
+                    From = new Email(email.FromIdentifier, email.FromName),
                     Subject = email.Subject
                 };
 
@@ -70,7 +70,7 @@ namespace Frapid.SendGridMail
                 }
 
 
-                foreach (string address in email.SentTo.Split(','))
+                foreach (string address in email.SendTo.Split(','))
                 {
                     personalization.AddTo(new Email(address.Trim()));
                 }
@@ -113,7 +113,7 @@ namespace Frapid.SendGridMail
             catch (Exception ex)
             {
                 email.Status = Status.Failed;
-                Log.Warning(@"Could not send email to {To} using SendGrid API. {Ex}. ", email.SentTo, ex);
+                Log.Warning(@"Could not send email to {To} using SendGrid API. {Ex}. ", email.SendTo, ex);
             }
             finally
             {

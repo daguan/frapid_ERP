@@ -19,7 +19,7 @@
     "PatchFilePath" : null,
 	"InstallSample": true,
 	"My": null,
-	"OverrideTemplatePath": "~/Areas/Frapid.WebsiteBuilder/Override",
+	"OverrideTemplatePath": "~/Areas/Frapid.WebsiteBuilder/Overrides",
     "OverrideDestination":"~/Tenants/{0}/Areas",
 	"DependsOn": ["Frapid", "Frapid.Config"]
 }

@@ -1,8 +1,18 @@
-﻿@model dynamic
+﻿@using System.Globalization
+@using Frapid.AddressBook.Extensions
+@model Frapid.AddressBook.ViewModels.IndexViewModel
 
 @{
     Layout = ViewBag.Layout;
+    var timeZones = TimeZoneInfo.GetSystemTimeZones();
+    var cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+    string contactId = Guid.NewGuid().ToString();
 }
+<link rel="stylesheet" type="text/css" href="/scripts/semantic-ui-calendar-0.0.6/dist/calendar.min.css" />
+<script src="/scripts/semantic-ui-calendar-0.0.6/dist/calendar.min.js"></script>
+<script src="/scripts/trumbowyg/dist/trumbowyg.min.js"></script>
+<link rel="stylesheet" href="/scripts/trumbowyg/dist/ui/trumbowyg.min.css">
+
 <style>
     #dashboard-container {
         padding: 0;
@@ -10,20 +20,23 @@
 
     .address.book {
         display: flex;
-        height: 100%;
+        min-height: 100%;
         padding: 0 !important;
     }
 
         .address.book .left.panel {
-            width: 300px;
-            border-right: 1px solid #ddd;
             padding: 1em;
+            width: 300px;
         }
 
             .address.book .left.panel .title {
-                font-weight: bold;
                 font-size: 1.2em;
+                font-weight: bold;
                 padding: 0.25em 0;
+            }
+
+            .address.book .left.panel .tags {
+                padding-left: 0.5em;
             }
 
             .address.book .left.panel .ui.checkbox {
@@ -33,15 +46,106 @@
 
 
 
-        .address.book .middle.panel {
-            width: 300px;
-            border-right: 1px solid #ddd;
+        .address.book .middle.panel .entries {
+            width: 100% !important;
+        }
+
+    .middle.panel .toolbar {
+        background: #eee;
+        border-bottom: 1px solid #dedede;
+        display: flex;
+        margin: 0 -0.2em;
+    }
+
+        .middle.panel .toolbar .item {
+            background: #eee;
+            border-right: 1px solid #dedede;
+            color: #888;
+            cursor: pointer;
+            padding: 0.7em;
+        }
+
+            .middle.panel .toolbar .item:hover {
+                background: #ddd;
+                color: #7A997B;
+            }
+
+    .address.book .middle.panel {
+        border-left: 1px solid #ededed;
+        border-right: 1px solid #ededed;
+        padding: 0.2em;
+        width: 300px;
+    }
+
+
+
+        .address.book .middle.panel .ui.input {
             padding: 1em;
         }
 
-        .address.book .right.panel {
-            width: calc(100% - 612px);
-            padding: 1em;
+
+        .address.book .middle.panel .entry {
+            cursor: pointer;
+            display: flex;
+            margin: 1px -0.2em 0 -0.2em !important;
+            padding: 1em 0.25em 0.25em 1.25em;
+        }
+
+
+            .address.book .middle.panel .entry:hover,
+            .address.book .middle.panel .selected.entry {
+                background-color: #efefef;
+            }
+
+
+            .address.book .middle.panel .entry .photo {
+                height: 3.5em;
+                width: 3.5em;
+                overflow: hidden;
+            }
+
+                .address.book .middle.panel .entry .photo img {
+                    height: 3em;
+                    width: auto;
+                    border-radius: 3em;
+                }
+
+                .address.book .middle.panel .entry .photo span {
+                    background: #7A997B;
+                    border-radius: 3em;
+                    color: #eee;
+                    display: inline-block;
+                    font-weight: bold;
+                    height: 3em;
+                    padding-top: 0.75em;
+                    text-align: center;
+                    width: 3em;
+                }
+
+            .address.book .middle.panel .entry .info .name label {
+                color: #888 !important;
+                font-size: 1.3em !important;
+                font-weight: bold !important;
+                padding-left: 1.5em !important;
+            }
+
+            .address.book .middle.panel .entry .info .detail {
+                color: #aaa;
+                padding-left: 2em;
+            }
+
+
+
+    .address.book .right.panel {
+        padding: 1em;
+        width: calc(100% - 612px);
+    }
+
+        .address.book .right.panel .field .photo {
+            background: #eee !important;
+            height: 200px;
+            margin-bottom: 1em;
+            width: 200px;
         }
 
     .not.padded {
@@ -52,305 +156,1017 @@
         border: none !important;
     }
 
-    .address.book .middle.panel .entry {
-        display: flex;
-        padding: 0.5em;
-        margin: 0.2em 0;
-        cursor: pointer;
-        border: 1px solid transparent;
-    }
 
-
-        .address.book .middle.panel .entry:hover,
-        .address.book .middle.panel .selected.entry {
-            border-color: #C1D4C1;
-            background-color: #EBF2EB;
-        }
-
-        .address.book .middle.panel .entry .photo {
-            width: 3.5em;
-            height: 3.5em;
-        }
-
-            .address.book .middle.panel .entry .photo span {
-                width: 3em;
-                height: 3em;
-                border-radius: 3em;
-                background: #7A997B;
-                display: inline-block;
-                color: #eee;
-                text-align: center;
-                padding-top: 0.75em;
-                font-weight: bold;
-            }
-
-        .address.book .middle.panel .entry .info .name {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #666;
-        }
-
-        .address.book .middle.panel .entry .info .detail {
-            color: #888;
-        }
-
-    .address.book .right.panel .title {
+    #FormattedNameInputText {
+        border: none;
         color: #7A997B;
         font-size: 4em;
         font-weight: 100;
-        padding: 0.5em 0;
+        margin-bottom: 2px;
+        padding: 0.2em 0;
     }
 
     .address.book .right.panel .form {
         padding: 1em;
     }
-</style>
-<style>
-    .mixerp.form .field {
-        margin: 0 !important;
-        padding: .25em !important;
+
+    .middle.panel .scroller {
+        height: 1254px;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
-    .mixerp.form .ui.dropdown {
-        border: none !important;
-    }
-
-    .mixerp.form label {
-        color: #777 !important;
-    }
-
-    .mixerp.form .ui.dropdown .dropdown.icon {
-        padding: 4px !important;
-    }
-
-    .mixerp.form input,
-    .mixerp.form textarea,
-    .mixerp.form .ui.search.dropdown input,
-    .mixerp.form .ui.dropdown:not(.search) {
-        border: none !important;
-        border-bottom: 1px solid #eee !important;
-        border-radius: 0 !important;
-        color: #777 !important;
-        min-height: auto !important;
-        padding: 4px !important;
-    }
-
-    .mixerp.form .ui.search.dropdown {
-        padding: 4px !important;
-    }
-
-        .mixerp.form .ui.search.dropdown .menu {
-            margin: -.6em -.05em !important;
-        }
-
-    .mixerp.form .title input {
-        color: #2474ad !important;
-        font-size: 1.5em !important;
+    #ShowMoreAnchor {
+        cursor: pointer;
     }
 </style>
+
 <div class="ui frapid address book app attached segment">
     <div class="left panel">
         <div class="title">Select Type</div>
-        <div class="ui form">
+        <div class="ui select type form">
             <div class="grouped fields">
                 <div class="field">
                     <div class="ui radio checkbox">
-                        <input name="contact-type" checked="checked" type="radio">
-                        <label>Private</label>
+                        <input name="contact-type" checked="checked" type="radio" value="all" />
+                        <label>All Contacts</label>
                     </div>
                 </div>
                 <div class="field">
                     <div class="ui radio checkbox">
-                        <input name="contact-type" type="radio">
-                        <label>Public</label>
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="ui radio checkbox">
-                        <input name="contact-type" type="radio">
-                        <label>Both</label>
+                        <input name="contact-type" type="radio" value="private" />
+                        <label>Private Only</label>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="title">Tags</div>
+        <div class="tag title">
+            <div class="ui checkbox">
+                <input type="checkbox" />
+                <label>
+                    Tags
+                </label>
+            </div>
+        </div>
         <div class="tags">
-            <div class="ui checked checkbox">
-                <input checked type="checkbox">
-                <label>
-                    Friend
-                </label>
-            </div>
-            <div class="ui checked checkbox">
-                <input checked type="checkbox">
-                <label>
-                    Family
-                </label>
-            </div>
-        </div>
-        <div class="ui form">
-            <div class="ui fluid input">
-                <input placeholder="Type and hit enter to create a new tag." />
-            </div>
+            @foreach (string tag in Model.Tags)
+            {
+                <div class="ui checkbox">
+                    <input type="checkbox" data-tag="@tag" />
+                    <label>
+                        @tag
+                    </label>
+                </div>
+            }
         </div>
     </div>
     <div class="middle panel">
-        <div class="ui entries attached borderless not padded segment">
-            <div class="ui fluid action input">
-                <input placeholder="Search ..." />
-                <button class="ui icon basic button">
-                    <i class="search icon"></i>
-                </button>
-                <button class="ui icon basic button">
-                    <i class="plus icon"></i>
-                </button>
-            </div>
-            <div class="entry">
-                <div class="photo">
-                    <span>JM</span>
-                </div>
-                <div class="info">
-                    <div class="name">James Morgan</div>
-                    <div class="detail">james@example.com</div>
-                </div>
-            </div>
-            <div class="entry">
-                <div class="photo">
-                    <span>SM</span>
-                </div>
-                <div class="info">
-                    <div class="name">Steve Muller</div>
-                    <div class="detail">1234567890</div>
-                </div>
-            </div>
-            <div class="entry">
-                <div class="photo">
-                    <span>AT</span>
-                </div>
-                <div class="info">
-                    <div class="name">Augustin Thomas</div>
-                    <div class="detail">www.example.com</div>
-                </div>
+        <div class="toolbar">
+            <a class="new contact item" title="Add a New Contact">
+                <i class="plus icon"></i>
+            </a>
+            <a class="email item" title="Bulk Email">
+                <i class="mail icon"></i>
+            </a>
+            <a class="sms item" title="Bulk SMS">
+                <i class="file text outline icon"></i>
+            </a>
+            @*<a class="item" title="Find Duplicates">
+                <i class="search icon"></i>
+            </a>
+            <a class="item" title="Sync Now">
+                <i class="refresh icon"></i>
+            </a>*@
+            <label for="FileInputFile" class="item" title="Import Contacts from a vCard File">
+                <i class="cloud upload icon"></i>
+            </label>
+            <a id="ExportContactsAnchor" class="item" title="Export Contacts to a vCard File">
+                <i class="cloud download icon"></i>
+            </a>
+            <input id="FileInputFile" type="file" data-handler="/dashboard/address-book/import/vcard" style="display: none">
+            <a id="DeleteAnchor" class="item" title="Delete Contact">
+                <i class="remove icon"></i>
+            </a>
+        </div>
+        <div class="ui fluid action input">
+            <input placeholder="Search ..." />
+            <button class="ui icon basic button">
+                <i class="search icon"></i>
+            </button>
+        </div>
+        <div class="scroller">
+            <div class="ui entries attached borderless not padded segment">
             </div>
         </div>
     </div>
-    <div class="right panel">
-        <div class="title">James Morgan</div>
-        <div class="ui mixerp form">
-            <div class="five fields">
-                <div class="field">
-                    <label>Prefix</label>
-                    <select id="PrefixSelect" class="ui search fluid dropdown">
-                        <option>None</option>
-                        <option>Mr.</option>
-                        <option>Miss.</option>
-                        <option>Mrs.</option>
-                        <option>Dr.</option>
-                    </select>
+    <div class="right panel" data-contact-id="">
+        <input id="FormattedNameInputText" class="title" value="Add a New Contact" />
+        <div class="ui two column doubling stackable celled divided padded grid">
+            <div class="column">
+                <div class="ui flat form">
+                    <input type="hidden" id="ContactIdInputHidden" value="@contactId" />
+                    <div class="two fields">
+                        <div class="field">
+                            <label>Prefix</label>
+                            <input id="PrefixInputText" type="text"/>
+                        </div>
+                        <div class="field">
+                            <label>Suffix</label>
+                            <input id="SuffixInputText" type="text"/>
+                        </div>
+                    </div>
+                    <div class="three fields">
+                        <div class="field">
+                            <label>First Name</label>
+                            <input id="FirstNameInputText" type="text"/>
+                        </div>
+                        <div class="field">
+                            <label>Middle Name</label>
+                            <input id="MiddleNameInputText" type="text"/>
+                        </div>
+                        <div class="field">
+                            <label>Last Name</label>
+                            <input id="LastNameInputText" type="text"/>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Email Address(es)</label>
+                        <div class="ui tags" id="EmailAddressesDiv">
+                            <input type="text"/>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Mobile Number(s)</label>
+                        <div class="ui tags" id="MobileNumbersDiv">
+                            <input type="text"/>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Tags</label>
+                        <div class="ui tags" id="TagsDiv">
+                            <input type="text"/>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <a id="ShowMoreAnchor">More</a>
+                    </div>
                 </div>
-                <div class="field">
-                    <label>First Name</label>
-                    <input id="FirstNameInputText" type="text" />
-                </div>
-                <div class="field">
-                    <label>Middle Name</label>
-                    <input id="MiddleNameInputText" type="text" />
-                </div>
-                <div class="field">
-                    <label>Last Name</label>
-                    <input id="LastNameInputText" type="text" />
-                </div>
-                <div class="field">
-                    <label>Suffix</label>
-                    <select id="SuffixSelect" class="ui search fluid dropdown">
-                        <option>None</option>
-                    </select>
+                <div class="ui flat form more" style="display: none;">
+                    <div class="field">
+                        <label>Nick Name</label>
+                        <input id="NickNameInputText" type="text" />
+                    </div>
+                    <div class="field">
+                        <label>Gender</label>
+                        <select id="GenderSelect">
+                            <option value="4">Not Specified</option>
+                            <option value="0">Female</option>
+                            <option value="1">Male</option>
+                            <option value="2">Not Applicable</option>
+                            <option value="3">Other</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Telephone Number(s)</label>
+                        <div class="ui tags" id="TelephonesDiv">
+                            <input type="text" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Fax Number(s)</label>
+                        <div class="ui tags" id="FaxNumbersDiv">
+                            <input type="text" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Website</label>
+                        <input id="UrlInputText" type="text" />
+                    </div>
+                    <div class="field">
+                        <label>Time Zone</label>
+                        <select id="TimeZoneSelect">
+                            <option value="">Select</option>
+                            @foreach (var timeZone in timeZones)
+                            {
+                                <option value="@timeZone.StandardName" data-offset="@(timeZone.BaseUtcOffset.TotalMinutes*-1)">@timeZone.DisplayName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Language</label>
+                        <select id="LanguageSelect">
+                            <option value="">Select</option>
+                            @foreach (var culture in cultures)
+                            {
+                                <option value="@culture.Name">@culture.DisplayName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="two fields">
+                        <div class="field">
+                            <label>Title</label>
+                            <input id="TitleInputText" type="text" />
+                        </div>
+                        <div class="field">
+                            <label>Role</label>
+                            <input id="RoleInputText" type="text" />
+                        </div>
+                    </div>
+                    <div class="two fields">
+                        <div class="field">
+                            <label>Organization</label>
+                            <input id="OrganizationInputText" type="text" />
+                        </div>
+                        <div class="field">
+                            <label>Organizational Unit</label>
+                            <input id="OrganizationalUnitInputText" type="text" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Contact Type</label>
+                        <select id="KindSelect">
+                            <option value="0">Individual</option>
+                            <option value="1">Group</option>
+                            <option value="2">Organization</option>
+                            <option value="3">Location</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Linked User Id</label>
+                        <select id="AssociatedUserIdSelect">
+                            <option value="">Select</option>
+                            @foreach (var user in Model.Users.OrderBy(x => x.UserId))
+                            {
+                                <option value="@user.UserId">@user.UserId.ToString("D4") - @user.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Birth Day</label>
+                        <div id="BirthDayCalendar" class="ui date only picker calendar">
+                            <input type="text" />
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="three fields">
-                <div class="field">
-                    <label>Mobile Number(s)</label>
-                    <input id="MobileNumbersInputTel" type="tel" />
-                </div>
-                <div class="field">
-                    <label>Telephone Number(s)</label>
-                    <input id="TelephoneNumbersInputTel" type="tel" />
-                </div>
-                <div class="field">
-                    <label>Fax Number(s)</label>
-                    <input id="FaxNumbersInputTel" type="tel" />
-                </div>
-            </div>
-            <div class="three fields">
-                <div class="field">
-                    <label>Email Address(es)</label>
-                    <input id="EmailAddressInputEmail" type="email" />
-                </div>
-                <div class="field">
-                    <label>Website(s)</label>
-                    <input id="WebsitesInputUrl" type="url" />
-                </div>
-                <div class="field">
-                    <label>Time Zone</label>
-                    <select id="TimeZoneSelect" class="ui search dropdown"></select>
-                </div>
-            </div>
-            <div class="field">
-                <label>Address Line 1</label>
-                <textarea id="AddressLine1TextArea" rows="2"></textarea>
-            </div>
-            <div class="field">
-                <label>Address Line 2</label>
-                <textarea id="AddressLine2TextArea" rows="2"></textarea>
-            </div>
-            <div class="two fields">
-                <div class="field">
-                    <label>Postal Code</label>
-                    <input id="PostalCodeInputText" type="text" />
-                </div>
-                <div class="field">
-                    <label>Street</label>
-                    <input id="StreetInputText" type="text" />
-                </div>
-            </div>
-            <div class="three fields">
-                <div class="field">
-                    <label>City</label>
-                    <input id="CityInputText" type="text" />
-                </div>
-                <div class="field">
-                    <label>State</label>
-                    <input id="StateInputText" type="text" />
-                </div>
-                <div class="field">
-                    <label>Country</label>
-                    <input id="CountryInputText" type="text" />
+            <div class="column">
+                <div class="ui flat form more" style="display: none;">
+                    <div class="field">
+                        <label>Upload Avatar</label>
+                        <div class="ui attached borderless segment" id="UploaderSegment">
+                            <img class="ui small preview image vpad8" src="/images/logo.png" />
+                            <div class="ui hidden divider"></div>
+                            <div class="uploader buttons">
+                                <label for="PhotoInputHidden" class="ui positive button">Upload</label>
+                                <input id="PhotoInputHidden"
+                                       data-handler="/dashboard/address-book/avatar/@contactId"
+                                       data-loader-id="UploaderSegment"
+                                       class="file" style="display: none" type="file"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Address Line 1</label>
+                        <textarea id="AddressLine1TextArea" rows="2"></textarea>
+                    </div>
+                    <div class="field">
+                        <label>Address Line 2</label>
+                        <textarea id="AddressLine2TextArea" rows="2"></textarea>
+                    </div>
+                    <div class="field">
+                        <label>Postal Code</label>
+                        <input id="PostalCodeInputText" type="text" />
+                    </div>
+                    <div class="field">
+                        <label>Street</label>
+                        <input id="StreetInputText" type="text" />
+                    </div>
+                    <div class="field">
+                        <label>City</label>
+                        <input id="CityInputText" type="text" />
+                    </div>
+                    <div class="field">
+                        <label>State</label>
+                        <input id="StateInputText" type="text" />
+                    </div>
+                    <div class="field">
+                        <label>Country</label>
+                        <input id="CountryInputText" type="text" />
+                    </div>
+                    <div class="field">
+                        <label>Note</label>
+                        <textarea id="NoteInputTextArea" rows="2"></textarea>
+                    </div>
                 </div>
             </div>
-            <div class="three fields">
-                <div class="field">
-                    <label>Title</label>
-                    <input id="TitleInputText" type="text"/>
-                </div>
-                <div class="field">
-                    <label>Department</label>
-                    <input id="DepartmentInputText" type="text"/>
-                </div>
-                <div class="field">
-                    <label>Organization</label>
-                    <input id="OrganizationInputText" type="text"/>
+        </div>
+        <div class="vpad8">
+            <div class="vpad8">
+                <div class="ui checked checkbox">
+                    <input id="IsPrivateCheckBox" checked type="checkbox">
+                    <label>
+                        Do not share with other users
+                    </label>
                 </div>
             </div>
-            <div class="field">
-                <label>Notes</label>
-                <textarea id="NotesInputTextArea" rows="2"></textarea>
-            </div>
-
-            <button class="ui save positive button">Save</button>
+            <button id="SaveButton" class="ui save positive button">Save</button>
         </div>
     </div>
 </div>
+
+<div id="EmailModal" class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Send Email
+    </div>
+    <div class="content">
+        <div class="ui flat form">
+            <div class="field">
+                <label>Subject</label>
+                <input name="SubjectInputText" type="text" required data-persist placeholder="Enter Subject" />
+            </div>
+            <div class="field">
+                <label>Message</label>
+                <textarea name="MessageTextArea" placeholder="Enter Your Message" rows="20"></textarea>
+            </div>
+            <button id="SendEmailButton" class="ui positive button">Send</button>
+            <button class="ui negative button" onclick="$('#EmailModal').modal('hide');">Close</button>
+        </div>
+    </div>
+</div>
+
+<div id="SmsModal" class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Send Text Message
+    </div>
+    <div class="content">
+        <div class="ui flat form">
+            <div class="field">
+                <label>Subject</label>
+                <input name="SubjectInputText" type="text" required data-persist placeholder="Enter Subject" />
+            </div>
+            <div class="field">
+                <label>Message</label>
+                <textarea name="MessageTextArea" maxlength="160" placeholder="Enter Your Message" rows="4"></textarea>
+            </div>
+            <button id="SendSmsButton" class="ui positive button">Send</button>
+            <button class="ui negative button" onclick="$('#SmsModal').modal('hide');">Close</button>
+        </div>
+    </div>
+</div>
+
+
 <script>
-    $(".ui.checkbox").checkbox();
-    $(".ui.dropdown").dropdown();
+    function deserializeForm(container, model) {
+        const convention = ["InputTel", "InputColor", "InputDate", "InputDateTime", "InputDateTimeLocal", "InputHidden", "InputNumber", "InputSearch", "InputTime", "InputUrl", "InputText", "InputPassword", "InputEmail", "Select", "Checkbox", "TextArea", "Calendar", "Tags", "Div"];
+
+        function setValue(el, value) {
+            var type = el.attr("type");
+
+            if (el.hasClass("hasDatepicker")) {
+                type = "datepicker";
+            };
+
+            if (el.is("select")) {
+                if (el.parent().hasClass("ui") && el.parent().hasClass("dropdown")) {
+                    type = "dropdown";
+                };
+            };
+
+
+            if (el.hasClass("ui") && el.hasClass("calendar")) {
+                type = "calendar";
+            };
+
+            if (el.hasClass("ui") && el.hasClass("tags")) {
+                type = "tags";
+            };
+
+            if (!value) {
+                if (el.is("select")) {
+                    el.find("option").prop("selected", false);
+                };
+
+                return;
+            };
+
+            switch (type) {
+                case "tags":
+                    el.find(".ui.label").remove();
+                    el.find("input").val(value).trigger("change");
+                    break;
+                case "datepicker":
+                    el.datepicker("setDate", new Date(value));
+                    break;
+                case "calendar":
+                    el.calendar("set date", new Date(value));
+                    break;
+                case "checkbox":
+                    el.prop("checked", value.toLowerCase === "true");
+                    break;
+                case "dropdown":
+                    //Todo: Remove Semantic UI Dropdown dependency 
+                    //el.dropdown("set selected", value);
+                    console.log("Semantic UI Dropdown is not supported!!!");
+                    break;
+                default:
+                    el.val(value);
+                    break;
+            };
+        };
+
+        function searchEl(key) {
+            for (let i = 0; i < convention.length; i++) {
+                const selector = key + convention[i];
+
+                var el = $("#" + selector);
+                if (el.length) {
+                    return el;
+                };
+
+                el = $("[name='" + selector + "']");
+                if (el.length) {
+                    return el;
+                };
+            };
+
+            return null;
+        };
+
+        if (!model || !container.length) {
+            return;
+        };
+
+        const keys = Object.keys(model);
+
+        if (!keys || !keys.length) {
+            return;
+        };
+
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+
+            const value = model[key];
+            const el = searchEl(key);
+
+            if (el && el.length) {
+                setValue(el, value);
+            };
+        };
+
+    };
+
 </script>
+
+<script>
+    initializeUITags();
+</script>
+<script>
+    function setTimeZone() {
+        var offset = new Date().getTimezoneOffset();
+        $("#TimeZoneSelect option").removeAttr("selected");
+        $(`#TimeZoneSelect option[data-offset='${offset}']`).prop('selected', true);
+        $("#LanguageSelect").val(window.culture);
+    };
+
+    $("#PrefixInputText, #SuffixInputText, #FirstNameInputText, #MiddleNameInputText, #LastNameInputText").off("keyup change blur").on("keyup change blur", function () {
+        const prefix = $("#PrefixInputText").val().trim();
+        const suffix = $("#SuffixInputText").val().trim();
+        const firstName = $("#FirstNameInputText").val().trim();
+        const middleName = $("#MiddleNameInputText").val().trim();
+        const lastName = $("#LastNameInputText").val().trim();
+
+        var name = prefix.trim();
+
+        if (name) {
+            name += " ";
+        };
+
+        name += firstName;
+
+        if (middleName) {
+            name += " " + middleName;
+        };
+
+        if (lastName) {
+            name += " " + lastName;
+        };
+
+        if (suffix) {
+            name += " " + suffix;
+        };
+
+        $("#FormattedNameInputText").val(name);
+    });
+
+    function resetForm() {
+        function getGuid() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        };
+
+        const container = $(".address.book .right.panel");
+        const contactId = getGuid();
+
+        container.removeAttr("data-contact-id");
+        container.find("input, textarea").val("");
+        container.find(".tags .label").remove();
+        container.find("select option").prop("selected", false);
+        $("#FirstNameInputText").focus();
+
+        //Todo: Remove Semantic UI Dropdown dependency 
+        //container.find(".dropdown").dropdown("restore default text");
+        container.find("select").find(":selected").removeAttr("selected");
+        container.find("select").find("option:first-child").prop("selected", true);
+
+        $(".entries .entry").removeClass("selected");
+        $(".entries .entry input[type='checkbox']").prop("checked", true);
+        $("#ContactIdInputHidden").val(contactId);
+        $("#PhotoInputHidden").val("");
+        $("#PhotoInputHidden").attr("data-handler", "/dashboard/address-book/avatar/" + contactId);
+        $("#UploaderSegment img").attr("src", "/images/logo.png");
+    };
+
+    $(".new.contact.item").off("click").on("click", function() {
+        resetForm();
+        setTimeZone();
+    });
+
+    $("#SaveButton").off("click").on("click", function () {
+        function request(model) {
+            var url = "/dashboard/address-book";
+            var method = "POST";
+
+            if (model.Edit) {
+                url = "/dashboard/address-book/edit";
+                method = "PUT";
+            };
+
+            const data = JSON.stringify(model);
+            return window.getAjaxRequest(url, method, data);
+        };
+
+        function getModel() {
+            const container = $(".right.panel");
+            const model = window.serializeForm(container);
+            const contactId = $(".right.panel").attr("data-contact-id");
+            model.Edit = false;
+
+            if (contactId) {
+                model.Edit = true;
+                model.ContactId = contactId;
+            };
+
+            model.AssociatedUserId = parseInt(model.AssociatedUserId) || null;
+
+            return model;
+        };
+
+        const model = getModel();
+        const ajax = request(model);
+
+        ajax.success(function () {
+            window.displaySuccess();
+            loadContacts();
+            resetForm();
+        });
+
+        ajax.fail(function (xhr) {
+            window.logAjaxErrorMessage(xhr);
+        });
+    });
+</script>
+
+
+<script>
+    var fileInputFile = $("#FileInputFile");
+
+    function readUrl(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                $(input).trigger("readComplete", [{ e: e }]);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        };
+    };
+
+    fileInputFile.on("change", function () {
+        var el = $(this);
+        const handler = el.attr("data-handler");
+
+        const loaderTarget = el.attr("data-loader-id");
+        var targetSelector = el.attr("data-target");
+        var segment = el.closest(".segment");
+
+        if (loaderTarget) {
+            segment = $("#" + loaderTarget);
+        };
+
+        var target = null;
+
+        if (targetSelector) {
+            target = $("#" + targetSelector);
+        };
+
+        readUrl(this);
+
+        if (segment.length) {
+            segment.addClass("loading");
+        };
+
+        el.upload(handler, function (response) {
+            if (targetSelector && target && response) {
+                target.val(response);
+                target.attr("data-val", response);
+            };
+
+            if (segment.length) {
+                segment.removeClass("loading");
+            };
+
+            el.trigger("done", [{ response: response }]);
+        },
+            null, null, function error(xhr) {
+                $(".frapid.address.book.segment").removeClass("loading");
+                window.logAjaxErrorMessage(xhr);
+            });
+    });
+
+    fileInputFile.on("done", function () {
+        document.location = document.location;
+    });
+
+    function getQueryModel() {
+        const tags = $(".tags input:checkbox:checked").map(function () {
+            return $(this).attr("data-tag");
+        }).get().join(',');
+        const privateOnly = $(".select.type.form input:checked").val() === "private";
+
+        return {
+            Tags: tags,
+            PrivateOnly: privateOnly
+        };
+    };
+
+    $("#ExportContactsAnchor").off("click").on("click", function () {
+        function request(model) {
+            const url = "/dashboard/address-book/export/vcard";
+            const data = JSON.stringify(model);
+            return window.getAjaxRequest(url, "POST", data);
+        };
+
+        const el = $(this);
+        if (el.hasClass("loading") || el.attr("href")) {
+            return;
+        };
+
+        el.find("i").removeClass("cloud download").addClass("loading circle notched");
+
+        const model = getQueryModel();
+        const ajax = request(model);
+
+        ajax.success(function (response) {
+            el.find("i").removeClass("loading circle notched").addClass("cloud download");
+
+            el.attr("target", "_self");
+            el.attr("href", response);
+            el.attr("download", "Contacts.vcf");
+            el[0].click();
+        });
+
+        ajax.fail(function (xhr) {
+            el.find("i").removeClass("loading circle notched").addClass("cloud download");
+            window.logAjaxErrorMessage(xhr);
+        });
+    });
+
+    $(".toolbar .email.item").off("click").on("click", function () {
+        $('#EmailModal textarea').trumbowyg();
+        $("#EmailModal").modal("show");
+    });
+
+    $(".toolbar .sms.item").off("click").on("click", function () {
+        $("#SmsModal").modal("show");
+    });
+
+    $("#ShowMoreAnchor").off("click").on("click", function () {
+        $(".more.form").toggle();
+        window.initializeCalendar();
+    });
+
+    $("#DeleteAnchor").off("click").on("click", function () {
+        function request(contactId) {
+            var url = "/dashboard/address-book/delete/{contactId}";
+            url = url.replace("{contactId}", contactId);
+
+            return window.getAjaxRequest(url, "DELETE");
+        };
+
+        if (!window.confirmAction()) {
+            return;
+        };
+
+        const entry = $(".entries .selected.entry").first();
+        const contactId = entry.attr("data-contact-id");
+        const ajax = request(contactId);
+
+        ajax.success(function () {
+            entry.remove();
+            resetForm();
+            window.displaySuccess();
+        });
+
+        ajax.fail(function (xhr) {
+            window.logAjaxErrorMessage(xhr);
+        });
+    });
+
+    function loadContact(el) {
+        function request(contactId) {
+            var url = "/dashboard/address-book/{contactId}";
+            url = url.replace("{contactId}", contactId);
+
+            return window.getAjaxRequest(url);
+        };
+
+        el = $(el);
+        const contactId = el.attr("data-contact-id");
+
+        if (!contactId) {
+            return;
+        };
+
+        resetForm();
+        const segment = $(".address.book.segment");
+        segment.addClass("loading");
+
+        const ajax = request(contactId);
+
+        ajax.success(function (response) {
+            segment.removeClass("loading");
+            $(".right.panel").attr("data-contact-id", contactId);
+            $("#ContactIdInputHidden").val(contactId);
+            $("#PhotoInputHidden").attr("data-handler", "/dashboard/address-book/avatar/" + contactId);
+            var avatar = "/dashboard/address-book/avatar/{contactId}/{name}/100/100";
+            avatar = avatar.replace("{contactId}", contactId).replace("{name}", response.FormattedName);
+            $("#UploaderSegment img").attr("src", avatar);
+
+            window.deserializeForm($(".address.book.segment .right.panel"), response);
+        });
+
+        ajax.fail(function (xhr) {
+            segment.removeClass("loading");
+            window.logAjaxErrorMessage(xhr);
+        });
+    };
+
+    function loadContacts() {
+        const target = $(".ui.entries");
+        const segment = $(".address.book.segment");
+
+        function addToDom(contact) {
+            function getPhoto() {
+                const photo = $("<div class=\"photo\">");
+                
+                var path = "/dashboard/address-book/avatar/{contactId}/{name}/100/100";
+                path = path.replace("{contactId}", contact.ContactId);
+                path = path.replace("{name}", contact.FormattedName);
+
+                const img = $("<img />");
+                img.attr("src", path);
+                photo.append(img);
+
+                return photo;
+            };
+
+            function getInfo() {
+                const info = $("<div class=\"info\" />");
+                const name = $("<div class=\"name\" />");
+
+                const checkbox = $("<div class=\"ui checkbox\"><input checked type=\"checkbox\" /><label></label></div>");
+                checkbox.find("input").attr("data-contact-id", contact.ContactId);
+                checkbox.checkbox();
+                checkbox.find("label").append(contact.FormattedName);
+                name.append(checkbox);
+
+                info.append(name);
+
+                const detail = $("<div class=\"detail\">");
+                detail.html(contact.DisplayInfo);
+                info.append(detail);
+
+                return info;
+
+            };
+
+
+            const entry = $("<div class=\"entry\" tabindex=\"0\" />");
+            entry.attr("data-contact-id", contact.ContactId);
+            entry.attr("data-mobile-numbers", contact.MobileNumbers);
+            entry.attr("data-email-addresses", contact.EmailAddresses);
+
+            entry.append(getPhoto());
+            entry.append(getInfo());
+            target.append(entry);
+
+            entry.off("click").on("click", function () {
+                const selectedEl = target.find(".entry.selected");
+
+                if (selectedEl.is(entry)) {
+                    return;
+                };
+
+                target.find(".entry").removeClass("selected");
+                entry.addClass("selected");
+                loadContact(this);
+            });
+
+            entry.off("keyup").on("keyup", function (e) {
+                function previous(el) {
+                    target.find(".entry").removeClass("selected");
+                    el.prev().addClass("selected");
+                };
+
+                function next(el) {
+                    target.find(".entry").removeClass("selected");
+                    el.next().addClass("selected");
+                };
+
+                const el = $(".entries .selected.entry");
+
+                switch (e.which) {
+                    case 13: //enter
+                        el.removeClass("selected").trigger("click");
+                        break;
+                    case 37: // left
+                        previous(el);
+                        break;
+                    case 38: // up
+                        previous(el);
+                        break;
+
+                    case 39: // right
+                        next(el);
+                        break;
+
+                    case 40: // down
+                        next(el);
+                        break;
+
+                    default: return; // exit this handler for other keys
+                };
+            });
+
+        };
+
+        function request(model) {
+            const url = "/dashboard/address-book/get";
+            const data = JSON.stringify(model);
+            return window.getAjaxRequest(url, "POST", data);
+        };
+
+
+        segment.addClass("loading");
+        const model = getQueryModel();
+        const ajax = request(model);
+
+
+        ajax.success(function (response) {
+            target.html("");
+            $.each(response, function () {
+                addToDom(this);
+            });
+
+            segment.removeClass("loading");
+        });
+
+        ajax.fail(function (xhr) {
+            segment.removeClass("loading");
+            window.logAjaxErrorMessage(xhr);
+        });
+    };
+
+    $(".select.type.form input:radio, .tags input:checkbox").off("change").on("change", function () {
+        loadContacts();
+    });
+
+    $(".tag.title input:checkbox").off("change").on("change", function () {
+        const checked = $(this).is(":checked");
+
+        $(".tags input:checkbox").prop("checked", checked);
+    });
+
+
+    function getSelectedContacts() {
+        return $(".entries .entry input[type='checkbox']:checked").map(function () {
+            return $(this).attr("data-contact-id");
+        }).get();
+    };
+
+    $("#SendEmailButton").click(function () {
+        function request(model) {
+            const url = "/dashboard/address-book/send/bulk-email";
+            const data = JSON.stringify(model);
+
+            return window.getAjaxRequest(url, "POST", data);
+        };
+
+        function getModel() {
+            const model = window.serializeForm($("#EmailModal"));
+            model.Contacts = getSelectedContacts();
+
+            return model;
+        };
+
+        const model = getModel();
+
+        if (!model.Contacts || !model.Contacts.length) {
+            window.displayMessage("Please select at least one contact.");
+            return;
+        };
+
+        if (!model.Subject.trim()) {
+            window.displayMessage("Please enter a subject.");
+            return;
+        };
+
+        if (!model.Message.trim()) {
+            window.displayMessage("Please enter a message.");
+            return;
+        };
+
+        const ajax = request(model);
+
+        ajax.success(function (result) {
+            if (!result) {
+                window.displayMessage("Could not send the email. Please setup email provider or consult with your administrator.");
+                return;
+            };
+
+            window.displaySuccess();
+        });
+
+        ajax.fail(function (xhr) {
+            window.logAjaxErrorMessage(xhr);
+        });
+    });
+
+    $("#SendSmsButton").click(function () {
+        function request(model) {
+            const url = "/dashboard/address-book/send/bulk-sms";
+            const data = JSON.stringify(model);
+
+            return window.getAjaxRequest(url, "POST", data);
+        };
+
+        function getModel() {
+            const model = window.serializeForm($("#SmsModal"));
+            model.Contacts = getSelectedContacts();
+            return model;
+        };
+
+        const model = getModel();
+
+        if (!model.Contacts || !model.Contacts.length) {
+            window.displayMessage("Please select at least one contact.");
+            return;
+        };
+
+        if (!model.Subject.trim()) {
+            window.displayMessage("Please enter a subject.");
+            return;
+        };
+
+        if (!model.Message.trim()) {
+            window.displayMessage("Please enter a message.");
+            return;
+        };
+
+        const ajax = request(model);
+
+        ajax.success(function (result) {
+            if (!result) {
+                window.displayMessage("Could not send the text message. Please setup SMS gateway or consult with your administrator.");
+                return;
+            };
+
+            window.displaySuccess();
+        });
+
+        ajax.fail(function (xhr) {
+            window.logAjaxErrorMessage(xhr);
+        });
+    });
+
+    loadContacts();
+    window.initializeUploader();
+    $(".ui.checkbox").checkbox();
+    setTimeZone();
+</script>
+

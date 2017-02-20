@@ -90,7 +90,8 @@ function loadFilterNames() {
             loadPageCount(loadGrid);
         };
 
-        $("#FilterSelect").html(option).dropdown();
+        //Todo: Remove Semantic UI Dropdown dependency 
+        //$("#FilterSelect").html(option).dropdown({placeholder: false, forceSelection: false});
 
 
         $("[data-filter-item]").click(function () {
