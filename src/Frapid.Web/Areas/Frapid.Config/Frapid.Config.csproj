@@ -139,8 +139,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\FileManager\Index.css" />
-    <Content Include="Scripts\FileManager\Index.js" />
+    <Content Include="styles\file-manager\index.css" />
+    <Content Include="scripts\file-manager\Index.js" />
     <Content Include="Views\web.config" />
   </ItemGroup>
   <ItemGroup>

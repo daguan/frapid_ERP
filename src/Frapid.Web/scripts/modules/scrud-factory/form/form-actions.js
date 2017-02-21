@@ -6,6 +6,7 @@
         $("[data-primarykey]").val("");
         window.displayMessage(window.translate("ItemDuplicated"), "success");
         $(".form.factory").show();
+        window.editing = false;
     };
 });
 

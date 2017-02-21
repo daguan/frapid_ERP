@@ -7,11 +7,11 @@
 }
 @if (CultureManager.IsRtl())
 {
-    <link rel="Stylesheet" href="@Href("~/assets/css/master-page-rtl.css")"/>
+    <link rel="Stylesheet" href="@Href("~/assets/css/backend.rtl.css")"/>
 }
 else
 {
-    <link rel="Stylesheet" href="@Href("~/assets/css/master-page.css")"/>
+    <link rel="Stylesheet" href="@Href("~/assets/css/backend.css")"/>
 }
 
 <div class="ui attached padded reset password left aligned segment">
@@ -42,4 +42,4 @@ else
 </div>
 <script src="/i18n/resources.js?cultureCode=@CultureManager.GetCurrentUiCulture().Name"></script>
 <script src="/assets/js/backend.js"></script>
-<script src="/Areas/Frapid.Account/Scripts/Account/ResetConfirmation/index.js"></script>
+<script src="/Areas/Frapid.Account/scripts/account/reset-confirmation/index.js"></script>

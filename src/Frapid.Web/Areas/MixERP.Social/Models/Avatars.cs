@@ -61,10 +61,15 @@ namespace MixERP.Social.Models
             string path = $"/Tenants/{tenant}/Areas/MixERP.Social/avatars";
             path = PathMapper.MapPath(path);
 
-            if (path == null || !Directory.Exists(path))
+            if (path == null)
             {
                 Log.Warning("Could not upload resource because the avatar directory {directory} does not exist.", path);
                 throw new AttachmentException(Resources.CouldNotFindAvatarDirectory);
+            }
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
             }
 
             string fileName = Path.GetFileName(file.FileName);

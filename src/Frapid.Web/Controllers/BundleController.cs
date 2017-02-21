@@ -15,7 +15,7 @@ namespace Frapid.Web.Controllers
     public class BundleController : FrapidController
     {
         [Route("bundler/get.{extension}")]
-        [FrapidOutputCache(Duration = 31536000, VaryByParam = "*", Location = OutputCacheLocation.Any)]
+        [FrapidOutputCache(Duration = 31536000, VaryByParam = "*", Location = OutputCacheLocation.Client)]
         public ActionResult Index(string extension, string files, string directory = "")
         {
             if (extension.ToLowerInvariant().Equals("css"))

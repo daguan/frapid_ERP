@@ -291,15 +291,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Layout\Index.css" />
+    <Content Include="styles\layout\index.css" />
     <Content Include="DevTrends.MvcDonutCaching.README.txt" />
-    <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Scripts\Subscription\Remove.js" />
-    <Content Include="Scripts\Contents\EntityParser.js" />
-    <Content Include="Scripts\Contents\Manage.js" />
-    <Content Include="Scripts\ContactUs\ContactForm.js" />
-    <Content Include="Scripts\SubscriptionEmailTemplate\Shared\Editor.js" />
-    <Content Include="Scripts\Layout\Index.js" />
+    <Content Include="scripts\modernizr-2.8.3.js" />
+    <Content Include="scripts\subscription\remove.js" />
+    <Content Include="scripts\contents\entity-parse.js" />
+    <Content Include="scripts\contents\manage.js" />
+    <Content Include="scripts\contact-us\contact-form.js" />
+    <Content Include="scripts\subscription-email-template\shared\editor.js" />
+    <Content Include="scripts\layout\index.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />

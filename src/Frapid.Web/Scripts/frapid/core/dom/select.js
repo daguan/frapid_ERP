@@ -47,7 +47,6 @@ function displayFieldBinder(el, url, notNull, filters, callback) {
 		};
 		
 		var totalItems = response.length;
-		var selectedValue;
 		
 		$.each(response, function (i) {
 			var option = "<option value='{key}' {selected}>{value}</option>";
@@ -56,11 +55,9 @@ function displayFieldBinder(el, url, notNull, filters, callback) {
 			
 			if(totalItems === 1){
 				option = option.replace("{selected}", "selected='selected'");
-				selectedValue = this.Value;
 			} else{
 				if(notNull && i === 0){
 					option = option.replace("{selected}", "selected='selected'");									
-					selectedValue = this.Value;
 				}else{
 					option = option.replace("{selected}", "");													
 				};
@@ -69,27 +66,11 @@ function displayFieldBinder(el, url, notNull, filters, callback) {
 			options += option;
 		});
 
-		el.html(options);
+        el.html(options);
 
-	    //Todo: Remove Semantic UI Dropdown dependency 
-		// if(el.parent().is(".dropdown")){
-		// 	setTimeout(function(){
-		// 		el.dropdown("clear");
-		// 		el.dropdown("restore defaults");
-
-		// 		if(selectedValue){
-		// 			el.dropdown("set selected", selectedValue);
-
-		// 			setTimeout(function(){
-		// 				el.trigger("change").trigger("blur");						
-		// 			}, 100);
-		// 		};
-		// 	}, 100)
-		// };
-
-		if(selectedValue){
-			el.val(selectedValue).trigger("change").trigger("blur");
-		};
+        setTimeout(function(){
+			el.trigger("change").trigger("blur");
+        });
 		
 		if(typeof(callback) === "function"){
 			callback();

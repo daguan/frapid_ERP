@@ -166,8 +166,8 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\social.js" />
-    <Content Include="Styles\social.css" />
+    <Content Include="scripts\social.js" />
+    <Content Include="styles\social.css" />
     <Content Include="Views\web.config" />
   </ItemGroup>
   <ItemGroup>

@@ -158,8 +158,8 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\MenuPolicy\policy.js" />
-    <Content Include="Scripts\MenuPolicy\group-policy.js" />
+    <Content Include="scripts\menu-policy\policy.js" />
+    <Content Include="scripts\menu-policy\group-policy.js" />
     <Content Include="Views\web.config" />
   </ItemGroup>
   <ItemGroup>
