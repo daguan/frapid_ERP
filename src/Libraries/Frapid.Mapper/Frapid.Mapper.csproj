@@ -65,6 +65,7 @@
     <Compile Include="Helpers\PocoHelper.cs" />
     <Compile Include="Helpers\ResultsetCache.cs" />
     <Compile Include="Helpers\SqlHelper.cs" />
+    <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Helpers\TitleCaseConverter.cs" />
     <Compile Include="Helpers\TypeConverter.cs" />
     <Compile Include="Helpers\UnderscoreCaseConverter.cs" />

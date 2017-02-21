@@ -36,17 +36,18 @@
     };
 
     this.initialize = function (el) {
-        el.find(".dropdown input.search").blur(function () {
-            $(this).parent().find("select").trigger("blur");
-        });
+        //Todo: Remove Semantic UI Dropdown dependency 
+        //el.find(".dropdown input.search").blur(function () {
+        //    $(this).parent().find("select").trigger("blur");
+        //});
 
-        el.find(".dropdown").dropdown().on("blur", function () {
-            $(this).parent().find("select").trigger("blur");
-        });
+        //el.find(".dropdown").dropdown({placeholder: false, forceSelection: false}).on("blur", function () {
+        //    $(this).parent().find("select").trigger("blur");
+        //});
 
-        el.find(".dropdown").dropdown().on("change", function () {
-            $(this).parent().find("select").trigger("blur");
-        });
+        //el.find(".dropdown").dropdown({placeholder: false, forceSelection: false}).on("change", function () {
+        //    $(this).parent().find("select").trigger("blur");
+        //});
 
         el.find("[required]:not(:disabled):not([readonly])").blur(function () {
             var field = $(this);

@@ -65,7 +65,9 @@ function bindOffices() {
         setTimeout(function () {
             const selected = response[0].OfficeId;
             if ($(".office.dropdown").find('option[value=' + selected + ']').length) {
-                $(".office.dropdown").dropdown("set selected", selected);
+                //Todo: Remove Semantic UI Dropdown dependency 
+                //$(".office.dropdown").dropdown("set selected", selected);
+                $(".office.dropdown").val(selected);
             };
         }, 100);
     });
@@ -85,15 +87,20 @@ function bindLanguages() {
         setTimeout(function () {
             const userLang = navigator.language || navigator.userLanguage;
             if ($(".language.dropdown").find('option[value=' + userLang + ']').length) {
-                $(".language.dropdown").dropdown("set selected", userLang);
+                //Todo: Remove Semantic UI Dropdown dependency 
+                //$(".language.dropdown").dropdown("set selected", userLang);
+                $(".language.dropdown").val(userLang);
             } else {
-                $(".language.dropdown").dropdown("set selected", "en-US");
+                //Todo: Remove Semantic UI Dropdown dependency 
+                //$(".language.dropdown").dropdown("set selected", "en-US");
+                $(".language.dropdown").val("en-US");
             };
         }, 100);
     });
 };
 
-$(".dropdown").dropdown();
+//Todo: Remove Semantic UI Dropdown dependency 
+//$(".dropdown").dropdown({placeholder: false, forceSelection: false});
 window.validator.initialize($("#LoginForm"));
 bindOffices();
 bindLanguages();

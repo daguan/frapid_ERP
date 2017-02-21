@@ -9,7 +9,7 @@
     "/scripts/vakata-jstree/dist/themes/default/style.css",
     "/scripts/semantic-ui/semantic.css",
     "/scripts/jquery.notify-1.0/css/jquery.notify.css",
-    "~/Stylesheets/Backend/frapid.css"
+    "~/stylesheets/backend/frapid.css"
   ],
   "CacheDurationInMinutes": 10080
 }

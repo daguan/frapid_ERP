@@ -11,7 +11,9 @@
 
     loadMeta(loadFilterNames);
     loadFilterConditions();
-    $("#ExportDropDown").dropdown();
+
+    //Todo: Remove Semantic UI Dropdown dependency 
+    //$("#ExportDropDown").dropdown({placeholder: false, forceSelection: false});
 
     if (window.scrudFactory.title) {
         $(".scrud.title").html(window.scrudFactory.title);

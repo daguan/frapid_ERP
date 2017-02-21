@@ -238,18 +238,13 @@
             </div>
             <div class="twelve wide field">
                 <label>&nbsp;</label>
-                <div id="RepeatDropdown" class="ui selection dropdown">
-                    <input name="RepeatTypeInputHidden" type="hidden"/>
-                    <i class="dropdown icon"></i>
-                    <div class="text">@I18N.DontRepeat</div>
-                    <div class="menu">
-                        <div class="item" data-value="None">@I18N.DontRepeat</div>
-                        <div class="item" data-value="NDays">@I18N.Days</div>
-                        <div class="item" data-value="NWeeks">@I18N.Weeks</div>
-                        <div class="item" data-value="NMonthsChosenDate">@I18N.MonthsOnChosenDate</div>
-                        <div class="item" data-value="NMonthsChosenDay">@I18N.MonthsOnChosenDay</div>
-                    </div>
-                </div>
+                <select id="RepeatDropdown">
+                    <option value="None">@I18N.DontRepeat</option>
+                    <option value="NDays">@I18N.Days</option>
+                    <option value="NWeeks">@I18N.Weeks</option>
+                    <option value="NMonthsChosenDate">@I18N.MonthsOnChosenDate</option>
+                    <option value="NMonthsChosenDay">@I18N.MonthsOnChosenDay</option>
+                </select>
             </div>
         </div>
         <div class="toggle group vpad8 item" data-value="NWeeks" style="display: none;">
@@ -276,7 +271,7 @@
             <div class="two fields">
                 <div class="four wide field">
                     <label>@I18N.OnThe</label>
-                    <select id="DayOfMonthTypeSelect" class="ui fluid dropdown">
+                    <select id="DayOfMonthTypeSelect">
                         <option value="1">@I18N.First</option>
                         <option value="2">@I18N.Second</option>
                         <option value="3">@I18N.Third</option>
@@ -285,7 +280,7 @@
                 </div>
                 <div class="twelve wide field">
                     <label>&nbsp;</label>
-                    <select id="DayOfMonthSelect" class="ui fluid dropdown">
+                    <select id="DayOfMonthSelect">
                         <option value="1">@I18N.Monday</option>
                         <option value="2">@I18N.Tuesday</option>
                         <option value="3">@I18N.Wednesday</option>
@@ -305,22 +300,17 @@
         </div>
         <div class="field">
             <label>@I18N.RemindMe</label>
-            <div id="RemindMeDropdown" class="ui selection dropdown">
-                <input name="RemindBeforeInMinutesInputHidden" type="hidden">
-                <i class="dropdown icon"></i>
-                <div class="default text">@I18N.None</div>
-                <div class="menu">
-                    <div class="item" data-value="0">@I18N.None</div>
-                    <div class="item" data-value="5">@I18N.Remind5MinutesBefore</div>
-                    <div class="item" data-value="10">@I18N.Remind10MinutesBefore</div>
-                    <div class="item" data-value="15">@I18N.Remind15MinutesBefore</div>
-                    <div class="item" data-value="30">@I18N.Remind30MinutesBefore</div>
-                    <div class="item" data-value="60">@I18N.Remind1HourBefore</div>
-                    <div class="item" data-value="120">@I18N.Remind2HoursBefore</div>
-                    <div class="item" data-value="1440">@I18N.Remind1DayBefore</div>
-                    <div class="item" data-value="2880">@I18N.Remind2DaysBefore</div>
-                </div>
-            </div>
+            <select id="RemindMeDropdown">
+                <option value="0">@I18N.None</option>
+                <option value="5">@I18N.Remind5MinutesBefore</option>
+                <option value="10">@I18N.Remind10MinutesBefore</option>
+                <option value="15">@I18N.Remind15MinutesBefore</option>
+                <option value="30">@I18N.Remind30MinutesBefore</option>
+                <option value="60">@I18N.Remind1HourBefore</option>
+                <option value="120">@I18N.Remind2HoursBefore</option>
+                <option value="1440">@I18N.Remind1DayBefore</option>
+                <option value="2880">@I18N.Remind2DaysBefore</option>
+            </select>
         </div>
         <div id="ReminderTypePanel" class="field" style="display: none;">
             <div class="field">

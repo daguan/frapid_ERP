@@ -19,7 +19,7 @@ namespace Frapid.Messaging.Smtp
 
         public void InitializeConfig(string database)
         {
-            var config = new Config(database, null);
+            var config = new EmailConfig(database, null);
             var host = EmailHelper.GetSmtpHost(config);
             var credentials = EmailHelper.GetCredentials(config);
 
@@ -38,9 +38,9 @@ namespace Frapid.Messaging.Smtp
 
         public async Task<bool> SendAsync(EmailMessage email, bool deleteAttachmentes, params string[] attachments)
         {
-            if (string.IsNullOrWhiteSpace(email.SentTo))
+            if (string.IsNullOrWhiteSpace(email.SendTo))
             {
-                throw new ArgumentNullException(email.SentTo);
+                throw new ArgumentNullException(email.SendTo);
             }
 
             if (string.IsNullOrWhiteSpace(email.Message))
@@ -48,7 +48,7 @@ namespace Frapid.Messaging.Smtp
                 throw new ArgumentNullException(email.Message);
             }
 
-            var addresses = email.SentTo.Split(',');
+            var addresses = email.SendTo.Split(',');
 
             foreach (var validator in addresses.Select(address => new Validator(address)))
             {
@@ -61,11 +61,11 @@ namespace Frapid.Messaging.Smtp
             }
 
             addresses = addresses.Distinct().ToArray();
-            email.SentTo = string.Join(",", addresses);
+            email.SendTo = string.Join(",", addresses);
             email.Status = Status.Executing;
 
 
-            using (var mail = new MailMessage(email.FromEmail, email.SentTo))
+            using (var mail = new MailMessage(email.FromIdentifier, email.SendTo))
             {
                 if (attachments != null)
                 {
@@ -108,7 +108,7 @@ namespace Frapid.Messaging.Smtp
 
                         mail.SubjectEncoding = Encoding.UTF8;
 
-                        mail.ReplyToList.Add(new MailAddress(email.FromEmail, email.FromName));
+                        mail.ReplyToList.Add(new MailAddress(email.FromIdentifier, email.FromName));
 
                         await smtp.SendMailAsync(mail).ConfigureAwait(false);
 
@@ -118,7 +118,7 @@ namespace Frapid.Messaging.Smtp
                     catch (SmtpException ex)
                     {
                         email.Status = Status.Failed;
-                        Log.Warning(@"Could not send email to {To}. {Ex}. ", email.SentTo, ex);
+                        Log.Warning(@"Could not send email to {To}. {Ex}. ", email.SendTo, ex);
                     }
                     finally
                     {

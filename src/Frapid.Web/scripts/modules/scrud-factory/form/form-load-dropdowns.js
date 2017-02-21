@@ -19,7 +19,8 @@
                 };
             };
 
-            dropdown.dropdown({ placeholder: false });
+            //Todo: Remove Semantic UI Dropdown dependency 
+            //dropdown.dropdown({ placeholder: false, forceSelection: false });
         });
 
         window.dropdownsLoaded = true;

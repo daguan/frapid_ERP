@@ -70,20 +70,25 @@ function displayFieldBinder(el, url, notNull, filters, callback) {
 		});
 
 		el.html(options);
-		
-		if(el.parent().is(".dropdown")){
-			setTimeout(function(){
-				el.dropdown("clear");
-				el.dropdown("restore defaults");
 
-				if(selectedValue){
-					el.dropdown("set selected", selectedValue);
+	    //Todo: Remove Semantic UI Dropdown dependency 
+		// if(el.parent().is(".dropdown")){
+		// 	setTimeout(function(){
+		// 		el.dropdown("clear");
+		// 		el.dropdown("restore defaults");
 
-					setTimeout(function(){
-						el.trigger("change").trigger("blur");						
-					}, 100);
-				};
-			}, 100)
+		// 		if(selectedValue){
+		// 			el.dropdown("set selected", selectedValue);
+
+		// 			setTimeout(function(){
+		// 				el.trigger("change").trigger("blur");						
+		// 			}, 100);
+		// 		};
+		// 	}, 100)
+		// };
+
+		if(selectedValue){
+			el.val(selectedValue).trigger("change").trigger("blur");
 		};
 		
 		if(typeof(callback) === "function"){

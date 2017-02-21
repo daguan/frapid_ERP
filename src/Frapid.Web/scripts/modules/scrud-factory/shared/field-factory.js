@@ -106,7 +106,10 @@ function editScrudFormElement(targetEl, value) {
                 };
             };
 
-            targetEl.dropdown("set selected", value.toString());
+            //Todo: Remove Semantic UI Dropdown dependency 
+            //targetEl.dropdown("set selected", value.toString());
+            targetEl.val(value.toString());
+            
             targetEl.trigger("blur");
             targetEl.trigger("change");
             return;

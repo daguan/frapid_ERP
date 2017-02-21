@@ -1,5 +1,6 @@
 window.overridePath = "/dashboard/website/contents";
-$(".dropdown").dropdown();
+//Todo: Remove Semantic UI Dropdown dependency 
+//$(".dropdown").dropdown({placeholder: false, forceSelection: false});
 
 function appendTag(select, text, value, selected) {
     if (select.find(`option[value='${value}']`).length) {
