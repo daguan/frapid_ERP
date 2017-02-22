@@ -151,15 +151,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\Account\ResetConfirmation\index.js" />
-    <Content Include="Scripts\Account\Reset\index.js" />
-    <Content Include="Scripts\Account\SignIn\google.js" />
-    <Content Include="Scripts\Account\SignIn\facebook.js" />
-    <Content Include="Scripts\Account\SignIn\default.js" />
-    <Content Include="Scripts\Account\ChangePassword\index.js" />
-    <Content Include="Scripts\Account\SignUp\signup.js" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Configuration.cs" />
     <Compile Include="Controllers\Backend\AddUserController.cs" />
     <Compile Include="Controllers\Backend\ChangePasswordController.cs" />
@@ -221,7 +212,14 @@
     <Compile Include="ViewModels\UserInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\EmailTemplate\Editor.js" />
+    <Content Include="scripts\account\change-password\index.js" />
+    <Content Include="scripts\account\reset-confirmation\index.js" />
+    <Content Include="scripts\account\reset\index.js" />
+    <Content Include="scripts\account\sign-in\default.js" />
+    <Content Include="scripts\account\sign-in\facebook.js" />
+    <Content Include="scripts\account\sign-in\google.js" />
+    <Content Include="scripts\account\sign-up\signup.js" />
+    <Content Include="scripts\email-template\editor.js" />
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
     <Content Include="Views\SignIn\Index.cshtml" />

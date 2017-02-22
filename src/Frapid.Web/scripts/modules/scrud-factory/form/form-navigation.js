@@ -32,6 +32,7 @@ $("#FirstButton").click(function () {
 
     ajax.success(function(response) {
         loadResponse(response);
+        window.editing = true;
     });
 });
 
@@ -50,6 +51,7 @@ $("#PreviousButton").click(function () {
 
     ajax.success(function (response) {
         loadResponse(response);
+        window.editing = true;
     });
 });
 
@@ -69,6 +71,7 @@ $("#NextButton").click(function () {
 
     ajax.success(function (response) {
         loadResponse(response);
+        window.editing = true;
     });
 });
 
@@ -83,6 +86,7 @@ $("#LastButton").click(function () {
 
     ajax.success(function (response) {
         loadResponse(response);
+        window.editing = true;
     });
 });
 

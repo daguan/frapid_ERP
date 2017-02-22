@@ -213,9 +213,9 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Styles\source.css" />
-    <Content Include="Scripts\reports.js" />
-    <Content Include="Styles\reports.css" />
+    <Content Include="styles\source.css" />
+    <Content Include="scripts\reports.js" />
+    <Content Include="styles\reports.css" />
     <Content Include="Views\web.config" />
   </ItemGroup>
   <ItemGroup>

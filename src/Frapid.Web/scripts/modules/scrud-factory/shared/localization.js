@@ -7,7 +7,7 @@
 
         var column = new Object();
 
-        column.columnName = name;
+        column.columnName = key;
         column.localized = text;
 
         localizedHeaders.push(column);

@@ -7,13 +7,14 @@ using Frapid.Areas.Caching;
 using Frapid.Configuration;
 using Frapid.Framework;
 using Frapid.i18n;
+using System.Web.UI;
 
 namespace Frapid.Web.Controllers
 {
     public class SiteMapController: FrapidController
     {
         [Route("sitemap.xml")]
-        [FrapidOutputCache(ProfileName = "Sitemap.xml")]
+        [FrapidOutputCache(ProfileName = "Sitemap.xml", Location = OutputCacheLocation.Client)]
         public async Task<ActionResult> IndexAsync()
         {
             string domain = TenantConvention.GetBaseDomain(this.HttpContext, true);

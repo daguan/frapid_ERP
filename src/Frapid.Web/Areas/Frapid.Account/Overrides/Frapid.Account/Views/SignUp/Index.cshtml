@@ -6,11 +6,11 @@
 }
 @if (CultureManager.IsRtl())
 {
-    <link rel="Stylesheet" href="@Href("~/assets/css/master-page-rtl.css")" />
+    <link rel="Stylesheet" href="@Href("~/assets/css/backend.rtl.css")" />
 }
 else
 {
-    <link rel="Stylesheet" href="@Href("~/assets/css/master-page.css")" />
+    <link rel="Stylesheet" href="@Href("~/assets/css/backend.css")" />
 }
 
 <div class="ui attached padded signup left aligned segment">
@@ -92,4 +92,4 @@ else
 <script src="/i18n/resources.js?cultureCode=@CultureManager.GetCurrentUiCulture().Name"></script>
 <script src="/assets/js/backend.js"></script>
 <script src="/scripts/jssha1.5/src/sha.js"></script>
-<script src="/Areas/Frapid.Account/Scripts/Account/SignUp/signup.js"></script>
+<script src="/Areas/Frapid.Account/scripts/account/sign-up/signup.js"></script>
