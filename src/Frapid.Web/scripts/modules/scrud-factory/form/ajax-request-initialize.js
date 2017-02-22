@@ -17,7 +17,7 @@
             };
 
             if (this.url) {
-                ajaxDataBind(this.url, el, this.data, selectedValue.toString(), null, null, this.valueField, this.textField, this.isArray);
+                ajaxDataBind(this.url, el, this.data, this.valueField, this.textField, selectedValue.toString(), null, this.isArray);
             };
         };
     });

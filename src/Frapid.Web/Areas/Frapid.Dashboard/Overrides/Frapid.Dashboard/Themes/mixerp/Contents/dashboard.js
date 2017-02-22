@@ -111,7 +111,7 @@ function initalizeSelectApis() {
         var valueField = el.attr("data-api-value-field");
         var keyField = el.attr("data-api-key-field");
 
-        window.ajaxDataBind(apiUrl, el, null, null, null, function () {
+        window.ajaxDataBind(apiUrl, el, null, keyField, valueField, null, function () {
             var selectedValue = el.attr("data-api-selected-value");
             var selectedValues = el.attr("data-api-selected-values");
 
@@ -136,6 +136,6 @@ function initalizeSelectApis() {
             };
 
 
-        }, keyField, valueField);
+        });
     });
 };

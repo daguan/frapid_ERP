@@ -135,10 +135,6 @@
 </div>
 <a id="DownloadAnchor" style="display: none;"></a>
 <script>
-
-
-    //Todo: Remove Semantic UI Dropdown dependency 
-    //$(".dropdown").dropdown({forceSelection: false});
     loadDatepicker();
 
     (function() {
@@ -184,12 +180,10 @@
             const optional = el.attr("data-optional").toLowerCase().indexOf("t") > -1;
 
 
-            window.ajaxDataBind(url, el, null, defaultValue, null, function() {
+            window.ajaxDataBind(url, el, null, keyField, valueField, defaultValue, function() {
                 setTimeout(function() {
 
                     if (defaultValue) {
-                        //Todo: Remove Semantic UI Dropdown dependency 
-                        //el.dropdown("set selected", defaultValue);
                         el.val(defaultValue);
                     };
 
@@ -197,15 +191,12 @@
                         el.prepend("<option value='null'>Select</option>");
 
                         if (defaultValue === "0") {
-                            //Todo: Remove Semantic UI Dropdown dependency 
-                            //el.dropdown("set text", "Select");
                             el.find(":selected").removeAttr("selected");
                             el.find("option:first-child").prop("selected", true);
                         };
                     };
                 }, 100);
-
-            }, keyField, valueField, false);
+            }, false, true);
         });
     })();
 
