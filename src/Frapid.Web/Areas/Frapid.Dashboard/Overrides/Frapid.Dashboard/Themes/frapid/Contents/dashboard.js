@@ -124,11 +124,15 @@ frapidApp.run(function ($rootScope, $location) {
 
     $rootScope.toogleDashboard = function () {
         if (window.location.pathname !== "/dashboard") {
-            lastPage = window.location.pathname;
-            $location.path("/dashboard");
+            lastPage = {
+                path: window.location.pathname,
+                query: window.location.search.substring(1)
+            };
+
+            $location.url("/dashboard");
         } else {
             if (lastPage) {
-                $location.path(lastPage);
+                $location.url(lastPage.path + "?" + lastPage.query);
             };
         };
 

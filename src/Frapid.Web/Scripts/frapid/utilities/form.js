@@ -195,5 +195,7 @@ function initializeUITags() {
 		const el = $(this);
 		processTags(el);
 	});
+
+	$(".ui.tags input").trigger("change");
 };
 

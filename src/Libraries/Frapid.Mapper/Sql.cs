@@ -10,7 +10,7 @@ namespace Frapid.Mapper
 {
     public class Sql
     {
-        private static readonly Regex ParameterPattern = new Regex(@"(?<!@)@\w+", RegexOptions.Compiled);
+        private static readonly Regex ParameterPattern = new Regex(@"(?<!@)@\w+");
         private readonly StringBuilder _builder;
         private readonly List<int> _parameterTokens;
         private List<object> _parameters;

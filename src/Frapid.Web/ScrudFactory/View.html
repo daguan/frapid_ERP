@@ -106,7 +106,6 @@
     }
 </style>
 
-
 <div class="ui view factory attached segment" style="display: none;">
     <div class="ui inverted active view dimmer">
         <div class="content">
@@ -141,10 +140,10 @@
 
     <div class="ui stackable divided grid">
         <div class="three wide filter column">
-            <div class="ui teal big header">Filters</div>
+            <div class="ui teal big header"><span data-localize="Filters"></span></div>
             <div class="ui divider"></div>
             <div data-filter-list class="ui relaxed filter list"></div>
-            <div class="ui small teal button" data-add-filter onclick="showView('filter', true)">Add New</div>
+            <button class="ui small teal button" data-add-filter onclick="showView('filter', true)"><span data-localize="AddNew"></span></button>
             <div class="vpad8"></div>
             <section class="filter section" style="display: none;">
                 <div class="ui teal header" data-filter-header></div>
@@ -189,9 +188,9 @@
                 </div>
                 <div class="actions">
                     <div class="ui basic buttons">
-                        <div class="ui cancel button">
+                        <button class="ui cancel button">
                             <span data-localize="Cancel"></span>
-                        </div>
+                        </button>
                         <a href="javascript:void(0);" class="ui button" onclick="saveOrUpdateKanban();">
                             <span data-localize="OK"></span>
                         </a>
@@ -236,22 +235,22 @@
                 </div>
                 <div class="right aligned four wide column">
                     <div class="ui basic icon action mini buttons">
-                        <a class="ui basic icon button" data-target="grid" title="Grid View">
+                        <a class="ui basic icon button" data-target="grid" data-localized-title="GridView">
                             <i class="grid layout icon"></i>
                         </a>
-                        <a class="ui active green basic icon button" data-target="kanban" title="Kanban View">
+                        <a class="ui active green basic icon button" data-target="kanban" data-localized-title="KanbanView">
                             <i class="block layout icon"></i>
                         </a>
-                        <a class="ui basic icon button" data-target="filter" title="Filter View">
+                        <a class="ui basic icon button" data-target="filter" data-localized-title="FilterView">
                             <i class="icons">
                                 <i class="filter layout icon"></i>
                                 <i class="corner add icon"></i>
                             </i>
                         </a>
-                        <a class="ui basic icon button" data-target="import" title="Import">
+                        <a class="ui basic icon button" data-target="import" data-localized-title="Import">
                             <i class="upload layout icon"></i>
                         </a>
-                        <a class="ui basic icon button" onclick="clearQuery();" title="Clear Filters">
+                        <a class="ui basic icon button" onclick="clearQuery();" data-localized-title="ClearFilters">
                             <i class="delete icon"></i>
                         </a>
                     </div>
@@ -259,7 +258,7 @@
             </div>
             <div class="ui stackable form segment" ID="Annotation" style="display: none;">
                 <div class="field">
-                    <div class="ui green button" id="ShowButton">Show</div>
+                    <button class="ui green button" id="ShowButton"><span data-localize="Show"></span></button>
                 </div>
             </div>
             <div class="ui stackable grid">

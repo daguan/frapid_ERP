@@ -61,14 +61,9 @@
                     </div>
                     <div class="field">
                         <label>@Resources.Tags</label>
-                        <select id="TagsSelect" class="ui fluid multiple search selection tag dropdown"
-                                data-entity="tags"
-                                data-api="/api/views/website/tag-view/all"
-                                data-api-value-field="Tag"
-                                data-api-key-field="Tag"
-                                data-api-selected-values="@Model.Tags"
-                                multiple="">
-                        </select>
+                        <div class="ui tags" id="TagsDiv">
+                            <input type="text" value="@Model.Tags" />
+                        </div>
                     </div>
                     <div class="field">
                         <label>@Resources.PublishOn</label>
@@ -103,8 +98,8 @@
             <div class="ui container">
                 <div class="error vpad8 initially hidden">
                     <div class="ui brown header">@Resources.Error</div>
-                    <div class="ui red bulleted list">
-                    </div>
+                    <ul class="ui red bulleted list">
+                    </ul>
                     <div class="ui divider"></div>
                 </div>
             </div>
