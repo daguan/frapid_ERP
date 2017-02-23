@@ -2,33 +2,29 @@
 WHERE menu_id IN
 (
  SELECT menu_id FROM core.menus
- WHERE app_name = 'Calendar'
+ WHERE app_name = 'AddressBook'
 );
 
 DELETE FROM auth.group_menu_access_policy
 WHERE menu_id IN
 (
  SELECT menu_id FROM core.menus
- WHERE app_name = 'Calendar'
+ WHERE app_name = 'AddressBook'
 );
 
 DELETE FROM core.menus
-WHERE app_name = 'Calendar';
+WHERE app_name = 'AddressBook';
 
 
-EXECUTE core.create_app 'Calendar', 'Calendar', 'Calendar', '1.0', 'MixERP Inc.', 'December 1, 2015', 'violet calendar', '/dashboard/calendar', NULL;
+EXECUTE core.create_app 'Address Book', 'AddressBook', 'AddressBook', '1.0', 'MixERP Inc.', 'December 1, 2015', 'teal phone', '/dashboard/address-book', NULL;
 
-EXECUTE core.create_menu 'Calendar', 'Tasks', 'Tasks', '', 'lightning', '';
-EXECUTE core.create_menu 'Calendar', 'Calendar', 'Calendar', '/dashboard/calendar', 'calendar', 'Tasks';
-
+EXECUTE core.create_menu 'Address Book', 'Tasks', 'Tasks', '', 'lightning', '';
+EXECUTE core.create_menu 'Address Book', 'AddressBook', 'AddressBook', '/dashboard/address-book', 'phone', 'Tasks';
 
 GO
-DECLARE @office_id integer  = core.get_office_id_by_office_name('Default');
-
+DECLARE @office_id integer = core.get_office_id_by_office_name('Default');
 EXECUTE auth.create_app_menu_policy
 'Admin', 
 @office_id, 
-'Calendar',
+'Address Book',
 '{*}';
-
-GO

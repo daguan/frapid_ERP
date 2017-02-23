@@ -13,6 +13,8 @@ $(document).on("viewready", function () {
     if (hasVerification()) {
         var verifyButton = $("#VerifyButton");
 
+        verifyButton.show();
+
         verifyButton.click(function () {
             popUnder(verificationPopUnder, verifyButton);
         });

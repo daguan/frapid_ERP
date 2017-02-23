@@ -66,7 +66,7 @@ var getAjaxRequest = function (url, type, data) {
     return ajax;
 };
 
-jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, keyField, valueField, isArray) {
+jQuery.fn.bindAjaxData = function (ajaxData, nullable, selectedValue, keyField, valueField, isArray) {
     "use strict";
     var selected;
 
@@ -79,7 +79,7 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, keyField
         return;
     };
 
-    if (!skipSelect) {
+    if (!nullable) {
         appendOption(targetControl, "", window.i18n.Select);
     };
 
@@ -110,6 +110,7 @@ jQuery.fn.bindAjaxData = function (ajaxData, skipSelect, selectedValue, keyField
 
         if (!isArray) {
             var expression;
+
 
             if (textIsExpression) {
                 expression = valueField.replace("{{", "").replace("}}", "");
@@ -147,7 +148,7 @@ function appendOption(selectEl, value, text, selected) {
 	selectEl.append(option);
 };
 
-var ajaxDataBind = function(url, targetControl, data, selectedValue, associatedControl, callback, keyField, valueField, isArray) {
+function ajaxDataBind(url, targetControl, data, keyField, valueField, selectedValue, callback, isArray, nullable) {
     var isWebApiRequest = url.substring(5, 0) === "/api/";
     var isProcedure = url.slice(-7) === "execute";
 
@@ -178,17 +179,13 @@ var ajaxDataBind = function(url, targetControl, data, selectedValue, associatedC
         };
 
         if (targetControl.length === 1) {
-            targetControl.bindAjaxData(result, false, selectedValue, keyField, valueField, isArray);
+            targetControl.bindAjaxData(result, nullable, selectedValue, keyField, valueField, isArray);
         };
 
         if (targetControl.length > 1) {
             targetControl.each(function () {
-                $(this).bindAjaxData(result, false, selectedValue, keyField, valueField, isArray);
+                $(this).bindAjaxData(result, nullable, selectedValue, keyField, valueField, isArray);
             });
-        };
-
-        if (associatedControl && associatedControl.val) {
-            associatedControl.val(selectedValue).trigger('change');
         };
 
         if (typeof window.ajaxDataBindCallBack === "function") {

@@ -135,7 +135,7 @@
 
         ajax.fail(function (xhr) {
             form.removeClass("loading");
-            alert(JSON.stringify(xhr));
+            window.logAjaxErrorMessage(xhr);
         });
     });
 </script>

@@ -336,6 +336,7 @@ function displayStories(lastFeedId, parentFeedId) {
 
     const ajax = request();
     ajax.success(function (response) {
+
         const model = window.Enumerable.From(response).OrderBy(function (x) {
             return x.ParentFeedId || 0;
         }).ThenBy(function (x) {

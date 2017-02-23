@@ -1,87 +1,112 @@
 ﻿-->-->-- src/Frapid.Web/Areas/Frapid.AddressBook/db/Sql Server/2.x/2.0/src/01.types-domains-tables-and-constraints/tables-and-constraints.sql --<--<--
-EXECUTE dbo.drop_schema 'calendar';
+EXECUTE dbo.drop_schema 'addressbook';
 GO
-CREATE SCHEMA calendar;
+CREATE SCHEMA addressbook;
+GO
 
-GO
-CREATE TABLE calendar.categories
+CREATE TABLE addressbook.contacts
 (
-	category_id								integer IDENTITY PRIMARY KEY,
-	user_id									integer NOT NULL REFERENCES account.users,
-	category_name							national character varying(200) NOT NULL,
-	color_code								national character varying(50) NOT NULL,
-	is_local								bit NOT NULL DEFAULT(1),
-	category_order							smallint,
-    audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
-    deleted                                 bit DEFAULT(0)  
+    contact_id                  uniqueidentifier PRIMARY KEY DEFAULT(NEWID()),
+    associated_user_id          integer REFERENCES account.users,
+    first_name                  national character varying(200),
+    prefix                      national character varying(200),
+    middle_name                 national character varying(200),
+    last_name                   national character varying(200),
+    suffix                      national character varying(200),
+    formatted_name              national character varying(610) NOT NULL,
+    nick_name                   national character varying(610),
+    email_addresses             national character varying(1000),
+    telephones                  national character varying(1000),
+    fax_numbers                 national character varying(1000),
+    mobile_numbers              national character varying(1000),
+    url                         national character varying(1000),
+    kind                        integer,
+    gender                      integer,
+    language                    national character varying(500),
+    time_zone                   national character varying(500),
+    birth_day                   date,
+    address_line_1              national character varying(500),
+    address_line_2              national character varying(500),
+    postal_code                 national character varying(500),
+    street                      national character varying(500),
+    city                        national character varying(500),
+    state                       national character varying(500),
+    country                     national character varying(500),
+    organization                national character varying(500),
+    organizational_unit         national character varying(500),
+    title                       national character varying(500),
+    role                        national character varying(500),
+    note                        text,
+    is_private                  BIT NOT NULL DEFAULT(1),
+    tags                        national character varying(500),
+    created_by                  integer REFERENCES account.users,
+    audit_user_id               integer REFERENCES account.users,
+    audit_ts                    DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
+    deleted                     BIT DEFAULT(0)    
 );
 
-CREATE UNIQUE INDEX categories_user_id_category_name_uix
-ON calendar.categories(user_id, category_name)
-WHERE deleted = 0;
 
-CREATE TABLE calendar.events
-(
-	event_id								uniqueidentifier PRIMARY KEY DEFAULT(NEWSEQUENTIALID()),
-	category_id								integer NOT NULL REFERENCES calendar.categories,
-	user_id									integer NOT NULL REFERENCES account.users,
-	name									national character varying(500) NOT NULL,
-	location								national character varying(2000),
-	starts_at								DATETIMEOFFSET NOT NULL,
-	ends_on									DATETIMEOFFSET NOT NULL,
-	time_zone								national character varying(200) NOT NULL,
-	all_day									bit NOT NULL DEFAULT(0),
-	recurrence								national character varying(MAX),--JSON data
-	until									DATETIMEOFFSET,
-	alarm									integer,--minutes before
-	reminder_types							national character varying(MAX),--JSON data
-	is_private								bit,
-	url										national character varying(500),
-	note									national character varying(MAX),
-    audit_user_id                           integer REFERENCES account.users,
-    audit_ts                                DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),
-    deleted                                 bit DEFAULT(0)
-);
+-->-->-- src/Frapid.Web/Areas/Frapid.AddressBook/db/Sql Server/2.x/2.0/src/02.functions-and-logic/addressbook.get_tags.sql --<--<--
+IF OBJECT_ID('addressbook.get_tags') IS NOT NULL
+DROP FUNCTION addressbook.get_tags;
 
 GO
 
+CREATE FUNCTION addressbook.get_tags(@user_id integer)
+RETURNS national character varying(MAX)
+AS
+BEGIN
+	DECLARE @tags national character varying(MAX);
+	SELECT @tags = COALESCE(@tags + ',', '') +  member 
+	FROM
+	(
+			SELECT DISTINCT member
+			FROM addressbook.contacts
+			CROSS APPLY core.split(tags)
+			WHERE addressbook.contacts.deleted = 0
+			AND (addressbook.contacts.is_private = 0 OR addressbook.contacts.created_by = @user_id)
+	) AS tags;
+
+	RETURN @tags;
+END;
+
+GO
+
+--SELECT addressbook.get_tags(1);
+
+GO
 
 -->-->-- src/Frapid.Web/Areas/Frapid.AddressBook/db/Sql Server/2.x/2.0/src/03.menus/menus.sql --<--<--
 DELETE FROM auth.menu_access_policy
 WHERE menu_id IN
 (
  SELECT menu_id FROM core.menus
- WHERE app_name = 'Calendar'
+ WHERE app_name = 'AddressBook'
 );
 
 DELETE FROM auth.group_menu_access_policy
 WHERE menu_id IN
 (
  SELECT menu_id FROM core.menus
- WHERE app_name = 'Calendar'
+ WHERE app_name = 'AddressBook'
 );
 
 DELETE FROM core.menus
-WHERE app_name = 'Calendar';
+WHERE app_name = 'AddressBook';
 
 
-EXECUTE core.create_app 'Calendar', 'Calendar', 'Calendar', '1.0', 'MixERP Inc.', 'December 1, 2015', 'violet calendar', '/dashboard/calendar', NULL;
+EXECUTE core.create_app 'Address Book', 'AddressBook', 'AddressBook', '1.0', 'MixERP Inc.', 'December 1, 2015', 'teal phone', '/dashboard/address-book', NULL;
 
-EXECUTE core.create_menu 'Calendar', 'Tasks', 'Tasks', '', 'lightning', '';
-EXECUTE core.create_menu 'Calendar', 'Calendar', 'Calendar', '/dashboard/calendar', 'calendar', 'Tasks';
-
+EXECUTE core.create_menu 'Address Book', 'Tasks', 'Tasks', '', 'lightning', '';
+EXECUTE core.create_menu 'Address Book', 'AddressBook', 'AddressBook', '/dashboard/address-book', 'phone', 'Tasks';
 
 GO
-DECLARE @office_id integer  = core.get_office_id_by_office_name('Default');
-
+DECLARE @office_id integer = core.get_office_id_by_office_name('Default');
 EXECUTE auth.create_app_menu_policy
 'Admin', 
 @office_id, 
-'Calendar',
+'Address Book',
 '{*}';
-
-GO
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.AddressBook/db/Sql Server/2.x/2.0/src/04.default-values/01.default-values.sql --<--<--
