@@ -26,7 +26,7 @@ namespace Frapid.i18n
             }
 
             resourceKey = resourceKey.Replace("_", " ");
-            resourceKey = Regex.Replace(resourceKey, "([A-Z])", " $1", RegexOptions.Compiled).Trim();
+            resourceKey = Regex.Replace(resourceKey, "([A-Z])", " $1").Trim();
 
             return new TitleCaseConverter().Convert(resourceKey);
         }

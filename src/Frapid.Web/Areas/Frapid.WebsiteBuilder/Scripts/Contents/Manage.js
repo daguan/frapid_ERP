@@ -49,11 +49,19 @@ function save() {
         return window.getAjaxRequest(url, "POST", data);
     };
 
-    const attribute = "data-entity";
-    const validationEl = ".error";
-    const validationSummary = ".error .bulleted.list";
+    function getModel() {
+        const tags = window.serializeForm($("#ContentForm")).Tags;
 
-    const model = window.entityParser.getModel(attribute, validationEl, validationSummary);
+        const attribute = "data-entity";
+        const validationEl = ".error";
+        const validationSummary = ".error .bulleted.list";
+
+        const model = window.entityParser.getModel(attribute, validationEl, validationSummary);
+        model.Tags = tags;
+        return model;
+    };
+
+    const model = getModel();
     if (!model) {
         return;
     };
@@ -69,6 +77,10 @@ function save() {
             target = window.updateQueryString("ContentId", response);
             document.location.href = target;
         };
+    });
+
+    ajax.fail(function(xhr) {
+        window.logAjaxErrorMessage(xhr);
     });
 };
 
@@ -158,7 +170,9 @@ $(document).ready(function() {
         maximize(target);
     };
 
-    setTimeout(function() {
+    window.initializeUITags();
+
+    setTimeout(function () {
         initializeAceEditor();
     }, 2000);
 });

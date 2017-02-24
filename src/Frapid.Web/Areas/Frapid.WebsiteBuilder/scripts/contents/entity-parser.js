@@ -1,7 +1,7 @@
 var entityParser = {
     attribute: "data-entity",
     validationSummary: ".error .bulleted.list",
-    getValue: function(el, raw) {
+    getValue: function (el, raw) {
         function parseValue(value, typeClass) {
             if (!typeClass) {
                 return value;
@@ -63,7 +63,7 @@ var entityParser = {
                 };
             } else {
                 value = el.val();
-                value = parseValue(value, el.parent().attr("class"));
+                value = parseValue(value);
             };
 
             break;
@@ -93,10 +93,12 @@ var entityParser = {
 
             model[name] = val;
 
+
             if (required && !val) {
                 valid = false;
                 invalidItems.push(label);
             };
+
         });
 
         if (!valid) {
@@ -105,7 +107,7 @@ var entityParser = {
             list.html("");
 
             $.each(invalidItems, function() {
-                const item = $("<div class='item' />");
+                const item = $("<li class='item' />");
                 item.html(this + " is required");
                 list.append(item);
             });

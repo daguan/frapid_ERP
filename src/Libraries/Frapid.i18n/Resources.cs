@@ -648,5 +648,40 @@ namespace Frapid.i18n
 		/// </summary>
 		public static string CtrlShiftF => I18NResource.GetString(ResourceDirectory, "CtrlShiftF");
 
+		/// <summary>
+		///Filters
+		/// </summary>
+		public static string Filters => I18NResource.GetString(ResourceDirectory, "Filters");
+
+		/// <summary>
+		///Show
+		/// </summary>
+		public static string Show => I18NResource.GetString(ResourceDirectory, "Show");
+
+		/// <summary>
+		///Grid View
+		/// </summary>
+		public static string GridView => I18NResource.GetString(ResourceDirectory, "GridView");
+
+		/// <summary>
+		///Kanban View
+		/// </summary>
+		public static string KanbanView => I18NResource.GetString(ResourceDirectory, "KanbanView");
+
+		/// <summary>
+		///Filter View
+		/// </summary>
+		public static string FilterView => I18NResource.GetString(ResourceDirectory, "FilterView");
+
+		/// <summary>
+		///Import
+		/// </summary>
+		public static string Import => I18NResource.GetString(ResourceDirectory, "Import");
+
+		/// <summary>
+		///Clear Filters
+		/// </summary>
+		public static string ClearFilters => I18NResource.GetString(ResourceDirectory, "ClearFilters");
+
 	}
 }
