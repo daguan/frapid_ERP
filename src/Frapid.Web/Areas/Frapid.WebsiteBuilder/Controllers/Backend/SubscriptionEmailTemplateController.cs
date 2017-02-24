@@ -37,7 +37,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         public ActionResult SaveWelcomeTemplate(Template model)
         {
             string path = this.GetWelcomeTemplatePath();
-            System.IO.File.WriteAllText(path, model.Contents, Encoding.UTF8);
+            System.IO.File.WriteAllText(path, model.Contents, new UTF8Encoding(false));
             return this.Json("OK");
         }
 
@@ -47,7 +47,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         public ActionResult SaveSubscriptionRemovedTemplate(Template model)
         {
             string path = this.GetSubscriptionRemovedTemplatePath();
-            System.IO.File.WriteAllText(path, model.Contents, Encoding.UTF8);
+            System.IO.File.WriteAllText(path, model.Contents, new UTF8Encoding(false));
             return this.Json("OK");
         }
 

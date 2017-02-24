@@ -44,7 +44,7 @@ namespace Frapid.Backups.Postgres
 
             string file = this.FileName + ".bat";
 
-            File.WriteAllText(file, string.Join(Environment.NewLine, commands.ToString()));
+            File.WriteAllText(file, string.Join(Environment.NewLine, commands.ToString()), new UTF8Encoding(false));
 
             return file;
         }

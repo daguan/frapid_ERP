@@ -9,7 +9,7 @@ using Serilog;
 
 namespace Frapid.SendGridMail
 {
-    public class Processor : IEmailProcessor
+    public sealed class Processor : IEmailProcessor
     {
         public IEmailConfig Config { get; set; }
         public bool IsEnabled { get; set; }

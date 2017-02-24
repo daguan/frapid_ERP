@@ -37,7 +37,7 @@ namespace Frapid.Reports.Models
             var manager = new MailQueueManager(tenant, email);
 
             await manager.AddAsync().ConfigureAwait(false);
-            await manager.ProcessMailQueueAsync(processor, true).ConfigureAwait(false);
+            await manager.ProcessQueueAsync(processor, true).ConfigureAwait(false);
         }
     }
 }

@@ -19,7 +19,7 @@ CREATE TABLE core.apps
     version_number                              national character varying(100),
     publisher                                   national character varying(100),
     published_on                                date,
-    icon                                        national character varying(100),
+    icon                                        text,
     landing_url                                 text,
     audit_user_id                           	integer,
     audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),

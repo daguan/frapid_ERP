@@ -24,7 +24,7 @@ namespace Frapid.Messaging.Smtp
             //Fall back to SMTP configuration
 
 
-            var smtp = GetSmtpConfigAsync(tenant).Result;
+            var smtp = GetSmtpConfigAsync(tenant).GetAwaiter().GetResult();
 
             if (smtp == null)
             {

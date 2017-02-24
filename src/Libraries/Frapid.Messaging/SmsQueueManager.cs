@@ -59,7 +59,7 @@ namespace Frapid.Messaging
             return this.Processor != null && this.Processor.IsEnabled;
         }
 
-        public async Task ProcessMailQueueAsync(ISmsProcessor processor)
+        public async Task ProcessQueueAsync(ISmsProcessor processor)
         {
             var queue = await TextMessageQueue.GetMailInQueueAsync(this.Database).ConfigureAwait(false);
             var config = new SmsConfig(this.Database, this.Processor);

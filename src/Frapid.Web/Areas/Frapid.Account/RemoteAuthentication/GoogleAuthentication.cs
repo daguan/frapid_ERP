@@ -23,7 +23,7 @@ namespace Frapid.Account.RemoteAuthentication
         public GoogleAuthentication(string tenant)
         {
             this.Tenant = tenant;
-            var profile = ConfigurationProfiles.GetActiveProfileAsync(tenant).Result;
+            var profile = ConfigurationProfiles.GetActiveProfileAsync(tenant).GetAwaiter().GetResult();
             this.ClientId = profile.GoogleSigninClientId;
         }
 
@@ -52,7 +52,7 @@ namespace Frapid.Account.RemoteAuthentication
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = JsonConvert.DeserializeObject<JObject>(response.Content.ReadAsStringAsync().Result);
+                    var result = JsonConvert.DeserializeObject<JObject>(response.Content.ReadAsStringAsync().GetAwaiter().GetResult());
                     string aud = result["aud"].ToString();
 
                     if (aud == this.ClientId)
@@ -67,7 +67,7 @@ namespace Frapid.Account.RemoteAuthentication
 
         public async Task<LoginResult> AuthenticateAsync(GoogleAccount account, RemoteUser user)
         {
-            bool validationResult = Task.Run(() => this.ValidateAsync(account.Token)).Result;
+            bool validationResult = Task.Run(() => this.ValidateAsync(account.Token)).GetAwaiter().GetResult();
 
             if (!validationResult)
             {

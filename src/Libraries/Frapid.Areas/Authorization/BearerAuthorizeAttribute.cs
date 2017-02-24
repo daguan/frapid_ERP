@@ -24,12 +24,12 @@ namespace Frapid.Areas.Authorization
 
             if (token != null)
             {
-                bool isValid = AccessTokens.IsValidAsync(tenant, token.ClientToken, request.GetClientIpAddress(), request.Headers["user-agent"]).Result;
+                bool isValid = AccessTokens.IsValidAsync(tenant, token.ClientToken, request.GetClientIpAddress(), request.Headers["user-agent"]).GetAwaiter().GetResult();
 
                 if (isValid)
                 {
-                    AppUsers.SetCurrentLoginAsync(tenant, token.LoginId).Wait();
-                    var loginView = AppUsers.GetCurrentAsync(tenant, token.LoginId).Result;
+                    AppUsers.SetCurrentLoginAsync(tenant, token.LoginId).GetAwaiter().GetResult();
+                    var loginView = AppUsers.GetCurrentAsync(tenant, token.LoginId).GetAwaiter().GetResult();
 
                     var identity = new ClaimsIdentity(token.GetClaims(), DefaultAuthenticationTypes.ApplicationCookie, ClaimTypes.NameIdentifier, ClaimTypes.Role);
 

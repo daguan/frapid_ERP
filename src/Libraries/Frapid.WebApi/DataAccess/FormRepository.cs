@@ -26,7 +26,7 @@ namespace Frapid.WebApi.DataAccess
 
         public FormRepository(string schemaName, string tableName, string database, long loginId, int userId)
         {
-            var me = AppUsers.GetCurrentAsync().Result;
+            var me = AppUsers.GetCurrentAsync().GetAwaiter().GetResult();
 
             this._ObjectNamespace = Sanitizer.SanitizeIdentifierName(schemaName);
             this._ObjectName = Sanitizer.SanitizeIdentifierName(tableName.Replace("-", "_"));

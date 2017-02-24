@@ -27,7 +27,7 @@ namespace Frapid.Web.Jobs
                     try
                     {
                         Log.Verbose($"Executing the job with description \"{member.Description}\".");
-                        member.RegisterAsync().Wait();
+                        member.RegisterAsync().GetAwaiter().GetResult();
                     }
                     catch (Exception ex)
                     {

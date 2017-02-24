@@ -17,13 +17,13 @@ namespace Frapid.Dashboard
         {
             string path = this.OverridePath.Or(filterContext.HttpContext.Request.FilePath);
 
-            var my = AppUsers.GetCurrentAsync().Result;
+            var my = AppUsers.GetCurrentAsync().GetAwaiter().GetResult();
             int userId = my.UserId;
             int officeId = my.OfficeId;
 
             string tenant = TenantConvention.GetTenant();
 
-            var policy = Menus.GetAsync(tenant, userId, officeId).Result;
+            var policy = Menus.GetAsync(tenant, userId, officeId).GetAwaiter().GetResult();
 
             if (!policy.Any(x => x.Url.Equals(path)))
             {

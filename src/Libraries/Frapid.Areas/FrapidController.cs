@@ -30,12 +30,12 @@ namespace Frapid.Areas
 
             if (token != null)
             {
-                bool isValid = AccessTokens.IsValidAsync(tenant, token.ClientToken, context.HttpContext.GetClientIpAddress(), context.HttpContext.GetUserAgent()).Result;
+                bool isValid = AccessTokens.IsValidAsync(tenant, token.ClientToken, context.HttpContext.GetClientIpAddress(), context.HttpContext.GetUserAgent()).GetAwaiter().GetResult();
 
                 if (isValid)
                 {
-                    AppUsers.SetCurrentLoginAsync(tenant, token.LoginId).Wait();
-                    var loginView = AppUsers.GetCurrentAsync(tenant, token.LoginId).Result;
+                    AppUsers.SetCurrentLoginAsync(tenant, token.LoginId).GetAwaiter().GetResult();
+                    var loginView = AppUsers.GetCurrentAsync(tenant, token.LoginId).GetAwaiter().GetResult();
 
                     this.AppUser = new AppUser
                     {

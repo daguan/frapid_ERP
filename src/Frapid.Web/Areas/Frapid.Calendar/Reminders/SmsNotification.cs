@@ -7,20 +7,18 @@ using Frapid.Messaging.DTO;
 
 namespace Frapid.Calendar.Reminders
 {
-    public sealed class EmailNotification : IReminderProvider
+    public sealed class SmsNotification : IReminderProvider
     {
-        public string ProviderId { get; set; } = "EmailNotificationReminder";
-        public string LocalizedName { get; set; } = I18N.EmailNotification;
+        public string ProviderId { get; set; } = "SmsNotificationReminder";
+        public string LocalizedName { get; set; } = I18N.SmsNotification;
         public bool Enabled { get; set; } = true;
 
 
         public async Task<bool> RemindAsync(string tenant, ReminderMessage message)
         {
             await Task.Delay(0).ConfigureAwait(false);
-            string sendTo = message.Contact.EmailAddresses;
-            string timezone = message.Contact.TimeZone.Or(message.Event.TimeZone);
 
-            if (string.IsNullOrWhiteSpace(sendTo))
+            if (string.IsNullOrWhiteSpace(message.Contact.MobileNumbers))
             {
                 return false;
             }
@@ -31,6 +29,8 @@ namespace Frapid.Calendar.Reminders
             {
                 return false;
             }
+
+            string timezone = message.Contact.TimeZone.Or(message.Event.TimeZone);
 
             string template = Configs.GetNotificationEmailTemplate(tenant);
             string eventDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow.AddMinutes(alarm), TimeZoneInfo.FindSystemTimeZoneById(timezone)).Date.ToString("D");
@@ -45,25 +45,24 @@ namespace Frapid.Calendar.Reminders
             template = template.Replace("{Note}", message.Event.Note);
 
 
-            var processor = EmailProcessor.GetDefault(tenant);
+            var processor = SmsProcessor.GetDefault(tenant);
             if (processor == null)
             {
                 return false;
             }
 
-            var email = new EmailQueue
+            var textMessage = new SmsQueue
             {
                 AddedOn = DateTimeOffset.UtcNow,
                 SendOn = DateTimeOffset.UtcNow,
-                SendTo = sendTo,
+                SendTo = message.Contact.MobileNumbers,
                 FromName = processor.Config.FromName,
-                ReplyTo = processor.Config.FromEmail,
-                ReplyToName = processor.Config.FromName,
+                FromNumber = processor.Config.FromNumber,
                 Subject = string.Format(I18N.CalendarNotificationEmailSubject, message.Event.Name, startTime),
                 Message = template
             };
 
-            var manager = new MailQueueManager(tenant, email);
+            var manager = new SmsQueueManager(tenant, textMessage);
             await manager.AddAsync().ConfigureAwait(false);
 
             await manager.ProcessQueueAsync(processor).ConfigureAwait(false);

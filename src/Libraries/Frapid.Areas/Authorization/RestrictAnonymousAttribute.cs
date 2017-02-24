@@ -22,7 +22,7 @@ namespace Frapid.Areas.Authorization
         protected override bool AuthorizeCore(HttpContextBase context)
         {
             string tenant = TenantConvention.GetTenant();
-            bool authorized = AuthorizationManager.IsAuthorizedAsync(tenant, context).Result;
+            bool authorized = AuthorizationManager.IsAuthorizedAsync(tenant, context).GetAwaiter().GetResult();
 
             if (!authorized)
             {

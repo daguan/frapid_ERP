@@ -124,7 +124,7 @@ namespace Frapid.i18n.Command
             string target = this.GetPackingTarget(language);
             string contents = ResourceSerializer.GetSerializedResources(resources);
 
-            File.WriteAllText(target, contents, Encoding.UTF8);
+            File.WriteAllText(target, contents, new UTF8Encoding(false));
         }
 
         private Dictionary<string, string> GetResourcesFrom(string path)

@@ -38,7 +38,7 @@ namespace Frapid.AssetBundling
 
             this.EnsureDirectoryExists(file.DirectoryName);
 
-            File.WriteAllText(file.FullName, contents, Encoding.UTF8);
+            File.WriteAllText(file.FullName, contents, new UTF8Encoding(false));
         }
     }
 }
