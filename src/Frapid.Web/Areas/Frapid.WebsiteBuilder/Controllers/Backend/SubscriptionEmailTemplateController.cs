@@ -18,7 +18,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         {
             string path = this.GetWelcomeTemplatePath();
             var model = this.GetModel(path);
-            return this.FrapidView(this.GetRazorView<AreaRegistration>("SubscriptionEmailTemplate/Welcome.cshtml", this.Tenant), model);
+            return this.FrapidView(this.GetRazorView<AreaRegistration>("Backend/SubscriptionEmailTemplate/Welcome.cshtml", this.Tenant), model);
         }
 
         [Route("dashboard/website/subscription/removed")]
@@ -28,7 +28,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         {
             string path = this.GetSubscriptionRemovedTemplatePath();
             var model = this.GetModel(path);
-            return this.FrapidView(this.GetRazorView<AreaRegistration>("SubscriptionEmailTemplate/SubscriptionRemoved.cshtml", this.Tenant), model);
+            return this.FrapidView(this.GetRazorView<AreaRegistration>("Backend/SubscriptionEmailTemplate/SubscriptionRemoved.cshtml", this.Tenant), model);
         }
 
         [Route("dashboard/website/subscription/welcome/save")]

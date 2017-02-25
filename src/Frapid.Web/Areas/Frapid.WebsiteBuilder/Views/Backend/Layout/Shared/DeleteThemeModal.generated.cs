@@ -29,17 +29,17 @@ namespace ASP
     using DevTrends.MvcDonutCaching;
     using Frapid.Web;
     
-    #line 1 "..\..\Views\Layout\Shared\DeleteThemeModal.cshtml"
+    #line 1 "..\..\Views\Backend\Layout\Shared\DeleteThemeModal.cshtml"
     using Frapid.WebsiteBuilder;
     
     #line default
     #line hidden
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
-    [System.Web.WebPages.PageVirtualPathAttribute("~/Views/Layout/Shared/DeleteThemeModal.cshtml")]
-    public partial class _Views_Layout_Shared_DeleteThemeModal_cshtml : System.Web.Mvc.WebViewPage<dynamic>
+    [System.Web.WebPages.PageVirtualPathAttribute("~/Views/Backend/Layout/Shared/DeleteThemeModal.cshtml")]
+    public partial class _Views_Backend_Layout_Shared_DeleteThemeModal_cshtml : System.Web.Mvc.WebViewPage<dynamic>
     {
-        public _Views_Layout_Shared_DeleteThemeModal_cshtml()
+        public _Views_Backend_Layout_Shared_DeleteThemeModal_cshtml()
         {
         }
         public override void Execute()
@@ -63,7 +63,7 @@ WriteLiteral(">\r\n");
 WriteLiteral("        ");
 
             
-            #line 5 "..\..\Views\Layout\Shared\DeleteThemeModal.cshtml"
+            #line 5 "..\..\Views\Backend\Layout\Shared\DeleteThemeModal.cshtml"
    Write(Resources.ProceedWithCaution);
 
             
@@ -80,8 +80,8 @@ WriteLiteral(" class=\"ui large header\"");
 WriteLiteral(">");
 
             
-            #line 8 "..\..\Views\Layout\Shared\DeleteThemeModal.cshtml"
-                                Write(Resources.ConfirmThemeDelete);
+            #line 8 "..\..\Views\Backend\Layout\Shared\DeleteThemeModal.cshtml"
+                                Write(Html.Raw(Resources.ConfirmThemeDelete));
 
             
             #line default
@@ -91,7 +91,7 @@ WriteLiteral("</div>\r\n        <p>\r\n");
 WriteLiteral("            ");
 
             
-            #line 10 "..\..\Views\Layout\Shared\DeleteThemeModal.cshtml"
+            #line 10 "..\..\Views\Backend\Layout\Shared\DeleteThemeModal.cshtml"
        Write(Resources.ThemeDeleteWarning);
 
             
@@ -110,7 +110,7 @@ WriteLiteral(" class=\"ui small exception header\"");
 WriteLiteral(">");
 
             
-            #line 14 "..\..\Views\Layout\Shared\DeleteThemeModal.cshtml"
+            #line 14 "..\..\Views\Backend\Layout\Shared\DeleteThemeModal.cshtml"
                                               Write(Resources.CannotDeleteThemeBecauseOfError);
 
             
@@ -135,7 +135,7 @@ WriteLiteral(">\r\n");
 WriteLiteral("                ");
 
             
-            #line 21 "..\..\Views\Layout\Shared\DeleteThemeModal.cshtml"
+            #line 21 "..\..\Views\Backend\Layout\Shared\DeleteThemeModal.cshtml"
            Write(Resources.NoDontDeleteThisTheme);
 
             
@@ -152,7 +152,7 @@ WriteLiteral(">\r\n");
 WriteLiteral("                ");
 
             
-            #line 24 "..\..\Views\Layout\Shared\DeleteThemeModal.cshtml"
+            #line 24 "..\..\Views\Backend\Layout\Shared\DeleteThemeModal.cshtml"
            Write(Resources.Yes);
 
             

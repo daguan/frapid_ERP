@@ -78,7 +78,7 @@ namespace Frapid.Messaging
                         mail.Delivered = true;
                         mail.DeliveredOn = DateTimeOffset.UtcNow;
 
-                        await MailQueue.SetSuccessAsync(this.Database, mail.QueueId).ConfigureAwait(false);
+                        await TextMessageQueue.SetSuccessAsync(this.Database, mail.QueueId).ConfigureAwait(false);
                     }
                 }
             }

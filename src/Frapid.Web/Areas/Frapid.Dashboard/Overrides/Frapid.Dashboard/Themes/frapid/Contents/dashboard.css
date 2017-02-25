@@ -561,3 +561,7 @@ input[data-feature-search] {
 .dashboard.menu .scrolling.menu .item{
 	letter-spacing: 0;
 }
+
+#trumbowyg-icons{
+	display: none;
+}

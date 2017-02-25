@@ -3,8 +3,10 @@ SELECT * FROM core.create_app('Frapid.WebsiteBuilder', 'Website', 'Website', '1.
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Tasks', 'Tasks', '', 'tasks icon', '');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Configuration', 'Configuration', '/dashboard/website/configuration', 'configure icon', 'Tasks');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'ManageCategories', 'Manage Categories', '/dashboard/website/categories', 'sitemap icon', 'Tasks');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'AddNewContent', 'Add New Content', '/dashboard/website/contents/new', 'file', 'Tasks');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'AddNewContent', 'Add a New Content', '/dashboard/website/contents/new', 'file', 'Tasks');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'ViewContents', 'View Contents', '/dashboard/website/contents', 'desktop', 'Tasks');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'AddNewBlogPost', 'Add a New Blog Post', '/dashboard/website/blogs/new', 'write', 'Tasks');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'ViewBlogPosts', 'View Blog Posts', '/dashboard/website/blogs', 'browser', 'Tasks');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Menus', 'Menus', '/dashboard/website/menus', 'star', 'Tasks');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Contacts', 'Contacts', '/dashboard/website/contacts', 'phone', 'Tasks');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Subscriptions', 'Subscriptions', '/dashboard/website/subscriptions', 'newspaper', 'Tasks');
