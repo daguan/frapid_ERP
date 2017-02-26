@@ -25,7 +25,7 @@ namespace Frapid.Calendar.Jobs
             var message = new ReminderMessage
             {
                 Event = @event,
-                Contact = Contacts.GetContactByUserIdAsync(tenant, @event.UserId).Result
+                Contact = Contacts.GetContactByUserIdAsync(tenant, @event.UserId).GetAwaiter().GetResult()
             };
 
             var providers = @event.ReminderTypes.Split(',');
@@ -38,7 +38,7 @@ namespace Frapid.Calendar.Jobs
                     continue;
                 }
 
-                Task.Run(async () => { await provider.RemindAsync(tenant, message).ConfigureAwait(true); }).Wait();
+                Task.Run(async () => { await provider.RemindAsync(tenant, message).ConfigureAwait(true); }).GetAwaiter().GetResult();
             }
         }
 

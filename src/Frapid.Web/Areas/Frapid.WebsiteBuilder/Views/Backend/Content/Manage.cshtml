@@ -5,6 +5,8 @@
     bool isMarkDown = !string.IsNullOrWhiteSpace(Model.Markdown);
     ViewBag.Title = Model.Title;
     Layout = ViewBag.Layout;
+
+    var publishOn = Model.PublishOn ?? DateTimeOffset.Now;
 }
 
 <script src="/scripts/ace-1.2.2/src-min-noconflict/ace.js"></script>
@@ -17,8 +19,12 @@
         right: 0;
         top: 0;
     }
+
+    .field .ui.checkbox {
+        padding-right: 1em;
+    }
 </style>
-<div class="ui attached segment" style="height: 100%;">
+<div class="ui attached content segment" style="height: 100%;">
     <div class="ui stackable divided doubling grid" style="height: 100%;">
         <div class="three wide column">
             <div class="ui one column grid">
@@ -32,32 +38,31 @@
                 </div>
             </div>
             <div class="column">
-                <div class="ui violet header">@Resources.SaveThisPage</div>
+                <div class="ui violet header">@Resources.CreateNewPage</div>
             </div>
             <div class="ui divider"></div>
-            <div wi class="ui form">
-                <input type="hidden" data-entity="content_id" class="integer" value="@Model.ContentId"/>
-                <input type="hidden" data-entity="markdown" value="@Model.Markdown"/>
+            <div wi class="ui flat form">
+                <input type="hidden" id="ContentIdInputHidden" data-entity="content_id" class="integer" value="@Model.ContentId" />
+                <input type="hidden" id="MarkdownInputHidden" data-entity="markdown" value="@Model.Markdown" />
                 <div class="">
                     <div class="field">
                         <label>@Resources.Title</label>
-                        <input type="text" data-entity="title" value="@Model.Title" required=""/>
+                        <input id="TitleInputText" type="text" data-entity="title" value="@Model.Title" required="" />
                     </div>
                     <div class="field">
                         <label>@Resources.Alias</label>
-                        <input type="text" data-entity="alias" value="@Model.Alias" required=""/>
+                        <input id="AliasInputText" type="text" data-entity="alias" value="@Model.Alias" required="" />
                     </div>
                     <div class="field">
                         <label>@Resources.Category</label>
-                        <select id="CategorySelect" class="ui search integer dropdown"
+                        <select id="CategoryIdSelect" class="ui search integer dropdown"
                                 data-entity="category_id"
                                 required=""
                                 data-placeholder="true"
-                                data-api="/api/forms/website/categories/display-fields"
+                                data-api="/api/views/website/website-category-view/display-fields"
                                 data-api-value-field="Value"
                                 data-api-key-field="Key"
-                                data-api-selected-value="@Model.CategoryId">
-                        </select>
+                                data-api-selected-value="@Model.CategoryId"></select>
                     </div>
                     <div class="field">
                         <label>@Resources.Tags</label>
@@ -67,26 +72,27 @@
                     </div>
                     <div class="field">
                         <label>@Resources.PublishOn</label>
-                        <input type="date" class="date" data-entity="publish_on" value="@Model.PublishOn.ToString("d")" required=""/>
+                        <input id="PublishOnInputText" type="text" class="date" data-entity="publish_on" value="@(publishOn.ToString("d"))" required="" />
                     </div>
                     <div class="field">
                         <label>@Resources.SeoDescription</label>
-                        <input type="text" data-entity="seo_description" value="@Model.SeoDescription" required=""/>
+                        <input id="SeoDescriptionInputText" type="text" data-entity="seo_description" value="@Model.SeoDescription" required="" />
                     </div>
                 </div>
                 <div class="field">
                     <label>&nbsp;</label>
                     <div class="ui checkbox">
-                        @Html.CheckBox("IsDraftInputCheckbox", Model.IsDraft, new {id = "IsDraftInputCheckbox", data_entity = "is_draft"})
-                        <label for="IsDraftInputCheckbox">@Resources.Draft</label>
+                        <label for="IsDraftCheckbox">@Resources.Draft</label>
+                        <input id="IsDraftCheckbox" type="checkbox" data-value="@Model.IsDraft" />
+                    </div>
+
+                    <div class="ui checkbox">
+                        <label for="IsHomePageCheckbox">@Resources.HomePage</label>
+                        <input id="IsHomePageCheckbox" type="checkbox" data-value="@Model.IsHomepage" />
                     </div>
                     <div class="ui checkbox">
-                        @Html.CheckBox("IsHomePageInputCheckbox", Model.IsHomepage, new {id = "IsHomePageInputCheckbox", data_entity = "is_homepage"})
-                        <label for="IsHomePageInputCheckbox">@Resources.HomePage</label>
-                    </div>
-                    <div class="ui checkbox">
-                        @Html.CheckBox("IsMarkdownInputCheckbox", isMarkDown, new {id = "IsMarkdownInputCheckbox"})
-                        <label for="IsMarkdownInputCheckbox">@Resources.IsMarkdown</label>
+                        <label for="IsMarkdownCheckbox">@Resources.IsMarkdown</label>
+                        <input id="IsMarkdownCheckbox" type="checkbox" data-value="@isMarkDown" />
                     </div>
                 </div>
                 <div class="ui basic buttons">
@@ -98,8 +104,7 @@
             <div class="ui container">
                 <div class="error vpad8 initially hidden">
                     <div class="ui brown header">@Resources.Error</div>
-                    <ul class="ui red bulleted list">
-                    </ul>
+                    <ul class="ui red bulleted list"></ul>
                     <div class="ui divider"></div>
                 </div>
             </div>
@@ -125,6 +130,4 @@
     var html = "@Html.Encode(HttpUtility.JavaScriptStringEncode(Model.Contents))";
 </script>
 
-
-<script src="~/Areas/Frapid.WebsiteBuilder/scripts/contents/entity-parser.js"></script>
 <script src="~/Areas/Frapid.WebsiteBuilder/scripts/contents/manage.js"></script>

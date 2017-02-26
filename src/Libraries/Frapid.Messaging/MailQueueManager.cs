@@ -99,7 +99,7 @@ namespace Frapid.Messaging
             return this.Processor != null && this.Processor.IsEnabled;
         }
 
-        public async Task ProcessMailQueueAsync(IEmailProcessor processor, bool deleteAttachments = false)
+        public async Task ProcessQueueAsync(IEmailProcessor processor, bool deleteAttachments = false)
         {
             var queue = await MailQueue.GetMailInQueueAsync(this.Database).ConfigureAwait(false);
             var config = new EmailConfig(this.Database, this.Processor);

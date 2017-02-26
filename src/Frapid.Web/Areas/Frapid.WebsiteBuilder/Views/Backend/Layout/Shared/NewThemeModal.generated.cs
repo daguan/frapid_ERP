@@ -29,17 +29,17 @@ namespace ASP
     using DevTrends.MvcDonutCaching;
     using Frapid.Web;
     
-    #line 1 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+    #line 1 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
     using Frapid.WebsiteBuilder;
     
     #line default
     #line hidden
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
-    [System.Web.WebPages.PageVirtualPathAttribute("~/Views/Layout/Shared/NewThemeModal.cshtml")]
-    public partial class _Views_Layout_Shared_NewThemeModal_cshtml : System.Web.Mvc.WebViewPage<dynamic>
+    [System.Web.WebPages.PageVirtualPathAttribute("~/Views/Backend/Layout/Shared/NewThemeModal.cshtml")]
+    public partial class _Views_Backend_Layout_Shared_NewThemeModal_cshtml : System.Web.Mvc.WebViewPage<dynamic>
     {
-        public _Views_Layout_Shared_NewThemeModal_cshtml()
+        public _Views_Backend_Layout_Shared_NewThemeModal_cshtml()
         {
         }
         public override void Execute()
@@ -59,7 +59,7 @@ WriteLiteral(">\r\n");
 WriteLiteral("        ");
 
             
-            #line 4 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 4 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
    Write(Resources.AddANewTheme);
 
             
@@ -98,7 +98,7 @@ WriteLiteral(">\r\n");
 WriteLiteral("                        ");
 
             
-            #line 16 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 16 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                    Write(Resources.UploadATheme);
 
             
@@ -121,7 +121,7 @@ WriteLiteral(" class=\"ui basic green button\"");
 WriteLiteral(">");
 
             
-            #line 23 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 23 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                                                                                    Write(Resources.FromLocalHardDrive);
 
             
@@ -153,7 +153,7 @@ WriteLiteral(" class=\"ui horizontal divider\"");
 WriteLiteral(">");
 
             
-            #line 34 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 34 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                                                   Write(Resources.Or);
 
             
@@ -170,7 +170,7 @@ WriteLiteral(" class=\"ui small header\"");
 WriteLiteral(">");
 
             
-            #line 38 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 38 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                                             Write(Resources.DownloadThemeFrom);
 
             
@@ -187,7 +187,7 @@ WriteLiteral(" class=\"ui basic label\"");
 WriteLiteral(">");
 
             
-            #line 40 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 40 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                                                Write(Resources.Url);
 
             
@@ -214,7 +214,7 @@ WriteLiteral(" onclick=\"remoteUpload();\"");
 WriteLiteral(">");
 
             
-            #line 45 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 45 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                                                                                                 Write(Resources.DownloadAndInstall);
 
             
@@ -240,7 +240,7 @@ WriteLiteral(">\r\n");
 WriteLiteral("                    ");
 
             
-            #line 54 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 54 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                Write(Resources.Or);
 
             
@@ -259,7 +259,7 @@ WriteLiteral(">\r\n");
 WriteLiteral("                        ");
 
             
-            #line 60 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 60 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                    Write(Resources.CreateABrandNewTheme);
 
             
@@ -280,7 +280,7 @@ WriteLiteral(" class=\"field\"");
 WriteLiteral(">\r\n                            <label>");
 
             
-            #line 65 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 65 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                               Write(Resources.ThemeName);
 
             
@@ -301,7 +301,7 @@ WriteLiteral(" class=\"field\"");
 WriteLiteral(">\r\n                            <label>");
 
             
-            #line 69 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 69 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                               Write(Resources.Author);
 
             
@@ -322,7 +322,7 @@ WriteLiteral(" class=\"field\"");
 WriteLiteral(">\r\n                            <label>");
 
             
-            #line 73 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 73 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                               Write(Resources.AuthorUrl);
 
             
@@ -341,7 +341,7 @@ WriteLiteral(" class=\"field\"");
 WriteLiteral(">\r\n                            <label>");
 
             
-            #line 77 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 77 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                               Write(Resources.AuthorEmail);
 
             
@@ -362,7 +362,7 @@ WriteLiteral(" class=\"field\"");
 WriteLiteral(">\r\n                            <label>");
 
             
-            #line 81 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 81 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                               Write(Resources.ThemeConvertedBy);
 
             
@@ -376,7 +376,7 @@ WriteLiteral(" name=\"ConvertedBy\"");
 
 WriteAttribute("title", Tuple.Create("\r\n                                   title=\"", 3555), Tuple.Create("\"", 3631)
             
-            #line 83 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 83 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
 , Tuple.Create(Tuple.Create("", 3599), Tuple.Create<System.Object, System.Int32>(Resources.ThemeConvertedByTitle
             
             #line default
@@ -391,7 +391,7 @@ WriteLiteral(" class=\"field\"");
 WriteLiteral(">\r\n                            <label>");
 
             
-            #line 86 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 86 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                               Write(Resources.ReleasedOn);
 
             
@@ -410,7 +410,7 @@ WriteLiteral(" class=\"field\"");
 WriteLiteral(">\r\n                            <label>");
 
             
-            #line 90 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 90 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                               Write(Resources.ThemeVersion);
 
             
@@ -429,7 +429,7 @@ WriteLiteral(" class=\"field\"");
 WriteLiteral(">\r\n                            <label>");
 
             
-            #line 94 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 94 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                               Write(Resources.Category);
 
             
@@ -448,7 +448,7 @@ WriteLiteral(" class=\"field\"");
 WriteLiteral(">\r\n                            <label>");
 
             
-            #line 98 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 98 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                               Write(Resources.Responsive);
 
             
@@ -474,7 +474,7 @@ WriteLiteral(" class=\"field\"");
 WriteLiteral(">\r\n                            <label>");
 
             
-            #line 105 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 105 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                               Write(Resources.CSSFramework);
 
             
@@ -493,7 +493,7 @@ WriteLiteral(" class=\"field\"");
 WriteLiteral(">\r\n                            <label>");
 
             
-            #line 109 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 109 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                               Write(Resources.Tags);
 
             
@@ -507,7 +507,7 @@ WriteLiteral(" name=\"Tags\"");
 
 WriteAttribute("title", Tuple.Create(" title=\"", 5066), Tuple.Create("\"", 5100)
             
-            #line 110 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 110 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
 , Tuple.Create(Tuple.Create("", 5074), Tuple.Create<System.Object, System.Int32>(Resources.TagsDescription
             
             #line default
@@ -528,7 +528,7 @@ WriteLiteral(" onclick=\"createTheme();\"");
 WriteLiteral(">");
 
             
-            #line 114 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 114 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                                                                                    Write(Resources.LetsGo);
 
             
@@ -543,7 +543,7 @@ WriteLiteral(" onclick=\'$(\"#NewThemeModal\").modal(\"hide\");\'");
 WriteLiteral(">");
 
             
-            #line 115 "..\..\Views\Layout\Shared\NewThemeModal.cshtml"
+            #line 115 "..\..\Views\Backend\Layout\Shared\NewThemeModal.cshtml"
                                                                                                        Write(Resources.Cancel);
 
             

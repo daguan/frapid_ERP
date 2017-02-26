@@ -441,7 +441,7 @@
 
 
     $(".mail.button").off("click").on("click", function() {
-        $('#MessageTextArea').trumbowyg();
+        $('#MessageTextArea').trumbowyg({ svgPath: "/scripts/trumbowyg/dist/ui/icons.svg" });
         $("#EmailModal").modal("show");
     });
 

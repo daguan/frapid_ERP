@@ -16,7 +16,7 @@ CREATE TABLE core.apps
     version_number                              national character varying(100),
     publisher                                   national character varying(500),
     published_on                                date,
-    icon                                        national character varying(100),
+    icon                                        national character varying(MAX),
     landing_url                                 national character varying(500),
     audit_user_id                           	integer,
     audit_ts                                	DATETIMEOFFSET NULL DEFAULT(GETUTCDATE()),

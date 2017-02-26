@@ -306,8 +306,10 @@ EXECUTE core.create_app 'Frapid.WebsiteBuilder', 'Website', 'Website', '1.0', 'M
 EXECUTE core.create_menu 'Frapid.WebsiteBuilder', 'Tasks', 'Tasks', '', 'tasks icon', '';
 EXECUTE core.create_menu 'Frapid.WebsiteBuilder', 'Configuration', 'Configuration', '/dashboard/website/configuration', 'configure icon', 'Tasks';
 EXECUTE core.create_menu 'Frapid.WebsiteBuilder', 'ManageCategories', 'Manage Categories', '/dashboard/website/categories', 'sitemap icon', 'Tasks';
-EXECUTE core.create_menu 'Frapid.WebsiteBuilder', 'AddNewContent', 'Add New Content', '/dashboard/website/contents/new', 'file', 'Tasks';
+EXECUTE core.create_menu 'Frapid.WebsiteBuilder', 'AddNewContent', 'Add a New Content', '/dashboard/website/contents/new', 'file', 'Tasks';
 EXECUTE core.create_menu 'Frapid.WebsiteBuilder', 'ViewContents', 'View Contents', '/dashboard/website/contents', 'desktop', 'Tasks';
+EXECUTE core.create_menu 'Frapid.WebsiteBuilder', 'AddNewBlogPost', 'Add a New Blog Post', '/dashboard/website/blogs/new', 'write', 'Tasks';
+EXECUTE core.create_menu 'Frapid.WebsiteBuilder', 'ViewBlogPosts', 'View Blog Posts', '/dashboard/website/blogs', 'browser', 'Tasks';
 EXECUTE core.create_menu 'Frapid.WebsiteBuilder', 'Menus', 'Menus', '/dashboard/website/menus', 'star', 'Tasks';
 EXECUTE core.create_menu 'Frapid.WebsiteBuilder', 'Contacts', 'Contacts', '/dashboard/website/contacts', 'phone', 'Tasks';
 EXECUTE core.create_menu 'Frapid.WebsiteBuilder', 'Subscriptions', 'Subscriptions', '/dashboard/website/subscriptions', 'newspaper', 'Tasks';
@@ -348,6 +350,29 @@ EXECUTE auth.create_app_menu_policy
 GO
 
 
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.scrud-views/website.blog_scrud_view.sql --<--<--
+IF OBJECT_ID('website.blog_scrud_view') IS NOT NULL
+DROP VIEW website.blog_scrud_view;
+
+GO
+CREATE VIEW website.blog_scrud_view
+AS
+SELECT
+	website.contents.content_id AS blog_id,
+	website.contents.title,
+	website.categories.category_name,
+	website.contents.alias,
+	website.contents.is_draft,
+	website.contents.publish_on
+FROM website.contents
+INNER JOIN website.categories
+ON website.categories.category_id = website.contents.category_id
+WHERE website.contents.deleted = 0
+AND website.categories.is_blog = 1;
+
+GO
+
+
 -->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.scrud-views/website.contact_scrud_view.sql --<--<--
 IF OBJECT_ID('website.contact_scrud_view') IS NOT NULL
 DROP VIEW website.contact_scrud_view;
@@ -380,14 +405,14 @@ SELECT
 	website.contents.content_id,
 	website.contents.title,
 	website.categories.category_name,
-	website.categories.is_blog,
 	website.contents.alias,
 	website.contents.is_draft,
 	website.contents.publish_on
 FROM website.contents
 INNER JOIN website.categories
 ON website.categories.category_id = website.contents.category_id
-WHERE website.contents.deleted = 0;
+WHERE website.contents.deleted = 0
+AND website.categories.is_blog = 0;
 
 GO
 
@@ -458,6 +483,23 @@ END;
 
 GO
 
+
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.views/website.blog_category_view.sql --<--<--
+IF OBJECT_ID('website.blog_category_view') IS NOT NULL
+DROP VIEW website.blog_category_view;
+
+GO
+
+CREATE VIEW website.blog_category_view
+AS
+SELECT
+    website.categories.category_id          AS blog_category_id,
+    website.categories.category_name        AS blog_category_name
+FROM website.categories
+WHERE website.categories.deleted = 0
+AND website.categories.is_blog = 1;
+
+GO
 
 -->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.views/website.email_subscription_insert_view.sql --<--<--
 IF OBJECT_ID('website.email_subscription_insert_view') IS NOT NULL
@@ -601,6 +643,24 @@ SELECT
 FROM tags;
 
 GO
+
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.views/website.website_category_view.sql --<--<--
+IF OBJECT_ID('website.website_category_view') IS NOT NULL
+DROP VIEW website.website_category_view;
+
+GO
+
+CREATE VIEW website.website_category_view
+AS
+SELECT
+    website.categories.category_id          AS website_category_id,
+    website.categories.category_name        AS website_category_name
+FROM website.categories
+WHERE website.categories.deleted = 0
+AND website.categories.is_blog = 0;
+
+GO
+
 
 -->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/SQL Server/1.x/1.0/src/05.views/website.yesterdays_email_subscriptions.sql --<--<--
 IF OBJECT_ID('website.yesterdays_email_subscriptions') IS NOT NULL

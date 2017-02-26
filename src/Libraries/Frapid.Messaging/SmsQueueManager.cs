@@ -59,7 +59,7 @@ namespace Frapid.Messaging
             return this.Processor != null && this.Processor.IsEnabled;
         }
 
-        public async Task ProcessMailQueueAsync(ISmsProcessor processor)
+        public async Task ProcessQueueAsync(ISmsProcessor processor)
         {
             var queue = await TextMessageQueue.GetMailInQueueAsync(this.Database).ConfigureAwait(false);
             var config = new SmsConfig(this.Database, this.Processor);
@@ -78,7 +78,7 @@ namespace Frapid.Messaging
                         mail.Delivered = true;
                         mail.DeliveredOn = DateTimeOffset.UtcNow;
 
-                        await MailQueue.SetSuccessAsync(this.Database, mail.QueueId).ConfigureAwait(false);
+                        await TextMessageQueue.SetSuccessAsync(this.Database, mail.QueueId).ConfigureAwait(false);
                     }
                 }
             }

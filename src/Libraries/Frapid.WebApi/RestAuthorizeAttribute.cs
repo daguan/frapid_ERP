@@ -59,7 +59,7 @@ namespace Frapid.WebApi
             }
 
 
-            bool isValid = AccessTokens.IsValidAsync(tenant, clientToken, ipAddress, userAgent).Result;
+            bool isValid = AccessTokens.IsValidAsync(tenant, clientToken, ipAddress, userAgent).GetAwaiter().GetResult();
 
             if (expriesOn <= DateTimeOffset.UtcNow)
             {

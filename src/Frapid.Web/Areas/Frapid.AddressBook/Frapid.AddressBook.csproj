@@ -143,6 +143,7 @@
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\Contacts.cs" />
     <Compile Include="Extensions\VCardExtensions.cs" />
+    <Compile Include="I18N.cs" />
     <Compile Include="Models\AttachmentException.cs" />
     <Compile Include="Models\Avatars.cs" />
     <Compile Include="Models\ContactOperationException.cs" />
@@ -163,6 +164,8 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="scripts\index.js" />
+    <Content Include="styles\index.css" />
     <Content Include="Views\web.config" />
   </ItemGroup>
   <ItemGroup>

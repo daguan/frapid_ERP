@@ -9,6 +9,6 @@ namespace Frapid.Messaging
 
         ISmsConfig Config { get; set; }
         void InitializeConfig(string database);
-        Task<bool> SendAsync(SmsMessage email);
+        Task<bool> SendAsync(SmsMessage sms);
     }
 }

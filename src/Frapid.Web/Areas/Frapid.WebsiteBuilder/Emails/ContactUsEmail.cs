@@ -91,7 +91,7 @@ namespace Frapid.WebsiteBuilder.Emails
                     email.ReplyTo = processor.Config.FromEmail;
                 }
 
-                await manager.ProcessMailQueueAsync(processor).ConfigureAwait(false);
+                await manager.ProcessQueueAsync(processor).ConfigureAwait(false);
             }
         }
     }

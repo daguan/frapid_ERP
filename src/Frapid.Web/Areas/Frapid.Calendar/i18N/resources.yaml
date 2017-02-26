@@ -80,4 +80,4 @@ CalendarNotificationEmailSubject: "Calendar Event Reminder: {0} at {1}"
 CannotAddNullCalendarEvent: "Cannot add a null instance of calendar event"
 AccessIsDenied: "Access is denied!"
 CannotDeleteBecauseEventsUnderCategory: "Cannot delete this item because there are events under this category."
-
+SmsNotification: "SMS Notification"

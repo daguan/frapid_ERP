@@ -199,3 +199,102 @@ function initializeUITags() {
 	$(".ui.tags input").trigger("change");
 };
 
+function deserializeForm(container, model) {
+    const convention = ["InputTel", "InputColor", "InputDate", "InputDateTime", "InputDateTimeLocal", "InputHidden", "InputNumber", "InputSearch", "InputTime", "InputUrl", "InputText", "InputPassword", "InputEmail", "Select", "Checkbox", "TextArea", "Calendar", "Tags", "Div"];
+
+    function setValue(el, value) {
+        var type = el.attr("type");
+
+        if (el.hasClass("hasDatepicker")) {
+            type = "datepicker";
+        };
+
+        if (el.is("select")) {
+            if (el.parent().hasClass("ui") && el.parent().hasClass("dropdown")) {
+                type = "dropdown";
+            };
+        };
+
+
+        if (el.hasClass("ui") && el.hasClass("calendar")) {
+            type = "calendar";
+        };
+
+        if (el.hasClass("ui") && el.hasClass("tags")) {
+            type = "tags";
+        };
+
+        if (!value) {
+            if (el.is("select")) {
+                el.find("option").prop("selected", false);
+            };
+
+            return;
+        };
+
+        switch (type) {
+            case "tags":
+                el.find(".ui.label").remove();
+                el.find("input").val(value).trigger("change");
+                break;
+            case "datepicker":
+                el.datepicker("setDate", new Date(value));
+                break;
+            case "calendar":
+                el.calendar("set date", new Date(value));
+                break;
+            case "checkbox":
+                el.prop("checked", value.toLowerCase === "true");
+                break;
+            case "dropdown":
+                //Todo: Remove Semantic UI Dropdown dependency 
+                //el.dropdown("set selected", value);
+                console.log("Semantic UI Dropdown is not supported!!!");
+                break;
+            default:
+                el.val(value);
+                break;
+        };
+    };
+
+    function searchEl(key) {
+        for (let i = 0; i < convention.length; i++) {
+            const selector = key + convention[i];
+
+            var el = $("#" + selector);
+            if (el.length) {
+                return el;
+            };
+
+            el = $("[name='" + selector + "']");
+            if (el.length) {
+                return el;
+            };
+        };
+
+        return null;
+    };
+
+    if (!model || !container.length) {
+        return;
+    };
+
+    const keys = Object.keys(model);
+
+    if (!keys || !keys.length) {
+        return;
+    };
+
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+
+        const value = model[key];
+        const el = searchEl(key);
+
+        if (el && el.length) {
+            setValue(el, value);
+        };
+    };
+
+};
+

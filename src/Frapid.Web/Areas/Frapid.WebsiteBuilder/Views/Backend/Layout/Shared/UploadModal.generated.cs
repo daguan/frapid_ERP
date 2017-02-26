@@ -29,17 +29,17 @@ namespace ASP
     using DevTrends.MvcDonutCaching;
     using Frapid.Web;
     
-    #line 1 "..\..\Views\Layout\Shared\UploadModal.cshtml"
+    #line 1 "..\..\Views\Backend\Layout\Shared\UploadModal.cshtml"
     using Frapid.WebsiteBuilder;
     
     #line default
     #line hidden
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
-    [System.Web.WebPages.PageVirtualPathAttribute("~/Views/Layout/Shared/UploadModal.cshtml")]
-    public partial class _Views_Layout_Shared_UploadModal_cshtml : System.Web.Mvc.WebViewPage<dynamic>
+    [System.Web.WebPages.PageVirtualPathAttribute("~/Views/Backend/Layout/Shared/UploadModal.cshtml")]
+    public partial class _Views_Backend_Layout_Shared_UploadModal_cshtml : System.Web.Mvc.WebViewPage<dynamic>
     {
-        public _Views_Layout_Shared_UploadModal_cshtml()
+        public _Views_Backend_Layout_Shared_UploadModal_cshtml()
         {
         }
         public override void Execute()
@@ -63,7 +63,7 @@ WriteLiteral(">\r\n");
 WriteLiteral("        ");
 
             
-            #line 5 "..\..\Views\Layout\Shared\UploadModal.cshtml"
+            #line 5 "..\..\Views\Backend\Layout\Shared\UploadModal.cshtml"
    Write(Resources.UploadAFile);
 
             
@@ -92,7 +92,7 @@ WriteLiteral(" class=\"ui small header\"");
 WriteLiteral(">");
 
             
-            #line 10 "..\..\Views\Layout\Shared\UploadModal.cshtml"
+            #line 10 "..\..\Views\Backend\Layout\Shared\UploadModal.cshtml"
                                         Write(Resources.UploadAnotherFile);
 
             
@@ -115,7 +115,7 @@ WriteLiteral(" class=\"ui positive button\"");
 WriteLiteral(">");
 
             
-            #line 14 "..\..\Views\Layout\Shared\UploadModal.cshtml"
+            #line 14 "..\..\Views\Backend\Layout\Shared\UploadModal.cshtml"
                                                                  Write(Resources.Upload);
 
             
@@ -130,7 +130,7 @@ WriteLiteral(" onclick=\"$(\'#UploadModal\').modal(\'hide\');\"");
 WriteLiteral(">");
 
             
-            #line 15 "..\..\Views\Layout\Shared\UploadModal.cshtml"
+            #line 15 "..\..\Views\Backend\Layout\Shared\UploadModal.cshtml"
                                                                                                Write(Resources.Close);
 
             

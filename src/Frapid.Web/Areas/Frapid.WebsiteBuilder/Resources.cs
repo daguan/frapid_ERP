@@ -983,5 +983,25 @@ namespace Frapid.WebsiteBuilder
 		/// </summary>
 		public static string YourName => I18NResource.GetString(ResourceDirectory, "YourName");
 
+		/// <summary>
+		///Blog
+		/// </summary>
+		public static string Blog => I18NResource.GetString(ResourceDirectory, "Blog");
+
+		/// <summary>
+		///Blogs
+		/// </summary>
+		public static string Blogs => I18NResource.GetString(ResourceDirectory, "Blogs");
+
+		/// <summary>
+		///Create a New Page
+		/// </summary>
+		public static string CreateNewPage => I18NResource.GetString(ResourceDirectory, "CreateNewPage");
+
+		/// <summary>
+		///Create a New Blog Post
+		/// </summary>
+		public static string CreateNewBlogPost => I18NResource.GetString(ResourceDirectory, "CreateNewBlogPost");
+
 	}
 }

@@ -50,12 +50,12 @@ namespace Frapid.ApplicationState.Cache
 
         public static LoginView GetCurrent(string tenant = "")
         {
-            return GetCurrentAsync(tenant).Result;
+            return GetCurrentAsync(tenant).GetAwaiter().GetResult();
         }
 
         public static LoginView GetCurrent(string tenant, long loginId)
         {
-            return GetCurrentAsync(tenant, loginId).Result;
+            return GetCurrentAsync(tenant, loginId).GetAwaiter().GetResult();
         }
 
         public static async Task<LoginView> GetCurrentAsync(string tenant = "")

@@ -282,8 +282,10 @@ SELECT * FROM core.create_app('Frapid.WebsiteBuilder', 'Website', 'Website', '1.
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Tasks', 'Tasks', '', 'tasks icon', '');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Configuration', 'Configuration', '/dashboard/website/configuration', 'configure icon', 'Tasks');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'ManageCategories', 'Manage Categories', '/dashboard/website/categories', 'sitemap icon', 'Tasks');
-SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'AddNewContent', 'Add New Content', '/dashboard/website/contents/new', 'file', 'Tasks');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'AddNewContent', 'Add a New Content', '/dashboard/website/contents/new', 'file', 'Tasks');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'ViewContents', 'View Contents', '/dashboard/website/contents', 'desktop', 'Tasks');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'AddNewBlogPost', 'Add a New Blog Post', '/dashboard/website/blogs/new', 'write', 'Tasks');
+SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'ViewBlogPosts', 'View Blog Posts', '/dashboard/website/blogs', 'browser', 'Tasks');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Menus', 'Menus', '/dashboard/website/menus', 'star', 'Tasks');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Contacts', 'Contacts', '/dashboard/website/contacts', 'phone', 'Tasks');
 SELECT * FROM core.create_menu('Frapid.WebsiteBuilder', 'Subscriptions', 'Subscriptions', '/dashboard/website/subscriptions', 'newspaper', 'Tasks');
@@ -323,6 +325,24 @@ SELECT * FROM auth.create_app_menu_policy
 );
 
 
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.scrud-views/website.blog_scrud_view.sql --<--<--
+DROP VIEW IF EXISTS website.blog_scrud_view;
+
+CREATE VIEW website.blog_scrud_view
+AS
+SELECT
+	website.contents.content_id AS blog_id,
+	website.contents.title,
+	website.categories.category_name,
+	website.contents.alias,
+	website.contents.is_draft,
+	website.contents.publish_on
+FROM website.contents
+INNER JOIN website.categories
+ON website.categories.category_id = website.contents.category_id
+WHERE NOT website.contents.deleted
+AND website.categories.is_blog;
+
 -->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.scrud-views/website.contact_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS website.contact_scrud_view;
 
@@ -348,14 +368,14 @@ SELECT
 	website.contents.content_id,
 	website.contents.title,
 	website.categories.category_name,
-	website.categories.is_blog,
 	website.contents.alias,
 	website.contents.is_draft,
 	website.contents.publish_on
 FROM website.contents
 INNER JOIN website.categories
 ON website.categories.category_id = website.contents.category_id
-WHERE NOT website.contents.deleted;
+WHERE NOT website.contents.deleted
+AND NOT website.categories.is_blog;
 
 -->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.scrud-views/website.email_subscription_scrud_view.sql --<--<--
 DROP VIEW IF EXISTS website.email_subscription_scrud_view;
@@ -395,6 +415,20 @@ CREATE TRIGGER email_subscription_confirmation_trigger
 BEFORE UPDATE ON website.email_subscriptions 
 FOR EACH ROW
 EXECUTE PROCEDURE website.email_subscription_confirmation_trigger();
+
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.blog_category_view.sql --<--<--
+DROP VIEW IF EXISTS website.blog_category_view;
+
+CREATE VIEW website.blog_category_view
+AS
+SELECT
+    website.categories.category_id          AS blog_category_id,
+    website.categories.category_name        AS blog_category_name
+FROM website.categories
+WHERE NOT website.categories.deleted
+AND website.categories.is_blog;
+
+
 
 -->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.email_subscription_insert_view.sql --<--<--
 DROP VIEW IF EXISTS website.email_subscription_insert_view;
@@ -516,6 +550,19 @@ SELECT
     ROW_NUMBER() OVER (ORDER BY tag) AS tag_id,
     tag
 FROM tags;
+
+
+-->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.website_category_view.sql --<--<--
+DROP VIEW IF EXISTS website.website_category_view;
+
+CREATE VIEW website.website_category_view
+AS
+SELECT
+    website.categories.category_id          AS website_category_id,
+    website.categories.category_name        AS website_category_name
+FROM website.categories
+WHERE NOT website.categories.deleted
+AND NOT website.categories.is_blog;
 
 
 -->-->-- src/Frapid.Web/Areas/Frapid.WebsiteBuilder/db/PostgreSQL/1.x/1.0/src/05.views/website.yesterdays_email_subscriptions.sql --<--<--

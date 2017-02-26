@@ -29,17 +29,17 @@ namespace ASP
     using DevTrends.MvcDonutCaching;
     using Frapid.Web;
     
-    #line 1 "..\..\Views\Layout\Shared\FileModal.cshtml"
+    #line 1 "..\..\Views\Backend\Layout\Shared\FolderModal.cshtml"
     using Frapid.WebsiteBuilder;
     
     #line default
     #line hidden
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
-    [System.Web.WebPages.PageVirtualPathAttribute("~/Views/Layout/Shared/FileModal.cshtml")]
-    public partial class _Views_Layout_Shared_FileModal_cshtml : System.Web.Mvc.WebViewPage<dynamic>
+    [System.Web.WebPages.PageVirtualPathAttribute("~/Views/Backend/Layout/Shared/FolderModal.cshtml")]
+    public partial class _Views_Backend_Layout_Shared_FolderModal_cshtml : System.Web.Mvc.WebViewPage<dynamic>
     {
-        public _Views_Layout_Shared_FileModal_cshtml()
+        public _Views_Backend_Layout_Shared_FolderModal_cshtml()
         {
         }
         public override void Execute()
@@ -48,7 +48,7 @@ WriteLiteral("<div");
 
 WriteLiteral(" class=\"ui small modal\"");
 
-WriteLiteral(" id=\"FileModal\"");
+WriteLiteral(" id=\"FolderModal\"");
 
 WriteLiteral(">\r\n    <i");
 
@@ -63,8 +63,8 @@ WriteLiteral(">\r\n");
 WriteLiteral("        ");
 
             
-            #line 5 "..\..\Views\Layout\Shared\FileModal.cshtml"
-   Write(Resources.CreateANewFile);
+            #line 5 "..\..\Views\Backend\Layout\Shared\FolderModal.cshtml"
+   Write(Resources.CreateANewFolder);
 
             
             #line default
@@ -84,7 +84,7 @@ WriteLiteral(" class=\"field\"");
 WriteLiteral(">\r\n                <label>");
 
             
-            #line 10 "..\..\Views\Layout\Shared\FileModal.cshtml"
+            #line 10 "..\..\Views\Backend\Layout\Shared\FolderModal.cshtml"
                   Write(Resources.Location);
 
             
@@ -103,8 +103,8 @@ WriteLiteral(" class=\"field\"");
 WriteLiteral(">\r\n                <label>");
 
             
-            #line 14 "..\..\Views\Layout\Shared\FileModal.cshtml"
-                  Write(Resources.FileName);
+            #line 14 "..\..\Views\Backend\Layout\Shared\FolderModal.cshtml"
+                  Write(Resources.FolderName);
 
             
             #line default
@@ -117,13 +117,13 @@ WriteLiteral(" />\r\n            </div>\r\n            <button");
 
 WriteLiteral(" class=\"ui button\"");
 
-WriteLiteral(" onclick=\"createFile(this);\"");
+WriteLiteral(" onclick=\"createFolder(this);\"");
 
 WriteLiteral(">");
 
             
-            #line 17 "..\..\Views\Layout\Shared\FileModal.cshtml"
-                                                             Write(Resources.Create);
+            #line 17 "..\..\Views\Backend\Layout\Shared\FolderModal.cshtml"
+                                                               Write(Resources.Create);
 
             
             #line default

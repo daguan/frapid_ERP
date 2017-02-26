@@ -42,7 +42,7 @@ namespace Frapid.Config.Models
                 return;
             }
 
-            System.IO.File.WriteAllText(path, this.Contents, Encoding.UTF8);
+            System.IO.File.WriteAllText(path, this.Contents, new UTF8Encoding(false));
         }
     }
 }

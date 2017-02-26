@@ -20,7 +20,7 @@ namespace Frapid.WebApi.DataAccess
 
         public ViewRepository(string schemaName, string tableName, string database, long loginId, int userId)
         {
-            var appUser = AppUsers.GetCurrentAsync().Result;
+            var appUser = AppUsers.GetCurrentAsync().GetAwaiter().GetResult();
 
             this._ObjectNamespace = Sanitizer.SanitizeIdentifierName(schemaName);
             this._ObjectName = Sanitizer.SanitizeIdentifierName(tableName.Replace("-", "_"));

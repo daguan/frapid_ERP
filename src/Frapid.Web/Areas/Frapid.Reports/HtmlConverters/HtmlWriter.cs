@@ -12,7 +12,7 @@ namespace Frapid.Reports.HtmlConverters
 
             if (contents != null)
             {
-                File.WriteAllText(contents, html, Encoding.UTF8);
+                File.WriteAllText(contents, html, new UTF8Encoding(false));
             }
         }
     }

@@ -80,7 +80,7 @@ namespace Frapid.Account.Emails
 
                 var queue = new MailQueueManager(tenant, email);
                 await queue.AddAsync().ConfigureAwait(false);
-                await queue.ProcessMailQueueAsync(processor).ConfigureAwait(false);
+                await queue.ProcessQueueAsync(processor).ConfigureAwait(false);
             }
         }
     }

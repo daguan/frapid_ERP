@@ -66,7 +66,7 @@ namespace Frapid.Calendar.Reminders
             var manager = new MailQueueManager(tenant, email);
             await manager.AddAsync().ConfigureAwait(false);
 
-            await manager.ProcessMailQueueAsync(processor).ConfigureAwait(false);
+            await manager.ProcessQueueAsync(processor).ConfigureAwait(false);
             return true;
         }
     }

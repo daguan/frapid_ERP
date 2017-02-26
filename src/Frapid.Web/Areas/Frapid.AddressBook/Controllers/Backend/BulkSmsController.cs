@@ -25,10 +25,10 @@ namespace Frapid.AddressBook.Controllers.Backend
 
             var meta = await AppUsers.GetCurrentAsync().ConfigureAwait(true);
             model.UserId = meta.UserId;
-
+            
             try
             {
-                bool result = await TextMessages.SendAsync(this.Tenant, model).ConfigureAwait(true);
+                bool result = await TextMessages.SendAsync(this.Tenant, model, meta).ConfigureAwait(true);
                 return this.Ok(result);
             }
             catch (Exception ex)

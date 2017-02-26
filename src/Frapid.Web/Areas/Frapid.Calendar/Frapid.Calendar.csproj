@@ -190,6 +190,7 @@
     <Compile Include="Jobs\ReminderJob.cs" />
     <Compile Include="Helpers\JobHelper.cs" />
     <Compile Include="QueryModels\EventQuery.cs" />
+    <Compile Include="Reminders\SmsNotification.cs" />
     <Compile Include="ViewModels\CalendarCategory.cs" />
     <Compile Include="ViewModels\CalendarEvent.cs" />
     <Compile Include="DTO\Event.cs" />

@@ -18,7 +18,7 @@ namespace Frapid.WebsiteBuilder.Controllers.FrontEnd
 
             var contacts = await Contacts.GetContactsAsync(this.Tenant).ConfigureAwait(true);
             model.Contacts = contacts;
-            return this.View(this.GetRazorView<AreaRegistration>("ContactUs/Index.cshtml", this.Tenant), model);
+            return this.View(this.GetRazorView<AreaRegistration>("Frontend/ContactUs/Index.cshtml", this.Tenant), model);
         }
 
         [Route("contact-us")]

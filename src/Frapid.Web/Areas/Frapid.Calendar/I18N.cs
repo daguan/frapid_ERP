@@ -433,5 +433,10 @@ namespace Frapid.Calendar
 		/// </summary>
 		public static string CannotDeleteBecauseEventsUnderCategory => I18NResource.GetString(ResourceDirectory, "CannotDeleteBecauseEventsUnderCategory");
 
+		/// <summary>
+		///SMS Notification
+		/// </summary>
+		public static string SmsNotification => I18NResource.GetString(ResourceDirectory, "SmsNotification");
+
 	}
 }

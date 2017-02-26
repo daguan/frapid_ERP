@@ -1,3 +1,4 @@
+//Todo: deprecated
 var entityParser = {
     attribute: "data-entity",
     validationSummary: ".error .bulleted.list",

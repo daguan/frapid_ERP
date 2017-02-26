@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Frapid.AddressBook.Helpers;
 using Frapid.AddressBook.ViewModels;
+using Frapid.ApplicationState.Models;
+using Frapid.Framework.Extensions;
 using Frapid.Messaging;
 using Frapid.Messaging.DTO;
 
@@ -10,7 +12,7 @@ namespace Frapid.AddressBook.BulkOperations
 {
     public static class TextMessages
     {
-        public static async Task<bool> SendAsync(string tenant, SmsViewModel model)
+        public static async Task<bool> SendAsync(string tenant, SmsViewModel model, LoginView meta)
         {
             var processor = SmsProcessor.GetDefault(tenant);
             if (processor == null)
@@ -21,13 +23,13 @@ namespace Frapid.AddressBook.BulkOperations
             foreach (var contactId in model.Contacts)
             {
                 var contact = await DAL.Contacts.GetContactAsync(tenant, model.UserId, contactId).ConfigureAwait(false);
-                if (string.IsNullOrWhiteSpace(contact?.EmailAddresses) || !contact.EmailAddresses.Split(',').Any())
+                if (string.IsNullOrWhiteSpace(contact?.MobileNumbers) || !contact.MobileNumbers.Split(',').Any())
                 {
                     continue;
                 }
 
                 //Only select the first cell number
-                string cellNumber = contact.EmailAddresses.Split(',').Select(x => x.Trim()).FirstOrDefault();
+                string cellNumber = contact.MobileNumbers.Split(',').Select(x => x.Trim()).FirstOrDefault();
 
                 if (string.IsNullOrWhiteSpace(cellNumber))
                 {
@@ -42,7 +44,8 @@ namespace Frapid.AddressBook.BulkOperations
                     AddedOn = DateTimeOffset.UtcNow,
                     SendOn = DateTimeOffset.UtcNow,
                     SendTo = cellNumber,
-                    FromName = processor.Config.FromName,
+                    FromName = processor.Config.FromName.Or(meta.OfficeName),
+                    FromNumber = processor.Config.FromNumber.Or(meta.Phone),
                     Subject = model.Subject,
                     Message = message
                 };
@@ -50,7 +53,7 @@ namespace Frapid.AddressBook.BulkOperations
                 var manager = new SmsQueueManager(tenant, sms);
                 await manager.AddAsync().ConfigureAwait(false);
 
-                await manager.ProcessMailQueueAsync(processor).ConfigureAwait(false);
+                await manager.ProcessQueueAsync(processor).ConfigureAwait(false);
             }
 
             return true;
