@@ -47,7 +47,7 @@
             <div class="filter padded container" style="background-color: #efefef; height: 100%;">
                 <div class="report title">@Model.ReportTitle</div>
 
-                <div class="ui small parameter form">
+                <div class="ui small parameter flat form">
                     @foreach (var parameter in Model.Parameters)
                     {
                         string name = parameter.Name.Replace("@", "");
@@ -110,7 +110,7 @@
         @I18N.SendEmail
     </div>
     <div class="content">
-        <div class="ui form">
+        <div class="ui flat form">
             <div class="field">
                 <label>@I18N.SendTo</label>
                 <input id="SendToInputEmail" type="email" required data-persist placeholder="Enter Email Address"/>

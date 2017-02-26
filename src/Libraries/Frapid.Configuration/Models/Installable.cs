@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Frapid.Mapper.Database;
 using Newtonsoft.Json;
 
 namespace Frapid.Configuration.Models
@@ -33,6 +34,7 @@ namespace Frapid.Configuration.Models
         public string My { get; set; }
         public string OverrideTemplatePath { get; set; }
         public string OverrideDestination { get; set; }
+        public string OverrideTenantProviderType { get; set; }//Empty value means all, Npgsql for PostgreSQL, System.Data.SqlClient for SQL Server
 
         [JsonIgnore]
         public List<Installable> Dependencies { get; private set; }
