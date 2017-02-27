@@ -55,38 +55,13 @@ function createEvent(start, end, allDay) {
 
 
 function initializeDatePicker() {
-    function getDatePickerOptions(dateOnly) {
-        const options = {
-            parser: {
-                date: function (text) {
-                    return new Date(text);
-                }
-            },
-            formatter: {
-                date: function (date) {
-                    if (!date) return '';
-                    return $.datepicker.formatDate(window.convertNetDateFormat(window.longDateFormat), date);
-                }
-            },
-            initialDate: window.today ? new Date(window.today) : new Date()
-        };
-
-        if (dateOnly) {
-            options.type = 'date';
-        };
-
-        return options;
-    };
-
-    $('.ui.date.only.picker').calendar(getDatePickerOptions(true));
+    window.initializeCalendar();
 
     $('.ui.date.only.picker').calendar("setting", "onChange", function (date) {
         $('#calendar').fullCalendar('gotoDate', date);
     });
 
     $('.ui.date.only.picker').calendar("set date", new Date(window.today), false, false);
-
-    $('.ui.date.time.picker').calendar(getDatePickerOptions(false));
 };
 
 
@@ -238,7 +213,7 @@ function parseTokens(input) {
 };
 
 
-function initializeCalendar() {
+function initializeFullCalendar() {
     var initialized = false;
 
     function initializeUi() {
@@ -1034,4 +1009,4 @@ function parseToFullCalendarEvents(data) {
 $(".sortable").sortable();
 
 
-window.initializeCalendar();
+window.initializeFullCalendar();

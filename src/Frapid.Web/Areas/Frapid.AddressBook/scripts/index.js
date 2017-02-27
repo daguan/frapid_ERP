@@ -347,16 +347,17 @@ function loadContacts() {
         entry.append(getInfo());
         target.append(entry);
 
-        entry.off("click").on("click", function() {
+        entry.off("click").on("click", function () {
             const selectedEl = target.find(".entry.selected");
 
             if (selectedEl.is(entry)) {
                 return;
             };
 
+            loadContact(this);
+
             target.find(".entry").removeClass("selected");
             entry.addClass("selected");
-            loadContact(this);
         });
 
         entry.off("keyup").on("keyup", function(e) {

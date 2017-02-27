@@ -269,6 +269,7 @@ function loadDatepicker() {
 
 function initializeCalendar() {	
     function getDatePickerOptions(dateOnly) {
+        //Todo: localization: localize week names.
         const options = {
             parser: {
                 date: function (text) {
@@ -291,11 +292,10 @@ function initializeCalendar() {
         return options;
     };
 
+
     $('.ui.date.only.picker').calendar(getDatePickerOptions(true));
-
-    $('.ui.date.only.picker').calendar("set date", new Date(window.today), false, false);
-
     $('.ui.date.time.picker').calendar(getDatePickerOptions(false));
+    $('.ui.date.only.picker').calendar("set date", new Date(window.today), false, false);
 };
 
 $(document).ready(function () {
