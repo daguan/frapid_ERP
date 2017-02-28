@@ -3,7 +3,8 @@ function shuffle(o) {
     return o;
 };
 
-var chartColors = shuffle(["#DF0101", "#DF3A01", "#DF7401", "#DBA901", "#D7DF01", "#A5DF00", "#74DF00", "#3ADF00", "#01DF74", "#01DFA5", "#01DFD7", "#01A9DB", "#0174DF", "#013ADF", "#0101DF", "#3A01DF", "#7401DF", "#A901DB", "#DF01D7", "#DF01A5", "#DF0174", "#DF013A", "#6E6E6E"]);
+//var chartColors = ["#DF0101", "#DF3A01", "#DF7401", "#DBA901", "#D7DF01", "#A5DF00", "#74DF00", "#3ADF00", "#01DF74", "#01DFA5", "#01DFD7", "#01A9DB", "#0174DF", "#013ADF", "#0101DF", "#3A01DF", "#7401DF", "#A901DB", "#DF01D7", "#DF01A5", "#DF0174", "#DF013A", "#6E6E6E"];
+var chartColors = ["#005BAC", "#CC6858", "#00894F", "#7D6B55", "#938F3A", "#C3CA00", "#917199", "#DF816E", "#CB5252", "#83CCD2", "#509D69", "#8F939F", "#D5B329", "#A76283", "#70A68C", "#E95383", "#A6BAB2", "#D5B329", "#4994C4", "#009591", "#4E4770", "#BA5054", "#D6E9C4", "#32ADC6"];
 
 function getFillColor(index) {
     var color = hexToRgb(chartColors[index]);
@@ -26,84 +27,8 @@ function hexToRgb(hex) {
     } : null;
 };
 
-function prepareChart(datasourceId, canvasId, legendId, type, log) {
-    chartColors = shuffle(chartColors);
-    var table = $("#" + datasourceId);
-    var labels = [];
-    var data = [];
-    var datasets = [];
-    var title;
-    var index = 0;
-
-    //Loop through the table header for labels.
-    table.find("tr:first-child th:not(:first-child)").each(function () {
-        //Create labels from header row columns.
-        labels.push($(this).html());
-    });
-
-    //Loop through each row of the table body.
-    table.find("tr").not(":first").each(function () {
-        //Get an instance of the current row
-        var row = $(this);
-
-        //The first column of each row is the legend.
-        title = row.find(":first-child").html();
-
-        //Reset the data object's value from the previous iteration.
-        data = [];
-        //Loop through the row columns.
-        row.find(":not(:first-child)").each(function () {
-            //Get data from this row.
-            data.push(parseFloat2($(this).html()));
-        });
-
-        //Create a new dataset representing this row.
-        var dataset =
-        {
-            fillColor: getFillColor(index),
-            strokeColor: chartColors[index],
-            pointColor: chartColors[index],
-            data: data,
-            title: title
-        };
-
-        //Add the dataset object to the array object.
-        datasets.push(dataset);
-
-        if (log) {
-            console.log(JSON.stringify(datasets));
-        };
-
-        index++;
-    });
-
-    table.remove();
-
-    var reportData = {
-        labels: labels,
-        datasets: datasets
-    };
-
-    var ctx = document.getElementById(canvasId).getContext("2d");
-
-    switch (type) {
-        case "line":
-            new Chart(ctx).Line(reportData);
-            break;
-        case "radar":
-            new Chart(ctx).Radar(reportData);
-            break;
-        default:
-            new Chart(ctx).Bar(reportData);
-            break;
-    };
-
-    legend(document.getElementById(legendId), reportData);
-    table.hide();
-};
-
 function prepare1DChart(datasourceId, canvasId, legendId, type, remove, titleColumnIndex, valueColumnIndex) {
-    chartColors = shuffle(chartColors);
+    //chartColors = shuffle(chartColors);
     var table = $("#" + datasourceId);
     var labels = [];
     var datasets = [];
@@ -119,11 +44,10 @@ function prepare1DChart(datasourceId, canvasId, legendId, type, remove, titleCol
 
         var dataset =
         {
-            fillColor: getFillColor(i),
-            strokeColor: chartColors[i],
-            pointColor: chartColors[i],
+            backgroundColor: getFillColor(i),
+            borderColor: "transparent",
             data: [value],
-            title: title
+            label: title
         };
 
         //Add the dataset object to the array object.
@@ -141,25 +65,26 @@ function prepare1DChart(datasourceId, canvasId, legendId, type, remove, titleCol
         datasets: datasets
     };
 
+
     var ctx = document.getElementById(canvasId).getContext("2d");
 
     switch (type) {
         case "line":
-            new Chart(ctx).Line(reportData);
+            new Chart(ctx, { type: "line", data: reportData });
             break;
         case "radar":
-            new Chart(ctx).Radar(reportData);
+            new Chart(ctx, { type: "radar", data: reportData });
             break;
         default:
-            new Chart(ctx).Bar(reportData);
+            new Chart(ctx, { type: "bar", data: reportData });
             break;
     };
 
-    legend(document.getElementById(legendId), reportData);
+    //legend(document.getElementById(legendId), reportData);
 };
 
 function prepareReportChart(datasourceId, canvasId, legendId, type, hide, titleColumnIndex, valueColumnIndex) {
-    var pieCharts = ["polar", "pie", "doughnut"];
+    var pieCharts = ["polararea", "pie", "doughnut"];
 
     if ($.inArray(type, pieCharts) === -1) {
         prepare1DChart(datasourceId, canvasId, legendId, type, hide, titleColumnIndex, valueColumnIndex);
@@ -170,10 +95,10 @@ function prepareReportChart(datasourceId, canvasId, legendId, type, hide, titleC
 };
 
 function preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColumnIndex, valueColumnIndex) {
-    chartColors = shuffle(chartColors);
+    //chartColors = shuffle(chartColors);
     var table = $("#" + datasourceId);
     var value;
-    var data = [];
+    var data = { title: "", labels: [], datasets: [{ data: [], backgroundColor: [] }] };
 
     if (typeof titleColumnIndex === "undefined") {
         titleColumnIndex = 0;
@@ -197,20 +122,17 @@ function preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColu
         //The first column of each row is the legend.
         value = parseFloat2(row.find("td:eq(" + parseInt(valueColumnIndex) + ")").html());
 
-        var dataset = {
-            value: value,
-            color: chartColors[counter],
-            title: title
-        };
+        data.labels.push(title);
+        data.datasets[0].data.push(value);
+        data.datasets[0].backgroundColor.push(chartColors[counter]);
 
         //Add the dataset object to the array object.
-        data.push(dataset);
         counter++;
     });
 
     var ctx = document.getElementById(canvasId).getContext("2d");
 
-    var animation = true;
+    var animation = { animateScale: true };
 
     if (typeof (window.chartAnimation) !== "undefined") {
         animation = window.chartAnimation;
@@ -222,17 +144,29 @@ function preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColu
 
     switch (type) {
         case "doughnut":
-            new Chart(ctx).Doughnut(data, options);
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: options
+            });
             break;
-        case "polar":
-            new Chart(ctx).PolarArea(data, options);
+        case "polararea":
+            new Chart(ctx, {
+                type: 'polarArea',
+                data: data,
+                options: options
+            });
             break;
         default:
-            new Chart(ctx).Pie(data, options);
+            new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: options
+            });
             break;
     };
 
-    legend(document.getElementById(legendId), data);
+    //legend(document.getElementById(legendId), data);
     if (hide) {
         table.hide();
     };
