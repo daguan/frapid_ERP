@@ -43,6 +43,8 @@ namespace Frapid.Installer
                 await new AppInstaller(this.Tenant, this.Database, dependency).InstallAsync().ConfigureAwait(false);
             }
 
+            InstallerLog.Verbose($"Installing module {this.Installable.ApplicationName}.");
+
             await this.CreateSchemaAsync().ConfigureAwait(false);
             await this.CreateMyAsync().ConfigureAwait(false);
             this.CreateOverride();
