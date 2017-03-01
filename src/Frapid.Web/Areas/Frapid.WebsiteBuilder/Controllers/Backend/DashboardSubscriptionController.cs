@@ -8,7 +8,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     public class DashboardSubscriptionController : DashboardController
     {
         [Route("dashboard/website/subscriptions")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Index()
         {

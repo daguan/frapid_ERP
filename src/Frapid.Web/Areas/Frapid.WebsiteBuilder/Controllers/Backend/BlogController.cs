@@ -13,7 +13,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     public sealed class BlogController : DashboardController
     {
         [Route("dashboard/website/blogs")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Index()
         {
@@ -23,7 +22,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
 
         [Route("dashboard/website/blogs/manage")]
         [Route("dashboard/website/blogs/new")]
-        [RestrictAnonymous]
         [MenuPolicy(OverridePath = "/dashboard/website/blogs")]
         public async Task<ActionResult> ManageAsync(int contentId = 0)
         {
@@ -32,7 +30,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         }
 
         [Route("dashboard/website/blogs/add-or-edit")]
-        [RestrictAnonymous]
         [MenuPolicy(OverridePath = "/dashboard/website/blogs")]
         [HttpPost]
         public async Task<ActionResult> PostAsync(Content content)

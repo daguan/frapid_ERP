@@ -8,7 +8,6 @@ namespace Frapid.Config.Controllers
     public class CurrencyController : DashboardController
     {
         [Route("dashboard/config/currencies")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Index()
         {

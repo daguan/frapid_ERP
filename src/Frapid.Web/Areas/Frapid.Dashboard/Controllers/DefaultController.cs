@@ -13,14 +13,12 @@ namespace Frapid.Dashboard.Controllers
     public class DefaultController : DashboardController
     {
         [Route("dashboard")]
-        [RestrictAnonymous]
         public ActionResult Index()
         {
             return this.View(this.GetRazorView<AreaRegistration>("Default/Index.cshtml", this.Tenant));
         }
 
         [Route("dashboard/meta")]
-        [RestrictAnonymous]
         public ActionResult GetMeta()
         {
             return this.Ok
@@ -51,7 +49,6 @@ namespace Frapid.Dashboard.Controllers
 
 
         [Route("dashboard/custom-variables")]
-        [RestrictAnonymous]
         public async Task<ActionResult> GetCustomVariablesAsync()
         {
             var meta = await AppUsers.GetCurrentAsync().ConfigureAwait(true);

@@ -8,7 +8,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     public class MenuItemController : DashboardController
     {
         [Route("dashboard/website/menus/items")]
-        [RestrictAnonymous]
         [MenuPolicy(OverridePath = "/dashboard/website/menus")]
         public ActionResult Index()
         {

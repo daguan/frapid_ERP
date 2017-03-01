@@ -8,7 +8,6 @@ namespace Frapid.Config.Controllers
     public class OfficeController : DashboardController
     {
         [Route("dashboard/config/offices")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Index()
         {

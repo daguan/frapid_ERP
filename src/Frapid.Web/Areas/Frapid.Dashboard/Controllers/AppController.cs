@@ -9,8 +9,8 @@ namespace Frapid.Dashboard.Controllers
 {
     public class AppController : FrapidController
     {
-        [Route("dashboard/my/apps")]
         [RestrictAnonymous]
+        [Route("dashboard/my/apps")]
         public async Task<ActionResult> GetAppsAsync()
         {
             int userId = this.AppUser.UserId;

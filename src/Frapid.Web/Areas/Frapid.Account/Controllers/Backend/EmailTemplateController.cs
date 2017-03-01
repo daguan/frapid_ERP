@@ -13,7 +13,6 @@ namespace Frapid.Account.Controllers.Backend
     public class EmailTemplateController : DashboardController
     {
         [Route("dashboard/account/email-templates/{file}")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Index(string file)
         {
@@ -33,7 +32,6 @@ namespace Frapid.Account.Controllers.Backend
         }
 
         [Route("dashboard/account/email-templates")]
-        [RestrictAnonymous]
         [HttpPost]
         public ActionResult Save(Template model)
         {

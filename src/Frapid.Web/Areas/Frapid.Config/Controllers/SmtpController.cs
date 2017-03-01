@@ -8,7 +8,6 @@ namespace Frapid.Config.Controllers
     public class SmtpController : DashboardController
     {
         [Route("dashboard/config/smtp")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Index()
         {

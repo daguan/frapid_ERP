@@ -8,7 +8,6 @@ namespace Frapid.Account.Controllers.Backend
     public class UserController : DashboardController
     {
         [Route("dashboard/account/user/list")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Index()
         {

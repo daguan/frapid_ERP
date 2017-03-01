@@ -15,7 +15,6 @@ namespace MixERP.Social.Controllers
     public sealed class DefaultController : DashboardController
     {
         [Route("dashboard/social")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Index()
         {
@@ -23,7 +22,6 @@ namespace MixERP.Social.Controllers
         }
 
         [Route("dashboard/social")]
-        [RestrictAnonymous]
         [MenuPolicy]
         [HttpPost]
         public async Task<ActionResult> PostAsync(Feed model)
@@ -34,7 +32,6 @@ namespace MixERP.Social.Controllers
         }
 
         [Route("dashboard/social/delete/{feedId}")]
-        [RestrictAnonymous]
         [MenuPolicy(OverridePath = "/dashboard/social")]
         [HttpDelete]
         public async Task<ActionResult> DeleteAsync(long feedId)
@@ -53,7 +50,6 @@ namespace MixERP.Social.Controllers
         }
 
         [Route("dashboard/social/like/{feedId}")]
-        [RestrictAnonymous]
         [MenuPolicy(OverridePath = "/dashboard/social")]
         [HttpPut]
         public async Task<ActionResult> LikeAsync(long feedId)
@@ -72,7 +68,6 @@ namespace MixERP.Social.Controllers
         }
 
         [Route("dashboard/social/unlike/{feedId}")]
-        [RestrictAnonymous]
         [MenuPolicy(OverridePath = "/dashboard/social")]
         [HttpPut]
         public async Task<ActionResult> UnlikeAsync(long feedId)
@@ -91,7 +86,6 @@ namespace MixERP.Social.Controllers
         }
 
         [Route("dashboard/social/delete/{feedId}/attachment/{attachment}")]
-        [RestrictAnonymous]
         [MenuPolicy(OverridePath = "/dashboard/social")]
         [HttpDelete]
         public async Task<ActionResult> DeleteAttachmentAsync(long feedId, string attachment)
@@ -112,7 +106,6 @@ namespace MixERP.Social.Controllers
         [Route("dashboard/social/feeds")]
         [Route("dashboard/social/feeds/{lastFeedId}")]
         [Route("dashboard/social/feeds/{lastFeedId}/{parentFeedId}")]
-        [RestrictAnonymous]
         [MenuPolicy(OverridePath = "/dashboard/social")]
         public async Task<ActionResult> GetNextTopFeedsAsync(long lastFeedId = 0, long parentFeedId = 0)
         {
