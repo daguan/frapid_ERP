@@ -70,7 +70,7 @@ function displayContent() {
 };
 
 $(document).ready(function () {
-    window.initalizeSelectApis();
+    window.initializeSelectApis();
     window.initializeUITags();
     $(".ui.checkbox").checkbox();
     window.loadDatepicker();
