@@ -42,7 +42,7 @@ namespace Frapid.Web.Controllers
         }
 
         [Route("assets/js/{*name}")]
-        [FrapidOutputCache(ProfileName = "StaticFile.xml", Location = OutputCacheLocation.Client)]
+        [FileOutputCache(ProfileName = "StaticFile.xml", Duration = 60 * 60, Location = OutputCacheLocation.Client)]
         public ActionResult Js(string name)
         {
             var asset = AssetDiscovery.FindByName(name);
@@ -61,7 +61,7 @@ namespace Frapid.Web.Controllers
         }
 
         [Route("assets/css/{*name}")]
-        [FrapidOutputCache(ProfileName = "StaticFile.xml", Location = OutputCacheLocation.Client)]
+        [FileOutputCache(ProfileName = "StaticFile.xml", Duration = 60 * 60, Location = OutputCacheLocation.Client)]
         public ActionResult Css(string name)
         {
             var asset = AssetDiscovery.FindByName(name);
