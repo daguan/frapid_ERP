@@ -12,7 +12,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     public class SubscriptionEmailTemplateController : DashboardController
     {
         [Route("dashboard/website/subscription/welcome")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Welcome()
         {
@@ -22,7 +21,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         }
 
         [Route("dashboard/website/subscription/removed")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Removed()
         {
@@ -33,7 +31,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
 
         [Route("dashboard/website/subscription/welcome/save")]
         [HttpPost]
-        [RestrictAnonymous]
         public ActionResult SaveWelcomeTemplate(Template model)
         {
             string path = this.GetWelcomeTemplatePath();
@@ -43,7 +40,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
 
         [Route("dashboard/website/subscription/removed/save")]
         [HttpPost]
-        [RestrictAnonymous]
         public ActionResult SaveSubscriptionRemovedTemplate(Template model)
         {
             string path = this.GetSubscriptionRemovedTemplatePath();

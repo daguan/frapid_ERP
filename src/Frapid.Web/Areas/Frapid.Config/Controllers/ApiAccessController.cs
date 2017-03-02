@@ -8,7 +8,6 @@ namespace Frapid.Config.Controllers
     public class ApiAccessController : DashboardController
     {
         [Route("dashboard/config/api-access")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Index()
         {

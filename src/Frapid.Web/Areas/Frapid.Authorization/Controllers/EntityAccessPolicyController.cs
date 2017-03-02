@@ -13,7 +13,6 @@ namespace Frapid.Authorization.Controllers
     [AntiForgery]
     public class EntityAccessPolicyController : DashboardController
     {
-        [RestrictAnonymous]
         [Route("dashboard/authorization/entity-access/user-policy")]
         [MenuPolicy]
         public async Task<ActionResult> UserPolicyAsync()
@@ -23,7 +22,6 @@ namespace Frapid.Authorization.Controllers
         }
 
 
-        [RestrictAnonymous]
         [Route("dashboard/authorization/entity-access/user-policy/{officeId}/{userId}")]
         public async Task<ActionResult> GetPolicyAsync(int officeId, int userId)
         {
@@ -32,7 +30,6 @@ namespace Frapid.Authorization.Controllers
         }
 
 
-        [RestrictAnonymous]
         [Route("dashboard/authorization/entity-access/user-policy/{officeId}/{userId}")]
         [HttpPost]
         public async Task<ActionResult> SavePolicyAsync(int officeId, int userId, List<AccessPolicyInfo> model)

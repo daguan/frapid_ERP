@@ -8,7 +8,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     public class ContactController : DashboardController
     {
         [Route("dashboard/website/contacts")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Index()
         {

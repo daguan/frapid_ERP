@@ -12,7 +12,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     public class LayoutController: DashboardController
     {
         [Route("dashboard/website/layouts")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Master()
         {
@@ -21,7 +20,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
 
         [Route("dashboard/website/layouts/save")]
         [HttpPost]
-        [RestrictAnonymous]
         public ActionResult SaveLayoutFile(string theme, string fileName, string contents)
         {
             bool result = LayoutManagerModel.SaveLayoutFile(this.Tenant, theme, fileName, contents);

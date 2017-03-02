@@ -8,7 +8,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     public class CategoryController : DashboardController
     {
         [Route("dashboard/website/categories")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Index()
         {

@@ -11,7 +11,7 @@ CREATE PROCEDURE core.create_app
     @version_number                             national character varying(100),
     @publisher                                  national character varying(100),
     @published_on                               date,
-    @icon                                       national character varying(100),
+    @icon                                       national character varying(MAX),
     @landing_url                                national character varying(100),
     @dependencies                               national character varying(MAX)
 )

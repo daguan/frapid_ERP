@@ -37,7 +37,9 @@ namespace Frapid.Dashboard.Controllers
             string layoutDirectory = HostingEnvironment.MapPath(layout);
 
             if (layoutDirectory != null && Directory.Exists(layoutDirectory))
+            {
                 return layout;
+            }
 
             return null;
         }
@@ -45,13 +47,19 @@ namespace Frapid.Dashboard.Controllers
         private bool IsAjax(HttpContextBase context)
         {
             if (context.Request.IsAjaxRequest())
+            {
                 return true;
+            }
 
             string query = context.Request.QueryString["IsAjaxRequest"];
 
             if (!string.IsNullOrWhiteSpace(query))
+            {
                 if (query.ToUpperInvariant().StartsWith("T"))
+                {
                     return true;
+                }
+            }
 
             return false;
         }
@@ -68,7 +76,9 @@ namespace Frapid.Dashboard.Controllers
             bool isAjax = this.IsAjax(filterContext.HttpContext);
 
             if (!isAjax)
+            {
                 this.ViewBag.Layout = this.ViewBag.LayoutPath + this.ViewBag.LayoutFile;
+            }
         }
 
         protected ContentResult FrapidView(string path, object model = null)

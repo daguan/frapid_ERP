@@ -12,7 +12,6 @@ namespace Frapid.Authorization.Controllers
     [AntiForgery]
     public class MenuAccessPolicyController : DashboardController
     {
-        [RestrictAnonymous]
         [Route("dashboard/authorization/menu-access/user-policy")]
         [MenuPolicy]
         public async Task<ActionResult> UserPolicyAsync()
@@ -21,7 +20,6 @@ namespace Frapid.Authorization.Controllers
             return this.FrapidView(this.GetRazorView<AreaRegistration>("MenuPolicy/Policy.cshtml", this.Tenant), model);
         }
 
-        [RestrictAnonymous]
         [Route("dashboard/authorization/menu-access/user-policy/{officeId}/{userId}")]
         public async Task<ActionResult> GetPolicyAsync(int officeId, int userId)
         {
@@ -30,7 +28,6 @@ namespace Frapid.Authorization.Controllers
         }
 
 
-        [RestrictAnonymous]
         [HttpPut]
         [Route("dashboard/authorization/menu-access/user-policy")]
         public async Task<ActionResult> SavePolicyAsync(UserMenuPolicyInfo model)

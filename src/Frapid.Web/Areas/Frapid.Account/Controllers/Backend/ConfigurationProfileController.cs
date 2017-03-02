@@ -8,7 +8,6 @@ namespace Frapid.Account.Controllers.Backend
     public class ConfigurationProfileController : DashboardController
     {
         [Route("dashboard/account/configuration-profile")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Index()
         {

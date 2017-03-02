@@ -16,7 +16,6 @@ namespace Frapid.Account.Controllers.Backend
     public class ChangePasswordController : DashboardController
     {
         [Route("dashboard/account/user/change-password")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult ChangePassword()
         {
@@ -29,7 +28,6 @@ namespace Frapid.Account.Controllers.Backend
         }
 
         [Route("dashboard/account/user/change-password")]
-        [RestrictAnonymous]
         [HttpPost]
         public async Task<ActionResult> ChangePasswordAsync(ChangePasswordInfo model)
         {

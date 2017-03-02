@@ -16,7 +16,6 @@ namespace Frapid.Account.Controllers.Backend
     public class AddUserController : DashboardController
     {
         [Route("dashboard/account/user/add")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Add()
         {
@@ -29,7 +28,6 @@ namespace Frapid.Account.Controllers.Backend
         }
 
         [Route("dashboard/account/user/add")]
-        [RestrictAnonymous]
         [HttpPost]
         public async Task<ActionResult> AddAsync(UserInfo model)
         {

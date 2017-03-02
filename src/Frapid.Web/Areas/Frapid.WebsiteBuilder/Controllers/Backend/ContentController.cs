@@ -16,7 +16,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     public sealed class ContentController : DashboardController
     {
         [Route("dashboard/website/contents")]
-        [RestrictAnonymous]
         [MenuPolicy]
         public ActionResult Index()
         {
@@ -26,7 +25,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
 
         [Route("dashboard/website/contents/manage")]
         [Route("dashboard/website/contents/new")]
-        [RestrictAnonymous]
         [MenuPolicy(OverridePath = "/dashboard/website/contents")]
         public async Task<ActionResult> ManageAsync(int contentId = 0)
         {
@@ -35,7 +33,6 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         }
 
         [Route("dashboard/website/contents/add-or-edit")]
-        [RestrictAnonymous]
         [MenuPolicy(OverridePath = "/dashboard/website/contents")]
         [HttpPost]
         public async Task<ActionResult> PostAsync(Content content)
