@@ -234,8 +234,8 @@ function initializeSelectApis() {
     candidates.each(function () {
         var el = $(this);
         const apiUrl = el.attr("data-api");
-        const valueField = el.attr("data-api-value-field");
-        const keyField = el.attr("data-api-key-field");
+        const valueField = el.attr("data-api-value-field") || "Value";
+        const keyField = el.attr("data-api-key-field") || "Key";
 
         window.ajaxDataBind(apiUrl, el, null, keyField, valueField, null, function () {
             var selectedValue = el.attr("data-api-selected-value");

@@ -1,5 +1,9 @@
 @echo off
 SET builddir=%~dp0
+
+@echo Building Resources
+"%~dp0..\src\Frapid.Web\bin\frapid.exe" create resource
+
 rmdir "%~dp0..\src\Frapid.Web\bin" /Q /S
 xcopy "%~dp0..\src\Frapid.Web\Resources\_Configs\Assets" "%~dp0..\src\Frapid.Web\Resources\Configs\Assets\" /s/y
 
