@@ -7,6 +7,7 @@ using Frapid.Areas.Authorization;
 using Frapid.Areas.CSRF;
 using Frapid.Dashboard;
 using Frapid.Dashboard.Controllers;
+using Frapid.DataAccess.Models;
 using Frapid.WebsiteBuilder.DAL;
 using Frapid.WebsiteBuilder.DTO;
 
@@ -17,6 +18,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
     {
         [Route("dashboard/website/contents")]
         [MenuPolicy]
+        [AccessPolicy("website", "contents", AccessTypeEnum.Read)]
         public ActionResult Index()
         {
             return this.FrapidView(this.GetRazorView<AreaRegistration>("Backend/Content/Index.cshtml", this.Tenant));
@@ -26,6 +28,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         [Route("dashboard/website/contents/manage")]
         [Route("dashboard/website/contents/new")]
         [MenuPolicy(OverridePath = "/dashboard/website/contents")]
+        [AccessPolicy("website", "contents", AccessTypeEnum.Read)]
         public async Task<ActionResult> ManageAsync(int contentId = 0)
         {
             var model = await Contents.GetAsync(this.Tenant, contentId).ConfigureAwait(true) ?? new Content();
@@ -35,6 +38,7 @@ namespace Frapid.WebsiteBuilder.Controllers.Backend
         [Route("dashboard/website/contents/add-or-edit")]
         [MenuPolicy(OverridePath = "/dashboard/website/contents")]
         [HttpPost]
+        [AccessPolicy("website", "contents", AccessTypeEnum.Create)]
         public async Task<ActionResult> PostAsync(Content content)
         {
             if (!this.ModelState.IsValid)

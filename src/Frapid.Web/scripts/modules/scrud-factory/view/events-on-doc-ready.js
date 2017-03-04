@@ -1,4 +1,5 @@
 ﻿function docready() {
+    $("#ExportDropDown").dropdown();
     window.scrudForm = $(".form.factory");
     window.scrudView = $(".view.factory");
 

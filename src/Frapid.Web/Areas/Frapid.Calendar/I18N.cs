@@ -29,9 +29,44 @@ namespace Frapid.Calendar
 		public static string Calendar => I18NResource.GetString(ResourceDirectory, "Calendar");
 
 		/// <summary>
+		///Audit User Id
+		/// </summary>
+		public static string AuditUserId => I18NResource.GetString(ResourceDirectory, "AuditUserId");
+
+		/// <summary>
+		///Ends On
+		/// </summary>
+		public static string EndsOn => I18NResource.GetString(ResourceDirectory, "EndsOn");
+
+		/// <summary>
+		///Deleted
+		/// </summary>
+		public static string Deleted => I18NResource.GetString(ResourceDirectory, "Deleted");
+
+		/// <summary>
 		///All Day
 		/// </summary>
 		public static string AllDay => I18NResource.GetString(ResourceDirectory, "AllDay");
+
+		/// <summary>
+		///Event Id
+		/// </summary>
+		public static string EventId => I18NResource.GetString(ResourceDirectory, "EventId");
+
+		/// <summary>
+		///Alarm
+		/// </summary>
+		public static string Alarm => I18NResource.GetString(ResourceDirectory, "Alarm");
+
+		/// <summary>
+		///Until
+		/// </summary>
+		public static string Until => I18NResource.GetString(ResourceDirectory, "Until");
+
+		/// <summary>
+		///Time Zone
+		/// </summary>
+		public static string TimeZone => I18NResource.GetString(ResourceDirectory, "TimeZone");
 
 		/// <summary>
 		///Note
@@ -39,9 +74,19 @@ namespace Frapid.Calendar
 		public static string Note => I18NResource.GetString(ResourceDirectory, "Note");
 
 		/// <summary>
+		///Category Id
+		/// </summary>
+		public static string CategoryId => I18NResource.GetString(ResourceDirectory, "CategoryId");
+
+		/// <summary>
 		///Location
 		/// </summary>
 		public static string Location => I18NResource.GetString(ResourceDirectory, "Location");
+
+		/// <summary>
+		///Url
+		/// </summary>
+		public static string Url => I18NResource.GetString(ResourceDirectory, "Url");
 
 		/// <summary>
 		///Reminder Types
@@ -69,6 +114,11 @@ namespace Frapid.Calendar
 		public static string StartsAt => I18NResource.GetString(ResourceDirectory, "StartsAt");
 
 		/// <summary>
+		///Audit Ts
+		/// </summary>
+		public static string AuditTs => I18NResource.GetString(ResourceDirectory, "AuditTs");
+
+		/// <summary>
 		///Name
 		/// </summary>
 		public static string Name => I18NResource.GetString(ResourceDirectory, "Name");
@@ -79,61 +129,6 @@ namespace Frapid.Calendar
 		public static string CategoryOrder => I18NResource.GetString(ResourceDirectory, "CategoryOrder");
 
 		/// <summary>
-		///Recurrence
-		/// </summary>
-		public static string Recurrence => I18NResource.GetString(ResourceDirectory, "Recurrence");
-
-		/// <summary>
-		///Audit User Id
-		/// </summary>
-		public static string AuditUserId => I18NResource.GetString(ResourceDirectory, "AuditUserId");
-
-		/// <summary>
-		///Ends On
-		/// </summary>
-		public static string EndsOn => I18NResource.GetString(ResourceDirectory, "EndsOn");
-
-		/// <summary>
-		///Deleted
-		/// </summary>
-		public static string Deleted => I18NResource.GetString(ResourceDirectory, "Deleted");
-
-		/// <summary>
-		///Event Id
-		/// </summary>
-		public static string EventId => I18NResource.GetString(ResourceDirectory, "EventId");
-
-		/// <summary>
-		///Alarm
-		/// </summary>
-		public static string Alarm => I18NResource.GetString(ResourceDirectory, "Alarm");
-
-		/// <summary>
-		///Until
-		/// </summary>
-		public static string Until => I18NResource.GetString(ResourceDirectory, "Until");
-
-		/// <summary>
-		///Time Zone
-		/// </summary>
-		public static string TimeZone => I18NResource.GetString(ResourceDirectory, "TimeZone");
-
-		/// <summary>
-		///Category Id
-		/// </summary>
-		public static string CategoryId => I18NResource.GetString(ResourceDirectory, "CategoryId");
-
-		/// <summary>
-		///Url
-		/// </summary>
-		public static string Url => I18NResource.GetString(ResourceDirectory, "Url");
-
-		/// <summary>
-		///Audit Ts
-		/// </summary>
-		public static string AuditTs => I18NResource.GetString(ResourceDirectory, "AuditTs");
-
-		/// <summary>
 		///User Id
 		/// </summary>
 		public static string UserId => I18NResource.GetString(ResourceDirectory, "UserId");
@@ -142,6 +137,11 @@ namespace Frapid.Calendar
 		///Color Code
 		/// </summary>
 		public static string ColorCode => I18NResource.GetString(ResourceDirectory, "ColorCode");
+
+		/// <summary>
+		///Recurrence
+		/// </summary>
+		public static string Recurrence => I18NResource.GetString(ResourceDirectory, "Recurrence");
 
 		/// <summary>
 		///Is Local

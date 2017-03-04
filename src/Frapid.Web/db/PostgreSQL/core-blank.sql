@@ -671,7 +671,6 @@ CREATE TABLE core.offices
     parent_office_id                            integer NULL REFERENCES core.offices,
 	registration_number							national character varying(100),
 	pan_number									national character varying(50),
-	has_vat										boolean NOT NULL DEFAULT(false),
 	allow_transaction_posting					boolean NOT NULL DEFAULT(false),
     audit_user_id                               integer,
     audit_ts                                	TIMESTAMP WITH TIME ZONE DEFAULT(NOW()),

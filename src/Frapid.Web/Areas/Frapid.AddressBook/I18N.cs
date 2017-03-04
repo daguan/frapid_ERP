@@ -29,71 +29,6 @@ namespace Frapid.AddressBook
 		public static string AddressBook => I18NResource.GetString(ResourceDirectory, "AddressBook");
 
 		/// <summary>
-		///Gender
-		/// </summary>
-		public static string Gender => I18NResource.GetString(ResourceDirectory, "Gender");
-
-		/// <summary>
-		///Note
-		/// </summary>
-		public static string Note => I18NResource.GetString(ResourceDirectory, "Note");
-
-		/// <summary>
-		///Title
-		/// </summary>
-		public static string Title => I18NResource.GetString(ResourceDirectory, "Title");
-
-		/// <summary>
-		///Is Private
-		/// </summary>
-		public static string IsPrivate => I18NResource.GetString(ResourceDirectory, "IsPrivate");
-
-		/// <summary>
-		///First Name
-		/// </summary>
-		public static string FirstName => I18NResource.GetString(ResourceDirectory, "FirstName");
-
-		/// <summary>
-		///Email Addresses
-		/// </summary>
-		public static string EmailAddresses => I18NResource.GetString(ResourceDirectory, "EmailAddresses");
-
-		/// <summary>
-		///Associated User Id
-		/// </summary>
-		public static string AssociatedUserId => I18NResource.GetString(ResourceDirectory, "AssociatedUserId");
-
-		/// <summary>
-		///Organization
-		/// </summary>
-		public static string Organization => I18NResource.GetString(ResourceDirectory, "Organization");
-
-		/// <summary>
-		///Prefix
-		/// </summary>
-		public static string Prefix => I18NResource.GetString(ResourceDirectory, "Prefix");
-
-		/// <summary>
-		///State
-		/// </summary>
-		public static string State => I18NResource.GetString(ResourceDirectory, "State");
-
-		/// <summary>
-		///Fax Numbers
-		/// </summary>
-		public static string FaxNumbers => I18NResource.GetString(ResourceDirectory, "FaxNumbers");
-
-		/// <summary>
-		///Contact Id
-		/// </summary>
-		public static string ContactId => I18NResource.GetString(ResourceDirectory, "ContactId");
-
-		/// <summary>
-		///City
-		/// </summary>
-		public static string City => I18NResource.GetString(ResourceDirectory, "City");
-
-		/// <summary>
 		///Audit User Id
 		/// </summary>
 		public static string AuditUserId => I18NResource.GetString(ResourceDirectory, "AuditUserId");
@@ -109,6 +44,11 @@ namespace Frapid.AddressBook
 		public static string Deleted => I18NResource.GetString(ResourceDirectory, "Deleted");
 
 		/// <summary>
+		///Gender
+		/// </summary>
+		public static string Gender => I18NResource.GetString(ResourceDirectory, "Gender");
+
+		/// <summary>
 		///Middle Name
 		/// </summary>
 		public static string MiddleName => I18NResource.GetString(ResourceDirectory, "MiddleName");
@@ -122,6 +62,11 @@ namespace Frapid.AddressBook
 		///Time Zone
 		/// </summary>
 		public static string TimeZone => I18NResource.GetString(ResourceDirectory, "TimeZone");
+
+		/// <summary>
+		///Note
+		/// </summary>
+		public static string Note => I18NResource.GetString(ResourceDirectory, "Note");
 
 		/// <summary>
 		///Created By
@@ -149,6 +94,11 @@ namespace Frapid.AddressBook
 		public static string Suffix => I18NResource.GetString(ResourceDirectory, "Suffix");
 
 		/// <summary>
+		///Title
+		/// </summary>
+		public static string Title => I18NResource.GetString(ResourceDirectory, "Title");
+
+		/// <summary>
 		///Telephones
 		/// </summary>
 		public static string Telephones => I18NResource.GetString(ResourceDirectory, "Telephones");
@@ -157,6 +107,11 @@ namespace Frapid.AddressBook
 		///Country
 		/// </summary>
 		public static string Country => I18NResource.GetString(ResourceDirectory, "Country");
+
+		/// <summary>
+		///Is Private
+		/// </summary>
+		public static string IsPrivate => I18NResource.GetString(ResourceDirectory, "IsPrivate");
 
 		/// <summary>
 		///Language
@@ -179,6 +134,16 @@ namespace Frapid.AddressBook
 		public static string Street => I18NResource.GetString(ResourceDirectory, "Street");
 
 		/// <summary>
+		///First Name
+		/// </summary>
+		public static string FirstName => I18NResource.GetString(ResourceDirectory, "FirstName");
+
+		/// <summary>
+		///Email Addresses
+		/// </summary>
+		public static string EmailAddresses => I18NResource.GetString(ResourceDirectory, "EmailAddresses");
+
+		/// <summary>
 		///Audit Ts
 		/// </summary>
 		public static string AuditTs => I18NResource.GetString(ResourceDirectory, "AuditTs");
@@ -194,6 +159,11 @@ namespace Frapid.AddressBook
 		public static string AddressLine2 => I18NResource.GetString(ResourceDirectory, "AddressLine2");
 
 		/// <summary>
+		///Associated User Id
+		/// </summary>
+		public static string AssociatedUserId => I18NResource.GetString(ResourceDirectory, "AssociatedUserId");
+
+		/// <summary>
 		///Role
 		/// </summary>
 		public static string Role => I18NResource.GetString(ResourceDirectory, "Role");
@@ -204,14 +174,44 @@ namespace Frapid.AddressBook
 		public static string BirthDay => I18NResource.GetString(ResourceDirectory, "BirthDay");
 
 		/// <summary>
+		///Organization
+		/// </summary>
+		public static string Organization => I18NResource.GetString(ResourceDirectory, "Organization");
+
+		/// <summary>
+		///Prefix
+		/// </summary>
+		public static string Prefix => I18NResource.GetString(ResourceDirectory, "Prefix");
+
+		/// <summary>
+		///State
+		/// </summary>
+		public static string State => I18NResource.GetString(ResourceDirectory, "State");
+
+		/// <summary>
+		///Fax Numbers
+		/// </summary>
+		public static string FaxNumbers => I18NResource.GetString(ResourceDirectory, "FaxNumbers");
+
+		/// <summary>
 		///Address Line 1
 		/// </summary>
 		public static string AddressLine1 => I18NResource.GetString(ResourceDirectory, "AddressLine1");
 
 		/// <summary>
+		///Contact Id
+		/// </summary>
+		public static string ContactId => I18NResource.GetString(ResourceDirectory, "ContactId");
+
+		/// <summary>
 		///Organizational Unit
 		/// </summary>
 		public static string OrganizationalUnit => I18NResource.GetString(ResourceDirectory, "OrganizationalUnit");
+
+		/// <summary>
+		///City
+		/// </summary>
+		public static string City => I18NResource.GetString(ResourceDirectory, "City");
 
 		/// <summary>
 		///Tasks
@@ -477,11 +477,6 @@ namespace Frapid.AddressBook
 		///Group
 		/// </summary>
 		public static string Group => I18NResource.GetString(ResourceDirectory, "Group");
-
-		/// <summary>
-		///Has Vat
-		/// </summary>
-		public static string HasVat => I18NResource.GetString(ResourceDirectory, "HasVat");
 
 		/// <summary>
 		///Header

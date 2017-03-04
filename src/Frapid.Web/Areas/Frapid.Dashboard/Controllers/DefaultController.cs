@@ -61,8 +61,7 @@ namespace Frapid.Dashboard.Controllers
                 var items = await member.GetAsync(this.Tenant, meta.OfficeId).ConfigureAwait(true);
                 model = model.Union(items).ToDictionary(k => k.Key, v => v.Value);
             }
-
-
+        
             return this.Ok(model);
         }
     }

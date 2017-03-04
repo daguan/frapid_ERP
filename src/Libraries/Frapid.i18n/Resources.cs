@@ -54,9 +54,49 @@ namespace Frapid.i18n
 		public static string HasVat => I18NResource.GetString(ResourceDirectory, "HasVat");
 
 		/// <summary>
+		///Phone
+		/// </summary>
+		public static string Phone => I18NResource.GetString(ResourceDirectory, "Phone");
+
+		/// <summary>
+		///Nick Name
+		/// </summary>
+		public static string NickName => I18NResource.GetString(ResourceDirectory, "NickName");
+
+		/// <summary>
+		///Landing Url
+		/// </summary>
+		public static string LandingUrl => I18NResource.GetString(ResourceDirectory, "LandingUrl");
+
+		/// <summary>
+		///Marital Status Code
+		/// </summary>
+		public static string MaritalStatusCode => I18NResource.GetString(ResourceDirectory, "MaritalStatusCode");
+
+		/// <summary>
 		///Parent Menu Id
 		/// </summary>
 		public static string ParentMenuId => I18NResource.GetString(ResourceDirectory, "ParentMenuId");
+
+		/// <summary>
+		///Publisher
+		/// </summary>
+		public static string Publisher => I18NResource.GetString(ResourceDirectory, "Publisher");
+
+		/// <summary>
+		///Fax
+		/// </summary>
+		public static string Fax => I18NResource.GetString(ResourceDirectory, "Fax");
+
+		/// <summary>
+		///App Name
+		/// </summary>
+		public static string AppName => I18NResource.GetString(ResourceDirectory, "AppName");
+
+		/// <summary>
+		///Country Name
+		/// </summary>
+		public static string CountryName => I18NResource.GetString(ResourceDirectory, "CountryName");
 
 		/// <summary>
 		///App Id
@@ -64,9 +104,29 @@ namespace Frapid.i18n
 		public static string AppId => I18NResource.GetString(ResourceDirectory, "AppId");
 
 		/// <summary>
+		///Seen By
+		/// </summary>
+		public static string SeenBy => I18NResource.GetString(ResourceDirectory, "SeenBy");
+
+		/// <summary>
+		///Hundredth Name
+		/// </summary>
+		public static string HundredthName => I18NResource.GetString(ResourceDirectory, "HundredthName");
+
+		/// <summary>
+		///Url
+		/// </summary>
+		public static string Url => I18NResource.GetString(ResourceDirectory, "Url");
+
+		/// <summary>
 		///Email
 		/// </summary>
 		public static string Email => I18NResource.GetString(ResourceDirectory, "Email");
+
+		/// <summary>
+		///Last Seen On
+		/// </summary>
+		public static string LastSeenOn => I18NResource.GetString(ResourceDirectory, "LastSeenOn");
 
 		/// <summary>
 		///Week Day Id
@@ -74,19 +134,34 @@ namespace Frapid.i18n
 		public static string WeekDayId => I18NResource.GetString(ResourceDirectory, "WeekDayId");
 
 		/// <summary>
-		///Gender Code
-		/// </summary>
-		public static string GenderCode => I18NResource.GetString(ResourceDirectory, "GenderCode");
-
-		/// <summary>
 		///Verification Status Id
 		/// </summary>
 		public static string VerificationStatusId => I18NResource.GetString(ResourceDirectory, "VerificationStatusId");
 
 		/// <summary>
+		///To Role Id
+		/// </summary>
+		public static string ToRoleId => I18NResource.GetString(ResourceDirectory, "ToRoleId");
+
+		/// <summary>
+		///Gender Code
+		/// </summary>
+		public static string GenderCode => I18NResource.GetString(ResourceDirectory, "GenderCode");
+
+		/// <summary>
+		///Country
+		/// </summary>
+		public static string Country => I18NResource.GetString(ResourceDirectory, "Country");
+
+		/// <summary>
 		///Office Id
 		/// </summary>
 		public static string OfficeId => I18NResource.GetString(ResourceDirectory, "OfficeId");
+
+		/// <summary>
+		///Logo
+		/// </summary>
+		public static string Logo => I18NResource.GetString(ResourceDirectory, "Logo");
 
 		/// <summary>
 		///Currency Symbol
@@ -104,9 +179,24 @@ namespace Frapid.i18n
 		public static string MaritalStatusId => I18NResource.GetString(ResourceDirectory, "MaritalStatusId");
 
 		/// <summary>
+		///Notification Status Id
+		/// </summary>
+		public static string NotificationStatusId => I18NResource.GetString(ResourceDirectory, "NotificationStatusId");
+
+		/// <summary>
 		///Gender Name
 		/// </summary>
 		public static string GenderName => I18NResource.GetString(ResourceDirectory, "GenderName");
+
+		/// <summary>
+		///Street
+		/// </summary>
+		public static string Street => I18NResource.GetString(ResourceDirectory, "Street");
+
+		/// <summary>
+		///Verification Status Name
+		/// </summary>
+		public static string VerificationStatusName => I18NResource.GetString(ResourceDirectory, "VerificationStatusName");
 
 		/// <summary>
 		///Tenant
@@ -129,14 +219,39 @@ namespace Frapid.i18n
 		public static string MenuName => I18NResource.GetString(ResourceDirectory, "MenuName");
 
 		/// <summary>
+		///Allow Transaction Posting
+		/// </summary>
+		public static string AllowTransactionPosting => I18NResource.GetString(ResourceDirectory, "AllowTransactionPosting");
+
+		/// <summary>
+		///Icon
+		/// </summary>
+		public static string Icon => I18NResource.GetString(ResourceDirectory, "Icon");
+
+		/// <summary>
+		///Audit Ts
+		/// </summary>
+		public static string AuditTs => I18NResource.GetString(ResourceDirectory, "AuditTs");
+
+		/// <summary>
 		///Currency Id
 		/// </summary>
 		public static string CurrencyId => I18NResource.GetString(ResourceDirectory, "CurrencyId");
 
 		/// <summary>
+		///Address Line 2
+		/// </summary>
+		public static string AddressLine2 => I18NResource.GetString(ResourceDirectory, "AddressLine2");
+
+		/// <summary>
 		///Associated App
 		/// </summary>
 		public static string AssociatedApp => I18NResource.GetString(ResourceDirectory, "AssociatedApp");
+
+		/// <summary>
+		///Version Number
+		/// </summary>
+		public static string VersionNumber => I18NResource.GetString(ResourceDirectory, "VersionNumber");
 
 		/// <summary>
 		///Associated Menu Id
@@ -149,9 +264,29 @@ namespace Frapid.i18n
 		public static string DependsOn => I18NResource.GetString(ResourceDirectory, "DependsOn");
 
 		/// <summary>
+		///Zip Code
+		/// </summary>
+		public static string ZipCode => I18NResource.GetString(ResourceDirectory, "ZipCode");
+
+		/// <summary>
 		///Frequency Name
 		/// </summary>
 		public static string FrequencyName => I18NResource.GetString(ResourceDirectory, "FrequencyName");
+
+		/// <summary>
+		///Registration Date
+		/// </summary>
+		public static string RegistrationDate => I18NResource.GetString(ResourceDirectory, "RegistrationDate");
+
+		/// <summary>
+		///Parent Office Id
+		/// </summary>
+		public static string ParentOfficeId => I18NResource.GetString(ResourceDirectory, "ParentOfficeId");
+
+		/// <summary>
+		///Frequency Code
+		/// </summary>
+		public static string FrequencyCode => I18NResource.GetString(ResourceDirectory, "FrequencyCode");
 
 		/// <summary>
 		///Name
@@ -159,9 +294,9 @@ namespace Frapid.i18n
 		public static string Name => I18NResource.GetString(ResourceDirectory, "Name");
 
 		/// <summary>
-		///Frequency Code
+		///Po Box
 		/// </summary>
-		public static string FrequencyCode => I18NResource.GetString(ResourceDirectory, "FrequencyCode");
+		public static string PoBox => I18NResource.GetString(ResourceDirectory, "PoBox");
 
 		/// <summary>
 		///State
@@ -179,6 +314,21 @@ namespace Frapid.i18n
 		public static string PublishedOn => I18NResource.GetString(ResourceDirectory, "PublishedOn");
 
 		/// <summary>
+		///Address Line 1
+		/// </summary>
+		public static string AddressLine1 => I18NResource.GetString(ResourceDirectory, "AddressLine1");
+
+		/// <summary>
+		///Office Code
+		/// </summary>
+		public static string OfficeCode => I18NResource.GetString(ResourceDirectory, "OfficeCode");
+
+		/// <summary>
+		///To User Id
+		/// </summary>
+		public static string ToUserId => I18NResource.GetString(ResourceDirectory, "ToUserId");
+
+		/// <summary>
 		///App Dependency Id
 		/// </summary>
 		public static string AppDependencyId => I18NResource.GetString(ResourceDirectory, "AppDependencyId");
@@ -187,6 +337,11 @@ namespace Frapid.i18n
 		///Week Day Code
 		/// </summary>
 		public static string WeekDayCode => I18NResource.GetString(ResourceDirectory, "WeekDayCode");
+
+		/// <summary>
+		///Sort
+		/// </summary>
+		public static string Sort => I18NResource.GetString(ResourceDirectory, "Sort");
 
 		/// <summary>
 		///I 18n Key
@@ -199,9 +354,19 @@ namespace Frapid.i18n
 		public static string OfficeName => I18NResource.GetString(ResourceDirectory, "OfficeName");
 
 		/// <summary>
+		///Currency Name
+		/// </summary>
+		public static string CurrencyName => I18NResource.GetString(ResourceDirectory, "CurrencyName");
+
+		/// <summary>
 		///Country Code
 		/// </summary>
 		public static string CountryCode => I18NResource.GetString(ResourceDirectory, "CountryCode");
+
+		/// <summary>
+		///Event Timestamp
+		/// </summary>
+		public static string EventTimestamp => I18NResource.GetString(ResourceDirectory, "EventTimestamp");
 
 		/// <summary>
 		///City
@@ -232,171 +397,6 @@ namespace Frapid.i18n
 		///Frequency Id
 		/// </summary>
 		public static string FrequencyId => I18NResource.GetString(ResourceDirectory, "FrequencyId");
-
-		/// <summary>
-		///Phone
-		/// </summary>
-		public static string Phone => I18NResource.GetString(ResourceDirectory, "Phone");
-
-		/// <summary>
-		///Nick Name
-		/// </summary>
-		public static string NickName => I18NResource.GetString(ResourceDirectory, "NickName");
-
-		/// <summary>
-		///Landing Url
-		/// </summary>
-		public static string LandingUrl => I18NResource.GetString(ResourceDirectory, "LandingUrl");
-
-		/// <summary>
-		///Marital Status Code
-		/// </summary>
-		public static string MaritalStatusCode => I18NResource.GetString(ResourceDirectory, "MaritalStatusCode");
-
-		/// <summary>
-		///Publisher
-		/// </summary>
-		public static string Publisher => I18NResource.GetString(ResourceDirectory, "Publisher");
-
-		/// <summary>
-		///Fax
-		/// </summary>
-		public static string Fax => I18NResource.GetString(ResourceDirectory, "Fax");
-
-		/// <summary>
-		///Seen By
-		/// </summary>
-		public static string SeenBy => I18NResource.GetString(ResourceDirectory, "SeenBy");
-
-		/// <summary>
-		///App Name
-		/// </summary>
-		public static string AppName => I18NResource.GetString(ResourceDirectory, "AppName");
-
-		/// <summary>
-		///Country Name
-		/// </summary>
-		public static string CountryName => I18NResource.GetString(ResourceDirectory, "CountryName");
-
-		/// <summary>
-		///Url
-		/// </summary>
-		public static string Url => I18NResource.GetString(ResourceDirectory, "Url");
-
-		/// <summary>
-		///Hundredth Name
-		/// </summary>
-		public static string HundredthName => I18NResource.GetString(ResourceDirectory, "HundredthName");
-
-		/// <summary>
-		///Last Seen On
-		/// </summary>
-		public static string LastSeenOn => I18NResource.GetString(ResourceDirectory, "LastSeenOn");
-
-		/// <summary>
-		///To Role Id
-		/// </summary>
-		public static string ToRoleId => I18NResource.GetString(ResourceDirectory, "ToRoleId");
-
-		/// <summary>
-		///Country
-		/// </summary>
-		public static string Country => I18NResource.GetString(ResourceDirectory, "Country");
-
-		/// <summary>
-		///Logo
-		/// </summary>
-		public static string Logo => I18NResource.GetString(ResourceDirectory, "Logo");
-
-		/// <summary>
-		///Notification Status Id
-		/// </summary>
-		public static string NotificationStatusId => I18NResource.GetString(ResourceDirectory, "NotificationStatusId");
-
-		/// <summary>
-		///Street
-		/// </summary>
-		public static string Street => I18NResource.GetString(ResourceDirectory, "Street");
-
-		/// <summary>
-		///Verification Status Name
-		/// </summary>
-		public static string VerificationStatusName => I18NResource.GetString(ResourceDirectory, "VerificationStatusName");
-
-		/// <summary>
-		///Allow Transaction Posting
-		/// </summary>
-		public static string AllowTransactionPosting => I18NResource.GetString(ResourceDirectory, "AllowTransactionPosting");
-
-		/// <summary>
-		///Icon
-		/// </summary>
-		public static string Icon => I18NResource.GetString(ResourceDirectory, "Icon");
-
-		/// <summary>
-		///Audit Ts
-		/// </summary>
-		public static string AuditTs => I18NResource.GetString(ResourceDirectory, "AuditTs");
-
-		/// <summary>
-		///Address Line 2
-		/// </summary>
-		public static string AddressLine2 => I18NResource.GetString(ResourceDirectory, "AddressLine2");
-
-		/// <summary>
-		///Version Number
-		/// </summary>
-		public static string VersionNumber => I18NResource.GetString(ResourceDirectory, "VersionNumber");
-
-		/// <summary>
-		///Zip Code
-		/// </summary>
-		public static string ZipCode => I18NResource.GetString(ResourceDirectory, "ZipCode");
-
-		/// <summary>
-		///Registration Date
-		/// </summary>
-		public static string RegistrationDate => I18NResource.GetString(ResourceDirectory, "RegistrationDate");
-
-		/// <summary>
-		///Parent Office Id
-		/// </summary>
-		public static string ParentOfficeId => I18NResource.GetString(ResourceDirectory, "ParentOfficeId");
-
-		/// <summary>
-		///Po Box
-		/// </summary>
-		public static string PoBox => I18NResource.GetString(ResourceDirectory, "PoBox");
-
-		/// <summary>
-		///Address Line 1
-		/// </summary>
-		public static string AddressLine1 => I18NResource.GetString(ResourceDirectory, "AddressLine1");
-
-		/// <summary>
-		///Office Code
-		/// </summary>
-		public static string OfficeCode => I18NResource.GetString(ResourceDirectory, "OfficeCode");
-
-		/// <summary>
-		///To User Id
-		/// </summary>
-		public static string ToUserId => I18NResource.GetString(ResourceDirectory, "ToUserId");
-
-		/// <summary>
-		///Sort
-		/// </summary>
-		public static string Sort => I18NResource.GetString(ResourceDirectory, "Sort");
-
-		/// <summary>
-		///Currency Name
-		/// </summary>
-		public static string CurrencyName => I18NResource.GetString(ResourceDirectory, "CurrencyName");
-
-		/// <summary>
-		///Event Timestamp
-		/// </summary>
-		public static string EventTimestamp => I18NResource.GetString(ResourceDirectory, "EventTimestamp");
 
 		/// <summary>
 		///Access is denied

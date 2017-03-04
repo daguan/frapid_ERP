@@ -15,6 +15,10 @@
         cursor: pointer;
     }
 
+        .kanban-card .header {
+            height: 2.5em;
+        }
+
     .kanban.segments .ui.segment:nth-child(odd) {
         background-color: #FAFAFA !important;
     }
@@ -331,13 +335,13 @@
                                     <label for="ColumnSelect">
                                         <span data-localize="SelectAColumn"></span>
                                     </label>
-                                    <select class="ui search dropdown" id="ColumnSelect" data-scope="column" required></select>
+                                    <select id="ColumnSelect" data-scope="column" required></select>
                                 </div>
                                 <div class="field">
                                     <label for="FilterConditionSelect">
                                         <span data-localize="FilterCondition"></span>
                                     </label>
-                                    <select class="ui search dropdown" id="FilterConditionSelect" data-scope="filter-condition" required></select>
+                                    <select id="FilterConditionSelect" data-scope="filter-condition" required></select>
                                 </div>
                                 <div class="field">
                                     <label for="ValueInputText">

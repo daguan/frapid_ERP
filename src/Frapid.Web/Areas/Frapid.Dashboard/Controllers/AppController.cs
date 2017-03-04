@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Frapid.Areas;
 using Frapid.Areas.Authorization;
 using Frapid.Dashboard.DAL;
+using Frapid.DataAccess.Models;
 
 namespace Frapid.Dashboard.Controllers
 {
@@ -11,6 +12,7 @@ namespace Frapid.Dashboard.Controllers
     {
         [RestrictAnonymous]
         [Route("dashboard/my/apps")]
+        [AccessPolicy("core", "apps", AccessTypeEnum.Read)]
         public async Task<ActionResult> GetAppsAsync()
         {
             int userId = this.AppUser.UserId;

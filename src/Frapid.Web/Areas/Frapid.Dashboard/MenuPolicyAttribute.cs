@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
 using Frapid.Dashboard.DAL;
+using Frapid.DataAccess;
 using Frapid.Framework.Extensions;
 using Frapid.i18n;
 
@@ -17,9 +18,9 @@ namespace Frapid.Dashboard
         {
             string path = this.OverridePath.Or(filterContext.HttpContext.Request.FilePath);
 
-            var my = AppUsers.GetCurrentAsync().GetAwaiter().GetResult();
-            int userId = my.UserId;
-            int officeId = my.OfficeId;
+            var meta = AppUsers.GetCurrentAsync().GetAwaiter().GetResult();
+            int userId = meta.UserId;
+            int officeId = meta.OfficeId;
 
             string tenant = TenantConvention.GetTenant();
 
