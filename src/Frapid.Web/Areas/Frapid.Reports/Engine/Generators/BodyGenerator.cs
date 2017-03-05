@@ -121,7 +121,7 @@ namespace Frapid.Reports.Engine.Generators
             html.Append("</tr>");
             html.Append("</thead>");
 
-            if (dataSource.RunningTotalTextColumnIndex != null && dataSource.RunningTotalTextColumnIndex > 0)
+            if (dataSource.RunningTotalTextColumnIndex != null)
             {
                 int index = dataSource.RunningTotalTextColumnIndex.Value;
                 var candidates = dataSource.RunningTotalFieldIndices;
