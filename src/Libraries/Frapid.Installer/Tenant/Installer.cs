@@ -7,7 +7,7 @@ using Frapid.Installer.Helpers;
 
 namespace Frapid.Installer.Tenant
 {
-    public class Installer
+    public sealed class Installer
     {
         public static List<Installable> InstalledApps;
 

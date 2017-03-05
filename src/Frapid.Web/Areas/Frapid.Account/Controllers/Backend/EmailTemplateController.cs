@@ -2,7 +2,6 @@ using System.IO;
 using System.Text;
 using System.Web.Mvc;
 using Frapid.Account.ViewModels;
-using Frapid.Areas.Authorization;
 using Frapid.Areas.CSRF;
 using Frapid.Dashboard;
 using Frapid.Dashboard.Controllers;
