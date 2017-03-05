@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Text;
 using Frapid.Reports.Engine.Model;
@@ -77,7 +78,11 @@ namespace Frapid.Reports.Engine.Generators
 
             if (value is decimal || value is double || value is float)
             {
-                cell += " class='right aligned'>";
+                cell += " class='right aligned decimal number'>";
+            }
+            else if(value is DateTime || value is DateTimeOffset)
+            {
+                cell += " class='unformatted date'>";
             }
             else
             {

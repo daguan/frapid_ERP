@@ -30,7 +30,7 @@ namespace Frapid.Dashboard
                 ObjectNamespace = this.ObjectNamespace,
                 ObjectName = this.ObjectName,
                 LoginId = meta.LoginId,
-                Database = tenant,
+                Tenant = tenant,
                 AccessType = this.Type
             };
 
