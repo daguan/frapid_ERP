@@ -18,6 +18,20 @@
 
     <script>
         $(document).ready(function () {
+            (function() {
+                $(".unformatted.date").each(function() {
+                    const el = $(this);
+                    const value = el.text().trim();
+                    if(!value) {
+                        return;
+                    };
+
+                    const date = new Date(value);
+
+                    el.text(window.getFormattedDate(date)).removeClass("unformatted");
+                });
+            })();
+
             const template = `<div style='background-color:{0};border:1px solid {1};margin:0.5em;text-align:center;'>
                                 <div class ='canvas container' style='width:{3}px;height:{4}px;'>
                                     <canvas id='Canvas{2}' width='{3}' height='{4}'></canvas>

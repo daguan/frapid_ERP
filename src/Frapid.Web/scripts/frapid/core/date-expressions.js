@@ -267,6 +267,20 @@ function loadDatepicker() {
     candidates.trigger("blur");
 };
 
+function getFormattedDate(date){
+	var formatted = "";
+	var d = moment(date).local();
+	var time = d.hour() + d.minute() + d.second();
+
+	if(!time){
+		formatted = d.format('LL');
+	}else{
+		formatted = d.format('LLLL');
+	};
+	
+	return formatted;
+};
+
 function initializeCalendar() {	
     function getDatePickerOptions(dateOnly) {
         //Todo: localization: localize week names.
@@ -278,7 +292,11 @@ function initializeCalendar() {
             },
             formatter: {
                 date: function (date) {
-                    if (!date) return '';
+                    if (!date) {
+						return ''
+					};
+					
+                    //return getFormattedDate(date);
                     return $.datepicker.formatDate(window.convertNetDateFormat(window.longDateFormat), date);
                 }
             },
