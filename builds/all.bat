@@ -1,8 +1,7 @@
 @echo off
 SET builddir=%~dp0
 
-@echo Building Resources
-"%~dp0..\src\Frapid.Web\bin\frapid.exe" create resource
+call build-resource.bat
 
 rmdir "%~dp0..\src\Frapid.Web\bin" /Q /S
 xcopy "%~dp0..\src\Frapid.Web\Resources\_Configs\Assets" "%~dp0..\src\Frapid.Web\Resources\Configs\Assets\" /s/y
@@ -161,20 +160,7 @@ if exist "C:\Program Files\Redis\redis-cli.exe" (
 cd ..\builds-sql\
 call all.bat
 
-cd %builddir%..\src\Frapid.Web\bin\
-
-@echo Packing Resources
-call frapid.exe pack resource
-
-@echo Creating PostgreSQL Tenant
-call frapid.exe create site postgresql.test provider Npgsql cleanup when done
-
-@echo Creating SQL Server Tenant
-call frapid.exe create site sqlserver.test provider System.Data.SqlClient cleanup when done
-
-@echo Creating a Test App
-call frapid.exe create app TestApp
-
-rmdir %builddir%..\src\Frapid.Web\Areas\TestApp /Q /S
+cd %builddir%
+call custom.bat
 
 @echo OK
