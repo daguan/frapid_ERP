@@ -39,14 +39,14 @@ namespace Frapid.Account
 		public static string Status => I18NResource.GetString(ResourceDirectory, "Status");
 
 		/// <summary>
-		///Header
-		/// </summary>
-		public static string Header => I18NResource.GetString(ResourceDirectory, "Header");
-
-		/// <summary>
 		///Privacy Policy Url
 		/// </summary>
 		public static string PrivacyPolicyUrl => I18NResource.GetString(ResourceDirectory, "PrivacyPolicyUrl");
+
+		/// <summary>
+		///Header
+		/// </summary>
+		public static string Header => I18NResource.GetString(ResourceDirectory, "Header");
 
 		/// <summary>
 		///Description
@@ -57,11 +57,6 @@ namespace Frapid.Account
 		///Pan Number
 		/// </summary>
 		public static string PanNumber => I18NResource.GetString(ResourceDirectory, "PanNumber");
-
-		/// <summary>
-		///Has Vat
-		/// </summary>
-		public static string HasVat => I18NResource.GetString(ResourceDirectory, "HasVat");
 
 		/// <summary>
 		///Subject
@@ -124,11 +119,6 @@ namespace Frapid.Account
 		public static string ApplicationId => I18NResource.GetString(ResourceDirectory, "ApplicationId");
 
 		/// <summary>
-		///Is Administrator
-		/// </summary>
-		public static string IsAdministrator => I18NResource.GetString(ResourceDirectory, "IsAdministrator");
-
-		/// <summary>
 		///Role Id
 		/// </summary>
 		public static string RoleId => I18NResource.GetString(ResourceDirectory, "RoleId");
@@ -139,44 +129,9 @@ namespace Frapid.Account
 		public static string IssuedBy => I18NResource.GetString(ResourceDirectory, "IssuedBy");
 
 		/// <summary>
-		///Audit Ts
-		/// </summary>
-		public static string AuditTs => I18NResource.GetString(ResourceDirectory, "AuditTs");
-
-		/// <summary>
-		///Admin Email
-		/// </summary>
-		public static string AdminEmail => I18NResource.GetString(ResourceDirectory, "AdminEmail");
-
-		/// <summary>
 		///User Agent
 		/// </summary>
 		public static string UserAgent => I18NResource.GetString(ResourceDirectory, "UserAgent");
-
-		/// <summary>
-		///Address Line 2
-		/// </summary>
-		public static string AddressLine2 => I18NResource.GetString(ResourceDirectory, "AddressLine2");
-
-		/// <summary>
-		///Revoked
-		/// </summary>
-		public static string Revoked => I18NResource.GetString(ResourceDirectory, "Revoked");
-
-		/// <summary>
-		///Facebook Scope
-		/// </summary>
-		public static string FacebookScope => I18NResource.GetString(ResourceDirectory, "FacebookScope");
-
-		/// <summary>
-		///Fb User Id
-		/// </summary>
-		public static string FbUserId => I18NResource.GetString(ResourceDirectory, "FbUserId");
-
-		/// <summary>
-		///Version Number
-		/// </summary>
-		public static string VersionNumber => I18NResource.GetString(ResourceDirectory, "VersionNumber");
 
 		/// <summary>
 		///Last Browser
@@ -184,14 +139,14 @@ namespace Frapid.Account
 		public static string LastBrowser => I18NResource.GetString(ResourceDirectory, "LastBrowser");
 
 		/// <summary>
-		///Registration Role Id
+		///Fb User Id
 		/// </summary>
-		public static string RegistrationRoleId => I18NResource.GetString(ResourceDirectory, "RegistrationRoleId");
+		public static string FbUserId => I18NResource.GetString(ResourceDirectory, "FbUserId");
 
 		/// <summary>
-		///Zip Code
+		///Revoked
 		/// </summary>
-		public static string ZipCode => I18NResource.GetString(ResourceDirectory, "ZipCode");
+		public static string Revoked => I18NResource.GetString(ResourceDirectory, "Revoked");
 
 		/// <summary>
 		///Profile Name
@@ -204,29 +159,9 @@ namespace Frapid.Account
 		public static string RegistrationOfficeId => I18NResource.GetString(ResourceDirectory, "RegistrationOfficeId");
 
 		/// <summary>
-		///Registration Date
-		/// </summary>
-		public static string RegistrationDate => I18NResource.GetString(ResourceDirectory, "RegistrationDate");
-
-		/// <summary>
-		///Ip Address
-		/// </summary>
-		public static string IpAddress => I18NResource.GetString(ResourceDirectory, "IpAddress");
-
-		/// <summary>
-		///Terms Of Service Url
-		/// </summary>
-		public static string TermsOfServiceUrl => I18NResource.GetString(ResourceDirectory, "TermsOfServiceUrl");
-
-		/// <summary>
 		///Confirmed
 		/// </summary>
 		public static string Confirmed => I18NResource.GetString(ResourceDirectory, "Confirmed");
-
-		/// <summary>
-		///Client Token
-		/// </summary>
-		public static string ClientToken => I18NResource.GetString(ResourceDirectory, "ClientToken");
 
 		/// <summary>
 		///Name
@@ -234,9 +169,9 @@ namespace Frapid.Account
 		public static string Name => I18NResource.GetString(ResourceDirectory, "Name");
 
 		/// <summary>
-		///Po Box
+		///Client Token
 		/// </summary>
-		public static string PoBox => I18NResource.GetString(ResourceDirectory, "PoBox");
+		public static string ClientToken => I18NResource.GetString(ResourceDirectory, "ClientToken");
 
 		/// <summary>
 		///State
@@ -254,16 +189,6 @@ namespace Frapid.Account
 		public static string RegistrationId => I18NResource.GetString(ResourceDirectory, "RegistrationId");
 
 		/// <summary>
-		///Role Name
-		/// </summary>
-		public static string RoleName => I18NResource.GetString(ResourceDirectory, "RoleName");
-
-		/// <summary>
-		///User Id
-		/// </summary>
-		public static string UserId => I18NResource.GetString(ResourceDirectory, "UserId");
-
-		/// <summary>
 		///Published On
 		/// </summary>
 		public static string PublishedOn => I18NResource.GetString(ResourceDirectory, "PublishedOn");
@@ -274,29 +199,9 @@ namespace Frapid.Account
 		public static string BrowserBasedApp => I18NResource.GetString(ResourceDirectory, "BrowserBasedApp");
 
 		/// <summary>
-		///Address Line 1
-		/// </summary>
-		public static string AddressLine1 => I18NResource.GetString(ResourceDirectory, "AddressLine1");
-
-		/// <summary>
 		///Login Id
 		/// </summary>
 		public static string LoginId => I18NResource.GetString(ResourceDirectory, "LoginId");
-
-		/// <summary>
-		///Application Url
-		/// </summary>
-		public static string ApplicationUrl => I18NResource.GetString(ResourceDirectory, "ApplicationUrl");
-
-		/// <summary>
-		///Configuration Profile Id
-		/// </summary>
-		public static string ConfigurationProfileId => I18NResource.GetString(ResourceDirectory, "ConfigurationProfileId");
-
-		/// <summary>
-		///Office Code
-		/// </summary>
-		public static string OfficeCode => I18NResource.GetString(ResourceDirectory, "OfficeCode");
 
 		/// <summary>
 		///Access Token Id
@@ -314,29 +219,9 @@ namespace Frapid.Account
 		public static string FacebookAppId => I18NResource.GetString(ResourceDirectory, "FacebookAppId");
 
 		/// <summary>
-		///Google Signin Scope
-		/// </summary>
-		public static string GoogleSigninScope => I18NResource.GetString(ResourceDirectory, "GoogleSigninScope");
-
-		/// <summary>
 		///Office Name
 		/// </summary>
 		public static string OfficeName => I18NResource.GetString(ResourceDirectory, "OfficeName");
-
-		/// <summary>
-		///Claims
-		/// </summary>
-		public static string Claims => I18NResource.GetString(ResourceDirectory, "Claims");
-
-		/// <summary>
-		///Login Timestamp
-		/// </summary>
-		public static string LoginTimestamp => I18NResource.GetString(ResourceDirectory, "LoginTimestamp");
-
-		/// <summary>
-		///Currency Name
-		/// </summary>
-		public static string CurrencyName => I18NResource.GetString(ResourceDirectory, "CurrencyName");
 
 		/// <summary>
 		///City
@@ -349,14 +234,14 @@ namespace Frapid.Account
 		public static string CurrencyCode => I18NResource.GetString(ResourceDirectory, "CurrencyCode");
 
 		/// <summary>
-		///Token
-		/// </summary>
-		public static string Token => I18NResource.GetString(ResourceDirectory, "Token");
-
-		/// <summary>
 		///Display Name
 		/// </summary>
 		public static string DisplayName => I18NResource.GetString(ResourceDirectory, "DisplayName");
+
+		/// <summary>
+		///Token
+		/// </summary>
+		public static string Token => I18NResource.GetString(ResourceDirectory, "Token");
 
 		/// <summary>
 		///Audit User Id
@@ -364,9 +249,9 @@ namespace Frapid.Account
 		public static string AuditUserId => I18NResource.GetString(ResourceDirectory, "AuditUserId");
 
 		/// <summary>
-		///Revoked By
+		///Redirect Url
 		/// </summary>
-		public static string RevokedBy => I18NResource.GetString(ResourceDirectory, "RevokedBy");
+		public static string RedirectUrl => I18NResource.GetString(ResourceDirectory, "RedirectUrl");
 
 		/// <summary>
 		///Deleted
@@ -379,9 +264,9 @@ namespace Frapid.Account
 		public static string ConfirmedOn => I18NResource.GetString(ResourceDirectory, "ConfirmedOn");
 
 		/// <summary>
-		///Redirect Url
+		///Revoked By
 		/// </summary>
-		public static string RedirectUrl => I18NResource.GetString(ResourceDirectory, "RedirectUrl");
+		public static string RevokedBy => I18NResource.GetString(ResourceDirectory, "RevokedBy");
 
 		/// <summary>
 		///Created On
@@ -507,6 +392,116 @@ namespace Frapid.Account
 		///Street
 		/// </summary>
 		public static string Street => I18NResource.GetString(ResourceDirectory, "Street");
+
+		/// <summary>
+		///Is Administrator
+		/// </summary>
+		public static string IsAdministrator => I18NResource.GetString(ResourceDirectory, "IsAdministrator");
+
+		/// <summary>
+		///Audit Ts
+		/// </summary>
+		public static string AuditTs => I18NResource.GetString(ResourceDirectory, "AuditTs");
+
+		/// <summary>
+		///Admin Email
+		/// </summary>
+		public static string AdminEmail => I18NResource.GetString(ResourceDirectory, "AdminEmail");
+
+		/// <summary>
+		///Address Line 2
+		/// </summary>
+		public static string AddressLine2 => I18NResource.GetString(ResourceDirectory, "AddressLine2");
+
+		/// <summary>
+		///Version Number
+		/// </summary>
+		public static string VersionNumber => I18NResource.GetString(ResourceDirectory, "VersionNumber");
+
+		/// <summary>
+		///Facebook Scope
+		/// </summary>
+		public static string FacebookScope => I18NResource.GetString(ResourceDirectory, "FacebookScope");
+
+		/// <summary>
+		///Registration Role Id
+		/// </summary>
+		public static string RegistrationRoleId => I18NResource.GetString(ResourceDirectory, "RegistrationRoleId");
+
+		/// <summary>
+		///Zip Code
+		/// </summary>
+		public static string ZipCode => I18NResource.GetString(ResourceDirectory, "ZipCode");
+
+		/// <summary>
+		///Registration Date
+		/// </summary>
+		public static string RegistrationDate => I18NResource.GetString(ResourceDirectory, "RegistrationDate");
+
+		/// <summary>
+		///Terms Of Service Url
+		/// </summary>
+		public static string TermsOfServiceUrl => I18NResource.GetString(ResourceDirectory, "TermsOfServiceUrl");
+
+		/// <summary>
+		///Ip Address
+		/// </summary>
+		public static string IpAddress => I18NResource.GetString(ResourceDirectory, "IpAddress");
+
+		/// <summary>
+		///Po Box
+		/// </summary>
+		public static string PoBox => I18NResource.GetString(ResourceDirectory, "PoBox");
+
+		/// <summary>
+		///Role Name
+		/// </summary>
+		public static string RoleName => I18NResource.GetString(ResourceDirectory, "RoleName");
+
+		/// <summary>
+		///User Id
+		/// </summary>
+		public static string UserId => I18NResource.GetString(ResourceDirectory, "UserId");
+
+		/// <summary>
+		///Address Line 1
+		/// </summary>
+		public static string AddressLine1 => I18NResource.GetString(ResourceDirectory, "AddressLine1");
+
+		/// <summary>
+		///Application Url
+		/// </summary>
+		public static string ApplicationUrl => I18NResource.GetString(ResourceDirectory, "ApplicationUrl");
+
+		/// <summary>
+		///Configuration Profile Id
+		/// </summary>
+		public static string ConfigurationProfileId => I18NResource.GetString(ResourceDirectory, "ConfigurationProfileId");
+
+		/// <summary>
+		///Office Code
+		/// </summary>
+		public static string OfficeCode => I18NResource.GetString(ResourceDirectory, "OfficeCode");
+
+		/// <summary>
+		///Google Signin Scope
+		/// </summary>
+		public static string GoogleSigninScope => I18NResource.GetString(ResourceDirectory, "GoogleSigninScope");
+
+		/// <summary>
+		///Login Timestamp
+		/// </summary>
+		public static string LoginTimestamp => I18NResource.GetString(ResourceDirectory, "LoginTimestamp");
+
+		/// <summary>
+		///Claims
+		/// </summary>
+		public static string Claims => I18NResource.GetString(ResourceDirectory, "Claims");
+
+		/// <summary>
+		///Currency Name
+		/// </summary>
+		public static string CurrencyName => I18NResource.GetString(ResourceDirectory, "CurrencyName");
 
 		/// <summary>
 		///Roles
@@ -707,6 +702,11 @@ namespace Frapid.Account
 		///Sorry, google registration is not allowed at this time.
 		/// </summary>
 		public static string GoogleRegistrationClosed => I18NResource.GetString(ResourceDirectory, "GoogleRegistrationClosed");
+
+		/// <summary>
+		///Has Vat
+		/// </summary>
+		public static string HasVat => I18NResource.GetString(ResourceDirectory, "HasVat");
 
 		/// <summary>
 		///I agree to the terms and conditions.

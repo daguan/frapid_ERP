@@ -100,9 +100,9 @@ frapidApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
         });
 });
 
-function loadUI(){
+function loadUI() {
     window.localize();
-    
+
     window.loadDatepicker();
     window.setNumberFormat();
 };
@@ -158,19 +158,20 @@ var menuBuilder = {
         };
 
         $.each(myMenus, function () {
+            const menu = this;
             const anchor = $("<a />");
             const span = $("<span/>");
             anchor.addClass("item");
-            anchor.attr("data-menu-id", this.MenuId);
-            anchor.attr("data-app-name", this.AppName);
-            anchor.attr("data-parent-menu-id", this.ParentMenuId);
-            anchor.attr("href", this.Url || "javascript:void(0);");
+            anchor.attr("data-menu-id", menu.MenuId);
+            anchor.attr("data-app-name", menu.AppName);
+            anchor.attr("data-parent-menu-id", menu.ParentMenuId);
+            anchor.attr("href", menu.Url || "javascript:void(0);");
 
-            span.text(window.translate(this.I18nKey));
+            span.text(window.translate(menu.I18nKey));
 
-            if (this.Icon) {
+            if (menu.Icon) {
                 const i = $("<i/>");
-                i.addClass(this.Icon);
+                i.addClass(menu.Icon);
                 i.addClass("icon");
 
                 anchor.append(i);
@@ -185,7 +186,28 @@ var menuBuilder = {
             };
 
 
-            window.menuBuilder.build(app, anchor, this.MenuId);
+            anchor.off("click").on("click", function () {
+                const key = meta.Tenant + "_menu_events";
+
+                function fromStorage() {
+                    return JSON.parse(window.localStorage.getItem(key));
+                };
+
+                function toStorage(menuId) {
+                    const current = fromStorage() || {};
+                    const currentCount = current[menuId] || 0;
+
+                    current[menuId] = currentCount + 1;
+
+                    window.localStorage.setItem(key, JSON.stringify(current));
+                };
+
+                if (menu.Url) {
+                    toStorage(menu.MenuId);
+                };
+            });
+
+            window.menuBuilder.build(app, anchor, menu.MenuId);
         });
     }
 };
@@ -201,7 +223,7 @@ function buildMenus() {
 
             if (application) {
                 window.menuBuilder.build(application.AppName, target, null);
-                $(".dashboard.menu .dropdown").dropdown({placeholder: false, forceSelection: false});
+                $(".dashboard.menu .dropdown").dropdown({ placeholder: false, forceSelection: false });
             };
         };
 
@@ -236,6 +258,7 @@ function initializeSelectApis() {
         const apiUrl = el.attr("data-api");
         const valueField = el.attr("data-api-value-field") || "Value";
         const keyField = el.attr("data-api-key-field") || "Key";
+        const isArray = el.attr("data-is-array") || false;
 
         window.ajaxDataBind(apiUrl, el, null, keyField, valueField, null, function () {
             var selectedValue = el.attr("data-api-selected-value");
@@ -261,7 +284,7 @@ function initializeSelectApis() {
             };
 
 
-        });
+        }, isArray);
     });
 };
 
@@ -749,7 +772,7 @@ function showNotifications() {
     const ajax = request();
 
     ajax.success(function (response) {
-        const ordered = window.Enumerable.From(response).OrderByDescending(function(x) {
+        const ordered = window.Enumerable.From(response).OrderByDescending(function (x) {
             return x.EventDate;
         }).ToArray();
 

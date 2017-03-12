@@ -4,7 +4,7 @@ function shuffle(o) {
 };
 
 //var chartColors = ["#DF0101", "#DF3A01", "#DF7401", "#DBA901", "#D7DF01", "#A5DF00", "#74DF00", "#3ADF00", "#01DF74", "#01DFA5", "#01DFD7", "#01A9DB", "#0174DF", "#013ADF", "#0101DF", "#3A01DF", "#7401DF", "#A901DB", "#DF01D7", "#DF01A5", "#DF0174", "#DF013A", "#6E6E6E"];
-var chartColors = ["#005BAC", "#CC6858", "#00894F", "#7D6B55", "#938F3A", "#C3CA00", "#917199", "#DF816E", "#CB5252", "#83CCD2", "#509D69", "#8F939F", "#D5B329", "#A76283", "#70A68C", "#E95383", "#A6BAB2", "#D5B329", "#4994C4", "#009591", "#4E4770", "#BA5054", "#D6E9C4", "#32ADC6"];
+var chartColors = ["#FF6384", "#4BC0C0", "#FFCE56", "#36A2EB", "#005BAC", "#CC6858", "#00894F", "#7D6B55", "#938F3A", "#C3CA00", "#917199", "#DF816E", "#CB5252", "#83CCD2", "#509D69", "#8F939F", "#D5B329", "#A76283", "#70A68C", "#E95383", "#A6BAB2", "#D5B329", "#4994C4", "#009591", "#4E4770", "#BA5054", "#D6E9C4", "#32ADC6"];
 
 function getFillColor(index) {
     var color = hexToRgb(chartColors[index]);

@@ -149,9 +149,6 @@ function appendOption(selectEl, value, text, selected) {
 };
 
 function ajaxDataBind(url, targetControl, data, keyField, valueField, selectedValue, callback, isArray, nullable) {
-    var isWebApiRequest = url.substring(5, 0) === "/api/";
-    var isProcedure = url.slice(-7) === "execute";
-
     if (!targetControl) {
         return;
     };
@@ -159,20 +156,13 @@ function ajaxDataBind(url, targetControl, data, keyField, valueField, selectedVa
     if (targetControl.length === 0) {
         return;
     };
-    var type = "GET";
 
-    if (isProcedure) {
-        type = "POST";
-    };
+    var type = "GET";
 
     var ajax = new window.getAjaxRequest(url, type, data);
 
     ajax.success(function (msg) {
-        var result = msg.d;
-
-        if (isWebApiRequest) {
-            result = msg;
-        };
+        result = msg;
 
         if (!result) {
             return;
@@ -206,6 +196,7 @@ function ajaxDataBind(url, targetControl, data, keyField, valueField, selectedVa
         appendOption(targetControl, 0, err.Message);
     });
 };
+
 
 var getAjaxErrorMessage = function (xhr) {
     if (xhr) {
