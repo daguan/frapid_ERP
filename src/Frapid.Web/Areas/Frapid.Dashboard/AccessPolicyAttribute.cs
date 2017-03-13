@@ -3,7 +3,6 @@ using Frapid.ApplicationState.Cache;
 using Frapid.Configuration;
 using Frapid.DataAccess.Models;
 using Frapid.DbPolicy;
-using Frapid.i18n;
 
 namespace Frapid.Dashboard
 {

@@ -23,6 +23,7 @@ MixERP includes works distributed under the licenses listed below. The full text
 | [MvcDonutCaching](https://github.com/moonpyk/mvcdonutcaching) | [MIT](https://github.com/moonpyk/mvcdonutcaching) |
 | [Newtonsoft.Json](http://www.newtonsoft.com/json) | [MIT](https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md) |
 | [Npgsql](http://www.npgsql.org/)         | [PostgreSQL License](https://github.com/npgsql/npgsql/blob/dev/LICENSE.txt) |
+| [Premailer](https://github.com/milkshakesoftware/PreMailer.Net) | [MIT](https://github.com/milkshakesoftware/PreMailer.Net/blob/master/LICENSE) |
 | [PostgreSQL Server](http://postgresql.org/) | [PostgreSQL License](https://www.postgresql.org/about/licence/) |
 | [Quartz](https://www.quartz-scheduler.net/) | [Apache 2.0](https://github.com/quartznet/quartznet/blob/master/license.txt) |
 | [Redis](https://redis.io/)               | [3-Clause BSD](https://redis.io/topics/license) |
@@ -30,6 +31,8 @@ MixERP includes works distributed under the licenses listed below. The full text
 | [SendGrid](https://github.com/sendgrid/sendgrid-csharp) | [MIT](https://github.com/sendgrid/sendgrid-csharp/blob/master/LICENSE.txt) |
 | [Serilog](https://serilog.net/)          | [Apache 2.0](https://github.com/serilog/serilog/blob/dev/LICENSE) |
 | [StackExchange.Redis](https://github.com/StackExchange/StackExchange.Redis) | [MIT](https://github.com/StackExchange/StackExchange.Redis/blob/master/LICENSE) |
+| [tablesorter](https://github.com/christianbach/tablesorter) | [MIT](https://github.com/christianbach/tablesorter/blob/master/LICENSE) |
+| [Trumbowyg](https://github.com/Alex-D/Trumbowyg) | [MIT](https://github.com/Alex-D/Trumbowyg/blob/develop/LICENSE) |
 | [xUnit.net](https://xunit.github.io/)    | [Apache 2.0](https://github.com/xunit/xunit/blob/master/license.txt) |
 | [YamlDotNet](https://github.com/aaubry/YamlDotNet) | [MIT](https://github.com/aaubry/YamlDotNet/blob/master/LICENSE) |
 

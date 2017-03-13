@@ -591,3 +591,11 @@ select.inverted{
 	background: #333!important;
 	border:1px solid #444!important;
 }
+
+.ace_editor {
+	font-family: Consolas,Courier,source-code-pro,monospace !important;
+}
+
+.ace_editor div {
+	font: inherit !important;
+}

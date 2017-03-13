@@ -178,3 +178,28 @@ table {
 .canvas.container {
     margin: 0 auto;
 }
+
+table, table th{
+  position: relative;
+}
+
+
+.headerSortDown:after,
+.headerSortUp:after{
+  content: ' ';
+  position: absolute;
+  right: 4px;
+  top:4px;
+  border: 4px solid transparent;
+}
+
+.headerSortDown:after{
+  top:4px;
+  border-top-color: silver;
+}
+.headerSortUp:after{
+  right: 4px;
+  top:4px;
+  border-bottom-color: silver;
+}
+

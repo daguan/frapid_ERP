@@ -127,7 +127,10 @@ function initializeAceEditor() {
     editor.setTheme("ace/theme/sqlserver");
     editor.getSession().setMode("ace/mode/html");
     editor.setValue(content, -1);
-    editor.setOptions({ fontFamily: "Monaco,Menlo,'Ubuntu Mono',Consolas,Courier,source-code-pro,monospace" });
+
+    editor.setOptions({
+        maxLines: Infinity
+    });
 
     editor.on("input", function () {
         displayContent();

@@ -10,9 +10,9 @@
     padding: 0 !important;
 }
 
-.pusher, .report-panel, [data-ng-view] {
+/*.pusher, .report-panel, [data-ng-view] {
     height: 100% !important;
-}
+}*/
 
 .report-panel {
     background-color: #949596;
@@ -47,7 +47,7 @@ iframe {
     background-color: #fafafa;
     border: none;
     display: block;
-    height: 100%;
+    min-height: 800px;
     margin: 0 auto;
     overflow: auto;
     padding: 2em 2em 0 2em;

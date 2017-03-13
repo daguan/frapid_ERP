@@ -63,6 +63,12 @@ var getFormattedNumber = function (input, isInteger) {
     return $.number(input, decimalPlaces, decimalSeparator, thousandSeparator);
 };
 
+
+function getFormattedCurrency(input){
+    return meta.CurrencySymbol + getFormattedNumber(input);
+};
+
+
 stringFormat = function () {
     var s = arguments[0];
 
