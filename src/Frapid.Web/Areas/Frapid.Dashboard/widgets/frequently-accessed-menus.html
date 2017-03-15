@@ -45,8 +45,13 @@
 
             for (let i = 0; i < appMenus.length; i++) {
                 const menuId = appMenus[i].MenuId;
+                var clicked = 0;
 
-                appMenus[i]["Clicked"] = items[menuId] || 0;
+                if (items) {
+                    clicked = items[menuId] || 0;
+                };
+
+                appMenus[i]["Clicked"] = clicked;
             };
 
             const candidates = window.Enumerable.From(appMenus)
