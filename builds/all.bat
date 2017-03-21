@@ -144,6 +144,11 @@ if exist "../src/Frapid.Web/Areas/SendGridMail/SendGridMail.sln" (
 	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/SendGridMail/SendGridMail.sln /p:VisualStudioVersion=14.0
 )
 
+if exist "../src/Frapid.Web/Areas/SparkPostMail/SparkPostMail.sln" (
+	@echo Building SparkPostMail Module
+	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/SparkPostMail/SparkPostMail.sln /p:VisualStudioVersion=14.0
+)
+
 if exist "../src/Frapid.Web/Areas/TheSmsCentral/TheSmsCentral.sln" (
 	@echo Building TheSmsCentral Module
 	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/TheSmsCentral/TheSmsCentral.sln /p:VisualStudioVersion=14.0

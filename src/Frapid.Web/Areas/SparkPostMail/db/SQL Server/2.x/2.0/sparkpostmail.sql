@@ -1,4 +1,5 @@
-﻿DELETE FROM auth.menu_access_policy
+﻿-->-->-- src/Frapid.Web/Areas/SparkPostMail/db/SQL Server/2.x/2.0/src/03.menus/menus.sql --<--<--
+DELETE FROM auth.menu_access_policy
 WHERE menu_id IN
 (
  SELECT menu_id FROM core.menus
@@ -31,3 +32,4 @@ EXECUTE auth.create_app_menu_policy
 'SparkPostMail',
 '{*}'
 ;
+

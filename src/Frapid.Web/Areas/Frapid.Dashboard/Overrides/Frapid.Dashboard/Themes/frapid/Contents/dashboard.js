@@ -56,6 +56,14 @@ jQuery.ajaxSetup({
 });
 
 var lastPage;
+
+function loadUI() {
+    window.localize();
+
+    window.loadDatepicker();
+    window.setNumberFormat();
+};
+
 var frapidApp = angular.module('FrapidApp', ['ngRoute']);
 
 
@@ -70,12 +78,12 @@ frapidApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
 
     $routeProvider.
         when('/dashboard', {
-            templateUrl: "/dashboard/my/template/Contents/apps.html"
+            templateUrl: "/dashboard/my/template/Contents/apps.html",
+            reloadOnSearch: false
         }).
         when('/dashboard/:url*', {
             templateUrl: function (url) {
                 var path = '/dashboard/' + url.url;
-
 
                 const qs = [];
 
@@ -96,19 +104,39 @@ frapidApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
                 };
 
                 return path;
-            }
+            },
+            reloadOnSearch: false
         });
 });
 
-function loadUI() {
-    window.localize();
-
-    window.loadDatepicker();
-    window.setNumberFormat();
-};
-
 frapidApp.run(function ($rootScope, $location) {
-    $rootScope.$on('$locationChangeStart', function (e, n, o) {
+    $rootScope.$on('$locationChangeStart', function (e, goingTo, cameFrom) {
+        function extractPath(fullUrl) {
+            const anchor = document.createElement("a");
+            anchor.href = fullUrl;
+            return anchor.pathname;
+        };
+
+
+        //This hack fixes a strange angularjs bug which, out of the blue, 
+        //forces a page to load "fromUrl" during the route change. 
+        //When this condition occurs, "toUrl" url is swapped with "fromUrl",
+        //which results in the page reload.
+
+        //No referrer. The current url is the last page.
+        if (cameFrom !== goingTo) {
+            //Seems like the destination url is acutally the document url.
+            //Don't want to be in this page anymore.
+            if (goingTo === location.toString()) {
+
+                //fromUrl is actually the destination.
+                const goTo = extractPath(cameFrom);
+
+                $location.url(goTo);
+                $location.search({});
+            };
+        };
+
         window.overridePath = null;
     });
 
@@ -135,9 +163,9 @@ frapidApp.run(function ($rootScope, $location) {
                 $location.url(lastPage.path + "?" + lastPage.query);
             };
         };
-
     };
 });
+
 var menuBuilder = {
     build: function (app, container, menuId) {
         const myMenus = window.Enumerable.From(window.appMenus)
@@ -166,6 +194,7 @@ var menuBuilder = {
             anchor.attr("data-app-name", menu.AppName);
             anchor.attr("data-parent-menu-id", menu.ParentMenuId);
             anchor.attr("href", menu.Url || "javascript:void(0);");
+            //anchor.attr("target", "_self");
 
             span.text(window.translate(menu.I18nKey));
 
