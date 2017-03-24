@@ -78,13 +78,11 @@ frapidApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
 
     $routeProvider.
         when('/dashboard', {
-            templateUrl: "/dashboard/my/template/Contents/apps.html",
-            reloadOnSearch: false
+            templateUrl: "/dashboard/my/template/Contents/apps.html"
         }).
         when('/dashboard/:url*', {
             templateUrl: function (url) {
                 var path = '/dashboard/' + url.url;
-
                 const qs = [];
 
                 for (let q in url) {
@@ -104,8 +102,7 @@ frapidApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
                 };
 
                 return path;
-            },
-            reloadOnSearch: false
+            }
         });
 });
 
@@ -132,7 +129,7 @@ frapidApp.run(function ($rootScope, $location) {
                 //fromUrl is actually the destination.
                 const goTo = extractPath(cameFrom);
 
-                $location.url(goTo);
+                $location.url(goTo);				
                 $location.search({});
             };
         };
@@ -143,6 +140,15 @@ frapidApp.run(function ($rootScope, $location) {
     $rootScope.$on('$routeChangeStart', function () {
         $("#dashboard-container").addClass("loading");
     });
+	
+	$rootScope.$on('$viewContentLoaded', function(){
+		setTimeout(function(){
+			if(window.viewReady === false && typeof(window.prepareScrudView) === "function"){
+				window.prepareScrudView();
+			};
+		}, 1000);
+	});
+
 
     $rootScope.$on('$routeChangeSuccess', function () {
         $("#dashboard-container").removeClass("loading");
@@ -851,3 +857,4 @@ $(document).ready(function () {
         };
     });
 });
+
