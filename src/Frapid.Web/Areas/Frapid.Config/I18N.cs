@@ -64,14 +64,14 @@ namespace Frapid.Config
 		public static string TableName => I18NResource.GetString(ResourceDirectory, "TableName");
 
 		/// <summary>
-		///Kanban Detail Id
-		/// </summary>
-		public static string KanbanDetailId => I18NResource.GetString(ResourceDirectory, "KanbanDetailId");
-
-		/// <summary>
 		///Application Name
 		/// </summary>
 		public static string ApplicationName => I18NResource.GetString(ResourceDirectory, "ApplicationName");
+
+		/// <summary>
+		///Kanban Detail Id
+		/// </summary>
+		public static string KanbanDetailId => I18NResource.GetString(ResourceDirectory, "KanbanDetailId");
 
 		/// <summary>
 		///Custom Field Id
@@ -134,11 +134,6 @@ namespace Frapid.Config
 		public static string FilterValue => I18NResource.GetString(ResourceDirectory, "FilterValue");
 
 		/// <summary>
-		///Resource Id
-		/// </summary>
-		public static string ResourceId => I18NResource.GetString(ResourceDirectory, "ResourceId");
-
-		/// <summary>
 		///Enabled
 		/// </summary>
 		public static string Enabled => I18NResource.GetString(ResourceDirectory, "Enabled");
@@ -149,14 +144,14 @@ namespace Frapid.Config
 		public static string AddedOn => I18NResource.GetString(ResourceDirectory, "AddedOn");
 
 		/// <summary>
+		///Resource Id
+		/// </summary>
+		public static string ResourceId => I18NResource.GetString(ResourceDirectory, "ResourceId");
+
+		/// <summary>
 		///Smtp Password
 		/// </summary>
 		public static string SmtpPassword => I18NResource.GetString(ResourceDirectory, "SmtpPassword");
-
-		/// <summary>
-		///Kanban Id
-		/// </summary>
-		public static string KanbanId => I18NResource.GetString(ResourceDirectory, "KanbanId");
 
 		/// <summary>
 		///Data Type
@@ -164,9 +159,9 @@ namespace Frapid.Config
 		public static string DataType => I18NResource.GetString(ResourceDirectory, "DataType");
 
 		/// <summary>
-		///Canceled On
+		///Kanban Id
 		/// </summary>
-		public static string CanceledOn => I18NResource.GetString(ResourceDirectory, "CanceledOn");
+		public static string KanbanId => I18NResource.GetString(ResourceDirectory, "KanbanId");
 
 		/// <summary>
 		///Reply To
@@ -174,19 +169,24 @@ namespace Frapid.Config
 		public static string ReplyTo => I18NResource.GetString(ResourceDirectory, "ReplyTo");
 
 		/// <summary>
+		///Canceled On
+		/// </summary>
+		public static string CanceledOn => I18NResource.GetString(ResourceDirectory, "CanceledOn");
+
+		/// <summary>
 		///Value
 		/// </summary>
 		public static string Value => I18NResource.GetString(ResourceDirectory, "Value");
 
 		/// <summary>
-		///Canceled
-		/// </summary>
-		public static string Canceled => I18NResource.GetString(ResourceDirectory, "Canceled");
-
-		/// <summary>
 		///Filter And Value
 		/// </summary>
 		public static string FilterAndValue => I18NResource.GetString(ResourceDirectory, "FilterAndValue");
+
+		/// <summary>
+		///Canceled
+		/// </summary>
+		public static string Canceled => I18NResource.GetString(ResourceDirectory, "Canceled");
 
 		/// <summary>
 		///Configuration Name
@@ -214,6 +214,11 @@ namespace Frapid.Config
 		public static string FromName => I18NResource.GetString(ResourceDirectory, "FromName");
 
 		/// <summary>
+		///Field Order
+		/// </summary>
+		public static string FieldOrder => I18NResource.GetString(ResourceDirectory, "FieldOrder");
+
+		/// <summary>
 		///Message
 		/// </summary>
 		public static string Message => I18NResource.GetString(ResourceDirectory, "Message");
@@ -239,14 +244,14 @@ namespace Frapid.Config
 		public static string AfterField => I18NResource.GetString(ResourceDirectory, "AfterField");
 
 		/// <summary>
-		///Audit Ts
-		/// </summary>
-		public static string AuditTs => I18NResource.GetString(ResourceDirectory, "AuditTs");
-
-		/// <summary>
 		///Is Default Admin
 		/// </summary>
 		public static string IsDefaultAdmin => I18NResource.GetString(ResourceDirectory, "IsDefaultAdmin");
+
+		/// <summary>
+		///Audit Ts
+		/// </summary>
+		public static string AuditTs => I18NResource.GetString(ResourceDirectory, "AuditTs");
 
 		/// <summary>
 		///Before Field
@@ -254,14 +259,14 @@ namespace Frapid.Config
 		public static string BeforeField => I18NResource.GetString(ResourceDirectory, "BeforeField");
 
 		/// <summary>
-		///Smtp Config Id
-		/// </summary>
-		public static string SmtpConfigId => I18NResource.GetString(ResourceDirectory, "SmtpConfigId");
-
-		/// <summary>
 		///Filter Statement
 		/// </summary>
 		public static string FilterStatement => I18NResource.GetString(ResourceDirectory, "FilterStatement");
+
+		/// <summary>
+		///Smtp Config Id
+		/// </summary>
+		public static string SmtpConfigId => I18NResource.GetString(ResourceDirectory, "SmtpConfigId");
 
 		/// <summary>
 		///Form Name
@@ -327,11 +332,6 @@ namespace Frapid.Config
 		///Reply To Name
 		/// </summary>
 		public static string ReplyToName => I18NResource.GetString(ResourceDirectory, "ReplyToName");
-
-		/// <summary>
-		///Field Order
-		/// </summary>
-		public static string FieldOrder => I18NResource.GetString(ResourceDirectory, "FieldOrder");
 
 		/// <summary>
 		///Offices

@@ -184,24 +184,24 @@ namespace Frapid.Reports
 		public static string BlogCategoryName => I18NResource.GetString(ResourceDirectory, "BlogCategoryName");
 
 		/// <summary>
-		///Menu Item Id
-		/// </summary>
-		public static string MenuItemId => I18NResource.GetString(ResourceDirectory, "MenuItemId");
-
-		/// <summary>
 		///Display Contact Form
 		/// </summary>
 		public static string DisplayContactForm => I18NResource.GetString(ResourceDirectory, "DisplayContactForm");
 
 		/// <summary>
-		///Unsubscribed
+		///Menu Item Id
 		/// </summary>
-		public static string Unsubscribed => I18NResource.GetString(ResourceDirectory, "Unsubscribed");
+		public static string MenuItemId => I18NResource.GetString(ResourceDirectory, "MenuItemId");
 
 		/// <summary>
 		///Seo Description
 		/// </summary>
 		public static string SeoDescription => I18NResource.GetString(ResourceDirectory, "SeoDescription");
+
+		/// <summary>
+		///Unsubscribed
+		/// </summary>
+		public static string Unsubscribed => I18NResource.GetString(ResourceDirectory, "Unsubscribed");
 
 		/// <summary>
 		///Parent Menu Item Id
@@ -259,14 +259,14 @@ namespace Frapid.Reports
 		public static string IpAddress => I18NResource.GetString(ResourceDirectory, "IpAddress");
 
 		/// <summary>
-		///Confirmed
-		/// </summary>
-		public static string Confirmed => I18NResource.GetString(ResourceDirectory, "Confirmed");
-
-		/// <summary>
 		///Display Email
 		/// </summary>
 		public static string DisplayEmail => I18NResource.GetString(ResourceDirectory, "DisplayEmail");
+
+		/// <summary>
+		///Confirmed
+		/// </summary>
+		public static string Confirmed => I18NResource.GetString(ResourceDirectory, "Confirmed");
 
 		/// <summary>
 		///Name
