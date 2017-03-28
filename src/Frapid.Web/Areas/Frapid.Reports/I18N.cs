@@ -184,24 +184,24 @@ namespace Frapid.Reports
 		public static string BlogCategoryName => I18NResource.GetString(ResourceDirectory, "BlogCategoryName");
 
 		/// <summary>
-		///Display Contact Form
-		/// </summary>
-		public static string DisplayContactForm => I18NResource.GetString(ResourceDirectory, "DisplayContactForm");
-
-		/// <summary>
 		///Menu Item Id
 		/// </summary>
 		public static string MenuItemId => I18NResource.GetString(ResourceDirectory, "MenuItemId");
 
 		/// <summary>
-		///Seo Description
+		///Display Contact Form
 		/// </summary>
-		public static string SeoDescription => I18NResource.GetString(ResourceDirectory, "SeoDescription");
+		public static string DisplayContactForm => I18NResource.GetString(ResourceDirectory, "DisplayContactForm");
 
 		/// <summary>
 		///Unsubscribed
 		/// </summary>
 		public static string Unsubscribed => I18NResource.GetString(ResourceDirectory, "Unsubscribed");
+
+		/// <summary>
+		///Seo Description
+		/// </summary>
+		public static string SeoDescription => I18NResource.GetString(ResourceDirectory, "SeoDescription");
 
 		/// <summary>
 		///Parent Menu Item Id
@@ -259,14 +259,14 @@ namespace Frapid.Reports
 		public static string IpAddress => I18NResource.GetString(ResourceDirectory, "IpAddress");
 
 		/// <summary>
-		///Display Email
-		/// </summary>
-		public static string DisplayEmail => I18NResource.GetString(ResourceDirectory, "DisplayEmail");
-
-		/// <summary>
 		///Confirmed
 		/// </summary>
 		public static string Confirmed => I18NResource.GetString(ResourceDirectory, "Confirmed");
+
+		/// <summary>
+		///Display Email
+		/// </summary>
+		public static string DisplayEmail => I18NResource.GetString(ResourceDirectory, "DisplayEmail");
 
 		/// <summary>
 		///Name
@@ -274,14 +274,9 @@ namespace Frapid.Reports
 		public static string Name => I18NResource.GetString(ResourceDirectory, "Name");
 
 		/// <summary>
-		///Blog Category Id
+		///Last Editor Id
 		/// </summary>
-		public static string BlogCategoryId => I18NResource.GetString(ResourceDirectory, "BlogCategoryId");
-
-		/// <summary>
-		///Blog Id
-		/// </summary>
-		public static string BlogId => I18NResource.GetString(ResourceDirectory, "BlogId");
+		public static string LastEditorId => I18NResource.GetString(ResourceDirectory, "LastEditorId");
 
 		/// <summary>
 		///State
@@ -289,9 +284,14 @@ namespace Frapid.Reports
 		public static string State => I18NResource.GetString(ResourceDirectory, "State");
 
 		/// <summary>
-		///Last Editor Id
+		///Blog Id
 		/// </summary>
-		public static string LastEditorId => I18NResource.GetString(ResourceDirectory, "LastEditorId");
+		public static string BlogId => I18NResource.GetString(ResourceDirectory, "BlogId");
+
+		/// <summary>
+		///Blog Category Id
+		/// </summary>
+		public static string BlogCategoryId => I18NResource.GetString(ResourceDirectory, "BlogCategoryId");
 
 		/// <summary>
 		///Content Id
@@ -304,6 +304,11 @@ namespace Frapid.Reports
 		public static string WebsiteName => I18NResource.GetString(ResourceDirectory, "WebsiteName");
 
 		/// <summary>
+		///Is Default
+		/// </summary>
+		public static string IsDefault => I18NResource.GetString(ResourceDirectory, "IsDefault");
+
+		/// <summary>
 		///Is Homepage
 		/// </summary>
 		public static string IsHomepage => I18NResource.GetString(ResourceDirectory, "IsHomepage");
@@ -312,11 +317,6 @@ namespace Frapid.Reports
 		///Subscription Type
 		/// </summary>
 		public static string SubscriptionType => I18NResource.GetString(ResourceDirectory, "SubscriptionType");
-
-		/// <summary>
-		///Is Default
-		/// </summary>
-		public static string IsDefault => I18NResource.GetString(ResourceDirectory, "IsDefault");
 
 		/// <summary>
 		///Blog Title

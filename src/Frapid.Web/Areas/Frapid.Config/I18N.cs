@@ -64,14 +64,14 @@ namespace Frapid.Config
 		public static string TableName => I18NResource.GetString(ResourceDirectory, "TableName");
 
 		/// <summary>
-		///Application Name
-		/// </summary>
-		public static string ApplicationName => I18NResource.GetString(ResourceDirectory, "ApplicationName");
-
-		/// <summary>
 		///Kanban Detail Id
 		/// </summary>
 		public static string KanbanDetailId => I18NResource.GetString(ResourceDirectory, "KanbanDetailId");
+
+		/// <summary>
+		///Application Name
+		/// </summary>
+		public static string ApplicationName => I18NResource.GetString(ResourceDirectory, "ApplicationName");
 
 		/// <summary>
 		///Custom Field Id
@@ -134,6 +134,11 @@ namespace Frapid.Config
 		public static string FilterValue => I18NResource.GetString(ResourceDirectory, "FilterValue");
 
 		/// <summary>
+		///Resource Id
+		/// </summary>
+		public static string ResourceId => I18NResource.GetString(ResourceDirectory, "ResourceId");
+
+		/// <summary>
 		///Enabled
 		/// </summary>
 		public static string Enabled => I18NResource.GetString(ResourceDirectory, "Enabled");
@@ -144,19 +149,9 @@ namespace Frapid.Config
 		public static string AddedOn => I18NResource.GetString(ResourceDirectory, "AddedOn");
 
 		/// <summary>
-		///Resource Id
-		/// </summary>
-		public static string ResourceId => I18NResource.GetString(ResourceDirectory, "ResourceId");
-
-		/// <summary>
 		///Smtp Password
 		/// </summary>
 		public static string SmtpPassword => I18NResource.GetString(ResourceDirectory, "SmtpPassword");
-
-		/// <summary>
-		///Data Type
-		/// </summary>
-		public static string DataType => I18NResource.GetString(ResourceDirectory, "DataType");
 
 		/// <summary>
 		///Kanban Id
@@ -164,9 +159,9 @@ namespace Frapid.Config
 		public static string KanbanId => I18NResource.GetString(ResourceDirectory, "KanbanId");
 
 		/// <summary>
-		///Reply To
+		///Data Type
 		/// </summary>
-		public static string ReplyTo => I18NResource.GetString(ResourceDirectory, "ReplyTo");
+		public static string DataType => I18NResource.GetString(ResourceDirectory, "DataType");
 
 		/// <summary>
 		///Canceled On
@@ -174,19 +169,24 @@ namespace Frapid.Config
 		public static string CanceledOn => I18NResource.GetString(ResourceDirectory, "CanceledOn");
 
 		/// <summary>
+		///Reply To
+		/// </summary>
+		public static string ReplyTo => I18NResource.GetString(ResourceDirectory, "ReplyTo");
+
+		/// <summary>
 		///Value
 		/// </summary>
 		public static string Value => I18NResource.GetString(ResourceDirectory, "Value");
 
 		/// <summary>
-		///Filter And Value
-		/// </summary>
-		public static string FilterAndValue => I18NResource.GetString(ResourceDirectory, "FilterAndValue");
-
-		/// <summary>
 		///Canceled
 		/// </summary>
 		public static string Canceled => I18NResource.GetString(ResourceDirectory, "Canceled");
+
+		/// <summary>
+		///Filter And Value
+		/// </summary>
+		public static string FilterAndValue => I18NResource.GetString(ResourceDirectory, "FilterAndValue");
 
 		/// <summary>
 		///Configuration Name
@@ -214,19 +214,14 @@ namespace Frapid.Config
 		public static string FromName => I18NResource.GetString(ResourceDirectory, "FromName");
 
 		/// <summary>
-		///Field Order
+		///Kanban Name
 		/// </summary>
-		public static string FieldOrder => I18NResource.GetString(ResourceDirectory, "FieldOrder");
+		public static string KanbanName => I18NResource.GetString(ResourceDirectory, "KanbanName");
 
 		/// <summary>
 		///Message
 		/// </summary>
 		public static string Message => I18NResource.GetString(ResourceDirectory, "Message");
-
-		/// <summary>
-		///Kanban Name
-		/// </summary>
-		public static string KanbanName => I18NResource.GetString(ResourceDirectory, "KanbanName");
 
 		/// <summary>
 		///Smtp Host
@@ -244,14 +239,14 @@ namespace Frapid.Config
 		public static string AfterField => I18NResource.GetString(ResourceDirectory, "AfterField");
 
 		/// <summary>
-		///Is Default Admin
-		/// </summary>
-		public static string IsDefaultAdmin => I18NResource.GetString(ResourceDirectory, "IsDefaultAdmin");
-
-		/// <summary>
 		///Audit Ts
 		/// </summary>
 		public static string AuditTs => I18NResource.GetString(ResourceDirectory, "AuditTs");
+
+		/// <summary>
+		///Is Default Admin
+		/// </summary>
+		public static string IsDefaultAdmin => I18NResource.GetString(ResourceDirectory, "IsDefaultAdmin");
 
 		/// <summary>
 		///Before Field
@@ -259,14 +254,14 @@ namespace Frapid.Config
 		public static string BeforeField => I18NResource.GetString(ResourceDirectory, "BeforeField");
 
 		/// <summary>
-		///Filter Statement
-		/// </summary>
-		public static string FilterStatement => I18NResource.GetString(ResourceDirectory, "FilterStatement");
-
-		/// <summary>
 		///Smtp Config Id
 		/// </summary>
 		public static string SmtpConfigId => I18NResource.GetString(ResourceDirectory, "SmtpConfigId");
+
+		/// <summary>
+		///Filter Statement
+		/// </summary>
+		public static string FilterStatement => I18NResource.GetString(ResourceDirectory, "FilterStatement");
 
 		/// <summary>
 		///Form Name
@@ -277,6 +272,11 @@ namespace Frapid.Config
 		///Key Name
 		/// </summary>
 		public static string KeyName => I18NResource.GetString(ResourceDirectory, "KeyName");
+
+		/// <summary>
+		///User Id
+		/// </summary>
+		public static string UserId => I18NResource.GetString(ResourceDirectory, "UserId");
 
 		/// <summary>
 		///Is Default
@@ -292,11 +292,6 @@ namespace Frapid.Config
 		///Is Test
 		/// </summary>
 		public static string IsTest => I18NResource.GetString(ResourceDirectory, "IsTest");
-
-		/// <summary>
-		///User Id
-		/// </summary>
-		public static string UserId => I18NResource.GetString(ResourceDirectory, "UserId");
 
 		/// <summary>
 		///Filter Id
@@ -332,6 +327,11 @@ namespace Frapid.Config
 		///Reply To Name
 		/// </summary>
 		public static string ReplyToName => I18NResource.GetString(ResourceDirectory, "ReplyToName");
+
+		/// <summary>
+		///Field Order
+		/// </summary>
+		public static string FieldOrder => I18NResource.GetString(ResourceDirectory, "FieldOrder");
 
 		/// <summary>
 		///Offices
