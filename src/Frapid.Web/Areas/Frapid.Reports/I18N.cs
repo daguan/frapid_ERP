@@ -194,14 +194,14 @@ namespace Frapid.Reports
 		public static string DisplayContactForm => I18NResource.GetString(ResourceDirectory, "DisplayContactForm");
 
 		/// <summary>
-		///Unsubscribed
-		/// </summary>
-		public static string Unsubscribed => I18NResource.GetString(ResourceDirectory, "Unsubscribed");
-
-		/// <summary>
 		///Seo Description
 		/// </summary>
 		public static string SeoDescription => I18NResource.GetString(ResourceDirectory, "SeoDescription");
+
+		/// <summary>
+		///Unsubscribed
+		/// </summary>
+		public static string Unsubscribed => I18NResource.GetString(ResourceDirectory, "Unsubscribed");
 
 		/// <summary>
 		///Parent Menu Item Id
@@ -304,14 +304,14 @@ namespace Frapid.Reports
 		public static string WebsiteName => I18NResource.GetString(ResourceDirectory, "WebsiteName");
 
 		/// <summary>
-		///Is Default
-		/// </summary>
-		public static string IsDefault => I18NResource.GetString(ResourceDirectory, "IsDefault");
-
-		/// <summary>
 		///Is Homepage
 		/// </summary>
 		public static string IsHomepage => I18NResource.GetString(ResourceDirectory, "IsHomepage");
+
+		/// <summary>
+		///Is Default
+		/// </summary>
+		public static string IsDefault => I18NResource.GetString(ResourceDirectory, "IsDefault");
 
 		/// <summary>
 		///Subscription Type
@@ -359,14 +359,14 @@ namespace Frapid.Reports
 		public static string AuditUserId => I18NResource.GetString(ResourceDirectory, "AuditUserId");
 
 		/// <summary>
-		///Confirmed On
-		/// </summary>
-		public static string ConfirmedOn => I18NResource.GetString(ResourceDirectory, "ConfirmedOn");
-
-		/// <summary>
 		///Deleted
 		/// </summary>
 		public static string Deleted => I18NResource.GetString(ResourceDirectory, "Deleted");
+
+		/// <summary>
+		///Confirmed On
+		/// </summary>
+		public static string ConfirmedOn => I18NResource.GetString(ResourceDirectory, "ConfirmedOn");
 
 		/// <summary>
 		///Created On
