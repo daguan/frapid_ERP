@@ -294,6 +294,7 @@ function initializeSelectApis() {
         const valueField = el.attr("data-api-value-field") || "Value";
         const keyField = el.attr("data-api-key-field") || "Key";
         const isArray = el.attr("data-is-array") || false;
+        const removePlaceholder = el.attr("data-remove-placeholder") === "true" || false;
 
         window.ajaxDataBind(apiUrl, el, null, keyField, valueField, null, function () {
             var selectedValue = el.attr("data-api-selected-value");
@@ -317,9 +318,14 @@ function initializeSelectApis() {
                 const values = selectedValues.split(",");
                 el.val(values);
             };
+            
+            if(selectedValue || selectedValues){
+                setTimeout(function(){
+                    el.trigger("change");
+                }, 500);
+            };
 
-
-        }, isArray);
+        }, isArray, removePlaceholder);
     });
 };
 
