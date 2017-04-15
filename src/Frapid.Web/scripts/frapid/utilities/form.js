@@ -48,6 +48,10 @@ function serializeForm(el) {
 			type = "calendar";
 		};
 		
+		if(el.hasClass("decimal") || el.hasClass("decimal4") || el.hasClass("currency") || el.hasClass("integer")){
+			type = "number";
+		};
+		
 		if(el.hasClass("ui tags")){
 			type = "tags";
 		};
