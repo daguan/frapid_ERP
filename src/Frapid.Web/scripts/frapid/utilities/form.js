@@ -40,6 +40,10 @@ function serializeForm(el) {
 			type = "number";
 		};
 		
+		if(el.is("select")){
+			type = "select";
+		};
+		
 		if(el.hasClass("hasDatepicker")){
 			type = "datepicker";
 		};
@@ -83,6 +87,12 @@ function serializeForm(el) {
                 return el.is(":checked");
             case "number":                
                 return window.parseFloatStrict(val || null);
+			case "select":
+				if(val === window.translate("Select")){
+					val = null;
+				};
+				
+				return val;
             default:
                 return val;
         };
