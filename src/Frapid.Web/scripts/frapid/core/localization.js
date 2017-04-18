@@ -119,6 +119,12 @@ var parseFormattedNumber = function (input) {
 
     var result = input.split(thousandSeparator).join("");
     result = result.split(decimalSeparator).join(".");
+	
+	if(result.substr(0, 1) === "(" && result.substr(num.length -1, 1) === ")")
+	{
+		result = result.substr(1, result.length - 2);
+	}
+	
     return result;
 };
 

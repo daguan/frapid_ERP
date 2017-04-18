@@ -164,14 +164,14 @@ namespace Frapid.Config
 		public static string DataType => I18NResource.GetString(ResourceDirectory, "DataType");
 
 		/// <summary>
-		///Canceled On
-		/// </summary>
-		public static string CanceledOn => I18NResource.GetString(ResourceDirectory, "CanceledOn");
-
-		/// <summary>
 		///Reply To
 		/// </summary>
 		public static string ReplyTo => I18NResource.GetString(ResourceDirectory, "ReplyTo");
+
+		/// <summary>
+		///Canceled On
+		/// </summary>
+		public static string CanceledOn => I18NResource.GetString(ResourceDirectory, "CanceledOn");
 
 		/// <summary>
 		///Value
