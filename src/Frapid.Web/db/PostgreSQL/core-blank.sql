@@ -541,7 +541,7 @@ CHECK
 
 DROP DOMAIN IF EXISTS public.decimal_strict CASCADE;
 CREATE DOMAIN public.decimal_strict
-AS decimal(30, 6)
+AS numeric(30, 6)
 CHECK
 (
     VALUE > 0
@@ -549,7 +549,7 @@ CHECK
 
 DROP DOMAIN IF EXISTS public.decimal_strict2 CASCADE;
 CREATE DOMAIN public.decimal_strict2
-AS decimal(30, 6)
+AS numeric(30, 6)
 CHECK
 (
     VALUE >= 0
