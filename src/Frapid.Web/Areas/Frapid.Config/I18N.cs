@@ -39,14 +39,14 @@ namespace Frapid.Config
 		public static string Deleted => I18NResource.GetString(ResourceDirectory, "Deleted");
 
 		/// <summary>
-		///Delivered
-		/// </summary>
-		public static string Delivered => I18NResource.GetString(ResourceDirectory, "Delivered");
-
-		/// <summary>
 		///Custom Field Setup Id
 		/// </summary>
 		public static string CustomFieldSetupId => I18NResource.GetString(ResourceDirectory, "CustomFieldSetupId");
+
+		/// <summary>
+		///Delivered
+		/// </summary>
+		public static string Delivered => I18NResource.GetString(ResourceDirectory, "Delivered");
 
 		/// <summary>
 		///From Display Name
@@ -54,14 +54,14 @@ namespace Frapid.Config
 		public static string FromDisplayName => I18NResource.GetString(ResourceDirectory, "FromDisplayName");
 
 		/// <summary>
-		///Column Name
-		/// </summary>
-		public static string ColumnName => I18NResource.GetString(ResourceDirectory, "ColumnName");
-
-		/// <summary>
 		///Table Name
 		/// </summary>
 		public static string TableName => I18NResource.GetString(ResourceDirectory, "TableName");
+
+		/// <summary>
+		///Column Name
+		/// </summary>
+		public static string ColumnName => I18NResource.GetString(ResourceDirectory, "ColumnName");
 
 		/// <summary>
 		///Kanban Detail Id
@@ -94,14 +94,14 @@ namespace Frapid.Config
 		public static string FromEmail => I18NResource.GetString(ResourceDirectory, "FromEmail");
 
 		/// <summary>
-		///Filter Condition
-		/// </summary>
-		public static string FilterCondition => I18NResource.GetString(ResourceDirectory, "FilterCondition");
-
-		/// <summary>
 		///Underlying Type
 		/// </summary>
 		public static string UnderlyingType => I18NResource.GetString(ResourceDirectory, "UnderlyingType");
+
+		/// <summary>
+		///Filter Condition
+		/// </summary>
+		public static string FilterCondition => I18NResource.GetString(ResourceDirectory, "FilterCondition");
 
 		/// <summary>
 		///Subject
@@ -209,14 +209,14 @@ namespace Frapid.Config
 		public static string Rating => I18NResource.GetString(ResourceDirectory, "Rating");
 
 		/// <summary>
-		///From Name
-		/// </summary>
-		public static string FromName => I18NResource.GetString(ResourceDirectory, "FromName");
-
-		/// <summary>
 		///Field Order
 		/// </summary>
 		public static string FieldOrder => I18NResource.GetString(ResourceDirectory, "FieldOrder");
+
+		/// <summary>
+		///From Name
+		/// </summary>
+		public static string FromName => I18NResource.GetString(ResourceDirectory, "FromName");
 
 		/// <summary>
 		///Kanban Name
@@ -264,14 +264,14 @@ namespace Frapid.Config
 		public static string SmtpConfigId => I18NResource.GetString(ResourceDirectory, "SmtpConfigId");
 
 		/// <summary>
-		///Filter Statement
-		/// </summary>
-		public static string FilterStatement => I18NResource.GetString(ResourceDirectory, "FilterStatement");
-
-		/// <summary>
 		///Form Name
 		/// </summary>
 		public static string FormName => I18NResource.GetString(ResourceDirectory, "FormName");
+
+		/// <summary>
+		///Filter Statement
+		/// </summary>
+		public static string FilterStatement => I18NResource.GetString(ResourceDirectory, "FilterStatement");
 
 		/// <summary>
 		///Key Name
@@ -319,14 +319,14 @@ namespace Frapid.Config
 		public static string FromEmailAddress => I18NResource.GetString(ResourceDirectory, "FromEmailAddress");
 
 		/// <summary>
-		///Delivered On
-		/// </summary>
-		public static string DeliveredOn => I18NResource.GetString(ResourceDirectory, "DeliveredOn");
-
-		/// <summary>
 		///Field Label
 		/// </summary>
 		public static string FieldLabel => I18NResource.GetString(ResourceDirectory, "FieldLabel");
+
+		/// <summary>
+		///Delivered On
+		/// </summary>
+		public static string DeliveredOn => I18NResource.GetString(ResourceDirectory, "DeliveredOn");
 
 		/// <summary>
 		///Reply To Name

@@ -79,14 +79,14 @@ namespace MixERP.Social
 		public static string FormattedText => I18NResource.GetString(ResourceDirectory, "FormattedText");
 
 		/// <summary>
-		///User Id
-		/// </summary>
-		public static string UserId => I18NResource.GetString(ResourceDirectory, "UserId");
-
-		/// <summary>
 		///Liked By
 		/// </summary>
 		public static string LikedBy => I18NResource.GetString(ResourceDirectory, "LikedBy");
+
+		/// <summary>
+		///User Id
+		/// </summary>
+		public static string UserId => I18NResource.GetString(ResourceDirectory, "UserId");
 
 		/// <summary>
 		///Feed Id

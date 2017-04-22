@@ -38,7 +38,7 @@ $.getJSON("/dashboard/meta", function (response) {
     window.thousandSeparator = meta.ThousandSeparator;
     window.decimalSeparator = meta.DecimalSeparator;
     window.currencyDecimalPlaces = meta.CurrencyDecimalPlaces;
-    window.currencySymbol = meta.CurrencySymbol;
+    window.currencySymbol = meta.MetaView.CurrencySymbol || meta.CurrencySymbol;
     window.datepickerFormat = window.convertNetDateFormat(meta.ShortDateFormat);
     window.datepickerShowWeekNumber = meta.DatepickerShowWeekNumber;
     window.datepickerWeekStartDay = meta.DatepickerWeekStartDay;

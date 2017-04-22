@@ -152,7 +152,7 @@ var getFormattedNumber = function (input, isInteger) {
 
 
 function getFormattedCurrency(input){
-    return meta.CurrencySymbol + getFormattedNumber(input);
+    return (meta.MetaView.CurrencySymbol || meta.CurrencySymbol) + getFormattedNumber(input);
 };
 
 
