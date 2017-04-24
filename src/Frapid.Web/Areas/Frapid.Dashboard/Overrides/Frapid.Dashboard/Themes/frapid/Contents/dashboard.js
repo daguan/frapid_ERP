@@ -178,6 +178,7 @@ var menuBuilder = {
             .Where(function (x) { return x.AppName === app; })
             .Where(function (x) { return x.ParentMenuId === menuId; })
             .OrderBy(function (x) { return x.Sort; })
+            .ThenBy(function (x) { return x.MenuId; })
             .ToArray();
 
 
