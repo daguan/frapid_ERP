@@ -34,24 +34,9 @@ namespace MixERP.Social
 		public static string IsPublic => I18NResource.GetString(ResourceDirectory, "IsPublic");
 
 		/// <summary>
-		///Role Id
-		/// </summary>
-		public static string RoleId => I18NResource.GetString(ResourceDirectory, "RoleId");
-
-		/// <summary>
 		///Deleted
 		/// </summary>
 		public static string Deleted => I18NResource.GetString(ResourceDirectory, "Deleted");
-
-		/// <summary>
-		///Audit Ts
-		/// </summary>
-		public static string AuditTs => I18NResource.GetString(ResourceDirectory, "AuditTs");
-
-		/// <summary>
-		///Scope
-		/// </summary>
-		public static string Scope => I18NResource.GetString(ResourceDirectory, "Scope");
 
 		/// <summary>
 		///Attachments
@@ -74,21 +59,6 @@ namespace MixERP.Social
 		public static string LikedByName => I18NResource.GetString(ResourceDirectory, "LikedByName");
 
 		/// <summary>
-		///Formatted Text
-		/// </summary>
-		public static string FormattedText => I18NResource.GetString(ResourceDirectory, "FormattedText");
-
-		/// <summary>
-		///Liked By
-		/// </summary>
-		public static string LikedBy => I18NResource.GetString(ResourceDirectory, "LikedBy");
-
-		/// <summary>
-		///User Id
-		/// </summary>
-		public static string UserId => I18NResource.GetString(ResourceDirectory, "UserId");
-
-		/// <summary>
 		///Feed Id
 		/// </summary>
 		public static string FeedId => I18NResource.GetString(ResourceDirectory, "FeedId");
@@ -99,16 +69,6 @@ namespace MixERP.Social
 		public static string DeletedOn => I18NResource.GetString(ResourceDirectory, "DeletedOn");
 
 		/// <summary>
-		///Deleted By
-		/// </summary>
-		public static string DeletedBy => I18NResource.GetString(ResourceDirectory, "DeletedBy");
-
-		/// <summary>
-		///Parent Feed Id
-		/// </summary>
-		public static string ParentFeedId => I18NResource.GetString(ResourceDirectory, "ParentFeedId");
-
-		/// <summary>
 		///Unliked
 		/// </summary>
 		public static string Unliked => I18NResource.GetString(ResourceDirectory, "Unliked");
@@ -117,6 +77,46 @@ namespace MixERP.Social
 		///Unliked On
 		/// </summary>
 		public static string UnlikedOn => I18NResource.GetString(ResourceDirectory, "UnlikedOn");
+
+		/// <summary>
+		///Role Id
+		/// </summary>
+		public static string RoleId => I18NResource.GetString(ResourceDirectory, "RoleId");
+
+		/// <summary>
+		///Audit Ts
+		/// </summary>
+		public static string AuditTs => I18NResource.GetString(ResourceDirectory, "AuditTs");
+
+		/// <summary>
+		///Scope
+		/// </summary>
+		public static string Scope => I18NResource.GetString(ResourceDirectory, "Scope");
+
+		/// <summary>
+		///Formatted Text
+		/// </summary>
+		public static string FormattedText => I18NResource.GetString(ResourceDirectory, "FormattedText");
+
+		/// <summary>
+		///User Id
+		/// </summary>
+		public static string UserId => I18NResource.GetString(ResourceDirectory, "UserId");
+
+		/// <summary>
+		///Liked By
+		/// </summary>
+		public static string LikedBy => I18NResource.GetString(ResourceDirectory, "LikedBy");
+
+		/// <summary>
+		///Deleted By
+		/// </summary>
+		public static string DeletedBy => I18NResource.GetString(ResourceDirectory, "DeletedBy");
+
+		/// <summary>
+		///Parent Feed Id
+		/// </summary>
+		public static string ParentFeedId => I18NResource.GetString(ResourceDirectory, "ParentFeedId");
 
 		/// <summary>
 		///Event Timestamp
