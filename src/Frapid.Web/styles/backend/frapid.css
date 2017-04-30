@@ -1287,3 +1287,15 @@ select:-moz-focusring {
 .ui.table tfoot tr td{
 	border-top:1px solid #ddd!important;
 }
+
+input.important,
+input.important[disabled],
+input.important[readonly],
+.flat.form input.important,
+.flat.form input.important[disabled],
+.flat.form input.important[readonly]
+{
+	font-weight: bolder!important;
+	color:rgba(200, 0, 0, 1)!important;
+}
+
