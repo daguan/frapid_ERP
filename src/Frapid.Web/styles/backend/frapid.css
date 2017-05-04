@@ -1299,3 +1299,7 @@ input.important[readonly],
 	color:rgba(200, 0, 0, 1)!important;
 }
 
+
+.strong{
+	font-weight:bold!important;
+}
