@@ -865,3 +865,5 @@ $(document).ready(function () {
     });
 });
 
+$(".ui.theme.selector.dropdown").dropdown();
+$(".ui.select.language.dropdown").dropdown();

@@ -64,14 +64,14 @@ namespace Frapid.Config
 		public static string TableName => I18NResource.GetString(ResourceDirectory, "TableName");
 
 		/// <summary>
-		///Application Name
-		/// </summary>
-		public static string ApplicationName => I18NResource.GetString(ResourceDirectory, "ApplicationName");
-
-		/// <summary>
 		///Kanban Detail Id
 		/// </summary>
 		public static string KanbanDetailId => I18NResource.GetString(ResourceDirectory, "KanbanDetailId");
+
+		/// <summary>
+		///Application Name
+		/// </summary>
+		public static string ApplicationName => I18NResource.GetString(ResourceDirectory, "ApplicationName");
 
 		/// <summary>
 		///Custom Field Id
@@ -134,6 +134,11 @@ namespace Frapid.Config
 		public static string FilterValue => I18NResource.GetString(ResourceDirectory, "FilterValue");
 
 		/// <summary>
+		///Resource Id
+		/// </summary>
+		public static string ResourceId => I18NResource.GetString(ResourceDirectory, "ResourceId");
+
+		/// <summary>
 		///Enabled
 		/// </summary>
 		public static string Enabled => I18NResource.GetString(ResourceDirectory, "Enabled");
@@ -142,11 +147,6 @@ namespace Frapid.Config
 		///Added On
 		/// </summary>
 		public static string AddedOn => I18NResource.GetString(ResourceDirectory, "AddedOn");
-
-		/// <summary>
-		///Resource Id
-		/// </summary>
-		public static string ResourceId => I18NResource.GetString(ResourceDirectory, "ResourceId");
 
 		/// <summary>
 		///Smtp Password
@@ -214,14 +214,14 @@ namespace Frapid.Config
 		public static string FromName => I18NResource.GetString(ResourceDirectory, "FromName");
 
 		/// <summary>
-		///Message
-		/// </summary>
-		public static string Message => I18NResource.GetString(ResourceDirectory, "Message");
-
-		/// <summary>
 		///Kanban Name
 		/// </summary>
 		public static string KanbanName => I18NResource.GetString(ResourceDirectory, "KanbanName");
+
+		/// <summary>
+		///Message
+		/// </summary>
+		public static string Message => I18NResource.GetString(ResourceDirectory, "Message");
 
 		/// <summary>
 		///Smtp Host
@@ -274,6 +274,11 @@ namespace Frapid.Config
 		public static string KeyName => I18NResource.GetString(ResourceDirectory, "KeyName");
 
 		/// <summary>
+		///User Id
+		/// </summary>
+		public static string UserId => I18NResource.GetString(ResourceDirectory, "UserId");
+
+		/// <summary>
 		///Is Default
 		/// </summary>
 		public static string IsDefault => I18NResource.GetString(ResourceDirectory, "IsDefault");
@@ -287,11 +292,6 @@ namespace Frapid.Config
 		///Is Test
 		/// </summary>
 		public static string IsTest => I18NResource.GetString(ResourceDirectory, "IsTest");
-
-		/// <summary>
-		///User Id
-		/// </summary>
-		public static string UserId => I18NResource.GetString(ResourceDirectory, "UserId");
 
 		/// <summary>
 		///Filter Id
