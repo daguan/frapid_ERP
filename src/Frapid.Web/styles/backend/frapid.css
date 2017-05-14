@@ -417,3 +417,13 @@ input.important[readonly]
 .strong{
 	font-weight:bold!important;
 }
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-resolution: 144dpi) {
+    .chosen-container .chosen-search input[type="text"] {
+        background: url("/scripts/chosen/chosen-sprite@2x.png") 100% -20px / 52px 37px no-repeat scroll #fff !important;
+    }
+}
+
+.field .chosen-container{
+  width: 100%!important;
+}

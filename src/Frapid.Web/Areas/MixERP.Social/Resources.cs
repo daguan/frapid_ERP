@@ -59,6 +59,11 @@ namespace MixERP.Social
 		public static string LikedByName => I18NResource.GetString(ResourceDirectory, "LikedByName");
 
 		/// <summary>
+		///Url
+		/// </summary>
+		public static string Url => I18NResource.GetString(ResourceDirectory, "Url");
+
+		/// <summary>
 		///Feed Id
 		/// </summary>
 		public static string FeedId => I18NResource.GetString(ResourceDirectory, "FeedId");
@@ -139,6 +144,11 @@ namespace MixERP.Social
 		public static string AddANewPost => I18NResource.GetString(ResourceDirectory, "AddANewPost");
 
 		/// <summary>
+		///Add a New Reply
+		/// </summary>
+		public static string AddANewReply => I18NResource.GetString(ResourceDirectory, "AddANewReply");
+
+		/// <summary>
 		///All Stories
 		/// </summary>
 		public static string AllStories => I18NResource.GetString(ResourceDirectory, "AllStories");
@@ -164,6 +174,11 @@ namespace MixERP.Social
 		public static string CouldNotFindAvatarDirectory => I18NResource.GetString(ResourceDirectory, "CouldNotFindAvatarDirectory");
 
 		/// <summary>
+		///Discussion
+		/// </summary>
+		public static string Discussion => I18NResource.GetString(ResourceDirectory, "Discussion");
+
+		/// <summary>
 		///Invalid File
 		/// </summary>
 		public static string InvalidFile => I18NResource.GetString(ResourceDirectory, "InvalidFile");
@@ -177,6 +192,11 @@ namespace MixERP.Social
 		///Invalid file name.
 		/// </summary>
 		public static string InvalidFileName => I18NResource.GetString(ResourceDirectory, "InvalidFileName");
+
+		/// <summary>
+		///Join the Discussion
+		/// </summary>
+		public static string JoinDiscussion => I18NResource.GetString(ResourceDirectory, "JoinDiscussion");
 
 		/// <summary>
 		///Like
@@ -197,6 +217,11 @@ namespace MixERP.Social
 		///MixERP Social App
 		/// </summary>
 		public static string MixERPSocialApp => I18NResource.GetString(ResourceDirectory, "MixERPSocialApp");
+
+		/// <summary>
+		///My Profile Picture
+		/// </summary>
+		public static string MyProfilePicture => I18NResource.GetString(ResourceDirectory, "MyProfilePicture");
 
 		/// <summary>
 		///No file was uploaded.
