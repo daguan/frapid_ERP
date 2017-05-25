@@ -177,7 +177,7 @@ function ajaxDataBind(url, targetControl, data, keyField, valueField, selectedVa
             window.ajaxDataBindCallBack(targetControl);
         };
 
-        if(targetControl.is("select.chosen")){
+        if(targetControl.is("select.chosen")){            
             targetControl.removeClass("ui dropdown search").chosen({
                 disable_search_threshold: 10,
                 placeholder_text_single: window.translate("Select"),
@@ -187,11 +187,16 @@ function ajaxDataBind(url, targetControl, data, keyField, valueField, selectedVa
             targetControl.on("change", function(){
                 targetControl.trigger('chosen:updated');
             });
+
+            setTimeout(function(){
+                targetControl.trigger('chosen:updated');                
+            }, 300);
         };
 
         if (typeof callback === "function") {
             callback(targetControl, result);
         };
+
     });
 
     ajax.error(function (xhr) {
