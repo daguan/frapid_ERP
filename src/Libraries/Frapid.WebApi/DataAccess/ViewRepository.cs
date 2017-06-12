@@ -16,8 +16,6 @@ namespace Frapid.WebApi.DataAccess
 {
     public class ViewRepository : DbAccess, IViewRepository
     {
-        private const int PageSize = 10;
-
         public ViewRepository(string schemaName, string tableName, string database, long loginId, int userId)
         {
             var appUser = AppUsers.GetCurrentAsync().GetAwaiter().GetResult();
@@ -176,7 +174,7 @@ namespace Frapid.WebApi.DataAccess
             var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName}");
             sql.OrderBy(this.PrimaryKey);
             sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), 0);
-            sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), PageSize);
+            sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), Config.GetPageSize(this.Database));
 
             return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
         }
@@ -201,7 +199,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            long offset = (pageNumber - 1)*PageSize;
+            long offset = (pageNumber - 1)* Config.GetPageSize(this.Database);
 
             //"SELECT * FROM {this.FullyQualifiedObjectName} 
             //ORDER BY {this.PrimaryKey} LIMIT PageSize OFFSET @0;";
@@ -209,7 +207,7 @@ namespace Frapid.WebApi.DataAccess
             var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName}");
             sql.OrderBy(this.PrimaryKey);
             sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), offset);
-            sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), PageSize);
+            sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), Config.GetPageSize(this.Database));
 
             return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
         }
@@ -266,7 +264,7 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            long offset = (pageNumber - 1)*PageSize;
+            long offset = (pageNumber - 1)* Config.GetPageSize(this.Database);
             var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
 
             FilterManager.AddFilters(ref sql, filters);
@@ -276,7 +274,7 @@ namespace Frapid.WebApi.DataAccess
             if (pageNumber > 0)
             {
                 sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), offset);
-                sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), PageSize);
+                sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), Config.GetPageSize(this.Database));
             }
 
             return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);
@@ -332,7 +330,7 @@ namespace Frapid.WebApi.DataAccess
 
             var filters = await this.GetFiltersAsync(this.Database, filterName).ConfigureAwait(false);
 
-            long offset = (pageNumber - 1)*PageSize;
+            long offset = (pageNumber - 1)* Config.GetPageSize(this.Database);
             var sql = new Sql($"SELECT * FROM {this.FullyQualifiedObjectName} WHERE 1 = 1");
 
             FilterManager.AddFilters(ref sql, filters.ToList());
@@ -342,7 +340,7 @@ namespace Frapid.WebApi.DataAccess
             if (pageNumber > 0)
             {
                 sql.Append(FrapidDbServer.AddOffset(this.Database, "@0"), offset);
-                sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), PageSize);
+                sql.Append(FrapidDbServer.AddLimit(this.Database, "@0"), Config.GetPageSize(this.Database));
             }
 
             return await Factory.GetAsync<dynamic>(this.Database, sql).ConfigureAwait(false);

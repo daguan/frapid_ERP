@@ -34,14 +34,14 @@ namespace Frapid.Authorization
 		public static string AllowAccess => I18NResource.GetString(ResourceDirectory, "AllowAccess");
 
 		/// <summary>
-		///Menu Access Policy Id
-		/// </summary>
-		public static string MenuAccessPolicyId => I18NResource.GetString(ResourceDirectory, "MenuAccessPolicyId");
-
-		/// <summary>
 		///Audit User Id
 		/// </summary>
 		public static string AuditUserId => I18NResource.GetString(ResourceDirectory, "AuditUserId");
+
+		/// <summary>
+		///Menu Access Policy Id
+		/// </summary>
+		public static string MenuAccessPolicyId => I18NResource.GetString(ResourceDirectory, "MenuAccessPolicyId");
 
 		/// <summary>
 		///Deleted

@@ -15,7 +15,7 @@ namespace Frapid.Installer
 
             try
             {
-                var installer = new Tenant.Installer(url);
+                var installer = new Tenant.Installer(url, false);
                 installer.InstallAsync().GetAwaiter().GetResult();
 
                 var site = new ApprovedDomainSerializer().Get().FirstOrDefault(x => x.DomainName.Equals(url));

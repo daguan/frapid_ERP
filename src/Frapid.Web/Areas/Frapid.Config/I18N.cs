@@ -39,14 +39,14 @@ namespace Frapid.Config
 		public static string Deleted => I18NResource.GetString(ResourceDirectory, "Deleted");
 
 		/// <summary>
-		///Delivered
-		/// </summary>
-		public static string Delivered => I18NResource.GetString(ResourceDirectory, "Delivered");
-
-		/// <summary>
 		///Custom Field Setup Id
 		/// </summary>
 		public static string CustomFieldSetupId => I18NResource.GetString(ResourceDirectory, "CustomFieldSetupId");
+
+		/// <summary>
+		///Delivered
+		/// </summary>
+		public static string Delivered => I18NResource.GetString(ResourceDirectory, "Delivered");
 
 		/// <summary>
 		///From Display Name
@@ -244,14 +244,14 @@ namespace Frapid.Config
 		public static string AuditTs => I18NResource.GetString(ResourceDirectory, "AuditTs");
 
 		/// <summary>
-		///Is Default Admin
-		/// </summary>
-		public static string IsDefaultAdmin => I18NResource.GetString(ResourceDirectory, "IsDefaultAdmin");
-
-		/// <summary>
 		///Before Field
 		/// </summary>
 		public static string BeforeField => I18NResource.GetString(ResourceDirectory, "BeforeField");
+
+		/// <summary>
+		///Is Default Admin
+		/// </summary>
+		public static string IsDefaultAdmin => I18NResource.GetString(ResourceDirectory, "IsDefaultAdmin");
 
 		/// <summary>
 		///Smtp Config Id
@@ -259,14 +259,14 @@ namespace Frapid.Config
 		public static string SmtpConfigId => I18NResource.GetString(ResourceDirectory, "SmtpConfigId");
 
 		/// <summary>
-		///Filter Statement
-		/// </summary>
-		public static string FilterStatement => I18NResource.GetString(ResourceDirectory, "FilterStatement");
-
-		/// <summary>
 		///Form Name
 		/// </summary>
 		public static string FormName => I18NResource.GetString(ResourceDirectory, "FormName");
+
+		/// <summary>
+		///Filter Statement
+		/// </summary>
+		public static string FilterStatement => I18NResource.GetString(ResourceDirectory, "FilterStatement");
 
 		/// <summary>
 		///Key Name
@@ -314,14 +314,14 @@ namespace Frapid.Config
 		public static string FromEmailAddress => I18NResource.GetString(ResourceDirectory, "FromEmailAddress");
 
 		/// <summary>
-		///Delivered On
-		/// </summary>
-		public static string DeliveredOn => I18NResource.GetString(ResourceDirectory, "DeliveredOn");
-
-		/// <summary>
 		///Field Label
 		/// </summary>
 		public static string FieldLabel => I18NResource.GetString(ResourceDirectory, "FieldLabel");
+
+		/// <summary>
+		///Delivered On
+		/// </summary>
+		public static string DeliveredOn => I18NResource.GetString(ResourceDirectory, "DeliveredOn");
 
 		/// <summary>
 		///Reply To Name

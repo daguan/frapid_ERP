@@ -852,7 +852,8 @@ SELECT 'DEF', 'Default', 'USD', 'MixERP', '3415', 'Lobortis. Avenue', '', '', 'R
 
 INSERT INTO core.genders(gender_code, gender_name)
 SELECT 'M', 'Male' UNION ALL
-SELECT 'F', 'Female';
+SELECT 'F', 'Female' UNION ALL
+SELECT 'U', 'Unspecified';
 
 INSERT INTO core.marital_statuses(marital_status_code, marital_status_name, is_legally_recognized_marriage)
 SELECT 'NEM', 'Never Married',          0 UNION ALL

@@ -39,14 +39,14 @@ namespace Frapid.Account
 		public static string Status => I18NResource.GetString(ResourceDirectory, "Status");
 
 		/// <summary>
-		///Header
-		/// </summary>
-		public static string Header => I18NResource.GetString(ResourceDirectory, "Header");
-
-		/// <summary>
 		///Privacy Policy Url
 		/// </summary>
 		public static string PrivacyPolicyUrl => I18NResource.GetString(ResourceDirectory, "PrivacyPolicyUrl");
+
+		/// <summary>
+		///Header
+		/// </summary>
+		public static string Header => I18NResource.GetString(ResourceDirectory, "Header");
 
 		/// <summary>
 		///Office Email
@@ -159,6 +159,16 @@ namespace Frapid.Account
 		public static string AddressLine2 => I18NResource.GetString(ResourceDirectory, "AddressLine2");
 
 		/// <summary>
+		///Version Number
+		/// </summary>
+		public static string VersionNumber => I18NResource.GetString(ResourceDirectory, "VersionNumber");
+
+		/// <summary>
+		///Revoked
+		/// </summary>
+		public static string Revoked => I18NResource.GetString(ResourceDirectory, "Revoked");
+
+		/// <summary>
 		///Facebook Scope
 		/// </summary>
 		public static string FacebookScope => I18NResource.GetString(ResourceDirectory, "FacebookScope");
@@ -167,16 +177,6 @@ namespace Frapid.Account
 		///Fb User Id
 		/// </summary>
 		public static string FbUserId => I18NResource.GetString(ResourceDirectory, "FbUserId");
-
-		/// <summary>
-		///Revoked
-		/// </summary>
-		public static string Revoked => I18NResource.GetString(ResourceDirectory, "Revoked");
-
-		/// <summary>
-		///Version Number
-		/// </summary>
-		public static string VersionNumber => I18NResource.GetString(ResourceDirectory, "VersionNumber");
 
 		/// <summary>
 		///Last Browser
@@ -209,14 +209,14 @@ namespace Frapid.Account
 		public static string RegistrationDate => I18NResource.GetString(ResourceDirectory, "RegistrationDate");
 
 		/// <summary>
-		///Ip Address
-		/// </summary>
-		public static string IpAddress => I18NResource.GetString(ResourceDirectory, "IpAddress");
-
-		/// <summary>
 		///Terms Of Service Url
 		/// </summary>
 		public static string TermsOfServiceUrl => I18NResource.GetString(ResourceDirectory, "TermsOfServiceUrl");
+
+		/// <summary>
+		///Ip Address
+		/// </summary>
+		public static string IpAddress => I18NResource.GetString(ResourceDirectory, "IpAddress");
 
 		/// <summary>
 		///Confirmed
@@ -224,14 +224,14 @@ namespace Frapid.Account
 		public static string Confirmed => I18NResource.GetString(ResourceDirectory, "Confirmed");
 
 		/// <summary>
-		///Name
-		/// </summary>
-		public static string Name => I18NResource.GetString(ResourceDirectory, "Name");
-
-		/// <summary>
 		///Client Token
 		/// </summary>
 		public static string ClientToken => I18NResource.GetString(ResourceDirectory, "ClientToken");
+
+		/// <summary>
+		///Name
+		/// </summary>
+		public static string Name => I18NResource.GetString(ResourceDirectory, "Name");
 
 		/// <summary>
 		///Po Box
@@ -259,11 +259,6 @@ namespace Frapid.Account
 		public static string RoleName => I18NResource.GetString(ResourceDirectory, "RoleName");
 
 		/// <summary>
-		///User Id
-		/// </summary>
-		public static string UserId => I18NResource.GetString(ResourceDirectory, "UserId");
-
-		/// <summary>
 		///Published On
 		/// </summary>
 		public static string PublishedOn => I18NResource.GetString(ResourceDirectory, "PublishedOn");
@@ -274,19 +269,24 @@ namespace Frapid.Account
 		public static string BrowserBasedApp => I18NResource.GetString(ResourceDirectory, "BrowserBasedApp");
 
 		/// <summary>
+		///User Id
+		/// </summary>
+		public static string UserId => I18NResource.GetString(ResourceDirectory, "UserId");
+
+		/// <summary>
 		///Address Line 1
 		/// </summary>
 		public static string AddressLine1 => I18NResource.GetString(ResourceDirectory, "AddressLine1");
 
 		/// <summary>
-		///Login Id
-		/// </summary>
-		public static string LoginId => I18NResource.GetString(ResourceDirectory, "LoginId");
-
-		/// <summary>
 		///Application Url
 		/// </summary>
 		public static string ApplicationUrl => I18NResource.GetString(ResourceDirectory, "ApplicationUrl");
+
+		/// <summary>
+		///Login Id
+		/// </summary>
+		public static string LoginId => I18NResource.GetString(ResourceDirectory, "LoginId");
 
 		/// <summary>
 		///Configuration Profile Id
@@ -349,14 +349,14 @@ namespace Frapid.Account
 		public static string CurrencyCode => I18NResource.GetString(ResourceDirectory, "CurrencyCode");
 
 		/// <summary>
-		///Token
-		/// </summary>
-		public static string Token => I18NResource.GetString(ResourceDirectory, "Token");
-
-		/// <summary>
 		///Display Name
 		/// </summary>
 		public static string DisplayName => I18NResource.GetString(ResourceDirectory, "DisplayName");
+
+		/// <summary>
+		///Token
+		/// </summary>
+		public static string Token => I18NResource.GetString(ResourceDirectory, "Token");
 
 		/// <summary>
 		///Audit User Id
@@ -364,14 +364,14 @@ namespace Frapid.Account
 		public static string AuditUserId => I18NResource.GetString(ResourceDirectory, "AuditUserId");
 
 		/// <summary>
+		///Redirect Url
+		/// </summary>
+		public static string RedirectUrl => I18NResource.GetString(ResourceDirectory, "RedirectUrl");
+
+		/// <summary>
 		///Deleted
 		/// </summary>
 		public static string Deleted => I18NResource.GetString(ResourceDirectory, "Deleted");
-
-		/// <summary>
-		///Confirmed On
-		/// </summary>
-		public static string ConfirmedOn => I18NResource.GetString(ResourceDirectory, "ConfirmedOn");
 
 		/// <summary>
 		///Revoked By
@@ -379,9 +379,9 @@ namespace Frapid.Account
 		public static string RevokedBy => I18NResource.GetString(ResourceDirectory, "RevokedBy");
 
 		/// <summary>
-		///Redirect Url
+		///Confirmed On
 		/// </summary>
-		public static string RedirectUrl => I18NResource.GetString(ResourceDirectory, "RedirectUrl");
+		public static string ConfirmedOn => I18NResource.GetString(ResourceDirectory, "ConfirmedOn");
 
 		/// <summary>
 		///Created On
@@ -414,14 +414,14 @@ namespace Frapid.Account
 		public static string AppSecret => I18NResource.GetString(ResourceDirectory, "AppSecret");
 
 		/// <summary>
-		///Request Id
-		/// </summary>
-		public static string RequestId => I18NResource.GetString(ResourceDirectory, "RequestId");
-
-		/// <summary>
 		///Phone
 		/// </summary>
 		public static string Phone => I18NResource.GetString(ResourceDirectory, "Phone");
+
+		/// <summary>
+		///Request Id
+		/// </summary>
+		public static string RequestId => I18NResource.GetString(ResourceDirectory, "RequestId");
 
 		/// <summary>
 		///Domain Name

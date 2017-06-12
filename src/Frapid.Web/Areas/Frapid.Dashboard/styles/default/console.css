@@ -211,3 +211,8 @@ section.heading {
     position: absolute !important;
     margin-left: 1em !important;
 }
+
+.ui-state-highlight { 
+	background:white;
+	border: 1px dashed #999;
+}

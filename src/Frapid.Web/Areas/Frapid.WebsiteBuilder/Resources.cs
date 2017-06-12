@@ -264,14 +264,14 @@ namespace Frapid.WebsiteBuilder
 		public static string IpAddress => I18NResource.GetString(ResourceDirectory, "IpAddress");
 
 		/// <summary>
-		///Confirmed
-		/// </summary>
-		public static string Confirmed => I18NResource.GetString(ResourceDirectory, "Confirmed");
-
-		/// <summary>
 		///Display Email
 		/// </summary>
 		public static string DisplayEmail => I18NResource.GetString(ResourceDirectory, "DisplayEmail");
+
+		/// <summary>
+		///Confirmed
+		/// </summary>
+		public static string Confirmed => I18NResource.GetString(ResourceDirectory, "Confirmed");
 
 		/// <summary>
 		///Name
@@ -289,14 +289,14 @@ namespace Frapid.WebsiteBuilder
 		public static string State => I18NResource.GetString(ResourceDirectory, "State");
 
 		/// <summary>
-		///Blog Category Id
-		/// </summary>
-		public static string BlogCategoryId => I18NResource.GetString(ResourceDirectory, "BlogCategoryId");
-
-		/// <summary>
 		///Blog Id
 		/// </summary>
 		public static string BlogId => I18NResource.GetString(ResourceDirectory, "BlogId");
+
+		/// <summary>
+		///Blog Category Id
+		/// </summary>
+		public static string BlogCategoryId => I18NResource.GetString(ResourceDirectory, "BlogCategoryId");
 
 		/// <summary>
 		///Content Id

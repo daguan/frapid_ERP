@@ -159,10 +159,6 @@ function loadDatepicker() {
         if (expression) {
             el.val(expression).trigger("blur");
         };
-
-        if (!val) {
-            el.datepicker("setDate", getDate());
-        };
     });
 
     candidates.blur(function () {

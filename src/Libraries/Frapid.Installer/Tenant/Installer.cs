@@ -11,12 +11,14 @@ namespace Frapid.Installer.Tenant
     {
         public static List<Installable> InstalledApps;
 
-        public Installer(string url)
+        public Installer(string url, bool withoutSample)
         {
             this.Url = url;
+            this.WithoutSample = withoutSample;
         }
 
         public string Url { get; set; }
+        public bool WithoutSample { get; set; }
 
         public async Task InstallAsync()
         {
@@ -35,7 +37,7 @@ namespace Frapid.Installer.Tenant
             {
                 try
                 {
-                    await new AppInstaller(tenant, tenant, installable).InstallAsync().ConfigureAwait(false);
+                    await new AppInstaller(tenant, tenant, this.WithoutSample, installable).InstallAsync().ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {

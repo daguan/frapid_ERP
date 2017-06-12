@@ -134,6 +134,11 @@ namespace Frapid.i18n
 		public static string WeekDayId => I18NResource.GetString(ResourceDirectory, "WeekDayId");
 
 		/// <summary>
+		///Verification Status Id
+		/// </summary>
+		public static string VerificationStatusId => I18NResource.GetString(ResourceDirectory, "VerificationStatusId");
+
+		/// <summary>
 		///Gender Code
 		/// </summary>
 		public static string GenderCode => I18NResource.GetString(ResourceDirectory, "GenderCode");
@@ -142,11 +147,6 @@ namespace Frapid.i18n
 		///To Role Id
 		/// </summary>
 		public static string ToRoleId => I18NResource.GetString(ResourceDirectory, "ToRoleId");
-
-		/// <summary>
-		///Verification Status Id
-		/// </summary>
-		public static string VerificationStatusId => I18NResource.GetString(ResourceDirectory, "VerificationStatusId");
 
 		/// <summary>
 		///Country

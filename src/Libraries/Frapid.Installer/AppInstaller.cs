@@ -15,16 +15,18 @@ namespace Frapid.Installer
 {
     public class AppInstaller
     {
-        public AppInstaller(string tenant, string database, Installable installable)
+        public AppInstaller(string tenant, string database, bool withoutSample, Installable installable)
         {
             this.Tenant = tenant;
             this.Database = database;
+            this.WithoutSample = withoutSample;
             this.Installable = installable;
         }
 
         public Installable Installable { get; }
         protected string Tenant { get; set; }
         protected string Database { get; set; }
+        protected bool WithoutSample { get; set; }
 
         public async Task<bool> HasSchemaAsync(string database)
         {
@@ -40,7 +42,7 @@ namespace Frapid.Installer
 
             foreach (var dependency in this.Installable.Dependencies)
             {
-                await new AppInstaller(this.Tenant, this.Database, dependency).InstallAsync().ConfigureAwait(false);
+                await new AppInstaller(this.Tenant, this.Database, this.WithoutSample, dependency).InstallAsync().ConfigureAwait(false);
             }
 
             InstallerLog.Verbose($"Installing module {this.Installable.ApplicationName}.");
@@ -106,13 +108,17 @@ namespace Frapid.Installer
             string path = PathMapper.MapPath(db);
             await this.RunSqlAsync(this.Tenant, database, path).ConfigureAwait(false);
 
-            if (this.Installable.InstallSample &&
-                !string.IsNullOrWhiteSpace(this.Installable.SampleDbPath))
+
+            if (this.Installable.InstallSample && !string.IsNullOrWhiteSpace(this.Installable.SampleDbPath))
             {
-                InstallerLog.Verbose($"Creating sample data of {this.Installable.ApplicationName}.");
-                db = this.Installable.SampleDbPath;
-                path = PathMapper.MapPath(db);
-                await this.RunSqlAsync(database, database, path).ConfigureAwait(false);
+                //Manually override sample data installation
+                if (!this.WithoutSample)
+                {
+                    InstallerLog.Verbose($"Creating sample data of {this.Installable.ApplicationName}.");
+                    db = this.Installable.SampleDbPath;
+                    path = PathMapper.MapPath(db);
+                    await this.RunSqlAsync(database, database, path).ConfigureAwait(false);
+                }
             }
         }
 

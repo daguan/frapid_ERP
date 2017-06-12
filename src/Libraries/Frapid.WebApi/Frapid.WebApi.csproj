@@ -107,6 +107,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config.cs" />
     <Compile Include="DataAccess\FilterRepository.cs" />
     <Compile Include="DataAccess\FormRepository.cs" />
     <Compile Include="DataAccess\IFormRepository.cs" />

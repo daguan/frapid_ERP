@@ -160,7 +160,14 @@ function loadConsole(console) {
 
 function refreshWidgets() {
     $(".widget-container").html("");
-    $(".widget-container").sortable({ handle: '.widget.segment>.header' });
+    $(".widget-container").sortable({ 
+		handle: '.widget.segment>.header', 
+		placeholder: 'ui-state-highlight',
+		start: function(e, ui){
+				ui.placeholder.height(ui.item.height());
+				ui.placeholder.width(ui.item.width());
+			}
+	});
     window.initializeSelectApis();
 
     getWidgets(function (console) {

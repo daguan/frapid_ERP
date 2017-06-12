@@ -171,6 +171,23 @@ if exist "../src/Frapid.Web/Areas/MixCBS.Lendings/MixCBS.Lendings.sln" (
 )
 
 
+if exist "../src/Frapid.Web/Areas/MixERP.Discovery/MixERP.Discovery.sln" (
+	@echo Building MixERP Discovery Module
+	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/MixERP.Discovery/MixERP.Discovery.sln /p:VisualStudioVersion=14.0
+)
+
+if exist "../src/Frapid.Web/Areas/Salesific.CRM/Salesific.CRM.sln" (
+	@echo Building Salesific CRM Module
+	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/Salesific.CRM/Salesific.CRM.sln /p:VisualStudioVersion=14.0
+)
+
+
+if exist "../src/Frapid.Web/Areas/MixERP.Office/MixERP.Office.sln" (
+	@echo Building MixERP Office Module
+	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/MixERP.Office/MixERP.Office.sln /p:VisualStudioVersion=14.0
+)
+
+
 
 if exist "C:\Program Files\Redis\redis-cli.exe" (
 	@echo Flusing Redis Cache
