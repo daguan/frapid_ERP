@@ -83,6 +83,7 @@ namespace Frapid.Reports.DAL
             {
                 using (var command = new NpgsqlCommand(sql, connection))
                 {
+                    command.CommandTimeout = 900;//15 minutes
                     if (info.DataSourceParameters != null)
                     {
                         foreach (var p in info.DataSourceParameters)
@@ -108,6 +109,7 @@ namespace Frapid.Reports.DAL
             {
                 using (var command = new SqlCommand(sql, connection))
                 {
+                    command.CommandTimeout = 900;//15 minutes
                     if (info.DataSourceParameters != null)
                     {
                         foreach (var p in info.DataSourceParameters)

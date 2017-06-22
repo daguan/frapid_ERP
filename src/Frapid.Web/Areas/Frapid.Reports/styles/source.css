@@ -138,6 +138,11 @@ table:not(.borderless) {
         padding: 0.5em;
     }
 
+    table:not(.borderless) td, table:not(.borderless) th {
+        padding: 0.35em!important;
+		border:1px solid #dadada!important;
+    }
+
     table:not(.borderless) thead tr, table tfoot tr {
         background-color: #efefef;
         text-transform: uppercase;

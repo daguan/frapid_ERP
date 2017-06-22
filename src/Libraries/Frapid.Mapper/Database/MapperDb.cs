@@ -18,6 +18,7 @@ namespace Frapid.Mapper.Database
 
         public bool CacheResults { get; set; } = true;
         public int CacheMilliseconds { get; set; } = 5000; //5 seconds
+        public int CommandTimeout { get; set; } = 600;//10 seconds
         public DatabaseType DatabaseType { get; set; }
         public DbProviderFactory DbFactory { get; set; }
         public string ConnectionString { get; set; }

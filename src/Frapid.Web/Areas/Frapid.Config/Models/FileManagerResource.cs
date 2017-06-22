@@ -42,7 +42,7 @@ namespace Frapid.Config.Models
             return resource;
         }
 
-        public static FileManagerResource Get(string path)
+        public static FileManagerResource Get(string path, string extensions = "")
         {
             var directory = new DirectoryInfo(path);
 
@@ -53,7 +53,9 @@ namespace Frapid.Config.Models
                 IsDirectory = true
             };
 
-            foreach (var child in directory.GetFiles())
+            var files = string.IsNullOrWhiteSpace(extensions) ? directory.GetFiles() : directory.GetFiles(extensions);
+
+            foreach (var child in files)
             {
                 resource.AddChild(new FileManagerResource
                 {

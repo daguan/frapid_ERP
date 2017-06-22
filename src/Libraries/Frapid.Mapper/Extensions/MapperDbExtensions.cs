@@ -15,6 +15,7 @@ namespace Frapid.Mapper.Extensions
                 throw new MapperException("Could not create database command.");
             }
 
+            command.CommandTimeout = db.CommandTimeout;
             command.CommandText = sql.GetQuery();
             var parameters = sql.GetParameterValues();
 
@@ -53,6 +54,7 @@ namespace Frapid.Mapper.Extensions
                 throw new MapperException("Could not create database command.");
             }
 
+            command.CommandTimeout = db.CommandTimeout;
             command.CommandText = sql;
 
             int index = 0;

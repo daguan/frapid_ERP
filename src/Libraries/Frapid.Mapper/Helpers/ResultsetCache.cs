@@ -11,7 +11,7 @@ namespace Frapid.Mapper.Helpers
     {
         private static string GetCacheKey(MapperDb db, DbCommand command)
         {
-            var key = db.ConnectionString;
+            string key = db.ConnectionString;
             key += "." + command.CommandText + ".";
 
             var dbParameters = (from DbParameter parameter in command.Parameters select parameter.Value.ToString()).ToList();
@@ -40,7 +40,7 @@ namespace Frapid.Mapper.Helpers
             }
 
             string key = GetCacheKey(db, command);
-            var cacheDuration = db.CacheMilliseconds;
+            int cacheDuration = db.CacheMilliseconds;
             var expiresOn = DateTimeOffset.UtcNow.AddMilliseconds(cacheDuration);
 
 

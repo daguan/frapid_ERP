@@ -59,6 +59,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.Areas.dll</HintPath>
     </Reference>
+    <Reference Include="Frapid.Config">
+      <HintPath>..\..\bin\Frapid.Config.dll</HintPath>
+    </Reference>
     <Reference Include="Frapid.Configuration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.Configuration.dll</HintPath>
@@ -165,10 +168,12 @@
   <ItemGroup>
     <Compile Include="AreaRegistration.cs" />
     <Compile Include="Controllers\Backend\EmailController.cs" />
+    <Compile Include="Controllers\Backend\ReportBrowserController.cs" />
     <Compile Include="Engine\Generators\ScriptGenerator.cs" />
     <Compile Include="Engine\Parsers\ScriptParser.cs" />
     <Compile Include="Helpers\LocalizationHelper.cs" />
     <Compile Include="I18N.cs" />
+    <Compile Include="Models\ReportBrowser.cs" />
     <Compile Include="Models\EmailException.cs" />
     <Compile Include="Models\Emails.cs" />
     <Compile Include="Controllers\Backend\ExportController.cs" />
@@ -178,6 +183,7 @@
     <Compile Include="HtmlConverters\WkHtmlToPdf.cs" />
     <Compile Include="HtmlConverters\HtmlWriter.cs" />
     <Compile Include="IExportTo.cs" />
+    <Compile Include="Models\ReportBrowserException.cs" />
     <Compile Include="Models\ReportLocator.cs" />
     <Compile Include="PdfConvert.cs" />
     <Compile Include="ViewModels\EmailViewModel.cs" />
@@ -228,6 +234,7 @@
     <Content Include="web.config" />
     <Content Include="Views\Index.cshtml" />
     <Content Include="Views\Source.cshtml" />
+    <Content Include="Views\Browser.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

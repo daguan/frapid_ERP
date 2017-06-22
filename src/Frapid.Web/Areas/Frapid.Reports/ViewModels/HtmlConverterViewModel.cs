@@ -8,6 +8,7 @@ namespace Frapid.Reports.ViewModels
         [Required]
         [AllowHtml]
         public string Html { get; set; }
+
         [Required]
         public string DocumentName { get; set; }
     }

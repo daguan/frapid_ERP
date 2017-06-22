@@ -405,7 +405,6 @@ function displayImage(path) {
 
 function loadTree(model) {
     container.jstree("destroy");
-
     container.jstree({
         'core': {
             'data': model
