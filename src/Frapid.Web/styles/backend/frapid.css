@@ -426,3 +426,36 @@ input.important[readonly]
 .field .chosen-container{
   width: 100%!important;
 }
+
+
+.chosen-container .chosen-single,
+.chosen-container-single .chosen-single{
+	height:2.7rem!important;
+	padding-top:0.25rem!important	;
+	padding-left:1rem!important;
+	background:transparent!important;
+	border-color:#dadada!important;
+	background-clip: padding-box;
+	box-shadow:none!important;
+	font-size:1rem!important;
+}
+
+.error .chosen-container .chosen-single,
+.error .chosen-container-single .chosen-single{
+	background: #FFF6F6!important;
+    border-color: #E0B4B4!important;
+    color: #9F3A38!important;
+}
+
+.chosen-container-active .chosen-single {
+  border: 1px solid #85B7D9!important;
+}
+
+.chosen-container-single .chosen-single div b {
+  background-position: 0px 6px;
+}
+
+
+.chosen-container-active.chosen-with-drop .chosen-single div b {
+  background-position: -18px 6px;
+}

@@ -11,7 +11,7 @@
         .Where(function (x) { return x.property === propertyName }).ToArray()[0];
 
     if (hasKey) {
-        return $("<select class='' />");//$("<select class='' />");
+        return $("<select class='chosen' />");//$("<select class='' />");
     };
 
     switch (dataType.replace("?")) {
@@ -51,7 +51,7 @@
             return $("<input type='text' class='date' />");
         case "bool":
         case "bit":
-            var el = $("<select class='' />");//$("<select class='chosen' />");
+            var el = $("<select class='chosen' />");//$("<select class='chosen' />");
             var option = "<option";
 
             if (nullable) {

@@ -1,4 +1,24 @@
-﻿if (!String.prototype.endsWith) {
+﻿function initializeChosen(elements){
+    elements.chosen({
+        disable_search_threshold: 10,
+        placeholder_text_single: window.translate("Select"),
+        search_contains: true
+    });
+
+    elements.on("change, blur", function(){
+        $(this).trigger('chosen:updated');
+    });
+
+    elements.on('chosen:hiding_dropdown, chosen:blur', function() { 
+        $(this).trigger("blur");
+    });
+
+    setTimeout(function(){
+        $(this).trigger('chosen:updated');                
+    }, 300);
+};
+
+if (!String.prototype.endsWith) {
     // ReSharper disable once NativeTypePrototypeExtending
     String.prototype.endsWith = function (searchString, position) {
         var subjectString = this.toString();
@@ -326,4 +346,3 @@ function deserializeForm(container, model) {
     };
 
 };
-

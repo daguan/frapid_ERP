@@ -62,6 +62,10 @@ function loadUI() {
 
     window.loadDatepicker();
     window.setRegionalFormat();
+
+	setTimeout(function(){
+		window.initializeChosen($("select:not(.chosen)"));		
+	}, 500);
 };
 
 var frapidApp = angular.module('FrapidApp', ['ngRoute']);

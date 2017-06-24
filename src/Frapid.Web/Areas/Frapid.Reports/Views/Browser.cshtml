@@ -117,7 +117,7 @@
         getData();
     })();
 
-    $(".report.browser .close.command").off("click").on("click", function() {
+    $(".report.browser .close.command").off("click").on("click", function () {
         const source = $("#ReportIFrame").attr("src") || "/dashboard";
         window.location = source;
     });
@@ -127,8 +127,8 @@
         window.top.location.reload();
     };
 
-    (function() {
-        const path = getQueryStringByName("file");
+    (function () {
+        const path = window.getQueryStringByName("file");
         if (path) {
             $("#ReportIFrame").attr("src", path);
         };

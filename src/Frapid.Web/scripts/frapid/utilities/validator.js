@@ -53,6 +53,14 @@
         var required = el.find(".image.form-field, [required]:not(:disabled):not([readonly]):visible, .dropdown>select[required]");
         required.trigger("blur");
 
+		var chosenDropdowns = $(".chosen-container:visible");
+
+		$.each(chosenDropdowns, function(){
+			var id = $(this).attr("id");
+			var target = id.replace("_chosen", "");
+			$("#" + target).trigger("blur");
+		});
+		
         if (jQuery().timepicker) {
             $(".ui-timepicker-input").timepicker("hide");
         };

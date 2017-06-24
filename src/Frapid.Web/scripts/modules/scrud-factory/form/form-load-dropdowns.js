@@ -20,6 +20,9 @@
             };
         });
 
+        const targetControls = $("select.chosen");
+        initializeChosen(targetControls);
+
         window.dropdownsLoaded = true;
     };
 };
