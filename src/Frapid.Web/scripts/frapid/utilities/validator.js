@@ -57,6 +57,11 @@
 
 		$.each(chosenDropdowns, function(){
 			var id = $(this).attr("id");
+			
+			if(!id){
+				return true;
+			};
+			
 			var target = id.replace("_chosen", "");
 			$("#" + target).trigger("blur");
 		});
@@ -79,7 +84,7 @@
             };
         });
 
-        var errorFields = el.find(".error:not(.big.error)");
+        var errorFields = el.find(".error:not(.big):not(.message)");
 
         isValid = errorFields.length === 0;
 
