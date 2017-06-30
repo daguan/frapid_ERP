@@ -35,8 +35,9 @@ namespace Frapid.Configuration.DbServer
             int port = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "Port").To<int>();
             int minPoolSize = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "MinPoolSize").To<int>();
             int maxPoolSize = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "MaxPoolSize").To<int>();
+            string networkLibrary = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "NetworkLibrary");
 
-            return this.GetConnectionString(tenant, host, database, userId, password, port, enablePooling, minPoolSize, maxPoolSize);
+            return this.GetConnectionString(tenant, host, database, userId, password, port, enablePooling, minPoolSize, maxPoolSize, networkLibrary);
         }
 
         public string GetReportUserConnectionString(string tenant, string database = "")
@@ -48,6 +49,7 @@ namespace Frapid.Configuration.DbServer
 
             string userId = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "ReportUserId");
             string password = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "ReportUserPassword");
+
 
             return this.GetConnectionString(tenant, database, userId, password);
         }
@@ -70,6 +72,7 @@ namespace Frapid.Configuration.DbServer
             int port = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "Port").To<int>();
             int minPoolSize = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "MinPoolSize").To<int>();
             int maxPoolSize = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "MaxPoolSize").To<int>();
+            string networkLibrary = ConfigurationManager.ReadConfigurationValue(this.ConfigFile, "NetworkLibrary");
 
             string dataSource = host;
 
@@ -85,7 +88,8 @@ namespace Frapid.Configuration.DbServer
                 Pooling = enablePooling,
                 MinPoolSize = minPoolSize,
                 MaxPoolSize = maxPoolSize,
-                ApplicationName = "Frapid"
+                ApplicationName = "Frapid",
+                NetworkLibrary = networkLibrary
             };
 
             if (trusted)
@@ -107,7 +111,7 @@ namespace Frapid.Configuration.DbServer
             return this.GetConnectionString(tenant, database);
         }
 
-        public string GetConnectionString(string tenant, string host, string database, string username, string password, int port, bool enablePooling = true, int minPoolSize = 0, int maxPoolSize = 100)
+        public string GetConnectionString(string tenant, string host, string database, string username, string password, int port, bool enablePooling = true, int minPoolSize = 0, int maxPoolSize = 100, string networkLibrary = "")
         {
             string dataSource = host;
 
@@ -115,6 +119,19 @@ namespace Frapid.Configuration.DbServer
             {
                 dataSource += ", " + port;
             }
+
+            /**********************************************************************************************************
+                NetworkLibrary
+                ---------------
+                dbnmpntw	Named Pipes
+                dbmslpcn	Shared Memory (localhost)
+                dbmssocn	TCP/IP
+                dbmsspxn	SPX/IPX
+                dbmsvinn	Banyan Vines
+                dbmsrpcn	Multi-Protocol (Windows RPC)
+                dbmsadsn	Apple Talk
+                dbmsgnet	VIA
+            **********************************************************************************************************/
 
             return new SqlConnectionStringBuilder
             {
@@ -125,7 +142,8 @@ namespace Frapid.Configuration.DbServer
                 Pooling = enablePooling,
                 MinPoolSize = minPoolSize,
                 MaxPoolSize = maxPoolSize,
-                ApplicationName = "Frapid"
+                ApplicationName = "Frapid",
+                NetworkLibrary = networkLibrary.Or("dbmssocn")
             }.ConnectionString;
         }
 
@@ -161,3 +179,4 @@ namespace Frapid.Configuration.DbServer
         }
     }
 }
+ 

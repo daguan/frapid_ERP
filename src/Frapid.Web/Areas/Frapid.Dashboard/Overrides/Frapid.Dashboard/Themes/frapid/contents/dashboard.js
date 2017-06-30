@@ -64,7 +64,7 @@ function loadUI() {
     window.setRegionalFormat();
 
 	setTimeout(function(){
-		window.initializeChosen($("select:not(.chosen)"));		
+		window.initializeChosen($("select:not(.chosen):not(.native)"));
 	}, 500);
 };
 

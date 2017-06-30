@@ -103,7 +103,7 @@ namespace Frapid.Configuration.DbServer
             return this.GetConnectionString(tenant, database);
         }
 
-        public string GetConnectionString(string tenant, string host, string database, string username, string password, int port, bool enablePooling = true, int minPoolSize = 0, int maxPoolSize = 100)
+        public string GetConnectionString(string tenant, string host, string database, string username, string password, int port, bool enablePooling = true, int minPoolSize = 0, int maxPoolSize = 100, string networkLibrary = "")
         {
             return new NpgsqlConnectionStringBuilder
             {

@@ -55,7 +55,7 @@ function setRegionalFormat()
   $.fn.val = function(value) {
     if (arguments.length >= 1) {
       // setter invoked, do processing	  
-      var value = originalVal.call(this, value); 
+      var value = originalVal.call(this, value);
 	  return value;
     };
 	
