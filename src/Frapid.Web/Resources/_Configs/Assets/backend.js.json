@@ -54,7 +54,8 @@
 	"/scripts/inflection-js/inflection.js",
 	"/scripts/frapid/utilities/form.js",
 	"/scripts/frapid/utilities/localizable.js",
-	"/scripts/frapid/utilities/validator.js"
+	"/scripts/frapid/utilities/validator.js",
+	"/scripts/frapid/utilities/searchable.js",
   ],
   "CacheDurationInMinutes": 10080
 }

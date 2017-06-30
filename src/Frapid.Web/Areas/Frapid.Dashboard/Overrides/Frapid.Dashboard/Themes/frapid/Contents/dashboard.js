@@ -59,9 +59,12 @@ var lastPage;
 
 function loadUI() {
     window.localize();
-
     window.loadDatepicker();
     window.setRegionalFormat();
+	
+	setTimeout(function(){
+		window.initializeSearchable();
+	}, 1000);
 };
 
 var frapidApp = angular.module('FrapidApp', ['ngRoute']);
