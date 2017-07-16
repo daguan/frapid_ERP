@@ -9,7 +9,14 @@
                 return false;
             }
 
-            return BCrypt.Net.BCrypt.Verify(userName + plainPassword, hashedPassword);
+            bool isValid = BCrypt.Net.BCrypt.Verify(userName + plainPassword, hashedPassword);
+
+            if (!isValid)
+            {
+                isValid = BCrypt.Net.BCrypt.Verify(plainPassword, hashedPassword);
+            }
+
+            return isValid;
         }
 
         public static string GetHashedPassword(string userName, string plainPassword)
