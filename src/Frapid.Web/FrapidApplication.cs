@@ -19,7 +19,6 @@ namespace Frapid.Web
         {
             app.BeginRequest += this.App_BeginRequest;
             app.EndRequest += this.App_EndRequest;
-            app.PostAuthenticateRequest += this.App_PostAuthenticateRequest;
             app.Error += this.App_Error;
         }
 
@@ -72,19 +71,6 @@ namespace Frapid.Web
             context.Response.Headers.Set("Access-Control-Allow-Methods", "HEAD,GET");
             context.Response.Headers.Set("Access-Control-Allow-Credentials", "true");
         }
-
-        private void App_PostAuthenticateRequest(object sender, EventArgs eventArgs)
-        {
-            string tenant = TenantConvention.GetTenant();
-            string file = TenantStaticContentHelper.GetFile(tenant, FrapidHttpContext.GetCurrent());
-
-            if (!string.IsNullOrWhiteSpace(file))
-            {
-                //We found the requested file on the tenant's "wwwroot" directory.
-                FrapidHttpContext.GetCurrent().RewritePath(file);
-            }
-        }
-
 
         private void App_Error(object sender, EventArgs e)
         {
@@ -171,6 +157,23 @@ namespace Frapid.Web
                 string path = "https://" + context.Request.Url.Host + context.Request.Url.PathAndQuery;
                 context.Response.Status = "301 Moved Permanently";
                 context.Response.AddHeader("Location", path);
+            }
+
+            this.ServeRequestAsTenantResource();
+        }
+
+        /// <summary>
+        /// This investigates and serves static resources present in the tenant's wwwroot folder.
+        /// </summary>
+        private void ServeRequestAsTenantResource()
+        {
+            string tenant = TenantConvention.GetTenant();
+            string file = TenantStaticContentHelper.GetFile(tenant, FrapidHttpContext.GetCurrent());
+
+            if (!string.IsNullOrWhiteSpace(file))
+            {
+                //We found the requested file on the tenant's "wwwroot" directory.
+                FrapidHttpContext.GetCurrent().RewritePath(file);
             }
         }
     }

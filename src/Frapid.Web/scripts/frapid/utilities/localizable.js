@@ -23,6 +23,11 @@
 		};
 
 	    var key = toProperCase(text);
+	    
+	    if(!window.i18n){
+	    	return "";
+	    };
+
 	    var parsed = window.i18n[key];
 
 	    return parsed;
