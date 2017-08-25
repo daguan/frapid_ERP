@@ -143,6 +143,7 @@ html, body, .jstree {
         height: 12em;
         overflow: hidden;
         position: relative;
+	vertical-align: top;
     }
 
         .apps > .item > .app > div.icon {
