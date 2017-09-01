@@ -4,6 +4,8 @@ function displayMessage(a, b) {
     if (window.notify) {
         displayNotification(a, b);
     };
+
+    alert(a);
 };
 
 function displaySuccess() {
@@ -15,6 +17,8 @@ function displaySuccess() {
 function logError(a, b) {
     if (window.notify) {
         displayNotification(a, b);
+    }else{
+    	alert(b + " -> " + a);
     };
 };
 

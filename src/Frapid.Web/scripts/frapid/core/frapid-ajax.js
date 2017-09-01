@@ -67,7 +67,6 @@ var getAjaxRequest = function (url, type, data) {
 };
 
 jQuery.fn.bindAjaxData = function (ajaxData, nullable, selectedValue, keyField, valueField, isArray) {
-    "use strict";
     var selected;
 
     var targetControl = $(this);
