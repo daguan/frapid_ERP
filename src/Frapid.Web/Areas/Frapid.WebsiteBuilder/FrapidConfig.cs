@@ -11,6 +11,11 @@ namespace Frapid.WebsiteBuilder
             return Get(tenant, "MyAllowedResources").Split(',');
         }
 
+        public static string[] GetAllowedImages(string tenant)
+        {
+            return Get(tenant, "AllowedImages").Split(',');
+        }
+
         public static string[] GetAllowedUploadExtensions(string tenant)
         {
             return Get(tenant, "AllowedUploadExtensions").Split(',');
