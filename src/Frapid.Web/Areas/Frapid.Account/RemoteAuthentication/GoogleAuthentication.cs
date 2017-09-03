@@ -19,6 +19,7 @@ namespace Frapid.Account.RemoteAuthentication
     public class GoogleAuthentication
     {
         private const string ProviderName = "Google";
+        internal static HttpClient googleClient;
 
         public GoogleAuthentication(string tenant)
         {
@@ -39,16 +40,16 @@ namespace Frapid.Account.RemoteAuthentication
                 return false;
             }
 
-            var client = GlobalHttpClient.Get();
+            googleClient = new HttpClient();
             string url = "https://www.googleapis.com";
-            client.BaseAddress = new Uri(url);
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            googleClient.BaseAddress = new Uri(url);
+            googleClient.DefaultRequestHeaders.Accept.Clear();
+            googleClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var sp = ServicePointManager.FindServicePoint(new Uri("http://foo.bar/baz/123?a=ab"));
             sp.ConnectionLeaseTimeout = 60 * 1000; // 1 minute
 
-            using (var response = await client.GetAsync("/oauth2/v3/tokeninfo?id_token=" + token).ConfigureAwait(false))
+            using (var response = await googleClient.GetAsync("/oauth2/v3/tokeninfo?id_token=" + token).ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
