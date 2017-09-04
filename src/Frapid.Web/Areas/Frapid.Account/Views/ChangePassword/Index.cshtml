@@ -13,15 +13,15 @@ else
     <link rel="Stylesheet" href="@Href("~/assets/css/backend.css")" />
 }
 
-<div class="ui attached padded change password left aligned segment">
-    <div class="ui container">
+<div class="ui attached padded change password left aligned segment" style="height:700px">
+    <div class="ui very relaxed container">
         <div class="ui stackable very relaxed padded grid">
             <div class="ten wide column">
                 <div class="ui stackable form">
                     <div class="ui huge header">@I18N.ChangePassword</div>
                     <div class="ui divider"></div>
                     <div class="field">
-                        <label for="UserNameInputText">@I18N.Username</label>
+                        <label for="UserNameInputText">@I18N.UserName</label>
                         <input type="text" id="UserNameInputText" maxlength="100" required="" disabled="disabled" readonly="readonly" value="@AppUsers.GetCurrent().Name" />
                     </div>
                     <div class="two fields">
