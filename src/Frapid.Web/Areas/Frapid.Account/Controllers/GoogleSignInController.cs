@@ -4,7 +4,6 @@ using Frapid.Account.InputModels;
 using Frapid.Account.RemoteAuthentication;
 using Frapid.Areas.CSRF;
 using Npgsql;
-using Frapid.ApplicationState.CacheFactory;
 
 namespace Frapid.Account.Controllers
 {
@@ -20,10 +19,6 @@ namespace Frapid.Account.Controllers
             {
                 var oauth = new GoogleAuthentication(this.Tenant);
                 var result = await oauth.AuthenticateAsync(account, this.RemoteUser).ConfigureAwait(false);
-
-                string key = "access_tokens_" + this.Tenant;
-                var factory = new DefaultCacheFactory();
-                factory.Remove(key);
 
                 return await this.OnAuthenticatedAsync(result).ConfigureAwait(true);
             }

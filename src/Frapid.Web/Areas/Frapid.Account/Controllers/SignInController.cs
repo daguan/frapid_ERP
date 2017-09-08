@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Frapid.Account.DAL;
 using Frapid.Account.InputModels;
-using Frapid.ApplicationState.CacheFactory;
 using Frapid.Areas.CSRF;
 using Frapid.Configuration;
 using Frapid.Framework.Extensions;
@@ -50,7 +49,7 @@ namespace Frapid.Account.Controllers
 
             try
             {
-                bool isValid = await this.CheckPasswordAsync(this.Tenant, model.Email, model.Password).ConfigureAwait(false);
+                bool isValid = await this.CheckPasswordAsync(model.Email, model.Password).ConfigureAwait(false);
 
                 if (!isValid)
                 {
@@ -58,10 +57,6 @@ namespace Frapid.Account.Controllers
                 }
 
                 var result = await DAL.SignIn.DoAsync(this.Tenant, model.Email, model.OfficeId, this.RemoteUser.Browser, this.RemoteUser.IpAddress, model.Culture.Or("en-US")).ConfigureAwait(false);
-
-                string key = "access_tokens_" + this.Tenant;
-                var factory = new DefaultCacheFactory();
-                factory.Remove(key);
 
                 return await this.OnAuthenticatedAsync(result, model).ConfigureAwait(true);
             }
@@ -92,8 +87,8 @@ namespace Frapid.Account.Controllers
                 select culture.Trim()
                 into cultureName
                 from info in
-                    CultureInfo.GetCultures(CultureTypes.AllCultures)
-                        .Where(x => x.TwoLetterISOLanguageName.Equals(cultureName))
+                CultureInfo.GetCultures(CultureTypes.AllCultures)
+                    .Where(x => x.TwoLetterISOLanguageName.Equals(cultureName))
                 select new
                 {
                     CultureCode = info.Name,

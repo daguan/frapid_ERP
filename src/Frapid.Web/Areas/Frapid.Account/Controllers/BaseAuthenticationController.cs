@@ -7,6 +7,7 @@ using Frapid.Account.DAL;
 using Frapid.Account.DTO;
 using Frapid.Account.InputModels;
 using Frapid.ApplicationState.Cache;
+using Frapid.ApplicationState.CacheFactory;
 using Frapid.Configuration;
 using Frapid.Framework.Extensions;
 using Frapid.TokenManager;
@@ -17,9 +18,9 @@ namespace Frapid.Account.Controllers
 {
     public class BaseAuthenticationController : WebsiteBuilderController
     {
-        protected async Task<bool> CheckPasswordAsync(string tenant, string email, string plainPassword)
+        protected async Task<bool> CheckPasswordAsync(string email, string plainPassword)
         {
-            var user = await Users.GetAsync(tenant, email).ConfigureAwait(false);
+            var user = await Users.GetAsync(this.Tenant, email).ConfigureAwait(false);
 
             return user != null && PasswordManager.ValidateBcrypt(email, plainPassword, user.Password);
         }
@@ -53,6 +54,8 @@ namespace Frapid.Account.Controllers
 
             this.AddAuthenticationCookie(domain, token);
             this.AddCultureCookie(domain, model?.Culture.Or("en-US"));
+
+            await this.RefreshTokens().ConfigureAwait(true);
 
             return this.Ok(token.ClientToken);
         }
@@ -91,6 +94,16 @@ namespace Frapid.Account.Controllers
             }
 
             this.Response.Cookies.Add(cookie);
+        }
+
+        protected async Task RefreshTokens()
+        {
+            string key = "access_tokens_" + this.Tenant;
+            var factory = new DefaultCacheFactory();
+            factory.Remove(key);
+
+            var tokens = await TokenManager.DAL.AccessTokens.FromStoreAsync(this.Tenant).ConfigureAwait(false);
+            factory.Add(key, tokens, DateTimeOffset.Now.AddMinutes(60));
         }
     }
 }

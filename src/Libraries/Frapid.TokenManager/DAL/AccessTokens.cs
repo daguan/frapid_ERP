@@ -25,24 +25,24 @@ namespace Frapid.TokenManager.DAL
             return token != null;
         }
 
-        private static async Task<IEnumerable<AccessToken>> GetActiveTokensAsync(string tenant)
+        public static async Task<IEnumerable<AccessToken>> GetActiveTokensAsync(string tenant)
         {
             string key = "access_tokens_" + tenant;
             var factory = new DefaultCacheFactory();
-            var tokens = factory.Get<IEnumerable<AccessToken>>(key);
+            var tokens = factory.Get<IEnumerable<AccessToken>>(key).ToList();
 
-            if (tokens != null)
+            if (tokens.Any())
             {
                 return tokens;
             }
 
-            tokens = await FromStoreAsync(tenant).ConfigureAwait(false);
-            factory.Add(key, tokens, DateTimeOffset.Now.AddMinutes(5));
+            tokens = (await FromStoreAsync(tenant).ConfigureAwait(false)).ToList();
+            factory.Add(key, tokens, DateTimeOffset.Now.AddMinutes(60));
 
             return tokens;
         }
 
-        private static async Task<IEnumerable<AccessToken>> FromStoreAsync(string tenant)
+        public static async Task<IEnumerable<AccessToken>> FromStoreAsync(string tenant)
         {
             const string sql = "SELECT access_token_id, created_on, expires_on, revoked, ip_address, user_agent, client_token FROM account.access_tokens WHERE account.access_tokens.revoked=@0;";
             return await Factory.GetAsync<AccessToken>(tenant, sql, false).ConfigureAwait(false);

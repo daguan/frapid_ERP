@@ -1,22 +1,22 @@
 var areYouSure = translate("AreYouSure");
 
-var sumOfColumn = function (tableSelector, columnIndex) {
+var sumOfColumn = function (tableSelector, columnPosition) {
     var total = 0;
 
     $(tableSelector).find("tr").each(function () {
-        var value = parseFloat2($("td", this).eq(columnIndex).text());
+        var value = parseFloat2($("td", this).eq(columnPosition).text());
         total += value;
     });
 
     return total;
 };
 
-var getColumnText = function (row, columnIndex) {
-    return row.find("td:eq(" + columnIndex + ")").text();
+var getColumnText = function (row, columnPosition) {
+    return row.find("td:eq(" + columnPosition + ")").text();
 };
 
-var setColumnText = function (row, columnIndex, value) {
-    row.find("td:eq(" + columnIndex + ")").html(value);
+var setColumnText = function (row, columnPosition, value) {
+    row.find("td:eq(" + columnPosition + ")").html(value);
 };
 
 var toggleDanger = function (cell) {
