@@ -186,6 +186,12 @@ if exist "../src/Frapid.Web/Areas/MixERP.Office/MixERP.Office.sln" (
 )
 
 
+if exist "../src/Frapid.Web/Areas/Frapid.SchemaUpdater/Frapid.SchemaUpdater.sln" (
+	@echo Building MixERP Office Module
+	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/Frapid.SchemaUpdater/Frapid.SchemaUpdater.sln /p:VisualStudioVersion=14.0
+)
+
+
 
 if exist "C:\Program Files\Redis\redis-cli.exe" (
 	@echo Flusing Redis Cache
