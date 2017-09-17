@@ -20,5 +20,5 @@
 	"My": null,
 	"OverrideTemplatePath": "~/Areas/SparkPostMail/Overrides",
     "OverrideDestination":"~/Tenants/{0}/Areas",
-	"DependsOn": ["Frapid", "Frapid.Frapid.Account", "Frapid.Authorization", "Frapid.Config", "Frapid.Core", "Frapid.Dashboard", "Frapid.WebsiteBuilder"]
+	"DependsOn": ["Frapid", "Frapid.Account", "Frapid.Authorization", "Frapid.Config", "Frapid.Core", "Frapid.Dashboard", "Frapid.WebsiteBuilder"]
 }
