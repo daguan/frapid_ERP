@@ -15,12 +15,12 @@ namespace Frapid.TokenManager.DAL
             var tokens = await GetActiveTokensAsync(tenant).ConfigureAwait(false);
 
             var token = tokens.FirstOrDefault
-                (
-                    x => x.ClientToken.Equals(clientToken)
-                         && !x.Revoked
-                         && x.CreatedOn <= DateTimeOffset.UtcNow
-                         && (x.ExpiresOn == null || x.ExpiresOn.Value >= DateTimeOffset.UtcNow)
-                );
+            (
+                x => x.ClientToken.Equals(clientToken)
+                     && !x.Revoked
+                     && x.CreatedOn <= DateTimeOffset.UtcNow
+                     && (x.ExpiresOn == null || x.ExpiresOn.Value >= DateTimeOffset.UtcNow)
+            );
 
             return token != null;
         }
@@ -29,14 +29,16 @@ namespace Frapid.TokenManager.DAL
         {
             string key = "access_tokens_" + tenant;
             var factory = new DefaultCacheFactory();
-            var tokens = factory.Get<IEnumerable<AccessToken>>(key).ToList();
+            var tokens = factory.Get<IEnumerable<AccessToken>>(key);
 
-            if (tokens.Any())
+            if (tokens != null)
             {
                 return tokens;
             }
 
-            tokens = (await FromStoreAsync(tenant).ConfigureAwait(false)).ToList();
+            tokens = await FromStoreAsync(tenant).ConfigureAwait(false);
+            // ReSharper disable once PossibleMultipleEnumeration
+            //False positive
             factory.Add(key, tokens, DateTimeOffset.Now.AddMinutes(60));
 
             return tokens;

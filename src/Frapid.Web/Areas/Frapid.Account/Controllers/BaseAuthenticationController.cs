@@ -50,6 +50,8 @@ namespace Frapid.Account.Controllers
 
             await AccessTokens.SaveAsync(this.Tenant, token, this.RemoteUser.IpAddress, this.RemoteUser.UserAgent).ConfigureAwait(true);
 
+            var context = this.HttpContext;
+
             string domain = TenantConvention.GetDomain();
 
             this.AddAuthenticationCookie(domain, token);

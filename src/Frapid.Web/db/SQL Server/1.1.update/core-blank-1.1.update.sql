@@ -11,7 +11,6 @@
 
 
 -->-->-- src/Frapid.Web/db/SQL Server/1.1.update/src/06.triggers/core.check_parent_office_trigger.sql --<--<--
-
 IF OBJECT_ID('core.check_parent_office_trigger') IS NOT NULL
 DROP TRIGGER core.check_parent_office_trigger
 

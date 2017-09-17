@@ -459,3 +459,13 @@ input.important[readonly]
 .chosen-container-active.chosen-with-drop .chosen-single div b {
   background-position: -18px 6px;
 }
+
+.ui.hidden.divider{
+	margin: 1em 0;
+	display: block;
+}
+
+
+input[disabled]{
+  opacity:0.9!important;
+}

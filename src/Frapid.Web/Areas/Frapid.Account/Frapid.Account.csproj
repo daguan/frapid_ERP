@@ -193,7 +193,6 @@
     <Compile Include="DTO\Registration.cs" />
     <Compile Include="DTO\Reset.cs" />
     <Compile Include="PasswordManager.cs" />
-    <Compile Include="StartupTask.cs" />
     <Compile Include="InputModels\ChangePassword.cs" />
     <Compile Include="RemoteAuthentication\FacebookAuthentication.cs" />
     <Compile Include="ViewModels\FacebookUserInfo.cs" />

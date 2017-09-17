@@ -1,4 +1,3 @@
-
 IF OBJECT_ID('core.check_parent_office_trigger') IS NOT NULL
 DROP TRIGGER core.check_parent_office_trigger
 

@@ -4,7 +4,7 @@ using Frapid.Framework.Extensions;
 
 namespace frapid.Commands.Create
 {
-    public abstract class CreateCommand: ICommand
+    public abstract class CreateCommand : ICommand
     {
         public abstract string Name { get; }
         public abstract bool IsValid { get; set; }
@@ -22,7 +22,7 @@ namespace frapid.Commands.Create
 
             var member = members.FirstOrDefault(m => m.Name == resourceType);
 
-            if(member != null)
+            if (member != null)
             {
                 member.Line = this.Line;
                 member.Initialize();

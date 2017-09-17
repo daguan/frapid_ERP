@@ -11,7 +11,6 @@
 
 
 -->-->-- src/Frapid.Web/db/PostgreSQL/1.1.update/src/06.triggers/core.check_parent_office_trigger.sql --<--<--
-
 DROP FUNCTION IF EXISTS core.check_parent_office_trigger() CASCADE;
 
 CREATE FUNCTION core.check_parent_office_trigger()
@@ -33,7 +32,7 @@ CREATE TRIGGER check_parent_office
 AFTER INSERT OR UPDATE
 ON core.offices
 FOR EACH ROW
-EXECUTE PROCEDURE core.check_parent_office();
+EXECUTE PROCEDURE core.check_parent_office_trigger();
 
 
 -->-->-- src/Frapid.Web/db/PostgreSQL/1.1.update/src/10.policy/empty.sql --<--<--

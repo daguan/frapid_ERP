@@ -46,7 +46,6 @@ namespace Frapid.Web
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new FrapidRazorViewEngine());
             LogManager.InternalizeLogger();
-            //AreaRegistration.RegisterAllAreas();
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

@@ -66,6 +66,7 @@
     <Compile Include="Commands\Create\CreateCommand.cs" />
     <Compile Include="Commands\Create\CreateTheme.cs" />
     <Compile Include="Commands\Create\MvcProjectCreator.cs" />
+    <Compile Include="Commands\UpdateCommand.cs" />
     <Compile Include="Commands\EchoCommand.cs" />
     <Compile Include="Commands\PackCommand.cs" />
     <Compile Include="TokenExtension.cs" />
