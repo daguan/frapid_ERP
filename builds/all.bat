@@ -187,9 +187,10 @@ if exist "../src/Frapid.Web/Areas/MixERP.Office/MixERP.Office.sln" (
 
 
 if exist "../src/Frapid.Web/Areas/Frapid.SchemaUpdater/Frapid.SchemaUpdater.sln" (
-	@echo Building MixERP Office Module
-	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Debug ../src/Frapid.Web/Areas/Frapid.SchemaUpdater/Frapid.SchemaUpdater.sln /p:VisualStudioVersion=14.0
+	@echo Building MixERP Frapid.SchemaUpdater Module
+	"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" /verbosity:quiet /nologo /property:Configuration=Release ../src/Frapid.Web/Areas/Frapid.SchemaUpdater/Frapid.SchemaUpdater.sln /p:VisualStudioVersion=14.0
 )
+
 
 
 
