@@ -3,6 +3,7 @@ var taskCompletedSuccessfully = translate("TaskCompletedSuccessfully");
 function displayMessage(a, b) {
     if (window.notify) {
         displayNotification(a, b);
+        return;
     };
 
     alert(a);

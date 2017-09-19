@@ -62,8 +62,7 @@ namespace Frapid.Installer.DAL
         public async Task RunSqlAsync(string tenant, string database, string fromFile)
         {
             fromFile = fromFile.Replace("{DbServer}", "SQL Server");
-            if(string.IsNullOrWhiteSpace(fromFile) ||
-               File.Exists(fromFile).Equals(false))
+            if(string.IsNullOrWhiteSpace(fromFile) || File.Exists(fromFile).Equals(false))
             {
                 return;
             }

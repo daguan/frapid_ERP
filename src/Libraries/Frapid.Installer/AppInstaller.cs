@@ -83,8 +83,7 @@ namespace Frapid.Installer
 
             if (this.Installable.IsMeta)
             {
-                InstallerLog.Verbose(
-                    $"Creating database of {this.Installable.ApplicationName} under meta database {Factory.GetMetaDatabase(this.Database)}.");
+                InstallerLog.Verbose($"Creating database of {this.Installable.ApplicationName} under meta database {Factory.GetMetaDatabase(this.Database)}.");
                 database = Factory.GetMetaDatabase(this.Database);
             }
 
@@ -96,8 +95,7 @@ namespace Frapid.Installer
 
             if (await this.HasSchemaAsync(database).ConfigureAwait(false))
             {
-                InstallerLog.Verbose(
-                    $"Skipped {this.Installable.ApplicationName} schema ({this.Installable.DbSchema}) creation because it already exists.");
+                InstallerLog.Verbose($"Skipped {this.Installable.ApplicationName} schema ({this.Installable.DbSchema}) creation because it already exists.");
                 return;
             }
 

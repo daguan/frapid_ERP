@@ -178,8 +178,12 @@
     <Compile Include="Command\UpdateDbSchemaCommand.cs" />
     <Compile Include="Models\HomeModel.cs" />
     <Compile Include="Installer.cs" />
+    <Compile Include="Tasks\PostgresqlUpdater.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SchemaUpdaterException.cs" />
     <Compile Include="SchemaVersion.cs" />
+    <Compile Include="Tasks\SqlServerUpdater.cs" />
+    <Compile Include="Tasks\UpdateBase.cs" />
     <Compile Include="UpdateCandidate.cs" />
     <Compile Include="Updater.cs" />
     <Compile Include="Helpers\VersionInvestigator.cs" />

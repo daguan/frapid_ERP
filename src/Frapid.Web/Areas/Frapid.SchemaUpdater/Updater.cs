@@ -1,49 +1,32 @@
-using System;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
+using Frapid.Configuration;
 using Frapid.Configuration.Models;
-using Frapid.DataAccess;
-using Frapid.SchemaUpdater.Helpers;
-using Serilog;
+using Frapid.SchemaUpdater.Tasks;
 
 namespace Frapid.SchemaUpdater
 {
-    public sealed class Updater
+    public static class Updater
     {
-        public Updater(string tenant, Installable app)
+        private static UpdateBase GetUpdater(string tenant, Installable app)
         {
-            this.Tenant = tenant;
-            this.App = app;
-            this.Candidate = new UpdateCandidate(app, tenant);
+            var site = TenantConvention.GetSite(tenant);
+            string providerName = site.DbProvider;
+
+            switch (providerName)
+            {
+                case "Npgsql":
+                    return new PostgresqlUpdater(tenant, app);
+                case "System.Data.SqlClient":
+                    return new SqlServerUpdater(tenant, app);
+                default:
+                    throw new SchemaUpdaterException("Frapid schema updater does not support provider " + providerName);
+            }
         }
 
-        public Installable App { get; }
-        public string Tenant { get; }
-        public UpdateCandidate Candidate { get; }
-
-        public async Task<string> UpdateAsync()
+        public static async Task<string> UpdateAsync(string tenant, Installable app)
         {
-            string filePath = this.Candidate.PathToUpdateFile;
-
-            if (string.IsNullOrEmpty(filePath))
-            {
-                return string.Empty;
-            }
-
-            string contents = File.ReadAllText(filePath, new UTF8Encoding(false));
-
-            try
-            {
-                await Factory.NonQueryAsync(this.Tenant, contents).ConfigureAwait(false);
-                VersionManager.SetSchemaVersion(this.Tenant, this.Candidate.VersionToUpdate);
-                return $"Installed updates on app {this.App.ApplicationName}.";
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Could not install update of {ApplicationName} on tenant {Tenant}. {ex}", this.App.ApplicationName, this.Tenant, ex);
-                return $"Error: could not install updates of app {this.App.ApplicationName}.\r\n{ex.Message}";
-            }
+            var updater = GetUpdater(tenant, app);
+            return await updater.UpdateAsync().ConfigureAwait(false);
         }
     }
 }

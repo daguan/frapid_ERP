@@ -1,5 +1,5 @@
 ﻿-->-->-- src/Frapid.Web/Areas/Frapid.SchemaUpdater/db/SQL Server/1.x/1.0/src/09.menus/0.menu.sql --<--<--
-EXECUTE core.create_app 'Frapid.SchemaUpdater', 'Updates', 'Updates', '1.0', 'MixERP Inc.', 'December 1, 2015', 'orange configure', '/dashboard/updater/home', null;
+EXECUTE core.create_app 'Frapid.SchemaUpdater', 'Updates', 'Updates', '1.0', 'MixERP Inc.', 'December 1, 2015', 'teal refresh', '/dashboard/updater/home', null;
 EXECUTE core.create_menu 'Frapid.SchemaUpdater', 'Offices', 'Offices', '/dashboard/updater/home', 'building outline', '';
 
 GO

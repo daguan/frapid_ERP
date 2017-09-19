@@ -26,11 +26,9 @@ namespace Frapid.SchemaUpdater
 
             foreach (var app in apps)
             {
-                var updater = new Updater(tenant, app);
-
                 try
                 {
-                    string message = await updater.UpdateAsync().ConfigureAwait(false);
+                    string message = await Updater.UpdateAsync(tenant, app).ConfigureAwait(false);
 
                     if (!string.IsNullOrWhiteSpace(message))
                     {
@@ -39,14 +37,14 @@ namespace Frapid.SchemaUpdater
                 }
                 catch (Exception ex)
                 {
-                    string message = $"Error: Could not install updates for application \"{updater.App.ApplicationName}\" on tenant {tenant} due to errors.";
+                    string message = $"Error: Could not install updates for application \"{app.ApplicationName}\" on tenant {tenant} due to errors.";
 
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(message);
                     Console.ForegroundColor = ConsoleColor.White;
 
                     this.Notify(message);
-                    Log.Error("Error: Could not install updates for application \"{ApplicationName}\" on tenant {tenant} due to errors. Exception: {Exception}", updater.App.ApplicationName, tenant, ex);
+                    Log.Error("Error: Could not install updates for application \"{ApplicationName}\" on tenant {tenant} due to errors. Exception: {Exception}", app.ApplicationName, tenant, ex);
                     throw;
                 }
             }
