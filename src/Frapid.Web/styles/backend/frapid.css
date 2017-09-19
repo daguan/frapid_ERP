@@ -469,3 +469,7 @@ input.important[readonly]
 input[disabled]{
   opacity:0.9!important;
 }
+
+input.right{
+	text-align:right;
+}

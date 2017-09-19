@@ -9,6 +9,7 @@ using Frapid.Account.InputModels;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.CacheFactory;
 using Frapid.Configuration;
+using Frapid.Framework;
 using Frapid.Framework.Extensions;
 using Frapid.TokenManager;
 using Frapid.WebsiteBuilder.Controllers;
@@ -51,8 +52,7 @@ namespace Frapid.Account.Controllers
             await AccessTokens.SaveAsync(this.Tenant, token, this.RemoteUser.IpAddress, this.RemoteUser.UserAgent).ConfigureAwait(true);
 
             var context = this.HttpContext;
-
-            string domain = TenantConvention.GetDomain();
+            string domain = TenantConvention.GetBaseDomain(context, false);
 
             this.AddAuthenticationCookie(domain, token);
             this.AddCultureCookie(domain, model?.Culture.Or("en-US"));

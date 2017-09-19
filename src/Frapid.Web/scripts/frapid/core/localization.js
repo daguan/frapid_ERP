@@ -4,7 +4,14 @@ function setRegionalFormat()
         return;
     };
 
-	var candidates = $("input.decimal:not(.hasCleave):not(:disabled):not([readonly]), input.decimal4:not(.hasCleave):not(:disabled):not([readonly]), input.integer:not(.hasCleave):not(:disabled):not([readonly]), input.currency:not(.hasCleave):not(:disabled):not([readonly])");	
+	var candidates = $("input.decimal:not(.hasCleave):not(:disabled):not([readonly]), " +
+                        "input.decimal3:not(.hasCleave):not(:disabled):not([readonly]), " +
+                        "input.decimal4:not(.hasCleave):not(:disabled):not([readonly]), " +
+                        "input.decimal5:not(.hasCleave):not(:disabled):not([readonly]), " +
+                        "input.decimal6:not(.hasCleave):not(:disabled):not([readonly]), " +
+                        "input.decimal7:not(.hasCleave):not(:disabled):not([readonly]), " +
+						"input.integer:not(.hasCleave):not(:disabled):not([readonly]), " +
+						"input.currency:not(.hasCleave):not(:disabled):not([readonly])");	
 	$.each(candidates, function(){
 		var el = $(this).addClass("hasCleave");
 		var prefix = "";
@@ -18,10 +25,25 @@ function setRegionalFormat()
 			decimalPlaces = 0;
 		};
 		
+		if(el.is(".decimal3")){
+			decimalPlaces = 3;
+		};
+		
 		if(el.is(".decimal4")){
 			decimalPlaces = 4;
 		};
+		if(el.is(".decimal5")){
+			decimalPlaces = 5;
+		};
+
+		if(el.is(".decimal6")){
+			decimalPlaces = 6;
+		};
 		
+		if(el.is(".decimal7")){
+			decimalPlaces = 7;
+		};
+
 		new Cleave(this, {
 			numeral: true,
 			numeralThousandsGroupStyle: 'thousand',

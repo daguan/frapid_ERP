@@ -73,7 +73,7 @@
                 <input type="text" data-feature-search placeholder="@Resources.CtrlShiftF"/>
             </div>
         </div>
-        <div class="ui dropdown select language item">
+        <div class="ui dropdown select language item hidden on mobile">
             <input name="filters" type="hidden">
             <i class="world icon"></i>
             <span class="text">@CultureManager.GetCurrent().NativeName</span>
@@ -101,7 +101,7 @@
         <a class="notification item" href="javascript:void(0)" title="@Resources.Notifications">
             <i class="alarm icon"></i>
         </a>
-        <a class="item" href="/" target="_blank" title="@Resources.GoToWebsite">
+        <a class="item hidden on mobile" href="/" target="_blank" title="@Resources.GoToWebsite">
             <i class="external icon"></i>
         </a>
         <a class="item" href="/account/sign-out" title="@Resources.SignOut" target="_self">
