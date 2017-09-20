@@ -102,6 +102,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Frapid.WebsiteBuilder.dll</HintPath>
     </Reference>
+    <Reference Include="Google">
+      <HintPath>..\..\bin\Google.dll</HintPath>
+    </Reference>
     <Reference Include="Ical.Net, Version=2.1.0.21428, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Ical.Net.2.2.31\lib\net46\Ical.Net.dll</HintPath>
       <Private>True</Private>

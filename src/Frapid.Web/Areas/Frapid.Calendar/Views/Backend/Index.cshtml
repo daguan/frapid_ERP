@@ -187,7 +187,7 @@
             <label>@I18N.Location</label>
             <input id="LocationInputText" type="text" placeholder="@I18N.EnterLocation"/>
         </div>
-        @if (!string.IsNullOrWhiteSpace(Configs.GoogleApiKey))
+        @if (!string.IsNullOrWhiteSpace(Configs.GoogleMapsJavascriptApiKey))
         {
             <div class="location map">
                 <div id="map"></div>
@@ -394,10 +394,10 @@
     <button id="DeleteEventButton" class="ui negative button">@I18N.DeleteThisEvent</button>
 </div>
 
-@if (!string.IsNullOrWhiteSpace(Configs.GoogleApiKey))
+@if (!string.IsNullOrWhiteSpace(Configs.GoogleMapsJavascriptApiKey))
 {
     <script src="/Areas/Frapid.Calendar/scripts/backend/google-places.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=@Configs.GoogleApiKey&libraries=places&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@Configs.GoogleMapsJavascriptApiKey&libraries=places&callback=initMap" async defer></script>
 }
 
 <script src="/Areas/Frapid.Calendar/scripts/backend/index.js" async defer></script>

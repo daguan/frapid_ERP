@@ -21,7 +21,7 @@ function initMap() {
         anchorPoint: new window.google.maps.Point(0, -29)
     });
 
-    autocomplete.addListener('place_changed', function () {
+    function onChange() {
         infowindow.close();
         marker.setVisible(false);
         const place = autocomplete.getPlace();
@@ -54,5 +54,20 @@ function initMap() {
         infowindowContent.children['place-name'].textContent = place.name;
         infowindowContent.children['place-address'].textContent = address;
         infowindow.open(map, marker);
+    };
+
+    autocomplete.addListener('place_changed', function () {
+        onChange();
     });
 };
+
+
+$("#LocationInputText").on("change", function () {
+    const val = $("#LocationInputText").val();
+    if ((val || "").trim()) {
+        const input = document.getElementById('LocationInputText');
+        window.google.maps.event.trigger(input, 'focus');
+        window.google.maps.event.trigger(input, 'keydown', { keyCode: 40 });
+        window.google.maps.event.trigger(input, 'keydown', { keyCode: 13 });
+    };
+});

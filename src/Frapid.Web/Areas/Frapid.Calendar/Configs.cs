@@ -7,7 +7,15 @@ namespace Frapid.Calendar
 {
     public static class Configs
     {
-        public static string GoogleApiKey => Get("GoogleApiKey");
+        public static string GoogleMapsJavascriptApiKey => GetGoogleMapsJavascriptApi();
+
+        public static string GetGoogleMapsJavascriptApi()
+        {
+            string tenant = AppUsers.GetTenant();
+            var google = Google.ConfigurationManager.Get(tenant);
+            return google.MapsJavascriptApiKey;
+        }
+
 
         public static string Get(string key)
         {

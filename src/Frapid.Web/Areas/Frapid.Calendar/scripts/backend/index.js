@@ -1,4 +1,6 @@
-﻿function updateTitle() {
+﻿var mapContainerInitialized = false;
+
+function updateTitle() {
     const view = $('#calendar').fullCalendar('getView');
     $(".organizer .title span").html(view.title);
 };
@@ -67,6 +69,11 @@ function initializeDatePicker() {
 
 function showEventModal() {
     $("#EventModal").show();
+
+    if (!mapContainerInitialized) {
+        initMap();
+        mapContainerInitialized = true;
+    };
 };
 
 function hideEventModal() {
@@ -89,7 +96,7 @@ $("#NaturalLanguageInputText").keyup(function (e) {
     const parsed = parseTokens(input);
 
     $("#NameInputText").val(parsed.Title.trim()).trigger("change");
-    $("#LocationInputText").val(parsed.Location.trim()).trigger("change");
+    $("#LocationInputText").val(parsed.Location.trim()).trigger("keyup").trigger("change");
 
     $("#StartsAtCalendar").calendar("set date", parsed.StartsFrom);
     $("#EndsOnCalendar").calendar("set date", parsed.EndsOn);
@@ -97,7 +104,6 @@ $("#NaturalLanguageInputText").keyup(function (e) {
     if (e.which === 13) {
         const locationInput = $("#LocationInputText");
         locationInput.focus();
-        window.google.maps.event.trigger(autocomplete, 'place_changed');
         return false;
     };
 });
