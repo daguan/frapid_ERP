@@ -139,8 +139,8 @@ table:not(.borderless) {
     }
 
     table:not(.borderless) td, table:not(.borderless) th {
-        padding: 0.35em!important;
-		border:1px solid #dadada!important;
+        padding: 0.35em !important;
+        border: 1px solid #dadada !important;
     }
 
     table:not(.borderless) thead tr, table tfoot tr {
@@ -182,27 +182,63 @@ table:not(.borderless) {
     margin: 0 auto;
 }
 
-table, table th{
-  position: relative;
+table, table th {
+    position: relative;
 }
 
 
 .headerSortDown:after,
-.headerSortUp:after{
-  content: ' ';
-  position: absolute;
-  right: 4px;
-  top:4px;
-  border: 4px solid transparent;
+.headerSortUp:after {
+    content: ' ';
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    border: 4px solid transparent;
 }
 
-.headerSortDown:after{
-  top:4px;
-  border-top-color: silver;
-}
-.headerSortUp:after{
-  right: 4px;
-  top:4px;
-  border-bottom-color: silver;
+.headerSortDown:after {
+    top: 4px;
+    border-top-color: silver;
 }
 
+.headerSortUp:after {
+    right: 4px;
+    top: 4px;
+    border-bottom-color: silver;
+}
+
+@media screen {
+    .toolbar {
+        background-color: #444;
+        padding-left: 1em;
+        text-align: center;
+    }
+
+        .toolbar .button {
+            background: transparent;
+            border: 0;
+            color: #dadada;
+            cursor: pointer;
+            display: inline-flex;
+            font-size: 0.8em;
+            height: 3em;
+            margin: 0 2px;
+            padding: 0.8em 0.5em;
+            width: 2em;
+            text-shadow: 2px 2px 20px white;
+        }
+
+            .toolbar .button:hover {
+                background-color: green;
+            }
+
+    .top.section, .body, .bottom.section {
+        padding: 1rem;
+    }
+}
+
+@media print {
+    .hide.on.print {
+        display: none;
+    }
+}

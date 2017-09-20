@@ -179,13 +179,11 @@ namespace Frapid.Reports.Helpers
                     string res = RemoveBraces(word);
                     var resource = res.Split('.');
 
-                    int dataSourceIndex =
-                        resource[0].ToLower(CultureInfo.InvariantCulture)
+                    int dataSourceIndex = resource[0].ToLower(CultureInfo.InvariantCulture)
                             .Replace("datasource", "")
                             .Replace("[", "")
                             .Replace("]", "").To<int>();
-                    int index =
-                        resource[1].ToLower(CultureInfo.InvariantCulture)
+                    int index = resource[1].ToLower(CultureInfo.InvariantCulture)
                             .Replace("runningtotalfieldvalue", "")
                             .Replace("[", "")
                             .Replace("]", "").To<int>();

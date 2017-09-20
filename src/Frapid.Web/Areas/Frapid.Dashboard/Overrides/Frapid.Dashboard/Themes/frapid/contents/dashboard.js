@@ -255,7 +255,8 @@ function buildMenus() {
     setTimeout(function () {
         const target = $('[data-scope="app-menus"]').html("");
         var path = window.overridePath || window.location.pathname;
-        if (window.menuBuilder) {
+        
+		if (window.menuBuilder) {
             const application = window.Enumerable.From(window.appMenus)
                 .Where(function (x) { return x.Url === path; })
                 .FirstOrDefault();
@@ -265,8 +266,8 @@ function buildMenus() {
                 $(".dashboard.menu .dropdown").dropdown({ placeholder: false, forceSelection: false });
             };
         };
-
-        target.fadeIn(200);
+		
+		target.toggle(target.find(".item").length > 0);				
     }, 500);
 };
 

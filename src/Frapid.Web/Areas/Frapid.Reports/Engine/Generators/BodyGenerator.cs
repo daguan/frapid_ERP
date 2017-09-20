@@ -96,7 +96,17 @@ namespace Frapid.Reports.Engine.Generators
 
         private string DataTableToHtml(DataSource dataSource, GridView grid, Report report)
         {
+            if (dataSource.Data.Rows.Count == 0 && dataSource.HideWhenEmpty)
+            {
+                return string.Empty;
+            }
+
             var html = new StringBuilder();
+
+            if (!string.IsNullOrWhiteSpace(dataSource.Title))
+            {
+                html.Append("<h2 class='grid view header'>" + dataSource.Title + "</h2>");
+            }
 
             html.Append("<table id='GridView" + dataSource.Index + "' ");
 

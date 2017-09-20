@@ -172,6 +172,7 @@
     <Compile Include="Engine\Generators\ScriptGenerator.cs" />
     <Compile Include="Engine\Parsers\ScriptParser.cs" />
     <Compile Include="Helpers\LocalizationHelper.cs" />
+    <Compile Include="Models\ReportHelper.cs" />
     <Compile Include="I18N.cs" />
     <Compile Include="Models\ReportBrowser.cs" />
     <Compile Include="Models\EmailException.cs" />

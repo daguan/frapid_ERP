@@ -141,10 +141,14 @@ namespace Frapid.Reports.Engine.Parsers
             foreach (XmlNode node in nodes)
             {
                 bool returnsJson = this.GetAttributeValue(node, "ReturnsJson")?.To<bool>() ?? false;
+                bool hideWhenEmpty = this.GetAttributeValue(node, "HideWhenEmpty")?.To<bool>() ?? false;
+                string title = this.GetAttributeValue(node, "Title")?.ToString() ?? "";
 
                 this.DataSources.Add(new DataSource
                 {
                     Index = index,
+                    Title = title,
+                    HideWhenEmpty = hideWhenEmpty,
                     ReturnsJson = returnsJson,
                     Query = this.GetQuery(node),
                     Parameters = this.GetParameters(report, node),

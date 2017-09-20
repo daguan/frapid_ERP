@@ -249,13 +249,36 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
 }
 
 .dashboard.menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 4em;
-    background: #3a3a3a !important;
-    border-style: none !important;
-    z-index: 3;
+	background: #3a3a3a !important;
+	border-style: none !important;
+	z-index: 3;
+}	
+
+@media(min-width: 768px){
+	.dashboard.menu {
+		position: fixed;
+		top: 0;
+		left: 0;
+		height: 4em;
+	}
+	
+	.mobile.only{
+		display: none;
+	}
+}
+
+@media(max-width: 768px){
+	.hidden.on.mobile{
+		display:none;
+	}
+
+	.ui.stackable.menu .right.menu {
+		flex-direction: column;
+	}
+	
+	#dashboard-container{
+		margin-top:0;
+	}
 }
 
     .dashboard.menu > .item,
@@ -266,6 +289,7 @@ input[readonly], input[disabled], textarea[readonly], textarea[disabled], select
     }
 
         .dashboard.menu > .item,
+		.dashboard.menu > .stackable.menu .item,
         .dashboard.menu > .menu > .item:not(.search):hover {
             background: #333 !important;
         }

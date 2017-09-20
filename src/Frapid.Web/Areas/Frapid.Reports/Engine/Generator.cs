@@ -96,7 +96,7 @@ namespace Frapid.Reports.Engine
                 return result;
             }
 
-            if (result.Rows == null || result.Rows.Count == 0)
+            if (result.Rows?.Count == 0)
             {
                 return result;
             }

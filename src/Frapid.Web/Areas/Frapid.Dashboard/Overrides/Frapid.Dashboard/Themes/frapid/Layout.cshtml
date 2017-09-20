@@ -60,20 +60,21 @@
         </div>
     </div>
 </div>
-<div class="ui attached basic small dashboard menu">
+<div class="ui attached basic small dashboard stackable menu">
     <a class="item" data-ng-click="toogleDashboard();">
         <i class="pin icon"></i>
+		<span class='mobile only'>@Resources.Dashboard</span>
     </a>
-    <div class="menu" data-scope="app-menus">
+    <div class="ui stackable inverted menu" data-scope="app-menus" style="display:none;">
 
     </div>
     <div class="right menu">
-        <div class="search item">
+        <div class="search item hidden on mobile">
             <div class="ui input">
                 <input type="text" data-feature-search placeholder="@Resources.CtrlShiftF"/>
             </div>
         </div>
-        <div class="ui dropdown select language item hidden on mobile">
+        <div class="ui dropdown select language item">
             <input name="filters" type="hidden">
             <i class="world icon"></i>
             <span class="text">@CultureManager.GetCurrent().NativeName</span>
@@ -100,12 +101,15 @@
         @Html.Partial(themeSelector)
         <a class="notification item" href="javascript:void(0)" title="@Resources.Notifications">
             <i class="alarm icon"></i>
+			<span class='mobile only'>@Resources.Notifications</span>
         </a>
-        <a class="item hidden on mobile" href="/" target="_blank" title="@Resources.GoToWebsite">
+        <a class="item" href="/" target="_blank" title="@Resources.GoToWebsite">
             <i class="external icon"></i>
+			<span class='mobile only'>@Resources.GoToWebsite</span>
         </a>
         <a class="item" href="/account/sign-out" title="@Resources.SignOut" target="_self">
             <i class="log out icon"></i>
+			<span class='mobile only'>@Resources.SignOut</span>
         </a>
     </div>
 </div>

@@ -28,6 +28,18 @@
     }
 }
 
+@media (max-width: 768px) {
+	.console.segment .title{
+	  display:block!important;
+	  margin-bottom: 1rem;
+	}
+	.console.segment .title section.heading,
+	.console.segment .title .actions {
+		width: 100%;
+		text-align:left;
+	}
+}
+
 .widget-container {
 }
 

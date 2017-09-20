@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
+using Frapid.Framework.Extensions;
 using Frapid.Reports.Engine;
 using Frapid.Reports.Engine.Model;
 using Frapid.Reports.Helpers;
+using Frapid.Reports.Models;
 
 namespace Frapid.Reports.Controllers.Backend
 {
@@ -28,7 +30,11 @@ namespace Frapid.Reports.Controllers.Backend
         [Route("dashboard/reports/source/{*path}")]
         public ActionResult Index(string path)
         {
-            return this.View(this.GetRazorView<AreaRegistration>("Source.cshtml", this.Tenant), path);
+            string query = this.Request?.Url?.Query.Or("");
+            var model = ReportModel.GetDefinition(path, query, this.Tenant, this.Request);
+            model.Path = path;
+
+            return this.View(this.GetRazorView<AreaRegistration>("Source.cshtml", this.Tenant), model);
         }
 
         [ActionName("ReportMarkup")]
