@@ -105,7 +105,7 @@ namespace SparkPostMail
             }
             finally
             {
-                if (deleteAttachmentes)
+                if (deleteAttachmentes && email.Status == Status.Completed)
                 {
                     FileHelper.DeleteFiles(attachments);
                 }
