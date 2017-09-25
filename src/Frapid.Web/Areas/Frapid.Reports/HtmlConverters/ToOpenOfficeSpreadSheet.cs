@@ -7,13 +7,14 @@ namespace Frapid.Reports.HtmlConverters
         public bool Enabled { get; set; } = true;
         public string Extension => "xls";
 
-        public string Export(string tenant, string html, string destination = "")
+        public string Export(string tenant, string html, string fileName, string destination = "")
         {
+            html = ExportHelper.RemoveNonPrintableElements(html);
             string id = Guid.NewGuid().ToString();
 
             if (string.IsNullOrWhiteSpace(destination))
             {
-                destination = $"/Tenants/{tenant}/Documents/{id}.xls";
+                destination = $"/Tenants/{tenant}/Documents/{id}/{fileName}.xls";
             }
 
             HtmlWriter.WriteHtml(destination, html);

@@ -13,16 +13,24 @@ namespace Frapid.Reports.HtmlConverters
         public bool Enabled { get; set; } = true;
         public string Extension => "docx";
 
-        public string Export(string tenant, string html, string destination = "")
+        public string Export(string tenant, string html, string fileName, string destination = "")
         {
-            string documentName = Guid.NewGuid().ToString();
+            html = ExportHelper.RemoveNonPrintableElements(html);
+            string folder = Guid.NewGuid().ToString();
 
             if (string.IsNullOrWhiteSpace(destination))
             {
-                destination = $"/Tenants/{tenant}/Documents/{documentName}.docx";
+                destination = $"/Tenants/{tenant}/Documents/{folder}/{fileName}.docx";
             }
 
-            using (var doc = WordprocessingDocument.Create(PathMapper.MapPath(destination), WordprocessingDocumentType.Document))
+            var file = new FileInfo(PathMapper.MapPath(destination));
+
+            if (!file.Directory.Exists)
+            {
+                file.Directory.Create();
+            }
+
+            using (var doc = WordprocessingDocument.Create(file.FullName, WordprocessingDocumentType.Document))
             {
                 string id = "html2doc";
                 

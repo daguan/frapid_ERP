@@ -20,7 +20,7 @@ namespace Frapid.Installer.Tenant
 
             using (var db = DbProvider.Get(FrapidDbServer.GetSuperUserConnectionString(tenant), tenant).GetDatabase())
             {
-                await db.NonQueryAsync(sql);
+                await db.NonQueryAsync(sql).ConfigureAwait(false);
             }
         }
     }

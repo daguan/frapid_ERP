@@ -61,13 +61,13 @@
         </div>
     </div>
 
-    <div id="EmailModal" class="ui modal">
+    <div id="EmailModal" class="ui modal hide on print">
         <i class="close icon"></i>
         <div class="header">
             @I18N.SendEmail
         </div>
         <div class="content">
-            <div class="ui flat form">
+            <div class="ui flat form basic segment">
                 <div class="field">
                     <label>@I18N.SendTo</label>
                     <input id="SendToInputEmail" type="email" required data-persist placeholder="Enter Email Address" />
@@ -79,6 +79,9 @@
                 <div class="field">
                     <label>@I18N.Message</label>
                     <textarea id="MessageTextArea" placeholder="Enter Your Message" rows="10">@I18N.PleaseFindAttachedDocument</textarea>
+                </div>
+                <div class="hidden field">
+                    <input type="text" id="FileNameInputText" value="@Model.ReportTitle" />
                 </div>
                 <div class="attachment vpad8 field">
                     <label>@I18N.Attachments</label>

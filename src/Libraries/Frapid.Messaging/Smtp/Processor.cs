@@ -127,7 +127,7 @@ namespace Frapid.Messaging.Smtp
                             item?.Dispose();
                         }
 
-                        if (deleteAttachmentes)
+                        if (deleteAttachmentes && email.Status == Status.Completed)
                         {
                             this.DeleteFiles(attachments);
                         }

@@ -15,6 +15,9 @@ namespace Frapid.Reports.ViewModels
         public string Message { get; set; }
 
         [Required]
+        public string FileName { get; set; }
+
+        [Required]
         [AllowHtml]
         public string Html { get; set; }
     }

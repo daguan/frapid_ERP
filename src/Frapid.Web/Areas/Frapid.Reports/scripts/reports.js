@@ -211,7 +211,7 @@ function getXml(reportTitle) {
 
     if ($("#ReportIframe").length) {
         tables = $("#ReportIframe").contents().find(".gridviews table");
-    } else {        
+    } else {
         tables = $(".gridviews table");
     }
 
@@ -365,20 +365,21 @@ $("#SendEmailButton").off("click").on("click", function () {
         return;
     };
 
+    $("#EmailModal").find(".form.segment").addClass("loading");
+
     const model = getModel();
     const ajax = request(model);
 
     ajax.success(function () {
+        $("#EmailModal").find(".form.segment").removeClass("loading");
         window.displaySuccess();
-
         $("#EmailModal").modal("hide");
     });
 
     ajax.fail(function (xhr) {
+        $("#EmailModal").find(".form.segment").removeClass("loading");
         window.logAjaxErrorMessage(xhr);
     });
-
-
 });
 
 $(".zoom.out.button").off("click").on("click", function () {

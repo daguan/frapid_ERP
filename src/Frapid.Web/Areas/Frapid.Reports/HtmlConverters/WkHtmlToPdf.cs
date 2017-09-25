@@ -11,7 +11,7 @@ namespace Frapid.Reports.HtmlConverters
         public bool Enabled { get; set; } = true;
         public string Extension => "pdf";
 
-        public string Export(string tenant, string html, string destination = "")
+        public string Export(string tenant, string html, string fileName, string destination = "")
         {
             string id = Guid.NewGuid().ToString();
 
@@ -19,11 +19,18 @@ namespace Frapid.Reports.HtmlConverters
 
             if (string.IsNullOrWhiteSpace(destination))
             {
-                destination = $"/Tenants/{tenant}/Documents/{id}.pdf";
+                destination = $"/Tenants/{tenant}/Documents/{id}/{fileName}.pdf";
+            }
+
+            var file = new FileInfo(PathMapper.MapPath(destination));
+
+            if (!file.Directory.Exists)
+            {
+                file.Directory.Create();
             }
 
             HtmlWriter.WriteHtml(source, html);
-            this.ToPdf(source, PathMapper.MapPath(destination));
+            this.ToPdf(source, file.FullName);
 
             return destination;
         }

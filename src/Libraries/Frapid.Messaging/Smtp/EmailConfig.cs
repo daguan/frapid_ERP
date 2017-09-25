@@ -1,7 +1,4 @@
-﻿using System.Security;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Security;
+﻿using System.Threading.Tasks;
 using Frapid.Messaging.DTO;
 
 namespace Frapid.Messaging.Smtp
@@ -39,7 +36,7 @@ namespace Frapid.Messaging.Smtp
             this.EnableSsl = smtp.SmtpEnableSsl;
             this.SmtpPort = smtp.SmtpPort;
             this.SmtpUsername = smtp.SmtpUsername;
-            this.SmtpUserPassword = this.GetSmtpUserPassword(smtp.SmtpPassword);
+            this.SmtpUserPassword = smtp.SmtpPassword;
         }
 
         public string Tenant { get; set; }
@@ -47,7 +44,7 @@ namespace Frapid.Messaging.Smtp
         public string SmtpHost { get; set; }
         public int SmtpPort { get; set; }
         public string SmtpUsername { get; set; }
-        public SecureString SmtpUserPassword { get; set; }
+        public string SmtpUserPassword { get; set; }
         public string PickupDirectory { get; set; }
         public bool Enabled { get; set; }
         public string FromName { get; set; }
@@ -68,32 +65,6 @@ namespace Frapid.Messaging.Smtp
         private static async Task<SmtpConfig> GetSmtpConfigAsync(string database)
         {
             return await DAL.Smtp.GetConfigAsync(database).ConfigureAwait(false);
-        }
-
-        private SecureString GetSmtpUserPassword(string password)
-        {
-            if (string.IsNullOrWhiteSpace(password))
-            {
-                return new SecureString();
-            }
-
-            var data = Encoding.UTF8.GetBytes(password);
-            var unsecure = MachineKey.Unprotect(data, "ScrudFactory");
-
-            if (unsecure == null)
-            {
-                return new SecureString();
-            }
-
-            password = Encoding.UTF8.GetString(unsecure);
-
-            var secureString = new SecureString();
-            foreach (char c in password)
-            {
-                secureString.AppendChar(c);
-            }
-
-            return secureString;
         }
     }
 }

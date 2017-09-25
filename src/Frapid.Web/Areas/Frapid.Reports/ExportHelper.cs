@@ -8,7 +8,7 @@ namespace Frapid.Reports
 {
     public static class ExportHelper
     {
-        public static string Export(string tenant, Uri baseUri, string extension, string html, string destination = "")
+        public static string Export(string tenant, Uri baseUri, string fileName, string extension, string html, string destination = "")
         {
             html = RemoveNonPrintableElements(html);
             html = InlineHtml(html, baseUri);
@@ -17,7 +17,7 @@ namespace Frapid.Reports
 
             var member = type.GetTypeMembers<IExportTo>().FirstOrDefault(x => x.Extension == extension && x.Enabled);
 
-            return member?.Export(tenant, html);
+            return member?.Export(tenant, html, fileName);
         }
 
         private static string InlineHtml(string html, Uri baseUri)
@@ -28,7 +28,7 @@ namespace Frapid.Reports
             return result.Html;
         }
 
-        private static string RemoveNonPrintableElements(string html)
+        public static string RemoveNonPrintableElements(string html)
         {
             try
             {

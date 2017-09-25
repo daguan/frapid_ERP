@@ -21,7 +21,7 @@ namespace Frapid.Reports.Controllers.Backend
             }
 
 
-            string result = ExportHelper.Export(this.Tenant, this.GetBaseUri(), "pdf", model.Html);
+            string result = ExportHelper.Export(this.Tenant, this.GetBaseUri(), model.DocumentName, "pdf", model.Html);
             return this.Ok(result);
         }
 
@@ -36,7 +36,7 @@ namespace Frapid.Reports.Controllers.Backend
                 return this.InvalidModelState(this.ModelState);
             }
 
-            string result = ExportHelper.Export(this.Tenant, this.GetBaseUri(), "docx", model.Html);
+            string result = ExportHelper.Export(this.Tenant, this.GetBaseUri(), model.DocumentName, "docx", model.Html);
             return this.Ok(result);
         }
 
@@ -50,7 +50,7 @@ namespace Frapid.Reports.Controllers.Backend
                 return this.InvalidModelState(this.ModelState);
             }
 
-            string result = ExportHelper.Export(this.Tenant, this.GetBaseUri(), "xls", model.Html);
+            string result = ExportHelper.Export(this.Tenant, this.GetBaseUri(), model.DocumentName, "xls", model.Html);
             return this.Ok(result);
         }
     }

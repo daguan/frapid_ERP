@@ -480,6 +480,10 @@
       <Project>{9BEA3809-B6D5-4025-AE7E-868E5E7E9C76}</Project>
       <Name>Frapid.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Libraries\Frapid.DbPolicy\Frapid.DbPolicy.csproj">
+      <Project>{e2c5690c-ef80-4afa-8107-5e58a936b15f}</Project>
+      <Name>Frapid.DbPolicy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Libraries\Frapid.Framework\Frapid.Framework.csproj">
       <Project>{a4dee358-3203-425c-80e9-8eba0a01b73f}</Project>
       <Name>Frapid.Framework</Name>
@@ -491,6 +495,10 @@
     <ProjectReference Include="..\Libraries\Frapid.Installer\Frapid.Installer.csproj">
       <Project>{BFFE76A6-7E9D-42FA-AB3A-108BD2125923}</Project>
       <Name>Frapid.Installer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Frapid.Messaging\Frapid.Messaging.csproj">
+      <Project>{9408fede-8a04-460d-8fd9-1c710c1baaeb}</Project>
+      <Name>Frapid.Messaging</Name>
     </ProjectReference>
     <ProjectReference Include="..\Libraries\Frapid.TokenManager\Frapid.TokenManager.csproj">
       <Project>{EF3BDE7C-A3D5-493A-8817-BF47DF9CAE47}</Project>

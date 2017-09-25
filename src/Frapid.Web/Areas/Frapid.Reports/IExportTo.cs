@@ -4,6 +4,6 @@
     {
         bool Enabled { get; set; }
         string Extension { get; }
-        string Export(string tenant, string html, string destination = "");
+        string Export(string tenant, string html, string fileName, string destination = "");
     }
 }

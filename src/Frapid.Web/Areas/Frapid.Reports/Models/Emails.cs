@@ -18,7 +18,7 @@ namespace Frapid.Reports.Models
                 throw new EmailException(I18N.NoEmailProcessorDefined);
             }
 
-            string attachmentPath = ExportHelper.Export(tenant, baseUri, "pdf", model.Html);
+            string attachmentPath = ExportHelper.Export(tenant, baseUri, model.FileName, "pdf", model.Html);
 
             attachmentPath = PathMapper.MapPath(attachmentPath);
 

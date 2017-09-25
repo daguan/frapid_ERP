@@ -429,8 +429,6 @@ namespace Frapid.WebApi.DataAccess
                 {
                     await db.BeginTransactionAsync().ConfigureAwait(false);
 
-                    items = this.Crypt(items);
-
                     foreach (var item in items)
                     {
                         line++;
@@ -515,7 +513,6 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            item = this.Crypt(item);
 
             item["AuditUserId"] = this.UserId;
             item["AuditTs"] = DateTimeOffset.UtcNow;
@@ -796,8 +793,6 @@ namespace Frapid.WebApi.DataAccess
                 }
             }
 
-            item = this.Crypt(item);
-
             item["AuditUserId"] = this.UserId;
             item["AuditTs"] = DateTimeOffset.UtcNow;
             item["Deleted"] = false;
@@ -908,32 +903,6 @@ namespace Frapid.WebApi.DataAccess
             return await Factory.GetAsync<DisplayField>(this.Database, sql).ConfigureAwait(false);
         }
 
-        private List<Dictionary<string, object>> Crypt(List<Dictionary<string, object>> items)
-        {
-            for (int index = 0; index < items.Count; index++)
-            {
-                items[index] = this.Crypt(items[index]);
-            }
-
-            return items;
-        }
-
-        private Dictionary<string, object> Crypt(Dictionary<string, object> item)
-        {
-            for (int index = 0; index < item.Count; index++)
-            {
-                var candidate = item.ElementAt(index);
-
-                if (candidate.Key.ToUpperInvariant().Contains("PASSWORD") ||
-                    candidate.Key.ToUpperInvariant().Contains("SECRET"))
-                {
-                    var bytes = Encoding.UTF8.GetBytes(candidate.Value.ToString());
-                    item[candidate.Key] = Encoding.UTF8.GetString(MachineKey.Protect(bytes, "ScrudFactory"));
-                }
-            }
-
-            return item;
-        }
 
         public async Task AddCustomFieldsAsync(object primaryKeyValue, List<CustomField> customFields)
         {
