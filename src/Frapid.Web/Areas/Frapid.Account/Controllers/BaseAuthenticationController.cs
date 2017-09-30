@@ -9,7 +9,6 @@ using Frapid.Account.InputModels;
 using Frapid.ApplicationState.Cache;
 using Frapid.ApplicationState.CacheFactory;
 using Frapid.Configuration;
-using Frapid.Framework;
 using Frapid.Framework.Extensions;
 using Frapid.TokenManager;
 using Frapid.WebsiteBuilder.Controllers;
@@ -24,6 +23,20 @@ namespace Frapid.Account.Controllers
             var user = await Users.GetAsync(this.Tenant, email).ConfigureAwait(false);
 
             return user != null && PasswordManager.ValidateBcrypt(email, plainPassword, user.Password);
+        }
+
+        private string GetDomainName()
+        {
+            var context = this.HttpContext;
+
+            string domain = this.HttpContext?.Request?.Url?.DnsSafeHost;
+
+            if (string.IsNullOrWhiteSpace(domain))
+            {
+                domain = TenantConvention.GetBaseDomain(context, false);
+            }
+
+            return domain;
         }
 
         protected async Task<ActionResult> OnAuthenticatedAsync(LoginResult result, SignInInfo model = null)
@@ -51,9 +64,7 @@ namespace Frapid.Account.Controllers
 
             await AccessTokens.SaveAsync(this.Tenant, token, this.RemoteUser.IpAddress, this.RemoteUser.UserAgent).ConfigureAwait(true);
 
-            var context = this.HttpContext;
-            string domain = TenantConvention.GetBaseDomain(context, false);
-
+            string domain = this.GetDomainName();
             this.AddAuthenticationCookie(domain, token);
             this.AddCultureCookie(domain, model?.Culture.Or("en-US"));
 
