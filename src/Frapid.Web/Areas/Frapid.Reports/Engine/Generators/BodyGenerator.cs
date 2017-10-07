@@ -70,17 +70,18 @@ namespace Frapid.Reports.Engine.Generators
         }
 
 
-        private string GetFormattedCell(object value)
+        private string GetFormattedCell(object value, string expression)
         {
             string cell = "<td";
 
-            string cellValue = FormattingHelper.GetFormattedValue(value);
+            string cellValue = FormattingHelper.GetFormattedValue(value, expression);
 
             if (value is decimal || value is double || value is float)
             {
+                cell += " data-value='" + value + "'";
                 cell += " class='right aligned decimal number'>";
             }
-            else if(value is DateTime || value is DateTimeOffset)
+            else if (value is DateTime || value is DateTimeOffset)
             {
                 cell += " class='unformatted date'>";
             }
@@ -173,8 +174,12 @@ namespace Frapid.Reports.Engine.Generators
 
                 for (int j = 0; j < dataSource.Data.Columns.Count; j++)
                 {
-                    var value = dataSource.Data.Rows[i][j];
-                    html.Append(this.GetFormattedCell(value));
+                    string columnName = dataSource.Data.Columns[j].ColumnName;
+
+                    var formatting = dataSource.FormattingFields.LastOrDefault(x => string.Equals(x.Name, columnName, StringComparison.InvariantCultureIgnoreCase));
+                    var value = dataSource.Data.Rows[i][columnName];
+
+                    html.Append(this.GetFormattedCell(value, formatting?.FormatExpression));
                 }
 
                 html.Append("</tr>");

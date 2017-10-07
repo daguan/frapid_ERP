@@ -636,3 +636,13 @@ select.inverted{
 .ace_editor div {
 	font: inherit !important;
 }
+
+@media print {
+	.dashboard.menu {
+		display: none;
+	}
+
+	#dashboard-container{
+		margin: 0!important;
+	}
+}

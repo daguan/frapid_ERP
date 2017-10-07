@@ -115,6 +115,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\DecimalExtensions.cs" />
     <Compile Include="CacheFactory\DefaultCacheFactory.cs" />
     <Compile Include="CacheFactory\FrapidOutputCacheProvider.cs" />
     <Compile Include="CacheFactory\MemoryCacheFactory.cs" />

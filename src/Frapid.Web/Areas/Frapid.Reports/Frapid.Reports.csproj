@@ -170,6 +170,7 @@
     <Compile Include="Controllers\Backend\EmailController.cs" />
     <Compile Include="Controllers\Backend\ReportBrowserController.cs" />
     <Compile Include="Engine\Generators\ScriptGenerator.cs" />
+    <Compile Include="Engine\Model\DataSourceFormattingField.cs" />
     <Compile Include="Engine\Parsers\ScriptParser.cs" />
     <Compile Include="Helpers\LocalizationHelper.cs" />
     <Compile Include="Models\ReportHelper.cs" />

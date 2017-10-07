@@ -62,6 +62,33 @@ namespace Frapid.Reports.Engine.Parsers
             return !string.IsNullOrWhiteSpace(defaultValue) && defaultValue.ToLower().StartsWith("{meta");
         }
 
+        private List<DataSourceFormattingField> GetFormattingField(Report report, XmlNode node)
+        {
+            var parameters = new List<DataSourceFormattingField>();
+
+            var candidates = node.ChildNodes.Cast<XmlNode>().Where(x => x.Name.Equals("Formatting"));
+
+            foreach (var item in candidates)
+            {
+                foreach (var current in item.ChildNodes.Cast<XmlNode>().Where(x => x.Name.Equals("Field")))
+                {
+                    if (current.Attributes != null)
+                    {
+                        string name = this.GetAttributeValue(current, "Name").ToString();
+                        string expression = this.GetAttributeValue(current, "FormatExpression").ToString();
+
+                        parameters.Add(new DataSourceFormattingField
+                        {
+                            Name = name,
+                            FormatExpression = expression
+                        });
+                    }
+                }
+            }
+
+            return parameters;
+        }
+
         private List<DataSourceParameter> GetParameters(Report report, XmlNode node)
         {
             var parameters = new List<DataSourceParameter>();
@@ -152,6 +179,7 @@ namespace Frapid.Reports.Engine.Parsers
                     ReturnsJson = returnsJson,
                     Query = this.GetQuery(node),
                     Parameters = this.GetParameters(report, node),
+                    FormattingFields = this.GetFormattingField(report, node),
                     RunningTotalFieldIndices = this.GetRunningTotalFieldIndices(node),
                     RunningTotalTextColumnIndex = this.GetRunningTotalTextColumnIndex(node)
                 });

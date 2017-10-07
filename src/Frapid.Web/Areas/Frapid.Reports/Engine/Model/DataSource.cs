@@ -10,6 +10,7 @@ namespace Frapid.Reports.Engine.Model
         public string Title { get; set; }
         public string Query { get; set; }
         public List<DataSourceParameter> Parameters { get; set; }
+        public List<DataSourceFormattingField> FormattingFields { get; set; }
         public int? RunningTotalTextColumnIndex { get; set; }
         public List<int> RunningTotalFieldIndices { get; set; }
         public DataTable Data { get; set; }

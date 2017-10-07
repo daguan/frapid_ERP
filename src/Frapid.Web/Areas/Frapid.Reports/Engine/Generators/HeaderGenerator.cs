@@ -17,11 +17,11 @@ namespace Frapid.Reports.Engine.Generators
                 return string.Empty;
             }
 
-            string pathToHeader = PathMapper.MapPath($"~/Tenants/{tenant}/Areas/Frapid.Reports/Assets/Header.html");
+            string pathToHeader = PathMapper.MapPath($"~/Tenants/{tenant}/Areas/Frapid.Reports/assets/header.html");
 
             if (!File.Exists(pathToHeader))
             {
-                pathToHeader = PathMapper.MapPath("~/Reports/Assets/Header.html");
+                pathToHeader = PathMapper.MapPath("~/report/assets/header.html");
             }
 
             return File.ReadAllText(pathToHeader, Encoding.UTF8);

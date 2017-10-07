@@ -2,6 +2,7 @@
     padding: 0 !important;
 }
 
+
 .social.network {
     font-size: 1em !important;
     background: #eee;
@@ -346,4 +347,10 @@ section.social.network {
 
 .add.a.new.post .ui.gallery .placeholder.item .text {
     top: 25%;
+}
+
+@media print {
+	.social.network {
+		display: none!important;
+	}
 }

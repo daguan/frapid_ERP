@@ -25,9 +25,11 @@ namespace Frapid.Reports.Helpers
                         return value.To<DateTime>();
                     }
                     break;
+                case "INTEGER":
                 case "INT":
                     return value.To<int>();
                 case "LONG":
+                case "BIGINT":
                     return value.To<long>();
                 case "BOOL":
                 case "BOOLEAN":

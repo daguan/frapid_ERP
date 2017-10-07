@@ -1,5 +1,5 @@
 var printGridView = function (reportTitle, table, windowName, offset, offsetLast, hiddenFieldToUpdate, callback) {
-    const templatePath = "/Reports/Assets/Print.html?v=2";
+    const templatePath = "/report/assets/print.html";
     const headerPath = "/dashboard/reports/header";
 
     //Load report template from the path.
