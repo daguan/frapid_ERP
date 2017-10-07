@@ -41,9 +41,14 @@ namespace Frapid.SchemaUpdater.Helpers
             else
             {
                 var candidate = versions.FirstOrDefault(x => x.VersionNumber == schemaVersion.VersionNumber);
+
                 if (candidate == null)
                 {
                     versions.Add(schemaVersion);
+                }
+                else
+                {
+                    candidate.LastInstalledOn = DateTimeOffset.UtcNow;
                 }
             }
 
