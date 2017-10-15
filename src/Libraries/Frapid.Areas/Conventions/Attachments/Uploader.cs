@@ -84,7 +84,7 @@ namespace Frapid.Areas.Conventions.Attachments
             if (!this.AllowedExtensions.Contains(extension.ToLower()))
             {
                 this.Logger.Warning("Could not upload avatar resource because the uploaded file {file} has invalid extension.", fileName);
-                throw new UploadException("Invalid data.");
+                throw new UploadException("Invalid file name extension.");
             }
 
             var stream = file.InputStream;

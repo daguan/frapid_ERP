@@ -181,6 +181,7 @@ function getCardField(card, field) {
     };
 
     var isExpression = field.substring(2, 0) === "{{" && field.slice(-2) === "}}";
+
     if (isExpression) {
         var expression = field.replace("{{", "").replace("}}", "");
         return eval(expression);
