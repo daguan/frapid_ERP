@@ -47,7 +47,7 @@
         return;
     };
 
-    saveButton.addClass("loading");
+    saveButton.addClass("loading").prop("disabled", true);
     var bigError = $(".big.error");
     var entity = new Object();
     var customFields = [];
@@ -126,7 +126,7 @@
     var ajax = request(getType(), entity, customFields);
 
     ajax.success(function (response) {
-        saveButton.removeClass("loading");
+        saveButton.removeClass("loading").prop("disabled", false);
 		
 		if(typeof(window.scrudSaveButtonCallback) === "function"){
 			window.scrudSaveButtonCallback(response);
@@ -153,7 +153,7 @@
     ajax.fail(function (xhr) {
         var error = getAjaxErrorMessage(xhr);
 
-        saveButton.removeClass("loading");
+        saveButton.removeClass("loading").prop("disabled", false);
         bigError.addClass("vpad16").text(error);
     });
 });

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
-using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.UI;
 using Frapid.Areas;
 using Frapid.Areas.Caching;
+using Frapid.Configuration;
 
 namespace Frapid.Web.Controllers
 {
@@ -49,7 +49,7 @@ namespace Frapid.Web.Controllers
             {
                 foreach (string path in paths)
                 {
-                    string location = HostingEnvironment.MapPath(directory + path);
+                    string location = PathMapper.MapPath(directory + path);
 
                     if (location != null &&
                         System.IO.File.Exists(location))

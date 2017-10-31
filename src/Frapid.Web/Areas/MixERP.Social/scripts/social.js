@@ -131,7 +131,7 @@ function uploadAttachments(el) {
 
     el.upload(handler, null, function (response) {
         el.attr("data-uploaded-files", JSON.stringify(response));
-        $("#PostButton").removeClass("loading");
+        $("#PostButton").removeClass("loading").prop("disabled", false);
     }, function (progress, value) {
     }, function (xhr) {
         window.logAjaxErrorMessage(xhr);
@@ -151,14 +151,14 @@ function isImage(fileName) {
 
 $("#UploadInputFile").off("change").on("change", function () {
     const el = $(this);
-    $("#PostButton").addClass("loading");
+    $("#PostButton").addClass("loading").prop("disabled", true);
     const target = $(".add.a.new.post .ui.gallery").html("");
 
     const files = this.files;
 
     for (var i = 0; i < files.length; i++) {
         const file = files[i];
-        const fileName = file.name;
+        const fileName = file.name;.prop("disabled", true)
         const extension = fileName.split('.').pop().toLowerCase();
 
         if (isImage(fileName)) {

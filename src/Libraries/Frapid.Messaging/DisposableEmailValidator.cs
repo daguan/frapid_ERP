@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Web.Hosting;
+using Frapid.Configuration;
 
 namespace Frapid.Messaging
 {
@@ -17,8 +17,8 @@ namespace Frapid.Messaging
 
             //The file should be a plain text file which contains the list of dispoable email domains separated by new line.
             //The file is expected to be present on either of these two paths:
-            string tenantConfigFile = HostingEnvironment.MapPath($"/Tenants/{tenant}/Configs/DisposableEmailDomains.config");
-            string rootConfigFile = HostingEnvironment.MapPath("/Resources/Configs/DisposableEmailDomains.config");
+            string tenantConfigFile = PathMapper.MapPath($"/Tenants/{tenant}/Configs/DisposableEmailDomains.config");
+            string rootConfigFile = PathMapper.MapPath("/Resources/Configs/DisposableEmailDomains.config");
 
 
             if (File.Exists(tenantConfigFile))

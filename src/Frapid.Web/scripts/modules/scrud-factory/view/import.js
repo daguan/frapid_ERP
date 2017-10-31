@@ -73,14 +73,14 @@ $("#file").change(function () {
 
         showProgress(progress, 50, window.translate("RequestingImport"));
 
-        el.closest(".segment").find(".button").addClass("loading");
+        el.closest(".segment").find(".button").addClass("loading").prop("disabled", true);
 
         var ajax = request(entities);
 
         ajax.success(function () {
             var message = stringFormat(window.translate("ImportedNItems"), entities.length);
             showProgress(progress, 100, message);
-            el.closest(".segment").find(".button").removeClass("loading");
+            el.closest(".segment").find(".button").removeClass("loading").prop("disabled", false);
 
             setTimeout(function(){
                 window.location = window.location;
@@ -89,7 +89,7 @@ $("#file").change(function () {
 
         ajax.fail(function (xhr) {
             $(".big.error").addClass("vpad8").html(getAjaxErrorMessage(xhr));
-            el.closest(".segment").find(".button").removeClass("loading");
+            el.closest(".segment").find(".button").removeClass("loading").prop("disabled", false);
             showProgress(progress, 0, window.translate("RollingBackChanges"));
             $("#ProgressBar").fadeOut(2000);
         });

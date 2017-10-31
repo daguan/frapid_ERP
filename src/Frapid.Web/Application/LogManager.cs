@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Web.Hosting;
 using Frapid.Configuration;
 using Serilog;
 using Serilog.Core;
@@ -16,7 +15,7 @@ namespace Frapid.Web.Application
 
             if (string.IsNullOrWhiteSpace(path))
             {
-                return HostingEnvironment.MapPath("~/Resource/Temp");
+                return PathMapper.MapPath("~/Resource/Temp");
             }
 
             if (!Directory.Exists(path))

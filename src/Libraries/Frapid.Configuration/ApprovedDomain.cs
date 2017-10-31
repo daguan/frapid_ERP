@@ -21,6 +21,7 @@ namespace Frapid.Configuration
         public string[] Synonyms { get; set; }
 
         public object Do { get; internal set; }
+        public List<AlternativeBackup> AlternativeBackups { get; set; }
 
         public List<string> GetSubtenants()
         {

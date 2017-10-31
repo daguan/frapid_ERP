@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Text;
-using System.Web.Hosting;
+using Frapid.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -11,7 +11,7 @@ namespace Frapid.TokenManager
         public static JObject Get()
         {
             string path = "~/Resources/Configs/JwtConfig.json";
-            path = HostingEnvironment.MapPath(path);
+            path = PathMapper.MapPath(path);
 
             if (string.IsNullOrWhiteSpace(path) ||
                 !File.Exists(path))

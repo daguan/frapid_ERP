@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Web.Hosting;
+using System.Collections.Generic;
 using Frapid.Backups.SqlServer;
 using Frapid.Configuration;
 using Quartz;
@@ -17,49 +17,75 @@ namespace Frapid.Backups
             foreach (var domain in domains)
             {
                 string tenant = TenantConvention.GetDbNameByConvention(domain.DomainName);
-                string directory = this.GetBackupDirectory(domain, tenant);
+                var directories = this.GetBackupDirectory(domain, tenant);
 
 
                 var server = new DbServer(tenant);
-                var agent = this.GetAgent(server, fileName, tenant, directory);
 
-                try
+                foreach (string directory in directories)
                 {
-                    agent.BackupAsync
-                        (
-                            done =>
-                            {
-                                var backup = new Resources(tenant, directory, fileName);
+                    var agent = this.GetAgent(server, fileName, tenant, directory);
 
-                                backup.AddTenantDataToBackup();
-                                backup.Compress();
-                                backup.Clean();
-                            },
-                            error => { Log.Error($"Could not backup because an error occurred. \n\n{error}"); })
-                        .GetAwaiter().GetResult();
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("Exception occurred executing the backup job. {Exception}.", ex);
+                    try
+                    {
+                        agent.BackupAsync
+                            (
+                                done =>
+                                {
+                                    var backup = new Resources(tenant, directory, fileName);
+
+                                    backup.AddTenantDataToBackup();
+                                    backup.Compress();
+                                    backup.Clean();
+                                },
+                                error => { Log.Error($"Could not backup because an error occurred. \n\n{error}"); })
+                            .GetAwaiter()
+                            .GetResult();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("Exception occurred executing the backup job. {Exception}.", ex);
+                    }
                 }
             }
         }
 
-        public string GetBackupDirectory(ApprovedDomain domain, string tenant)
+        public List<string> GetBackupDirectory(ApprovedDomain domain, string tenant)
         {
-            if (domain.BackupDirectoryIsFixedPath &&
-                !string.IsNullOrWhiteSpace(domain.BackupDirectory))
+            var directories = new List<string>();
+
+            if (domain.BackupDirectoryIsFixedPath && !string.IsNullOrWhiteSpace(domain.BackupDirectory))
             {
-                return domain.BackupDirectory;
+                directories.Add(domain.BackupDirectory);
             }
 
             if (!string.IsNullOrWhiteSpace(domain.BackupDirectory))
             {
-                return HostingEnvironment.MapPath(domain.BackupDirectory);
+                directories.Add(PathMapper.MapPath(domain.BackupDirectory));
+            }
+            else
+            {
+                string path = $"/Backups/{tenant}/backup";
+                directories.Add(PathMapper.MapPath(path));
             }
 
-            string path = $"/Backups/{tenant}/backup";
-            return HostingEnvironment.MapPath(path);
+            foreach (var backup in domain.AlternativeBackups)
+            {
+                if (!string.IsNullOrWhiteSpace(backup.Path))
+                {
+                    if (backup.IsFixedPath)
+                    {
+                        directories.Add(backup.Path);
+                    }
+                    else
+                    {
+                        directories.Add(PathMapper.MapPath(backup.Path));
+                    }
+                }
+            }
+
+
+            return directories;
         }
 
 

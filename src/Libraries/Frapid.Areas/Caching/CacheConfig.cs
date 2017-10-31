@@ -2,9 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Web.Hosting;
 using System.Web.UI;
 using DevTrends.MvcDonutCaching;
+using Frapid.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -28,7 +28,7 @@ namespace Frapid.Areas.Caching
 
         public static CacheConfig Get(string tenant, string profile)
         {
-            string path = HostingEnvironment.MapPath($"~/Tenants/{tenant}/Configs/OutputCache.json");
+            string path = PathMapper.MapPath($"~/Tenants/{tenant}/Configs/OutputCache.json");
             if (path == null)
             {
                 return null;

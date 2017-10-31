@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Text;
-using System.Web.Hosting;
+using Frapid.Configuration;
 using Newtonsoft.Json;
 
 namespace Frapid.Messaging
@@ -12,7 +12,7 @@ namespace Frapid.Messaging
         public static MessagingConfig Get(string tenant)
         {
             string path = $"/Tenants/{tenant}/Configs/Smtp.json";
-            path = HostingEnvironment.MapPath(path);
+            path = PathMapper.MapPath(path);
 
             if (path != null &&
                 File.Exists(path))

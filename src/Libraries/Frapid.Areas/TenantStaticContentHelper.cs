@@ -1,7 +1,6 @@
 using System.IO;
 using System.Linq;
 using System.Web;
-using System.Web.Hosting;
 using Frapid.Configuration;
 using Frapid.Framework.Extensions;
 
@@ -38,7 +37,7 @@ namespace Frapid.Areas
             {
                 //This is a well-known file type
                 string path = rootDirectory + requestedFile;
-                if (File.Exists(HostingEnvironment.MapPath(path)))
+                if (File.Exists(PathMapper.MapPath(path)))
                 {
                     return path + query;
                 }
@@ -50,7 +49,7 @@ namespace Frapid.Areas
 
         public static string GetConfig(string tenant, string key)
         {
-            string configFile = HostingEnvironment.MapPath($"~/Tenants/{tenant}/Configs/Frapid.config");
+            string configFile = PathMapper.MapPath($"~/Tenants/{tenant}/Configs/Frapid.config");
 
             return !File.Exists(configFile) ? string.Empty : ConfigurationManager.ReadConfigurationValue(configFile, key);
         }

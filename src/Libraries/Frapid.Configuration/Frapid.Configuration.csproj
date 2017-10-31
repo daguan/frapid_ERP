@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlternativeBackup.cs" />
     <Compile Include="AppResolver.cs" />
     <Compile Include="ApprovedDomain.cs" />
     <Compile Include="ConsolePathMapper.cs" />

@@ -2,12 +2,16 @@
   {
 	"DbProvider": "Npgsql",
 	"DomainName": "localhost",
-	"EnforceSsl": true,
+	"EnforceSsl": false,
 	"CdnDomain": "",
 	"AdminEmail": "",
 	"BcryptedAdminPassword": "",
 	"Synonyms": [],
 	"BackupDirectory": "/backups/localhost",
-	"BackupDirectoryIsFixedPath": false
+	"BackupDirectoryIsFixedPath": false,
+	"AlternativeBackups": [{
+		"Path": "",
+		"IsFixedPath": false
+	}]
   }
 ]

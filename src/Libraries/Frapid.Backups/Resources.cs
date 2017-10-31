@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.IO.Compression;
 using System.Text;
-using System.Web.Hosting;
+using Frapid.Configuration;
 using Microsoft.VisualBasic.FileIO;
 
 namespace Frapid.Backups
@@ -22,7 +22,7 @@ namespace Frapid.Backups
 
         public void AddTenantDataToBackup()
         {
-            string source = HostingEnvironment.MapPath($"/Tenants/{this.Tenant}");
+            string source = PathMapper.MapPath($"/Tenants/{this.Tenant}");
             string destination = Path.Combine(this.BackupPath, this.FileName);
             this.BackupDirectory = destination;
 

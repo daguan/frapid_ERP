@@ -70,7 +70,7 @@ $.fn.upload = function (remote, data, successFn, progressFn, failFn) {
 						json = JSON.parse(res.responseText);
 						if (successFn) successFn(json);
 					} catch (e) {
-						//if (failFn) failFn(e);
+						if (failFn) failFn(e);
 					};
 				}
 			});

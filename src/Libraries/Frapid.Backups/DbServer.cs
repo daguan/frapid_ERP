@@ -1,5 +1,4 @@
-﻿using System.Web.Hosting;
-using Frapid.Configuration;
+﻿using Frapid.Configuration;
 using Frapid.Configuration.Db;
 using Frapid.Framework.Extensions;
 
@@ -34,7 +33,7 @@ namespace Frapid.Backups
         private string GetConfig(string key)
         {
             string path = DbProvider.GetDbConfigurationFilePath(this.Tenant);
-            path = HostingEnvironment.MapPath(path);
+            path = PathMapper.MapPath(path);
 
             return ConfigurationManager.ReadConfigurationValue(path, key);
         }

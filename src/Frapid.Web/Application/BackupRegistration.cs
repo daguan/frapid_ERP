@@ -28,7 +28,9 @@ namespace Frapid.Web.Application
                 minute = scheduleData[1].To<int>();
             }
 
-            var trigger = TriggerBuilder.Create().WithIdentity("Backup", "PerformBackup").WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(hour, minute).InTimeZone(TimeZoneInfo.Utc)).Build();
+            var trigger = TriggerBuilder.Create().WithIdentity("Backup", "PerformBackup")
+                .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(hour, minute)
+                .InTimeZone(TimeZoneInfo.Utc)).Build();
 
             scheduler.ScheduleJob(job, trigger);
         }
