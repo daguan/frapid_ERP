@@ -98,7 +98,7 @@ function serializeForm(el) {
         };
     };
 
-    var members = el.find("input, select, textarea, div.date.calendar, div.ui.tags");
+    var members = el.find("input:not([type='radio']), input[type='radio']:checked, select, textarea, div.date.calendar, div.ui.tags");
 
     var form = {};
     members.each(function () {
@@ -326,3 +326,4 @@ function deserializeForm(container, model) {
     };
 
 };
+

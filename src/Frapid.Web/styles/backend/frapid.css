@@ -473,3 +473,11 @@ input[disabled]{
 input.right{
 	text-align:right;
 }
+
+.trumbowyg-fullscreen{
+  margin-top:3.6em!important;
+}
+
+.checkbox label{
+	cursor: pointer;
+}
