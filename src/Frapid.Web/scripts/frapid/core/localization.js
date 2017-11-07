@@ -174,9 +174,12 @@ var getFormattedNumber = function (input, isInteger) {
 
 
 function getFormattedCurrency(input){
-    return (meta.MetaView.CurrencySymbol || meta.CurrencySymbol) + getFormattedNumber(input);
-};
+	if(window.meta){
+	    return (window.meta.MetaView.CurrencySymbol || window.meta.CurrencySymbol) + getFormattedNumber(input);
+	};
 
+    return window.currencySymbol + getFormattedNumber(input);
+};
 
 stringFormat = function () {
     var s = arguments[0];
