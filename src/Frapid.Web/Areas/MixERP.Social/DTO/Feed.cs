@@ -6,7 +6,7 @@ using Frapid.Mapper.Decorators;
 namespace MixERP.Social.DTO
 {
     [TableName("social.feeds")]
-    [PrimaryKey("feed_id", true, false)]
+    [PrimaryKey("feed_id", true, true)]
     public class Feed : IPoco
     {
         public long FeedId { get; set; }

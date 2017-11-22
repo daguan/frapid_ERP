@@ -54,7 +54,7 @@ var parseIntStrict = function (arg) {
 		return null;
 	};
 
-	return parseInt2(arg);
+	return parseInt(arg);
 };
 
 function parseDate(str) {

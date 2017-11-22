@@ -409,5 +409,7 @@ function removeToolbar() {
 };
 
 if (top.parent) {
-    top.parent.removeToolbar();
+    if(typeof(top.parent.removeToolbar) === "function"){
+        top.parent.removeToolbar();
+    };
 };

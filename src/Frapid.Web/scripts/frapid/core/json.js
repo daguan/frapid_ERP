@@ -41,7 +41,7 @@ function serializeTable(table, strict) {
                     if (strict) {
                         value = window.parseIntStrict(value);
                     } else {
-                        value = window.parseInt2(value);
+                        value = window.parseInt(value);
                     }
                     break;
                 case "float":

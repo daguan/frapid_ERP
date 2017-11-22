@@ -38,9 +38,9 @@ function prepare1DChart(datasourceId, canvasId, legendId, type, remove, titleCol
     table.find("tr").not(":first").each(function (i) {
         //Get an instance of the current row
         var row = $(this);
-        var title = row.find("td:eq(" + parseInt(titleColumnIndex) + ")").html();
+        var title = row.find("td:eq(" + parseInt(titleColumnIndex) + ")").text();
 
-        var value = parseFloat2(row.find("td:eq(" + parseInt(valueColumnIndex) + ")").html());
+        var value = parseFloat2(row.find("td:eq(" + parseInt(valueColumnIndex) + ")").text());
 
         var dataset =
         {
@@ -117,10 +117,10 @@ function preparePieChart(datasourceId, canvasId, legendId, type, hide, titleColu
         var row = $(this);
 
         //The first column of each row is the legend.
-        var title = row.find("td:eq(" + parseInt(titleColumnIndex) + ")").html();
+        var title = row.find("td:eq(" + parseInt(titleColumnIndex) + ")").text();
 
         //The first column of each row is the legend.
-        value = parseFloat2(row.find("td:eq(" + parseInt(valueColumnIndex) + ")").html());
+        value = parseFloat2(row.find("td:eq(" + parseInt(valueColumnIndex) + ")").text());
 
         data.labels.push(title);
         data.datasets[0].data.push(value);

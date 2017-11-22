@@ -10,8 +10,7 @@ var filePlaceholderTemplate = `<div data-is-local="true" class="{Extension} plac
 		<div class="file name">{FileName}</div>
 	</div>`;
 
-var template = `
-        <div class ="original story" data-feed-id="{FeedId}" data-event-time="{EventTimestamp}"
+var template = `<div class ="original story" data-feed-id="{FeedId}" data-event-time="{EventTimestamp}"
             data-parent-feed-id="{ParentFeedId}" data-scope="{Scope}" data-child-count="{ChildCount}">
             <div class ="avatar">
                 <div class ="photo">
@@ -138,6 +137,7 @@ function uploadAttachments(el) {
     });
 };
 
+
 function isImage(fileName) {
     const images = ["jpg", "jpeg", "png", "gif"];
     const extension = fileName.split('.').pop().toLowerCase();
@@ -158,7 +158,7 @@ $("#UploadInputFile").off("change").on("change", function () {
 
     for (var i = 0; i < files.length; i++) {
         const file = files[i];
-        const fileName = file.name;.prop("disabled", true)
+        const fileName = file.name.prop("disabled", true)
         const extension = fileName.split('.').pop().toLowerCase();
 
         if (isImage(fileName)) {
@@ -171,6 +171,7 @@ $("#UploadInputFile").off("change").on("change", function () {
     uploadAttachments(el);
     window.localize();
 });
+
 
 $("#UploadAvatarInputFile").on("change", function () {
     const el = $(this);
@@ -509,7 +510,7 @@ function deleteFeed(element) {
     };
 
     const el = $(element);
-    const feedId = window.parseInt2(el.attr("data-feed-id"));
+    const feedId = window.parseInt(el.attr("data-feed-id"));
 
     if (!feedId) {
         return;
@@ -662,7 +663,7 @@ function unlike(el) {
         counterEl.attr("title", likedBy.join(", "));
     };
 
-    const totalLikes = window.parseInt2(counterEl.find("span").html());
+    const totalLikes = window.parseInt(counterEl.find("span").html());
     if (!feedId) {
         return;
     };
@@ -702,7 +703,7 @@ function like(el) {
 
     counterEl.attr("title", likedBy);
 
-    const totalLikes = window.parseInt2(counterEl.find("span").html());
+    const totalLikes = window.parseInt(counterEl.find("span").html());
     if (!feedId) {
         return;
     };

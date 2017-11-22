@@ -7,7 +7,7 @@ function getDocHeight(margin) {
     );
 
     if (margin) {
-        height += parseInt2(margin);
+        height += parseInt(margin);
     };
 
     return height;

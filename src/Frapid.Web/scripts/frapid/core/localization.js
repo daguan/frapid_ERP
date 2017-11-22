@@ -71,65 +71,6 @@ function setRegionalFormat()
 	});
 };
 
-
-(function ($) {
-  var originalVal = $.fn.val;
-  $.fn.val = function(value) {
-    if (arguments.length >= 1) {
-      // setter invoked, do processing	  
-      var value = originalVal.call(this, value);
-	  return value;
-    };
-	
-	var el =$(this[0]);
-	
-	if(el.is("input.decimal, input.decimal4, input.integer")){
-		return getRawCleaveValue(this[0]);
-	}else{
-		return originalVal.call(this);
-	};
-  };
-})(jQuery);
-
-
-
-function getRawCleaveValue(el){
-	var cleave;
-	
-	if($(el).is(".decimal")){
-		cleave = new Cleave(el, {
-			numeral: true,
-			numeralThousandsGroupStyle: 'thousand',
-			numeralDecimalScale: currencyDecimalPlaces,
-			numeralDecimalMark: decimalSeparator,
-			delimiter: thousandSeparator
-		});		
-	};
-	
-	if($(el).is(".decimal4")){
-		cleave = new Cleave(el, {
-			numeral: true,
-			numeralThousandsGroupStyle: 'thousand',
-			numeralDecimalScale: 4,
-			numeralDecimalMark: decimalSeparator,
-			delimiter: thousandSeparator
-		});		
-	};
-	
-	if($(el).is(".integer")){
-		cleave = new Cleave(el, {
-			numeral: true,
-			numeralThousandsGroupStyle: 'thousand',
-			numeralDecimalScale: 0,
-			numeralDecimalMark: decimalSeparator,
-			delimiter: thousandSeparator
-		});		
-	};
-	
-	return cleave.getRawValue();
-};
-
-
 var parseFormattedNumber = function (input) {
     if (typeof window.thousandSeparator === "undefined") {
         window.thousandSeparator = ",";

@@ -121,8 +121,8 @@ function pad(num, size) {
 
 function parseTime(text, hasPrimeMeridian) {
     const time = text.match(/(\d?\d):?(\d?\d?)/);
-    var hours = window.parseInt2(time[1], 10);
-    const minutes = window.parseInt2(time[2], 10) || 0;
+    var hours = window.parseInt(time[1], 10);
+    const minutes = window.parseInt(time[2], 10) || 0;
 
     if (hasPrimeMeridian) {
         hours += 12;
@@ -158,7 +158,7 @@ function parseTokens(input) {
             token = token.replace(/pm/i, "");
         };
 
-        var timeValue = window.parseInt2(token) || 0;
+        var timeValue = window.parseInt(token) || 0;
 
         if (timeValue > 0 && timeValue < 2400) {
             if (timeValue < 10) {
@@ -241,7 +241,7 @@ function initializeFullCalendar() {
             $(".dropdown").dropdown();
 
             $("#RemindMeDropdown").off("change").on("change", function () {
-                const selected = window.parseInt2($("#RemindMeDropdown").val());
+                const selected = window.parseInt($("#RemindMeDropdown").val());
 
                 if (!selected) {
                     $("#ReminderTypePanel").hide();
@@ -266,13 +266,13 @@ function initializeFullCalendar() {
 
                 $("#RepeatUntilPanel").show();
                 $("#RepeatEveryInputText").prop("disabled", false);
-                if (!window.parseInt2(repeatValueInputText.val())) {
+                if (!window.parseInt(repeatValueInputText.val())) {
                     repeatValueInputText.val("1");
                 };
             });
 
             $("#CategoryDropdown").off("change").on("change", function () {
-                const selected = window.parseInt2($("#CategoryDropdown").val());
+                const selected = window.parseInt($("#CategoryDropdown").val());
 
                 if (!selected) {
                     return;

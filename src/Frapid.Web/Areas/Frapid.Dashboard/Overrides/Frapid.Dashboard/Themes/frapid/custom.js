@@ -362,9 +362,9 @@
     function getAdDate(bsDate) {
         const date = bsDate.split("/");
 
-        const yearId = window.parseInt2(date[0]);
-        const monthId = window.parseInt2(date[1]);
-        const dayId = window.parseInt2(date[2]);
+        const yearId = window.parseInt(date[0]);
+        const monthId = window.parseInt(date[1]);
+        const dayId = window.parseInt(date[2]);
 
         if (yearId > 9999) {
             return null;
@@ -463,7 +463,7 @@
         const month = container.find("select.month").val();
         const day = container.find("input.day").val();
 
-        if (!window.parseInt2(year) || !window.parseInt2(month) || !window.parseInt2(day)) {
+        if (!window.parseInt(year) || !window.parseInt(month) || !window.parseInt(day)) {
             return;
         };
 

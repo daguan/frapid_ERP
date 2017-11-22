@@ -9,7 +9,7 @@ var entityParser = {
             };
 
             if (typeClass.indexOf("integer") !== -1) {
-                return window.parseInt2(value) || null;
+                return window.parseInt(value) || null;
             };
 
             if (typeClass.indexOf("float") !== -1) {
