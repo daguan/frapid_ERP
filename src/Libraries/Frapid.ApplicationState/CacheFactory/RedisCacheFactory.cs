@@ -35,6 +35,21 @@ namespace Frapid.ApplicationState.CacheFactory
             }
         }
 
+        public void RemoveByPrefix(string prefix)
+        {
+            var candidates = this.Client.SearchKeys(prefix + "*");
+
+            if (candidates == null || !candidates.Any())
+            {
+                return;
+            }
+
+            foreach (string key in candidates)
+            {
+                this.Client.Remove(key);
+            }
+        }
+
         public T Get<T>(string key) where T : class
         {
             return this.Client.Get<T>(key);

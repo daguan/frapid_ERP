@@ -22,6 +22,11 @@ namespace Frapid.ApplicationState.CacheFactory
             this.Factory.Remove(key);
         }
 
+        public void RemoveByPrefix(string prefix)
+        {
+            this.Factory.RemoveByPrefix(prefix);
+        }
+
         public T Get<T>(string key) where T : class
         {
             return this.Factory.Get<T>(key);

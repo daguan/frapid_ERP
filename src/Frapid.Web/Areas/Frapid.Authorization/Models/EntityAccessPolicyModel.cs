@@ -4,6 +4,7 @@ using Frapid.Authorization.DAL;
 using Frapid.Authorization.ViewModels;
 using Frapid.TokenManager;
 using Mapster;
+using Frapid.ApplicationState.CacheFactory;
 
 namespace Frapid.Authorization.Models
 {
@@ -48,6 +49,11 @@ namespace Frapid.Authorization.Models
             }
 
             await AccessPolicy.SavePolicyAsync(appUser.Tenant, officeId, userId, model).ConfigureAwait(false);
+
+            //Invalidate existing cache data
+            string prefix = $"access_policy_{appUser.Tenant}";
+            var factory = new DefaultCacheFactory();
+            factory.RemoveByPrefix(prefix);
         }
     }
 }

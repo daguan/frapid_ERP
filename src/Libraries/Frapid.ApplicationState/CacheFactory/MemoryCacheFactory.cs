@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.Caching;
 using Mapster;
+using System.Linq;
 
 namespace Frapid.ApplicationState.CacheFactory
 {
@@ -46,6 +47,22 @@ namespace Frapid.ApplicationState.CacheFactory
                 this.Cache.Remove(key);
             }
         }
+
+        public void RemoveByPrefix(string prefix)
+        {
+            var candidates = this.Cache.Where(x => x.Key.ToLower().StartsWith(prefix.ToLower())).Select(x => x.Key);
+
+            if (candidates == null || !candidates.Any())
+            {
+                return;
+            }
+
+            foreach (var key in candidates)
+            {
+                this.Cache.Remove(key);
+            }
+        }
+
 
         public T Get<T>(string key) where T : class
         {

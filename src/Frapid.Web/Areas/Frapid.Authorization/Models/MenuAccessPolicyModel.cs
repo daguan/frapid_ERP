@@ -4,6 +4,7 @@ using Frapid.Authorization.DAL;
 using Frapid.Authorization.DTO;
 using Frapid.Authorization.ViewModels;
 using Frapid.TokenManager;
+using Frapid.ApplicationState.CacheFactory;
 
 namespace Frapid.Authorization.Models
 {
@@ -31,6 +32,11 @@ namespace Frapid.Authorization.Models
         public static async Task SaveAsync(string tenant, UserMenuPolicyInfo model)
         {
             await Menus.SavePolicyAsync(tenant, model.OfficeId, model.UserId, model.Allowed, model.Disallowed).ConfigureAwait(false);
+
+            //Invalidate existing cache data
+            string prefix = $"menu_policy_{tenant}_{model.OfficeId}_{model.UserId}";
+            var factory = new DefaultCacheFactory();
+            factory.RemoveByPrefix(prefix);
         }
 
         internal static async Task<IEnumerable<MenuAccessPolicy>> GetAsync(AppUser appUser, int officeId, int userId)

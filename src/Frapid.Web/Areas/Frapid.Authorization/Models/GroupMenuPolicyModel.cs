@@ -2,6 +2,7 @@
 using Frapid.Authorization.DAL;
 using Frapid.Authorization.ViewModels;
 using Frapid.TokenManager;
+using Frapid.ApplicationState.CacheFactory;
 
 namespace Frapid.Authorization.Models
 {
@@ -51,6 +52,11 @@ namespace Frapid.Authorization.Models
             }
 
             await Menus.SaveGroupPolicyAsync(appUser.Tenant, model.OfficeId, model.RoleId, model.MenuIds).ConfigureAwait(false);
+
+            //Invalidate existing cache data
+            string prefix = $"menu_policy_{appUser.Tenant}_{appUser.OfficeId}";
+            var factory = new DefaultCacheFactory();
+            factory.RemoveByPrefix(prefix);
         }
     }
 }
