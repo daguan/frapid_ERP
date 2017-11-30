@@ -24,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -181,7 +182,7 @@
     <Compile Include="Controllers\Backend\ExportController.cs" />
     <Compile Include="ExportHelper.cs" />
     <Compile Include="HtmlConverters\ToOpenOfficeWord.cs" />
-    <Compile Include="HtmlConverters\ToOpenOfficeSpreadSheet.cs" />
+    <Compile Include="HtmlConverters\FakeExcelConverter.cs" />
     <Compile Include="HtmlConverters\WkHtmlToPdf.cs" />
     <Compile Include="HtmlConverters\HtmlWriter.cs" />
     <Compile Include="IExportTo.cs" />

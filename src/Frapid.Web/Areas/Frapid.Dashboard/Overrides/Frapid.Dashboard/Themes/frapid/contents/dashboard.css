@@ -608,11 +608,11 @@ input[data-feature-search] {
     color: #A67261 !important;
 }
 
-.ui.table a {
+.ui.table a:not(.button) {
     color: #888 !important;
 }
 
-    .ui.table a:hover {
+    .ui.table a:not(.button):hover {
         color: #333 !important;
     }
 

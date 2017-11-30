@@ -24,7 +24,7 @@ namespace Frapid.Reports.HtmlConverters
 
             var file = new FileInfo(PathMapper.MapPath(destination));
 
-            if (!file.Directory.Exists)
+            if (file.Directory != null && !file.Directory.Exists)
             {
                 file.Directory.Create();
             }

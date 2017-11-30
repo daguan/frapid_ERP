@@ -10,7 +10,7 @@ namespace Frapid.Reports.HtmlConverters
         {
             var destination = new FileInfo(PathMapper.MapPath(path));
 
-            if (!destination.Directory.Exists)
+            if (destination.Directory != null && !destination.Directory.Exists)
             {
                 destination.Directory.Create();
             }
